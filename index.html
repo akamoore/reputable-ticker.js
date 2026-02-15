@@ -46,6 +46,19 @@ img{max-width:100%;display:block}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes slideRight{from{transform:translateX(-10px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.95)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-40px,30px) scale(1.05)}66%{transform:translate(20px,-40px) scale(.9)}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(25px,35px) scale(1.08)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes gradientFlow{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+@keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes bounceArrow{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200)}50%{box-shadow:0 0 0 4px var(--slate-50),0 0 8px 6px rgba(99,102,241,.4)}}
+@keyframes borderGlow{0%,100%{border-color:var(--slate-200)}50%{border-color:var(--indigo-300)}}
+
+/* ── Hero path animation ─────────────────────────────── */
+.hero-path{animation:dashDraw 3s linear infinite}
+@keyframes dashDraw{from{stroke-dashoffset:0}to{stroke-dashoffset:-56}}
 
 /* ── Navigation ──────────────────────────────────────── */
 .nav{
@@ -96,12 +109,30 @@ img{max-width:100%;display:block}
   background:radial-gradient(ellipse,rgba(99,102,241,.07) 0%,transparent 70%);
   pointer-events:none;
 }
+.hero-blob{
+  position:absolute;border-radius:50%;pointer-events:none;opacity:.12;
+  filter:blur(60px);
+}
+.hero-blob-1{
+  width:400px;height:400px;top:-80px;right:-60px;
+  background:var(--indigo-400);animation:float1 14s ease-in-out infinite;
+}
+.hero-blob-2{
+  width:300px;height:300px;bottom:-50px;left:-40px;
+  background:var(--indigo-500);animation:float2 18s ease-in-out infinite;
+}
+.hero-blob-3{
+  width:200px;height:200px;top:40%;left:30%;
+  background:var(--indigo-300);animation:float3 12s ease-in-out infinite;
+}
 .hero-badge{
   display:inline-flex;align-items:center;gap:6px;
   background:var(--indigo-100);color:var(--indigo-700);
   font-size:.8rem;font-weight:600;padding:6px 16px;border-radius:20px;
   margin-bottom:20px;animation:fadeInUp .7s ease both;
+  transition:transform .3s ease,box-shadow .3s ease;
 }
+.hero-badge:hover{transform:scale(1.06);box-shadow:0 2px 12px rgba(99,102,241,.2)}
 .hero h1{
   font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.15;
   color:var(--slate-900);max-width:800px;margin:0 auto 16px;
@@ -123,7 +154,12 @@ img{max-width:100%;display:block}
 .section-header{text-align:center;margin-bottom:40px}
 .section-label{
   display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--indigo-500);margin-bottom:8px;
+  text-transform:uppercase;margin-bottom:8px;
+  background:linear-gradient(90deg,var(--indigo-500),var(--indigo-400),var(--indigo-600),var(--indigo-500));
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:shimmer 4s linear infinite;
 }
 .section-title{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;color:var(--slate-900);margin-bottom:12px}
 .section-subtitle{font-size:1.05rem;color:var(--slate-500);max-width:600px;margin:0 auto}
@@ -134,8 +170,10 @@ img{max-width:100%;display:block}
 /* Connector line */
 .lifecycle-flow::before{
   content:'';position:absolute;left:40px;top:0;bottom:0;width:3px;
-  background:linear-gradient(to bottom,var(--indigo-200),var(--indigo-400),var(--indigo-200));
+  background:linear-gradient(to bottom,var(--indigo-200),var(--indigo-500),var(--indigo-300),var(--indigo-500),var(--indigo-200));
+  background-size:100% 200%;
   border-radius:2px;
+  animation:gradientFlow 6s ease infinite;
 }
 @media(min-width:768px){
   .lifecycle-flow::before{left:50%;transform:translateX(-50%)}
@@ -159,7 +197,7 @@ img{max-width:100%;display:block}
   box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200);
   position:relative;z-index:2;transition:transform .3s ease,box-shadow .3s ease;
 }
-.stage-card:hover .stage-number{transform:scale(1.1);box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-400)}
+.stage-card:hover .stage-number{transform:scale(1.1);animation:glowPulse 2s ease-in-out infinite}
 
 .stage-content{
   background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
@@ -212,9 +250,16 @@ img{max-width:100%;display:block}
 }
 .loop-indicator p{font-size:1rem;font-weight:600;color:var(--indigo-700)}
 .loop-indicator span{font-size:.85rem;color:var(--indigo-500);display:block;margin-top:4px}
-.loop-arrow{font-size:2rem;color:var(--indigo-400);margin-bottom:4px}
+.loop-arrow{font-size:2rem;color:var(--indigo-400);margin-bottom:4px;display:inline-block;animation:spinSlow 4s linear infinite}
+.loop-indicator:hover{border-color:var(--indigo-400);background:linear-gradient(135deg,var(--indigo-100),var(--indigo-50));transition:all .3s ease}
 
 /* ── Segmentation ────────────────────────────────────── */
+.section:not(.section-alt){position:relative;overflow:hidden}
+.section:not(.section-alt)::after{
+  content:'';position:absolute;top:20%;right:-100px;width:250px;height:250px;
+  border:2px solid var(--indigo-100);border-radius:50%;opacity:.5;
+  animation:float3 16s ease-in-out infinite;pointer-events:none;
+}
 .seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
 .seg-card{
   background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
@@ -226,7 +271,9 @@ img{max-width:100%;display:block}
   flex-shrink:0;width:40px;height:40px;border-radius:var(--radius-sm);
   background:var(--indigo-50);display:flex;align-items:center;justify-content:center;
 }
-.seg-icon svg{width:20px;height:20px;color:var(--indigo-500)}
+.seg-icon svg{width:20px;height:20px;color:var(--indigo-500);transition:transform .3s ease}
+.seg-card:hover .seg-icon svg{transform:scale(1.2) rotate(-8deg)}
+.seg-card:hover .seg-icon{background:var(--indigo-100)}
 .seg-text{font-size:.9rem;font-weight:600;color:var(--slate-700);line-height:1.4}
 .seg-desc{font-size:.8rem;color:var(--slate-400);margin-top:2px;font-weight:400}
 
@@ -238,19 +285,19 @@ img{max-width:100%;display:block}
   background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-lg);
   padding:32px;position:relative;overflow:hidden;transition:all .3s ease;
 }
-.phase-card:hover{box-shadow:var(--shadow-lg)}
+.phase-card:hover{box-shadow:var(--shadow-lg);border-color:var(--indigo-300);animation:borderGlow 2s ease infinite}
 .phase-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:4px;
 }
 .phase-card.phase-1::before{background:linear-gradient(90deg,var(--indigo-400),var(--indigo-600))}
-.phase-card.phase-2::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.phase-card.phase-2::before{background:linear-gradient(90deg,var(--indigo-500),var(--indigo-700))}
 
 .phase-badge{
   display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;
   font-size:.75rem;font-weight:700;margin-bottom:16px;
 }
 .phase-1 .phase-badge{background:var(--indigo-100);color:var(--indigo-700)}
-.phase-2 .phase-badge{background:#ede9fe;color:#6d28d9}
+.phase-2 .phase-badge{background:var(--indigo-100);color:var(--indigo-700)}
 
 .phase-title{font-size:1.3rem;font-weight:800;color:var(--slate-900);margin-bottom:4px}
 .phase-timeline{font-size:.85rem;color:var(--slate-400);margin-bottom:20px}
@@ -266,7 +313,7 @@ img{max-width:100%;display:block}
   display:flex;align-items:center;justify-content:center;margin-top:1px;
 }
 .phase-1 .phase-check{background:var(--indigo-100);color:var(--indigo-600)}
-.phase-2 .phase-check{background:#ede9fe;color:#7c3aed}
+.phase-2 .phase-check{background:var(--indigo-100);color:var(--indigo-600)}
 .phase-check svg{width:12px;height:12px}
 
 /* ── Integration ─────────────────────────────────────── */
@@ -290,7 +337,9 @@ img{max-width:100%;display:block}
   width:40px;height:40px;border-radius:50%;
   background:var(--indigo-50);display:flex;align-items:center;justify-content:center;
 }
-.int-arrow svg{width:18px;height:18px;color:var(--indigo-400)}
+.int-arrow svg{width:18px;height:18px;color:var(--indigo-400);transition:transform .3s ease}
+.int-row:hover .int-arrow svg{animation:bounceArrow 1s ease infinite}
+.int-row:hover .int-arrow{background:var(--indigo-100)}
 @media(max-width:600px){.int-arrow{margin:0 auto}}
 
 /* ── Footer ──────────────────────────────────────────── */
@@ -342,10 +391,40 @@ img{max-width:100%;display:block}
 
 <!-- ─── Hero ─────────────────────────────────────────── -->
 <section class="hero" id="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
   <div class="container">
     <div class="hero-badge">Team Presentation — February 2026</div>
     <h1>The <span>Participant Lifecycle</span><br>End to End</h1>
     <p>From first ad click to long-term retention — a complete view of how participants move through our clinical study ecosystem.</p>
+    <div class="hero-graphic" style="margin:36px auto 0;max-width:480px;animation:fadeInUp .7s ease .35s both">
+      <svg viewBox="0 0 480 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Animated lifecycle path -->
+        <path d="M30 50 Q120 10 200 50 Q280 90 360 50 Q400 30 450 50" stroke="url(#heroGrad)" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="8 6" class="hero-path"/>
+        <!-- Dots along the path -->
+        <circle cx="30" cy="50" r="6" fill="var(--indigo-400)" class="hero-dot" style="animation:pulse 2s ease 0s infinite"/>
+        <circle cx="120" cy="28" r="5" fill="var(--indigo-300)" class="hero-dot" style="animation:pulse 2s ease .3s infinite"/>
+        <circle cx="200" cy="50" r="6" fill="var(--indigo-500)" class="hero-dot" style="animation:pulse 2s ease .6s infinite"/>
+        <circle cx="280" cy="72" r="5" fill="var(--indigo-300)" class="hero-dot" style="animation:pulse 2s ease .9s infinite"/>
+        <circle cx="360" cy="50" r="6" fill="var(--indigo-400)" class="hero-dot" style="animation:pulse 2s ease 1.2s infinite"/>
+        <circle cx="450" cy="50" r="6" fill="var(--indigo-600)" class="hero-dot" style="animation:pulse 2s ease 1.5s infinite"/>
+        <!-- Labels -->
+        <text x="30" y="80" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Lead</text>
+        <text x="120" y="18" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Install</text>
+        <text x="200" y="80" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Screen</text>
+        <text x="280" y="96" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Onboard</text>
+        <text x="360" y="36" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Active</text>
+        <text x="450" y="36" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Retain</text>
+        <defs>
+          <linearGradient id="heroGrad" x1="0" y1="0" x2="480" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--indigo-300)"/>
+            <stop offset="50%" stop-color="var(--indigo-500)"/>
+            <stop offset="100%" stop-color="var(--indigo-700)"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
   </div>
 </section>
 
