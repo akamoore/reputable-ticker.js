@@ -241,6 +241,16 @@ img{max-width:100%;display:block}
   border-radius:50%;background:var(--indigo-300);
 }
 
+/* Stage illustrations */
+.stage-illustration{
+  text-align:center;padding:16px 0 12px;
+  border-bottom:1px solid var(--slate-100);margin-bottom:14px;
+}
+.stage-illustration svg{
+  max-width:280px;width:100%;height:auto;
+  animation:fadeInUp .5s ease both;
+}
+
 /* Loop arrow */
 .loop-indicator{
   text-align:center;margin:40px auto 0;padding:24px;
@@ -451,6 +461,33 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Funnel shape -->
+                <path d="M60 15h160l-30 70H90L60 15z" fill="var(--indigo-50)" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <path d="M75 35h130" stroke="var(--indigo-200)" stroke-width="1" stroke-dasharray="4 3"/>
+                <path d="M85 55h110" stroke="var(--indigo-200)" stroke-width="1" stroke-dasharray="4 3"/>
+                <!-- Input arrows -->
+                <path d="M20 25h30" stroke="var(--indigo-400)" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowS1)"/>
+                <path d="M15 45h35" stroke="var(--indigo-300)" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowS1)"/>
+                <path d="M25 65h25" stroke="var(--indigo-400)" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowS1)"/>
+                <!-- Source labels -->
+                <text x="18" y="22" fill="var(--slate-400)" font-size="7" font-weight="600">Ads</text>
+                <text x="8" y="42" fill="var(--slate-400)" font-size="7" font-weight="600">Referral</text>
+                <text x="14" y="62" fill="var(--slate-400)" font-size="7" font-weight="600">Organic</text>
+                <!-- Funnel labels -->
+                <text x="140" y="28" text-anchor="middle" fill="var(--indigo-500)" font-size="8" font-weight="700">LEADS</text>
+                <text x="140" y="50" text-anchor="middle" fill="var(--indigo-400)" font-size="7">Filtered</text>
+                <text x="140" y="70" text-anchor="middle" fill="var(--indigo-400)" font-size="7">Qualified</text>
+                <!-- Output -->
+                <circle cx="140" cy="92" r="5" fill="var(--indigo-500)" style="animation:pulse 2s ease infinite"/>
+                <!-- Animated dots falling through funnel -->
+                <circle cx="120" cy="20" r="3" fill="var(--indigo-300)" style="animation:pulse 2s ease 0s infinite"/>
+                <circle cx="155" cy="40" r="3" fill="var(--indigo-400)" style="animation:pulse 2s ease .5s infinite"/>
+                <circle cx="135" cy="60" r="3" fill="var(--indigo-500)" style="animation:pulse 2s ease 1s infinite"/>
+                <defs><marker id="arrowS1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--indigo-400)"/></marker></defs>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -496,6 +533,33 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Phone body -->
+                <rect x="108" y="8" width="64" height="84" rx="10" fill="var(--indigo-50)" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <rect x="114" y="18" width="52" height="60" rx="4" fill="#fff" stroke="var(--indigo-200)" stroke-width="1"/>
+                <!-- Home button -->
+                <circle cx="140" cy="84" r="4" fill="none" stroke="var(--indigo-300)" stroke-width="1"/>
+                <!-- Download arrow -->
+                <path d="M140 30v26" stroke="var(--indigo-500)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M132 50l8 8 8-8" stroke="var(--indigo-500)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M126 62h28" stroke="var(--indigo-400)" stroke-width="2" stroke-linecap="round"/>
+                <!-- Signal waves from phone -->
+                <path d="M178 35a18 18 0 010 20" stroke="var(--indigo-200)" stroke-width="1.5" fill="none" stroke-linecap="round" style="animation:pulse 2s ease 0s infinite"/>
+                <path d="M186 30a28 28 0 010 30" stroke="var(--indigo-100)" stroke-width="1.5" fill="none" stroke-linecap="round" style="animation:pulse 2s ease .4s infinite"/>
+                <!-- Store icons -->
+                <rect x="30" y="28" width="50" height="18" rx="4" fill="var(--indigo-100)"/>
+                <text x="55" y="40" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">App Store</text>
+                <rect x="30" y="54" width="50" height="18" rx="4" fill="var(--indigo-100)"/>
+                <text x="55" y="66" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Play Store</text>
+                <!-- Connection lines -->
+                <path d="M80 37h28" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
+                <path d="M80 63h28" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
+                <!-- Attribution label -->
+                <rect x="200" y="38" width="56" height="18" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <text x="228" y="50" text-anchor="middle" fill="var(--indigo-500)" font-size="7" font-weight="600">AppsFlyer</text>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -538,6 +602,33 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Browser window -->
+                <rect x="40" y="10" width="200" height="80" rx="8" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <rect x="40" y="10" width="200" height="18" rx="8" fill="var(--indigo-50)"/>
+                <rect x="40" y="26" width="200" height="2" fill="var(--indigo-200)"/>
+                <!-- Browser dots -->
+                <circle cx="52" cy="19" r="3" fill="var(--indigo-300)"/>
+                <circle cx="62" cy="19" r="3" fill="var(--indigo-200)"/>
+                <circle cx="72" cy="19" r="3" fill="var(--indigo-100)"/>
+                <!-- Search bar -->
+                <rect x="90" y="14" width="100" height="10" rx="5" fill="#fff" stroke="var(--indigo-200)" stroke-width=".8"/>
+                <!-- Study cards grid -->
+                <rect x="50" y="34" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <rect x="112" y="34" width="56" height="22" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1.5" style="animation:pulse 3s ease infinite"/>
+                <rect x="174" y="34" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <rect x="50" y="62" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <rect x="112" y="62" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <rect x="174" y="62" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <!-- Card labels -->
+                <text x="78" y="48" text-anchor="middle" fill="var(--indigo-400)" font-size="6" font-weight="600">Study A</text>
+                <text x="140" y="48" text-anchor="middle" fill="var(--indigo-600)" font-size="6" font-weight="700">Study B</text>
+                <text x="202" y="48" text-anchor="middle" fill="var(--indigo-400)" font-size="6" font-weight="600">Study C</text>
+                <!-- Cursor pointer on highlighted card -->
+                <path d="M150 52l-2-6 8 4-4 1 3 4-2 1-3-4z" fill="var(--indigo-500)"/>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -581,6 +672,32 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Clipboard -->
+                <rect x="90" y="12" width="100" height="80" rx="6" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <rect x="115" y="6" width="50" height="14" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1.2"/>
+                <circle cx="140" cy="13" r="3" fill="var(--indigo-400)"/>
+                <!-- Question rows -->
+                <rect x="102" y="28" width="10" height="10" rx="2" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
+                <path d="M104 33l2.5 2.5L111 31" stroke="var(--indigo-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="118" y="30" width="60" height="5" rx="2" fill="var(--indigo-50)"/>
+                <rect x="102" y="44" width="10" height="10" rx="2" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
+                <path d="M104 49l2.5 2.5L111 47" stroke="var(--indigo-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="118" y="46" width="50" height="5" rx="2" fill="var(--indigo-50)"/>
+                <rect x="102" y="60" width="10" height="10" rx="2" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1" style="animation:pulse 2s ease infinite"/>
+                <rect x="118" y="62" width="44" height="5" rx="2" fill="var(--indigo-50)"/>
+                <rect x="102" y="76" width="10" height="10" rx="2" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <rect x="118" y="78" width="55" height="5" rx="2" fill="var(--indigo-50)"/>
+                <!-- Progress bar -->
+                <rect x="40" y="50" width="36" height="6" rx="3" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width=".8"/>
+                <rect x="40" y="50" width="18" height="6" rx="3" fill="var(--indigo-400)"/>
+                <text x="58" y="44" text-anchor="middle" fill="var(--indigo-500)" font-size="7" font-weight="700">50%</text>
+                <!-- Qualified badge -->
+                <rect x="204" y="44" width="46" height="16" rx="8" fill="var(--indigo-100)"/>
+                <text x="227" y="55" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Eligible?</text>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -623,6 +740,43 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Onboarding steps as connected cards -->
+                <rect x="20" y="30" width="54" height="40" rx="6" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <rect x="93" y="30" width="54" height="40" rx="6" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <rect x="166" y="30" width="54" height="40" rx="6" fill="#fff" stroke="var(--indigo-400)" stroke-width="1.5" style="animation:pulse 2.5s ease infinite"/>
+                <!-- Step 1: Join icon -->
+                <circle cx="47" cy="44" r="7" fill="var(--indigo-100)"/>
+                <path d="M44 44l2 2 4-4" stroke="var(--indigo-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="47" y="62" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Join Study</text>
+                <!-- Step 2: Lab kit icon -->
+                <rect x="113" y="38" width="14" height="10" rx="2" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width=".8"/>
+                <path d="M116 38v-3h8v3" stroke="var(--indigo-300)" stroke-width=".8" fill="none"/>
+                <text x="120" y="62" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Lab Kit</text>
+                <!-- Step 3: Wearable icon (watch) -->
+                <rect x="187" y="38" width="12" height="14" rx="3" fill="var(--indigo-100)" stroke="var(--indigo-400)" stroke-width=".8"/>
+                <path d="M190 37v-4h6v4M190 53v4h6v-4" stroke="var(--indigo-400)" stroke-width=".8" fill="none"/>
+                <circle cx="193" cy="45" r="2" fill="none" stroke="var(--indigo-500)" stroke-width=".6"/>
+                <text x="193" y="62" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Wearable</text>
+                <!-- Connection arrows -->
+                <path d="M74 50h19" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+                <path d="M147 50h19" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+                <!-- Arrow heads -->
+                <path d="M90 47l3 3-3 3" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M163 47l3 3-3 3" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Progress dots at top -->
+                <circle cx="47" cy="20" r="4" fill="var(--indigo-500)"/>
+                <circle cx="120" cy="20" r="4" fill="var(--indigo-500)"/>
+                <circle cx="193" cy="20" r="4" fill="var(--indigo-200)"/>
+                <path d="M51 20h65" stroke="var(--indigo-400)" stroke-width="1.5"/>
+                <path d="M124 20h65" stroke="var(--indigo-200)" stroke-width="1.5" stroke-dasharray="3 2"/>
+                <!-- Right side: Ready badge -->
+                <rect x="230" y="40" width="38" height="20" rx="10" fill="var(--indigo-100)"/>
+                <text x="249" y="53" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Ready</text>
+                <path d="M220 50h10" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -666,6 +820,36 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Monitor frame -->
+                <rect x="30" y="10" width="220" height="70" rx="8" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <!-- Grid lines -->
+                <path d="M50 25h180M50 40h180M50 55h180" stroke="var(--indigo-50)" stroke-width="1"/>
+                <!-- Activity chart line -->
+                <polyline points="50,55 70,52 90,48 105,35 115,55 125,42 140,30 155,45 170,38 185,25 200,40 215,35 230,42" stroke="var(--indigo-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <!-- Gradient fill under chart -->
+                <polyline points="50,55 70,52 90,48 105,35 115,55 125,42 140,30 155,45 170,38 185,25 200,40 215,35 230,42 230,65 50,65" fill="url(#chartGrad)" opacity=".3"/>
+                <!-- Active dot on last point -->
+                <circle cx="230" cy="42" r="4" fill="var(--indigo-500)" style="animation:pulse 1.5s ease infinite"/>
+                <circle cx="230" cy="42" r="8" fill="none" stroke="var(--indigo-300)" stroke-width="1" opacity=".5" style="animation:pulse 1.5s ease infinite"/>
+                <!-- Y-axis labels -->
+                <text x="42" y="28" text-anchor="end" fill="var(--slate-400)" font-size="6">High</text>
+                <text x="42" y="58" text-anchor="end" fill="var(--slate-400)" font-size="6">Low</text>
+                <!-- Compliance badge -->
+                <rect x="50" y="68" width="60" height="10" rx="5" fill="var(--indigo-100)"/>
+                <text x="80" y="76" text-anchor="middle" fill="var(--indigo-600)" font-size="6" font-weight="700">92% Compliant</text>
+                <!-- Status indicator -->
+                <circle cx="195" cy="73" r="3" fill="#22c55e"/>
+                <text x="210" y="76" fill="var(--slate-500)" font-size="6" font-weight="600">Active</text>
+                <defs>
+                  <linearGradient id="chartGrad" x1="140" y1="25" x2="140" y2="65" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="var(--indigo-400)"/>
+                    <stop offset="100%" stop-color="var(--indigo-50)" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -709,6 +893,33 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Trophy cup -->
+                <path d="M115 25h50v30c0 14-11 25-25 25s-25-11-25-25V25z" fill="var(--indigo-100)" stroke="var(--indigo-400)" stroke-width="1.5"/>
+                <!-- Trophy handles -->
+                <path d="M115 32c-12 0-18 6-18 14s6 14 14 14" stroke="var(--indigo-300)" stroke-width="1.5" fill="none"/>
+                <path d="M165 32c12 0 18 6 18 14s-6 14-14 14" stroke="var(--indigo-300)" stroke-width="1.5" fill="none"/>
+                <!-- Trophy base -->
+                <rect x="128" y="78" width="24" height="4" rx="2" fill="var(--indigo-300)"/>
+                <rect x="134" y="74" width="12" height="6" rx="1" fill="var(--indigo-300)"/>
+                <!-- Star on trophy -->
+                <path d="M140 36l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="var(--indigo-400)" stroke="var(--indigo-500)" stroke-width=".8"/>
+                <!-- Celebration sparkles -->
+                <circle cx="90" cy="20" r="2" fill="var(--indigo-300)" style="animation:pulse 1.5s ease 0s infinite"/>
+                <circle cx="190" cy="18" r="2" fill="var(--indigo-400)" style="animation:pulse 1.5s ease .3s infinite"/>
+                <circle cx="80" cy="45" r="1.5" fill="var(--indigo-200)" style="animation:pulse 1.5s ease .6s infinite"/>
+                <circle cx="200" cy="40" r="1.5" fill="var(--indigo-300)" style="animation:pulse 1.5s ease .9s infinite"/>
+                <path d="M95 28l-4-6M185 26l4-6" stroke="var(--indigo-200)" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M85 35l-6-2M195 33l6-2" stroke="var(--indigo-200)" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Reward label -->
+                <rect x="30" y="55" width="50" height="16" rx="8" fill="var(--indigo-100)"/>
+                <text x="55" y="66" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Reward</text>
+                <!-- Next study label -->
+                <rect x="200" y="55" width="56" height="16" rx="8" fill="var(--indigo-100)"/>
+                <text x="228" y="66" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Next Study</text>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -752,6 +963,39 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Hourglass -->
+                <rect x="118" y="8" width="44" height="6" rx="2" fill="var(--indigo-300)"/>
+                <rect x="118" y="86" width="44" height="6" rx="2" fill="var(--indigo-300)"/>
+                <path d="M122 14l18 36-18 36" stroke="var(--indigo-400)" stroke-width="1.5" fill="none"/>
+                <path d="M158 14l-18 36 18 36" stroke="var(--indigo-400)" stroke-width="1.5" fill="none"/>
+                <!-- Sand top -->
+                <path d="M130 22h20l-10 18z" fill="var(--indigo-100)"/>
+                <!-- Sand bottom (accumulated) -->
+                <path d="M128 76h24l-12-12z" fill="var(--indigo-200)"/>
+                <!-- Falling sand particle -->
+                <circle cx="140" cy="52" r="1.5" fill="var(--indigo-400)" style="animation:pulse 1s ease infinite"/>
+                <!-- Calendar on left -->
+                <rect x="30" y="28" width="55" height="44" rx="4" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.2"/>
+                <rect x="30" y="28" width="55" height="12" rx="4" fill="var(--indigo-100)"/>
+                <text x="57" y="37" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Washout</text>
+                <!-- Calendar days grid -->
+                <circle cx="42" cy="50" r="3" fill="var(--indigo-200)"/>
+                <circle cx="52" cy="50" r="3" fill="var(--indigo-200)"/>
+                <circle cx="62" cy="50" r="3" fill="var(--indigo-200)"/>
+                <circle cx="72" cy="50" r="3" fill="var(--indigo-100)"/>
+                <circle cx="42" cy="62" r="3" fill="var(--indigo-100)"/>
+                <circle cx="52" cy="62" r="3" fill="var(--indigo-100)"/>
+                <circle cx="62" cy="62" r="3" fill="var(--indigo-50)"/>
+                <circle cx="72" cy="62" r="3" fill="var(--indigo-50)"/>
+                <!-- Content engagement on right -->
+                <rect x="195" y="30" width="60" height="18" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <text x="225" y="42" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Articles</text>
+                <rect x="195" y="54" width="60" height="18" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
+                <text x="225" y="66" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Community</text>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
@@ -795,6 +1039,36 @@ img{max-width:100%;display:block}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illustration">
+              <svg viewBox="0 0 280 100" fill="none">
+                <!-- Sleeping user icon -->
+                <circle cx="60" cy="40" r="18" fill="var(--indigo-50)" stroke="var(--indigo-300)" stroke-width="1.5"/>
+                <circle cx="60" cy="36" r="8" fill="var(--indigo-100)"/>
+                <path d="M48 50c0-7 5-10 12-10s12 3 12 10" fill="var(--indigo-100)"/>
+                <!-- Zzz -->
+                <text x="78" y="28" fill="var(--indigo-300)" font-size="8" font-weight="700">z</text>
+                <text x="84" y="22" fill="var(--indigo-200)" font-size="10" font-weight="700">z</text>
+                <text x="92" y="14" fill="var(--indigo-100)" font-size="12" font-weight="700">z</text>
+                <!-- Outreach channels -->
+                <rect x="120" y="16" width="50" height="16" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
+                <text x="145" y="27" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="600">Email</text>
+                <rect x="120" y="40" width="50" height="16" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
+                <text x="145" y="51" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="600">Push</text>
+                <rect x="120" y="64" width="50" height="16" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
+                <text x="145" y="75" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="600">SMS</text>
+                <!-- Arrow to channels -->
+                <path d="M78 40h42" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
+                <!-- Return curved arrow -->
+                <path d="M170 24h30c20 0 20 28 0 28h-30" stroke="var(--indigo-400)" stroke-width="2" fill="none" stroke-linecap="round" marker-end="url(#arrowS9)"/>
+                <!-- Active user icon -->
+                <circle cx="220" cy="75" r="14" fill="var(--indigo-100)" stroke="var(--indigo-400)" stroke-width="1.5" style="animation:pulse 2s ease infinite"/>
+                <circle cx="220" cy="72" r="6" fill="var(--indigo-200)"/>
+                <path d="M212 82c0-5 3-7 8-7s8 2 8 7" fill="var(--indigo-200)"/>
+                <!-- Reactivated label -->
+                <text x="220" y="96" text-anchor="middle" fill="var(--indigo-500)" font-size="7" font-weight="700">Reactivated</text>
+                <defs><marker id="arrowS9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--indigo-400)"/></marker></defs>
+              </svg>
+            </div>
             <div class="detail-group">
               <div class="detail-label">Channels / Touchpoints</div>
               <ul class="detail-list">
