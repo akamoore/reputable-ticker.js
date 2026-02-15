@@ -8,10 +8,10 @@
 /* ── Reset & Base ────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --indigo-50:#f0f9ff;--indigo-100:#e0f2fe;--indigo-200:#bae6fd;
-  --indigo-300:#7dd3fc;--indigo-400:#38bdf8;--indigo-500:#0ea5e9;
-  --indigo-600:#0284c7;--indigo-700:#0369a1;--indigo-800:#075985;
-  --indigo-900:#0c4a6e;
+  --indigo-50:#e7faf6;--indigo-100:#c8f2ea;--indigo-200:#93e7d8;
+  --indigo-300:#50d7c3;--indigo-400:#00d5be;--indigo-500:#00b39f;
+  --indigo-600:#009180;--indigo-700:#007768;--indigo-800:#005c51;
+  --indigo-900:#00433b;
   --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;
   --slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;
   --slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;
@@ -53,7 +53,7 @@ img{max-width:100%;display:block}
 @keyframes gradientFlow{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes bounceArrow{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200)}50%{box-shadow:0 0 0 4px var(--slate-50),0 0 8px 6px rgba(14,165,233,.4)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200)}50%{box-shadow:0 0 0 4px var(--slate-50),0 0 8px 6px rgba(0,179,159,.4)}}
 @keyframes borderGlow{0%,100%{border-color:var(--slate-200)}50%{border-color:var(--indigo-300)}}
 
 /* ── Hero path animation ─────────────────────────────── */
@@ -106,7 +106,7 @@ img{max-width:100%;display:block}
 }
 .hero::before{
   content:'';position:absolute;top:-50%;right:-30%;width:80%;height:200%;
-  background:radial-gradient(ellipse,rgba(14,165,233,.07) 0%,transparent 70%);
+  background:radial-gradient(ellipse,rgba(0,179,159,.07) 0%,transparent 70%);
   pointer-events:none;
 }
 .hero-blob{
@@ -132,7 +132,7 @@ img{max-width:100%;display:block}
   margin-bottom:20px;animation:fadeInUp .7s ease both;
   transition:transform .3s ease,box-shadow .3s ease;
 }
-.hero-badge:hover{transform:scale(1.06);box-shadow:0 2px 12px rgba(14,165,233,.2)}
+.hero-badge:hover{transform:scale(1.06);box-shadow:0 2px 12px rgba(0,179,159,.2)}
 .hero h1{
   font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.15;
   color:var(--slate-900);max-width:800px;margin:0 auto 16px;
