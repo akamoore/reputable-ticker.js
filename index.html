@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participant Lifecycle — Team Presentation</title>
+<style>
+/* ── Reset & Base ────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-200:#c7d2fe;
+  --indigo-300:#a5b4fc;--indigo-400:#818cf8;--indigo-500:#6366f1;
+  --indigo-600:#4f46e5;--indigo-700:#4338ca;--indigo-800:#3730a3;
+  --indigo-900:#312e81;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;
+  --slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;
+  --slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;
+  --slate-900:#0f172a;
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+  --shadow-xl:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  color:var(--slate-800);background:var(--slate-50);line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ── Utility ─────────────────────────────────────────── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* ── Animations ──────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes slideRight{from{transform:translateX(-10px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ── Navigation ──────────────────────────────────────── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--slate-200);transition:box-shadow .3s ease;
+}
+.nav.scrolled{box-shadow:var(--shadow-md)}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1200px;margin:0 auto;padding:0 24px;height:64px;
+}
+.nav-logo{font-weight:700;font-size:1.1rem;color:var(--indigo-600);display:flex;align-items:center;gap:8px}
+.nav-logo svg{width:28px;height:28px}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{
+  padding:6px 14px;border-radius:6px;font-size:.875rem;font-weight:500;
+  color:var(--slate-600);transition:all .2s ease;white-space:nowrap;
+}
+.nav-links a:hover,.nav-links a.active{background:var(--indigo-50);color:var(--indigo-600)}
+.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--slate-700);margin:5px 0;border-radius:2px;transition:all .3s ease}
+
+/* ── Mobile nav ──────────────────────────────────────── */
+@media(max-width:900px){
+  .nav-links{
+    position:fixed;top:64px;left:0;right:0;bottom:0;
+    background:rgba(255,255,255,.97);backdrop-filter:blur(12px);
+    flex-direction:column;padding:24px;gap:4px;
+    transform:translateX(100%);transition:transform .35s ease;
+  }
+  .nav-links.open{transform:translateX(0)}
+  .nav-links a{font-size:1.1rem;padding:12px 16px}
+  .nav-hamburger{display:block}
+  .nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+  .nav-hamburger.open span:nth-child(2){opacity:0}
+  .nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+}
+
+/* ── Hero ────────────────────────────────────────────── */
+.hero{
+  padding:140px 0 80px;text-align:center;
+  background:linear-gradient(135deg,var(--indigo-50) 0%,#fff 50%,var(--indigo-50) 100%);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-50%;right:-30%;width:80%;height:200%;
+  background:radial-gradient(ellipse,rgba(99,102,241,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--indigo-100);color:var(--indigo-700);
+  font-size:.8rem;font-weight:600;padding:6px 16px;border-radius:20px;
+  margin-bottom:20px;animation:fadeInUp .7s ease both;
+}
+.hero h1{
+  font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.15;
+  color:var(--slate-900);max-width:800px;margin:0 auto 16px;
+  animation:fadeInUp .7s ease .1s both;
+}
+.hero h1 span{
+  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero p{
+  font-size:clamp(1rem,2vw,1.25rem);color:var(--slate-500);
+  max-width:600px;margin:0 auto;animation:fadeInUp .7s ease .2s both;
+}
+
+/* ── Section ─────────────────────────────────────────── */
+.section{padding:80px 0}
+.section-alt{background:#fff}
+.section-header{text-align:center;margin-bottom:56px}
+.section-label{
+  display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--indigo-500);margin-bottom:8px;
+}
+.section-title{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;color:var(--slate-900);margin-bottom:12px}
+.section-subtitle{font-size:1.05rem;color:var(--slate-500);max-width:600px;margin:0 auto}
+
+/* ── Lifecycle Flow ──────────────────────────────────── */
+.lifecycle-flow{position:relative;max-width:1000px;margin:0 auto}
+
+/* Connector line */
+.lifecycle-flow::before{
+  content:'';position:absolute;left:40px;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--indigo-200),var(--indigo-400),var(--indigo-200));
+  border-radius:2px;
+}
+@media(min-width:768px){
+  .lifecycle-flow::before{left:50%;transform:translateX(-50%)}
+}
+
+.stage-card{
+  position:relative;display:flex;align-items:flex-start;gap:20px;
+  margin-bottom:24px;cursor:pointer;
+}
+@media(min-width:768px){
+  .stage-card{width:48%;margin-bottom:32px}
+  .stage-card:nth-child(odd){margin-left:0;margin-right:auto;flex-direction:row-reverse;text-align:right}
+  .stage-card:nth-child(even){margin-left:auto;margin-right:0}
+}
+
+.stage-number{
+  flex-shrink:0;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:1rem;
+  box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200);
+  position:relative;z-index:2;transition:transform .3s ease,box-shadow .3s ease;
+}
+.stage-card:hover .stage-number{transform:scale(1.1);box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-400)}
+
+.stage-content{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  padding:20px 24px;flex:1;transition:all .3s ease;
+  box-shadow:var(--shadow-sm);
+}
+.stage-card:hover .stage-content{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
+.stage-card.expanded .stage-content{border-color:var(--indigo-400);box-shadow:var(--shadow-lg)}
+
+.stage-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+@media(min-width:768px){
+  .stage-card:nth-child(odd) .stage-header{flex-direction:row-reverse}
+}
+.stage-name{font-size:1.1rem;font-weight:700;color:var(--slate-900)}
+.stage-toggle{
+  width:28px;height:28px;border-radius:50%;background:var(--indigo-50);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .3s ease;
+}
+.stage-toggle svg{width:14px;height:14px;color:var(--indigo-500);transition:transform .3s ease}
+.stage-card.expanded .stage-toggle{background:var(--indigo-500)}
+.stage-card.expanded .stage-toggle svg{color:#fff;transform:rotate(180deg)}
+
+.stage-subtitle{font-size:.875rem;color:var(--slate-500);margin-top:4px}
+
+.stage-details{
+  max-height:0;overflow:hidden;transition:max-height .45s ease,opacity .3s ease;opacity:0;
+}
+.stage-card.expanded .stage-details{max-height:600px;opacity:1;margin-top:16px}
+
+.detail-group{margin-bottom:14px}
+.detail-group:last-child{margin-bottom:0}
+.detail-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--indigo-500);margin-bottom:6px}
+.detail-list{list-style:none;padding:0}
+.detail-list li{
+  font-size:.85rem;color:var(--slate-600);padding:3px 0;padding-left:16px;position:relative;
+  text-align:left;
+}
+.detail-list li::before{
+  content:'';position:absolute;left:0;top:11px;width:6px;height:6px;
+  border-radius:50%;background:var(--indigo-300);
+}
+
+/* Loop arrow */
+.loop-indicator{
+  text-align:center;margin:40px auto 0;padding:24px;
+  background:linear-gradient(135deg,var(--indigo-50),var(--indigo-100));
+  border:2px dashed var(--indigo-300);border-radius:var(--radius-lg);
+  max-width:480px;
+}
+.loop-indicator p{font-size:1rem;font-weight:600;color:var(--indigo-700)}
+.loop-indicator span{font-size:.85rem;color:var(--indigo-500);display:block;margin-top:4px}
+.loop-arrow{font-size:2rem;color:var(--indigo-400);margin-bottom:4px}
+
+/* ── Segmentation ────────────────────────────────────── */
+.seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.seg-card{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  padding:18px 20px;display:flex;align-items:flex-start;gap:14px;
+  transition:all .3s ease;
+}
+.seg-card:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.seg-icon{
+  flex-shrink:0;width:40px;height:40px;border-radius:var(--radius-sm);
+  background:var(--indigo-50);display:flex;align-items:center;justify-content:center;
+}
+.seg-icon svg{width:20px;height:20px;color:var(--indigo-500)}
+.seg-text{font-size:.9rem;font-weight:600;color:var(--slate-700);line-height:1.4}
+.seg-desc{font-size:.8rem;color:var(--slate-400);margin-top:2px;font-weight:400}
+
+/* ── Phases ──────────────────────────────────────────── */
+.phases-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:768px){.phases-grid{grid-template-columns:1fr}}
+
+.phase-card{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-lg);
+  padding:32px;position:relative;overflow:hidden;transition:all .3s ease;
+}
+.phase-card:hover{box-shadow:var(--shadow-lg)}
+.phase-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+}
+.phase-card.phase-1::before{background:linear-gradient(90deg,var(--indigo-400),var(--indigo-600))}
+.phase-card.phase-2::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+
+.phase-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;
+  font-size:.75rem;font-weight:700;margin-bottom:16px;
+}
+.phase-1 .phase-badge{background:var(--indigo-100);color:var(--indigo-700)}
+.phase-2 .phase-badge{background:#ede9fe;color:#6d28d9}
+
+.phase-title{font-size:1.3rem;font-weight:800;color:var(--slate-900);margin-bottom:4px}
+.phase-timeline{font-size:.85rem;color:var(--slate-400);margin-bottom:20px}
+
+.phase-list{list-style:none;padding:0}
+.phase-list li{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 0;
+  font-size:.9rem;color:var(--slate-600);border-bottom:1px solid var(--slate-100);
+}
+.phase-list li:last-child{border-bottom:none}
+.phase-check{
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.phase-1 .phase-check{background:var(--indigo-100);color:var(--indigo-600)}
+.phase-2 .phase-check{background:#ede9fe;color:#7c3aed}
+.phase-check svg{width:12px;height:12px}
+
+/* ── Integration ─────────────────────────────────────── */
+.int-grid{display:grid;gap:16px;max-width:900px;margin:0 auto}
+.int-row{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  padding:20px 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
+  transition:all .3s ease;
+}
+.int-row:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
+@media(max-width:600px){
+  .int-row{grid-template-columns:1fr;text-align:center}
+}
+.int-from,.int-to{display:flex;flex-direction:column;gap:2px}
+.int-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.int-from .int-label{color:var(--slate-400)}
+.int-to .int-label{color:var(--indigo-500)}
+.int-value{font-size:.9rem;font-weight:600;color:var(--slate-700)}
+.int-to .int-value{color:var(--indigo-700)}
+.int-arrow{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--indigo-50);display:flex;align-items:center;justify-content:center;
+}
+.int-arrow svg{width:18px;height:18px;color:var(--indigo-400)}
+@media(max-width:600px){.int-arrow{margin:0 auto}}
+
+/* ── Footer ──────────────────────────────────────────── */
+.footer{
+  text-align:center;padding:40px 0;border-top:1px solid var(--slate-200);
+  color:var(--slate-400);font-size:.85rem;
+}
+
+/* ── Scroll-to-top ───────────────────────────────────── */
+.scroll-top{
+  position:fixed;bottom:28px;right:28px;width:44px;height:44px;
+  border-radius:50%;background:var(--indigo-600);color:#fff;border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-lg);opacity:0;transform:translateY(20px);
+  transition:all .3s ease;z-index:50;
+}
+.scroll-top.show{opacity:1;transform:translateY(0)}
+.scroll-top:hover{background:var(--indigo-700);transform:translateY(-2px)}
+.scroll-top svg{width:20px;height:20px}
+
+/* ── Print styles ────────────────────────────────────── */
+@media print{
+  .nav,.scroll-top{display:none!important}
+  .hero{padding-top:40px}
+  .stage-details{max-height:none!important;opacity:1!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── Navigation ───────────────────────────────────── -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="2.5"/><path d="M9 14.5l3.5 3L19 11" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Participant Lifecycle
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#lifecycle">Lifecycle</a>
+      <a href="#segmentation">Segmentation</a>
+      <a href="#phases">Phases</a>
+      <a href="#integrations">Integrations</a>
+    </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ─── Hero ─────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-badge">Team Presentation — February 2026</div>
+    <h1>The <span>Participant Lifecycle</span><br>End to End</h1>
+    <p>From first ad click to long-term retention — a complete view of how participants move through our clinical study ecosystem.</p>
+  </div>
+</section>
+
+<!-- ─── Lifecycle Flow ───────────────────────────────── -->
+<section class="section section-alt" id="lifecycle">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">The Journey</div>
+      <h2 class="section-title">9-Stage Participant Lifecycle</h2>
+      <p class="section-subtitle">Click any stage to explore channels, system requirements, and dashboard metrics.</p>
+    </div>
+
+    <div class="lifecycle-flow">
+
+      <!-- Stage 1 -->
+      <div class="stage-card reveal" data-stage="1">
+        <div class="stage-number">1</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Lead Capture</div>
+              <div class="stage-subtitle">Ads, newsletter, referral, organic, self-serve studies</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>Meta Ads (Facebook & Instagram)</li>
+                <li>Google Ads / Search</li>
+                <li>Newsletter signup forms</li>
+                <li>Referral links from existing participants</li>
+                <li>Organic search / blog content</li>
+                <li>Self-serve study landing pages</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Auto-import leads from Meta Ads API</li>
+                <li>Landing page form → participant database sync</li>
+                <li>UTM parameter tracking on all inbound links</li>
+                <li>Referral code generation &amp; tracking</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Leads by source &amp; campaign</li>
+                <li>Cost per lead by channel</li>
+                <li>Lead → app install conversion rate</li>
+                <li>Weekly/monthly lead volume trend</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 2 -->
+      <div class="stage-card reveal" data-stage="2">
+        <div class="stage-number">2</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">App Install</div>
+              <div class="stage-subtitle">OneLink tracking, AppsFlyer attribution</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>OneLink deep links from ads &amp; emails</li>
+                <li>App Store / Google Play organic search</li>
+                <li>AppsFlyer attribution for install source</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>AppsFlyer SDK integration for attribution</li>
+                <li>OneLink configuration for all campaigns</li>
+                <li>Install event → participant record creation</li>
+                <li>Deferred deep linking for pre-install referrals</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Installs by source / campaign</li>
+                <li>Cost per install</li>
+                <li>Install → account creation rate</li>
+                <li>Attribution accuracy / unattributed installs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="stage-card reveal" data-stage="3">
+        <div class="stage-number">3</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Browse / Explore</div>
+              <div class="stage-subtitle">In-app browsing, push notifications</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>In-app study catalog</li>
+                <li>Push notifications for new studies</li>
+                <li>Email digests of available studies</li>
+                <li>In-app banners and featured studies</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Study catalog with filtering &amp; eligibility hints</li>
+                <li>Push notification service (segmented sends)</li>
+                <li>Browse activity tracking (views, clicks, time)</li>
+                <li>Personalized study recommendations</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Studies viewed per session</li>
+                <li>Browse → eligibility survey start rate</li>
+                <li>Push notification open rate</li>
+                <li>Most viewed / most clicked studies</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 4 -->
+      <div class="stage-card reveal" data-stage="4">
+        <div class="stage-number">4</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Eligibility Survey</div>
+              <div class="stage-subtitle">In-app survey, drop-off monitoring by question</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>In-app eligibility questionnaire</li>
+                <li>Email reminder for incomplete surveys</li>
+                <li>Push notification nudge to finish survey</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Question-level drop-off tracking</li>
+                <li>Disqualification reason logging</li>
+                <li>Survey completion event triggers</li>
+                <li>Partial survey save &amp; resume capability</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Survey start → complete rate</li>
+                <li>Drop-off rate by question</li>
+                <li>Disqualification reasons breakdown</li>
+                <li>Average time to complete survey</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 5 -->
+      <div class="stage-card reveal" data-stage="5">
+        <div class="stage-number">5</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Onboarding</div>
+              <div class="stage-subtitle">Join study, labs, wearable setup</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>In-app onboarding flow</li>
+                <li>Email with lab kit / wearable instructions</li>
+                <li>SMS reminders for manual steps</li>
+                <li>Support chat for setup issues</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Onboarding checklist with step tracking</li>
+                <li>Lab kit shipment tracking integration</li>
+                <li>Wearable device pairing verification</li>
+                <li>Onboarding timeout alerts (stalled participants)</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Onboarding completion rate</li>
+                <li>Average time to fully onboard</li>
+                <li>Drop-off by onboarding step</li>
+                <li>Wearable pairing success rate</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 6 -->
+      <div class="stage-card reveal" data-stage="6">
+        <div class="stage-number">6</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Active in Study</div>
+              <div class="stage-subtitle">Compliance monitoring, at-risk flagging</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>In-app daily/weekly check-ins</li>
+                <li>Push notifications for task reminders</li>
+                <li>Email progress reports</li>
+                <li>Support escalation for at-risk participants</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Real-time compliance scoring engine</li>
+                <li>At-risk participant flagging &amp; alerts</li>
+                <li>Automated reminder sequences</li>
+                <li>Wearable data ingestion &amp; validation</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Compliance rate (overall &amp; by task)</li>
+                <li>At-risk participant count</li>
+                <li>Average daily engagement score</li>
+                <li>Data completeness by participant</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 7 -->
+      <div class="stage-card reveal" data-stage="7">
+        <div class="stage-number">7</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Study Completion</div>
+              <div class="stage-subtitle">Exit survey, rewards, next-study recommendation</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>In-app completion celebration screen</li>
+                <li>Exit survey / feedback form</li>
+                <li>Reward notification (payment, gift card)</li>
+                <li>Next-study recommendation prompt</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Study completion event triggers</li>
+                <li>Automated reward issuance</li>
+                <li>Next-study recommendation engine</li>
+                <li>Exit survey data collection &amp; analysis</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Study completion rate</li>
+                <li>Exit survey response rate &amp; scores</li>
+                <li>Reward redemption rate</li>
+                <li>Next-study click-through rate</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 8 -->
+      <div class="stage-card reveal" data-stage="8">
+        <div class="stage-number">8</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Washout Period</div>
+              <div class="stage-subtitle">Waiting period between studies, public study nudges</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>In-app washout countdown / status</li>
+                <li>Email updates on upcoming studies</li>
+                <li>Public study nudges (non-clinical content)</li>
+                <li>Community engagement content</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Automated washout period tracking per participant</li>
+                <li>Washout end-date calculation &amp; alerts</li>
+                <li>Study eligibility re-check on washout expiry</li>
+                <li>Public study catalog (non-restricted content)</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Participants currently in washout</li>
+                <li>Average washout duration</li>
+                <li>Washout → re-engagement rate</li>
+                <li>Content engagement during washout</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage 9 -->
+      <div class="stage-card reveal" data-stage="9">
+        <div class="stage-number">9</div>
+        <div class="stage-content">
+          <div class="stage-header">
+            <div>
+              <div class="stage-name">Re-engagement</div>
+              <div class="stage-subtitle">Segmented outreach, churn detection, incentives</div>
+            </div>
+            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="stage-details">
+            <div class="detail-group">
+              <div class="detail-label">Channels / Touchpoints</div>
+              <ul class="detail-list">
+                <li>Segmented email campaigns</li>
+                <li>Push notification re-engagement sequences</li>
+                <li>SMS outreach for high-value participants</li>
+                <li>Special incentives / bonus offers</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">System Requirements</div>
+              <ul class="detail-list">
+                <li>Churn detection model (inactivity thresholds)</li>
+                <li>Segmented campaign builder</li>
+                <li>Incentive tracking &amp; budgeting</li>
+                <li>A/B testing for re-engagement messages</li>
+              </ul>
+            </div>
+            <div class="detail-group">
+              <div class="detail-label">Dashboard Metrics</div>
+              <ul class="detail-list">
+                <li>Churned participant count &amp; trend</li>
+                <li>Re-engagement campaign response rate</li>
+                <li>Reactivation rate (returned to browse)</li>
+                <li>Cost per reactivated participant</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loop indicator -->
+    <div class="loop-indicator reveal">
+      <div class="loop-arrow">&#x21bb;</div>
+      <p>Participants loop back to Stage 3: Browse / Explore</p>
+      <span>The lifecycle is continuous — participants cycle through multiple studies over time.</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── Segmentation Rules ───────────────────────────── -->
+<section class="section" id="segmentation">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Targeting</div>
+      <h2 class="section-title">Segmentation Rules</h2>
+      <p class="section-subtitle">Key filters for building targeted campaigns and participant groups.</p>
+    </div>
+
+    <div class="seg-grid">
+
+      <div class="seg-card reveal">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div>
+        <div>
+          <div class="seg-text">Not in any active study</div>
+          <div class="seg-desc">Available for new study recruitment</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal reveal-delay-1">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div>
+          <div class="seg-text">Not in washout period</div>
+          <div class="seg-desc">Cleared to begin a new clinical study</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal reveal-delay-2">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>
+        <div>
+          <div class="seg-text">Has not tried Study X</div>
+          <div class="seg-desc">Eligible for specific study recruitment</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal reveal-delay-3">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/></svg></div>
+        <div>
+          <div class="seg-text">Has baseline wearable data (30+ days)</div>
+          <div class="seg-desc">Sufficient data for study baseline requirements</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div>
+          <div class="seg-text">Has verified phone number</div>
+          <div class="seg-desc">Reachable via SMS for outreach campaigns</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal reveal-delay-1">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+        <div>
+          <div class="seg-text">Not logged in 3+ months (churned)</div>
+          <div class="seg-desc">Targets for re-engagement campaigns</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal reveal-delay-2">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <div>
+          <div class="seg-text">Downloaded app but never joined a study</div>
+          <div class="seg-desc">High-intent leads needing a push to convert</div>
+        </div>
+      </div>
+
+      <div class="seg-card reveal reveal-delay-3">
+        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg></div>
+        <div>
+          <div class="seg-text">Clicked ad but never downloaded app</div>
+          <div class="seg-desc">Top-of-funnel leads for retargeting</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── Implementation Phases ────────────────────────── -->
+<section class="section section-alt" id="phases">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-title">Implementation Phases</h2>
+      <p class="section-subtitle">A two-phase rollout from minimum viable to full automation.</p>
+    </div>
+
+    <div class="phases-grid">
+
+      <!-- Phase 1 -->
+      <div class="phase-card phase-1 reveal">
+        <div class="phase-badge">Phase 1</div>
+        <div class="phase-title">Minimum Viable</div>
+        <div class="phase-timeline">Now &rarr; 4 weeks</div>
+        <ul class="phase-list">
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Data cleanup of test/dummy accounts</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Naming convention for test accounts</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Get data into their system</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Basic segmentation queries (manual pull)</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Study-level dumps for active recruitment</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Eligibility drop-off visibility by question</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Dashboard fixes (spend, source attribution)</li>
+        </ul>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card phase-2 reveal reveal-delay-1">
+        <div class="phase-badge">Phase 2</div>
+        <div class="phase-title">Full System</div>
+        <div class="phase-timeline">4 weeks &rarr; 3 months</div>
+        <ul class="phase-list">
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Automated segmentation dashboard with filters</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>One-click email campaigns from dashboard</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>In-app notifications and drip campaigns</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Washout period auto-tracking</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Full participant status tracking</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Churn detection and re-engagement flows</li>
+          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>API integration to email platform</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── Integration Points ───────────────────────────── -->
+<section class="section" id="integrations">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Data Flow</div>
+      <h2 class="section-title">Integration Points</h2>
+      <p class="section-subtitle">Where data enters today vs. where it needs to go.</p>
+    </div>
+
+    <div class="int-grid">
+
+      <div class="int-row reveal">
+        <div class="int-from">
+          <div class="int-label">Today</div>
+          <div class="int-value">Meta Ads leads &mdash; manual download</div>
+        </div>
+        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <div class="int-to">
+          <div class="int-label">Target State</div>
+          <div class="int-value">Auto-feed into participant database</div>
+        </div>
+      </div>
+
+      <div class="int-row reveal reveal-delay-1">
+        <div class="int-from">
+          <div class="int-label">Today</div>
+          <div class="int-value">Landing page forms &mdash; sits on page</div>
+        </div>
+        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <div class="int-to">
+          <div class="int-label">Target State</div>
+          <div class="int-value">Auto-import to participant database</div>
+        </div>
+      </div>
+
+      <div class="int-row reveal reveal-delay-2">
+        <div class="int-from">
+          <div class="int-label">Today</div>
+          <div class="int-value">Newsletter signups &mdash; SendGrid only</div>
+        </div>
+        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <div class="int-to">
+          <div class="int-label">Target State</div>
+          <div class="int-value">Sync with participant database</div>
+        </div>
+      </div>
+
+      <div class="int-row reveal reveal-delay-3">
+        <div class="int-from">
+          <div class="int-label">Today</div>
+          <div class="int-value">App installs &mdash; AppsFlyer only</div>
+        </div>
+        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <div class="int-to">
+          <div class="int-label">Target State</div>
+          <div class="int-value">AppsFlyer &rarr; real-time dashboard</div>
+        </div>
+      </div>
+
+      <div class="int-row reveal">
+        <div class="int-from">
+          <div class="int-label">Today</div>
+          <div class="int-value">Study joins &mdash; in-app only</div>
+        </div>
+        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <div class="int-to">
+          <div class="int-label">Target State</div>
+          <div class="int-value">Real-time dashboard with status tracking</div>
+        </div>
+      </div>
+
+      <div class="int-row reveal reveal-delay-1">
+        <div class="int-from">
+          <div class="int-label">Today</div>
+          <div class="int-value">Email sends &mdash; manual SendGrid</div>
+        </div>
+        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+        <div class="int-to">
+          <div class="int-label">Target State</div>
+          <div class="int-value">One-click campaigns from dashboard</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ───────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <p>Participant Lifecycle &mdash; Internal Team Presentation &mdash; February 2026</p>
+  </div>
+</footer>
+
+<!-- ─── Scroll to top ────────────────────────────────── -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- ─── JavaScript ───────────────────────────────────── -->
+<script>
+(function(){
+  'use strict';
+
+  /* ── Mobile menu ────────────────────────────────────── */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', function(){
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  /* ── Scroll: nav shadow + active link ───────────────── */
+  const nav = document.getElementById('nav');
+  const sections = document.querySelectorAll('section[id]');
+  const links = navLinks.querySelectorAll('a');
+
+  function onScroll(){
+    const scrollY = window.scrollY;
+    nav.classList.toggle('scrolled', scrollY > 10);
+
+    // Scroll-to-top button
+    document.getElementById('scrollTop').classList.toggle('show', scrollY > 500);
+
+    // Active section highlight
+    let current = '';
+    sections.forEach(function(sec){
+      if(scrollY >= sec.offsetTop - 200) current = sec.getAttribute('id');
+    });
+    links.forEach(function(link){
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ── Scroll to top button ───────────────────────────── */
+  document.getElementById('scrollTop').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ── Reveal on scroll (Intersection Observer) ───────── */
+  var reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    reveals.forEach(function(el){ observer.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('visible'); });
+  }
+
+  /* ── Stage card expand/collapse ─────────────────────── */
+  document.querySelectorAll('.stage-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      var wasExpanded = card.classList.contains('expanded');
+      // Collapse all
+      document.querySelectorAll('.stage-card.expanded').forEach(function(c){
+        c.classList.remove('expanded');
+      });
+      // Toggle clicked
+      if(!wasExpanded) card.classList.add('expanded');
+    });
+  });
+
+  /* ── Keyboard: Escape to collapse ───────────────────── */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      document.querySelectorAll('.stage-card.expanded').forEach(function(c){
+        c.classList.remove('expanded');
+      });
+    }
+  });
+
+  /* ── Presentation mode: arrow keys navigate sections ── */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowDown' || e.key === 'ArrowRight'){
+      e.preventDefault();
+      navigateSection(1);
+    }
+    if(e.key === 'ArrowUp' || e.key === 'ArrowLeft'){
+      e.preventDefault();
+      navigateSection(-1);
+    }
+  });
+
+  function navigateSection(dir){
+    var sects = Array.from(sections);
+    var scrollY = window.scrollY;
+    var idx = -1;
+    for(var i = 0; i < sects.length; i++){
+      if(sects[i].offsetTop - 80 > scrollY + 10){
+        idx = i;
+        break;
+      }
+    }
+    if(dir === 1){
+      var target = idx >= 0 ? sects[idx] : null;
+    } else {
+      if(idx <= 0) idx = sects.length;
+      var target = sects[idx - 1] || null;
+      // If we're already at the top of this section, go one more back
+      if(target && Math.abs(target.offsetTop - 80 - scrollY) < 20){
+        target = sects[idx - 2] || null;
+      }
+    }
+    if(target){
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }
+
+})();
+</script>
+</body>
+</html>
