@@ -118,9 +118,9 @@ img{max-width:100%;display:block}
 }
 
 /* ── Section ─────────────────────────────────────────── */
-.section{padding:80px 0}
+.section{padding:64px 0}
 .section-alt{background:#fff}
-.section-header{text-align:center;margin-bottom:56px}
+.section-header{text-align:center;margin-bottom:40px}
 .section-label{
   display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;
   text-transform:uppercase;color:var(--indigo-500);margin-bottom:8px;
@@ -146,7 +146,7 @@ img{max-width:100%;display:block}
   margin-bottom:24px;cursor:pointer;
 }
 @media(min-width:768px){
-  .stage-card{width:48%;margin-bottom:32px}
+  .stage-card{width:48%;margin-bottom:20px}
   .stage-card:nth-child(odd){margin-left:0;margin-right:auto;flex-direction:row-reverse;text-align:right}
   .stage-card:nth-child(even){margin-left:auto;margin-right:0}
 }
@@ -1041,8 +1041,25 @@ img{max-width:100%;display:block}
           observer.unobserve(entry.target);
         }
       });
-    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    }, {threshold:0.08, rootMargin:'0px 0px -30px 0px'});
     reveals.forEach(function(el){ observer.observe(el); });
+    // Fallback: periodically check for unrevealed elements near the viewport
+    function checkReveals(){
+      var anyHidden = false;
+      reveals.forEach(function(el){
+        if(!el.classList.contains('visible')){
+          anyHidden = true;
+          var rect = el.getBoundingClientRect();
+          if(rect.top < window.innerHeight + 80){
+            el.classList.add('visible');
+          }
+        }
+      });
+      if(anyHidden) requestAnimationFrame(checkReveals);
+    }
+    requestAnimationFrame(checkReveals);
+    // Also check on scroll as a safety net
+    window.addEventListener('scroll', checkReveals, {passive:true});
   } else {
     reveals.forEach(function(el){ el.classList.add('visible'); });
   }
