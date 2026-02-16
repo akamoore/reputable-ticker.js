@@ -149,6 +149,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
 .q-card .q-val{font-size:1.4rem;font-weight:800;color:var(--teal-600);margin:4px 0}
 .q-card .q-note{font-size:.7rem;color:var(--s400)}
 
+/* ── Discrepancy Notes ────────────── */
+.discrepancy-note{border-left:4px solid var(--amber-500)}
+.disc-list{display:grid;gap:12px}
+.disc-item{display:flex;gap:12px;align-items:flex-start}
+.disc-num{width:26px;height:26px;border-radius:50%;background:var(--amber-100);color:var(--amber-700);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.disc-item strong{font-size:.88rem;color:var(--s800);display:block;margin-bottom:2px}
+.disc-item p{font-size:.82rem;color:var(--s500);line-height:1.5}
+
+/* ── Toast ────────────────────────── */
+.copied-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s800);color:#fff;padding:10px 24px;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s ease;z-index:200;pointer-events:none}
+.copied-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
 /* ── Print / Export ──────────────── */
 @media print{
   .topbar,.data-panel,.btn,.buffer-row,.tabs{display:none!important}
@@ -172,9 +184,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
     <a href="#health-section">Study Health</a>
     <a href="#proj-section">Projections</a>
     <a href="#source-section">Attribution</a>
+    <a href="#discrepancy-section">Notes</a>
   </div>
   <div class="topbar-actions">
     <span class="last-updated" id="lastUpdated">Last updated: —</span>
+    <button class="btn" onclick="exportSummary()" title="Copy summary to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Summary</button>
     <button class="btn" onclick="exportScreenshot()" title="Export as image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
   </div>
 </nav>
@@ -205,13 +219,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
       <div class="form-row">
         <div class="form-group"><label>Study Name</label><select id="addStudyName">
           <option value="">Select study...</option>
-          <option>Melatonin Sleep Study</option>
+          <option>Somato / Melatonin Sleep Study</option>
+          <option>ProLivaMax (Pain Relief)</option>
           <option>Enhanced Brew Coffee Study</option>
-          <option>Pain Relief ProleevaMax</option>
+          <option>Berkeley Life</option>
           <option>Peptide Supplement Sleep Recovery</option>
-          <option>Rootless &amp; Women's Health</option>
-          <option>Quantum Upgrade &amp; Women's Health</option>
-          <option>Somato</option>
+          <option>Rootless Women's Health</option>
+          <option>Quantum Upgrade</option>
           <option>Tapping</option>
           <option>Percepta</option>
           <option>Leila Nivana</option>
@@ -305,7 +319,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
   </div>
   <div class="card" style="overflow-x:auto">
     <table class="tbl" id="costTable">
-      <thead><tr><th>Study</th><th>Spend</th><th>Joins</th><th>Onboarded</th><th>Cost/Lead</th><th>Cost/Onboard</th><th>Join→Onboard %</th></tr></thead>
+      <thead><tr><th>Study</th><th>Spend</th><th>Ad Results</th><th>Impressions</th><th>Joins</th><th>Onboarded</th><th>Cost/Lead</th><th>Cost/Onboard</th><th>Join→Onboard %</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
@@ -367,23 +381,80 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════
+     DATA DISCREPANCY NOTES
+     ══════════════════════════════════════════════════ -->
+<div class="section" id="discrepancy-section">
+  <div class="section-head">
+    <h2>Data Discrepancy Notes</h2>
+    <span class="badge">Ads Manager vs Dashboard</span>
+  </div>
+  <div class="card discrepancy-note">
+    <p style="font-size:.88rem;font-weight:600;color:var(--s800);margin-bottom:14px">These corrections were made on Feb 16, 2026 after cross-referencing Meta Ads Manager export (Jan 2023 – Feb 2026) with the Reputable dashboard.</p>
+    <div class="disc-list">
+      <div class="disc-item">
+        <span class="disc-num">1</span>
+        <div>
+          <strong>ProLivaMax spend was undercounted by $1,561</strong>
+          <p>Dashboard showed $4,125.19. Actual is $5,686.18. The active "Pain Relief: ProleevaMax" campaign was missing from the dashboard total. ProLivaMax has 5 campaigns total — the dashboard was only tracking 4.</p>
+        </div>
+      </div>
+      <div class="disc-item">
+        <span class="disc-num">2</span>
+        <div>
+          <strong>Berkeley Life ($2,632.02) was missing entirely</strong>
+          <p>This study was either not mapped in the dashboard or was being counted under "Unmapped Campaigns" ($1,557.56 on Manpreet's dashboard). The remaining ~$1,074 gap suggests partial data loss. Berkeley Life joins and onboarded numbers need confirmation from Manpreet.</p>
+        </div>
+      </div>
+      <div class="disc-item">
+        <span class="disc-num">3</span>
+        <div>
+          <strong>Total spend gap: $4,199.61</strong>
+          <p>Dashboard was showing $18,132.96 total. Actual from Ads Manager is $22,332.57. This 23% undercount was affecting all cost-per-onboard calculations and budget projections.</p>
+        </div>
+      </div>
+      <div class="disc-item">
+        <span class="disc-num">4</span>
+        <div>
+          <strong>"Unmapped Campaigns" row removed</strong>
+          <p>The $1,557.56 "Unmapped Campaigns" line on Manpreet's dashboard is likely a portion of the Berkeley Life spend. It has been replaced with the correct Berkeley Life entry from Ads Manager.</p>
+        </div>
+      </div>
+      <div class="disc-item">
+        <span class="disc-num">5</span>
+        <div>
+          <strong>Corrected averages</strong>
+          <p>Overall cost per onboard: $45.86 (was showing ~$37). Average excluding outliers (ProLivaMax + Somato/Melatonin): ~$20.17. These corrected numbers are now used for all budget projections.</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:12px 16px;background:var(--teal-50);border-radius:var(--radius-sm);font-size:.82rem;color:var(--teal-800)">
+      <strong>Action items:</strong> (1) Manpreet to confirm Berkeley Life joins/onboarded counts. (2) Verify all 5 ProLivaMax campaigns are mapped. (3) Remove "Unmapped Campaigns" row from official dashboard. (4) Reconcile 30-day view vs all-time data display.
+    </div>
+  </div>
+</div>
+
 </div><!-- /container -->
+
+<!-- Toast notification -->
+<div class="copied-toast" id="copiedToast">Copied to clipboard!</div>
 
 <script>
 /* ═══════════════════════════════════════════════════════
    DATA LAYER (localStorage-backed)
    ═══════════════════════════════════════════════════════ */
-const STORAGE_KEY = 'rcc_data_v2';
+const STORAGE_KEY = 'rcc_data_v3';
 
 const DEFAULT_DATA = {
   lastUpdated: null,
   studies: [
-    {name:'Melatonin Sleep Study',spend:6463.02,joins:432,onboarded:78},
-    {name:'Enhanced Brew Coffee Study',spend:4231.92,joins:771,onboarded:192},
-    {name:'Pain Relief ProleevaMax',spend:4125.19,joins:152,onboarded:35},
-    {name:'Peptide Supplement Sleep Recovery',spend:2464.11,joins:575,onboarded:120},
-    {name:'Rootless & Women\'s Health',spend:582.58,joins:141,onboarded:50},
-    {name:'Quantum Upgrade & Women\'s Health',spend:266.14,joins:122,onboarded:12}
+    {name:'Somato / Melatonin Sleep Study',spend:6469.62,joins:432,onboarded:78,adResults:10169,impressions:578956,reach:320592,campaigns:2,studyStatus:'active'},
+    {name:'ProLivaMax (Pain Relief)',spend:5686.18,joins:152,onboarded:35,adResults:10109,impressions:505917,reach:331582,campaigns:5,studyStatus:'active'},
+    {name:'Enhanced Brew Coffee Study',spend:4231.92,joins:771,onboarded:192,adResults:12855,impressions:1058891,reach:853198,campaigns:3,studyStatus:'inactive'},
+    {name:'Berkeley Life',spend:2632.02,joins:0,onboarded:0,adResults:11226,impressions:418996,reach:226508,campaigns:1,studyStatus:'inactive',needsConfirmation:true},
+    {name:'Peptide Supplement Sleep Recovery',spend:2464.11,joins:575,onboarded:120,adResults:5579,impressions:301324,reach:216406,campaigns:1,studyStatus:'inactive'},
+    {name:'Rootless Women\'s Health',spend:582.58,joins:141,onboarded:50,adResults:897,impressions:53318,reach:45390,campaigns:1,studyStatus:'inactive'},
+    {name:'Quantum Upgrade',spend:266.14,joins:122,onboarded:12,adResults:662,impressions:60649,reach:43744,campaigns:1,studyStatus:'inactive'}
   ],
   weeklySnapshots: [
     {week:'2026-01-12',spend:980,joins:85,onboarded:28,installs:210},
@@ -408,7 +479,7 @@ const DEFAULT_DATA = {
   ],
   healthStudies: [
     {name:'Somato',status:'recruiting',needed:240,current:0,cpo:null,notes:'Currently recruiting'},
-    {name:'Pain Relief ProleevaMax',status:'recruiting',needed:80,current:35,cpo:117.86,notes:'Labs completion is bottleneck'},
+    {name:'ProLivaMax (Pain Relief)',status:'recruiting',needed:80,current:35,cpo:162.46,notes:'Labs completion is bottleneck. Spend corrected to $5,686.18'},
     {name:'Tapping',status:'recruiting',needed:100,current:0,cpo:null,notes:'Currently recruiting'},
     {name:'Percepta',status:'at-risk',needed:0,current:0,cpo:null,notes:'Wearable + age requirements, needs TBD participants'},
     {name:'Leila Nivana',status:'upcoming',needed:0,current:0,cpo:null,notes:'Upcoming'},
@@ -456,7 +527,7 @@ function addStudyEntry(){
 
   // Update study totals
   let study=DATA.studies.find(s=>s.name===name);
-  if(!study){study={name,spend:0,joins:0,onboarded:0};DATA.studies.push(study);}
+  if(!study){study={name,spend:0,joins:0,onboarded:0,adResults:0,impressions:0,reach:0,campaigns:0,studyStatus:'active'};DATA.studies.push(study);}
   study.spend+=spend;study.joins+=joins;study.onboarded+=onb;
 
   // Add weekly snapshot
@@ -504,7 +575,7 @@ function importCSV(){
     if(p.length>=5){
       const name=p[0],week=p[1],spend=parseFloat(p[2])||0,joins=parseInt(p[3])||0,onb=parseInt(p[4])||0;
       let study=DATA.studies.find(s=>s.name===name);
-      if(!study){study={name,spend:0,joins:0,onboarded:0};DATA.studies.push(study);}
+      if(!study){study={name,spend:0,joins:0,onboarded:0,adResults:0,impressions:0,reach:0,campaigns:0,studyStatus:'active'};DATA.studies.push(study);}
       study.spend+=spend;study.joins+=joins;study.onboarded+=onb;
       if(week){
         let snap=DATA.weeklySnapshots.find(s=>s.week===week);
@@ -589,32 +660,43 @@ document.querySelectorAll('.buffer-btn').forEach(b=>{
 function renderCostTable(){
   const buf=currentBuffer/100;
   const tbody=document.querySelector('#costTable tbody');
-  const outliers=['Pain Relief ProleevaMax','Melatonin Sleep Study'];
-  let totalSpend=0,totalJoins=0,totalOnb=0,exSpend=0,exJoins=0,exOnb=0;
+  const outliers=['ProLivaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
+  let totalSpend=0,totalJoins=0,totalOnb=0,totalAdRes=0,totalImp=0,exSpend=0,exJoins=0,exOnb=0;
   const rows=DATA.studies.map(s=>{
-    const adjOnb=Math.max(1,Math.round(s.onboarded*(1-buf)));
+    const adjOnb=s.onboarded>0?Math.max(1,Math.round(s.onboarded*(1-buf))):0;
     const cpl=s.joins>0?(s.spend/s.joins):0;
     const cpo=adjOnb>0?(s.spend/adjOnb):0;
     const conv=s.joins>0?(s.onboarded/s.joins*100):0;
-    totalSpend+=s.spend;totalJoins+=s.joins;totalOnb+=adjOnb;
-    if(!outliers.includes(s.name)){exSpend+=s.spend;exJoins+=s.joins;exOnb+=adjOnb;}
-    return {name:s.name,spend:s.spend,joins:s.joins,onboarded:s.onboarded,adjOnb,cpl,cpo,conv};
+    const adRes=s.adResults||0;
+    const imp=s.impressions||0;
+    totalSpend+=s.spend;totalJoins+=s.joins;totalOnb+=adjOnb;totalAdRes+=adRes;totalImp+=imp;
+    if(!outliers.includes(s.name)&&!s.needsConfirmation){exSpend+=s.spend;exJoins+=s.joins;exOnb+=adjOnb;}
+    return {name:s.name,spend:s.spend,joins:s.joins,onboarded:s.onboarded,adjOnb,cpl,cpo,conv,adRes,imp,needsConfirmation:s.needsConfirmation};
   });
   const avgCPO=totalOnb>0?(totalSpend/totalOnb):0;
   const exAvgCPO=exOnb>0?(exSpend/exOnb):0;
 
   let html=rows.map(r=>{
     const cls=r.cpo>0?(r.cpo<=avgCPO?'good':'bad'):'';
+    const joinsTd=r.needsConfirmation?'<span style="color:var(--amber-600)" title="Needs confirmation from Manpreet">TBD*</span>':r.joins;
+    const onbTd=r.needsConfirmation?'<span style="color:var(--amber-600)" title="Needs confirmation from Manpreet">TBD*</span>':(r.onboarded+(currentBuffer>0?' → '+r.adjOnb+'**':''));
+    const cplTd=r.needsConfirmation?'—':'$'+fmt(r.cpl);
+    const cpoTd=r.needsConfirmation?'—':('$'+fmt(r.cpo));
+    const convTd=r.needsConfirmation?'—':(r.conv.toFixed(1)+'%');
     return `<tr>
       <td style="font-weight:600">${r.name}</td>
-      <td>$${fmt(r.spend)}</td><td>${r.joins}</td><td>${r.onboarded}${currentBuffer>0?' → '+r.adjOnb+'*':''}</td>
-      <td>$${fmt(r.cpl)}</td><td class="${cls}">$${fmt(r.cpo)}</td><td>${r.conv.toFixed(1)}%</td>
+      <td>$${fmt(r.spend)}</td><td>${r.adRes.toLocaleString()}</td><td>${r.imp.toLocaleString()}</td><td>${joinsTd}</td><td>${onbTd}</td>
+      <td>${cplTd}</td><td class="${cls}">${cpoTd}</td><td>${convTd}</td>
     </tr>`;
   }).join('');
 
-  html+=`<tr class="avg-row"><td>Overall Average</td><td>$${fmt(totalSpend)}</td><td>${totalJoins}</td><td>${totalOnb}</td><td>$${fmt(totalJoins>0?totalSpend/totalJoins:0)}</td><td>$${fmt(avgCPO)}</td><td>${totalJoins>0?(DATA.studies.reduce((s,x)=>s+x.onboarded,0)/totalJoins*100).toFixed(1):'0'}%</td></tr>`;
-  html+=`<tr class="avg-row"><td>Avg (excl. outliers)</td><td>$${fmt(exSpend)}</td><td>${exJoins}</td><td>${exOnb}</td><td>$${fmt(exJoins>0?exSpend/exJoins:0)}</td><td style="color:var(--teal-600)">$${fmt(exAvgCPO)}</td><td>—</td></tr>`;
-  if(currentBuffer>0) html+=`<tr><td colspan="7" style="font-size:.72rem;color:var(--s400);text-align:center">* Adjusted onboarded after ${currentBuffer}% non-ad buffer</td></tr>`;
+  const realOnb=DATA.studies.reduce((s,x)=>s+x.onboarded,0);
+  html+=`<tr class="avg-row"><td>Overall Average</td><td>$${fmt(totalSpend)}</td><td>${totalAdRes.toLocaleString()}</td><td>${totalImp.toLocaleString()}</td><td>${totalJoins}</td><td>${totalOnb}</td><td>$${fmt(totalJoins>0?totalSpend/totalJoins:0)}</td><td>$${fmt(avgCPO)}</td><td>${totalJoins>0?(realOnb/totalJoins*100).toFixed(1):'0'}%</td></tr>`;
+  html+=`<tr class="avg-row"><td>Avg (excl. outliers)</td><td>$${fmt(exSpend)}</td><td colspan="2" style="text-align:center;color:var(--s400)">—</td><td>${exJoins}</td><td>${exOnb}</td><td>$${fmt(exJoins>0?exSpend/exJoins:0)}</td><td style="color:var(--teal-600)">$${fmt(exAvgCPO)}</td><td>—</td></tr>`;
+  let notes=[];
+  if(rows.some(r=>r.needsConfirmation)) notes.push('* Berkeley Life joins/onboarded need confirmation from Manpreet');
+  if(currentBuffer>0) notes.push('** Adjusted onboarded after '+currentBuffer+'% non-ad buffer');
+  if(notes.length) html+=`<tr><td colspan="9" style="font-size:.72rem;color:var(--s400);text-align:center">${notes.join(' &nbsp;|&nbsp; ')}</td></tr>`;
   tbody.innerHTML=html;
 }
 
@@ -792,6 +874,67 @@ function exportScreenshot(){
     link.download='recruitment-report-'+new Date().toISOString().slice(0,10)+'.png';
     link.href=canvas.toDataURL();link.click();
   }).catch(()=>alert('Export failed. Try using your browser\'s print function (Ctrl+P) as a fallback.'));
+}
+
+function exportSummary(){
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const totalSpend=DATA.studies.reduce((s,x)=>s+x.spend,0);
+  const totalOnb=DATA.studies.reduce((s,x)=>s+x.onboarded,0);
+  const avgCPO=totalOnb>0?(totalSpend/totalOnb):0;
+  const outliers=['ProLivaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
+  const exStudies=DATA.studies.filter(s=>!outliers.includes(s.name)&&!s.needsConfirmation);
+  const exSpend=exStudies.reduce((s,x)=>s+x.spend,0);
+  const exOnb=exStudies.reduce((s,x)=>s+x.onboarded,0);
+  const exCPO=exOnb>0?(exSpend/exOnb):0;
+  const snaps=DATA.weeklySnapshots;
+  const latest=snaps[snaps.length-1];
+  const weekCPO=latest&&latest.onboarded>0?(latest.spend/latest.onboarded):0;
+  const recruiting=DATA.healthStudies.filter(s=>s.status==='recruiting');
+
+  let txt=`RECRUITMENT UPDATE — ${dateStr}\n`;
+  txt+=`${'='.repeat(50)}\n\n`;
+  txt+=`KEY METRICS (Corrected from Ads Manager)\n`;
+  txt+=`• Total All-Time Ad Spend: $${fmt(totalSpend)}\n`;
+  txt+=`• Total Onboarded: ${totalOnb}\n`;
+  txt+=`• Avg Cost per Onboard (all): $${fmt(avgCPO)}\n`;
+  txt+=`• Avg Cost per Onboard (excl. outliers): $${fmt(exCPO)}\n`;
+  if(latest) txt+=`• 7-Day Cost per Onboard: $${fmt(weekCPO)} (week of ${latest.week})\n`;
+  txt+=`\nPER-STUDY BREAKDOWN\n`;
+  DATA.studies.forEach(s=>{
+    const cpo=s.onboarded>0?(s.spend/s.onboarded):0;
+    const status=s.studyStatus==='active'?'[ACTIVE]':'[Complete]';
+    txt+=`• ${s.name} ${status} — Spend: $${fmt(s.spend)}, Onboarded: ${s.needsConfirmation?'TBD':s.onboarded}${s.onboarded>0?', CPO: $'+fmt(cpo):''}\n`;
+  });
+  txt+=`\nACTIVE RECRUITING (${recruiting.length} studies)\n`;
+  recruiting.forEach(s=>{
+    const remaining=Math.max(0,s.needed-s.current);
+    txt+=`• ${s.name}: ${s.current}/${s.needed} onboarded${remaining>0?' ('+remaining+' remaining)':''}\n`;
+  });
+  txt+=`\nDATA CORRECTIONS APPLIED\n`;
+  txt+=`• ProLivaMax spend corrected: $4,125.19 → $5,686.18 (+$1,561)\n`;
+  txt+=`• Berkeley Life added: $2,632.02 (was missing from dashboard)\n`;
+  txt+=`• Total spend corrected: $18,132.96 → $22,332.57 (gap: $4,199.61)\n`;
+  txt+=`• "Unmapped Campaigns" removed — was likely Berkeley Life\n`;
+  txt+=`\n— Generated from Recruitment Command Center\n`;
+
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>showToast()).catch(()=>fallbackCopy(txt));
+  }else{fallbackCopy(txt);}
+}
+
+function fallbackCopy(txt){
+  const ta=document.createElement('textarea');
+  ta.value=txt;ta.style.cssText='position:fixed;left:-9999px';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');showToast();}catch(e){alert('Copy failed. Please select and copy manually.');}
+  document.body.removeChild(ta);
+}
+
+function showToast(){
+  const t=document.getElementById('copiedToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
 }
 
 /* ═══════════════════════════════════════════════════════
