@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participant Lifecycle — Speaker Notes</title>
+<style>
+/* ── Reset & Base ────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --indigo-50:#e7faf6;--indigo-100:#c8f2ea;--indigo-200:#93e7d8;
+  --indigo-300:#50d7c3;--indigo-400:#00d5be;--indigo-500:#00b39f;
+  --indigo-600:#009180;--indigo-700:#007768;--indigo-800:#005c51;
+  --indigo-900:#00433b;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;
+  --slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;
+  --slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;
+  --slate-900:#0f172a;
+  --amber-50:#fffbeb;--amber-100:#fef3c7;--amber-500:#f59e0b;--amber-600:#d97706;--amber-700:#b45309;
+  --red-50:#fef2f2;--red-100:#fee2e2;--red-500:#ef4444;--red-600:#dc2626;
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  color:var(--slate-800);background:var(--slate-50);line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+
+/* ── Animations ──────────────────────────────────────── */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(0,179,159,.3)}50%{box-shadow:0 0 0 8px rgba(0,179,159,0)}}
+.fade-in{animation:fadeInUp .5s ease both}
+.fade-in-1{animation-delay:.1s}
+.fade-in-2{animation-delay:.2s}
+.fade-in-3{animation-delay:.3s}
+
+/* ── Sticky Nav / Progress Bar ───────────────────────── */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--slate-200);
+  transition:box-shadow .3s ease;
+}
+.top-nav.scrolled{box-shadow:var(--shadow-md)}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;height:56px;gap:16px;
+}
+.nav-brand{
+  font-weight:800;font-size:.95rem;color:var(--indigo-700);white-space:nowrap;
+  display:flex;align-items:center;gap:8px;
+}
+.nav-brand svg{width:22px;height:22px;flex-shrink:0}
+.nav-sections{
+  display:flex;gap:2px;flex:1;justify-content:center;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.nav-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 14px;border-radius:20px;font-size:.78rem;font-weight:600;
+  color:var(--slate-500);white-space:nowrap;transition:all .25s ease;
+  cursor:pointer;border:none;background:none;
+}
+.nav-pill:hover{color:var(--slate-700);background:var(--slate-100)}
+.nav-pill.active{background:var(--indigo-100);color:var(--indigo-700)}
+.nav-pill .time-badge{
+  font-size:.65rem;font-weight:700;background:var(--slate-200);
+  color:var(--slate-600);padding:2px 6px;border-radius:10px;
+}
+.nav-pill.active .time-badge{background:var(--indigo-200);color:var(--indigo-800)}
+/* Progress bar under nav */
+.progress-track{height:3px;background:var(--slate-100);position:relative}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--indigo-400),var(--indigo-600));width:0;transition:width .3s ease}
+
+@media(max-width:768px){
+  .nav-brand span{display:none}
+  .nav-pill{padding:5px 10px;font-size:.72rem}
+  .nav-pill .time-badge{display:none}
+}
+
+/* ── Container ───────────────────────────────────────── */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ── Header ──────────────────────────────────────────── */
+.header{
+  padding:100px 0 48px;text-align:center;
+  background:linear-gradient(135deg,var(--indigo-50) 0%,#fff 50%,var(--indigo-50) 100%);
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;top:-40%;right:-20%;width:70%;height:180%;
+  background:radial-gradient(ellipse,rgba(0,179,159,.06) 0%,transparent 70%);pointer-events:none;
+}
+.header-label{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--indigo-100);color:var(--indigo-700);
+  font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:20px;
+  margin-bottom:16px;letter-spacing:.03em;
+}
+.header h1{
+  font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.15;
+  color:var(--slate-900);margin-bottom:10px;
+}
+.header h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header p{font-size:1.05rem;color:var(--slate-500);margin-bottom:24px}
+.header-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.85rem;font-weight:600;color:var(--indigo-600);
+  padding:8px 18px;border-radius:8px;border:1px solid var(--indigo-200);
+  background:white;transition:all .2s ease;
+}
+.header-link:hover{background:var(--indigo-50);border-color:var(--indigo-300)}
+.header-link svg{width:14px;height:14px}
+
+/* ── Section ─────────────────────────────────────────── */
+.section{padding:48px 0;border-bottom:1px solid var(--slate-200)}
+.section:last-of-type{border-bottom:none}
+.section-head{display:flex;align-items:center;gap:14px;margin-bottom:28px;flex-wrap:wrap}
+.section-icon{
+  width:48px;height:48px;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.section-icon svg{width:24px;height:24px;color:#fff}
+.section-head h2{font-size:1.5rem;font-weight:800;color:var(--slate-900)}
+.section-time{
+  font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;
+  background:var(--indigo-100);color:var(--indigo-700);white-space:nowrap;
+}
+
+/* ── Key Message Box ─────────────────────────────────── */
+.key-message{
+  background:linear-gradient(135deg,var(--indigo-50),#fff);
+  border:1px solid var(--indigo-200);border-left:4px solid var(--indigo-500);
+  border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.key-message svg{width:20px;height:20px;color:var(--indigo-500);flex-shrink:0;margin-top:2px}
+.key-message p{font-size:.92rem;font-weight:600;color:var(--indigo-800);line-height:1.5}
+
+/* ── Talking Points ──────────────────────────────────── */
+.talk-points{list-style:none;padding:0;margin-bottom:20px}
+.talk-points li{
+  position:relative;padding:8px 0 8px 28px;font-size:.9rem;color:var(--slate-700);
+  border-bottom:1px solid var(--slate-100);
+}
+.talk-points li:last-child{border-bottom:none}
+.talk-points li::before{
+  content:'';position:absolute;left:0;top:16px;width:8px;height:8px;
+  border-radius:50%;background:var(--indigo-400);
+}
+
+/* ── Presenter Tip ───────────────────────────────────── */
+.presenter-tip{
+  background:var(--amber-50);border:1px solid var(--amber-100);
+  border-radius:var(--radius-sm);padding:12px 16px;margin:16px 0;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.presenter-tip svg{width:18px;height:18px;color:var(--amber-600);flex-shrink:0;margin-top:1px}
+.presenter-tip p{font-size:.84rem;font-style:italic;color:var(--amber-700);line-height:1.5}
+
+/* ── Stat Cards ──────────────────────────────────────── */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0}
+.stat-card{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  padding:18px;text-align:center;transition:all .2s ease;
+}
+.stat-card:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.stat-card.alert{border-color:var(--red-500);background:var(--red-50)}
+.stat-card .stat-value{
+  font-size:1.8rem;font-weight:800;
+  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-card.alert .stat-value{
+  background:linear-gradient(135deg,var(--red-500),var(--red-600));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-card .stat-label{font-size:.75rem;font-weight:600;color:var(--slate-500);margin-top:4px;line-height:1.3}
+
+/* ── Stage Card (lifecycle walkthrough) ──────────────── */
+.stage-minimap{
+  display:flex;align-items:center;gap:0;margin-bottom:28px;padding:16px 20px;
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  overflow-x:auto;
+}
+.minimap-node{
+  display:flex;flex-direction:column;align-items:center;gap:4px;min-width:70px;
+  position:relative;flex-shrink:0;
+}
+.minimap-dot{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--slate-200);color:var(--slate-500);
+  font-size:.7rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s ease;position:relative;z-index:1;
+}
+.minimap-node.active .minimap-dot{
+  background:var(--indigo-500);color:#fff;
+  box-shadow:0 0 0 4px var(--indigo-100);
+}
+.minimap-node.key-stage .minimap-dot{
+  background:var(--red-500);color:#fff;
+  animation:pulseGlow 2s ease infinite;
+}
+.minimap-label{font-size:.58rem;font-weight:600;color:var(--slate-400);text-align:center;max-width:72px;line-height:1.2}
+.minimap-node.active .minimap-label{color:var(--indigo-600)}
+.minimap-connector{width:20px;height:2px;background:var(--slate-200);flex-shrink:0;margin-bottom:16px}
+
+.lifecycle-stage{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  padding:24px;margin-bottom:16px;position:relative;
+  border-left:4px solid var(--indigo-400);
+  transition:all .2s ease;
+}
+.lifecycle-stage:hover{box-shadow:var(--shadow-md)}
+.lifecycle-stage.key-highlight{
+  border-left-color:var(--red-500);
+  background:linear-gradient(135deg,var(--red-50),#fff);
+}
+.lifecycle-stage .stage-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--indigo-600);margin-bottom:8px;
+}
+.lifecycle-stage .stage-badge .num{
+  width:24px;height:24px;border-radius:50%;background:var(--indigo-500);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;
+}
+.lifecycle-stage.key-highlight .stage-badge{color:var(--red-600)}
+.lifecycle-stage.key-highlight .stage-badge .num{background:var(--red-500)}
+.lifecycle-stage h3{font-size:1.15rem;font-weight:700;color:var(--slate-900);margin-bottom:10px}
+.lifecycle-stage .key-tag{
+  display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;
+  border-radius:4px;background:var(--red-500);color:#fff;margin-left:8px;vertical-align:middle;
+}
+
+/* ── Segmentation Rules ──────────────────────────────── */
+.seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:20px 0}
+.seg-rule{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-sm);
+  padding:14px 16px;display:flex;align-items:flex-start;gap:10px;transition:all .2s ease;
+}
+.seg-rule:hover{border-color:var(--indigo-300);box-shadow:var(--shadow)}
+.seg-rule .seg-icon{
+  width:32px;height:32px;border-radius:8px;background:var(--indigo-50);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.seg-rule .seg-icon svg{width:16px;height:16px;color:var(--indigo-500)}
+.seg-rule .seg-text{font-size:.84rem;color:var(--slate-700);font-weight:500;line-height:1.4}
+
+/* ── Phase Timeline ──────────────────────────────────── */
+.phase-timeline{display:flex;gap:20px;margin:24px 0;flex-wrap:wrap}
+.phase-block{
+  flex:1;min-width:280px;background:#fff;border:1px solid var(--slate-200);
+  border-radius:var(--radius);overflow:hidden;transition:all .2s ease;
+}
+.phase-block:hover{box-shadow:var(--shadow-md)}
+.phase-header{
+  padding:16px 20px;color:#fff;display:flex;align-items:center;gap:10px;
+}
+.phase-block:first-child .phase-header{background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700))}
+.phase-block:last-child .phase-header{background:linear-gradient(135deg,var(--slate-600),var(--slate-800))}
+.phase-header h3{font-size:1rem;font-weight:700}
+.phase-header .phase-time{
+  margin-left:auto;font-size:.7rem;font-weight:700;
+  background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px;
+}
+.phase-body{padding:16px 20px}
+.phase-body ul{list-style:none;padding:0}
+.phase-body li{
+  font-size:.85rem;color:var(--slate-700);padding:6px 0 6px 20px;
+  position:relative;border-bottom:1px solid var(--slate-100);
+}
+.phase-body li:last-child{border-bottom:none}
+.phase-body li::before{
+  content:'';position:absolute;left:0;top:13px;width:7px;height:7px;
+  border-radius:50%;
+}
+.phase-block:first-child .phase-body li::before{background:var(--indigo-400)}
+.phase-block:last-child .phase-body li::before{background:var(--slate-400)}
+
+/* ── Integration Cards (Today vs Target) ─────────────── */
+.integration-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin:20px 0}
+.integration-card{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  padding:18px 20px;transition:all .2s ease;
+}
+.integration-card:hover{box-shadow:var(--shadow-md)}
+.integration-card h4{font-size:.92rem;font-weight:700;color:var(--slate-900);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.integration-card h4 svg{width:18px;height:18px;color:var(--indigo-500)}
+.int-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.int-label{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  width:52px;text-align:center;padding:3px 0;border-radius:4px;flex-shrink:0;
+}
+.int-label.today{background:var(--red-100);color:var(--red-600)}
+.int-label.target{background:var(--indigo-100);color:var(--indigo-700)}
+.int-desc{font-size:.82rem;color:var(--slate-600)}
+.int-arrow{
+  display:flex;align-items:center;justify-content:center;
+  margin:4px 0 4px 22px;color:var(--indigo-400);
+}
+.int-arrow svg{width:16px;height:16px}
+
+/* ── Closing Quote ───────────────────────────────────── */
+.closing-quote{
+  background:linear-gradient(135deg,var(--indigo-600),var(--indigo-800));
+  color:#fff;border-radius:var(--radius-lg);padding:36px 32px;
+  margin:28px 0;text-align:center;position:relative;overflow:hidden;
+}
+.closing-quote::before{
+  content:'';position:absolute;top:-30%;right:-10%;width:50%;height:160%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none;
+}
+.closing-quote blockquote{
+  font-size:clamp(1rem,2.5vw,1.35rem);font-weight:600;line-height:1.5;
+  max-width:700px;margin:0 auto;position:relative;z-index:1;
+}
+.closing-quote .quote-mark{
+  font-size:4rem;line-height:1;opacity:.25;font-family:Georgia,serif;margin-bottom:-20px;
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+.footer{
+  text-align:center;padding:32px 24px;color:var(--slate-400);font-size:.8rem;
+  border-top:1px solid var(--slate-200);
+}
+.footer a{color:var(--indigo-500);font-weight:600}
+
+/* ── Data Corrections Box ────────────────────────────── */
+.corrections-box{
+  background:#fff;border:2px solid var(--amber-500);border-radius:var(--radius);
+  padding:24px 28px;margin:8px 0 40px;
+}
+.corrections-box h3{
+  font-size:1.05rem;font-weight:800;color:var(--amber-700);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.corrections-box h3 svg{width:20px;height:20px;color:var(--amber-600)}
+.corrections-table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.corrections-table th{
+  text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--slate-500);padding:6px 10px;border-bottom:2px solid var(--slate-200);
+}
+.corrections-table td{
+  font-size:.85rem;color:var(--slate-700);padding:8px 10px;border-bottom:1px solid var(--slate-100);
+}
+.corrections-table .old{color:var(--red-500);text-decoration:line-through;font-weight:600}
+.corrections-table .new{color:var(--indigo-600);font-weight:700}
+.corrections-note{font-size:.8rem;color:var(--slate-500);font-style:italic;margin-top:8px;line-height:1.5}
+
+/* ── Print Styles ────────────────────────────────────── */
+@media print{
+  .top-nav,.progress-track{display:none!important}
+  .header{padding-top:24px}
+  body{font-size:14px}
+  .section{page-break-inside:avoid}
+  .lifecycle-stage{page-break-inside:avoid}
+  .closing-quote{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .stat-card,.phase-header,.section-icon,.minimap-dot,.nav-pill{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     STICKY NAV
+     ════════════════════════════════════════════════════════ -->
+<nav class="top-nav" id="topNav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      <span>Speaker Notes</span>
+    </div>
+    <div class="nav-sections">
+      <a class="nav-pill active" href="#opening">Opening <span class="time-badge">1-2m</span></a>
+      <a class="nav-pill" href="#lifecycle">Lifecycle <span class="time-badge">8-10m</span></a>
+      <a class="nav-pill" href="#segmentation">Segmentation <span class="time-badge">2-3m</span></a>
+      <a class="nav-pill" href="#phases">Phases <span class="time-badge">3-5m</span></a>
+      <a class="nav-pill" href="#integrations">Integrations <span class="time-badge">2-3m</span></a>
+      <a class="nav-pill" href="#closing">Closing <span class="time-badge">2m</span></a>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     HEADER
+     ════════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="container">
+    <div class="header-label fade-in">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Speaker Reference Guide
+    </div>
+    <h1 class="fade-in fade-in-1">Participant Lifecycle — <em>Speaker Notes</em></h1>
+    <p class="fade-in fade-in-2">Wednesday Team Meeting &bull; February 2026 &bull; ~20 minutes</p>
+    <br>
+    <a class="header-link fade-in fade-in-3" href="https://akamoore.github.io/reputable-ticker.js/" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Open Live Presentation
+    </a>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════
+     KEY STATS AT A GLANCE
+     ════════════════════════════════════════════════════════ -->
+<div class="container" style="margin-top:-20px;position:relative;z-index:2">
+  <div class="stat-row fade-in">
+    <div class="stat-card alert">
+      <div class="stat-value">75%</div>
+      <div class="stat-label">Ad-to-install drop-off</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">800+</div>
+      <div class="stat-label">Participants in ecosystem</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">$15-20</div>
+      <div class="stat-label">Cost per qualified lead</div>
+    </div>
+    <div class="stat-card alert">
+      <div class="stat-value">2,000</div>
+      <div class="stat-label">Bounced emails from dirty data</div>
+    </div>
+    <div class="stat-card alert">
+      <div class="stat-value">100+</div>
+      <div class="stat-label">People through broken eligibility</div>
+    </div>
+    <div class="stat-card alert">
+      <div class="stat-value">$4,200</div>
+      <div class="stat-label">Dashboard spend gap identified</div>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 1: OPENING
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="opening">
+  <div class="section-head">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <h2>Opening</h2>
+    <span class="section-time">1-2 minutes</span>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <p>Frame the "why" — the team has been asking for clarity on how participants move through our ecosystem. This presentation answers that question end-to-end.</p>
+  </div>
+
+  <ul class="talk-points">
+    <li>We've spent the last week mapping out exactly how participants move through our ecosystem, from first ad click to long-term retention.</li>
+    <li>The core idea: <strong>treat participants like customers.</strong> This is an end-to-end lifecycle, just like any e-commerce brand manages their customer journey.</li>
+    <li>Today we're walking through where things stand, what's working, what we need, and what we're asking the product team to help us build.</li>
+    <li>We're not asking for everything at once. <strong>We have a phased plan with clear priorities.</strong></li>
+    <li>We also cross-referenced the dashboard against our actual Meta Ads Manager export and found a <strong>$4,200 gap</strong> in reported spend. We'll walk through the corrections.</li>
+  </ul>
+
+  <div class="presenter-tip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+    <p>Don't spend long here. Get to the lifecycle visual quickly — that's what grabs attention.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 2: LIFECYCLE WALKTHROUGH
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="lifecycle">
+  <div class="section-head">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    </div>
+    <h2>Lifecycle Walkthrough</h2>
+    <span class="section-time">8-10 minutes</span>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    <p>Click through each stage on the live page as you talk. Don't read every bullet — hit the key pain points and stories.</p>
+  </div>
+
+  <!-- Mini-map -->
+  <div class="stage-minimap" id="stageMinimap">
+    <div class="minimap-node active" data-stage="1"><div class="minimap-dot">1</div><div class="minimap-label">Lead Capture</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="2"><div class="minimap-dot">2</div><div class="minimap-label">App Install</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="3"><div class="minimap-dot">3</div><div class="minimap-label">Browse</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node key-stage" data-stage="4"><div class="minimap-dot">4</div><div class="minimap-label">Eligibility</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="5"><div class="minimap-dot">5</div><div class="minimap-label">Onboarding</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="6"><div class="minimap-dot">6</div><div class="minimap-label">Active</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="7"><div class="minimap-dot">7</div><div class="minimap-label">Completion</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="8"><div class="minimap-dot">8</div><div class="minimap-label">Washout</div></div>
+    <div class="minimap-connector"></div>
+    <div class="minimap-node" data-stage="9"><div class="minimap-dot">9</div><div class="minimap-label">Re-engage</div></div>
+  </div>
+
+  <!-- Stage 1 -->
+  <div class="lifecycle-stage" data-stage="1">
+    <div class="stage-badge"><span class="num">1</span> Lead Capture</div>
+    <h3>OneLinks &amp; UTM Tracking</h3>
+    <ul class="talk-points">
+      <li>We now have OneLinks and UTM parameters set up for every channel starting in January.</li>
+      <li><strong>Problem:</strong> they weren't being pulled into the dashboard. Manpreet is fixing that.</li>
+      <li>Once that's in place, we can finally answer <strong>"where are our participants actually coming from?"</strong></li>
+      <li>We discovered that <strong>ProleevaMax spend was undercounted by $1,561</strong> because the active campaign wasn't being pulled into the dashboard.</li>
+      <li><strong>Berkeley Life ($2,632) was missing entirely</strong> — it was showing as "Unmapped Campaigns" on the dashboard.</li>
+    </ul>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="lifecycle-stage" data-stage="2">
+    <div class="stage-badge"><span class="num">2</span> App Install</div>
+    <h3>The Biggest Leak in the Funnel</h3>
+    <ul class="talk-points">
+      <li><strong>75% of people who click our ads never download the app.</strong> That's the single biggest leak in our funnel.</li>
+      <li>We're working with Matt on direct app install flows to close that gap.</li>
+      <li>AppsFlyer is our source of truth for install attribution, but the data isn't matching what's in our dashboard yet.</li>
+    </ul>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="lifecycle-stage" data-stage="3">
+    <div class="stage-badge"><span class="num">3</span> Browse / Explore</div>
+    <h3>The Silent Drop-Off</h3>
+    <ul class="talk-points">
+      <li>People who download the app but never join a study — <strong>we have no way to reach them right now.</strong></li>
+      <li>We need push notifications and in-app messaging to nudge these people toward studies.</li>
+      <li>This is a Phase 2 item, but important to flag for the team.</li>
+    </ul>
+  </div>
+
+  <!-- Stage 4 — KEY MOMENT -->
+  <div class="lifecycle-stage key-highlight" data-stage="4">
+    <div class="stage-badge"><span class="num">4</span> Eligibility Survey <span class="key-tag">KEY MOMENT</span></div>
+    <h3>Where We Lost 100+ People Before We Knew</h3>
+    <ul class="talk-points">
+      <li><strong>This is the big one. Tell the story:</strong></li>
+      <li>We had no visibility into where people were dropping off by question. By the time we discovered there was a problem, <strong>over 100 people had already gone through.</strong></li>
+      <li>The ask is simple: <strong>real-time drop-off monitoring by question</strong> so we can catch problems within the first 10-20 people, not after 100.</li>
+      <li>Example: the GLP-1/metformin question in the HOP study may be unnecessarily disqualifying people.</li>
+    </ul>
+    <div class="presenter-tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+      <p>This stage gets the most reaction. Pause here and let it sink in.</p>
+    </div>
+  </div>
+
+  <!-- Stage 5 -->
+  <div class="lifecycle-stage" data-stage="5">
+    <div class="stage-badge"><span class="num">5</span> Onboarding</div>
+    <h3>"Joined" Is Not "Onboarded"</h3>
+    <ul class="talk-points">
+      <li>Key distinction: <strong>"joined" is not the same as "fully onboarded."</strong></li>
+      <li>ProleevaMax is the perfect example: people join but then don't complete their labs. We have no visibility into who's stuck in that manual queue.</li>
+      <li>For any study with manual steps (labs, wearable setup, scheduling calls), we need a <strong>manual queue status</strong> showing pending vs. completed.</li>
+      <li>Right now, Nisha tells me we need more people, but can't give me an exact number. That has to change.</li>
+    </ul>
+  </div>
+
+  <!-- Stage 6 -->
+  <div class="lifecycle-stage" data-stage="6">
+    <div class="stage-badge"><span class="num">6</span> Active in Study</div>
+    <h3>Stop Recruiting Active Participants</h3>
+    <ul class="talk-points">
+      <li>Once someone is active, they need to be <strong>automatically excluded from all recruitment campaigns.</strong></li>
+      <li>I've accidentally reached out to people already in studies because I had no visibility. That's not a good experience for participants.</li>
+      <li>Compliance monitoring and at-risk flagging are Phase 2, but the <strong>exclusion piece is essential now.</strong></li>
+    </ul>
+  </div>
+
+  <!-- Stage 7 -->
+  <div class="lifecycle-stage" data-stage="7">
+    <div class="stage-badge"><span class="num">7</span> Study Completion</div>
+    <h3>Automate the Transition</h3>
+    <ul class="talk-points">
+      <li>When someone finishes a study, that should automatically trigger the next part of their journey.</li>
+      <li><strong>Exit survey &rarr; washout period starts &rarr; drip campaign until ready for next study.</strong></li>
+      <li>Right now, none of this is automated. It's all manual tracking.</li>
+    </ul>
+  </div>
+
+  <!-- Stage 8 -->
+  <div class="lifecycle-stage" data-stage="8">
+    <div class="stage-badge"><span class="num">8</span> Washout Period</div>
+    <h3>The Invisible Queue</h3>
+    <ul class="talk-points">
+      <li>There's no automated way to know who's in washout, who's done, and who's available.</li>
+      <li>During washout, participants could be doing <strong>public studies to stay engaged</strong> — but we're not nudging them.</li>
+      <li>When washout ends, they should get a notification: "You're eligible for new studies." <strong>That doesn't exist today.</strong></li>
+    </ul>
+  </div>
+
+  <!-- Stage 9 -->
+  <div class="lifecycle-stage" data-stage="9">
+    <div class="stage-badge"><span class="num">9</span> Re-engagement</div>
+    <h3>Smart Segmentation, Not Blasts</h3>
+    <ul class="talk-points">
+      <li>This is the vision. Once we can segment properly, we stop sending one blast to everyone.</li>
+      <li><strong>Pankaj's experience at Cycleic Water is the model:</strong> 12 emails a month, but each person only received 2-3 because of smart segmentation.</li>
+      <li>Churn detection: if someone hasn't logged in for 3+ months, we should know and have a re-engagement campaign ready.</li>
+      <li>Incentives like <strong>bonus heartbeats</strong> can pull dormant users back in.</li>
+    </ul>
+  </div>
+
+  <!-- Loop Callout -->
+  <div class="key-message" style="margin-top:8px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+    <p>Point out the loop — participants cycle through stages 3-9 multiple times. That's what makes this a lifecycle, not a funnel.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     DATA CORRECTIONS CALLOUT
+     ════════════════════════════════════════════════════════ -->
+<div class="corrections-box">
+  <h3>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    What We Fixed — Data Corrections
+  </h3>
+  <table class="corrections-table">
+    <thead>
+      <tr><th>Item</th><th>Dashboard</th><th>Actual</th><th>Reason</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ProleevaMax spend</td>
+        <td class="old">$4,125</td>
+        <td class="new">$5,686</td>
+        <td>Missing active campaign</td>
+      </tr>
+      <tr>
+        <td>Berkeley Life spend</td>
+        <td class="old">$0</td>
+        <td class="new">$2,632</td>
+        <td>Was labeled as "Unmapped Campaigns"</td>
+      </tr>
+      <tr>
+        <td>Total all-time spend</td>
+        <td class="old">$18,133</td>
+        <td class="new">$22,333</td>
+        <td>Sum of above corrections</td>
+      </tr>
+      <tr>
+        <td>Cost per onboard</td>
+        <td class="old">$37.23</td>
+        <td class="new">$45.86</td>
+        <td>Corrected spend denominator</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="corrections-note">These corrections have been applied to our personal Command Center dashboard. Manpreet is updating the official dashboard.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 3: SEGMENTATION RULES
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="segmentation">
+  <div class="section-head">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+    </div>
+    <h2>Segmentation Rules</h2>
+    <span class="section-time">2-3 minutes</span>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <p>Keep this short. These filters don't exist today, and that's why everyone gets the same email.</p>
+  </div>
+
+  <ul class="talk-points">
+    <li>Right now, every participant gets the same weekly newsletter blast regardless of where they are in their journey.</li>
+    <li>We can't distinguish between someone active in a study, someone in washout, and someone who churned 6 months ago.</li>
+    <li>These <strong>8 segmentation rules</strong> are what unlock targeted, relevant communication.</li>
+    <li>This is also what prevents embarrassing mistakes — like reaching out to someone already in a study.</li>
+  </ul>
+
+  <div class="seg-grid">
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="seg-text">Active in study (exclude from recruitment)</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="seg-text">In washout period (engage with public studies)</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="seg-text">Completed washout (eligible for new studies)</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div class="seg-text">Never joined a study (nurture campaign)</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="seg-text">Churned (no login 3+ months)</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+      <div class="seg-text">Lead source / acquisition channel</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+      <div class="seg-text">Study eligibility criteria match</div>
+    </div>
+    <div class="seg-rule">
+      <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div class="seg-text">Engagement level (active vs. dormant)</div>
+    </div>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <p>The ask: We need these as query-able filters in the dashboard. Even if it's manual pulls at first, we need the ability to generate these lists.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 4: IMPLEMENTATION PHASES
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="phases">
+  <div class="section-head">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+    </div>
+    <h2>Implementation Phases</h2>
+    <span class="section-time">3-5 minutes</span>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <p>Set expectations clearly — we are NOT asking for everything at once.</p>
+  </div>
+
+  <div class="phase-timeline">
+    <!-- Phase 1 -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <h3>Phase 1: Minimum Viable</h3>
+        <span class="phase-time">Now &rarr; 4 weeks</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li><strong>Data cleanup is urgent.</strong> Test and dummy accounts are inflating our numbers and hurting email deliverability. We had 2,000 bounces on our last send because of this.</li>
+          <li>Naming convention for test accounts going forward so they're auto-excluded from filters.</li>
+          <li><strong>Basic segmentation queries</strong> — even if I'm pulling lists manually, I just need the ability to say "give me everyone not in an active study and not in washout."</li>
+          <li><strong>Eligibility drop-off by question</strong> — critical for every study launch going forward.</li>
+          <li>Dashboard fixes: accurate spend numbers, source attribution, 30-day views.</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Phase 2 -->
+    <div class="phase-block">
+      <div class="phase-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <h3>Phase 2: Full System</h3>
+        <span class="phase-time">4 wks &rarr; 3 months</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>This is where we get to <strong>automation:</strong> one-click email campaigns, in-app notifications, washout tracking, churn detection.</li>
+          <li>The infrastructure from Phase 1 makes Phase 2 possible.</li>
+          <li><strong>Phase 1 alone will dramatically improve what we can do.</strong> Phase 2 is the long-term vision.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="presenter-tip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+    <p>Emphasize this framing: "We're defining what we need. We're asking the product team to tell us how to implement it." You're not telling them how to build it.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 5: INTEGRATION POINTS
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="integrations">
+  <div class="section-head">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+    </div>
+    <h2>Integration Points</h2>
+    <span class="section-time">2-3 minutes</span>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <p>Walk through quickly — the "today vs. target" format on the live page makes it visually obvious.</p>
+  </div>
+
+  <ul class="talk-points">
+    <li>The takeaway: <strong>almost everything is manual, disconnected, and living in different systems.</strong></li>
+    <li>The goal is one system where data flows in automatically and we have visibility without asking five different people.</li>
+  </ul>
+
+  <div class="integration-grid">
+    <div class="integration-card">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Meta Ads
+      </h4>
+      <div class="int-row">
+        <span class="int-label today">Today</span>
+        <span class="int-desc">Manually downloading lead data</span>
+      </div>
+      <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+      <div class="int-row">
+        <span class="int-label target">Target</span>
+        <span class="int-desc">Auto-feed into dashboard with UTM attribution</span>
+      </div>
+    </div>
+
+    <div class="integration-card">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email System
+      </h4>
+      <div class="int-row">
+        <span class="int-label today">Today</span>
+        <span class="int-desc">One blast to everyone, no segmentation</span>
+      </div>
+      <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+      <div class="int-row">
+        <span class="int-label target">Target</span>
+        <span class="int-desc">Segmented sends from dashboard (feature already started)</span>
+      </div>
+    </div>
+
+    <div class="integration-card">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        AppsFlyer
+      </h4>
+      <div class="int-row">
+        <span class="int-label today">Today</span>
+        <span class="int-desc">Data doesn't match dashboard numbers</span>
+      </div>
+      <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+      <div class="int-row">
+        <span class="int-label target">Target</span>
+        <span class="int-desc">Unified install attribution, single source of truth</span>
+      </div>
+    </div>
+
+    <div class="integration-card">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Eligibility Surveys
+      </h4>
+      <div class="int-row">
+        <span class="int-label today">Today</span>
+        <span class="int-desc">No question-level drop-off visibility</span>
+      </div>
+      <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+      <div class="int-row">
+        <span class="int-label target">Target</span>
+        <span class="int-desc">Real-time monitoring, catch issues in first 10-20 people</span>
+      </div>
+    </div>
+
+    <div class="integration-card">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Participant Status
+      </h4>
+      <div class="int-row">
+        <span class="int-label today">Today</span>
+        <span class="int-desc">Ask 5 different people for status updates</span>
+      </div>
+      <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+      <div class="int-row">
+        <span class="int-label target">Target</span>
+        <span class="int-desc">One dashboard with real-time lifecycle status</span>
+      </div>
+    </div>
+
+    <div class="integration-card">
+      <h4>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+        Washout Tracking
+      </h4>
+      <div class="int-row">
+        <span class="int-label today">Today</span>
+        <span class="int-desc">No automated tracking of washout periods</span>
+      </div>
+      <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+      <div class="int-row">
+        <span class="int-label target">Target</span>
+        <span class="int-desc">Auto-track periods, notify when eligible</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 6: CLOSING
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="closing">
+  <div class="section-head">
+    <div class="section-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <h2>Closing</h2>
+    <span class="section-time">2 minutes</span>
+  </div>
+
+  <div class="key-message">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <p>End on momentum. You've earned the right to ask for these tools.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-value">~100 &rarr; 800+</div>
+      <div class="stat-label">Ecosystem growth</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">$15-20</div>
+      <div class="stat-label">Cost per qualified lead</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">$0</div>
+      <div class="stat-label">Self-serve acquisition cost</div>
+    </div>
+  </div>
+
+  <ul class="talk-points">
+    <li>Our ecosystem has grown from ~100 people to <strong>800+</strong>.</li>
+    <li>We've <strong>reduced ad spend</strong> while improving results.</li>
+    <li>Self-serve studies are bringing people into our ecosystem at <strong>zero acquisition cost.</strong> That's a game-changer.</li>
+    <li>Our cost per qualified lead for standard studies is <strong>$15-20.</strong> That's strong.</li>
+    <li>Our corrected total spend is <strong>$22,333 all-time</strong> across all studies. When you include studies where we spent $0 on ads, the blended average drops even further.</li>
+    <li>We've identified and corrected the data discrepancies — <strong>going forward, we'll have accurate numbers we can trust.</strong></li>
+    <li>Q1-Q2 costs will go up as we invest in growth. <strong>Q3-Q4 costs come down</strong> as the ecosystem compounds.</li>
+  </ul>
+
+  <div class="closing-quote">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>The infrastructure we're asking for is what turns this from a scrappy manual operation into a scalable system. We're defining what we need — we're asking you to tell us how to implement it.</blockquote>
+  </div>
+
+  <div class="presenter-tip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+    <p>Then open it up for questions and discussion.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <p>Speaker notes for <a href="https://akamoore.github.io/reputable-ticker.js/" target="_blank">Participant Lifecycle Presentation</a> &bull; February 2026</p>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  // ── Scroll-based nav highlighting & progress bar ──
+  const nav = document.getElementById('topNav');
+  const progressFill = document.getElementById('progressFill');
+  const pills = document.querySelectorAll('.nav-pill');
+  const sections = [];
+
+  pills.forEach(pill => {
+    const id = pill.getAttribute('href')?.replace('#','');
+    if(id){
+      const el = document.getElementById(id);
+      if(el) sections.push({id, el, pill});
+    }
+  });
+
+  function onScroll(){
+    const scrollY = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = Math.min(scrollY / docHeight, 1);
+    progressFill.style.width = (progress * 100) + '%';
+
+    // Nav shadow
+    nav.classList.toggle('scrolled', scrollY > 10);
+
+    // Active section
+    let current = sections[0];
+    for(const s of sections){
+      if(scrollY >= s.el.offsetTop - 120) current = s;
+    }
+    pills.forEach(p => p.classList.remove('active'));
+    if(current) current.pill.classList.add('active');
+
+    // Update minimap based on which lifecycle stage is in view
+    updateMinimap();
+  }
+
+  // ── Minimap highlights the stage currently visible ──
+  const stageCards = document.querySelectorAll('.lifecycle-stage[data-stage]');
+  const minimapNodes = document.querySelectorAll('.minimap-node[data-stage]');
+
+  function updateMinimap(){
+    let activeStage = '1';
+    stageCards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      if(rect.top < window.innerHeight * 0.5){
+        activeStage = card.dataset.stage;
+      }
+    });
+    minimapNodes.forEach(node => {
+      const isKey = node.classList.contains('key-stage');
+      node.classList.remove('active');
+      if(node.dataset.stage === activeStage){
+        node.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // ── Smooth scroll for nav pills ──
+  pills.forEach(pill => {
+    pill.addEventListener('click', e => {
+      e.preventDefault();
+      const id = pill.getAttribute('href')?.replace('#','');
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // ── Fade-in on load ──
+  document.querySelectorAll('.fade-in').forEach(el => {
+    el.style.opacity = '1';
+  });
+})();
+</script>
+</body>
+</html>
