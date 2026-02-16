@@ -1,1482 +1,1005 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participant Lifecycle — Team Presentation</title>
-<style>
-/* ── Reset & Base ────────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --indigo-50:#e7faf6;--indigo-100:#c8f2ea;--indigo-200:#93e7d8;
-  --indigo-300:#50d7c3;--indigo-400:#00d5be;--indigo-500:#00b39f;
-  --indigo-600:#009180;--indigo-700:#007768;--indigo-800:#005c51;
-  --indigo-900:#00433b;
-  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;
-  --slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;
-  --slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;
-  --slate-900:#0f172a;
-  --radius:12px;--radius-sm:8px;--radius-lg:16px;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
-  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
-  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
-  --shadow-xl:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
-}
-html{scroll-behavior:smooth;font-size:16px}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-  color:var(--slate-800);background:var(--slate-50);line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruitment Command Center</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #232733;
+      --border: #2e3345;
+      --text: #e4e6ef;
+      --text-dim: #8b8fa3;
+      --accent: #6c5ce7;
+      --green: #00b894;
+      --green-bg: rgba(0,184,148,0.12);
+      --yellow: #fdcb6e;
+      --yellow-bg: rgba(253,203,110,0.12);
+      --red: #e17055;
+      --red-bg: rgba(225,112,85,0.12);
+      --blue: #74b9ff;
+      --blue-bg: rgba(116,185,255,0.12);
+      --gray: #636e80;
+      --gray-bg: rgba(99,110,128,0.12);
+    }
 
-/* ── Utility ─────────────────────────────────────────── */
-.container{max-width:1200px;margin:0 auto;padding:0 24px}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Animations ──────────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
 
-@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-@keyframes slideRight{from{transform:translateX(-10px);opacity:0}to{transform:translateX(0);opacity:1}}
-@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.95)}}
-@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-40px,30px) scale(1.05)}66%{transform:translate(20px,-40px) scale(.9)}}
-@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(25px,35px) scale(1.08)}}
-@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
-@keyframes gradientFlow{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
-@keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes bounceArrow{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200)}50%{box-shadow:0 0 0 4px var(--slate-50),0 0 8px 6px rgba(0,179,159,.4)}}
-@keyframes borderGlow{0%,100%{border-color:var(--slate-200)}50%{border-color:var(--indigo-300)}}
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
 
-/* ── Hero path animation ─────────────────────────────── */
-.hero-path{animation:dashDraw 3s linear infinite}
-@keyframes dashDraw{from{stroke-dashoffset:0}to{stroke-dashoffset:-56}}
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
 
-/* ── Navigation ──────────────────────────────────────── */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(255,255,255,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--slate-200);transition:box-shadow .3s ease;
-}
-.nav.scrolled{box-shadow:var(--shadow-md)}
-.nav-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  max-width:1200px;margin:0 auto;padding:0 24px;height:64px;
-}
-.nav-logo{font-weight:700;font-size:1.1rem;color:var(--indigo-600);display:flex;align-items:center;gap:8px}
-.nav-logo svg{width:28px;height:28px}
-.nav-links{display:flex;gap:4px;align-items:center}
-.nav-links a{
-  padding:6px 14px;border-radius:6px;font-size:.875rem;font-weight:500;
-  color:var(--slate-600);transition:all .2s ease;white-space:nowrap;
-}
-.nav-links a:hover,.nav-links a.active{background:var(--indigo-50);color:var(--indigo-600)}
-.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px}
-.nav-hamburger span{display:block;width:22px;height:2px;background:var(--slate-700);margin:5px 0;border-radius:2px;transition:all .3s ease}
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 13px;
+    }
 
-/* ── Mobile nav ──────────────────────────────────────── */
-@media(max-width:900px){
-  .nav-links{
-    position:fixed;top:64px;left:0;right:0;bottom:0;
-    background:rgba(255,255,255,.97);backdrop-filter:blur(12px);
-    flex-direction:column;padding:24px;gap:4px;
-    transform:translateX(100%);transition:transform .35s ease;
-  }
-  .nav-links.open{transform:translateX(0)}
-  .nav-links a{font-size:1.1rem;padding:12px 16px}
-  .nav-hamburger{display:block}
-  .nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
-  .nav-hamburger.open span:nth-child(2){opacity:0}
-  .nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-}
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-/* ── Hero ────────────────────────────────────────────── */
-.hero{
-  padding:140px 0 80px;text-align:center;
-  background:linear-gradient(135deg,var(--indigo-50) 0%,#fff 50%,var(--indigo-50) 100%);
-  position:relative;overflow:hidden;
-}
-.hero::before{
-  content:'';position:absolute;top:-50%;right:-30%;width:80%;height:200%;
-  background:radial-gradient(ellipse,rgba(0,179,159,.07) 0%,transparent 70%);
-  pointer-events:none;
-}
-.hero-blob{
-  position:absolute;border-radius:50%;pointer-events:none;opacity:.12;
-  filter:blur(60px);
-}
-.hero-blob-1{
-  width:400px;height:400px;top:-80px;right:-60px;
-  background:var(--indigo-400);animation:float1 14s ease-in-out infinite;
-}
-.hero-blob-2{
-  width:300px;height:300px;bottom:-50px;left:-40px;
-  background:var(--indigo-500);animation:float2 18s ease-in-out infinite;
-}
-.hero-blob-3{
-  width:200px;height:200px;top:40%;left:30%;
-  background:var(--indigo-300);animation:float3 12s ease-in-out infinite;
-}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--indigo-100);color:var(--indigo-700);
-  font-size:.8rem;font-weight:600;padding:6px 16px;border-radius:20px;
-  margin-bottom:20px;animation:fadeInUp .7s ease both;
-  transition:transform .3s ease,box-shadow .3s ease;
-}
-.hero-badge:hover{transform:scale(1.06);box-shadow:0 2px 12px rgba(0,179,159,.2)}
-.hero h1{
-  font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.15;
-  color:var(--slate-900);max-width:800px;margin:0 auto 16px;
-  animation:fadeInUp .7s ease .1s both;
-}
-.hero h1 span{
-  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.hero p{
-  font-size:clamp(1rem,2vw,1.25rem);color:var(--slate-500);
-  max-width:600px;margin:0 auto;animation:fadeInUp .7s ease .2s both;
-}
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+    .badge-gray { background: var(--gray-bg); color: var(--gray); }
 
-/* ── Section ─────────────────────────────────────────── */
-.section{padding:64px 0}
-.section-alt{background:#fff}
-.section-header{text-align:center;margin-bottom:40px}
-.section-label{
-  display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;
-  text-transform:uppercase;margin-bottom:8px;
-  background:linear-gradient(90deg,var(--indigo-500),var(--indigo-400),var(--indigo-600),var(--indigo-500));
-  background-size:200% auto;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-  animation:shimmer 4s linear infinite;
-}
-.section-title{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;color:var(--slate-900);margin-bottom:12px}
-.section-subtitle{font-size:1.05rem;color:var(--slate-500);max-width:600px;margin:0 auto}
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
 
-/* ── Lifecycle Flow ──────────────────────────────────── */
-.lifecycle-flow{position:relative;max-width:1000px;margin:0 auto}
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
 
-/* Connector line */
-.lifecycle-flow::before{
-  content:'';position:absolute;left:40px;top:0;bottom:0;width:3px;
-  background:linear-gradient(to bottom,var(--indigo-200),var(--indigo-500),var(--indigo-300),var(--indigo-500),var(--indigo-200));
-  background-size:100% 200%;
-  border-radius:2px;
-  animation:gradientFlow 6s ease infinite;
-}
-@media(min-width:768px){
-  .lifecycle-flow::before{left:50%;transform:translateX(-50%)}
-}
+    .metric-card .label {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
 
-.stage-card{
-  position:relative;display:flex;align-items:flex-start;gap:20px;
-  margin-bottom:24px;cursor:pointer;
-}
-@media(min-width:768px){
-  .stage-card{width:48%;margin-bottom:20px}
-  .stage-card:nth-child(odd){margin-left:0;margin-right:auto;flex-direction:row-reverse;text-align:right}
-  .stage-card:nth-child(even){margin-left:auto;margin-right:0}
-}
+    .metric-card .value {
+      font-size: 28px;
+      font-weight: 700;
+    }
 
-.stage-number{
-  flex-shrink:0;width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:1rem;
-  box-shadow:0 0 0 4px var(--slate-50),0 0 0 6px var(--indigo-200);
-  position:relative;z-index:2;transition:transform .3s ease,box-shadow .3s ease;
-}
-.stage-card:hover .stage-number{transform:scale(1.1);animation:glowPulse 2s ease-in-out infinite}
+    .metric-card .sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
 
-.stage-content{
-  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
-  padding:20px 24px;flex:1;transition:all .3s ease;
-  box-shadow:var(--shadow-sm);
-}
-.stage-card:hover .stage-content{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
-.stage-card.expanded .stage-content{border-color:var(--indigo-400);box-shadow:var(--shadow-lg)}
+    .metric-card .value.green { color: var(--green); }
+    .metric-card .value.blue { color: var(--blue); }
+    .metric-card .value.yellow { color: var(--yellow); }
+    .metric-card .value.accent { color: var(--accent); }
 
-.stage-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-@media(min-width:768px){
-  .stage-card:nth-child(odd) .stage-header{flex-direction:row-reverse}
-}
-.stage-name{font-size:1.1rem;font-weight:700;color:var(--slate-900)}
-.stage-toggle{
-  width:28px;height:28px;border-radius:50%;background:var(--indigo-50);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:all .3s ease;
-}
-.stage-toggle svg{width:14px;height:14px;color:var(--indigo-500);transition:transform .3s ease}
-.stage-card.expanded .stage-toggle{background:var(--indigo-500)}
-.stage-card.expanded .stage-toggle svg{color:#fff;transform:rotate(180deg)}
+    /* Sections */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
 
-.stage-subtitle{font-size:.875rem;color:var(--slate-500);margin-top:4px}
+    .section h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.stage-details{
-  max-height:0;overflow:hidden;transition:max-height .45s ease,opacity .3s ease;opacity:0;
-}
-.stage-card.expanded .stage-details{max-height:600px;opacity:1;margin-top:16px}
+    .section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 20px 0 10px;
+    }
 
-.detail-group{margin-bottom:14px}
-.detail-group:last-child{margin-bottom:0}
-.detail-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--indigo-500);margin-bottom:6px}
-.detail-list{list-style:none;padding:0}
-.detail-list li{
-  font-size:.85rem;color:var(--slate-600);padding:3px 0;padding-left:16px;position:relative;
-  text-align:left;
-}
-.detail-list li::before{
-  content:'';position:absolute;left:0;top:11px;width:6px;height:6px;
-  border-radius:50%;background:var(--indigo-300);
-}
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 0 -8px;
+      padding: 0 8px;
+    }
 
-/* Stage illustrations */
-.stage-illustration{
-  text-align:center;padding:24px 0 20px;
-  border-bottom:1px solid var(--slate-100);margin-bottom:14px;
-}
-.stage-illustration svg{
-  max-width:640px;width:100%;height:auto;
-  animation:fadeInUp .5s ease both;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
 
-/* Loop arrow */
-.loop-indicator{
-  text-align:center;margin:40px auto 0;padding:24px;
-  background:linear-gradient(135deg,var(--indigo-50),var(--indigo-100));
-  border:2px dashed var(--indigo-300);border-radius:var(--radius-lg);
-  max-width:480px;
-}
-.loop-indicator p{font-size:1rem;font-weight:600;color:var(--indigo-700)}
-.loop-indicator span{font-size:.85rem;color:var(--indigo-500);display:block;margin-top:4px}
-.loop-arrow{font-size:2rem;color:var(--indigo-400);margin-bottom:4px;display:inline-block;animation:spinSlow 4s linear infinite}
-.loop-indicator:hover{border-color:var(--indigo-400);background:linear-gradient(135deg,var(--indigo-100),var(--indigo-50));transition:all .3s ease}
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
 
-/* ── Segmentation ────────────────────────────────────── */
-.section:not(.section-alt){position:relative;overflow:hidden}
-.section:not(.section-alt)::after{
-  content:'';position:absolute;top:20%;right:-100px;width:250px;height:250px;
-  border:2px solid var(--indigo-100);border-radius:50%;opacity:.5;
-  animation:float3 16s ease-in-out infinite;pointer-events:none;
-}
-.seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.seg-card{
-  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
-  padding:18px 20px;display:flex;align-items:flex-start;gap:14px;
-  transition:all .3s ease;
-}
-.seg-card:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.seg-icon{
-  flex-shrink:0;width:40px;height:40px;border-radius:var(--radius-sm);
-  background:var(--indigo-50);display:flex;align-items:center;justify-content:center;
-}
-.seg-icon svg{width:20px;height:20px;color:var(--indigo-500);transition:transform .3s ease}
-.seg-card:hover .seg-icon svg{transform:scale(1.2) rotate(-8deg)}
-.seg-card:hover .seg-icon{background:var(--indigo-100)}
-.seg-text{font-size:.9rem;font-weight:600;color:var(--slate-700);line-height:1.4}
-.seg-desc{font-size:.8rem;color:var(--slate-400);margin-top:2px;font-weight:400}
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
 
-/* ── Phases ──────────────────────────────────────────── */
-.phases-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-@media(max-width:768px){.phases-grid{grid-template-columns:1fr}}
+    tr:last-child td { border-bottom: none; }
 
-.phase-card{
-  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-lg);
-  padding:32px;position:relative;overflow:hidden;transition:all .3s ease;
-}
-.phase-card:hover{box-shadow:var(--shadow-lg);border-color:var(--indigo-300);animation:borderGlow 2s ease infinite}
-.phase-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:4px;
-}
-.phase-card.phase-1::before{background:linear-gradient(90deg,var(--indigo-400),var(--indigo-600))}
-.phase-card.phase-2::before{background:linear-gradient(90deg,var(--indigo-500),var(--indigo-700))}
+    tr.row-outlier { background: var(--yellow-bg); }
+    tr.row-free { background: var(--green-bg); }
+    tr.row-pending { background: var(--gray-bg); }
 
-.phase-badge{
-  display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;
-  font-size:.75rem;font-weight:700;margin-bottom:16px;
-}
-.phase-1 .phase-badge{background:var(--indigo-100);color:var(--indigo-700)}
-.phase-2 .phase-badge{background:var(--indigo-100);color:var(--indigo-700)}
+    .totals-row td {
+      font-weight: 700;
+      border-top: 2px solid var(--border);
+      padding-top: 14px;
+    }
 
-.phase-title{font-size:1.3rem;font-weight:800;color:var(--slate-900);margin-bottom:4px}
-.phase-timeline{font-size:.85rem;color:var(--slate-400);margin-bottom:20px}
+    .align-right { text-align: right; }
 
-.phase-list{list-style:none;padding:0}
-.phase-list li{
-  display:flex;align-items:flex-start;gap:10px;padding:8px 0;
-  font-size:.9rem;color:var(--slate-600);border-bottom:1px solid var(--slate-100);
-}
-.phase-list li:last-child{border-bottom:none}
-.phase-check{
-  flex-shrink:0;width:22px;height:22px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;margin-top:1px;
-}
-.phase-1 .phase-check{background:var(--indigo-100);color:var(--indigo-600)}
-.phase-2 .phase-check{background:var(--indigo-100);color:var(--indigo-600)}
-.phase-check svg{width:12px;height:12px}
+    /* Scorecard */
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
 
-/* ── Integration ─────────────────────────────────────── */
-.int-grid{display:grid;gap:16px;max-width:900px;margin:0 auto}
-.int-row{
-  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
-  padding:20px 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
-  transition:all .3s ease;
-}
-.int-row:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
-@media(max-width:600px){
-  .int-row{grid-template-columns:1fr;text-align:center}
-}
-.int-from,.int-to{display:flex;flex-direction:column;gap:2px}
-.int-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-.int-from .int-label{color:var(--slate-400)}
-.int-to .int-label{color:var(--indigo-500)}
-.int-value{font-size:.9rem;font-weight:600;color:var(--slate-700)}
-.int-to .int-value{color:var(--indigo-700)}
-.int-arrow{
-  width:40px;height:40px;border-radius:50%;
-  background:var(--indigo-50);display:flex;align-items:center;justify-content:center;
-}
-.int-arrow svg{width:18px;height:18px;color:var(--indigo-400);transition:transform .3s ease}
-.int-row:hover .int-arrow svg{animation:bounceArrow 1s ease infinite}
-.int-row:hover .int-arrow{background:var(--indigo-100)}
-@media(max-width:600px){.int-arrow{margin:0 auto}}
+    .score-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+    }
 
-/* ── Footer ──────────────────────────────────────────── */
-.footer{
-  text-align:center;padding:40px 0;border-top:1px solid var(--slate-200);
-  color:var(--slate-400);font-size:.85rem;
-}
+    .score-card .study-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
 
-/* ── Scroll-to-top ───────────────────────────────────── */
-.scroll-top{
-  position:fixed;bottom:28px;right:28px;width:44px;height:44px;
-  border-radius:50%;background:var(--indigo-600);color:#fff;border:none;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:var(--shadow-lg);opacity:0;transform:translateY(20px);
-  transition:all .3s ease;z-index:50;
-}
-.scroll-top.show{opacity:1;transform:translateY(0)}
-.scroll-top:hover{background:var(--indigo-700);transform:translateY(-2px)}
-.scroll-top svg{width:20px;height:20px}
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
 
-/* ── Print styles ────────────────────────────────────── */
-@media print{
-  .nav,.scroll-top{display:none!important}
-  .hero{padding-top:40px}
-  .stage-details{max-height:none!important;opacity:1!important}
-}
-</style>
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-fill.green { background: var(--green); }
+    .progress-fill.yellow { background: var(--yellow); }
+    .progress-fill.red { background: var(--red); }
+    .progress-fill.blue { background: var(--blue); }
+
+    .score-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* Discrepancy Notes */
+    .note-card {
+      background: var(--surface2);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+
+    .note-card .note-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .note-card .note-body {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    /* CPO Averages */
+    .avg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .avg-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .avg-card .avg-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .avg-card .avg-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .avg-card .avg-detail {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* Projection */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .proj-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .proj-card .proj-name {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .proj-card .proj-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 4px 0;
+      color: var(--text-dim);
+    }
+
+    .proj-card .proj-row span:last-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 12px;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+
+    .swatch-outlier { background: var(--yellow-bg); border: 1px solid var(--yellow); }
+    .swatch-free { background: var(--green-bg); border: 1px solid var(--green); }
+    .swatch-pending { background: var(--gray-bg); border: 1px solid var(--gray); }
+
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-card .value { font-size: 22px; }
+      .section { padding: 16px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ─── Navigation ───────────────────────────────────── -->
-<nav class="nav" id="nav">
-  <div class="nav-inner">
-    <div class="nav-logo">
-      <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="2.5"/><path d="M9 14.5l3.5 3L19 11" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Participant Lifecycle
+  <div class="header">
+    <div>
+      <h1>Recruitment Command Center</h1>
+      <div class="subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 16, 2026</div>
     </div>
-    <div class="nav-links" id="navLinks">
-      <a href="#lifecycle">Lifecycle</a>
-      <a href="#segmentation">Segmentation</a>
-      <a href="#phases">Phases</a>
-      <a href="#integrations">Integrations</a>
-    </div>
-    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<!-- ─── Hero ─────────────────────────────────────────── -->
-<section class="hero" id="hero">
-  <div class="hero-blob hero-blob-1"></div>
-  <div class="hero-blob hero-blob-2"></div>
-  <div class="hero-blob hero-blob-3"></div>
-  <div class="container">
-    <div class="hero-badge">Team Presentation — February 2026</div>
-    <h1>The <span>Participant Lifecycle</span><br>End to End</h1>
-    <p>From first ad click to long-term retention — a complete view of how participants move through our clinical study ecosystem.</p>
-    <div class="hero-graphic" style="margin:36px auto 0;max-width:480px;animation:fadeInUp .7s ease .35s both">
-      <svg viewBox="0 0 480 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Animated lifecycle path -->
-        <path d="M30 50 Q120 10 200 50 Q280 90 360 50 Q400 30 450 50" stroke="url(#heroGrad)" stroke-width="3" stroke-linecap="round" fill="none" stroke-dasharray="8 6" class="hero-path"/>
-        <!-- Dots along the path -->
-        <circle cx="30" cy="50" r="6" fill="var(--indigo-400)" class="hero-dot" style="animation:pulse 2s ease 0s infinite"/>
-        <circle cx="120" cy="28" r="5" fill="var(--indigo-300)" class="hero-dot" style="animation:pulse 2s ease .3s infinite"/>
-        <circle cx="200" cy="50" r="6" fill="var(--indigo-500)" class="hero-dot" style="animation:pulse 2s ease .6s infinite"/>
-        <circle cx="280" cy="72" r="5" fill="var(--indigo-300)" class="hero-dot" style="animation:pulse 2s ease .9s infinite"/>
-        <circle cx="360" cy="50" r="6" fill="var(--indigo-400)" class="hero-dot" style="animation:pulse 2s ease 1.2s infinite"/>
-        <circle cx="450" cy="50" r="6" fill="var(--indigo-600)" class="hero-dot" style="animation:pulse 2s ease 1.5s infinite"/>
-        <!-- Labels -->
-        <text x="30" y="80" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Lead</text>
-        <text x="120" y="18" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Install</text>
-        <text x="200" y="80" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Screen</text>
-        <text x="280" y="96" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Onboard</text>
-        <text x="360" y="36" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Active</text>
-        <text x="450" y="36" text-anchor="middle" fill="var(--slate-400)" font-size="9" font-weight="600">Retain</text>
-        <defs>
-          <linearGradient id="heroGrad" x1="0" y1="0" x2="480" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="var(--indigo-300)"/>
-            <stop offset="50%" stop-color="var(--indigo-500)"/>
-            <stop offset="100%" stop-color="var(--indigo-700)"/>
-          </linearGradient>
-        </defs>
-      </svg>
+    <div>
+      <span class="badge badge-green">Live</span>
     </div>
   </div>
-</section>
 
-<!-- ─── Lifecycle Flow ───────────────────────────────── -->
-<section class="section section-alt" id="lifecycle">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-label">The Journey</div>
-      <h2 class="section-title">9-Stage Participant Lifecycle</h2>
-      <p class="section-subtitle">Click any stage to explore channels, system requirements, and dashboard metrics.</p>
+  <!-- ==================== TOP METRIC CARDS ==================== -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="label">Total Studies</div>
+      <div class="value accent">22</div>
+      <div class="sub">8 paid &middot; 14 organic ($0)</div>
     </div>
-
-    <div class="lifecycle-flow">
-
-      <!-- Stage 1 -->
-      <div class="stage-card reveal" data-stage="1">
-        <div class="stage-number">1</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Lead Capture</div>
-              <div class="stage-subtitle">Ads, newsletter, referral, organic, self-serve studies</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Funnel shape -->
-                <path d="M60 15h160l-30 70H90L60 15z" fill="var(--indigo-50)" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <path d="M75 35h130" stroke="var(--indigo-200)" stroke-width="1" stroke-dasharray="4 3"/>
-                <path d="M85 55h110" stroke="var(--indigo-200)" stroke-width="1" stroke-dasharray="4 3"/>
-                <!-- Input arrows -->
-                <path d="M20 25h30" stroke="var(--indigo-400)" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowS1)"/>
-                <path d="M15 45h35" stroke="var(--indigo-300)" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowS1)"/>
-                <path d="M25 65h25" stroke="var(--indigo-400)" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowS1)"/>
-                <!-- Source labels -->
-                <text x="18" y="22" fill="var(--slate-400)" font-size="7" font-weight="600">Ads</text>
-                <text x="8" y="42" fill="var(--slate-400)" font-size="7" font-weight="600">Referral</text>
-                <text x="14" y="62" fill="var(--slate-400)" font-size="7" font-weight="600">Organic</text>
-                <!-- Funnel labels -->
-                <text x="140" y="28" text-anchor="middle" fill="var(--indigo-500)" font-size="8" font-weight="700">LEADS</text>
-                <text x="140" y="50" text-anchor="middle" fill="var(--indigo-400)" font-size="7">Filtered</text>
-                <text x="140" y="70" text-anchor="middle" fill="var(--indigo-400)" font-size="7">Qualified</text>
-                <!-- Output -->
-                <circle cx="140" cy="92" r="5" fill="var(--indigo-500)" style="animation:pulse 2s ease infinite"/>
-                <!-- Animated dots falling through funnel -->
-                <circle cx="120" cy="20" r="3" fill="var(--indigo-300)" style="animation:pulse 2s ease 0s infinite"/>
-                <circle cx="155" cy="40" r="3" fill="var(--indigo-400)" style="animation:pulse 2s ease .5s infinite"/>
-                <circle cx="135" cy="60" r="3" fill="var(--indigo-500)" style="animation:pulse 2s ease 1s infinite"/>
-                <defs><marker id="arrowS1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--indigo-400)"/></marker></defs>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>Meta Ads (Facebook & Instagram)</li>
-                <li>Google Ads / Search</li>
-                <li>Newsletter signup forms</li>
-                <li>Referral links from existing participants</li>
-                <li>Organic search / blog content</li>
-                <li>Self-serve study landing pages</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Auto-import leads from Meta Ads API</li>
-                <li>Landing page form → participant database sync</li>
-                <li>UTM parameter tracking on all inbound links</li>
-                <li>Referral code generation &amp; tracking</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Leads by source &amp; campaign</li>
-                <li>Cost per lead by channel</li>
-                <li>Lead → app install conversion rate</li>
-                <li>Weekly/monthly lead volume trend</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 2 -->
-      <div class="stage-card reveal" data-stage="2">
-        <div class="stage-number">2</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">App Install</div>
-              <div class="stage-subtitle">OneLink tracking, AppsFlyer attribution</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Phone body -->
-                <rect x="108" y="8" width="64" height="84" rx="10" fill="var(--indigo-50)" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <rect x="114" y="18" width="52" height="60" rx="4" fill="#fff" stroke="var(--indigo-200)" stroke-width="1"/>
-                <!-- Home button -->
-                <circle cx="140" cy="84" r="4" fill="none" stroke="var(--indigo-300)" stroke-width="1"/>
-                <!-- Download arrow -->
-                <path d="M140 30v26" stroke="var(--indigo-500)" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M132 50l8 8 8-8" stroke="var(--indigo-500)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M126 62h28" stroke="var(--indigo-400)" stroke-width="2" stroke-linecap="round"/>
-                <!-- Signal waves from phone -->
-                <path d="M178 35a18 18 0 010 20" stroke="var(--indigo-200)" stroke-width="1.5" fill="none" stroke-linecap="round" style="animation:pulse 2s ease 0s infinite"/>
-                <path d="M186 30a28 28 0 010 30" stroke="var(--indigo-100)" stroke-width="1.5" fill="none" stroke-linecap="round" style="animation:pulse 2s ease .4s infinite"/>
-                <!-- Store icons -->
-                <rect x="30" y="28" width="50" height="18" rx="4" fill="var(--indigo-100)"/>
-                <text x="55" y="40" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">App Store</text>
-                <rect x="30" y="54" width="50" height="18" rx="4" fill="var(--indigo-100)"/>
-                <text x="55" y="66" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Play Store</text>
-                <!-- Connection lines -->
-                <path d="M80 37h28" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
-                <path d="M80 63h28" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
-                <!-- Attribution label -->
-                <rect x="200" y="38" width="56" height="18" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <text x="228" y="50" text-anchor="middle" fill="var(--indigo-500)" font-size="7" font-weight="600">AppsFlyer</text>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>OneLink deep links from ads &amp; emails</li>
-                <li>App Store / Google Play organic search</li>
-                <li>AppsFlyer attribution for install source</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>AppsFlyer SDK integration for attribution</li>
-                <li>OneLink configuration for all campaigns</li>
-                <li>Install event → participant record creation</li>
-                <li>Deferred deep linking for pre-install referrals</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Installs by source / campaign</li>
-                <li>Cost per install</li>
-                <li>Install → account creation rate</li>
-                <li>Attribution accuracy / unattributed installs</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 3 -->
-      <div class="stage-card reveal" data-stage="3">
-        <div class="stage-number">3</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Browse / Explore</div>
-              <div class="stage-subtitle">In-app browsing, push notifications</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Browser window -->
-                <rect x="40" y="10" width="200" height="80" rx="8" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <rect x="40" y="10" width="200" height="18" rx="8" fill="var(--indigo-50)"/>
-                <rect x="40" y="26" width="200" height="2" fill="var(--indigo-200)"/>
-                <!-- Browser dots -->
-                <circle cx="52" cy="19" r="3" fill="var(--indigo-300)"/>
-                <circle cx="62" cy="19" r="3" fill="var(--indigo-200)"/>
-                <circle cx="72" cy="19" r="3" fill="var(--indigo-100)"/>
-                <!-- Search bar -->
-                <rect x="90" y="14" width="100" height="10" rx="5" fill="#fff" stroke="var(--indigo-200)" stroke-width=".8"/>
-                <!-- Study cards grid -->
-                <rect x="50" y="34" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <rect x="112" y="34" width="56" height="22" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1.5" style="animation:pulse 3s ease infinite"/>
-                <rect x="174" y="34" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <rect x="50" y="62" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <rect x="112" y="62" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <rect x="174" y="62" width="56" height="22" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <!-- Card labels -->
-                <text x="78" y="48" text-anchor="middle" fill="var(--indigo-400)" font-size="6" font-weight="600">Study A</text>
-                <text x="140" y="48" text-anchor="middle" fill="var(--indigo-600)" font-size="6" font-weight="700">Study B</text>
-                <text x="202" y="48" text-anchor="middle" fill="var(--indigo-400)" font-size="6" font-weight="600">Study C</text>
-                <!-- Cursor pointer on highlighted card -->
-                <path d="M150 52l-2-6 8 4-4 1 3 4-2 1-3-4z" fill="var(--indigo-500)"/>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>In-app study catalog</li>
-                <li>Push notifications for new studies</li>
-                <li>Email digests of available studies</li>
-                <li>In-app banners and featured studies</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Study catalog with filtering &amp; eligibility hints</li>
-                <li>Push notification service (segmented sends)</li>
-                <li>Browse activity tracking (views, clicks, time)</li>
-                <li>Personalized study recommendations</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Studies viewed per session</li>
-                <li>Browse → eligibility survey start rate</li>
-                <li>Push notification open rate</li>
-                <li>Most viewed / most clicked studies</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 4 -->
-      <div class="stage-card reveal" data-stage="4">
-        <div class="stage-number">4</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Eligibility Survey</div>
-              <div class="stage-subtitle">In-app survey, drop-off monitoring by question</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Clipboard -->
-                <rect x="90" y="12" width="100" height="80" rx="6" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <rect x="115" y="6" width="50" height="14" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1.2"/>
-                <circle cx="140" cy="13" r="3" fill="var(--indigo-400)"/>
-                <!-- Question rows -->
-                <rect x="102" y="28" width="10" height="10" rx="2" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
-                <path d="M104 33l2.5 2.5L111 31" stroke="var(--indigo-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="118" y="30" width="60" height="5" rx="2" fill="var(--indigo-50)"/>
-                <rect x="102" y="44" width="10" height="10" rx="2" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
-                <path d="M104 49l2.5 2.5L111 47" stroke="var(--indigo-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="118" y="46" width="50" height="5" rx="2" fill="var(--indigo-50)"/>
-                <rect x="102" y="60" width="10" height="10" rx="2" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1" style="animation:pulse 2s ease infinite"/>
-                <rect x="118" y="62" width="44" height="5" rx="2" fill="var(--indigo-50)"/>
-                <rect x="102" y="76" width="10" height="10" rx="2" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <rect x="118" y="78" width="55" height="5" rx="2" fill="var(--indigo-50)"/>
-                <!-- Progress bar -->
-                <rect x="40" y="50" width="36" height="6" rx="3" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width=".8"/>
-                <rect x="40" y="50" width="18" height="6" rx="3" fill="var(--indigo-400)"/>
-                <text x="58" y="44" text-anchor="middle" fill="var(--indigo-500)" font-size="7" font-weight="700">50%</text>
-                <!-- Qualified badge -->
-                <rect x="204" y="44" width="46" height="16" rx="8" fill="var(--indigo-100)"/>
-                <text x="227" y="55" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Eligible?</text>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>In-app eligibility questionnaire</li>
-                <li>Email reminder for incomplete surveys</li>
-                <li>Push notification nudge to finish survey</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Question-level drop-off tracking</li>
-                <li>Disqualification reason logging</li>
-                <li>Survey completion event triggers</li>
-                <li>Partial survey save &amp; resume capability</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Survey start → complete rate</li>
-                <li>Drop-off rate by question</li>
-                <li>Disqualification reasons breakdown</li>
-                <li>Average time to complete survey</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 5 -->
-      <div class="stage-card reveal" data-stage="5">
-        <div class="stage-number">5</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Onboarding</div>
-              <div class="stage-subtitle">Join study, labs, wearable setup</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Onboarding steps as connected cards -->
-                <rect x="20" y="30" width="54" height="40" rx="6" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <rect x="93" y="30" width="54" height="40" rx="6" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <rect x="166" y="30" width="54" height="40" rx="6" fill="#fff" stroke="var(--indigo-400)" stroke-width="1.5" style="animation:pulse 2.5s ease infinite"/>
-                <!-- Step 1: Join icon -->
-                <circle cx="47" cy="44" r="7" fill="var(--indigo-100)"/>
-                <path d="M44 44l2 2 4-4" stroke="var(--indigo-500)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <text x="47" y="62" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Join Study</text>
-                <!-- Step 2: Lab kit icon -->
-                <rect x="113" y="38" width="14" height="10" rx="2" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width=".8"/>
-                <path d="M116 38v-3h8v3" stroke="var(--indigo-300)" stroke-width=".8" fill="none"/>
-                <text x="120" y="62" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Lab Kit</text>
-                <!-- Step 3: Wearable icon (watch) -->
-                <rect x="187" y="38" width="12" height="14" rx="3" fill="var(--indigo-100)" stroke="var(--indigo-400)" stroke-width=".8"/>
-                <path d="M190 37v-4h6v4M190 53v4h6v-4" stroke="var(--indigo-400)" stroke-width=".8" fill="none"/>
-                <circle cx="193" cy="45" r="2" fill="none" stroke="var(--indigo-500)" stroke-width=".6"/>
-                <text x="193" y="62" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Wearable</text>
-                <!-- Connection arrows -->
-                <path d="M74 50h19" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
-                <path d="M147 50h19" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
-                <!-- Arrow heads -->
-                <path d="M90 47l3 3-3 3" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M163 47l3 3-3 3" stroke="var(--indigo-300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <!-- Progress dots at top -->
-                <circle cx="47" cy="20" r="4" fill="var(--indigo-500)"/>
-                <circle cx="120" cy="20" r="4" fill="var(--indigo-500)"/>
-                <circle cx="193" cy="20" r="4" fill="var(--indigo-200)"/>
-                <path d="M51 20h65" stroke="var(--indigo-400)" stroke-width="1.5"/>
-                <path d="M124 20h65" stroke="var(--indigo-200)" stroke-width="1.5" stroke-dasharray="3 2"/>
-                <!-- Right side: Ready badge -->
-                <rect x="230" y="40" width="38" height="20" rx="10" fill="var(--indigo-100)"/>
-                <text x="249" y="53" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Ready</text>
-                <path d="M220 50h10" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>In-app onboarding flow</li>
-                <li>Email with lab kit / wearable instructions</li>
-                <li>SMS reminders for manual steps</li>
-                <li>Support chat for setup issues</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Onboarding checklist with step tracking</li>
-                <li>Lab kit shipment tracking integration</li>
-                <li>Wearable device pairing verification</li>
-                <li>Onboarding timeout alerts (stalled participants)</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Onboarding completion rate</li>
-                <li>Average time to fully onboard</li>
-                <li>Drop-off by onboarding step</li>
-                <li>Wearable pairing success rate</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 6 -->
-      <div class="stage-card reveal" data-stage="6">
-        <div class="stage-number">6</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Active in Study</div>
-              <div class="stage-subtitle">Compliance monitoring, at-risk flagging</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Monitor frame -->
-                <rect x="30" y="10" width="220" height="70" rx="8" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <!-- Grid lines -->
-                <path d="M50 25h180M50 40h180M50 55h180" stroke="var(--indigo-50)" stroke-width="1"/>
-                <!-- Activity chart line -->
-                <polyline points="50,55 70,52 90,48 105,35 115,55 125,42 140,30 155,45 170,38 185,25 200,40 215,35 230,42" stroke="var(--indigo-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                <!-- Gradient fill under chart -->
-                <polyline points="50,55 70,52 90,48 105,35 115,55 125,42 140,30 155,45 170,38 185,25 200,40 215,35 230,42 230,65 50,65" fill="url(#chartGrad)" opacity=".3"/>
-                <!-- Active dot on last point -->
-                <circle cx="230" cy="42" r="4" fill="var(--indigo-500)" style="animation:pulse 1.5s ease infinite"/>
-                <circle cx="230" cy="42" r="8" fill="none" stroke="var(--indigo-300)" stroke-width="1" opacity=".5" style="animation:pulse 1.5s ease infinite"/>
-                <!-- Y-axis labels -->
-                <text x="42" y="28" text-anchor="end" fill="var(--slate-400)" font-size="6">High</text>
-                <text x="42" y="58" text-anchor="end" fill="var(--slate-400)" font-size="6">Low</text>
-                <!-- Compliance badge -->
-                <rect x="50" y="68" width="60" height="10" rx="5" fill="var(--indigo-100)"/>
-                <text x="80" y="76" text-anchor="middle" fill="var(--indigo-600)" font-size="6" font-weight="700">92% Compliant</text>
-                <!-- Status indicator -->
-                <circle cx="195" cy="73" r="3" fill="#22c55e"/>
-                <text x="210" y="76" fill="var(--slate-500)" font-size="6" font-weight="600">Active</text>
-                <defs>
-                  <linearGradient id="chartGrad" x1="140" y1="25" x2="140" y2="65" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="var(--indigo-400)"/>
-                    <stop offset="100%" stop-color="var(--indigo-50)" stop-opacity="0"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>In-app daily/weekly check-ins</li>
-                <li>Push notifications for task reminders</li>
-                <li>Email progress reports</li>
-                <li>Support escalation for at-risk participants</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Real-time compliance scoring engine</li>
-                <li>At-risk participant flagging &amp; alerts</li>
-                <li>Automated reminder sequences</li>
-                <li>Wearable data ingestion &amp; validation</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Compliance rate (overall &amp; by task)</li>
-                <li>At-risk participant count</li>
-                <li>Average daily engagement score</li>
-                <li>Data completeness by participant</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 7 -->
-      <div class="stage-card reveal" data-stage="7">
-        <div class="stage-number">7</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Study Completion</div>
-              <div class="stage-subtitle">Exit survey, rewards, next-study recommendation</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Trophy cup -->
-                <path d="M115 25h50v30c0 14-11 25-25 25s-25-11-25-25V25z" fill="var(--indigo-100)" stroke="var(--indigo-400)" stroke-width="1.5"/>
-                <!-- Trophy handles -->
-                <path d="M115 32c-12 0-18 6-18 14s6 14 14 14" stroke="var(--indigo-300)" stroke-width="1.5" fill="none"/>
-                <path d="M165 32c12 0 18 6 18 14s-6 14-14 14" stroke="var(--indigo-300)" stroke-width="1.5" fill="none"/>
-                <!-- Trophy base -->
-                <rect x="128" y="78" width="24" height="4" rx="2" fill="var(--indigo-300)"/>
-                <rect x="134" y="74" width="12" height="6" rx="1" fill="var(--indigo-300)"/>
-                <!-- Star on trophy -->
-                <path d="M140 36l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="var(--indigo-400)" stroke="var(--indigo-500)" stroke-width=".8"/>
-                <!-- Celebration sparkles -->
-                <circle cx="90" cy="20" r="2" fill="var(--indigo-300)" style="animation:pulse 1.5s ease 0s infinite"/>
-                <circle cx="190" cy="18" r="2" fill="var(--indigo-400)" style="animation:pulse 1.5s ease .3s infinite"/>
-                <circle cx="80" cy="45" r="1.5" fill="var(--indigo-200)" style="animation:pulse 1.5s ease .6s infinite"/>
-                <circle cx="200" cy="40" r="1.5" fill="var(--indigo-300)" style="animation:pulse 1.5s ease .9s infinite"/>
-                <path d="M95 28l-4-6M185 26l4-6" stroke="var(--indigo-200)" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M85 35l-6-2M195 33l6-2" stroke="var(--indigo-200)" stroke-width="1.5" stroke-linecap="round"/>
-                <!-- Reward label -->
-                <rect x="30" y="55" width="50" height="16" rx="8" fill="var(--indigo-100)"/>
-                <text x="55" y="66" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Reward</text>
-                <!-- Next study label -->
-                <rect x="200" y="55" width="56" height="16" rx="8" fill="var(--indigo-100)"/>
-                <text x="228" y="66" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Next Study</text>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>In-app completion celebration screen</li>
-                <li>Exit survey / feedback form</li>
-                <li>Reward notification (payment, gift card)</li>
-                <li>Next-study recommendation prompt</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Study completion event triggers</li>
-                <li>Automated reward issuance</li>
-                <li>Next-study recommendation engine</li>
-                <li>Exit survey data collection &amp; analysis</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Study completion rate</li>
-                <li>Exit survey response rate &amp; scores</li>
-                <li>Reward redemption rate</li>
-                <li>Next-study click-through rate</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 8 -->
-      <div class="stage-card reveal" data-stage="8">
-        <div class="stage-number">8</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Washout Period</div>
-              <div class="stage-subtitle">Waiting period between studies, public study nudges</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Hourglass -->
-                <rect x="118" y="8" width="44" height="6" rx="2" fill="var(--indigo-300)"/>
-                <rect x="118" y="86" width="44" height="6" rx="2" fill="var(--indigo-300)"/>
-                <path d="M122 14l18 36-18 36" stroke="var(--indigo-400)" stroke-width="1.5" fill="none"/>
-                <path d="M158 14l-18 36 18 36" stroke="var(--indigo-400)" stroke-width="1.5" fill="none"/>
-                <!-- Sand top -->
-                <path d="M130 22h20l-10 18z" fill="var(--indigo-100)"/>
-                <!-- Sand bottom (accumulated) -->
-                <path d="M128 76h24l-12-12z" fill="var(--indigo-200)"/>
-                <!-- Falling sand particle -->
-                <circle cx="140" cy="52" r="1.5" fill="var(--indigo-400)" style="animation:pulse 1s ease infinite"/>
-                <!-- Calendar on left -->
-                <rect x="30" y="28" width="55" height="44" rx="4" fill="#fff" stroke="var(--indigo-300)" stroke-width="1.2"/>
-                <rect x="30" y="28" width="55" height="12" rx="4" fill="var(--indigo-100)"/>
-                <text x="57" y="37" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="700">Washout</text>
-                <!-- Calendar days grid -->
-                <circle cx="42" cy="50" r="3" fill="var(--indigo-200)"/>
-                <circle cx="52" cy="50" r="3" fill="var(--indigo-200)"/>
-                <circle cx="62" cy="50" r="3" fill="var(--indigo-200)"/>
-                <circle cx="72" cy="50" r="3" fill="var(--indigo-100)"/>
-                <circle cx="42" cy="62" r="3" fill="var(--indigo-100)"/>
-                <circle cx="52" cy="62" r="3" fill="var(--indigo-100)"/>
-                <circle cx="62" cy="62" r="3" fill="var(--indigo-50)"/>
-                <circle cx="72" cy="62" r="3" fill="var(--indigo-50)"/>
-                <!-- Content engagement on right -->
-                <rect x="195" y="30" width="60" height="18" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <text x="225" y="42" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Articles</text>
-                <rect x="195" y="54" width="60" height="18" rx="4" fill="var(--indigo-50)" stroke="var(--indigo-200)" stroke-width="1"/>
-                <text x="225" y="66" text-anchor="middle" fill="var(--indigo-500)" font-size="6" font-weight="600">Community</text>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>In-app washout countdown / status</li>
-                <li>Email updates on upcoming studies</li>
-                <li>Public study nudges (non-clinical content)</li>
-                <li>Community engagement content</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Automated washout period tracking per participant</li>
-                <li>Washout end-date calculation &amp; alerts</li>
-                <li>Study eligibility re-check on washout expiry</li>
-                <li>Public study catalog (non-restricted content)</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Participants currently in washout</li>
-                <li>Average washout duration</li>
-                <li>Washout → re-engagement rate</li>
-                <li>Content engagement during washout</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stage 9 -->
-      <div class="stage-card reveal" data-stage="9">
-        <div class="stage-number">9</div>
-        <div class="stage-content">
-          <div class="stage-header">
-            <div>
-              <div class="stage-name">Re-engagement</div>
-              <div class="stage-subtitle">Segmented outreach, churn detection, incentives</div>
-            </div>
-            <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-          </div>
-          <div class="stage-details">
-            <div class="stage-illustration">
-              <svg viewBox="0 0 280 100" fill="none">
-                <!-- Sleeping user icon -->
-                <circle cx="60" cy="40" r="18" fill="var(--indigo-50)" stroke="var(--indigo-300)" stroke-width="1.5"/>
-                <circle cx="60" cy="36" r="8" fill="var(--indigo-100)"/>
-                <path d="M48 50c0-7 5-10 12-10s12 3 12 10" fill="var(--indigo-100)"/>
-                <!-- Zzz -->
-                <text x="78" y="28" fill="var(--indigo-300)" font-size="8" font-weight="700">z</text>
-                <text x="84" y="22" fill="var(--indigo-200)" font-size="10" font-weight="700">z</text>
-                <text x="92" y="14" fill="var(--indigo-100)" font-size="12" font-weight="700">z</text>
-                <!-- Outreach channels -->
-                <rect x="120" y="16" width="50" height="16" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
-                <text x="145" y="27" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="600">Email</text>
-                <rect x="120" y="40" width="50" height="16" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
-                <text x="145" y="51" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="600">Push</text>
-                <rect x="120" y="64" width="50" height="16" rx="4" fill="var(--indigo-100)" stroke="var(--indigo-300)" stroke-width="1"/>
-                <text x="145" y="75" text-anchor="middle" fill="var(--indigo-600)" font-size="7" font-weight="600">SMS</text>
-                <!-- Arrow to channels -->
-                <path d="M78 40h42" stroke="var(--indigo-300)" stroke-width="1" stroke-dasharray="3 2"/>
-                <!-- Return curved arrow -->
-                <path d="M170 24h30c20 0 20 28 0 28h-30" stroke="var(--indigo-400)" stroke-width="2" fill="none" stroke-linecap="round" marker-end="url(#arrowS9)"/>
-                <!-- Active user icon -->
-                <circle cx="220" cy="75" r="14" fill="var(--indigo-100)" stroke="var(--indigo-400)" stroke-width="1.5" style="animation:pulse 2s ease infinite"/>
-                <circle cx="220" cy="72" r="6" fill="var(--indigo-200)"/>
-                <path d="M212 82c0-5 3-7 8-7s8 2 8 7" fill="var(--indigo-200)"/>
-                <!-- Reactivated label -->
-                <text x="220" y="96" text-anchor="middle" fill="var(--indigo-500)" font-size="7" font-weight="700">Reactivated</text>
-                <defs><marker id="arrowS9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--indigo-400)"/></marker></defs>
-              </svg>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Channels / Touchpoints</div>
-              <ul class="detail-list">
-                <li>Segmented email campaigns</li>
-                <li>Push notification re-engagement sequences</li>
-                <li>SMS outreach for high-value participants</li>
-                <li>Special incentives / bonus offers</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">System Requirements</div>
-              <ul class="detail-list">
-                <li>Churn detection model (inactivity thresholds)</li>
-                <li>Segmented campaign builder</li>
-                <li>Incentive tracking &amp; budgeting</li>
-                <li>A/B testing for re-engagement messages</li>
-              </ul>
-            </div>
-            <div class="detail-group">
-              <div class="detail-label">Dashboard Metrics</div>
-              <ul class="detail-list">
-                <li>Churned participant count &amp; trend</li>
-                <li>Re-engagement campaign response rate</li>
-                <li>Reactivation rate (returned to browse)</li>
-                <li>Cost per reactivated participant</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="metric-card">
+      <div class="label">All-Time Ad Spend</div>
+      <div class="value blue">$22,332.57</div>
+      <div class="sub">Previously reported: $18,132.96</div>
     </div>
-
-    <!-- Loop indicator -->
-    <div class="loop-indicator reveal">
-      <div class="loop-arrow">&#x21bb;</div>
-      <p>Participants loop back to Stage 3: Browse / Explore</p>
-      <span>The lifecycle is continuous — participants cycle through multiple studies over time.</span>
+    <div class="metric-card">
+      <div class="label">Total Joined</div>
+      <div class="value">1,753</div>
+      <div class="sub">Across 13 studies with known data</div>
     </div>
-
-  </div>
-</section>
-
-<!-- ─── Segmentation Rules ───────────────────────────── -->
-<section class="section" id="segmentation">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-label">Targeting</div>
-      <h2 class="section-title">Segmentation Rules</h2>
-      <p class="section-subtitle">Key filters for building targeted campaigns and participant groups.</p>
+    <div class="metric-card">
+      <div class="label">Total Onboarded</div>
+      <div class="value green">1,280</div>
+      <div class="sub">Across 20 studies with known data</div>
     </div>
-
-    <div class="seg-grid">
-
-      <div class="seg-card reveal">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div>
-        <div>
-          <div class="seg-text">Not in any active study</div>
-          <div class="seg-desc">Available for new study recruitment</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal reveal-delay-1">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-        <div>
-          <div class="seg-text">Not in washout period</div>
-          <div class="seg-desc">Cleared to begin a new clinical study</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal reveal-delay-2">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div>
-        <div>
-          <div class="seg-text">Has not tried Study X</div>
-          <div class="seg-desc">Eligible for specific study recruitment</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal reveal-delay-3">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/></svg></div>
-        <div>
-          <div class="seg-text">Has baseline wearable data (30+ days)</div>
-          <div class="seg-desc">Sufficient data for study baseline requirements</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-        <div>
-          <div class="seg-text">Has verified phone number</div>
-          <div class="seg-desc">Reachable via SMS for outreach campaigns</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal reveal-delay-1">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
-        <div>
-          <div class="seg-text">Not logged in 3+ months (churned)</div>
-          <div class="seg-desc">Targets for re-engagement campaigns</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal reveal-delay-2">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
-        <div>
-          <div class="seg-text">Downloaded app but never joined a study</div>
-          <div class="seg-desc">High-intent leads needing a push to convert</div>
-        </div>
-      </div>
-
-      <div class="seg-card reveal reveal-delay-3">
-        <div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg></div>
-        <div>
-          <div class="seg-text">Clicked ad but never downloaded app</div>
-          <div class="seg-desc">Top-of-funnel leads for retargeting</div>
-        </div>
-      </div>
-
+    <div class="metric-card">
+      <div class="label">Blended CPO (All Studies)</div>
+      <div class="value green">$17.45</div>
+      <div class="sub">$22,332.57 / 1,280 onboarded</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Paid CPO (Excl. Outliers)</div>
+      <div class="value green">$16.47</div>
+      <div class="sub">Standard paid studies only</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Completed Studies</div>
+      <div class="value">18</div>
+      <div class="sub">4 still recruiting &middot; 2 awaiting data</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Avg Days to Recruit</div>
+      <div class="value">24.5</div>
+      <div class="sub">Across 9 studies with duration data</div>
     </div>
   </div>
-</section>
 
-<!-- ─── Implementation Phases ────────────────────────── -->
-<section class="section section-alt" id="phases">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-label">Roadmap</div>
-      <h2 class="section-title">Implementation Phases</h2>
-      <p class="section-subtitle">A two-phase rollout from minimum viable to full automation.</p>
+  <!-- ==================== COST ANALYSIS TABLE ==================== -->
+  <div class="section">
+    <h2>Cost Analysis — All 15 Studies</h2>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch swatch-outlier"></div> Outlier Study</div>
+      <div class="legend-item"><div class="legend-swatch swatch-free"></div> $0 Ad Spend (Organic)</div>
+      <div class="legend-item"><div class="legend-swatch swatch-pending"></div> Awaiting Data</div>
     </div>
 
-    <div class="phases-grid">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Study Name</th>
+            <th>Type</th>
+            <th class="align-right">Ad Spend</th>
+            <th class="align-right">Joined</th>
+            <th class="align-right">Onboarded</th>
+            <th class="align-right">Target</th>
+            <th class="align-right">CPO</th>
+            <th>Wearable</th>
+            <th class="align-right">Days</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- PAID STUDIES -->
+          <tr class="row-outlier">
+            <td>1</td>
+            <td>Melatonin Sleep Study (Somato)</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$6,469.62</td>
+            <td class="align-right">293</td>
+            <td class="align-right">81</td>
+            <td class="align-right">240</td>
+            <td class="align-right">$79.87</td>
+            <td>Oura</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>OUTLIER — app issues, pre-launch ad spend</td>
+          </tr>
+          <tr class="row-outlier">
+            <td>2</td>
+            <td>Pain Relief: ProleevaMax</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$5,686.18</td>
+            <td class="align-right">103</td>
+            <td class="align-right">35</td>
+            <td class="align-right">39</td>
+            <td class="align-right">$162.46</td>
+            <td>WHOOP</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>OUTLIER — WHOOP user base issue, lab bottleneck, 5 campaigns</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Enhanced Brew — Coffee Study</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$3,184.93</td>
+            <td class="align-right">520</td>
+            <td class="align-right">192</td>
+            <td class="align-right">192</td>
+            <td class="align-right">$16.59</td>
+            <td>Oura</td>
+            <td class="align-right">23</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Nov 20 – Dec 13, 2025</td>
+          </tr>
+          <tr class="row-pending">
+            <td>4</td>
+            <td>Berkeley Life (Nitrate Supp.)</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$2,632.02</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">—</td>
+            <td>—</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-gray">Complete</span></td>
+            <td>Was missing — mislabeled as "Unmapped Campaigns"</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Peptide Supplement: Sleep &amp; Recovery</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$2,464.11</td>
+            <td class="align-right">338</td>
+            <td class="align-right">120</td>
+            <td class="align-right">120</td>
+            <td class="align-right">$20.53</td>
+            <td>Oura</td>
+            <td class="align-right">17</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Dec 23 – Jan 9</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Enhanced Brew Formula (RCT)</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$1,046.99</td>
+            <td class="align-right">82</td>
+            <td class="align-right">80</td>
+            <td class="align-right">80</td>
+            <td class="align-right">$13.09</td>
+            <td>Oura</td>
+            <td class="align-right">49</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Jun 4 – Jul 23, 2025</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Rootless &amp; Women's Health</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$582.58</td>
+            <td class="align-right">92</td>
+            <td class="align-right">50</td>
+            <td class="align-right">50</td>
+            <td class="align-right">$11.65</td>
+            <td>Oura</td>
+            <td class="align-right">19</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Nov 26 – Dec 15, 2025</td>
+          </tr>
+          <tr class="row-pending">
+            <td>8</td>
+            <td>Quantum Upgrade</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$266.14</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">—</td>
+            <td class="align-right">—</td>
+            <td>—</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-gray">Complete</span></td>
+            <td>Awaiting data from Manpreet</td>
+          </tr>
 
-      <!-- Phase 1 -->
-      <div class="phase-card phase-1 reveal">
-        <div class="phase-badge">Phase 1</div>
-        <div class="phase-title">Minimum Viable</div>
-        <div class="phase-timeline">Now &rarr; 4 weeks</div>
-        <ul class="phase-list">
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Data cleanup of test/dummy accounts</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Naming convention for test accounts</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Get data into their system</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Basic segmentation queries (manual pull)</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Study-level dumps for active recruitment</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Eligibility drop-off visibility by question</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Dashboard fixes (spend, source attribution)</li>
-        </ul>
+          <!-- $0 AD SPEND STUDIES -->
+          <tr class="row-free">
+            <td>9</td>
+            <td>Sleep Mushrooms+</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">67</td>
+            <td class="align-right">50</td>
+            <td class="align-right">50</td>
+            <td class="align-right">$0</td>
+            <td>Oura / Fitbit / WHOOP</td>
+            <td class="align-right">15</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>10</td>
+            <td>Tapping Solutions for Stress Relief</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">56</td>
+            <td class="align-right">15</td>
+            <td class="align-right">20</td>
+            <td class="align-right">$0</td>
+            <td>Oura / Fitbit / WHOOP</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>75% to target</td>
+          </tr>
+          <tr class="row-free">
+            <td>11</td>
+            <td>Better Sleep with NatPat</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">38</td>
+            <td class="align-right">25</td>
+            <td class="align-right">25</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">29</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>12</td>
+            <td>Sleep Well, Stress Less: Sensate</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">57</td>
+            <td class="align-right">25</td>
+            <td class="align-right">25</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">5</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>13</td>
+            <td>LyfeFuel Daily Essentials Shake</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">52</td>
+            <td class="align-right">25</td>
+            <td class="align-right">25</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">2</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>14</td>
+            <td>Rest &amp; Recharge: Hapbee</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">15</td>
+            <td class="align-right">10</td>
+            <td class="align-right">10</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">22</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>15</td>
+            <td>Vitamin D Boost: Clearlight</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">40</td>
+            <td class="align-right">20</td>
+            <td class="align-right">20</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">64</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td></td>
+            <td><strong>TOTALS (known data)</strong></td>
+            <td></td>
+            <td class="align-right">$22,332.57</td>
+            <td class="align-right">1,753</td>
+            <td class="align-right">728</td>
+            <td class="align-right">916</td>
+            <td class="align-right">—</td>
+            <td></td>
+            <td class="align-right">—</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- CPO Averages -->
+    <h3>Cost Per Onboard Averages</h3>
+    <div class="avg-grid">
+      <div class="avg-card">
+        <div class="avg-label">Blended CPO (All Studies incl. $0)</div>
+        <div class="avg-value green" style="color:var(--green)">$17.45</div>
+        <div class="avg-detail">$22,332.57 spend &divide; 1,280 onboarded</div>
       </div>
-
-      <!-- Phase 2 -->
-      <div class="phase-card phase-2 reveal reveal-delay-1">
-        <div class="phase-badge">Phase 2</div>
-        <div class="phase-title">Full System</div>
-        <div class="phase-timeline">4 weeks &rarr; 3 months</div>
-        <ul class="phase-list">
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Automated segmentation dashboard with filters</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>One-click email campaigns from dashboard</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>In-app notifications and drip campaigns</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Washout period auto-tracking</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Full participant status tracking</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Churn detection and re-engagement flows</li>
-          <li><span class="phase-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>API integration to email platform</li>
-        </ul>
+      <div class="avg-card">
+        <div class="avg-label">Paid Studies CPO (Excl. Outliers)</div>
+        <div class="avg-value" style="color:var(--blue)">$16.47</div>
+        <div class="avg-detail">$7,278.61 spend &divide; 442 onboarded &middot; Studies 3, 5, 6, 7</div>
       </div>
-
+      <div class="avg-card">
+        <div class="avg-label">Paid Studies CPO (Incl. Outliers)</div>
+        <div class="avg-value" style="color:var(--yellow)">$34.83</div>
+        <div class="avg-detail">$19,434.41 spend &divide; 558 onboarded &middot; Studies 1–3, 5–7</div>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- ─── Integration Points ───────────────────────────── -->
-<section class="section" id="integrations">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-label">Data Flow</div>
-      <h2 class="section-title">Integration Points</h2>
-      <p class="section-subtitle">Where data enters today vs. where it needs to go.</p>
-    </div>
+  <!-- ==================== STUDY HEALTH SCORECARD ==================== -->
+  <div class="section">
+    <h2>Study Health Scorecard</h2>
 
-    <div class="int-grid">
-
-      <div class="int-row reveal">
-        <div class="int-from">
-          <div class="int-label">Today</div>
-          <div class="int-value">Meta Ads leads &mdash; manual download</div>
-        </div>
-        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
-        <div class="int-to">
-          <div class="int-label">Target State</div>
-          <div class="int-value">Auto-feed into participant database</div>
-        </div>
+    <div class="scorecard-grid">
+      <!-- Still Recruiting -->
+      <div class="score-card">
+        <div class="study-name">Melatonin Sleep Study (Somato) <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>81 / 240 onboarded</span><span>33.8%</span></div>
+        <div class="progress-bar"><div class="progress-fill red" style="width:33.8%"></div></div>
+        <div class="score-meta"><span>CPO: $79.87</span><span>OUTLIER — app issues, pre-launch spend</span></div>
       </div>
 
-      <div class="int-row reveal reveal-delay-1">
-        <div class="int-from">
-          <div class="int-label">Today</div>
-          <div class="int-value">Landing page forms &mdash; sits on page</div>
-        </div>
-        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
-        <div class="int-to">
-          <div class="int-label">Target State</div>
-          <div class="int-value">Auto-import to participant database</div>
-        </div>
+      <div class="score-card">
+        <div class="study-name">Pain Relief: ProleevaMax <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>35 / 39 onboarded</span><span>89.7%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:89.7%"></div></div>
+        <div class="score-meta"><span>CPO: $162.46</span><span>OUTLIER — WHOOP issue, lab bottleneck</span></div>
       </div>
 
-      <div class="int-row reveal reveal-delay-2">
-        <div class="int-from">
-          <div class="int-label">Today</div>
-          <div class="int-value">Newsletter signups &mdash; SendGrid only</div>
-        </div>
-        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
-        <div class="int-to">
-          <div class="int-label">Target State</div>
-          <div class="int-value">Sync with participant database</div>
-        </div>
+      <div class="score-card">
+        <div class="study-name">Tapping Solutions for Stress Relief <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>15 / 20 onboarded</span><span>75.0%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:75%"></div></div>
+        <div class="score-meta"><span>CPO: $0 (organic)</span><span>VEP — needs 5 more participants</span></div>
       </div>
 
-      <div class="int-row reveal reveal-delay-3">
-        <div class="int-from">
-          <div class="int-label">Today</div>
-          <div class="int-value">App installs &mdash; AppsFlyer only</div>
-        </div>
-        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
-        <div class="int-to">
-          <div class="int-label">Target State</div>
-          <div class="int-value">AppsFlyer &rarr; real-time dashboard</div>
-        </div>
+      <!-- Completed — Paid -->
+      <div class="score-card">
+        <div class="study-name">Enhanced Brew — Coffee Study <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>192 / 192 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $16.59</span><span>23 days</span></div>
       </div>
 
-      <div class="int-row reveal">
-        <div class="int-from">
-          <div class="int-label">Today</div>
-          <div class="int-value">Study joins &mdash; in-app only</div>
-        </div>
-        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
-        <div class="int-to">
-          <div class="int-label">Target State</div>
-          <div class="int-value">Real-time dashboard with status tracking</div>
-        </div>
+      <div class="score-card">
+        <div class="study-name">Peptide Supplement: Sleep &amp; Recovery <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>120 / 120 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $20.53</span><span>17 days</span></div>
       </div>
 
-      <div class="int-row reveal reveal-delay-1">
-        <div class="int-from">
-          <div class="int-label">Today</div>
-          <div class="int-value">Email sends &mdash; manual SendGrid</div>
-        </div>
-        <div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
-        <div class="int-to">
-          <div class="int-label">Target State</div>
-          <div class="int-value">One-click campaigns from dashboard</div>
-        </div>
+      <div class="score-card">
+        <div class="study-name">Enhanced Brew Formula (RCT) <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>80 / 80 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $13.09</span><span>49 days</span></div>
       </div>
 
+      <div class="score-card">
+        <div class="study-name">Rootless &amp; Women's Health <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $11.65</span><span>19 days</span></div>
+      </div>
+
+      <!-- Completed — $0 Spend -->
+      <div class="score-card">
+        <div class="study-name">Sleep Mushrooms+ <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>15 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Better Sleep with NatPat <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>29 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Sleep Well, Stress Less: Sensate <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>5 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">LyfeFuel Daily Essentials Shake <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>2 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Rest &amp; Recharge: Hapbee <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>10 / 10 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>22 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Vitamin D Boost: Clearlight <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>20 / 20 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>64 days</span></div>
+      </div>
+
+      <!-- New Studies -->
+      <div class="score-card">
+        <div class="study-name">Leela Quantum <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Neuvana <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>40 / 40 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Percepta <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>154 / 154 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Very difficult recruitment</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">HOP Box <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>18 / 35 onboarded</span><span>51.4%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:51.4%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Since Feb 12 — needs 17 more</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Young Goose <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Target may increase</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Cure Hydration <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>70 / 70 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Moon Brew <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>200 / 200 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <!-- Awaiting Data -->
+      <div class="score-card">
+        <div class="study-name">Berkeley Life (Nitrate Supp.) <span class="badge badge-gray">Awaiting Data</span></div>
+        <div class="score-meta"><span>TBD / TBD onboarded</span><span>—</span></div>
+        <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
+        <div class="score-meta"><span>Spend: $2,632.02</span><span>Was mislabeled as Unmapped Campaigns</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Quantum Upgrade <span class="badge badge-gray">Awaiting Data</span></div>
+        <div class="score-meta"><span>TBD / TBD onboarded</span><span>—</span></div>
+        <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
+        <div class="score-meta"><span>Spend: $266.14</span><span>Awaiting data from Manpreet</span></div>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- ─── Footer ───────────────────────────────────────── -->
-<footer class="footer">
-  <div class="container">
-    <p>Participant Lifecycle &mdash; Internal Team Presentation &mdash; February 2026</p>
+  <!-- ==================== DATA DISCREPANCY NOTES ==================== -->
+  <div class="section">
+    <h2>Data Discrepancy Notes</h2>
+
+    <div class="note-card">
+      <div class="note-title">ProleevaMax: Spend increased $4,125 &rarr; $5,686.18</div>
+      <div class="note-body">
+        Previous dashboard showed $4,125. Actual spend is $5,686.18 — difference of $1,561.18 was from a missing active campaign not tracked in the original export. Study also had 5 separate campaigns contributing to total spend.
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-title">Berkeley Life: Missing entirely &rarr; $2,632.02 recovered</div>
+      <div class="note-body">
+        Berkeley Life was not displayed on the previous dashboard. Its $2,632.02 in ad spend was likely mislabeled as "Unmapped Campaigns" in the ads platform. Joined/onboarded data still TBD.
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-title">Total gap: ~$4,200 previously unaccounted</div>
+      <div class="note-body">
+        Combined discrepancy from ProleevaMax ($1,561) and Berkeley Life ($2,632) accounts for approximately $4,193 in ad spend that was missing from the previous dashboard total of $18,132.96. Corrected total: $22,332.57.
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-title">7 organic studies ($0 spend) were missing from the previous dashboard</div>
+      <div class="note-body">
+        Studies 9–15 (VEP and self-serve studies) were not included in the previous dashboard. These represent 170 additional onboarded participants at zero cost and significantly reduce the blended CPO.
+      </div>
+    </div>
   </div>
-</footer>
 
-<!-- ─── Scroll to top ────────────────────────────────── -->
-<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>
-</button>
+  <!-- ==================== RECRUITMENT PROJECTIONS ==================== -->
+  <div class="section">
+    <h2>Recruitment Projections — Active Studies</h2>
 
-<!-- ─── JavaScript ───────────────────────────────────── -->
-<script>
-(function(){
-  'use strict';
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-name">Melatonin Sleep Study (Somato)</div>
+        <div class="proj-row"><span>Current onboarded</span><span>81 / 240</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>159 participants</span></div>
+        <div class="proj-row"><span>Current CPO</span><span>$79.87 (outlier)</span></div>
+        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$12,699</span></div>
+        <div class="proj-row"><span>Est. remaining cost at standard CPO ($16.47)</span><span>$2,619</span></div>
+        <div class="proj-row"><span>First joined</span><span>Jan 13, 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>App issues being resolved; CPO should improve</span></div>
+      </div>
 
-  /* ── Mobile menu ────────────────────────────────────── */
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('navLinks');
-  hamburger.addEventListener('click', function(){
-    hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open');
-  });
-  navLinks.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', function(){
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-    });
-  });
+      <div class="proj-card">
+        <div class="proj-name">Pain Relief: ProleevaMax</div>
+        <div class="proj-row"><span>Current onboarded</span><span>35 / 39</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>4 participants</span></div>
+        <div class="proj-row"><span>Current CPO</span><span>$162.46 (outlier)</span></div>
+        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$650</span></div>
+        <div class="proj-row"><span>First joined</span><span>Jan 5, 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>Near completion — lab completion bottleneck</span></div>
+      </div>
 
-  /* ── Scroll: nav shadow + active link ───────────────── */
-  const nav = document.getElementById('nav');
-  const sections = document.querySelectorAll('section[id]');
-  const links = navLinks.querySelectorAll('a');
+      <div class="proj-card">
+        <div class="proj-name">Tapping Solutions for Stress Relief</div>
+        <div class="proj-row"><span>Current onboarded</span><span>15 / 20</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>5 participants</span></div>
+        <div class="proj-row"><span>Ad spend</span><span>$0 (organic / VEP)</span></div>
+        <div class="proj-row"><span>Est. remaining cost</span><span>$0</span></div>
+        <div class="proj-row"><span>Note</span><span>Organic recruitment, no ad spend needed</span></div>
+      </div>
 
-  function onScroll(){
-    const scrollY = window.scrollY;
-    nav.classList.toggle('scrolled', scrollY > 10);
+      <div class="proj-card">
+        <div class="proj-name">Projection Summary</div>
+        <div class="proj-row"><span>Total remaining participants</span><span>168</span></div>
+        <div class="proj-row"><span>Est. cost at current CPO rates</span><span>~$13,349</span></div>
+        <div class="proj-row"><span>Est. cost at standard CPO ($16.47)</span><span>~$2,619</span></div>
+        <div class="proj-row"><span>Best-case total spend at completion</span><span>~$24,952</span></div>
+        <div class="proj-row"><span>Worst-case total spend at completion</span><span>~$35,682</span></div>
+      </div>
+    </div>
+  </div>
 
-    // Scroll-to-top button
-    document.getElementById('scrollTop').classList.toggle('show', scrollY > 500);
+  <!-- ==================== STUDY TYPE BREAKDOWN ==================== -->
+  <div class="section">
+    <h2>Study Type Breakdown</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Study Type</th>
+            <th class="align-right">Count</th>
+            <th class="align-right">Total Spend</th>
+            <th class="align-right">Total Onboarded</th>
+            <th class="align-right">Avg CPO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-blue">RCT</span> Randomized Controlled Trial</td>
+            <td class="align-right">4</td>
+            <td class="align-right">$13,165.65</td>
+            <td class="align-right">473</td>
+            <td class="align-right">$27.83</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">RWE</span> Real World Evidence</td>
+            <td class="align-right">4</td>
+            <td class="align-right">$3,480.74</td>
+            <td class="align-right">105*</td>
+            <td class="align-right">—</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-yellow">VEP</span> Validated Experience Program</td>
+            <td class="align-right">6</td>
+            <td class="align-right">$0</td>
+            <td class="align-right">150</td>
+            <td class="align-right">$0</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">RWE</span> Real World Evidence ($0 spend)</td>
+            <td class="align-right">1</td>
+            <td class="align-right">$0</td>
+            <td class="align-right">20</td>
+            <td class="align-right">$0</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td><strong>Total</strong></td>
+            <td class="align-right"><strong>15</strong></td>
+            <td class="align-right"><strong>$22,332.57</strong></td>
+            <td class="align-right"><strong>728*</strong></td>
+            <td class="align-right"><strong>$30.68</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:8px;">* RWE onboarded excludes Berkeley Life and Quantum Upgrade (TBD). Actual totals will be higher.</p>
+  </div>
 
-    // Active section highlight
-    let current = '';
-    sections.forEach(function(sec){
-      if(scrollY >= sec.offsetTop - 200) current = sec.getAttribute('id');
-    });
-    links.forEach(function(link){
-      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-    });
-  }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
+  <div class="footer">
+    Recruitment Command Center &middot; Reputable &middot; Last updated Feb 16, 2026 &middot; Data corrected from full ad platform export
+  </div>
 
-  /* ── Scroll to top button ───────────────────────────── */
-  document.getElementById('scrollTop').addEventListener('click', function(){
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-
-  /* ── Reveal on scroll (Intersection Observer) ───────── */
-  var reveals = document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){
-    var observer = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {threshold:0.08, rootMargin:'0px 0px -30px 0px'});
-    reveals.forEach(function(el){ observer.observe(el); });
-    // Fallback: periodically check for unrevealed elements near the viewport
-    function checkReveals(){
-      var anyHidden = false;
-      reveals.forEach(function(el){
-        if(!el.classList.contains('visible')){
-          anyHidden = true;
-          var rect = el.getBoundingClientRect();
-          if(rect.top < window.innerHeight + 80){
-            el.classList.add('visible');
-          }
-        }
-      });
-      if(anyHidden) requestAnimationFrame(checkReveals);
-    }
-    requestAnimationFrame(checkReveals);
-    // Also check on scroll as a safety net
-    window.addEventListener('scroll', checkReveals, {passive:true});
-  } else {
-    reveals.forEach(function(el){ el.classList.add('visible'); });
-  }
-
-  /* ── Stage card expand/collapse ─────────────────────── */
-  document.querySelectorAll('.stage-card').forEach(function(card){
-    card.addEventListener('click', function(){
-      var wasExpanded = card.classList.contains('expanded');
-      // Collapse all
-      document.querySelectorAll('.stage-card.expanded').forEach(function(c){
-        c.classList.remove('expanded');
-      });
-      // Toggle clicked
-      if(!wasExpanded) card.classList.add('expanded');
-    });
-  });
-
-  /* ── Keyboard: Escape to collapse ───────────────────── */
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape'){
-      document.querySelectorAll('.stage-card.expanded').forEach(function(c){
-        c.classList.remove('expanded');
-      });
-    }
-  });
-
-  /* ── Presentation mode: arrow keys navigate sections ── */
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'ArrowDown' || e.key === 'ArrowRight'){
-      e.preventDefault();
-      navigateSection(1);
-    }
-    if(e.key === 'ArrowUp' || e.key === 'ArrowLeft'){
-      e.preventDefault();
-      navigateSection(-1);
-    }
-  });
-
-  function navigateSection(dir){
-    var sects = Array.from(sections);
-    var scrollY = window.scrollY;
-    var idx = -1;
-    for(var i = 0; i < sects.length; i++){
-      if(sects[i].offsetTop - 80 > scrollY + 10){
-        idx = i;
-        break;
-      }
-    }
-    if(dir === 1){
-      var target = idx >= 0 ? sects[idx] : null;
-    } else {
-      if(idx <= 0) idx = sects.length;
-      var target = sects[idx - 1] || null;
-      // If we're already at the top of this section, go one more back
-      if(target && Math.abs(target.offsetTop - 80 - scrollY) < 20){
-        target = sects[idx - 2] || null;
-      }
-    }
-    if(target){
-      target.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-  }
-
-})();
-</script>
 </body>
 </html>

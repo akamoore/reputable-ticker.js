@@ -1,963 +1,1005 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recruitment Command Center</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --teal-50:#e7faf6;--teal-100:#c8f2ea;--teal-200:#93e7d8;
-  --teal-300:#50d7c3;--teal-400:#00d5be;--teal-500:#00b39f;
-  --teal-600:#009180;--teal-700:#007768;--teal-800:#005c51;
-  --teal-900:#00433b;
-  --s50:#f8fafc;--s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;
-  --s400:#94a3b8;--s500:#64748b;--s600:#475569;--s700:#334155;--s800:#1e293b;--s900:#0f172a;
-  --green-500:#22c55e;--green-100:#dcfce7;
-  --red-500:#ef4444;--red-100:#fee2e2;--red-50:#fef2f2;
-  --amber-500:#f59e0b;--amber-100:#fef3c7;--amber-50:#fffbeb;--amber-600:#d97706;--amber-700:#b45309;
-  --radius:12px;--radius-sm:8px;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
-  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
-  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
-}
-html{scroll-behavior:smooth;font-size:16px}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:var(--s800);background:var(--s100);line-height:1.6;-webkit-font-smoothing:antialiased}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruitment Command Center</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #232733;
+      --border: #2e3345;
+      --text: #e4e6ef;
+      --text-dim: #8b8fa3;
+      --accent: #6c5ce7;
+      --green: #00b894;
+      --green-bg: rgba(0,184,148,0.12);
+      --yellow: #fdcb6e;
+      --yellow-bg: rgba(253,203,110,0.12);
+      --red: #e17055;
+      --red-bg: rgba(225,112,85,0.12);
+      --blue: #74b9ff;
+      --blue-bg: rgba(116,185,255,0.12);
+      --gray: #636e80;
+      --gray-bg: rgba(99,110,128,0.12);
+    }
 
-/* ── Nav ─────────────────────────── */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--s200);padding:0 24px;height:56px;display:flex;align-items:center;gap:16px}
-.topbar-brand{font-weight:800;font-size:.95rem;color:var(--teal-700);display:flex;align-items:center;gap:8px;white-space:nowrap}
-.topbar-brand svg{width:22px;height:22px}
-.topbar-nav{display:flex;gap:2px;flex:1;justify-content:center;overflow-x:auto}
-.topbar-nav a{padding:6px 13px;border-radius:20px;font-size:.78rem;font-weight:600;color:var(--s500);white-space:nowrap;text-decoration:none;transition:all .2s}
-.topbar-nav a:hover,.topbar-nav a.active{background:var(--teal-50);color:var(--teal-700)}
-.topbar-actions{display:flex;gap:8px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;border:1px solid var(--s200);background:#fff;color:var(--s700);cursor:pointer;transition:all .2s;white-space:nowrap}
-.btn:hover{border-color:var(--teal-300);color:var(--teal-700)}
-.btn-primary{background:linear-gradient(135deg,var(--teal-500),var(--teal-700));color:#fff;border:none}
-.btn-primary:hover{opacity:.9}
-.btn svg{width:15px;height:15px}
-.last-updated{font-size:.7rem;color:var(--s400);white-space:nowrap}
-@media(max-width:768px){.topbar-nav{display:none}.last-updated{display:none}}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Layout ──────────────────────── */
-.container{max-width:1260px;margin:0 auto;padding:24px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media(max-width:1024px){.grid-4{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
 
-.section{margin-bottom:32px}
-.section-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-.section-head h2{font-size:1.25rem;font-weight:800;color:var(--s900)}
-.section-head .badge{font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:12px;background:var(--teal-100);color:var(--teal-700)}
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
 
-/* ── Cards ────────────────────────── */
-.card{background:#fff;border:1px solid var(--s200);border-radius:var(--radius);padding:20px;transition:box-shadow .2s}
-.card:hover{box-shadow:var(--shadow-md)}
-.card-sm{padding:16px}
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
 
-/* ── KPI Cards ───────────────────── */
-.kpi{text-align:center}
-.kpi .kpi-label{font-size:.72rem;font-weight:600;color:var(--s500);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-.kpi .kpi-value{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--teal-500),var(--teal-700));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.kpi .kpi-sub{font-size:.72rem;color:var(--s400);margin-top:2px;display:flex;align-items:center;justify-content:center;gap:4px}
-.kpi .up{color:var(--green-500)}
-.kpi .down{color:var(--red-500)}
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 13px;
+    }
 
-/* ── Cost Table ──────────────────── */
-.tbl{width:100%;border-collapse:collapse;font-size:.84rem}
-.tbl th{text-align:left;padding:10px 12px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--s500);border-bottom:2px solid var(--s200);background:var(--s50)}
-.tbl td{padding:10px 12px;border-bottom:1px solid var(--s100)}
-.tbl tr:hover td{background:var(--teal-50)}
-.tbl .good{color:var(--green-500);font-weight:700}
-.tbl .bad{color:var(--red-500);font-weight:700}
-.tbl .avg-row td{font-weight:700;border-top:2px solid var(--s200);background:var(--s50)}
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-/* ── Health Cards ────────────────── */
-.health-card{border-left:4px solid var(--s300)}
-.health-card.green{border-left-color:var(--green-500)}
-.health-card.yellow{border-left-color:var(--amber-500)}
-.health-card.red{border-left-color:var(--red-500)}
-.health-card .hc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.health-card .hc-name{font-weight:700;font-size:.95rem;color:var(--s900)}
-.health-card .hc-status{font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:12px}
-.health-card .hc-status.recruiting{background:var(--teal-100);color:var(--teal-700)}
-.health-card .hc-status.upcoming{background:var(--amber-100);color:var(--amber-700)}
-.health-card .hc-status.at-risk{background:var(--red-100);color:var(--red-500)}
-.health-card .hc-bar{height:6px;background:var(--s200);border-radius:3px;margin:8px 0}
-.health-card .hc-bar-fill{height:100%;border-radius:3px;background:var(--teal-500);transition:width .5s}
-.health-card .hc-stats{display:flex;gap:12px;flex-wrap:wrap}
-.health-card .hc-stat{font-size:.72rem;color:var(--s500)}
-.health-card .hc-stat strong{color:var(--s800)}
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+    .badge-gray { background: var(--gray-bg); color: var(--gray); }
 
-/* ── Projection Table ────────────── */
-.proj-grid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:1px;background:var(--s200);border-radius:var(--radius);overflow:hidden;font-size:.82rem}
-.proj-grid .cell{padding:10px 14px;background:#fff}
-.proj-grid .cell.head{background:var(--s50);font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em;color:var(--s500)}
-.proj-grid .cell.study-name{font-weight:600;color:var(--s800);display:flex;align-items:center;gap:6px}
-.proj-grid .cell.highlight{background:var(--teal-50);font-weight:600;color:var(--teal-700)}
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
 
-/* ── Source Attribution ──────────── */
-.source-warning{background:var(--amber-50);border:1px solid var(--amber-100);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:flex-start;gap:10px;margin-top:12px}
-.source-warning svg{width:18px;height:18px;color:var(--amber-600);flex-shrink:0;margin-top:1px}
-.source-warning p{font-size:.82rem;color:var(--amber-700);line-height:1.5}
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
 
-/* ── Buffer Toggle ───────────────── */
-.buffer-row{display:flex;gap:6px;align-items:center;margin:12px 0;flex-wrap:wrap}
-.buffer-btn{padding:5px 14px;border-radius:20px;font-size:.75rem;font-weight:600;border:1px solid var(--s200);background:#fff;color:var(--s600);cursor:pointer;transition:all .2s}
-.buffer-btn.active{background:var(--teal-500);color:#fff;border-color:var(--teal-500)}
-.buffer-label{font-size:.75rem;font-weight:600;color:var(--s500)}
+    .metric-card .label {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
 
-/* ── Data Entry ──────────────────── */
-.data-panel{background:#fff;border:1px solid var(--s200);border-radius:var(--radius);margin-bottom:24px;overflow:hidden}
-.data-panel-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid var(--s200);background:var(--s50)}
-.data-panel-header h3{font-size:.95rem;font-weight:700;color:var(--s800);display:flex;align-items:center;gap:8px}
-.data-panel-header h3 svg{width:18px;height:18px;color:var(--teal-500)}
-.data-panel-header .toggle-icon{width:20px;height:20px;color:var(--s400);transition:transform .3s}
-.data-panel-header.open .toggle-icon{transform:rotate(180deg)}
-.data-panel-body{display:none;padding:20px}
-.data-panel-body.open{display:block}
-.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
-.form-group label{display:block;font-size:.72rem;font-weight:600;color:var(--s500);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 12px;border:1px solid var(--s200);border-radius:var(--radius-sm);font-size:.85rem;font-family:inherit;transition:border-color .2s}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--teal-400)}
-.form-group textarea{min-height:80px;resize:vertical}
-.form-actions{display:flex;gap:8px;margin-top:8px}
+    .metric-card .value {
+      font-size: 28px;
+      font-weight: 700;
+    }
 
-/* ── Tabs ────────────────────────── */
-.tabs{display:flex;gap:2px;margin-bottom:16px;border-bottom:2px solid var(--s200);padding-bottom:0}
-.tab{padding:8px 18px;font-size:.82rem;font-weight:600;color:var(--s500);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
-.tab:hover{color:var(--s700)}
-.tab.active{color:var(--teal-600);border-bottom-color:var(--teal-500)}
-.tab-content{display:none}
-.tab-content.active{display:block}
+    .metric-card .sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
 
-/* ── Chart Container ─────────────── */
-.chart-wrap{position:relative;height:280px}
-@media(max-width:640px){.chart-wrap{height:220px}}
+    .metric-card .value.green { color: var(--green); }
+    .metric-card .value.blue { color: var(--blue); }
+    .metric-card .value.yellow { color: var(--yellow); }
+    .metric-card .value.accent { color: var(--accent); }
 
-/* ── Quarterly Budget ────────────── */
-.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media(max-width:768px){.q-grid{grid-template-columns:1fr 1fr}}
-.q-card{background:#fff;border:1px solid var(--s200);border-radius:var(--radius-sm);padding:16px;text-align:center}
-.q-card .q-label{font-size:.75rem;font-weight:700;color:var(--s500);text-transform:uppercase}
-.q-card .q-val{font-size:1.4rem;font-weight:800;color:var(--teal-600);margin:4px 0}
-.q-card .q-note{font-size:.7rem;color:var(--s400)}
+    /* Sections */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
 
-/* ── Discrepancy Notes ────────────── */
-.discrepancy-note{border-left:4px solid var(--amber-500)}
-.disc-list{display:grid;gap:12px}
-.disc-item{display:flex;gap:12px;align-items:flex-start}
-.disc-num{width:26px;height:26px;border-radius:50%;background:var(--amber-100);color:var(--amber-700);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.disc-item strong{font-size:.88rem;color:var(--s800);display:block;margin-bottom:2px}
-.disc-item p{font-size:.82rem;color:var(--s500);line-height:1.5}
+    .section h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-/* ── Toast ────────────────────────── */
-.copied-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s800);color:#fff;padding:10px 24px;border-radius:8px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s ease;z-index:200;pointer-events:none}
-.copied-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+    .section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 20px 0 10px;
+    }
 
-/* ── Print / Export ──────────────── */
-@media print{
-  .topbar,.data-panel,.btn,.buffer-row,.tabs{display:none!important}
-  body{background:#fff}
-  .card,.health-card,.kpi{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
-</style>
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 0 -8px;
+      padding: 0 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tr.row-outlier { background: var(--yellow-bg); }
+    tr.row-free { background: var(--green-bg); }
+    tr.row-pending { background: var(--gray-bg); }
+
+    .totals-row td {
+      font-weight: 700;
+      border-top: 2px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .align-right { text-align: right; }
+
+    /* Scorecard */
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .score-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .score-card .study-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-fill.green { background: var(--green); }
+    .progress-fill.yellow { background: var(--yellow); }
+    .progress-fill.red { background: var(--red); }
+    .progress-fill.blue { background: var(--blue); }
+
+    .score-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* Discrepancy Notes */
+    .note-card {
+      background: var(--surface2);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+
+    .note-card .note-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .note-card .note-body {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    /* CPO Averages */
+    .avg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .avg-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .avg-card .avg-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .avg-card .avg-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .avg-card .avg-detail {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* Projection */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .proj-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .proj-card .proj-name {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .proj-card .proj-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 4px 0;
+      color: var(--text-dim);
+    }
+
+    .proj-card .proj-row span:last-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 12px;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+
+    .swatch-outlier { background: var(--yellow-bg); border: 1px solid var(--yellow); }
+    .swatch-free { background: var(--green-bg); border: 1px solid var(--green); }
+    .swatch-pending { background: var(--gray-bg); border: 1px solid var(--gray); }
+
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-card .value { font-size: 22px; }
+      .section { padding: 16px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ══ Top Bar ══ -->
-<nav class="topbar">
-  <div class="topbar-brand">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
-    Command Center
-  </div>
-  <div class="topbar-nav">
-    <a href="#kpis" class="active">Dashboard</a>
-    <a href="#cost-section">Costs</a>
-    <a href="#trends-section">Trends</a>
-    <a href="#health-section">Study Health</a>
-    <a href="#proj-section">Projections</a>
-    <a href="#source-section">Attribution</a>
-    <a href="#discrepancy-section">Notes</a>
-  </div>
-  <div class="topbar-actions">
-    <span class="last-updated" id="lastUpdated">Last updated: —</span>
-    <button class="btn" onclick="exportSummary()" title="Copy summary to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Summary</button>
-    <button class="btn" onclick="exportScreenshot()" title="Export as image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</button>
-  </div>
-</nav>
-
-<div class="container" id="reportContent">
-
-<!-- ══════════════════════════════════════════════════
-     DATA ENTRY
-     ══════════════════════════════════════════════════ -->
-<div class="data-panel" id="dataPanel">
-  <div class="data-panel-header" onclick="togglePanel()">
-    <h3>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-      Enter Weekly Data
-    </h3>
-    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-  </div>
-  <div class="data-panel-body" id="dataPanelBody">
-    <div class="tabs">
-      <div class="tab active" data-tab="tab-study">Ad Spend &amp; Studies</div>
-      <div class="tab" data-tab="tab-newsletter">Newsletter</div>
-      <div class="tab" data-tab="tab-installs">Installs</div>
-      <div class="tab" data-tab="tab-csv">Paste CSV</div>
+  <div class="header">
+    <div>
+      <h1>Recruitment Command Center</h1>
+      <div class="subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 16, 2026</div>
     </div>
-
-    <!-- Tab: Study Data -->
-    <div class="tab-content active" id="tab-study">
-      <div class="form-row">
-        <div class="form-group"><label>Study Name</label><select id="addStudyName">
-          <option value="">Select study...</option>
-          <option>Somato / Melatonin Sleep Study</option>
-          <option>ProleevaMax (Pain Relief)</option>
-          <option>Enhanced Brew Coffee Study</option>
-          <option>Berkeley Life</option>
-          <option>Peptide Supplement Sleep Recovery</option>
-          <option>Rootless Women's Health</option>
-          <option>Quantum Upgrade</option>
-          <option>Tapping</option>
-          <option>Percepta</option>
-          <option>Leila Nivana</option>
-          <option>Box</option>
-          <option>Young Goose</option>
-          <option>Cure Hydration</option>
-          <option value="__custom__">+ New Study</option>
-        </select></div>
-        <div class="form-group"><label>Week Ending</label><input type="date" id="addWeekEnd"></div>
-        <div class="form-group"><label>Spend ($)</label><input type="number" step="0.01" id="addSpend" placeholder="0.00"></div>
-        <div class="form-group"><label>New Joins</label><input type="number" id="addJoins" placeholder="0"></div>
-        <div class="form-group"><label>New Onboarded</label><input type="number" id="addOnboarded" placeholder="0"></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-primary" onclick="addStudyEntry()">Add Entry</button>
-      </div>
-    </div>
-
-    <!-- Tab: Newsletter -->
-    <div class="tab-content" id="tab-newsletter">
-      <div class="form-row">
-        <div class="form-group"><label>Date Sent</label><input type="date" id="nlDate"></div>
-        <div class="form-group"><label>Total Sent</label><input type="number" id="nlSent" placeholder="0"></div>
-        <div class="form-group"><label>Opens</label><input type="number" id="nlOpens" placeholder="0"></div>
-        <div class="form-group"><label>Clicks</label><input type="number" id="nlClicks" placeholder="0"></div>
-        <div class="form-group"><label>Bounces</label><input type="number" id="nlBounces" placeholder="0"></div>
-        <div class="form-group"><label>Unsubscribes</label><input type="number" id="nlUnsubs" placeholder="0"></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-primary" onclick="addNewsletterEntry()">Add Entry</button>
-      </div>
-    </div>
-
-    <!-- Tab: Installs -->
-    <div class="tab-content" id="tab-installs">
-      <div class="form-row">
-        <div class="form-group"><label>Week Ending</label><input type="date" id="instDate"></div>
-        <div class="form-group"><label>Total Installs</label><input type="number" id="instTotal" placeholder="0"></div>
-        <div class="form-group"><label>From Ads</label><input type="number" id="instAds" placeholder="0"></div>
-        <div class="form-group"><label>From Newsletter</label><input type="number" id="instNL" placeholder="0"></div>
-        <div class="form-group"><label>Organic</label><input type="number" id="instOrganic" placeholder="0"></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-primary" onclick="addInstallEntry()">Add Entry</button>
-      </div>
-    </div>
-
-    <!-- Tab: CSV -->
-    <div class="tab-content" id="tab-csv">
-      <div class="form-group">
-        <label>Paste CSV (study,week_ending,spend,joins,onboarded)</label>
-        <textarea id="csvInput" placeholder="Melatonin Sleep Study,2026-02-09,500.00,30,8&#10;Enhanced Brew Coffee Study,2026-02-09,350.00,45,15"></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-primary" onclick="importCSV()">Import CSV</button>
-      </div>
-    </div>
-
-    <div style="margin-top:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button class="btn" onclick="setLastUpdated()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Mark as Updated Now
-      </button>
-      <button class="btn" onclick="if(confirm('Reset all data to defaults?')){localStorage.clear();location.reload()}" style="color:var(--red-500)">Reset Data</button>
+    <div>
+      <span class="badge badge-green">Live</span>
     </div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════════════════
-     KPI CARDS
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="kpis">
-  <div class="grid-4" id="kpiGrid"></div>
-</div>
+  <!-- ==================== TOP METRIC CARDS ==================== -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="label">Total Studies</div>
+      <div class="value accent">22</div>
+      <div class="sub">8 paid &middot; 14 organic ($0)</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">All-Time Ad Spend</div>
+      <div class="value blue">$22,332.57</div>
+      <div class="sub">Previously reported: $18,132.96</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Total Joined</div>
+      <div class="value">1,753</div>
+      <div class="sub">Across 13 studies with known data</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Total Onboarded</div>
+      <div class="value green">1,280</div>
+      <div class="sub">Across 20 studies with known data</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Blended CPO (All Studies)</div>
+      <div class="value green">$17.45</div>
+      <div class="sub">$22,332.57 / 1,280 onboarded</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Paid CPO (Excl. Outliers)</div>
+      <div class="value green">$16.47</div>
+      <div class="sub">Standard paid studies only</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Completed Studies</div>
+      <div class="value">18</div>
+      <div class="sub">4 still recruiting &middot; 2 awaiting data</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Avg Days to Recruit</div>
+      <div class="value">24.5</div>
+      <div class="sub">Across 9 studies with duration data</div>
+    </div>
+  </div>
 
-<!-- ══════════════════════════════════════════════════
-     COST ANALYSIS
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="cost-section">
-  <div class="section-head">
-    <h2>Cost Analysis</h2>
-    <span class="badge">Per Study Breakdown</span>
-  </div>
-  <div class="buffer-row">
-    <span class="buffer-label">Non-ad buffer:</span>
-    <button class="buffer-btn active" data-buffer="0">0%</button>
-    <button class="buffer-btn" data-buffer="5">5%</button>
-    <button class="buffer-btn" data-buffer="10">10%</button>
-    <button class="buffer-btn" data-buffer="15">15%</button>
-    <button class="buffer-btn" data-buffer="20">20%</button>
-  </div>
-  <div class="card" style="overflow-x:auto">
-    <table class="tbl" id="costTable">
-      <thead><tr><th>Study</th><th>Spend</th><th>Ad Results</th><th>Impressions</th><th>Joins</th><th>Onboarded</th><th>Cost/Lead</th><th>Cost/Onboard</th><th>Join→Onboard %</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</div>
+  <!-- ==================== COST ANALYSIS TABLE ==================== -->
+  <div class="section">
+    <h2>Cost Analysis — All 15 Studies</h2>
 
-<!-- ══════════════════════════════════════════════════
-     TREND CHARTS
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="trends-section">
-  <div class="section-head">
-    <h2>Trends</h2>
-    <span class="badge">Visual Analytics</span>
-  </div>
-  <div class="grid-2">
-    <div class="card"><h4 style="font-size:.85rem;font-weight:700;color:var(--s700);margin-bottom:12px">Cost per Onboard Over Time</h4><div class="chart-wrap"><canvas id="chartCPO"></canvas></div></div>
-    <div class="card"><h4 style="font-size:.85rem;font-weight:700;color:var(--s700);margin-bottom:12px">Signups vs Onboarded</h4><div class="chart-wrap"><canvas id="chartSignups"></canvas></div></div>
-    <div class="card"><h4 style="font-size:.85rem;font-weight:700;color:var(--s700);margin-bottom:12px">Ad Spend &amp; Efficiency</h4><div class="chart-wrap"><canvas id="chartSpend"></canvas></div></div>
-    <div class="card"><h4 style="font-size:.85rem;font-weight:700;color:var(--s700);margin-bottom:12px">Newsletter Performance</h4><div class="chart-wrap"><canvas id="chartNewsletter"></canvas></div></div>
-  </div>
-</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch swatch-outlier"></div> Outlier Study</div>
+      <div class="legend-item"><div class="legend-swatch swatch-free"></div> $0 Ad Spend (Organic)</div>
+      <div class="legend-item"><div class="legend-swatch swatch-pending"></div> Awaiting Data</div>
+    </div>
 
-<!-- ══════════════════════════════════════════════════
-     STUDY HEALTH
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="health-section">
-  <div class="section-head">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Study Name</th>
+            <th>Type</th>
+            <th class="align-right">Ad Spend</th>
+            <th class="align-right">Joined</th>
+            <th class="align-right">Onboarded</th>
+            <th class="align-right">Target</th>
+            <th class="align-right">CPO</th>
+            <th>Wearable</th>
+            <th class="align-right">Days</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- PAID STUDIES -->
+          <tr class="row-outlier">
+            <td>1</td>
+            <td>Melatonin Sleep Study (Somato)</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$6,469.62</td>
+            <td class="align-right">293</td>
+            <td class="align-right">81</td>
+            <td class="align-right">240</td>
+            <td class="align-right">$79.87</td>
+            <td>Oura</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>OUTLIER — app issues, pre-launch ad spend</td>
+          </tr>
+          <tr class="row-outlier">
+            <td>2</td>
+            <td>Pain Relief: ProleevaMax</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$5,686.18</td>
+            <td class="align-right">103</td>
+            <td class="align-right">35</td>
+            <td class="align-right">39</td>
+            <td class="align-right">$162.46</td>
+            <td>WHOOP</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>OUTLIER — WHOOP user base issue, lab bottleneck, 5 campaigns</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Enhanced Brew — Coffee Study</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$3,184.93</td>
+            <td class="align-right">520</td>
+            <td class="align-right">192</td>
+            <td class="align-right">192</td>
+            <td class="align-right">$16.59</td>
+            <td>Oura</td>
+            <td class="align-right">23</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Nov 20 – Dec 13, 2025</td>
+          </tr>
+          <tr class="row-pending">
+            <td>4</td>
+            <td>Berkeley Life (Nitrate Supp.)</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$2,632.02</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">—</td>
+            <td>—</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-gray">Complete</span></td>
+            <td>Was missing — mislabeled as "Unmapped Campaigns"</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Peptide Supplement: Sleep &amp; Recovery</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$2,464.11</td>
+            <td class="align-right">338</td>
+            <td class="align-right">120</td>
+            <td class="align-right">120</td>
+            <td class="align-right">$20.53</td>
+            <td>Oura</td>
+            <td class="align-right">17</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Dec 23 – Jan 9</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Enhanced Brew Formula (RCT)</td>
+            <td><span class="badge badge-blue">RCT</span></td>
+            <td class="align-right">$1,046.99</td>
+            <td class="align-right">82</td>
+            <td class="align-right">80</td>
+            <td class="align-right">80</td>
+            <td class="align-right">$13.09</td>
+            <td>Oura</td>
+            <td class="align-right">49</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Jun 4 – Jul 23, 2025</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Rootless &amp; Women's Health</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$582.58</td>
+            <td class="align-right">92</td>
+            <td class="align-right">50</td>
+            <td class="align-right">50</td>
+            <td class="align-right">$11.65</td>
+            <td>Oura</td>
+            <td class="align-right">19</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td>Nov 26 – Dec 15, 2025</td>
+          </tr>
+          <tr class="row-pending">
+            <td>8</td>
+            <td>Quantum Upgrade</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$266.14</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">TBD</td>
+            <td class="align-right">—</td>
+            <td class="align-right">—</td>
+            <td>—</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-gray">Complete</span></td>
+            <td>Awaiting data from Manpreet</td>
+          </tr>
+
+          <!-- $0 AD SPEND STUDIES -->
+          <tr class="row-free">
+            <td>9</td>
+            <td>Sleep Mushrooms+</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">67</td>
+            <td class="align-right">50</td>
+            <td class="align-right">50</td>
+            <td class="align-right">$0</td>
+            <td>Oura / Fitbit / WHOOP</td>
+            <td class="align-right">15</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>10</td>
+            <td>Tapping Solutions for Stress Relief</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">56</td>
+            <td class="align-right">15</td>
+            <td class="align-right">20</td>
+            <td class="align-right">$0</td>
+            <td>Oura / Fitbit / WHOOP</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>75% to target</td>
+          </tr>
+          <tr class="row-free">
+            <td>11</td>
+            <td>Better Sleep with NatPat</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">38</td>
+            <td class="align-right">25</td>
+            <td class="align-right">25</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">29</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>12</td>
+            <td>Sleep Well, Stress Less: Sensate</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">57</td>
+            <td class="align-right">25</td>
+            <td class="align-right">25</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">5</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>13</td>
+            <td>LyfeFuel Daily Essentials Shake</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">52</td>
+            <td class="align-right">25</td>
+            <td class="align-right">25</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">2</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>14</td>
+            <td>Rest &amp; Recharge: Hapbee</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">15</td>
+            <td class="align-right">10</td>
+            <td class="align-right">10</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">22</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>15</td>
+            <td>Vitamin D Boost: Clearlight</td>
+            <td><span class="badge badge-green">RWE</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">40</td>
+            <td class="align-right">20</td>
+            <td class="align-right">20</td>
+            <td class="align-right">$0</td>
+            <td>Oura</td>
+            <td class="align-right">64</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td></td>
+            <td><strong>TOTALS (known data)</strong></td>
+            <td></td>
+            <td class="align-right">$22,332.57</td>
+            <td class="align-right">1,753</td>
+            <td class="align-right">728</td>
+            <td class="align-right">916</td>
+            <td class="align-right">—</td>
+            <td></td>
+            <td class="align-right">—</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- CPO Averages -->
+    <h3>Cost Per Onboard Averages</h3>
+    <div class="avg-grid">
+      <div class="avg-card">
+        <div class="avg-label">Blended CPO (All Studies incl. $0)</div>
+        <div class="avg-value green" style="color:var(--green)">$17.45</div>
+        <div class="avg-detail">$22,332.57 spend &divide; 1,280 onboarded</div>
+      </div>
+      <div class="avg-card">
+        <div class="avg-label">Paid Studies CPO (Excl. Outliers)</div>
+        <div class="avg-value" style="color:var(--blue)">$16.47</div>
+        <div class="avg-detail">$7,278.61 spend &divide; 442 onboarded &middot; Studies 3, 5, 6, 7</div>
+      </div>
+      <div class="avg-card">
+        <div class="avg-label">Paid Studies CPO (Incl. Outliers)</div>
+        <div class="avg-value" style="color:var(--yellow)">$34.83</div>
+        <div class="avg-detail">$19,434.41 spend &divide; 558 onboarded &middot; Studies 1–3, 5–7</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STUDY HEALTH SCORECARD ==================== -->
+  <div class="section">
     <h2>Study Health Scorecard</h2>
-    <span class="badge">Active &amp; Upcoming</span>
-  </div>
-  <div class="grid-3" id="healthGrid"></div>
-</div>
 
-<!-- ══════════════════════════════════════════════════
-     PROJECTIONS
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="proj-section">
-  <div class="section-head">
-    <h2>Recruitment Projections</h2>
-    <span class="badge">Budget Planning</span>
-  </div>
-  <div class="card" style="margin-bottom:16px;overflow-x:auto">
-    <div class="proj-grid" id="projGrid"></div>
-  </div>
-  <div class="section-head"><h2 style="font-size:1rem">Quarterly Budget Projection</h2></div>
-  <div class="q-grid" id="qGrid"></div>
-</div>
+    <div class="scorecard-grid">
+      <!-- Still Recruiting -->
+      <div class="score-card">
+        <div class="study-name">Melatonin Sleep Study (Somato) <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>81 / 240 onboarded</span><span>33.8%</span></div>
+        <div class="progress-bar"><div class="progress-fill red" style="width:33.8%"></div></div>
+        <div class="score-meta"><span>CPO: $79.87</span><span>OUTLIER — app issues, pre-launch spend</span></div>
+      </div>
 
-<!-- ══════════════════════════════════════════════════
-     SOURCE ATTRIBUTION
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="source-section">
-  <div class="section-head">
-    <h2>Source Attribution</h2>
-    <span class="badge">Install Tracking</span>
-  </div>
-  <div class="grid-2">
-    <div class="card"><div class="chart-wrap" style="height:260px"><canvas id="chartSource"></canvas></div></div>
-    <div class="card" id="sourceDetails"></div>
-  </div>
-</div>
+      <div class="score-card">
+        <div class="study-name">Pain Relief: ProleevaMax <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>35 / 39 onboarded</span><span>89.7%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:89.7%"></div></div>
+        <div class="score-meta"><span>CPO: $162.46</span><span>OUTLIER — WHOOP issue, lab bottleneck</span></div>
+      </div>
 
-<!-- ══════════════════════════════════════════════════
-     DATA DISCREPANCY NOTES
-     ══════════════════════════════════════════════════ -->
-<div class="section" id="discrepancy-section">
-  <div class="section-head">
+      <div class="score-card">
+        <div class="study-name">Tapping Solutions for Stress Relief <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>15 / 20 onboarded</span><span>75.0%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:75%"></div></div>
+        <div class="score-meta"><span>CPO: $0 (organic)</span><span>VEP — needs 5 more participants</span></div>
+      </div>
+
+      <!-- Completed — Paid -->
+      <div class="score-card">
+        <div class="study-name">Enhanced Brew — Coffee Study <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>192 / 192 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $16.59</span><span>23 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Peptide Supplement: Sleep &amp; Recovery <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>120 / 120 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $20.53</span><span>17 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Enhanced Brew Formula (RCT) <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>80 / 80 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $13.09</span><span>49 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Rootless &amp; Women's Health <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $11.65</span><span>19 days</span></div>
+      </div>
+
+      <!-- Completed — $0 Spend -->
+      <div class="score-card">
+        <div class="study-name">Sleep Mushrooms+ <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>15 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Better Sleep with NatPat <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>29 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Sleep Well, Stress Less: Sensate <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>5 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">LyfeFuel Daily Essentials Shake <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>2 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Rest &amp; Recharge: Hapbee <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>10 / 10 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>22 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Vitamin D Boost: Clearlight <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>20 / 20 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>64 days</span></div>
+      </div>
+
+      <!-- New Studies -->
+      <div class="score-card">
+        <div class="study-name">Leela Quantum <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Neuvana <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>40 / 40 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Percepta <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>154 / 154 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Very difficult recruitment</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">HOP Box <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>18 / 35 onboarded</span><span>51.4%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:51.4%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Since Feb 12 — needs 17 more</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Young Goose <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Target may increase</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Cure Hydration <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>70 / 70 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Moon Brew <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>200 / 200 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
+      </div>
+
+      <!-- Awaiting Data -->
+      <div class="score-card">
+        <div class="study-name">Berkeley Life (Nitrate Supp.) <span class="badge badge-gray">Awaiting Data</span></div>
+        <div class="score-meta"><span>TBD / TBD onboarded</span><span>—</span></div>
+        <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
+        <div class="score-meta"><span>Spend: $2,632.02</span><span>Was mislabeled as Unmapped Campaigns</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Quantum Upgrade <span class="badge badge-gray">Awaiting Data</span></div>
+        <div class="score-meta"><span>TBD / TBD onboarded</span><span>—</span></div>
+        <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
+        <div class="score-meta"><span>Spend: $266.14</span><span>Awaiting data from Manpreet</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DATA DISCREPANCY NOTES ==================== -->
+  <div class="section">
     <h2>Data Discrepancy Notes</h2>
-    <span class="badge">Ads Manager vs Dashboard</span>
-  </div>
-  <div class="card discrepancy-note">
-    <p style="font-size:.88rem;font-weight:600;color:var(--s800);margin-bottom:14px">These corrections were made on Feb 16, 2026 after cross-referencing Meta Ads Manager export (Jan 2023 – Feb 2026) with the Reputable dashboard.</p>
-    <div class="disc-list">
-      <div class="disc-item">
-        <span class="disc-num">1</span>
-        <div>
-          <strong>ProleevaMax spend was undercounted by $1,561</strong>
-          <p>Dashboard showed $4,125.19. Actual is $5,686.18. The active "Pain Relief: ProleevaMax" campaign was missing from the dashboard total. ProleevaMax has 5 campaigns total — the dashboard was only tracking 4.</p>
-        </div>
-      </div>
-      <div class="disc-item">
-        <span class="disc-num">2</span>
-        <div>
-          <strong>Berkeley Life ($2,632.02) was missing entirely</strong>
-          <p>This study was either not mapped in the dashboard or was being counted under "Unmapped Campaigns" ($1,557.56 on Manpreet's dashboard). The remaining ~$1,074 gap suggests partial data loss. Berkeley Life joins and onboarded numbers need confirmation from Manpreet.</p>
-        </div>
-      </div>
-      <div class="disc-item">
-        <span class="disc-num">3</span>
-        <div>
-          <strong>Total spend gap: $4,199.61</strong>
-          <p>Dashboard was showing $18,132.96 total. Actual from Ads Manager is $22,332.57. This 23% undercount was affecting all cost-per-onboard calculations and budget projections.</p>
-        </div>
-      </div>
-      <div class="disc-item">
-        <span class="disc-num">4</span>
-        <div>
-          <strong>"Unmapped Campaigns" row removed</strong>
-          <p>The $1,557.56 "Unmapped Campaigns" line on Manpreet's dashboard is likely a portion of the Berkeley Life spend. It has been replaced with the correct Berkeley Life entry from Ads Manager.</p>
-        </div>
-      </div>
-      <div class="disc-item">
-        <span class="disc-num">5</span>
-        <div>
-          <strong>Corrected averages</strong>
-          <p>Overall cost per onboard: $45.86 (was showing ~$37). Average excluding outliers (ProleevaMax + Somato/Melatonin): ~$20.17. These corrected numbers are now used for all budget projections.</p>
-        </div>
+
+    <div class="note-card">
+      <div class="note-title">ProleevaMax: Spend increased $4,125 &rarr; $5,686.18</div>
+      <div class="note-body">
+        Previous dashboard showed $4,125. Actual spend is $5,686.18 — difference of $1,561.18 was from a missing active campaign not tracked in the original export. Study also had 5 separate campaigns contributing to total spend.
       </div>
     </div>
-    <div style="margin-top:16px;padding:12px 16px;background:var(--teal-50);border-radius:var(--radius-sm);font-size:.82rem;color:var(--teal-800)">
-      <strong>Action items:</strong> (1) Manpreet to confirm Berkeley Life joins/onboarded counts. (2) Verify all 5 ProleevaMax campaigns are mapped. (3) Remove "Unmapped Campaigns" row from official dashboard. (4) Reconcile 30-day view vs all-time data display.
+
+    <div class="note-card">
+      <div class="note-title">Berkeley Life: Missing entirely &rarr; $2,632.02 recovered</div>
+      <div class="note-body">
+        Berkeley Life was not displayed on the previous dashboard. Its $2,632.02 in ad spend was likely mislabeled as "Unmapped Campaigns" in the ads platform. Joined/onboarded data still TBD.
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-title">Total gap: ~$4,200 previously unaccounted</div>
+      <div class="note-body">
+        Combined discrepancy from ProleevaMax ($1,561) and Berkeley Life ($2,632) accounts for approximately $4,193 in ad spend that was missing from the previous dashboard total of $18,132.96. Corrected total: $22,332.57.
+      </div>
+    </div>
+
+    <div class="note-card">
+      <div class="note-title">7 organic studies ($0 spend) were missing from the previous dashboard</div>
+      <div class="note-body">
+        Studies 9–15 (VEP and self-serve studies) were not included in the previous dashboard. These represent 170 additional onboarded participants at zero cost and significantly reduce the blended CPO.
+      </div>
     </div>
   </div>
-</div>
 
-</div><!-- /container -->
+  <!-- ==================== RECRUITMENT PROJECTIONS ==================== -->
+  <div class="section">
+    <h2>Recruitment Projections — Active Studies</h2>
 
-<!-- Toast notification -->
-<div class="copied-toast" id="copiedToast">Copied to clipboard!</div>
-
-<script>
-/* ═══════════════════════════════════════════════════════
-   DATA LAYER (localStorage-backed)
-   ═══════════════════════════════════════════════════════ */
-const STORAGE_KEY = 'rcc_data_v3';
-
-const DEFAULT_DATA = {
-  lastUpdated: null,
-  studies: [
-    {name:'Somato / Melatonin Sleep Study',spend:6469.62,joins:432,onboarded:78,adResults:10169,impressions:578956,reach:320592,campaigns:2,studyStatus:'active'},
-    {name:'ProleevaMax (Pain Relief)',spend:5686.18,joins:152,onboarded:35,adResults:10109,impressions:505917,reach:331582,campaigns:5,studyStatus:'active'},
-    {name:'Enhanced Brew Coffee Study',spend:4231.92,joins:771,onboarded:192,adResults:12855,impressions:1058891,reach:853198,campaigns:3,studyStatus:'inactive'},
-    {name:'Berkeley Life',spend:2632.02,joins:0,onboarded:0,adResults:11226,impressions:418996,reach:226508,campaigns:1,studyStatus:'inactive',needsConfirmation:true},
-    {name:'Peptide Supplement Sleep Recovery',spend:2464.11,joins:575,onboarded:120,adResults:5579,impressions:301324,reach:216406,campaigns:1,studyStatus:'inactive'},
-    {name:'Rootless Women\'s Health',spend:582.58,joins:141,onboarded:50,adResults:897,impressions:53318,reach:45390,campaigns:1,studyStatus:'inactive'},
-    {name:'Quantum Upgrade',spend:266.14,joins:122,onboarded:12,adResults:662,impressions:60649,reach:43744,campaigns:1,studyStatus:'inactive'}
-  ],
-  weeklySnapshots: [
-    {week:'2026-01-12',spend:980,joins:85,onboarded:28,installs:210},
-    {week:'2026-01-19',spend:1120,joins:102,onboarded:35,installs:245},
-    {week:'2026-01-26',spend:1250,joins:110,onboarded:42,installs:280},
-    {week:'2026-02-02',spend:1310,joins:115,onboarded:55,installs:310},
-    {week:'2026-02-09',spend:1373.11,joins:119,onboarded:96,installs:340}
-  ],
-  newsletters: [
-    {date:'2026-01-10',sent:2100,opens:630,clicks:84,bounces:180,unsubs:12},
-    {date:'2026-01-17',sent:2050,opens:615,clicks:78,bounces:165,unsubs:8},
-    {date:'2026-01-24',sent:2000,opens:640,clicks:92,bounces:150,unsubs:10},
-    {date:'2026-01-31',sent:1950,opens:605,clicks:88,bounces:140,unsubs:9},
-    {date:'2026-02-07',sent:1900,opens:627,clicks:95,bounces:130,unsubs:7}
-  ],
-  installs: [
-    {week:'2026-01-12',total:210,ads:18,newsletter:8,organic:184},
-    {week:'2026-01-19',total:245,ads:22,newsletter:10,organic:213},
-    {week:'2026-01-26',total:280,ads:25,newsletter:12,organic:243},
-    {week:'2026-02-02',total:310,ads:28,newsletter:14,organic:268},
-    {week:'2026-02-09',total:340,ads:30,newsletter:15,organic:295}
-  ],
-  healthStudies: [
-    {name:'Somato',status:'recruiting',needed:240,current:0,cpo:null,notes:'Currently recruiting'},
-    {name:'ProleevaMax (Pain Relief)',status:'recruiting',needed:80,current:35,cpo:162.46,notes:'Labs completion is bottleneck. Spend corrected to $5,686.18'},
-    {name:'Tapping',status:'recruiting',needed:100,current:0,cpo:null,notes:'Currently recruiting'},
-    {name:'Percepta',status:'at-risk',needed:0,current:0,cpo:null,notes:'Wearable + age requirements, needs TBD participants'},
-    {name:'Leila Nivana',status:'upcoming',needed:0,current:0,cpo:null,notes:'Upcoming'},
-    {name:'Box',status:'upcoming',needed:0,current:0,cpo:null,notes:'Upcoming'},
-    {name:'Young Goose',status:'upcoming',needed:52,current:0,cpo:null,notes:'35-70 participants'},
-    {name:'Cure Hydration',status:'upcoming',needed:0,current:0,cpo:null,notes:'Upcoming'}
-  ]
-};
-
-function loadData(){
-  try{const d=localStorage.getItem(STORAGE_KEY);return d?JSON.parse(d):JSON.parse(JSON.stringify(DEFAULT_DATA))}
-  catch(e){return JSON.parse(JSON.stringify(DEFAULT_DATA))}
-}
-function saveData(d){localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}
-let DATA = loadData();
-
-/* ═══════════════════════════════════════════════════════
-   DATA ENTRY FUNCTIONS
-   ═══════════════════════════════════════════════════════ */
-function togglePanel(){
-  const h=document.querySelector('.data-panel-header');
-  const b=document.getElementById('dataPanelBody');
-  h.classList.toggle('open');b.classList.toggle('open');
-}
-
-// Tabs
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById(t.dataset.tab).classList.add('active');
-  });
-});
-
-function addStudyEntry(){
-  const sel=document.getElementById('addStudyName');
-  let name=sel.value;
-  if(name==='__custom__'){name=prompt('Enter new study name:');if(!name)return;}
-  if(!name)return;
-  const week=document.getElementById('addWeekEnd').value;
-  const spend=parseFloat(document.getElementById('addSpend').value)||0;
-  const joins=parseInt(document.getElementById('addJoins').value)||0;
-  const onb=parseInt(document.getElementById('addOnboarded').value)||0;
-
-  // Update study totals
-  let study=DATA.studies.find(s=>s.name===name);
-  if(!study){study={name,spend:0,joins:0,onboarded:0,adResults:0,impressions:0,reach:0,campaigns:0,studyStatus:'active'};DATA.studies.push(study);}
-  study.spend+=spend;study.joins+=joins;study.onboarded+=onb;
-
-  // Add weekly snapshot
-  if(week){
-    let snap=DATA.weeklySnapshots.find(s=>s.week===week);
-    if(!snap){snap={week,spend:0,joins:0,onboarded:0,installs:0};DATA.weeklySnapshots.push(snap);DATA.weeklySnapshots.sort((a,b)=>a.week.localeCompare(b.week));}
-    snap.spend+=spend;snap.joins+=joins;snap.onboarded+=onb;
-  }
-  saveData(DATA);renderAll();
-  document.getElementById('addSpend').value='';document.getElementById('addJoins').value='';document.getElementById('addOnboarded').value='';
-}
-
-function addNewsletterEntry(){
-  const d=document.getElementById('nlDate').value;if(!d)return;
-  DATA.newsletters.push({
-    date:d,
-    sent:parseInt(document.getElementById('nlSent').value)||0,
-    opens:parseInt(document.getElementById('nlOpens').value)||0,
-    clicks:parseInt(document.getElementById('nlClicks').value)||0,
-    bounces:parseInt(document.getElementById('nlBounces').value)||0,
-    unsubs:parseInt(document.getElementById('nlUnsubs').value)||0
-  });
-  DATA.newsletters.sort((a,b)=>a.date.localeCompare(b.date));
-  saveData(DATA);renderAll();
-}
-
-function addInstallEntry(){
-  const w=document.getElementById('instDate').value;if(!w)return;
-  DATA.installs.push({
-    week:w,
-    total:parseInt(document.getElementById('instTotal').value)||0,
-    ads:parseInt(document.getElementById('instAds').value)||0,
-    newsletter:parseInt(document.getElementById('instNL').value)||0,
-    organic:parseInt(document.getElementById('instOrganic').value)||0
-  });
-  DATA.installs.sort((a,b)=>a.week.localeCompare(b.week));
-  saveData(DATA);renderAll();
-}
-
-function importCSV(){
-  const raw=document.getElementById('csvInput').value.trim();if(!raw)return;
-  const lines=raw.split('\n');
-  lines.forEach(line=>{
-    const p=line.split(',').map(s=>s.trim());
-    if(p.length>=5){
-      const name=p[0],week=p[1],spend=parseFloat(p[2])||0,joins=parseInt(p[3])||0,onb=parseInt(p[4])||0;
-      let study=DATA.studies.find(s=>s.name===name);
-      if(!study){study={name,spend:0,joins:0,onboarded:0,adResults:0,impressions:0,reach:0,campaigns:0,studyStatus:'active'};DATA.studies.push(study);}
-      study.spend+=spend;study.joins+=joins;study.onboarded+=onb;
-      if(week){
-        let snap=DATA.weeklySnapshots.find(s=>s.week===week);
-        if(!snap){snap={week,spend:0,joins:0,onboarded:0,installs:0};DATA.weeklySnapshots.push(snap);DATA.weeklySnapshots.sort((a,b)=>a.week.localeCompare(b.week));}
-        snap.spend+=spend;snap.joins+=joins;snap.onboarded+=onb;
-      }
-    }
-  });
-  saveData(DATA);renderAll();document.getElementById('csvInput').value='';
-}
-
-function setLastUpdated(){
-  DATA.lastUpdated=new Date().toISOString();saveData(DATA);renderLastUpdated();
-}
-
-function renderLastUpdated(){
-  const el=document.getElementById('lastUpdated');
-  if(DATA.lastUpdated){
-    const d=new Date(DATA.lastUpdated);
-    el.textContent='Last updated: '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-  }else{el.textContent='Last updated: —';}
-}
-
-/* ═══════════════════════════════════════════════════════
-   RENDERING
-   ═══════════════════════════════════════════════════════ */
-let charts={};
-
-function destroyCharts(){Object.values(charts).forEach(c=>{if(c&&c.destroy)c.destroy()});charts={}}
-
-function renderAll(){
-  destroyCharts();
-  renderLastUpdated();
-  renderKPIs();
-  renderCostTable();
-  renderTrends();
-  renderHealth();
-  renderProjections();
-  renderSource();
-}
-
-// ── KPIs ──
-function renderKPIs(){
-  const totalSpend=DATA.studies.reduce((s,x)=>s+x.spend,0);
-  const totalOnb=DATA.studies.reduce((s,x)=>s+x.onboarded,0);
-  const avgCPO=totalOnb>0?(totalSpend/totalOnb):0;
-  const best=DATA.studies.filter(s=>s.onboarded>0).sort((a,b)=>(a.spend/a.onboarded)-(b.spend/b.onboarded))[0];
-  const worst=DATA.studies.filter(s=>s.onboarded>0).sort((a,b)=>(b.spend/b.onboarded)-(a.spend/a.onboarded))[0];
-  const recruiting=DATA.healthStudies.filter(s=>s.status==='recruiting').length;
-  const snaps=DATA.weeklySnapshots;
-  const latestSnap=snaps[snaps.length-1];
-  const prevSnap=snaps.length>=2?snaps[snaps.length-2]:null;
-  const weekCPO=latestSnap&&latestSnap.onboarded>0?(latestSnap.spend/latestSnap.onboarded):0;
-  const prevCPO=prevSnap&&prevSnap.onboarded>0?(prevSnap.spend/prevSnap.onboarded):0;
-  const cpoDelta=prevCPO>0?((weekCPO-prevCPO)/prevCPO*100):0;
-
-  const kpis=[
-    {label:'Ecosystem Size',value:'800+',sub:'Total participants'},
-    {label:'Total Ad Spend',value:'$'+fmt(totalSpend),sub:'All-time'},
-    {label:'Avg Cost/Onboard',value:'$'+fmt(avgCPO),sub:cpoDelta!==0?((cpoDelta<0?'&#9650; ':'&#9660; ')+Math.abs(cpoDelta).toFixed(1)+'% vs last week'):'',cls:cpoDelta<0?'up':'down'},
-    {label:'7-Day Cost/Onboard',value:'$'+fmt(weekCPO),sub:latestSnap?latestSnap.week:''},
-    {label:'Best Study',value:best?shortName(best.name):'—',sub:best?'$'+fmt(best.spend/best.onboarded)+'/onboard':''},
-    {label:'Worst Study',value:worst?shortName(worst.name):'—',sub:worst?'$'+fmt(worst.spend/worst.onboarded)+'/onboard':''},
-    {label:'Active Recruiting',value:recruiting,sub:'Studies in progress'},
-    {label:'30-Day Signups',value:'2,336',sub:'From dashboard'}
-  ];
-  const grid=document.getElementById('kpiGrid');
-  grid.innerHTML=kpis.map(k=>`<div class="card card-sm kpi"><div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div><div class="kpi-sub ${k.cls||''}">${k.sub}</div></div>`).join('');
-}
-
-// ── Cost Table ──
-let currentBuffer=0;
-document.querySelectorAll('.buffer-btn').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.buffer-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    currentBuffer=parseInt(b.dataset.buffer);
-    renderCostTable();
-  });
-});
-
-function renderCostTable(){
-  const buf=currentBuffer/100;
-  const tbody=document.querySelector('#costTable tbody');
-  const outliers=['ProleevaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
-  let totalSpend=0,totalJoins=0,totalOnb=0,totalAdRes=0,totalImp=0,exSpend=0,exJoins=0,exOnb=0;
-  const rows=DATA.studies.map(s=>{
-    const adjOnb=s.onboarded>0?Math.max(1,Math.round(s.onboarded*(1-buf))):0;
-    const cpl=s.joins>0?(s.spend/s.joins):0;
-    const cpo=adjOnb>0?(s.spend/adjOnb):0;
-    const conv=s.joins>0?(s.onboarded/s.joins*100):0;
-    const adRes=s.adResults||0;
-    const imp=s.impressions||0;
-    totalSpend+=s.spend;totalJoins+=s.joins;totalOnb+=adjOnb;totalAdRes+=adRes;totalImp+=imp;
-    if(!outliers.includes(s.name)&&!s.needsConfirmation){exSpend+=s.spend;exJoins+=s.joins;exOnb+=adjOnb;}
-    return {name:s.name,spend:s.spend,joins:s.joins,onboarded:s.onboarded,adjOnb,cpl,cpo,conv,adRes,imp,needsConfirmation:s.needsConfirmation};
-  });
-  const avgCPO=totalOnb>0?(totalSpend/totalOnb):0;
-  const exAvgCPO=exOnb>0?(exSpend/exOnb):0;
-
-  let html=rows.map(r=>{
-    const cls=r.cpo>0?(r.cpo<=avgCPO?'good':'bad'):'';
-    const joinsTd=r.needsConfirmation?'<span style="color:var(--amber-600)" title="Needs confirmation from Manpreet">TBD*</span>':r.joins;
-    const onbTd=r.needsConfirmation?'<span style="color:var(--amber-600)" title="Needs confirmation from Manpreet">TBD*</span>':(r.onboarded+(currentBuffer>0?' → '+r.adjOnb+'**':''));
-    const cplTd=r.needsConfirmation?'—':'$'+fmt(r.cpl);
-    const cpoTd=r.needsConfirmation?'—':('$'+fmt(r.cpo));
-    const convTd=r.needsConfirmation?'—':(r.conv.toFixed(1)+'%');
-    return `<tr>
-      <td style="font-weight:600">${r.name}</td>
-      <td>$${fmt(r.spend)}</td><td>${r.adRes.toLocaleString()}</td><td>${r.imp.toLocaleString()}</td><td>${joinsTd}</td><td>${onbTd}</td>
-      <td>${cplTd}</td><td class="${cls}">${cpoTd}</td><td>${convTd}</td>
-    </tr>`;
-  }).join('');
-
-  const realOnb=DATA.studies.reduce((s,x)=>s+x.onboarded,0);
-  html+=`<tr class="avg-row"><td>Overall Average</td><td>$${fmt(totalSpend)}</td><td>${totalAdRes.toLocaleString()}</td><td>${totalImp.toLocaleString()}</td><td>${totalJoins}</td><td>${totalOnb}</td><td>$${fmt(totalJoins>0?totalSpend/totalJoins:0)}</td><td>$${fmt(avgCPO)}</td><td>${totalJoins>0?(realOnb/totalJoins*100).toFixed(1):'0'}%</td></tr>`;
-  html+=`<tr class="avg-row"><td>Avg (excl. outliers)</td><td>$${fmt(exSpend)}</td><td colspan="2" style="text-align:center;color:var(--s400)">—</td><td>${exJoins}</td><td>${exOnb}</td><td>$${fmt(exJoins>0?exSpend/exJoins:0)}</td><td style="color:var(--teal-600)">$${fmt(exAvgCPO)}</td><td>—</td></tr>`;
-  let notes=[];
-  if(rows.some(r=>r.needsConfirmation)) notes.push('* Berkeley Life joins/onboarded need confirmation from Manpreet');
-  if(currentBuffer>0) notes.push('** Adjusted onboarded after '+currentBuffer+'% non-ad buffer');
-  if(notes.length) html+=`<tr><td colspan="9" style="font-size:.72rem;color:var(--s400);text-align:center">${notes.join(' &nbsp;|&nbsp; ')}</td></tr>`;
-  tbody.innerHTML=html;
-}
-
-// ── Trend Charts ──
-function renderTrends(){
-  const snaps=DATA.weeklySnapshots;
-  const labels=snaps.map(s=>fmtWeek(s.week));
-
-  // Cost per Onboard
-  charts.cpo=new Chart(document.getElementById('chartCPO'),{
-    type:'line',
-    data:{labels,datasets:[{
-      label:'Cost per Onboard',
-      data:snaps.map(s=>s.onboarded>0?(s.spend/s.onboarded):null),
-      borderColor:'#00b39f',backgroundColor:'rgba(0,179,159,.1)',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#00b39f'
-    }]},
-    options:chartOpts('$')
-  });
-
-  // Signups vs Onboarded
-  charts.signups=new Chart(document.getElementById('chartSignups'),{
-    type:'bar',
-    data:{labels,datasets:[
-      {label:'Signups',data:snaps.map(s=>s.joins),backgroundColor:'rgba(0,179,159,.3)',borderColor:'#00b39f',borderWidth:1,borderRadius:4},
-      {label:'Onboarded',data:snaps.map(s=>s.onboarded),backgroundColor:'rgba(0,179,159,.7)',borderColor:'#007768',borderWidth:1,borderRadius:4}
-    ]},
-    options:chartOpts('')
-  });
-
-  // Spend + Efficiency
-  charts.spend=new Chart(document.getElementById('chartSpend'),{
-    type:'bar',
-    data:{labels,datasets:[
-      {label:'Ad Spend',data:snaps.map(s=>s.spend),backgroundColor:'rgba(0,179,159,.25)',borderColor:'#00b39f',borderWidth:1,borderRadius:4,yAxisID:'y'},
-      {label:'Cost/Onboard',data:snaps.map(s=>s.onboarded>0?(s.spend/s.onboarded):null),type:'line',borderColor:'#005c51',backgroundColor:'transparent',tension:.3,pointRadius:4,pointBackgroundColor:'#005c51',yAxisID:'y1'}
-    ]},
-    options:{...chartOpts('$'),scales:{
-      y:{beginAtZero:true,position:'left',ticks:{callback:v=>'$'+v}},
-      y1:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>'$'+v}},
-      x:{grid:{display:false}}
-    }}
-  });
-
-  // Newsletter
-  const nls=DATA.newsletters;
-  const nlLabels=nls.map(n=>fmtWeek(n.date));
-  charts.newsletter=new Chart(document.getElementById('chartNewsletter'),{
-    type:'line',
-    data:{labels:nlLabels,datasets:[
-      {label:'Open Rate %',data:nls.map(n=>n.sent>0?(n.opens/n.sent*100):0),borderColor:'#00b39f',backgroundColor:'transparent',tension:.3,pointRadius:4,pointBackgroundColor:'#00b39f'},
-      {label:'Click-to-Open %',data:nls.map(n=>n.opens>0?(n.clicks/n.opens*100):0),borderColor:'#007768',backgroundColor:'transparent',tension:.3,pointRadius:4,pointBackgroundColor:'#007768',borderDash:[5,5]},
-      {label:'Bounce Rate %',data:nls.map(n=>n.sent>0?(n.bounces/n.sent*100):0),borderColor:'#ef4444',backgroundColor:'transparent',tension:.3,pointRadius:4,pointBackgroundColor:'#ef4444'}
-    ]},
-    options:chartOpts('%')
-  });
-}
-
-function chartOpts(unit){
-  return {responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>unit+v}},x:{grid:{display:false}}}};
-}
-
-// ── Health Scorecard ──
-function renderHealth(){
-  const grid=document.getElementById('healthGrid');
-  grid.innerHTML=DATA.healthStudies.map(s=>{
-    const pct=s.needed>0?Math.min(100,Math.round(s.current/s.needed*100)):0;
-    const remaining=Math.max(0,s.needed-s.current);
-    const color=s.status==='at-risk'?'red':pct>=60?'green':pct>=20?'yellow':'';
-    const statusCls=s.status==='recruiting'?'recruiting':s.status==='at-risk'?'at-risk':'upcoming';
-    const statusLabel=s.status==='recruiting'?'Recruiting':s.status==='at-risk'?'At Risk':'Upcoming';
-    const estBudget=remaining>0?'$'+fmt(remaining*20):'—';
-    return `<div class="card card-sm health-card ${color}">
-      <div class="hc-top"><span class="hc-name">${s.name}</span><span class="hc-status ${statusCls}">${statusLabel}</span></div>
-      ${s.needed>0?`<div class="hc-bar"><div class="hc-bar-fill" style="width:${pct}%;${color==='red'?'background:var(--red-500)':''}"></div></div>`:''}
-      <div class="hc-stats">
-        ${s.needed>0?`<span class="hc-stat"><strong>${s.current}</strong> / ${s.needed} onboarded (${pct}%)</span>`:'<span class="hc-stat">Participants TBD</span>'}
-        ${remaining>0?`<span class="hc-stat">Est. budget: <strong>${estBudget}</strong></span>`:''}
-        ${s.cpo?`<span class="hc-stat">CPO: <strong>$${fmt(s.cpo)}</strong></span>`:''}
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-name">Melatonin Sleep Study (Somato)</div>
+        <div class="proj-row"><span>Current onboarded</span><span>81 / 240</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>159 participants</span></div>
+        <div class="proj-row"><span>Current CPO</span><span>$79.87 (outlier)</span></div>
+        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$12,699</span></div>
+        <div class="proj-row"><span>Est. remaining cost at standard CPO ($16.47)</span><span>$2,619</span></div>
+        <div class="proj-row"><span>First joined</span><span>Jan 13, 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>App issues being resolved; CPO should improve</span></div>
       </div>
-      <div style="margin-top:6px;font-size:.72rem;color:var(--s400)">${s.notes}</div>
-    </div>`;
-  }).join('');
-}
 
-// ── Projections ──
-function renderProjections(){
-  const upcoming=[
-    {name:'Somato',needed:240},
-    {name:'ProleevaMax (remaining)',needed:45},
-    {name:'Tapping',needed:100},
-    {name:'Young Goose',needed:52},
-    {name:'Percepta',needed:50},
-    {name:'Leila Nivana',needed:40},
-    {name:'Box',needed:40},
-    {name:'Cure Hydration',needed:40}
-  ];
-  const scenarios=[15,20,30,50];
-  const grid=document.getElementById('projGrid');
-  let html='<div class="cell head">Study (Needed)</div>';
-  scenarios.forEach(s=>html+=`<div class="cell head">@ $${s}/onboard</div>`);
+      <div class="proj-card">
+        <div class="proj-name">Pain Relief: ProleevaMax</div>
+        <div class="proj-row"><span>Current onboarded</span><span>35 / 39</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>4 participants</span></div>
+        <div class="proj-row"><span>Current CPO</span><span>$162.46 (outlier)</span></div>
+        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$650</span></div>
+        <div class="proj-row"><span>First joined</span><span>Jan 5, 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>Near completion — lab completion bottleneck</span></div>
+      </div>
 
-  let totals=[0,0,0,0];
-  upcoming.forEach(u=>{
-    html+=`<div class="cell study-name">${u.name} <span style="color:var(--s400);font-weight:400;font-size:.75rem">(${u.needed})</span></div>`;
-    scenarios.forEach((s,i)=>{
-      const cost=u.needed*s;
-      totals[i]+=cost;
-      html+=`<div class="cell${s===20?' highlight':''}">$${fmt(cost)}</div>`;
-    });
-  });
+      <div class="proj-card">
+        <div class="proj-name">Tapping Solutions for Stress Relief</div>
+        <div class="proj-row"><span>Current onboarded</span><span>15 / 20</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>5 participants</span></div>
+        <div class="proj-row"><span>Ad spend</span><span>$0 (organic / VEP)</span></div>
+        <div class="proj-row"><span>Est. remaining cost</span><span>$0</span></div>
+        <div class="proj-row"><span>Note</span><span>Organic recruitment, no ad spend needed</span></div>
+      </div>
 
-  html+=`<div class="cell head" style="font-weight:800;color:var(--s800)">TOTAL</div>`;
-  totals.forEach((t,i)=>html+=`<div class="cell head${scenarios[i]===20?' highlight':''}" style="font-weight:800;color:var(--s800)">$${fmt(t)}</div>`);
-  grid.innerHTML=html;
-  grid.style.gridTemplateColumns=`2fr repeat(${scenarios.length},1fr)`;
+      <div class="proj-card">
+        <div class="proj-name">Projection Summary</div>
+        <div class="proj-row"><span>Total remaining participants</span><span>168</span></div>
+        <div class="proj-row"><span>Est. cost at current CPO rates</span><span>~$13,349</span></div>
+        <div class="proj-row"><span>Est. cost at standard CPO ($16.47)</span><span>~$2,619</span></div>
+        <div class="proj-row"><span>Best-case total spend at completion</span><span>~$24,952</span></div>
+        <div class="proj-row"><span>Worst-case total spend at completion</span><span>~$35,682</span></div>
+      </div>
+    </div>
+  </div>
 
-  // Quarterly
-  const totalNeeded=upcoming.reduce((s,u)=>s+u.needed,0);
-  const qData=[
-    {label:'Q1 2026',pct:.35,note:'Heavy recruiting ramp-up'},
-    {label:'Q2 2026',pct:.35,note:'Peak recruitment spend'},
-    {label:'Q3 2026',pct:.20,note:'Ecosystem compounds, costs drop'},
-    {label:'Q4 2026',pct:.10,note:'Retention-driven, low spend'}
-  ];
-  const annualBudget=totalNeeded*20;
-  document.getElementById('qGrid').innerHTML=qData.map(q=>`<div class="q-card"><div class="q-label">${q.label}</div><div class="q-val">$${fmt(annualBudget*q.pct)}</div><div class="q-note">${q.note}</div></div>`).join('');
-}
+  <!-- ==================== STUDY TYPE BREAKDOWN ==================== -->
+  <div class="section">
+    <h2>Study Type Breakdown</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Study Type</th>
+            <th class="align-right">Count</th>
+            <th class="align-right">Total Spend</th>
+            <th class="align-right">Total Onboarded</th>
+            <th class="align-right">Avg CPO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-blue">RCT</span> Randomized Controlled Trial</td>
+            <td class="align-right">4</td>
+            <td class="align-right">$13,165.65</td>
+            <td class="align-right">473</td>
+            <td class="align-right">$27.83</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">RWE</span> Real World Evidence</td>
+            <td class="align-right">4</td>
+            <td class="align-right">$3,480.74</td>
+            <td class="align-right">105*</td>
+            <td class="align-right">—</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-yellow">VEP</span> Validated Experience Program</td>
+            <td class="align-right">6</td>
+            <td class="align-right">$0</td>
+            <td class="align-right">150</td>
+            <td class="align-right">$0</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">RWE</span> Real World Evidence ($0 spend)</td>
+            <td class="align-right">1</td>
+            <td class="align-right">$0</td>
+            <td class="align-right">20</td>
+            <td class="align-right">$0</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="totals-row">
+            <td><strong>Total</strong></td>
+            <td class="align-right"><strong>15</strong></td>
+            <td class="align-right"><strong>$22,332.57</strong></td>
+            <td class="align-right"><strong>728*</strong></td>
+            <td class="align-right"><strong>$30.68</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:8px;">* RWE onboarded excludes Berkeley Life and Quantum Upgrade (TBD). Actual totals will be higher.</p>
+  </div>
 
-// ── Source Attribution ──
-function renderSource(){
-  const latest=DATA.installs[DATA.installs.length-1]||{total:340,ads:30,newsletter:15,organic:295};
-  const total=latest.total||1;
-  const pctOrganic=(latest.organic/total*100).toFixed(1);
+  <div class="footer">
+    Recruitment Command Center &middot; Reputable &middot; Last updated Feb 16, 2026 &middot; Data corrected from full ad platform export
+  </div>
 
-  charts.source=new Chart(document.getElementById('chartSource'),{
-    type:'doughnut',
-    data:{
-      labels:['Organic','From Ads','From Newsletter'],
-      datasets:[{data:[latest.organic,latest.ads,latest.newsletter],backgroundColor:['#94a3b8','#00b39f','#007768'],borderWidth:2,borderColor:'#fff'}]
-    },
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14,font:{size:12}}}}}
-  });
-
-  let detailHTML=`<h4 style="font-size:.92rem;font-weight:700;color:var(--s900);margin-bottom:12px">Latest Week: ${fmtWeek(latest.week||'')}</h4>
-    <div style="display:grid;gap:8px">
-      <div style="display:flex;justify-content:space-between;font-size:.85rem"><span>Total Installs</span><strong>${latest.total}</strong></div>
-      <div style="display:flex;justify-content:space-between;font-size:.85rem"><span>From Ads</span><strong>${latest.ads} (${(latest.ads/total*100).toFixed(1)}%)</strong></div>
-      <div style="display:flex;justify-content:space-between;font-size:.85rem"><span>From Newsletter</span><strong>${latest.newsletter} (${(latest.newsletter/total*100).toFixed(1)}%)</strong></div>
-      <div style="display:flex;justify-content:space-between;font-size:.85rem"><span>Organic</span><strong>${latest.organic} (${pctOrganic}%)</strong></div>
-    </div>`;
-
-  if(parseFloat(pctOrganic)>80){
-    detailHTML+=`<div class="source-warning" style="margin-top:14px">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <p><strong>Source tracking needs fixing.</strong> Organic at ${pctOrganic}% is unrealistically high. Most of these installs are likely from ads or newsletter but aren't being attributed correctly. UTM + OneLink tracking fixes are in progress with Manpreet.</p>
-    </div>`;
-  }
-  document.getElementById('sourceDetails').innerHTML=detailHTML;
-}
-
-/* ═══════════════════════════════════════════════════════
-   HELPERS
-   ═══════════════════════════════════════════════════════ */
-function fmt(n){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function fmtWeek(w){if(!w)return'';const d=new Date(w+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
-function shortName(n){const parts=n.split(' ');return parts.length>3?parts.slice(0,2).join(' '):n}
-
-/* ═══════════════════════════════════════════════════════
-   EXPORT
-   ═══════════════════════════════════════════════════════ */
-function exportScreenshot(){
-  const el=document.getElementById('reportContent');
-  html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#f1f5f9'}).then(canvas=>{
-    const link=document.createElement('a');
-    link.download='recruitment-report-'+new Date().toISOString().slice(0,10)+'.png';
-    link.href=canvas.toDataURL();link.click();
-  }).catch(()=>alert('Export failed. Try using your browser\'s print function (Ctrl+P) as a fallback.'));
-}
-
-function exportSummary(){
-  const d=new Date();
-  const dateStr=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  const totalSpend=DATA.studies.reduce((s,x)=>s+x.spend,0);
-  const totalOnb=DATA.studies.reduce((s,x)=>s+x.onboarded,0);
-  const avgCPO=totalOnb>0?(totalSpend/totalOnb):0;
-  const outliers=['ProleevaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
-  const exStudies=DATA.studies.filter(s=>!outliers.includes(s.name)&&!s.needsConfirmation);
-  const exSpend=exStudies.reduce((s,x)=>s+x.spend,0);
-  const exOnb=exStudies.reduce((s,x)=>s+x.onboarded,0);
-  const exCPO=exOnb>0?(exSpend/exOnb):0;
-  const snaps=DATA.weeklySnapshots;
-  const latest=snaps[snaps.length-1];
-  const weekCPO=latest&&latest.onboarded>0?(latest.spend/latest.onboarded):0;
-  const recruiting=DATA.healthStudies.filter(s=>s.status==='recruiting');
-
-  let txt=`RECRUITMENT UPDATE — ${dateStr}\n`;
-  txt+=`${'='.repeat(50)}\n\n`;
-  txt+=`KEY METRICS (Corrected from Ads Manager)\n`;
-  txt+=`• Total All-Time Ad Spend: $${fmt(totalSpend)}\n`;
-  txt+=`• Total Onboarded: ${totalOnb}\n`;
-  txt+=`• Avg Cost per Onboard (all): $${fmt(avgCPO)}\n`;
-  txt+=`• Avg Cost per Onboard (excl. outliers): $${fmt(exCPO)}\n`;
-  if(latest) txt+=`• 7-Day Cost per Onboard: $${fmt(weekCPO)} (week of ${latest.week})\n`;
-  txt+=`\nPER-STUDY BREAKDOWN\n`;
-  DATA.studies.forEach(s=>{
-    const cpo=s.onboarded>0?(s.spend/s.onboarded):0;
-    const status=s.studyStatus==='active'?'[ACTIVE]':'[Complete]';
-    txt+=`• ${s.name} ${status} — Spend: $${fmt(s.spend)}, Onboarded: ${s.needsConfirmation?'TBD':s.onboarded}${s.onboarded>0?', CPO: $'+fmt(cpo):''}\n`;
-  });
-  txt+=`\nACTIVE RECRUITING (${recruiting.length} studies)\n`;
-  recruiting.forEach(s=>{
-    const remaining=Math.max(0,s.needed-s.current);
-    txt+=`• ${s.name}: ${s.current}/${s.needed} onboarded${remaining>0?' ('+remaining+' remaining)':''}\n`;
-  });
-  txt+=`\nDATA CORRECTIONS APPLIED\n`;
-  txt+=`• ProleevaMax spend corrected: $4,125.19 → $5,686.18 (+$1,561)\n`;
-  txt+=`• Berkeley Life added: $2,632.02 (was missing from dashboard)\n`;
-  txt+=`• Total spend corrected: $18,132.96 → $22,332.57 (gap: $4,199.61)\n`;
-  txt+=`• "Unmapped Campaigns" removed — was likely Berkeley Life\n`;
-  txt+=`\n— Generated from Recruitment Command Center\n`;
-
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(()=>showToast()).catch(()=>fallbackCopy(txt));
-  }else{fallbackCopy(txt);}
-}
-
-function fallbackCopy(txt){
-  const ta=document.createElement('textarea');
-  ta.value=txt;ta.style.cssText='position:fixed;left:-9999px';
-  document.body.appendChild(ta);ta.select();
-  try{document.execCommand('copy');showToast();}catch(e){alert('Copy failed. Please select and copy manually.');}
-  document.body.removeChild(ta);
-}
-
-function showToast(){
-  const t=document.getElementById('copiedToast');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
-}
-
-/* ═══════════════════════════════════════════════════════
-   NAV HIGHLIGHTING
-   ═══════════════════════════════════════════════════════ */
-const navLinks=document.querySelectorAll('.topbar-nav a');
-function updateNav(){
-  const scrollY=window.scrollY;
-  let current=null;
-  navLinks.forEach(a=>{
-    const id=a.getAttribute('href').replace('#','');
-    const el=document.getElementById(id);
-    if(el&&scrollY>=el.offsetTop-100)current=a;
-  });
-  navLinks.forEach(a=>a.classList.remove('active'));
-  if(current)current.classList.add('active');
-}
-window.addEventListener('scroll',updateNav,{passive:true});
-
-/* ═══════════════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════════════ */
-renderAll();
-</script>
 </body>
 </html>
