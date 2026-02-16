@@ -220,7 +220,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
         <div class="form-group"><label>Study Name</label><select id="addStudyName">
           <option value="">Select study...</option>
           <option>Somato / Melatonin Sleep Study</option>
-          <option>ProLivaMax (Pain Relief)</option>
+          <option>ProleevaMax (Pain Relief)</option>
           <option>Enhanced Brew Coffee Study</option>
           <option>Berkeley Life</option>
           <option>Peptide Supplement Sleep Recovery</option>
@@ -395,8 +395,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
       <div class="disc-item">
         <span class="disc-num">1</span>
         <div>
-          <strong>ProLivaMax spend was undercounted by $1,561</strong>
-          <p>Dashboard showed $4,125.19. Actual is $5,686.18. The active "Pain Relief: ProleevaMax" campaign was missing from the dashboard total. ProLivaMax has 5 campaigns total — the dashboard was only tracking 4.</p>
+          <strong>ProleevaMax spend was undercounted by $1,561</strong>
+          <p>Dashboard showed $4,125.19. Actual is $5,686.18. The active "Pain Relief: ProleevaMax" campaign was missing from the dashboard total. ProleevaMax has 5 campaigns total — the dashboard was only tracking 4.</p>
         </div>
       </div>
       <div class="disc-item">
@@ -424,12 +424,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica N
         <span class="disc-num">5</span>
         <div>
           <strong>Corrected averages</strong>
-          <p>Overall cost per onboard: $45.86 (was showing ~$37). Average excluding outliers (ProLivaMax + Somato/Melatonin): ~$20.17. These corrected numbers are now used for all budget projections.</p>
+          <p>Overall cost per onboard: $45.86 (was showing ~$37). Average excluding outliers (ProleevaMax + Somato/Melatonin): ~$20.17. These corrected numbers are now used for all budget projections.</p>
         </div>
       </div>
     </div>
     <div style="margin-top:16px;padding:12px 16px;background:var(--teal-50);border-radius:var(--radius-sm);font-size:.82rem;color:var(--teal-800)">
-      <strong>Action items:</strong> (1) Manpreet to confirm Berkeley Life joins/onboarded counts. (2) Verify all 5 ProLivaMax campaigns are mapped. (3) Remove "Unmapped Campaigns" row from official dashboard. (4) Reconcile 30-day view vs all-time data display.
+      <strong>Action items:</strong> (1) Manpreet to confirm Berkeley Life joins/onboarded counts. (2) Verify all 5 ProleevaMax campaigns are mapped. (3) Remove "Unmapped Campaigns" row from official dashboard. (4) Reconcile 30-day view vs all-time data display.
     </div>
   </div>
 </div>
@@ -449,7 +449,7 @@ const DEFAULT_DATA = {
   lastUpdated: null,
   studies: [
     {name:'Somato / Melatonin Sleep Study',spend:6469.62,joins:432,onboarded:78,adResults:10169,impressions:578956,reach:320592,campaigns:2,studyStatus:'active'},
-    {name:'ProLivaMax (Pain Relief)',spend:5686.18,joins:152,onboarded:35,adResults:10109,impressions:505917,reach:331582,campaigns:5,studyStatus:'active'},
+    {name:'ProleevaMax (Pain Relief)',spend:5686.18,joins:152,onboarded:35,adResults:10109,impressions:505917,reach:331582,campaigns:5,studyStatus:'active'},
     {name:'Enhanced Brew Coffee Study',spend:4231.92,joins:771,onboarded:192,adResults:12855,impressions:1058891,reach:853198,campaigns:3,studyStatus:'inactive'},
     {name:'Berkeley Life',spend:2632.02,joins:0,onboarded:0,adResults:11226,impressions:418996,reach:226508,campaigns:1,studyStatus:'inactive',needsConfirmation:true},
     {name:'Peptide Supplement Sleep Recovery',spend:2464.11,joins:575,onboarded:120,adResults:5579,impressions:301324,reach:216406,campaigns:1,studyStatus:'inactive'},
@@ -479,7 +479,7 @@ const DEFAULT_DATA = {
   ],
   healthStudies: [
     {name:'Somato',status:'recruiting',needed:240,current:0,cpo:null,notes:'Currently recruiting'},
-    {name:'ProLivaMax (Pain Relief)',status:'recruiting',needed:80,current:35,cpo:162.46,notes:'Labs completion is bottleneck. Spend corrected to $5,686.18'},
+    {name:'ProleevaMax (Pain Relief)',status:'recruiting',needed:80,current:35,cpo:162.46,notes:'Labs completion is bottleneck. Spend corrected to $5,686.18'},
     {name:'Tapping',status:'recruiting',needed:100,current:0,cpo:null,notes:'Currently recruiting'},
     {name:'Percepta',status:'at-risk',needed:0,current:0,cpo:null,notes:'Wearable + age requirements, needs TBD participants'},
     {name:'Leila Nivana',status:'upcoming',needed:0,current:0,cpo:null,notes:'Upcoming'},
@@ -660,7 +660,7 @@ document.querySelectorAll('.buffer-btn').forEach(b=>{
 function renderCostTable(){
   const buf=currentBuffer/100;
   const tbody=document.querySelector('#costTable tbody');
-  const outliers=['ProLivaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
+  const outliers=['ProleevaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
   let totalSpend=0,totalJoins=0,totalOnb=0,totalAdRes=0,totalImp=0,exSpend=0,exJoins=0,exOnb=0;
   const rows=DATA.studies.map(s=>{
     const adjOnb=s.onboarded>0?Math.max(1,Math.round(s.onboarded*(1-buf))):0;
@@ -882,7 +882,7 @@ function exportSummary(){
   const totalSpend=DATA.studies.reduce((s,x)=>s+x.spend,0);
   const totalOnb=DATA.studies.reduce((s,x)=>s+x.onboarded,0);
   const avgCPO=totalOnb>0?(totalSpend/totalOnb):0;
-  const outliers=['ProLivaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
+  const outliers=['ProleevaMax (Pain Relief)','Somato / Melatonin Sleep Study'];
   const exStudies=DATA.studies.filter(s=>!outliers.includes(s.name)&&!s.needsConfirmation);
   const exSpend=exStudies.reduce((s,x)=>s+x.spend,0);
   const exOnb=exStudies.reduce((s,x)=>s+x.onboarded,0);
@@ -912,7 +912,7 @@ function exportSummary(){
     txt+=`• ${s.name}: ${s.current}/${s.needed} onboarded${remaining>0?' ('+remaining+' remaining)':''}\n`;
   });
   txt+=`\nDATA CORRECTIONS APPLIED\n`;
-  txt+=`• ProLivaMax spend corrected: $4,125.19 → $5,686.18 (+$1,561)\n`;
+  txt+=`• ProleevaMax spend corrected: $4,125.19 → $5,686.18 (+$1,561)\n`;
   txt+=`• Berkeley Life added: $2,632.02 (was missing from dashboard)\n`;
   txt+=`• Total spend corrected: $18,132.96 → $22,332.57 (gap: $4,199.61)\n`;
   txt+=`• "Unmapped Campaigns" removed — was likely Berkeley Life\n`;
