@@ -339,6 +339,28 @@ a{color:inherit;text-decoration:none}
 }
 .footer a{color:var(--indigo-500);font-weight:600}
 
+/* ── Data Corrections Box ────────────────────────────── */
+.corrections-box{
+  background:#fff;border:2px solid var(--amber-500);border-radius:var(--radius);
+  padding:24px 28px;margin:8px 0 40px;
+}
+.corrections-box h3{
+  font-size:1.05rem;font-weight:800;color:var(--amber-700);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.corrections-box h3 svg{width:20px;height:20px;color:var(--amber-600)}
+.corrections-table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.corrections-table th{
+  text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--slate-500);padding:6px 10px;border-bottom:2px solid var(--slate-200);
+}
+.corrections-table td{
+  font-size:.85rem;color:var(--slate-700);padding:8px 10px;border-bottom:1px solid var(--slate-100);
+}
+.corrections-table .old{color:var(--red-500);text-decoration:line-through;font-weight:600}
+.corrections-table .new{color:var(--indigo-600);font-weight:700}
+.corrections-note{font-size:.8rem;color:var(--slate-500);font-style:italic;margin-top:8px;line-height:1.5}
+
 /* ── Print Styles ────────────────────────────────────── */
 @media print{
   .top-nav,.progress-track{display:none!important}
@@ -418,6 +440,10 @@ a{color:inherit;text-decoration:none}
       <div class="stat-value">100+</div>
       <div class="stat-label">People through broken eligibility</div>
     </div>
+    <div class="stat-card alert">
+      <div class="stat-value">$4,200</div>
+      <div class="stat-label">Dashboard spend gap identified</div>
+    </div>
   </div>
 </div>
 
@@ -445,6 +471,7 @@ a{color:inherit;text-decoration:none}
     <li>The core idea: <strong>treat participants like customers.</strong> This is an end-to-end lifecycle, just like any e-commerce brand manages their customer journey.</li>
     <li>Today we're walking through where things stand, what's working, what we need, and what we're asking the product team to help us build.</li>
     <li>We're not asking for everything at once. <strong>We have a phased plan with clear priorities.</strong></li>
+    <li>We also cross-referenced the dashboard against our actual Meta Ads Manager export and found a <strong>$4,200 gap</strong> in reported spend. We'll walk through the corrections.</li>
   </ul>
 
   <div class="presenter-tip">
@@ -499,6 +526,8 @@ a{color:inherit;text-decoration:none}
       <li>We now have OneLinks and UTM parameters set up for every channel starting in January.</li>
       <li><strong>Problem:</strong> they weren't being pulled into the dashboard. Manpreet is fixing that.</li>
       <li>Once that's in place, we can finally answer <strong>"where are our participants actually coming from?"</strong></li>
+      <li>We discovered that <strong>ProleevaMax spend was undercounted by $1,561</strong> because the active campaign wasn't being pulled into the dashboard.</li>
+      <li><strong>Berkeley Life ($2,632) was missing entirely</strong> — it was showing as "Unmapped Campaigns" on the dashboard.</li>
     </ul>
   </div>
 
@@ -603,6 +632,48 @@ a{color:inherit;text-decoration:none}
     <p>Point out the loop — participants cycle through stages 3-9 multiple times. That's what makes this a lifecycle, not a funnel.</p>
   </div>
 </section>
+
+<!-- ════════════════════════════════════════════════════════
+     DATA CORRECTIONS CALLOUT
+     ════════════════════════════════════════════════════════ -->
+<div class="corrections-box">
+  <h3>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    What We Fixed — Data Corrections
+  </h3>
+  <table class="corrections-table">
+    <thead>
+      <tr><th>Item</th><th>Dashboard</th><th>Actual</th><th>Reason</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ProleevaMax spend</td>
+        <td class="old">$4,125</td>
+        <td class="new">$5,686</td>
+        <td>Missing active campaign</td>
+      </tr>
+      <tr>
+        <td>Berkeley Life spend</td>
+        <td class="old">$0</td>
+        <td class="new">$2,632</td>
+        <td>Was labeled as "Unmapped Campaigns"</td>
+      </tr>
+      <tr>
+        <td>Total all-time spend</td>
+        <td class="old">$18,133</td>
+        <td class="new">$22,333</td>
+        <td>Sum of above corrections</td>
+      </tr>
+      <tr>
+        <td>Cost per onboard</td>
+        <td class="old">$37.23</td>
+        <td class="new">$45.86</td>
+        <td>Corrected spend denominator</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="corrections-note">These corrections have been applied to our personal Command Center dashboard. Manpreet is updating the official dashboard.</p>
+</div>
 
 <!-- ════════════════════════════════════════════════════════
      SECTION 3: SEGMENTATION RULES
@@ -885,6 +956,8 @@ a{color:inherit;text-decoration:none}
     <li>We've <strong>reduced ad spend</strong> while improving results.</li>
     <li>Self-serve studies are bringing people into our ecosystem at <strong>zero acquisition cost.</strong> That's a game-changer.</li>
     <li>Our cost per qualified lead for standard studies is <strong>$15-20.</strong> That's strong.</li>
+    <li>Our corrected total spend is <strong>$22,333 all-time</strong> across all studies. When you include studies where we spent $0 on ads, the blended average drops even further.</li>
+    <li>We've identified and corrected the data discrepancies — <strong>going forward, we'll have accurate numbers we can trust.</strong></li>
     <li>Q1-Q2 costs will go up as we invest in growth. <strong>Q3-Q4 costs come down</strong> as the ecosystem compounds.</li>
   </ul>
 
