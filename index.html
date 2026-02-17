@@ -327,11 +327,267 @@
     .swatch-outlier { background: var(--yellow-bg); border: 1px solid var(--yellow); }
     .swatch-free { background: var(--green-bg); border: 1px solid var(--green); }
 
+    /* KPI Section */
+    .kpi-section {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(108,92,231,0.06) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--blue), var(--green));
+    }
+
+    .kpi-section h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kpi-section h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 24px 0 12px;
+    }
+
+    .kpi-section h3:first-of-type {
+      margin-top: 0;
+    }
+
+    /* Target vs Actual bar */
+    .target-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: var(--surface2);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .target-row .target-label {
+      min-width: 140px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .target-row .target-bar-wrap {
+      flex: 1;
+      position: relative;
+      height: 24px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .target-row .target-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      transition: width 0.6s ease;
+    }
+
+    .target-row .target-bar-fill.green { background: linear-gradient(90deg, rgba(0,184,148,0.4), var(--green)); }
+    .target-row .target-bar-fill.blue { background: linear-gradient(90deg, rgba(116,185,255,0.4), var(--blue)); }
+    .target-row .target-bar-fill.yellow { background: linear-gradient(90deg, rgba(253,203,110,0.4), var(--yellow)); color: var(--bg); }
+    .target-row .target-bar-fill.accent { background: linear-gradient(90deg, rgba(108,92,231,0.4), var(--accent)); }
+
+    .target-row .target-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--text);
+      opacity: 0.6;
+    }
+
+    .target-row .target-marker::after {
+      content: attr(data-label);
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .target-row .target-vals {
+      min-width: 110px;
+      text-align: right;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .target-row .target-vals strong {
+      color: var(--text);
+    }
+
+    /* Pace ring */
+    .pace-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .pace-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pace-card .pace-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin-bottom: 12px;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 10;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .ring-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .ring-center .ring-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .ring-center .ring-label {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .pace-stats {
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .pace-stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 3px 0;
+      color: var(--text-dim);
+    }
+
+    .pace-stat-row span:last-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .status-chip {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-chip.on-track {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    /* Benchmark pills */
+    .bench-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .bench-pill {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 14px 16px;
+      border-left: 3px solid var(--border);
+    }
+
+    .bench-pill.blue-accent { border-left-color: var(--blue); }
+    .bench-pill.green-accent { border-left-color: var(--green); }
+    .bench-pill.accent-accent { border-left-color: var(--accent); }
+    .bench-pill.yellow-accent { border-left-color: var(--yellow); }
+
+    .bench-pill .bench-size {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .bench-pill .bench-detail {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .bench-pill .bench-days {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
     @media (max-width: 768px) {
       body { padding: 12px; }
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
       .metric-card .value { font-size: 22px; }
       .section { padding: 16px; }
+      .kpi-section { padding: 16px; }
+      .target-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .target-row .target-label { min-width: auto; }
+      .target-row .target-vals { text-align: left; }
+      .pace-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -913,115 +1169,142 @@
   </div>
 
   <!-- ==================== TARGET KPIs & 2026 OUTLOOK ==================== -->
-  <div class="section">
+  <div class="kpi-section">
     <h2>Target KPIs &amp; 2026 Outlook</h2>
 
     <h3>Cost-per-Participant Targets</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Study Type</th>
-            <th class="align-right">Current Avg CPO</th>
-            <th class="align-right">Target CPO</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="badge badge-blue">RCT</span> Paid</td>
-            <td class="align-right">$27.51</td>
-            <td class="align-right">$25.00</td>
-            <td>Tracking well — current avg near target</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-green">RWE</span> Paid</td>
-            <td class="align-right">$73.75</td>
-            <td class="align-right">$35.00</td>
-            <td>Skewed by outliers (ProleevaMax, Melatonin); excl. outliers = $18.60</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-yellow">VEP</span> / <span class="badge badge-green">RWE</span> Organic</td>
-            <td class="align-right">$0</td>
-            <td class="align-right">$0</td>
-            <td>Continue organic pipeline — zero-cost studies lower blended CPO</td>
-          </tr>
-          <tr class="totals-row">
-            <td><strong>Blended (all types)</strong></td>
-            <td class="align-right"><strong>$26.06</strong></td>
-            <td class="align-right"><strong>&le; $20.00</strong></td>
-            <td>Achievable as organic share grows and outliers resolve</td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="target-row">
+      <div class="target-label"><span class="badge badge-blue">RCT</span> Paid</div>
+      <div class="target-bar-wrap">
+        <div class="target-bar-fill blue" style="width: 91.3%;">$27.51</div>
+        <div class="target-marker" style="left: 83.3%;" data-label="Target $25"></div>
+      </div>
+      <div class="target-vals"><strong>$27.51</strong> / $25.00</div>
     </div>
 
+    <div class="target-row">
+      <div class="target-label"><span class="badge badge-green">RWE</span> Paid</div>
+      <div class="target-bar-wrap">
+        <div class="target-bar-fill yellow" style="width: 100%;">$73.75</div>
+        <div class="target-marker" style="left: 47.5%;" data-label="Target $35"></div>
+      </div>
+      <div class="target-vals"><strong>$73.75</strong> / $35.00</div>
+    </div>
+
+    <div class="target-row">
+      <div class="target-label"><span class="badge badge-yellow">VEP</span> Organic</div>
+      <div class="target-bar-wrap">
+        <div class="target-bar-fill green" style="width: 100%;">$0 — on target</div>
+      </div>
+      <div class="target-vals"><strong>$0</strong> / $0</div>
+    </div>
+
+    <div class="target-row" style="background: rgba(108,92,231,0.08); border: 1px solid rgba(108,92,231,0.2);">
+      <div class="target-label" style="font-weight: 700;">Blended</div>
+      <div class="target-bar-wrap">
+        <div class="target-bar-fill accent" style="width: 86.9%;">$26.06</div>
+        <div class="target-marker" style="left: 66.7%;" data-label="Target ≤$20"></div>
+      </div>
+      <div class="target-vals"><strong>$26.06</strong> / &le;$20.00</div>
+    </div>
+
+    <p style="font-size: 11px; color: var(--text-dim); margin-top: 8px;">
+      RWE paid CPO skewed by outliers (ProleevaMax $162, Melatonin $80). Excluding outliers: $18.60. Blended target achievable as organic share grows.
+    </p>
+
     <h3>Days-to-Recruit Benchmarks</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Study Size</th>
-            <th>Type</th>
-            <th class="align-right">Target Days to Full Enrollment</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Small (20–40 participants)</td>
-            <td><span class="badge badge-blue">RCT</span> / <span class="badge badge-green">RWE</span></td>
-            <td class="align-right">21 days</td>
-            <td>Aim for 1–2 per day with ads; organic may take longer</td>
-          </tr>
-          <tr>
-            <td>Medium (50–150 participants)</td>
-            <td><span class="badge badge-blue">RCT</span> / <span class="badge badge-green">RWE</span></td>
-            <td class="align-right">45 days</td>
-            <td>~3 per day sustained; scale ad spend proportionally</td>
-          </tr>
-          <tr>
-            <td>Large (200+ participants)</td>
-            <td><span class="badge badge-blue">RCT</span> / <span class="badge badge-green">RWE</span></td>
-            <td class="align-right">75 days</td>
-            <td>Requires multi-channel strategy; budget for drop-off</td>
-          </tr>
-          <tr>
-            <td>Any size (organic)</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">30–60 days</td>
-            <td>Dependent on partner engagement; no ad lever to pull</td>
-          </tr>
-        </tbody>
-      </table>
+
+    <div class="bench-grid">
+      <div class="bench-pill blue-accent">
+        <div class="bench-size">Small Study</div>
+        <div class="bench-detail">20–40 participants</div>
+        <div class="bench-days" style="color: var(--blue);">21 days</div>
+        <div class="bench-detail">1–2 / day with ads; organic may take longer</div>
+      </div>
+      <div class="bench-pill green-accent">
+        <div class="bench-size">Medium Study</div>
+        <div class="bench-detail">50–150 participants</div>
+        <div class="bench-days" style="color: var(--green);">45 days</div>
+        <div class="bench-detail">~3 / day sustained; scale spend proportionally</div>
+      </div>
+      <div class="bench-pill accent-accent">
+        <div class="bench-size">Large Study</div>
+        <div class="bench-detail">200+ participants</div>
+        <div class="bench-days" style="color: var(--accent);">75 days</div>
+        <div class="bench-detail">Multi-channel strategy; budget for drop-off</div>
+      </div>
+      <div class="bench-pill yellow-accent">
+        <div class="bench-size">Organic / VEP</div>
+        <div class="bench-detail">Any size</div>
+        <div class="bench-days" style="color: var(--yellow);">30–60 days</div>
+        <div class="bench-detail">Partner-dependent; no ad lever to pull</div>
+      </div>
     </div>
 
     <h3>2026 Annual Recruitment Goal</h3>
-    <div class="proj-grid">
-      <div class="proj-card">
-        <div class="proj-name">Year-to-Date Progress</div>
-        <div class="proj-row"><span>Onboarded so far (YTD)</span><span>857 participants</span></div>
-        <div class="proj-row"><span>Weeks elapsed</span><span>~6 weeks (mid-Jan to mid-Feb)</span></div>
-        <div class="proj-row"><span>Avg weekly run rate</span><span>~143 participants / week</span></div>
-        <div class="proj-row"><span>Active studies contributing</span><span>16 studies</span></div>
+
+    <div class="pace-grid">
+      <div class="pace-card">
+        <div class="pace-title">Year-to-Date Progress</div>
+        <div class="ring-wrap">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
+            <!-- 857 / 4500 midpoint = 19% → dashoffset calc: circumference=364.4, offset=364.4*(1-0.19)=295.2 -->
+            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="364.4" stroke-dashoffset="295.2"></circle>
+            <defs>
+              <linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="var(--accent)"/>
+                <stop offset="100%" stop-color="var(--green)"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-value" style="color: var(--green);">857</div>
+            <div class="ring-label">of 4,000–5,000</div>
+          </div>
+        </div>
+        <div class="pace-stats">
+          <div class="pace-stat-row"><span>Weeks elapsed</span><span>~6</span></div>
+          <div class="pace-stat-row"><span>Weekly run rate</span><span>~143 / wk</span></div>
+          <div class="pace-stat-row"><span>Active studies</span><span>16</span></div>
+        </div>
       </div>
 
-      <div class="proj-card">
-        <div class="proj-name">2026 Target: 4,000–5,000 Participants</div>
-        <div class="proj-row"><span>Target mix</span><span>RCTs + RWEs</span></div>
-        <div class="proj-row"><span>Remaining to recruit</span><span>3,143 – 4,143</span></div>
-        <div class="proj-row"><span>Weeks remaining in 2026</span><span>~46 weeks</span></div>
-        <div class="proj-row"><span>Required weekly run rate</span><span>68 – 90 participants / week</span></div>
-        <div class="proj-row"><span>Current run rate vs. required</span><span style="color: var(--green);">143 / wk — ahead of pace</span></div>
+      <div class="pace-card">
+        <div class="pace-title">Pace Check</div>
+        <div class="ring-wrap">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
+            <!-- 143 / 90 required = 159% → cap at 100% → offset 0 -->
+            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="var(--green)" stroke-dasharray="364.4" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-value" style="color: var(--green);">159%</div>
+            <div class="ring-label">of required pace</div>
+          </div>
+        </div>
+        <div class="pace-stats">
+          <div class="pace-stat-row"><span>Required rate</span><span>68–90 / wk</span></div>
+          <div class="pace-stat-row"><span>Current rate</span><span style="color: var(--green); font-weight: 600;">143 / wk</span></div>
+          <div class="pace-stat-row"><span>Status</span><span><span class="status-chip on-track">Ahead of pace</span></span></div>
+        </div>
       </div>
 
-      <div class="proj-card">
-        <div class="proj-name">Estimated Budget to Reach Goal</div>
-        <div class="proj-row"><span>Spend to date</span><span>$22,333</span></div>
-        <div class="proj-row"><span>At target blended CPO ($20)</span><span>$62,860 – $82,860 remaining</span></div>
-        <div class="proj-row"><span>At current blended CPO ($26)</span><span>$81,718 – $107,718 remaining</span></div>
-        <div class="proj-row"><span>If organic share stays ~25%</span><span>Paid cost drops ~25% vs. above</span></div>
-        <div class="proj-row"><span>Note</span><span>Growing the VEP / organic pipeline is the biggest lever for cost control</span></div>
+      <div class="pace-card">
+        <div class="pace-title">Budget Projection</div>
+        <div style="text-align: center; margin: 12px 0 16px;">
+          <div style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px;">Spend to date</div>
+          <div style="font-size: 32px; font-weight: 700; color: var(--blue);">$22,333</div>
+        </div>
+        <div class="pace-stats">
+          <div class="pace-stat-row"><span>Remaining (target CPO $20)</span><span>$63K–$83K</span></div>
+          <div class="pace-stat-row"><span>Remaining (current CPO $26)</span><span>$82K–$108K</span></div>
+          <div class="pace-stat-row"><span>If organic stays ~25%</span><span style="color: var(--green);">~25% savings</span></div>
+        </div>
+        <p style="font-size: 11px; color: var(--text-dim); margin-top: 10px; text-align: center;">
+          Growing the VEP / organic pipeline is the biggest lever for cost control
+        </p>
       </div>
     </div>
   </div>
