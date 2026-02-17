@@ -522,9 +522,8 @@ a{color:inherit;text-decoration:none}
         <div class="filter-menu">
           <div class="filter-menu-header">Washout Status</div>
           <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
-          <div class="filter-option" data-value="In Washout"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> In Washout</div>
-          <div class="filter-option" data-value="Completed"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Completed</div>
-          <div class="filter-option" data-value="Not in Washout"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Not in Washout</div>
+          <div class="filter-option" data-value="Yes"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Yes</div>
+          <div class="filter-option" data-value="No"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> No</div>
         </div>
       </div>
 
@@ -572,6 +571,43 @@ a{color:inherit;text-decoration:none}
           <div class="filter-option" data-value="Active (7 days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Active (7 days)</div>
           <div class="filter-option" data-value="Dormant (30+ days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Dormant (30+ days)</div>
           <div class="filter-option" data-value="Churned (90+ days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Churned (90+ days)</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="gender">
+        <div class="filter-chip"><span class="filter-chip-text">Gender: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Gender</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Male"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Male</div>
+          <div class="filter-option" data-value="Female"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Female</div>
+          <div class="filter-option" data-value="Non-binary"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Non-binary</div>
+          <div class="filter-option" data-value="Prefer not to say"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Prefer not to say</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="location">
+        <div class="filter-chip"><span class="filter-chip-text">Location: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Location</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="USA"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> USA</div>
+          <div class="filter-option" data-value="Canada"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Canada</div>
+          <div class="filter-option" data-value="Other"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Other</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="age">
+        <div class="filter-chip"><span class="filter-chip-text">Age: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Age Range</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="18-24"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 18&ndash;24</div>
+          <div class="filter-option" data-value="25-34"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 25&ndash;34</div>
+          <div class="filter-option" data-value="35-44"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 35&ndash;44</div>
+          <div class="filter-option" data-value="45-54"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 45&ndash;54</div>
+          <div class="filter-option" data-value="55-64"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 55&ndash;64</div>
+          <div class="filter-option" data-value="65+"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 65+</div>
         </div>
       </div>
 
