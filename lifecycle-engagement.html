@@ -172,10 +172,24 @@ a{color:inherit;text-decoration:none}
 /* Filter bar (segmentation) */
 .filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 20px;margin-bottom:16px}
 .filter-bar-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-400);margin-right:4px;white-space:nowrap}
-.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;border:1px solid var(--slate-200);background:var(--slate-50);color:var(--slate-600);transition:all .2s ease;cursor:pointer}
+.filter-dropdown{position:relative}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;border:1px solid var(--slate-200);background:var(--slate-50);color:var(--slate-600);transition:all .2s ease;cursor:pointer;user-select:none}
 .filter-chip:hover{border-color:var(--indigo-300);background:var(--indigo-50);color:var(--indigo-600)}
 .filter-chip.active{background:var(--indigo-100);border-color:var(--indigo-300);color:var(--indigo-700)}
-.filter-chip svg{width:12px;height:12px;opacity:.5}
+.filter-chip.open{border-color:var(--indigo-400);background:var(--indigo-100);color:var(--indigo-700);box-shadow:0 0 0 2px rgba(0,179,159,.15)}
+.filter-chip svg.chevron{width:12px;height:12px;opacity:.5;transition:transform .2s ease;flex-shrink:0}
+.filter-chip.open svg.chevron{transform:rotate(180deg);opacity:.8}
+.filter-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:180px;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);padding:4px 0;z-index:80;opacity:0;transform:translateY(-4px);pointer-events:none;transition:all .15s ease}
+.filter-dropdown.open .filter-menu{opacity:1;transform:translateY(0);pointer-events:auto}
+.filter-option{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:.82rem;font-weight:500;color:var(--slate-600);cursor:pointer;transition:all .15s ease;white-space:nowrap}
+.filter-option:hover{background:var(--indigo-50);color:var(--indigo-700)}
+.filter-option.selected{background:var(--indigo-50);color:var(--indigo-700);font-weight:600}
+.filter-option .check-icon{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+.filter-option.selected .check-icon{background:var(--indigo-500);border-color:var(--indigo-500)}
+.filter-option.selected .check-icon svg{display:block}
+.filter-option .check-icon svg{width:10px;height:10px;color:#fff;display:none}
+.filter-menu-header{padding:6px 14px 4px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-400);border-bottom:1px solid var(--slate-100);margin-bottom:2px}
+.filter-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;border-radius:8px;background:var(--indigo-500);color:#fff;font-size:.65rem;font-weight:700;padding:0 4px;margin-left:2px}
 .filter-reset{font-size:.75rem;font-weight:600;color:var(--indigo-500);margin-left:auto;cursor:pointer;padding:4px 10px;border-radius:4px;transition:background .2s;white-space:nowrap}
 .filter-reset:hover{background:var(--indigo-50)}
 .multi-note{display:flex;align-items:flex-start;gap:10px;background:var(--indigo-50);border:1px solid var(--indigo-200);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:20px}
@@ -492,12 +506,75 @@ a{color:inherit;text-decoration:none}
 
     <div class="filter-bar reveal">
       <div class="filter-bar-label">Filters</div>
-      <div class="filter-chip active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Active: All</div>
-      <div class="filter-chip active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Washout: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Study: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Baseline: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Channel: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Engagement: All</div>
+
+      <div class="filter-dropdown" data-filter="active">
+        <div class="filter-chip active"><span class="filter-chip-text">Active: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Active Status</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Yes"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Yes</div>
+          <div class="filter-option" data-value="No"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> No</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="washout">
+        <div class="filter-chip active"><span class="filter-chip-text">Washout: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Washout Status</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="In Washout"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> In Washout</div>
+          <div class="filter-option" data-value="Completed"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Completed</div>
+          <div class="filter-option" data-value="Not in Washout"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Not in Washout</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="study">
+        <div class="filter-chip"><span class="filter-chip-text">Study: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Study History</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Has Not Tried"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Has Not Tried</div>
+          <div class="filter-option" data-value="Currently Enrolled"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Currently Enrolled</div>
+          <div class="filter-option" data-value="Previously Completed"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Previously Completed</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="baseline">
+        <div class="filter-chip"><span class="filter-chip-text">Baseline: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Baseline Data</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="30+ Days"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 30+ Days</div>
+          <div class="filter-option" data-value="14-29 Days"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 14&ndash;29 Days</div>
+          <div class="filter-option" data-value="Insufficient"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Insufficient</div>
+          <div class="filter-option" data-value="N/A"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> N/A</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="channel">
+        <div class="filter-chip"><span class="filter-chip-text">Channel: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Lead Source</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Meta Ads"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Meta Ads</div>
+          <div class="filter-option" data-value="Organic Social"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Organic Social</div>
+          <div class="filter-option" data-value="Website"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Website</div>
+          <div class="filter-option" data-value="Referral"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Referral</div>
+          <div class="filter-option" data-value="Newsletter"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Newsletter</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="engagement">
+        <div class="filter-chip"><span class="filter-chip-text">Engagement: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Engagement Level</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Active (7 days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Active (7 days)</div>
+          <div class="filter-option" data-value="Dormant (30+ days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Dormant (30+ days)</div>
+          <div class="filter-option" data-value="Churned (90+ days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Churned (90+ days)</div>
+        </div>
+      </div>
+
       <div class="filter-reset">Reset filters</div>
     </div>
 
@@ -678,13 +755,65 @@ a{color:inherit;text-decoration:none}
       if(!was)card.classList.add('expanded');
     });
   });
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.stage-card.expanded').forEach(function(c){c.classList.remove('expanded')})});
-  // Filter chip toggle (interactive demo)
-  document.querySelectorAll('.filter-chip').forEach(function(chip){
-    chip.addEventListener('click',function(){chip.classList.toggle('active')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){
+    document.querySelectorAll('.stage-card.expanded').forEach(function(c){c.classList.remove('expanded')});
+    closeAllDropdowns();
+  }});
+
+  // ── Filter dropdown logic ──
+  function closeAllDropdowns(){
+    document.querySelectorAll('.filter-dropdown').forEach(function(d){
+      d.classList.remove('open');
+      d.querySelector('.filter-chip').classList.remove('open');
+    });
+  }
+
+  document.querySelectorAll('.filter-dropdown').forEach(function(dropdown){
+    var chip=dropdown.querySelector('.filter-chip');
+    var chipText=chip.querySelector('.filter-chip-text');
+    var filterName=dropdown.dataset.filter;
+    var displayName=filterName.charAt(0).toUpperCase()+filterName.slice(1);
+
+    // Toggle dropdown on chip click
+    chip.addEventListener('click',function(e){
+      e.stopPropagation();
+      var wasOpen=dropdown.classList.contains('open');
+      closeAllDropdowns();
+      if(!wasOpen){dropdown.classList.add('open');chip.classList.add('open')}
+    });
+
+    // Select option
+    dropdown.querySelectorAll('.filter-option').forEach(function(opt){
+      opt.addEventListener('click',function(e){
+        e.stopPropagation();
+        // Deselect all options in this dropdown
+        dropdown.querySelectorAll('.filter-option').forEach(function(o){o.classList.remove('selected')});
+        opt.classList.add('selected');
+        var val=opt.dataset.value;
+        chipText.textContent=displayName+': '+val;
+        chip.classList.toggle('active',val!=='All');
+        closeAllDropdowns();
+      });
+    });
   });
-  document.querySelector('.filter-reset')&&document.querySelector('.filter-reset').addEventListener('click',function(){
-    document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active')});
+
+  // Close dropdowns on outside click
+  document.addEventListener('click',function(){closeAllDropdowns()});
+
+  // Reset filters
+  document.querySelector('.filter-reset')&&document.querySelector('.filter-reset').addEventListener('click',function(e){
+    e.stopPropagation();
+    document.querySelectorAll('.filter-dropdown').forEach(function(dropdown){
+      var chip=dropdown.querySelector('.filter-chip');
+      var chipText=chip.querySelector('.filter-chip-text');
+      var filterName=dropdown.dataset.filter;
+      var displayName=filterName.charAt(0).toUpperCase()+filterName.slice(1);
+      dropdown.querySelectorAll('.filter-option').forEach(function(o){o.classList.remove('selected')});
+      dropdown.querySelector('.filter-option[data-value="All"]').classList.add('selected');
+      chipText.textContent=displayName+': All';
+      chip.classList.remove('active');
+    });
+    closeAllDropdowns();
   });
 })();
 </script>
