@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participant LTV Tracker — Reputable</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #232733;
+      --border: #2e3345;
+      --text: #e4e6ef;
+      --text-dim: #8b8fa3;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --green: #00b894;
+      --green-bg: rgba(0,184,148,0.12);
+      --yellow: #fdcb6e;
+      --yellow-bg: rgba(253,203,110,0.12);
+      --red: #e17055;
+      --red-bg: rgba(225,112,85,0.12);
+      --blue: #74b9ff;
+      --blue-bg: rgba(116,185,255,0.12);
+      --indigo: #6c5ce7;
+      --indigo-bg: rgba(108,92,231,0.12);
+      --gray: #636e80;
+      --gray-bg: rgba(99,110,128,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 16px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent-light), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header-sub { color: var(--text-dim); font-size: 13px; }
+    .header-right { display: flex; gap: 8px; align-items: center; }
+    .btn-settings {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-settings:hover { background: var(--border); }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+      white-space: nowrap;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+    }
+    .tab:hover { color: var(--text); background: var(--surface2); }
+    .tab.active {
+      background: var(--accent);
+      color: white;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    /* Metrics row */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .metric-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .metric-sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+    .metric-value.green { color: var(--green); }
+    .metric-value.blue { color: var(--blue); }
+    .metric-value.accent { color: var(--accent-light); }
+    .metric-value.yellow { color: var(--yellow); }
+    .metric-value.red { color: var(--red); }
+
+    /* Forms */
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    select, input[type="number"], input[type="text"], input[type="email"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    select:focus, input:focus { border-color: var(--accent); }
+    select { cursor: pointer; }
+    option { background: var(--surface2); }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .checkbox-item:hover { border-color: var(--accent); }
+    .checkbox-item.checked {
+      border-color: var(--accent);
+      background: var(--indigo-bg);
+    }
+    .checkbox-item input { display: none; }
+    .check-box {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .checkbox-item.checked .check-box {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .check-box::after {
+      content: '';
+      width: 10px; height: 6px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) translateY(-1px);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .checkbox-item.checked .check-box::after { opacity: 1; }
+    .study-rev { font-size: 11px; color: var(--text-dim); margin-left: auto; }
+
+    .btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent-light);
+    }
+
+    /* Results */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .result-item {
+      text-align: center;
+      padding: 16px;
+      background: var(--surface2);
+      border-radius: 10px;
+    }
+    .result-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+    .result-value { font-size: 22px; font-weight: 700; margin-top: 4px; }
+    .result-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+    /* Insights */
+    .insight {
+      background: var(--indigo-bg);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--accent-light);
+    }
+    .insight strong { color: var(--text); }
+
+    /* Sliders */
+    .slider-group { margin-bottom: 20px; }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .slider-label { font-size: 13px; color: var(--text); }
+    .slider-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-light);
+      min-width: 50px;
+      text-align: right;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--surface2);
+      outline: none;
+      border: none;
+      padding: 0;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid var(--accent-light);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid var(--accent-light);
+    }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--surface2);
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    td {
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tr:hover td { background: var(--surface2); }
+
+    /* Charts */
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin-top: 12px;
+    }
+    .chart-container-lg {
+      position: relative;
+      height: 350px;
+      margin-top: 12px;
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* Coming Soon badge */
+    .coming-soon {
+      display: inline-block;
+      background: var(--yellow-bg);
+      color: var(--yellow);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 8px;
+    }
+    .coming-soon-overlay {
+      position: relative;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .coming-soon-overlay::after {
+      content: 'COMING SOON — PHASE 2';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--surface);
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal h2 { margin-bottom: 16px; font-size: 18px; }
+    .modal-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-row:last-child { border-bottom: none; }
+    .modal-row label { font-size: 13px; flex: 1; }
+    .modal-row .study-type { font-size: 11px; color: var(--text-dim); }
+    .modal-row input[type="number"] {
+      width: 100px;
+      text-align: right;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      body { padding: 10px; }
+      .header h1 { font-size: 20px; }
+    }
+    @media (max-width: 480px) {
+      .metrics { grid-template-columns: 1fr; }
+      .tabs { flex-wrap: nowrap; }
+      .tab { padding: 8px 12px; font-size: 12px; }
+    }
+
+    /* Badge pill */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+
+    /* Active studies pill in calc */
+    .active-studies-info {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .active-pill {
+      background: var(--green-bg);
+      color: var(--green);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    /* Nav link */
+    .nav-back {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    .scenario-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .scenario-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .scenario-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+    .scenario-card .value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+    .scenario-card .delta { font-size: 12px; margin-top: 2px; }
+    .delta-positive { color: var(--green); }
+    .delta-negative { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <a href="index.html" class="nav-back">&larr; Command Center</a>
+    <h1>Participant LTV Tracker</h1>
+    <div class="header-sub">Lifetime Value Analytics for Clinical Research Participants</div>
+  </div>
+  <div class="header-right">
+    <button class="btn-settings" onclick="openSettings()">&#9881; Edit Revenue</button>
+  </div>
+</div>
+
+<!-- Key Insights Bar -->
+<div id="insights-bar" style="margin-bottom:20px;"></div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" data-tab="calculator">Calculator</button>
+  <button class="tab" data-tab="dashboard">Dashboard</button>
+  <button class="tab" data-tab="scenarios">Scenarios</button>
+  <button class="tab" data-tab="amortization">Cost Amortization</button>
+  <button class="tab" data-tab="cohorts">Cohorts</button>
+  <button class="tab" data-tab="phase2">Phase 2 <span class="coming-soon">Soon</span></button>
+</div>
+
+<!-- ==================== CALCULATOR TAB ==================== -->
+<div class="tab-content active" id="tab-calculator">
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <h3>Participant Journey</h3>
+        <div class="form-group">
+          <label>Acquisition Source</label>
+          <select id="calc-source" onchange="calcSourceChanged()">
+            <option value="meta">Meta Ads (Standard) — avg $18</option>
+            <option value="meta-complex">Meta Ads (Complex/Outlier) — avg $120</option>
+            <option value="newsletter">Newsletter — avg $5</option>
+            <option value="organic">Organic / Self-Serve — $0</option>
+            <option value="referral">Referral — $0</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Acquisition Cost ($)</label>
+          <input type="number" id="calc-cost" value="18" min="0" step="0.01" onchange="calculateLTV()">
+        </div>
+        <div class="form-group">
+          <label>Studies Completed (select all that apply)</label>
+          <div class="checkbox-grid" id="calc-studies-completed"></div>
+        </div>
+        <div class="form-group">
+          <label>Currently Active In</label>
+          <div class="active-studies-info" id="calc-active-studies"></div>
+          <select id="calc-active" style="margin-top:8px;" multiple size="3" onchange="calculateLTV()">
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Referrals Made</label>
+          <input type="number" id="calc-referrals" value="0" min="0" onchange="calculateLTV()">
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn" onclick="calculateLTV()">Calculate LTV</button>
+          <button class="btn btn-outline" style="margin-left:8px;" onclick="resetCalc()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>Lifetime Value Results</h3>
+        <div class="results-grid" id="calc-results">
+          <div class="result-item">
+            <div class="result-label">Total Revenue</div>
+            <div class="result-value green" id="res-revenue">$0</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Cost</div>
+            <div class="result-value red" id="res-cost">$0</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Net LTV</div>
+            <div class="result-value accent" id="res-ltv">$0</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">LTV Ratio</div>
+            <div class="result-value blue" id="res-ratio">0x</div>
+            <div class="result-sub">revenue / cost</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Referral Value</div>
+            <div class="result-value yellow" id="res-referral">$0</div>
+            <div class="result-sub">saved acquisition cost</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Projected LTV</div>
+            <div class="result-value accent" id="res-projected">$0</div>
+            <div class="result-sub">if +1 more study</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Cost Per Study Breakdown</h3>
+        <div class="chart-container" id="calc-chart-wrap">
+          <canvas id="calcCostChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DASHBOARD TAB ==================== -->
+<div class="tab-content" id="tab-dashboard">
+  <div class="metrics" id="dash-metrics"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Average LTV by Acquisition Source</h3>
+      <div class="chart-container">
+        <canvas id="dashSourceChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Revenue Distribution by Study Type</h3>
+      <div class="chart-container">
+        <canvas id="dashStudyTypeChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>Ecosystem Value Projector</h3>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Target Participants</label>
+        <input type="number" id="dash-target" value="2000" min="100" step="100" onchange="updateProjector()">
+      </div>
+      <div style="flex:1;">
+        <div id="projector-result" style="font-size:16px;font-weight:600;color:var(--accent-light);"></div>
+        <div id="projector-sub" style="font-size:12px;color:var(--text-dim);"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>Acquisition Spend Efficiency</h3>
+    <div class="table-wrap">
+      <table id="dash-spend-table">
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Participants</th>
+            <th>Spend</th>
+            <th>Cost/Participant</th>
+            <th>Avg Studies</th>
+            <th>Avg LTV</th>
+            <th>ROI</th>
+          </tr>
+        </thead>
+        <tbody id="dash-spend-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCENARIOS TAB ==================== -->
+<div class="tab-content" id="tab-scenarios">
+  <div class="grid-2">
+    <div class="card">
+      <h3>Adjust Assumptions</h3>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Repeat Study Rate</span>
+          <span class="slider-value" id="val-repeat">15%</span>
+        </div>
+        <input type="range" id="slider-repeat" min="0" max="100" value="15" oninput="updateScenarios()">
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">% of completers who do a second study</div>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Referral Rate</span>
+          <span class="slider-value" id="val-referral-rate">2%</span>
+        </div>
+        <input type="range" id="slider-referral-rate" min="0" max="20" value="2" step="0.5" oninput="updateScenarios()">
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">% of participants who refer someone</div>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Avg Studies Per Participant</span>
+          <span class="slider-value" id="val-avg-studies">1.0</span>
+        </div>
+        <input type="range" id="slider-avg-studies" min="1" max="5" value="1" step="0.1" oninput="updateScenarios()">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Churn Rate</span>
+          <span class="slider-value" id="val-churn">70%</span>
+        </div>
+        <input type="range" id="slider-churn" min="0" max="100" value="70" oninput="updateScenarios()">
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">% who never return after first study</div>
+      </div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-label">Monthly New Participants</span>
+          <span class="slider-value" id="val-monthly-new">60</span>
+        </div>
+        <input type="range" id="slider-monthly-new" min="10" max="300" value="60" step="10" oninput="updateScenarios()">
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>Scenario Impact</h3>
+        <div class="scenario-results" id="scenario-results"></div>
+      </div>
+      <div class="card">
+        <h3>12-Month LTV Projection</h3>
+        <div class="chart-container-lg">
+          <canvas id="scenarioChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>Quick Scenarios</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="applyScenario('moderate')">Moderate Growth</button>
+      <button class="btn btn-outline" onclick="applyScenario('aggressive')">Aggressive Growth</button>
+      <button class="btn btn-outline" onclick="applyScenario('referral-push')">Referral Push</button>
+      <button class="btn btn-outline" onclick="applyScenario('retention-focus')">Retention Focus</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== AMORTIZATION TAB ==================== -->
+<div class="tab-content" id="tab-amortization">
+  <div class="metrics">
+    <div class="metric-card">
+      <div class="metric-label">1 Study — Cost/Study</div>
+      <div class="metric-value red" id="amort-1">$18.00</div>
+      <div class="metric-sub">Full acquisition cost</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">2 Studies — Cost/Study</div>
+      <div class="metric-value yellow" id="amort-2">$9.00</div>
+      <div class="metric-sub">50% reduction</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">3 Studies — Cost/Study</div>
+      <div class="metric-value green" id="amort-3">$6.00</div>
+      <div class="metric-sub">67% reduction</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">5 Studies — Cost/Study</div>
+      <div class="metric-value green" id="amort-5">$3.60</div>
+      <div class="metric-sub">80% reduction</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Acquisition Cost Amortization Curve</h3>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Cost per study drops dramatically as participants complete more studies</p>
+      <div class="chart-container-lg">
+        <canvas id="amortChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Profitability Crossover</h3>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Revenue per study vs. amortized cost — the crossover point where participants become profitable</p>
+      <div class="chart-container-lg">
+        <canvas id="crossoverChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>Amortization by Acquisition Channel</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Avg Acq. Cost</th>
+            <th>1 Study</th>
+            <th>2 Studies</th>
+            <th>3 Studies</th>
+            <th>5 Studies</th>
+            <th>Break-Even At</th>
+          </tr>
+        </thead>
+        <tbody id="amort-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== COHORTS TAB ==================== -->
+<div class="tab-content" id="tab-cohorts">
+  <div class="card">
+    <h3>Cohort Overview</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Cohort</th>
+            <th>Entered</th>
+            <th>Still Active</th>
+            <th>1 Study</th>
+            <th>2+ Studies</th>
+            <th>Avg LTV</th>
+            <th>Retention</th>
+          </tr>
+        </thead>
+        <tbody id="cohort-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card">
+      <h3>Retention Curve by Cohort</h3>
+      <div class="chart-container-lg">
+        <canvas id="retentionChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Average LTV by Cohort</h3>
+      <div class="chart-container-lg">
+        <canvas id="cohortLTVChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PHASE 2 TAB ==================== -->
+<div class="tab-content" id="tab-phase2">
+  <div style="text-align:center;padding:40px 20px;">
+    <div style="font-size:48px;margin-bottom:16px;">&#128640;</div>
+    <h2 style="margin-bottom:8px;">Phase 2 Features</h2>
+    <p style="color:var(--text-dim);max-width:500px;margin:0 auto 30px;">These features are planned and will be available once database integration is complete.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card coming-soon-overlay" style="min-height:180px;">
+      <h3>Participant Lookup</h3>
+      <p style="font-size:13px;color:var(--text-dim);">Search by participant ID or email to view individual LTV profile, study history, and engagement timeline.</p>
+      <div class="form-group" style="margin-top:12px;">
+        <input type="text" placeholder="Search participant ID or email..." disabled>
+      </div>
+    </div>
+    <div class="card coming-soon-overlay" style="min-height:180px;">
+      <h3>Top 20 Highest-LTV Participants</h3>
+      <p style="font-size:13px;color:var(--text-dim);">Live leaderboard showing most valuable participants by total revenue generated, studies completed, and referrals made.</p>
+    </div>
+    <div class="card coming-soon-overlay" style="min-height:180px;">
+      <h3>Churn Detection Alerts</h3>
+      <p style="font-size:13px;color:var(--text-dim);">Automated alerts when high-value participants show disengagement signals — no study activity in 30+ days, incomplete applications.</p>
+    </div>
+    <div class="card coming-soon-overlay" style="min-height:180px;">
+      <h3>Live Recruitment Integration</h3>
+      <p style="font-size:13px;color:var(--text-dim);">Real-time LTV tracking connected to recruitment dashboard. See LTV update as participants move through study stages.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="coming-soon-overlay" style="min-height:120px;">
+      <h3>Compliance Score Weighting</h3>
+      <p style="font-size:13px;color:var(--text-dim);">High-compliance participants deliver better data quality, increasing effective revenue per participant. This feature adds a compliance multiplier to LTV calculations — a participant who completes all check-ins and surveys is worth more than one who barely meets minimums.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SETTINGS MODAL ==================== -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2>Edit Study Revenue</h2>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Update per-participant revenue for each study. Changes are saved locally.</p>
+    <div id="settings-study-list"></div>
+    <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
+      <h3 style="margin-bottom:12px;">Acquisition Cost Defaults</h3>
+      <div class="modal-row">
+        <label>Meta Ads (Standard)</label>
+        <input type="number" id="set-meta" value="18" min="0" step="0.5">
+      </div>
+      <div class="modal-row">
+        <label>Meta Ads (Complex/Outlier)</label>
+        <input type="number" id="set-meta-complex" value="120" min="0" step="1">
+      </div>
+      <div class="modal-row">
+        <label>Newsletter</label>
+        <input type="number" id="set-newsletter" value="5" min="0" step="0.5">
+      </div>
+      <div class="modal-row">
+        <label>Referral Value (saved acq cost)</label>
+        <input type="number" id="set-referral-value" value="20" min="0" step="1">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeSettings()">Cancel</button>
+      <button class="btn" onclick="saveSettings()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA MODEL
+// ============================================================
+const DEFAULT_STUDIES = [
+  // VEP Studies
+  { id: 'sleep-mushrooms', name: 'Sleep Mushrooms+', type: 'VEP', revenue: 100, status: 'completed' },
+  { id: 'tapping', name: 'Tapping', type: 'VEP', revenue: 100, status: 'recruiting' },
+  { id: 'natpat', name: 'NatPat', type: 'VEP', revenue: 100, status: 'completed' },
+  { id: 'sensate', name: 'Sensate', type: 'VEP', revenue: 100, status: 'completed' },
+  { id: 'lyfefuel', name: 'LyfeFuel', type: 'VEP', revenue: 100, status: 'completed' },
+  { id: 'hapbee', name: 'Hapbee', type: 'VEP', revenue: 100, status: 'completed' },
+  // RWE Studies
+  { id: 'rootless', name: 'Rootless', type: 'RWE', revenue: 150, status: 'completed' },
+  { id: 'clearlight', name: 'Clearlight', type: 'RWE', revenue: 150, status: 'completed' },
+  { id: 'quantum-upgrade', name: 'Quantum Upgrade', type: 'RWE', revenue: 150, status: 'completed' },
+  { id: 'proleeva-max', name: 'ProleevaMax', type: 'RWE', revenue: 150, status: 'recruiting' },
+  // RCT Studies
+  { id: 'enhanced-brew', name: 'Enhanced Brew', type: 'RCT', revenue: 300, status: 'completed' },
+  { id: 'peptide-supplement', name: 'Peptide Supplement', type: 'RCT', revenue: 300, status: 'completed' },
+  { id: 'somato', name: 'Melatonin/Somato', type: 'RCT', revenue: 300, status: 'recruiting' },
+  // Additional placeholders for 15 total
+  { id: 'study-14', name: 'Study 14 (TBD)', type: 'VEP', revenue: 100, status: 'planned' },
+  { id: 'study-15', name: 'Study 15 (TBD)', type: 'VEP', revenue: 100, status: 'planned' },
+];
+
+const DEFAULT_ACQ_COSTS = {
+  meta: 18,
+  'meta-complex': 120,
+  newsletter: 5,
+  organic: 0,
+  referral: 0,
+};
+
+const DEFAULT_REFERRAL_VALUE = 20;
+
+const ECOSYSTEM_DATA = {
+  totalParticipants: 800,
+  totalAdSpend: 22332.57,
+  totalOnboarded: 730,
+  activeRecruiting: 3,
+  completedStudies: 12,
+  zeroSpendStudies: 7,
+  totalStudies: 15,
+  referralCount: 17,
+};
+
+// Simulated cohort data
+const COHORT_DATA = [
+  { name: 'Q1 2025', entered: 120, active: 28, oneStudy: 95, twoPlus: 12, avgLTV: 118, retention: [100, 72, 48, 32, 25, 23] },
+  { name: 'Q2 2025', entered: 160, active: 52, oneStudy: 120, twoPlus: 18, avgLTV: 134, retention: [100, 78, 55, 40, 35, 33] },
+  { name: 'Q3 2025', entered: 200, active: 88, oneStudy: 140, twoPlus: 22, avgLTV: 142, retention: [100, 82, 60, 48, 44, null] },
+  { name: 'Q4 2025', entered: 180, active: 105, oneStudy: 110, twoPlus: 15, avgLTV: 126, retention: [100, 80, 62, 55, null, null] },
+  { name: 'Q1 2026', entered: 140, active: 120, oneStudy: 65, twoPlus: 5, avgLTV: 98, retention: [100, 85, 72, null, null, null] },
+];
+
+// Simulated per-channel data
+const CHANNEL_DATA = [
+  { name: 'Meta Ads', participants: 380, spend: 18500, avgStudies: 1.1, avgLTV: 125 },
+  { name: 'Newsletter', participants: 95, spend: 475, avgStudies: 1.3, avgLTV: 158 },
+  { name: 'Organic', participants: 220, spend: 0, avgStudies: 1.2, avgLTV: 145 },
+  { name: 'Referral', participants: 55, spend: 0, avgStudies: 1.5, avgLTV: 180 },
+  { name: 'Meta (Complex)', participants: 50, spend: 3357.57, avgStudies: 1.0, avgLTV: 150 },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let studies = JSON.parse(localStorage.getItem('ltv-studies')) || JSON.parse(JSON.stringify(DEFAULT_STUDIES));
+let acqCosts = JSON.parse(localStorage.getItem('ltv-acq-costs')) || { ...DEFAULT_ACQ_COSTS };
+let referralValue = JSON.parse(localStorage.getItem('ltv-referral-value')) || DEFAULT_REFERRAL_VALUE;
+
+// Chart instances
+let calcCostChartInstance, dashSourceChartInstance, dashStudyTypeChartInstance;
+let scenarioChartInstance, amortChartInstance, crossoverChartInstance;
+let retentionChartInstance, cohortLTVChartInstance;
+
+// ============================================================
+// TAB NAVIGATION
+// ============================================================
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+
+    // Initialize charts on first view
+    if (tab.dataset.tab === 'dashboard') initDashboard();
+    if (tab.dataset.tab === 'scenarios') initScenarios();
+    if (tab.dataset.tab === 'amortization') initAmortization();
+    if (tab.dataset.tab === 'cohorts') initCohorts();
+  });
+});
+
+// ============================================================
+// CALCULATOR
+// ============================================================
+function initCalculator() {
+  const grid = document.getElementById('calc-studies-completed');
+  grid.innerHTML = '';
+  const activeSelect = document.getElementById('calc-active');
+  activeSelect.innerHTML = '';
+
+  const recruitingStudies = studies.filter(s => s.status === 'recruiting');
+  const activeInfo = document.getElementById('calc-active-studies');
+  activeInfo.innerHTML = recruitingStudies.map(s =>
+    `<span class="active-pill">${s.name}</span>`
+  ).join('');
+
+  studies.forEach(s => {
+    if (s.status === 'planned') return;
+    const div = document.createElement('div');
+    div.className = 'checkbox-item';
+    div.innerHTML = `
+      <input type="checkbox" data-study="${s.id}" onchange="this.parentElement.classList.toggle('checked');calculateLTV();">
+      <div class="check-box"></div>
+      <span>${s.name}</span>
+      <span class="study-rev">$${s.revenue}</span>
+    `;
+    div.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      const cb = div.querySelector('input');
+      cb.checked = !cb.checked;
+      div.classList.toggle('checked');
+      calculateLTV();
+    });
+    grid.appendChild(div);
+  });
+
+  recruitingStudies.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = `${s.name} ($${s.revenue})`;
+    activeSelect.appendChild(opt);
+  });
+}
+
+function calcSourceChanged() {
+  const src = document.getElementById('calc-source').value;
+  document.getElementById('calc-cost').value = acqCosts[src] || 0;
+  calculateLTV();
+}
+
+function calculateLTV() {
+  const cost = parseFloat(document.getElementById('calc-cost').value) || 0;
+  const referrals = parseInt(document.getElementById('calc-referrals').value) || 0;
+
+  // Completed studies revenue
+  const checkedStudies = document.querySelectorAll('#calc-studies-completed input:checked');
+  let completedRevenue = 0;
+  let completedCount = 0;
+  checkedStudies.forEach(cb => {
+    const study = studies.find(s => s.id === cb.dataset.study);
+    if (study) {
+      completedRevenue += study.revenue;
+      completedCount++;
+    }
+  });
+
+  // Active studies (potential future revenue)
+  const activeSelect = document.getElementById('calc-active');
+  const activeStudyIds = Array.from(activeSelect.selectedOptions).map(o => o.value);
+  let activeRevenue = 0;
+  activeStudyIds.forEach(id => {
+    const study = studies.find(s => s.id === id);
+    if (study) activeRevenue += study.revenue;
+  });
+
+  const refValue = referrals * referralValue;
+  const totalRevenue = completedRevenue + refValue;
+  const netLTV = totalRevenue - cost;
+  const ratio = cost > 0 ? (totalRevenue / cost) : (totalRevenue > 0 ? Infinity : 0);
+
+  // Projected: add average study revenue
+  const avgStudyRev = getAvgStudyRevenue();
+  const projectedLTV = netLTV + avgStudyRev;
+
+  document.getElementById('res-revenue').textContent = '$' + totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  document.getElementById('res-cost').textContent = '$' + cost.toFixed(2);
+  document.getElementById('res-ltv').textContent = '$' + netLTV.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  document.getElementById('res-ratio').textContent = ratio === Infinity ? '∞' : ratio.toFixed(1) + 'x';
+  document.getElementById('res-referral').textContent = '$' + refValue.toFixed(0);
+  document.getElementById('res-projected').textContent = '$' + projectedLTV.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  // Update cost per study chart
+  updateCalcChart(cost, completedCount || 1);
+}
+
+function updateCalcChart(acqCost, numStudies) {
+  const ctx = document.getElementById('calcCostChart').getContext('2d');
+  const labels = ['1', '2', '3', '4', '5'];
+  const costPerStudy = labels.map((_, i) => acqCost / (i + 1));
+  const avgRev = getAvgStudyRevenue();
+
+  if (calcCostChartInstance) calcCostChartInstance.destroy();
+  calcCostChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels.map(l => l + (l === '1' ? ' study' : ' studies')),
+      datasets: [
+        {
+          label: 'Cost per Study',
+          data: costPerStudy,
+          backgroundColor: costPerStudy.map(v => v > avgRev ? 'rgba(225,112,85,0.7)' : 'rgba(0,184,148,0.7)'),
+          borderRadius: 6,
+        },
+        {
+          label: 'Avg Revenue per Study',
+          data: labels.map(() => avgRev),
+          type: 'line',
+          borderColor: '#6c5ce7',
+          borderDash: [5, 5],
+          pointRadius: 0,
+          borderWidth: 2,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8b8fa3', font: { size: 11 } } },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#8b8fa3', callback: v => '$' + v },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+        },
+        x: {
+          ticks: { color: '#8b8fa3' },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+}
+
+function resetCalc() {
+  document.getElementById('calc-source').value = 'meta';
+  document.getElementById('calc-cost').value = acqCosts.meta;
+  document.getElementById('calc-referrals').value = 0;
+  document.querySelectorAll('#calc-studies-completed input').forEach(cb => {
+    cb.checked = false;
+    cb.parentElement.classList.remove('checked');
+  });
+  document.getElementById('calc-active').selectedIndex = -1;
+  calculateLTV();
+}
+
+function getAvgStudyRevenue() {
+  const activeStudies = studies.filter(s => s.status !== 'planned');
+  return activeStudies.reduce((sum, s) => sum + s.revenue, 0) / activeStudies.length;
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+let dashInitialized = false;
+function initDashboard() {
+  if (dashInitialized) return;
+  dashInitialized = true;
+
+  const eco = ECOSYSTEM_DATA;
+  const avgLTV = CHANNEL_DATA.reduce((sum, c) => sum + c.avgLTV * c.participants, 0) / CHANNEL_DATA.reduce((sum, c) => sum + c.participants, 0);
+  const avgStudies = CHANNEL_DATA.reduce((sum, c) => sum + c.avgStudies * c.participants, 0) / CHANNEL_DATA.reduce((sum, c) => sum + c.participants, 0);
+  const repeatRate = ((avgStudies - 1) / avgStudies * 100).toFixed(0);
+  const blendedCPA = eco.totalAdSpend / eco.totalOnboarded;
+
+  document.getElementById('dash-metrics').innerHTML = `
+    <div class="metric-card">
+      <div class="metric-label">Total Participants</div>
+      <div class="metric-value blue">${eco.totalParticipants.toLocaleString()}+</div>
+      <div class="metric-sub">${eco.totalOnboarded} onboarded</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg LTV / Participant</div>
+      <div class="metric-value green">$${avgLTV.toFixed(0)}</div>
+      <div class="metric-sub">across all channels</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg Studies / Participant</div>
+      <div class="metric-value accent">${avgStudies.toFixed(2)}</div>
+      <div class="metric-sub">${repeatRate}% repeat rate</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Blended CPA</div>
+      <div class="metric-value yellow">$${blendedCPA.toFixed(2)}</div>
+      <div class="metric-sub">$${eco.totalAdSpend.toLocaleString()} total spend</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Referrals</div>
+      <div class="metric-value green">${eco.referralCount}</div>
+      <div class="metric-sub">$${(eco.referralCount * referralValue).toLocaleString()} saved</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">$0 Spend Studies</div>
+      <div class="metric-value accent">${eco.zeroSpendStudies} / ${eco.totalStudies}</div>
+      <div class="metric-sub">organic recruitment</div>
+    </div>
+  `;
+
+  // Source chart
+  const srcCtx = document.getElementById('dashSourceChart').getContext('2d');
+  if (dashSourceChartInstance) dashSourceChartInstance.destroy();
+  dashSourceChartInstance = new Chart(srcCtx, {
+    type: 'bar',
+    data: {
+      labels: CHANNEL_DATA.map(c => c.name),
+      datasets: [{
+        label: 'Avg LTV ($)',
+        data: CHANNEL_DATA.map(c => c.avgLTV),
+        backgroundColor: ['#6c5ce7', '#74b9ff', '#00b894', '#fdcb6e', '#a29bfe'],
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        x: {
+          ticks: { color: '#8b8fa3', callback: v => '$' + v },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+        },
+        y: {
+          ticks: { color: '#e4e6ef', font: { size: 12 } },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+
+  // Study type chart
+  const typeCtx = document.getElementById('dashStudyTypeChart').getContext('2d');
+  const vepRev = studies.filter(s => s.type === 'VEP' && s.status !== 'planned').reduce((s, st) => s + st.revenue, 0);
+  const rweRev = studies.filter(s => s.type === 'RWE').reduce((s, st) => s + st.revenue, 0);
+  const rctRev = studies.filter(s => s.type === 'RCT').reduce((s, st) => s + st.revenue, 0);
+
+  if (dashStudyTypeChartInstance) dashStudyTypeChartInstance.destroy();
+  dashStudyTypeChartInstance = new Chart(typeCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['VEP (~$100/p)', 'RWE (~$150/p)', 'RCT (~$300/p)'],
+      datasets: [{
+        data: [vepRev, rweRev, rctRev],
+        backgroundColor: ['#74b9ff', '#6c5ce7', '#00b894'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: '#8b8fa3', padding: 12, font: { size: 12 } }
+        }
+      }
+    }
+  });
+
+  // Spend table
+  const tbody = document.getElementById('dash-spend-tbody');
+  tbody.innerHTML = CHANNEL_DATA.map(c => {
+    const cpa = c.spend > 0 ? (c.spend / c.participants) : 0;
+    const roi = c.spend > 0 ? ((c.avgLTV * c.participants - c.spend) / c.spend * 100) : Infinity;
+    const roiStr = roi === Infinity ? '∞' : roi.toFixed(0) + '%';
+    const roiClass = roi > 200 ? 'badge-green' : roi > 50 ? 'badge-yellow' : 'badge-red';
+    return `<tr>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.participants}</td>
+      <td>$${c.spend.toLocaleString()}</td>
+      <td>$${cpa.toFixed(2)}</td>
+      <td>${c.avgStudies.toFixed(1)}</td>
+      <td>$${c.avgLTV}</td>
+      <td><span class="badge ${roiClass}">${roiStr}</span></td>
+    </tr>`;
+  }).join('');
+
+  updateProjector();
+}
+
+function updateProjector() {
+  const target = parseInt(document.getElementById('dash-target').value) || 2000;
+  const avgLTV = CHANNEL_DATA.reduce((sum, c) => sum + c.avgLTV * c.participants, 0) / CHANNEL_DATA.reduce((sum, c) => sum + c.participants, 0);
+  const projectedValue = target * avgLTV;
+  const currentValue = ECOSYSTEM_DATA.totalParticipants * avgLTV;
+
+  document.getElementById('projector-result').textContent =
+    `Projected ecosystem value: $${projectedValue.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+  document.getElementById('projector-sub').textContent =
+    `Current value: $${currentValue.toLocaleString('en-US', { maximumFractionDigits: 0 })} — growth of $${(projectedValue - currentValue).toLocaleString('en-US', { maximumFractionDigits: 0 })} (+${((projectedValue / currentValue - 1) * 100).toFixed(0)}%)`;
+}
+
+// ============================================================
+// SCENARIO MODELER
+// ============================================================
+let scenariosInitialized = false;
+function initScenarios() {
+  if (scenariosInitialized) return;
+  scenariosInitialized = true;
+  updateScenarios();
+}
+
+function updateScenarios() {
+  const repeatRate = parseInt(document.getElementById('slider-repeat').value);
+  const referralRate = parseFloat(document.getElementById('slider-referral-rate').value);
+  const avgStudies = parseFloat(document.getElementById('slider-avg-studies').value);
+  const churnRate = parseInt(document.getElementById('slider-churn').value);
+  const monthlyNew = parseInt(document.getElementById('slider-monthly-new').value);
+
+  document.getElementById('val-repeat').textContent = repeatRate + '%';
+  document.getElementById('val-referral-rate').textContent = referralRate + '%';
+  document.getElementById('val-avg-studies').textContent = avgStudies.toFixed(1);
+  document.getElementById('val-churn').textContent = churnRate + '%';
+  document.getElementById('val-monthly-new').textContent = monthlyNew;
+
+  const avgRev = getAvgStudyRevenue();
+  const avgAcqCost = ECOSYSTEM_DATA.totalAdSpend / ECOSYSTEM_DATA.totalOnboarded;
+
+  // Blended acq cost amortized
+  const blendedCPA = avgAcqCost / avgStudies;
+  // LTV per participant
+  const ltvPerParticipant = avgRev * avgStudies - avgAcqCost + (referralRate / 100 * referralValue);
+  // Effective retention
+  const retentionRate = 100 - churnRate;
+  // Baseline values
+  const baseAvgStudies = 1.0;
+  const baseLTV = avgRev * baseAvgStudies - avgAcqCost;
+  const baseCPA = avgAcqCost / baseAvgStudies;
+
+  const ltvDelta = ((ltvPerParticipant - baseLTV) / Math.abs(baseLTV) * 100);
+  const cpaDelta = ((blendedCPA - baseCPA) / baseCPA * 100);
+
+  document.getElementById('scenario-results').innerHTML = `
+    <div class="scenario-card">
+      <div class="label">Blended CPA</div>
+      <div class="value" style="color:var(--yellow);">$${blendedCPA.toFixed(2)}</div>
+      <div class="delta ${cpaDelta < 0 ? 'delta-positive' : 'delta-negative'}">${cpaDelta >= 0 ? '+' : ''}${cpaDelta.toFixed(0)}% vs baseline</div>
+    </div>
+    <div class="scenario-card">
+      <div class="label">LTV / Participant</div>
+      <div class="value" style="color:var(--green);">$${ltvPerParticipant.toFixed(0)}</div>
+      <div class="delta ${ltvDelta >= 0 ? 'delta-positive' : 'delta-negative'}">${ltvDelta >= 0 ? '+' : ''}${ltvDelta.toFixed(0)}% vs baseline</div>
+    </div>
+    <div class="scenario-card">
+      <div class="label">12-Mo New Participants</div>
+      <div class="value" style="color:var(--blue);">${(monthlyNew * 12).toLocaleString()}</div>
+      <div class="delta" style="color:var(--text-dim);">+ ${(monthlyNew * 12 * referralRate / 100).toFixed(0)} referrals</div>
+    </div>
+    <div class="scenario-card">
+      <div class="label">12-Mo Ecosystem Value</div>
+      <div class="value" style="color:var(--accent-light);">$${(monthlyNew * 12 * ltvPerParticipant + ECOSYSTEM_DATA.totalParticipants * ltvPerParticipant).toLocaleString('en-US', { maximumFractionDigits: 0 })}</div>
+      <div class="delta" style="color:var(--text-dim);">new + existing</div>
+    </div>
+  `;
+
+  // 12-month projection chart
+  const ctx = document.getElementById('scenarioChart').getContext('2d');
+  const months = ['Mo 1', 'Mo 2', 'Mo 3', 'Mo 4', 'Mo 5', 'Mo 6', 'Mo 7', 'Mo 8', 'Mo 9', 'Mo 10', 'Mo 11', 'Mo 12'];
+
+  let cumulativeParticipants = ECOSYSTEM_DATA.totalParticipants;
+  const currentData = [];
+  const optimisticData = [];
+  const baseData = [];
+
+  for (let m = 0; m < 12; m++) {
+    const newP = monthlyNew;
+    const referrals = Math.round(newP * referralRate / 100);
+    cumulativeParticipants += newP + referrals;
+
+    const retained = cumulativeParticipants * (retentionRate / 100);
+    const activeRev = retained * avgRev * avgStudies / 12;
+
+    currentData.push(activeRev * (m + 1));
+    optimisticData.push(activeRev * (m + 1) * 1.3);
+    baseData.push(ECOSYSTEM_DATA.totalParticipants * avgRev * 1.0 / 12 * (m + 1));
+  }
+
+  if (scenarioChartInstance) scenarioChartInstance.destroy();
+  scenarioChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Your Scenario',
+          data: currentData,
+          borderColor: '#6c5ce7',
+          backgroundColor: 'rgba(108,92,231,0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 3,
+        },
+        {
+          label: 'Optimistic (+30%)',
+          data: optimisticData,
+          borderColor: '#00b894',
+          borderDash: [5, 5],
+          tension: 0.3,
+          pointRadius: 0,
+          fill: false,
+        },
+        {
+          label: 'Baseline (no growth)',
+          data: baseData,
+          borderColor: '#636e80',
+          borderDash: [3, 3],
+          tension: 0.3,
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8b8fa3', font: { size: 11 } } }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#8b8fa3', callback: v => '$' + (v / 1000).toFixed(0) + 'k' },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+        },
+        x: {
+          ticks: { color: '#8b8fa3' },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+}
+
+function applyScenario(preset) {
+  const presets = {
+    'moderate': { repeat: 25, referral: 3, avgStudies: 1.3, churn: 60, monthlyNew: 80 },
+    'aggressive': { repeat: 40, referral: 5, avgStudies: 1.8, churn: 45, monthlyNew: 150 },
+    'referral-push': { repeat: 20, referral: 10, avgStudies: 1.2, churn: 65, monthlyNew: 60 },
+    'retention-focus': { repeat: 35, referral: 3, avgStudies: 1.5, churn: 40, monthlyNew: 60 },
+  };
+  const p = presets[preset];
+  if (!p) return;
+
+  document.getElementById('slider-repeat').value = p.repeat;
+  document.getElementById('slider-referral-rate').value = p.referral;
+  document.getElementById('slider-avg-studies').value = p.avgStudies;
+  document.getElementById('slider-churn').value = p.churn;
+  document.getElementById('slider-monthly-new').value = p.monthlyNew;
+  updateScenarios();
+}
+
+// ============================================================
+// AMORTIZATION
+// ============================================================
+let amortInitialized = false;
+function initAmortization() {
+  if (amortInitialized) return;
+  amortInitialized = true;
+
+  const avgCost = ECOSYSTEM_DATA.totalAdSpend / ECOSYSTEM_DATA.totalOnboarded;
+
+  document.getElementById('amort-1').textContent = '$' + avgCost.toFixed(2);
+  document.getElementById('amort-2').textContent = '$' + (avgCost / 2).toFixed(2);
+  document.getElementById('amort-3').textContent = '$' + (avgCost / 3).toFixed(2);
+  document.getElementById('amort-5').textContent = '$' + (avgCost / 5).toFixed(2);
+
+  // Amortization curve
+  const amortCtx = document.getElementById('amortChart').getContext('2d');
+  const studyCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const metaCost = acqCosts.meta;
+  const metaComplexCost = acqCosts['meta-complex'];
+  const newsletterCost = acqCosts.newsletter;
+
+  if (amortChartInstance) amortChartInstance.destroy();
+  amortChartInstance = new Chart(amortCtx, {
+    type: 'line',
+    data: {
+      labels: studyCounts.map(n => n + (n === 1 ? ' study' : ' studies')),
+      datasets: [
+        {
+          label: 'Meta Ads ($' + metaCost + ')',
+          data: studyCounts.map(n => metaCost / n),
+          borderColor: '#6c5ce7',
+          backgroundColor: 'rgba(108,92,231,0.1)',
+          fill: true,
+          tension: 0.3,
+        },
+        {
+          label: 'Meta Complex ($' + metaComplexCost + ')',
+          data: studyCounts.map(n => metaComplexCost / n),
+          borderColor: '#e17055',
+          tension: 0.3,
+          fill: false,
+        },
+        {
+          label: 'Newsletter ($' + newsletterCost + ')',
+          data: studyCounts.map(n => newsletterCost / n),
+          borderColor: '#00b894',
+          tension: 0.3,
+          fill: false,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8b8fa3', font: { size: 11 } } }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#8b8fa3', callback: v => '$' + v.toFixed(0) },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+          title: { display: true, text: 'Cost per Study', color: '#8b8fa3' }
+        },
+        x: {
+          ticks: { color: '#8b8fa3' },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+
+  // Crossover chart
+  const crossCtx = document.getElementById('crossoverChart').getContext('2d');
+  const avgRev = getAvgStudyRevenue();
+
+  if (crossoverChartInstance) crossoverChartInstance.destroy();
+  crossoverChartInstance = new Chart(crossCtx, {
+    type: 'line',
+    data: {
+      labels: studyCounts.map(n => n + (n === 1 ? ' study' : ' studies')),
+      datasets: [
+        {
+          label: 'Amortized Cost (Meta $' + metaCost + ')',
+          data: studyCounts.map(n => metaCost / n),
+          borderColor: '#e17055',
+          backgroundColor: 'rgba(225,112,85,0.1)',
+          fill: true,
+          tension: 0.3,
+        },
+        {
+          label: 'Avg Revenue per Study ($' + avgRev.toFixed(0) + ')',
+          data: studyCounts.map(() => avgRev),
+          borderColor: '#00b894',
+          backgroundColor: 'rgba(0,184,148,0.1)',
+          fill: true,
+          borderDash: [5, 5],
+          tension: 0,
+          pointRadius: 0,
+        },
+        {
+          label: 'Cumulative Profit',
+          data: studyCounts.map(n => (avgRev * n) - metaCost),
+          borderColor: '#6c5ce7',
+          tension: 0.3,
+          fill: false,
+          borderWidth: 3,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8b8fa3', font: { size: 11 } } }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#8b8fa3', callback: v => '$' + v.toFixed(0) },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+        },
+        x: {
+          ticks: { color: '#8b8fa3' },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+
+  // Amortization table
+  const channels = [
+    { name: 'Meta Ads (Standard)', cost: metaCost, avgRevPerStudy: avgRev },
+    { name: 'Meta Ads (Complex)', cost: metaComplexCost, avgRevPerStudy: avgRev },
+    { name: 'Newsletter', cost: newsletterCost, avgRevPerStudy: avgRev },
+    { name: 'Organic', cost: 0, avgRevPerStudy: avgRev },
+    { name: 'Referral', cost: 0, avgRevPerStudy: avgRev },
+  ];
+
+  document.getElementById('amort-table-body').innerHTML = channels.map(ch => {
+    const breakEven = ch.cost > 0 ? Math.ceil(ch.cost / ch.avgRevPerStudy) : 0;
+    const breakEvenStr = ch.cost === 0 ? '<span class="badge badge-green">Instant</span>' : `${breakEven} stud${breakEven === 1 ? 'y' : 'ies'}`;
+    return `<tr>
+      <td><strong>${ch.name}</strong></td>
+      <td>$${ch.cost.toFixed(2)}</td>
+      <td>$${(ch.cost / 1).toFixed(2)}</td>
+      <td>$${(ch.cost / 2).toFixed(2)}</td>
+      <td>$${(ch.cost / 3).toFixed(2)}</td>
+      <td>$${(ch.cost / 5).toFixed(2)}</td>
+      <td>${breakEvenStr}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// COHORTS
+// ============================================================
+let cohortsInitialized = false;
+function initCohorts() {
+  if (cohortsInitialized) return;
+  cohortsInitialized = true;
+
+  // Cohort table
+  document.getElementById('cohort-table-body').innerHTML = COHORT_DATA.map(c => {
+    const retPct = ((c.active / c.entered) * 100).toFixed(0);
+    const retClass = retPct >= 50 ? 'badge-green' : retPct >= 30 ? 'badge-yellow' : 'badge-red';
+    return `<tr>
+      <td><strong>${c.name}</strong></td>
+      <td>${c.entered}</td>
+      <td>${c.active}</td>
+      <td>${c.oneStudy}</td>
+      <td>${c.twoPlus}</td>
+      <td>$${c.avgLTV}</td>
+      <td><span class="badge ${retClass}">${retPct}%</span></td>
+    </tr>`;
+  }).join('');
+
+  // Retention chart
+  const retCtx = document.getElementById('retentionChart').getContext('2d');
+  const retLabels = ['Start', '1 Mo', '3 Mo', '6 Mo', '9 Mo', '12 Mo'];
+  const colors = ['#6c5ce7', '#a29bfe', '#74b9ff', '#00b894', '#fdcb6e'];
+
+  if (retentionChartInstance) retentionChartInstance.destroy();
+  retentionChartInstance = new Chart(retCtx, {
+    type: 'line',
+    data: {
+      labels: retLabels,
+      datasets: COHORT_DATA.map((c, i) => ({
+        label: c.name,
+        data: c.retention,
+        borderColor: colors[i % colors.length],
+        tension: 0.3,
+        spanGaps: false,
+        pointRadius: 4,
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8b8fa3', font: { size: 11 } } }
+      },
+      scales: {
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { color: '#8b8fa3', callback: v => v + '%' },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+          title: { display: true, text: 'Retention %', color: '#8b8fa3' },
+        },
+        x: {
+          ticks: { color: '#8b8fa3' },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+
+  // Cohort LTV chart
+  const ltvCtx = document.getElementById('cohortLTVChart').getContext('2d');
+  if (cohortLTVChartInstance) cohortLTVChartInstance.destroy();
+  cohortLTVChartInstance = new Chart(ltvCtx, {
+    type: 'bar',
+    data: {
+      labels: COHORT_DATA.map(c => c.name),
+      datasets: [{
+        label: 'Avg LTV',
+        data: COHORT_DATA.map(c => c.avgLTV),
+        backgroundColor: colors.map(c => c + '99'),
+        borderColor: colors,
+        borderWidth: 2,
+        borderRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#8b8fa3', callback: v => '$' + v },
+          grid: { color: 'rgba(46,51,69,0.5)' },
+        },
+        x: {
+          ticks: { color: '#8b8fa3' },
+          grid: { display: false },
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+// SETTINGS MODAL
+// ============================================================
+function openSettings() {
+  const modal = document.getElementById('settingsModal');
+  const list = document.getElementById('settings-study-list');
+
+  list.innerHTML = studies.map((s, i) => `
+    <div class="modal-row">
+      <label>
+        ${s.name}
+        <div class="study-type">${s.type} — ${s.status}</div>
+      </label>
+      <input type="number" id="set-study-${i}" value="${s.revenue}" min="0" step="10">
+    </div>
+  `).join('');
+
+  document.getElementById('set-meta').value = acqCosts.meta;
+  document.getElementById('set-meta-complex').value = acqCosts['meta-complex'];
+  document.getElementById('set-newsletter').value = acqCosts.newsletter;
+  document.getElementById('set-referral-value').value = referralValue;
+
+  modal.classList.add('active');
+}
+
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('active');
+}
+
+function saveSettings() {
+  // Save study revenues
+  studies.forEach((s, i) => {
+    const input = document.getElementById('set-study-' + i);
+    if (input) s.revenue = parseFloat(input.value) || 0;
+  });
+
+  // Save acq costs
+  acqCosts.meta = parseFloat(document.getElementById('set-meta').value) || 0;
+  acqCosts['meta-complex'] = parseFloat(document.getElementById('set-meta-complex').value) || 0;
+  acqCosts.newsletter = parseFloat(document.getElementById('set-newsletter').value) || 0;
+  referralValue = parseFloat(document.getElementById('set-referral-value').value) || 0;
+
+  // Persist
+  localStorage.setItem('ltv-studies', JSON.stringify(studies));
+  localStorage.setItem('ltv-acq-costs', JSON.stringify(acqCosts));
+  localStorage.setItem('ltv-referral-value', JSON.stringify(referralValue));
+
+  // Reset chart caches to force re-render
+  dashInitialized = false;
+  scenariosInitialized = false;
+  amortInitialized = false;
+  cohortsInitialized = false;
+
+  closeSettings();
+  initCalculator();
+  calculateLTV();
+  updateInsights();
+}
+
+// Close modal on backdrop click
+document.getElementById('settingsModal').addEventListener('click', function(e) {
+  if (e.target === this) closeSettings();
+});
+
+// ============================================================
+// INSIGHTS BAR
+// ============================================================
+function updateInsights() {
+  const eco = ECOSYSTEM_DATA;
+  const refSaved = eco.referralCount * referralValue;
+  const avgLTV = CHANNEL_DATA.reduce((sum, c) => sum + c.avgLTV * c.participants, 0) / CHANNEL_DATA.reduce((sum, c) => sum + c.participants, 0);
+  const newsletterLTV = CHANNEL_DATA.find(c => c.name === 'Newsletter')?.avgLTV || 0;
+  const metaLTV = CHANNEL_DATA.find(c => c.name === 'Meta Ads')?.avgLTV || 0;
+  const nlAdvantage = metaLTV > 0 ? ((newsletterLTV / metaLTV - 1) * 100).toFixed(0) : '—';
+
+  document.getElementById('insights-bar').innerHTML = `
+    <div class="insight"><strong>${eco.zeroSpendStudies} out of ${eco.totalStudies} studies</strong> recruited at $0 acquisition cost — self-serve and organic participants are pure LTV</div>
+    <div class="insight">If the average participant completes <strong>1.5 studies</strong> (vs 1.0 today), blended acquisition cost drops by <strong>33%</strong></div>
+    <div class="insight">Each referral saves approximately <strong>$${referralValue}</strong> in acquisition cost — <strong>${eco.referralCount} referrals = $${refSaved.toLocaleString()} saved</strong></div>
+    <div class="insight">Participants acquired through newsletter have <strong>${nlAdvantage}% higher LTV</strong> than Meta Ads participants ($${newsletterLTV} vs $${metaLTV})</div>
+  `;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+initCalculator();
+calculateLTV();
+updateInsights();
+</script>
+</body>
+</html>
