@@ -149,24 +149,56 @@ a{color:inherit;text-decoration:none}
 .seg-text{font-size:.85rem;font-weight:600;color:var(--slate-700);line-height:1.4}
 .seg-desc{font-size:.75rem;color:var(--slate-400);margin-top:1px;font-weight:400}
 
-/* Phases */
-.phases-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-@media(max-width:768px){.phases-grid{grid-template-columns:1fr}}
-.phase-card{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:28px;position:relative;overflow:hidden;transition:all .3s ease}
-.phase-card:hover{box-shadow:var(--shadow-lg);border-color:var(--indigo-300)}
-.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.phase-card.p1::before{background:linear-gradient(90deg,var(--indigo-400),var(--indigo-600))}
-.phase-card.p2::before{background:linear-gradient(90deg,var(--indigo-500),var(--indigo-700))}
-.phase-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;margin-bottom:12px;background:var(--indigo-100);color:var(--indigo-700)}
-.phase-title{font-size:1.15rem;font-weight:800;color:var(--slate-900);margin-bottom:2px}
-.phase-timeline{font-size:.82rem;color:var(--slate-400);margin-bottom:16px}
-.phase-list{list-style:none;padding:0}
-.phase-list li{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:.84rem;color:var(--slate-600);border-bottom:1px solid var(--slate-100)}
-.phase-list li:last-child{border-bottom:none}
-.phase-list li.new-item{background:var(--teal-50);margin:0 -6px;padding:6px;border-radius:4px}
-.pcheck{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:var(--indigo-100);color:var(--indigo-600);display:flex;align-items:center;justify-content:center;margin-top:1px}
-.phase-list li.new-item .pcheck{background:var(--teal-100);color:var(--teal-600)}
-.pcheck svg{width:11px;height:11px}
+/* Phases (team-briefing style) */
+.phase-row{display:flex;gap:20px;flex-wrap:wrap}
+.phase-block{flex:1;min-width:280px;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;transition:all .3s ease}
+.phase-block:hover{box-shadow:var(--shadow-lg)}
+.phase-head{padding:16px 20px;color:#fff;display:flex;align-items:center;gap:10px}
+.phase-block.p1 .phase-head{background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700))}
+.phase-block.p2 .phase-head{background:linear-gradient(135deg,var(--slate-600),var(--slate-800))}
+.phase-head h3{font-size:1rem;font-weight:700}
+.phase-head .phase-time{margin-left:auto;font-size:.7rem;font-weight:700;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px;white-space:nowrap}
+.phase-body{padding:16px 20px}
+.phase-body ul{list-style:none;padding:0}
+.phase-body li{font-size:.85rem;color:var(--slate-700);padding:6px 0 6px 20px;position:relative;border-bottom:1px solid var(--slate-100)}
+.phase-body li:last-child{border-bottom:none}
+.phase-body li::before{content:'';position:absolute;left:0;top:13px;width:7px;height:7px;border-radius:50%}
+.phase-block.p1 .phase-body li::before{background:var(--indigo-400)}
+.phase-block.p2 .phase-body li::before{background:var(--slate-400)}
+.phase-callout{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,var(--indigo-50),#fff);border:1px solid var(--indigo-200);border-left:4px solid var(--indigo-500);border-radius:var(--radius-sm);padding:14px 18px;margin-top:20px}
+.phase-callout svg{width:18px;height:18px;color:var(--indigo-500);flex-shrink:0;margin-top:2px}
+.phase-callout p{font-size:.88rem;font-weight:600;color:var(--indigo-800);line-height:1.5}
+
+/* Filter bar (segmentation) */
+.filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 20px;margin-bottom:16px}
+.filter-bar-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-400);margin-right:4px;white-space:nowrap}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;border:1px solid var(--slate-200);background:var(--slate-50);color:var(--slate-600);transition:all .2s ease;cursor:pointer}
+.filter-chip:hover{border-color:var(--indigo-300);background:var(--indigo-50);color:var(--indigo-600)}
+.filter-chip.active{background:var(--indigo-100);border-color:var(--indigo-300);color:var(--indigo-700)}
+.filter-chip svg{width:12px;height:12px;opacity:.5}
+.filter-reset{font-size:.75rem;font-weight:600;color:var(--indigo-500);margin-left:auto;cursor:pointer;padding:4px 10px;border-radius:4px;transition:background .2s;white-space:nowrap}
+.filter-reset:hover{background:var(--indigo-50)}
+.multi-note{display:flex;align-items:flex-start;gap:10px;background:var(--indigo-50);border:1px solid var(--indigo-200);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:20px}
+.multi-note svg{width:18px;height:18px;color:var(--indigo-500);flex-shrink:0;margin-top:1px}
+.multi-note p{font-size:.84rem;color:var(--indigo-700);font-weight:500;line-height:1.5}
+
+/* Summary */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:768px){.summary-grid{grid-template-columns:1fr}}
+.summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:20px 24px}
+.summary-card h4{font-size:.92rem;font-weight:700;color:var(--slate-900);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.summary-card h4 svg{width:18px;height:18px}
+.summary-card.positive h4 svg{color:var(--teal-500)}
+.summary-card.next h4 svg{color:var(--blue-500)}
+.summary-card ul{list-style:none;padding:0}
+.summary-card li{font-size:.84rem;color:var(--slate-600);padding:4px 0 4px 16px;position:relative}
+.summary-card li::before{content:'';position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%}
+.summary-card.positive li::before{background:var(--teal-500)}
+.summary-card.next li::before{background:var(--blue-500)}
+.closing-quote{background:linear-gradient(135deg,var(--indigo-600),var(--indigo-800));color:#fff;border-radius:var(--radius-lg);padding:36px 32px;text-align:center;position:relative;overflow:hidden}
+.closing-quote::before{content:'';position:absolute;top:-30%;right:-10%;width:50%;height:160%;background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
+.closing-quote blockquote{font-size:clamp(1rem,2.5vw,1.3rem);font-weight:600;line-height:1.5;max-width:700px;margin:0 auto;position:relative;z-index:1}
+.closing-quote .quote-mark{font-size:4rem;line-height:1;opacity:.25;font-family:Georgia,serif;margin-bottom:-20px}
 
 /* Integration */
 .int-grid{display:grid;gap:12px;max-width:860px;margin:0 auto}
@@ -208,6 +240,7 @@ a{color:inherit;text-decoration:none}
       <a href="#segmentation">Segmentation</a>
       <a href="#phases">Phases</a>
       <a href="#integrations">Integrations</a>
+      <a href="#summary">Summary</a>
     </div>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
@@ -454,8 +487,25 @@ a{color:inherit;text-decoration:none}
     <div class="section-header reveal">
       <div class="section-label">Targeting</div>
       <h2 class="section-title">Segmentation Rules</h2>
-      <p class="section-subtitle">Key filters for campaigns. New two-channel segments marked with teal.</p>
+      <p class="section-subtitle">Multi-select filters for targeted campaigns. Combine any filters to build precise audience segments.</p>
     </div>
+
+    <div class="filter-bar reveal">
+      <div class="filter-bar-label">Filters</div>
+      <div class="filter-chip active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Active: All</div>
+      <div class="filter-chip active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Washout: All</div>
+      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Study: All</div>
+      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Baseline: All</div>
+      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Channel: All</div>
+      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Engagement: All</div>
+      <div class="filter-reset">Reset filters</div>
+    </div>
+
+    <div class="multi-note reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+      <p>These are <strong>multi-select filters</strong> &mdash; combine any of them to build the exact audience you need. For example: <em>"Not in active study + Not in washout + Has not tried Study X"</em> gives you your eligible recruitment list for a specific study. Works across both in-app participants and outside-app leads.</p>
+    </div>
+
     <div class="seg-grid">
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div><div><div class="seg-text">Not in any active study</div><div class="seg-desc">Available for new recruitment</div></div></div>
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="seg-text">Not in washout period</div><div class="seg-desc">Cleared for a new clinical study</div></div></div>
@@ -478,39 +528,51 @@ a{color:inherit;text-decoration:none}
     <div class="section-header reveal">
       <div class="section-label">Roadmap</div>
       <h2 class="section-title">Implementation Phases</h2>
-      <p class="section-subtitle">Two-phase rollout updated for the two-channel model.</p>
+      <p class="section-subtitle">Two-phase rollout &mdash; Phase 1 infrastructure makes Phase 2 automation possible.</p>
     </div>
-    <div class="phases-grid">
-      <div class="phase-card p1 reveal">
-        <div class="phase-badge">Phase 1</div>
-        <div class="phase-title">Minimum Viable</div>
-        <div class="phase-timeline">Now &rarr; 4 weeks</div>
-        <ul class="phase-list">
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Data cleanup of test/dummy accounts</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Basic segmentation queries (manual pull)</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Study-level dumps for active recruitment</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Eligibility drop-off visibility by question</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Dashboard fixes (spend, attribution)</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Document in-app vs outside-app touchpoints per stage</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Manual queue visibility for labs/wearable steps</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Basic email segmentation by lifecycle stage</li>
-        </ul>
+    <div class="phase-row">
+      <div class="phase-block p1 reveal">
+        <div class="phase-head">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <h3>Phase 1: Minimum Viable</h3>
+          <span class="phase-time">Now &rarr; 4 weeks</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li><strong>Data cleanup (URGENT)</strong> &mdash; Remove test/dummy accounts inflating numbers and hurting email deliverability. Establish naming conventions so they're auto-excluded going forward.</li>
+            <li><strong>Basic segmentation queries</strong> &mdash; Even manual list pulls would be a huge step. Minimum: "give me everyone not in an active study, not in washout, and has not tried Study X." Multi-select filters across both in-app and lead databases.</li>
+            <li><strong>Eligibility drop-off by question</strong> &mdash; Real-time monitoring so we catch problems within the first 10&ndash;20 people, not after 100+. Critical for every study launch.</li>
+            <li><strong>Dashboard spend accuracy</strong> &mdash; Ensure all campaigns mapped. Fix spend gaps. Implement 30-day vs all-time views.</li>
+            <li><strong>Source attribution</strong> &mdash; UTMs and OneLinks are set up for every channel since January &mdash; data needs to flow into the dashboard. Add organic social &amp; website tracking.</li>
+            <li><strong>Manual queue visibility</strong> &mdash; For studies with off-app steps (labs, wearable setup), show pending vs completed status so we know exactly who's stuck.</li>
+            <li><strong>Document in-app vs outside-app touchpoints</strong> &mdash; Map every stage's in-app and outside-app actions so the team operates from one coordinated playbook.</li>
+            <li><strong>Basic email segmentation by lifecycle stage</strong> &mdash; Stop sending one blast to everyone. Segment by active, washout, available, churned at minimum.</li>
+          </ul>
+        </div>
       </div>
-      <div class="phase-card p2 reveal">
-        <div class="phase-badge">Phase 2</div>
-        <div class="phase-title">Full System</div>
-        <div class="phase-timeline">4 weeks &rarr; 3 months</div>
-        <ul class="phase-list">
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Automated segmentation dashboard</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>One-click email campaigns from dashboard</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Washout auto-tracking &amp; participant status</li>
-          <li><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>API integration to email platform</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Automated in-app notifications at lifecycle moments</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Coordinated in-app + email drip campaigns</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>VIP tier system with badges &amp; targeted emails</li>
-          <li class="new-item"><span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span>Churn detection with auto re-engagement (both channels)</li>
-        </ul>
+      <div class="phase-block p2 reveal">
+        <div class="phase-head">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <h3>Phase 2: Full System</h3>
+          <span class="phase-time">4 wks &rarr; 3 months</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li><strong>Automated email campaigns</strong> &mdash; One-click segmented sends from dashboard. Trigger-based drip campaigns for each lifecycle stage (welcome series, washout engagement, re-enrollment prompts).</li>
+            <li><strong>Push notifications &amp; in-app messaging</strong> &mdash; Reach the "silent drop-off" people who installed but never joined. Nudge them toward studies they're eligible for.</li>
+            <li><strong>Washout period tracking</strong> &mdash; Auto-track when washout starts and ends. Notify participants when they're eligible for new studies. Engage them with public studies in the interim.</li>
+            <li><strong>Churn detection &amp; re-engagement</strong> &mdash; Flag 3+ months inactivity. Auto-trigger re-engagement campaigns with incentives like bonus heartbeats.</li>
+            <li><strong>Coordinated in-app + email drip campaigns</strong> &mdash; Unified sequences that span both channels at every lifecycle moment.</li>
+            <li><strong>VIP tier system</strong> &mdash; Badges and exclusive content for participants who've completed 3+ studies. Targeted referral asks to high-value participants.</li>
+            <li><strong>Compliance monitoring</strong> &mdash; At-risk flagging for active participants who stop completing tasks. Alert clinical team before it becomes a dropout.</li>
+            <li><strong>Auto-exclusion rules</strong> &mdash; Once someone joins a study, automatically remove from all other recruitment campaigns. No more accidental double-recruitment.</li>
+          </ul>
+        </div>
       </div>
+    </div>
+    <div class="phase-callout reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <p>Phase 1 infrastructure makes Phase 2 possible. The data cleanup, segmentation queries, and dashboard fixes are the foundation everything else builds on. We need Phase 1 right to unlock the full automation vision.</p>
     </div>
   </div>
 </section>
@@ -532,6 +594,46 @@ a{color:inherit;text-decoration:none}
       <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">In-app notifications &mdash; no lifecycle triggers</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Automated triggers at each stage</div></div></div>
       <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Push notifications &mdash; not being used</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Segmented pushes for recs &amp; re-engagement</div></div></div>
       <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Communication log &mdash; no central tracking</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Unified in-app + email touchpoint view</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="summary">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Where We Stand</div>
+      <h2 class="section-title">Summary</h2>
+      <p class="section-subtitle">What we've built, what's working, and what comes next.</p>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card positive reveal">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> What's Working</h4>
+        <ul>
+          <li>Complete 9-stage lifecycle mapped with in-app + outside-app touchpoints</li>
+          <li>Two-channel model treats participants like customers with a coordinated journey</li>
+          <li>12 segmentation rules identified as multi-select filters for targeted campaigns</li>
+          <li>Integration points documented (today vs target state for each system)</li>
+          <li>Phased roadmap with clear Phase 1 (4 weeks) and Phase 2 (3 months) priorities</li>
+          <li>Rule established: no variable metrics for inclusion/exclusion criteria going forward</li>
+        </ul>
+      </div>
+      <div class="summary-card next reveal">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Immediate Next Steps</h4>
+        <ul>
+          <li>Data cleanup: remove test/dummy accounts inflating numbers and hurting deliverability</li>
+          <li>Build basic multi-select segmentation queries (manual pulls to start)</li>
+          <li>Eligibility drop-off monitoring by question for every study launch</li>
+          <li>Fix dashboard spend accuracy and get all campaigns properly mapped</li>
+          <li>Manual queue visibility for studies with off-app steps (labs, wearables)</li>
+          <li>Stop single-blast emails &mdash; basic lifecycle stage segmentation at minimum</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="closing-quote reveal">
+      <div class="quote-mark">&ldquo;</div>
+      <blockquote>We're not asking for everything at once. We have a phased plan with clear priorities. We're defining what we need &mdash; and asking the product team to tell us how to implement it. The infrastructure we build in Phase 1 is what turns this from a manual operation into a scalable system.</blockquote>
     </div>
   </div>
 </section>
@@ -577,6 +679,13 @@ a{color:inherit;text-decoration:none}
     });
   });
   document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.stage-card.expanded').forEach(function(c){c.classList.remove('expanded')})});
+  // Filter chip toggle (interactive demo)
+  document.querySelectorAll('.filter-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){chip.classList.toggle('active')});
+  });
+  document.querySelector('.filter-reset')&&document.querySelector('.filter-reset').addEventListener('click',function(){
+    document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active')});
+  });
 })();
 </script>
 </body>
