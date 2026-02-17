@@ -437,6 +437,70 @@
       margin-top: 20px;
     }
 
+    /* Guide modal */
+    .guide-tab-bar {
+      display: flex;
+      gap: 4px;
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+    .guide-tab {
+      padding: 7px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-dim);
+      white-space: nowrap;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+    }
+    .guide-tab:hover { color: var(--text); }
+    .guide-tab.active { background: var(--accent); color: white; }
+    .guide-content { display: none; }
+    .guide-content.active { display: block; }
+    .guide-content h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .guide-content h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 14px 0 6px;
+      color: var(--accent-light);
+    }
+    .guide-content p {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .guide-content ul, .guide-content ol {
+      font-size: 13px;
+      color: var(--text-dim);
+      padding-left: 20px;
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+    .guide-content li { margin-bottom: 4px; }
+    .guide-content li strong { color: var(--text); }
+    .guide-formula {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 10px 0 14px;
+      font-size: 13px;
+      color: var(--accent-light);
+      line-height: 1.8;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -519,6 +583,7 @@
     <div class="header-sub">Lifetime Value Analytics for Clinical Research Participants</div>
   </div>
   <div class="header-right">
+    <button class="btn-settings" onclick="openGuide()">&#9432; Guide</button>
     <button class="btn-settings" onclick="openSettings()">&#9881; Edit Revenue</button>
   </div>
 </div>
@@ -911,6 +976,157 @@
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeSettings()">Cancel</button>
       <button class="btn" onclick="saveSettings()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== GUIDE MODAL ==================== -->
+<div class="modal-backdrop" id="guideModal">
+  <div class="modal" style="max-width:760px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="margin-bottom:0;">How to Use This Tool</h2>
+      <button class="btn-settings" onclick="closeGuide()" style="font-size:18px;padding:4px 10px;">&times;</button>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-tab-bar">
+        <button class="guide-tab active" data-guide="overview" onclick="switchGuideTab('overview')">Overview</button>
+        <button class="guide-tab" data-guide="calculator" onclick="switchGuideTab('calculator')">Calculator</button>
+        <button class="guide-tab" data-guide="dashboard" onclick="switchGuideTab('dashboard')">Dashboard</button>
+        <button class="guide-tab" data-guide="scenarios" onclick="switchGuideTab('scenarios')">Scenarios</button>
+        <button class="guide-tab" data-guide="amortization" onclick="switchGuideTab('amortization')">Amortization</button>
+        <button class="guide-tab" data-guide="cohorts" onclick="switchGuideTab('cohorts')">Cohorts</button>
+      </div>
+
+      <div class="guide-content active" id="guide-overview">
+        <h3>What is Participant LTV?</h3>
+        <p>Lifetime Value (LTV) measures the total revenue a participant generates over their entire relationship with Reputable. Every time a participant completes a study, the sponsoring brand pays us. The more studies a participant completes, the more valuable they become.</p>
+        <div class="guide-formula">
+          <strong>Net LTV</strong> = Total Revenue from Studies + Referral Value &minus; Acquisition Cost
+        </div>
+        <h3>Why does this matter?</h3>
+        <ul>
+          <li><strong>Acquisition cost drops</strong> the more studies a participant completes — a $18 Meta Ads cost split across 3 studies is only $6/study</li>
+          <li><strong>Referrals compound value</strong> — each referral saves ~$20 in acquisition cost we'd otherwise spend</li>
+          <li><strong>Channel comparison</strong> — organic and referral participants cost $0 to acquire, making them pure LTV from day one</li>
+          <li><strong>Retention is the multiplier</strong> — getting participants to do even 1.5 studies (vs 1.0) cuts blended CPA by 33%</li>
+        </ul>
+        <h3>Study Types &amp; Revenue</h3>
+        <table style="margin-top:8px;">
+          <thead><tr><th>Type</th><th>Revenue/Participant</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>VEP</td><td>~$100</td><td>Sleep Mushrooms+, Tapping, NatPat, Sensate, LyfeFuel, Hapbee</td></tr>
+            <tr><td>RWE</td><td>~$150</td><td>Rootless, Clearlight, Quantum Upgrade, ProleevaMax</td></tr>
+            <tr><td>RCT</td><td>~$300</td><td>Enhanced Brew, Peptide Supplement, Melatonin/Somato</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:10px;font-size:12px;color:var(--text-dim);">Revenue values are editable — click the <strong>Edit Revenue</strong> button in the top right to adjust.</p>
+      </div>
+
+      <div class="guide-content" id="guide-calculator">
+        <h3>Calculator Tab</h3>
+        <p>Model an individual participant's journey and see their lifetime value in real time.</p>
+        <h4>How to use it:</h4>
+        <ol>
+          <li><strong>Pick an acquisition source</strong> — the cost auto-fills based on channel averages (Meta Ads = $18, Newsletter = $5, Organic/Referral = $0). You can override the cost manually.</li>
+          <li><strong>Check off completed studies</strong> — select every study this participant has finished. Revenue from each study is shown next to its name.</li>
+          <li><strong>Select active studies</strong> — if they're currently enrolled in a recruiting study (Somato, ProleevaMax, Tapping), select those too.</li>
+          <li><strong>Enter referrals</strong> — each referral is worth ~$20 in saved acquisition cost.</li>
+          <li><strong>Click Calculate LTV</strong> — results update on the right.</li>
+        </ol>
+        <h4>What the results mean:</h4>
+        <ul>
+          <li><strong>Total Revenue</strong> — sum of all completed study revenue + referral value</li>
+          <li><strong>Total Cost</strong> — what we spent to acquire this participant</li>
+          <li><strong>Net LTV</strong> — revenue minus cost (the real value)</li>
+          <li><strong>LTV Ratio</strong> — revenue divided by cost. Higher = better. Organic participants show &infin; (infinite) since cost is $0</li>
+          <li><strong>Projected LTV</strong> — what the LTV would be if they complete one more study at the average revenue</li>
+        </ul>
+        <p>The bar chart below shows how the acquisition cost splits across 1-5 studies, with the average revenue per study as a dashed line — you can see exactly when a participant becomes profitable.</p>
+      </div>
+
+      <div class="guide-content" id="guide-dashboard">
+        <h3>Dashboard Tab</h3>
+        <p>Bird's-eye view of your entire participant ecosystem.</p>
+        <h4>Top metrics:</h4>
+        <ul>
+          <li><strong>Total Participants</strong> — 800+ in the ecosystem, 730 onboarded</li>
+          <li><strong>Avg LTV / Participant</strong> — weighted average across all channels</li>
+          <li><strong>Avg Studies / Participant</strong> — how many studies the typical participant completes, plus the repeat rate</li>
+          <li><strong>Blended CPA</strong> — total ad spend ($22,332.57) divided by total onboarded. This is the real cost per participant when you include $0-spend studies</li>
+          <li><strong>Referrals</strong> — 17 referrals to date, with dollar value of saved acquisition costs</li>
+          <li><strong>$0 Spend Studies</strong> — 7 out of 15 studies recruited without any ad spend</li>
+        </ul>
+        <h4>Charts &amp; tables:</h4>
+        <ul>
+          <li><strong>LTV by Acquisition Source</strong> — which channels produce the highest-value participants? (Spoiler: referrals lead)</li>
+          <li><strong>Revenue by Study Type</strong> — how revenue splits across VEP, RWE, and RCT studies</li>
+          <li><strong>Spend Efficiency Table</strong> — per-channel breakdown with participants, spend, CPA, avg studies, avg LTV, and ROI</li>
+          <li><strong>Ecosystem Value Projector</strong> — enter a target participant count to see projected total ecosystem value</li>
+        </ul>
+      </div>
+
+      <div class="guide-content" id="guide-scenarios">
+        <h3>Scenarios Tab</h3>
+        <p>Play with "what if" assumptions to see how changes in retention, referrals, and growth impact LTV.</p>
+        <h4>The 5 sliders:</h4>
+        <ul>
+          <li><strong>Repeat Study Rate</strong> — % of completers who go on to do a second study</li>
+          <li><strong>Referral Rate</strong> — % of participants who refer someone new</li>
+          <li><strong>Avg Studies Per Participant</strong> — the core retention metric. Moving this from 1.0 to 1.5 has massive impact</li>
+          <li><strong>Churn Rate</strong> — % who never return after their first study</li>
+          <li><strong>Monthly New Participants</strong> — recruitment volume per month</li>
+        </ul>
+        <h4>Quick-apply presets:</h4>
+        <ul>
+          <li><strong>Moderate Growth</strong> — 25% repeat rate, 1.3 avg studies, 80/month intake</li>
+          <li><strong>Aggressive Growth</strong> — 40% repeat rate, 1.8 avg studies, 150/month</li>
+          <li><strong>Referral Push</strong> — 10% referral rate, showing compounding value of word-of-mouth</li>
+          <li><strong>Retention Focus</strong> — 35% repeat rate, 40% churn, showing what happens when you keep participants engaged</li>
+        </ul>
+        <p>The 12-month projection chart plots your scenario against an optimistic (+30%) case and a flat baseline (no growth) so you can see the range of outcomes.</p>
+      </div>
+
+      <div class="guide-content" id="guide-amortization">
+        <h3>Cost Amortization Tab</h3>
+        <p><strong>This is the key insight for presenting to leadership.</strong> It shows how acquisition cost per study decreases as participants complete more studies.</p>
+        <h4>The core idea:</h4>
+        <div class="guide-formula">
+          Participant does 1 study &rarr; $18 cost per study<br>
+          Participant does 2 studies &rarr; $9 cost per study<br>
+          Participant does 3 studies &rarr; $6 cost per study<br>
+          Participant does 5 studies &rarr; $3.60 cost per study
+        </div>
+        <h4>Two key charts:</h4>
+        <ul>
+          <li><strong>Amortization Curve</strong> — shows cost-per-study dropping for each channel (Meta standard, Meta complex, Newsletter). The curve flattens after ~3 studies, showing diminishing returns slow but the savings remain significant.</li>
+          <li><strong>Profitability Crossover</strong> — overlays amortized cost against average revenue per study. The purple line (cumulative profit) shows exactly when a participant becomes profitable. For Meta Ads at $18, a participant is profitable from their very first study since average revenue (~$150) exceeds the cost.</li>
+        </ul>
+        <p>The table at the bottom shows break-even points by channel. Organic and referral participants are <strong>instantly profitable</strong> since they cost $0 to acquire.</p>
+      </div>
+
+      <div class="guide-content" id="guide-cohorts">
+        <h3>Cohorts Tab</h3>
+        <p>Groups participants by the quarter they entered the ecosystem, answering: <em>"Are we getting better at retaining participants over time?"</em></p>
+        <h4>Cohort table columns:</h4>
+        <ul>
+          <li><strong>Entered</strong> — how many participants joined in that quarter</li>
+          <li><strong>Still Active</strong> — how many are still engaged today</li>
+          <li><strong>1 Study / 2+ Studies</strong> — completion distribution</li>
+          <li><strong>Avg LTV</strong> — average lifetime value for the cohort</li>
+          <li><strong>Retention</strong> — % still active (green = 50%+, yellow = 30-50%, red = below 30%)</li>
+        </ul>
+        <h4>Two charts:</h4>
+        <ul>
+          <li><strong>Retention Curve</strong> — tracks what % of each cohort remains at 1, 3, 6, 9, and 12 months. If newer cohorts have higher lines, retention is improving.</li>
+          <li><strong>LTV by Cohort</strong> — bar chart comparing average LTV across cohorts. Earlier cohorts have had more time to accumulate value, so expect them to be higher. What matters is the trend in newer cohorts.</li>
+        </ul>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">Note: Cohort data is pre-loaded with representative values. Update with real data as it becomes available.</p>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" onclick="closeGuide()">Got it</button>
     </div>
   </div>
 </div>
@@ -1789,6 +2005,25 @@ function saveSettings() {
 // Close modal on backdrop click
 document.getElementById('settingsModal').addEventListener('click', function(e) {
   if (e.target === this) closeSettings();
+});
+
+// ============================================================
+// GUIDE MODAL
+// ============================================================
+function openGuide() {
+  document.getElementById('guideModal').classList.add('active');
+}
+function closeGuide() {
+  document.getElementById('guideModal').classList.remove('active');
+}
+function switchGuideTab(tab) {
+  document.querySelectorAll('.guide-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.guide-tab[data-guide="${tab}"]`).classList.add('active');
+  document.getElementById('guide-' + tab).classList.add('active');
+}
+document.getElementById('guideModal').addEventListener('click', function(e) {
+  if (e.target === this) closeGuide();
 });
 
 // ============================================================
