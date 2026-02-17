@@ -501,6 +501,206 @@
       line-height: 1.8;
     }
 
+    /* Leaderboard */
+    .lb-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .lb-search {
+      flex: 1;
+      min-width: 200px;
+      padding: 9px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+    }
+    .lb-search::placeholder { color: var(--text-dim); }
+    .lb-search:focus { outline: none; border-color: var(--accent); }
+    .lb-filter {
+      padding: 9px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .lb-filter:focus { outline: none; border-color: var(--accent); }
+    .lb-table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .lb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .lb-table thead { background: var(--surface2); }
+    .lb-table th {
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      position: relative;
+    }
+    .lb-table th:hover { color: var(--text); }
+    .lb-table th .sort-arrow {
+      margin-left: 4px;
+      font-size: 10px;
+      opacity: 0.3;
+    }
+    .lb-table th.sort-active .sort-arrow { opacity: 1; color: var(--accent-light); }
+    .lb-table td {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .lb-table tbody tr {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .lb-table tbody tr:hover { background: var(--surface2); }
+    .lb-table tbody tr.lb-expanded { background: var(--surface2); }
+    .lb-rank {
+      font-weight: 700;
+      color: var(--text-dim);
+      width: 40px;
+      text-align: center;
+    }
+    .lb-rank-1 { color: #ffd700; }
+    .lb-rank-2 { color: #c0c0c0; }
+    .lb-rank-3 { color: #cd7f32; }
+    .lb-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .lb-detail-row td {
+      padding: 0;
+      border-top: none;
+    }
+    .lb-detail-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 4px 14px 14px;
+      padding: 16px 20px;
+    }
+    .lb-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .lb-detail-section h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .lb-study-list {
+      list-style: none;
+      padding: 0;
+    }
+    .lb-study-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 12px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    .lb-study-list li:last-child { border-bottom: none; }
+    .lb-study-list li .study-name { color: var(--text); }
+    .lb-study-list li .study-rev { color: var(--green); font-weight: 600; }
+    .lb-stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .lb-stat-row:last-child { border-bottom: none; }
+    .lb-stat-label { color: var(--text-dim); }
+    .lb-stat-value { color: var(--text); font-weight: 600; }
+    .lb-add-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .lb-add-form .form-group { margin-bottom: 0; }
+    .lb-add-form label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .lb-add-form input, .lb-add-form select {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+    }
+    .lb-add-form input:focus, .lb-add-form select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .lb-studies-pick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .lb-studies-pick label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: none;
+      letter-spacing: 0;
+      cursor: pointer;
+      background: var(--surface2);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: all 0.15s;
+    }
+    .lb-studies-pick label:has(input:checked) {
+      background: var(--indigo-bg);
+      border-color: var(--accent);
+      color: var(--accent-light);
+    }
+    .lb-studies-pick input { display: none; }
+    .lb-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+    .lb-count {
+      font-size: 12px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
@@ -598,6 +798,7 @@
   <button class="tab" data-tab="scenarios">Scenarios</button>
   <button class="tab" data-tab="amortization">Cost Amortization</button>
   <button class="tab" data-tab="cohorts">Cohorts</button>
+  <button class="tab" data-tab="leaderboard">Leaderboard</button>
   <button class="tab" data-tab="phase2">Phase 2 <span class="coming-soon">Soon</span></button>
 </div>
 
@@ -910,6 +1111,113 @@
   </div>
 </div>
 
+<!-- ==================== LEADERBOARD TAB ==================== -->
+<div class="tab-content" id="tab-leaderboard">
+  <!-- Metrics row -->
+  <div class="metrics" id="lb-metrics"></div>
+
+  <!-- Toolbar: search, filters, add button -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <h3 style="margin-bottom:0;">Participant Leaderboard</h3>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span class="lb-count" id="lb-count"></span>
+        <button class="btn btn-outline" onclick="toggleAddForm()" id="lb-add-toggle">+ Add Participant</button>
+      </div>
+    </div>
+
+    <!-- Add/Edit Form (hidden by default) -->
+    <div id="lb-add-form-wrap" style="display:none;margin-bottom:16px;padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h4 style="font-size:13px;color:var(--text);" id="lb-form-title">Add New Participant</h4>
+        <button class="btn-settings" onclick="cancelAddForm()" style="font-size:16px;padding:2px 8px;">&times;</button>
+      </div>
+      <div class="lb-add-form">
+        <div class="form-group">
+          <label>Participant Name</label>
+          <input type="text" id="lb-f-name" placeholder="e.g. Jordan M.">
+        </div>
+        <div class="form-group">
+          <label>Acquisition Channel</label>
+          <select id="lb-f-channel">
+            <option value="Meta Ads">Meta Ads</option>
+            <option value="Newsletter">Newsletter</option>
+            <option value="Organic">Organic</option>
+            <option value="Referral">Referral</option>
+            <option value="Meta (Complex)">Meta (Complex)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Acquisition Cost ($)</label>
+          <input type="number" id="lb-f-cost" value="18" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label>Referrals Made</label>
+          <input type="number" id="lb-f-referrals" value="0" min="0" step="1">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="lb-f-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Joined</label>
+          <input type="date" id="lb-f-joined">
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <label style="display:block;font-size:11px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Completed Studies</label>
+        <div class="lb-studies-pick" id="lb-f-studies"></div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-outline" onclick="cancelAddForm()">Cancel</button>
+        <button class="btn" onclick="saveParticipant()" id="lb-form-save">Add Participant</button>
+      </div>
+      <input type="hidden" id="lb-f-edit-id" value="">
+    </div>
+
+    <!-- Toolbar: search + filters -->
+    <div class="lb-toolbar">
+      <input type="text" class="lb-search" id="lb-search" placeholder="Search by name..." oninput="renderLeaderboard()">
+      <select class="lb-filter" id="lb-filter-channel" onchange="renderLeaderboard()">
+        <option value="">All Channels</option>
+        <option value="Meta Ads">Meta Ads</option>
+        <option value="Newsletter">Newsletter</option>
+        <option value="Organic">Organic</option>
+        <option value="Referral">Referral</option>
+        <option value="Meta (Complex)">Meta (Complex)</option>
+      </select>
+      <select class="lb-filter" id="lb-filter-status" onchange="renderLeaderboard()">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th data-sort="rank" class="sort-active" onclick="sortLeaderboard('rank')"># <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="name" onclick="sortLeaderboard('name')">Name <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="channel" onclick="sortLeaderboard('channel')">Channel <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="studies" onclick="sortLeaderboard('studies')">Studies <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="revenue" onclick="sortLeaderboard('revenue')">Revenue <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="referrals" onclick="sortLeaderboard('referrals')">Referrals <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="netLTV" onclick="sortLeaderboard('netLTV')">Net LTV <span class="sort-arrow">&#9660;</span></th>
+            <th data-sort="status" onclick="sortLeaderboard('status')">Status <span class="sort-arrow">&#9660;</span></th>
+            <th style="width:40px;"></th>
+          </tr>
+        </thead>
+        <tbody id="lb-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== PHASE 2 TAB ==================== -->
 <div class="tab-content" id="tab-phase2">
   <div style="text-align:center;padding:40px 20px;">
@@ -996,6 +1304,7 @@
         <button class="guide-tab" data-guide="scenarios" onclick="switchGuideTab('scenarios')">Scenarios</button>
         <button class="guide-tab" data-guide="amortization" onclick="switchGuideTab('amortization')">Amortization</button>
         <button class="guide-tab" data-guide="cohorts" onclick="switchGuideTab('cohorts')">Cohorts</button>
+        <button class="guide-tab" data-guide="leaderboard" onclick="switchGuideTab('leaderboard')">Leaderboard</button>
       </div>
 
       <div class="guide-content active" id="guide-overview">
@@ -1123,6 +1432,46 @@
         </ul>
         <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">Note: Cohort data is pre-loaded with representative values. Update with real data as it becomes available.</p>
       </div>
+
+      <div class="guide-content" id="guide-leaderboard">
+        <h3>Leaderboard Tab</h3>
+        <p>An internal tool for tracking your highest-performing participants by name. See who's generating the most value, completing the most studies, and referring the most new participants.</p>
+        <h4>Table columns (click any to sort):</h4>
+        <ul>
+          <li><strong>#</strong> — rank (gold/silver/bronze for top 3)</li>
+          <li><strong>Name</strong> — participant identifier</li>
+          <li><strong>Channel</strong> — how they were acquired (Meta, Newsletter, Organic, Referral)</li>
+          <li><strong>Studies</strong> — number of completed studies</li>
+          <li><strong>Revenue</strong> — total study revenue generated</li>
+          <li><strong>Referrals</strong> — number of new participants they've referred</li>
+          <li><strong>Net LTV</strong> — revenue + referral value minus acquisition cost (default sort)</li>
+          <li><strong>Status</strong> — active or inactive</li>
+        </ul>
+        <h4>Sorting:</h4>
+        <p>Click any column header to sort by that column. Click again to reverse the sort order. The active sort column is highlighted with a purple arrow.</p>
+        <h4>Search &amp; filters:</h4>
+        <ul>
+          <li><strong>Search</strong> — type to filter by name in real time</li>
+          <li><strong>Channel filter</strong> — show only participants from a specific acquisition channel</li>
+          <li><strong>Status filter</strong> — show only active or inactive participants</li>
+        </ul>
+        <h4>Participant detail cards:</h4>
+        <p>Click any row to expand a detailed card showing:</p>
+        <ul>
+          <li><strong>Study History</strong> — every study they've completed with revenue</li>
+          <li><strong>LTV Breakdown</strong> — revenue + referral value - cost = net LTV</li>
+          <li><strong>Profile</strong> — channel, join date, LTV ratio, and edit/delete buttons</li>
+        </ul>
+        <h4>Adding &amp; editing participants:</h4>
+        <ul>
+          <li>Click <strong>+ Add Participant</strong> to open the form — enter name, channel, cost, referrals, join date, and check off completed studies</li>
+          <li>The acquisition cost auto-fills based on the selected channel</li>
+          <li>To <strong>edit</strong>, expand a participant's row and click the Edit button</li>
+          <li>To <strong>delete</strong>, expand a row and click Delete (with confirmation)</li>
+          <li>All changes are saved to your browser's local storage automatically</li>
+        </ul>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:12px;">The leaderboard comes pre-loaded with 20 sample participants. Replace them with real participant data as it becomes available.</p>
+      </div>
     </div>
 
     <div class="modal-actions">
@@ -1223,6 +1572,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     if (tab.dataset.tab === 'scenarios') initScenarios();
     if (tab.dataset.tab === 'amortization') initAmortization();
     if (tab.dataset.tab === 'cohorts') initCohorts();
+    if (tab.dataset.tab === 'leaderboard') initLeaderboard();
   });
 });
 
@@ -2024,6 +2374,320 @@ function switchGuideTab(tab) {
 }
 document.getElementById('guideModal').addEventListener('click', function(e) {
   if (e.target === this) closeGuide();
+});
+
+// ============================================================
+// LEADERBOARD
+// ============================================================
+const DEFAULT_PARTICIPANTS = [
+  { id: 'p1',  name: 'Sarah K.',     channel: 'Referral',       cost: 0,   studyIds: ['sleep-mushrooms','rootless','enhanced-brew','tapping'], referrals: 4, status: 'active',   joined: '2025-01-15' },
+  { id: 'p2',  name: 'Marcus T.',    channel: 'Newsletter',     cost: 5,   studyIds: ['clearlight','peptide-supplement','quantum-upgrade'], referrals: 2, status: 'active',   joined: '2025-02-03' },
+  { id: 'p3',  name: 'Priya D.',     channel: 'Organic',        cost: 0,   studyIds: ['hapbee','sensate','enhanced-brew'],                   referrals: 3, status: 'active',   joined: '2025-01-22' },
+  { id: 'p4',  name: 'Jordan M.',    channel: 'Meta Ads',       cost: 18,  studyIds: ['natpat','lyfefuel','rootless','somato'],               referrals: 1, status: 'active',   joined: '2025-03-10' },
+  { id: 'p5',  name: 'Aisha N.',     channel: 'Referral',       cost: 0,   studyIds: ['sleep-mushrooms','clearlight','peptide-supplement'],   referrals: 5, status: 'active',   joined: '2025-02-18' },
+  { id: 'p6',  name: 'Tyler R.',     channel: 'Meta Ads',       cost: 18,  studyIds: ['sensate','quantum-upgrade','enhanced-brew'],           referrals: 0, status: 'active',   joined: '2025-04-05' },
+  { id: 'p7',  name: 'Lin W.',       channel: 'Newsletter',     cost: 5,   studyIds: ['hapbee','rootless'],                                  referrals: 2, status: 'active',   joined: '2025-03-22' },
+  { id: 'p8',  name: 'Carlos G.',    channel: 'Organic',        cost: 0,   studyIds: ['sleep-mushrooms','natpat','lyfefuel'],                referrals: 1, status: 'active',   joined: '2025-01-08' },
+  { id: 'p9',  name: 'Emily F.',     channel: 'Meta Ads',       cost: 18,  studyIds: ['clearlight','peptide-supplement'],                    referrals: 0, status: 'active',   joined: '2025-05-14' },
+  { id: 'p10', name: 'Devon A.',     channel: 'Referral',       cost: 0,   studyIds: ['enhanced-brew','quantum-upgrade'],                    referrals: 3, status: 'active',   joined: '2025-04-20' },
+  { id: 'p11', name: 'Mika S.',      channel: 'Meta Ads',       cost: 18,  studyIds: ['sensate','hapbee'],                                   referrals: 0, status: 'inactive', joined: '2025-02-28' },
+  { id: 'p12', name: 'Rachel P.',    channel: 'Newsletter',     cost: 5,   studyIds: ['sleep-mushrooms','rootless','proleeva-max'],          referrals: 1, status: 'active',   joined: '2025-06-01' },
+  { id: 'p13', name: 'Omar H.',      channel: 'Organic',        cost: 0,   studyIds: ['natpat','clearlight'],                                referrals: 0, status: 'inactive', joined: '2025-03-15' },
+  { id: 'p14', name: 'Jessica L.',   channel: 'Meta (Complex)', cost: 120, studyIds: ['peptide-supplement'],                                 referrals: 0, status: 'active',   joined: '2025-07-10' },
+  { id: 'p15', name: 'Andre B.',     channel: 'Meta Ads',       cost: 18,  studyIds: ['lyfefuel','quantum-upgrade','somato'],                referrals: 1, status: 'active',   joined: '2025-04-30' },
+  { id: 'p16', name: 'Nina V.',      channel: 'Referral',       cost: 0,   studyIds: ['hapbee','sleep-mushrooms','clearlight','rootless'],   referrals: 2, status: 'active',   joined: '2025-05-22' },
+  { id: 'p17', name: 'James C.',     channel: 'Meta Ads',       cost: 18,  studyIds: ['sensate'],                                            referrals: 0, status: 'inactive', joined: '2025-06-18' },
+  { id: 'p18', name: 'Fatima Z.',    channel: 'Newsletter',     cost: 5,   studyIds: ['enhanced-brew','natpat','proleeva-max'],              referrals: 2, status: 'active',   joined: '2025-03-05' },
+  { id: 'p19', name: 'Lucas E.',     channel: 'Organic',        cost: 0,   studyIds: ['rootless','peptide-supplement','tapping'],             referrals: 1, status: 'active',   joined: '2025-07-28' },
+  { id: 'p20', name: 'Hannah O.',    channel: 'Meta Ads',       cost: 18,  studyIds: ['sleep-mushrooms','lyfefuel'],                         referrals: 0, status: 'active',   joined: '2025-08-03' },
+];
+
+let participants = JSON.parse(localStorage.getItem('ltv-participants')) || JSON.parse(JSON.stringify(DEFAULT_PARTICIPANTS));
+let lbSortKey = 'netLTV';
+let lbSortDesc = true;
+let lbExpandedId = null;
+let lbInitialized = false;
+let lbEditId = null;
+
+function getParticipantCalc(p) {
+  const rev = p.studyIds.reduce((sum, sid) => {
+    const s = studies.find(st => st.id === sid);
+    return sum + (s ? s.revenue : 0);
+  }, 0);
+  const refVal = p.referrals * referralValue;
+  const netLTV = rev + refVal - p.cost;
+  const ratio = p.cost > 0 ? ((rev + refVal) / p.cost) : Infinity;
+  return { revenue: rev, refValue: refVal, netLTV, ratio, studyCount: p.studyIds.length };
+}
+
+function initLeaderboard() {
+  if (lbInitialized) return;
+  lbInitialized = true;
+  populateFormStudies();
+  renderLeaderboard();
+}
+
+function populateFormStudies() {
+  const wrap = document.getElementById('lb-f-studies');
+  wrap.innerHTML = studies.filter(s => s.status !== 'planned').map(s =>
+    `<label><input type="checkbox" value="${s.id}"> ${s.name} <span style="color:var(--green);font-size:11px;">$${s.revenue}</span></label>`
+  ).join('');
+}
+
+function renderLeaderboard() {
+  const search = document.getElementById('lb-search').value.toLowerCase();
+  const chanFilter = document.getElementById('lb-filter-channel').value;
+  const statusFilter = document.getElementById('lb-filter-status').value;
+
+  let list = participants.map(p => ({ ...p, calc: getParticipantCalc(p) }));
+
+  // Filter
+  if (search) list = list.filter(p => p.name.toLowerCase().includes(search));
+  if (chanFilter) list = list.filter(p => p.channel === chanFilter);
+  if (statusFilter) list = list.filter(p => p.status === statusFilter);
+
+  // Sort
+  list.sort((a, b) => {
+    let va, vb;
+    switch (lbSortKey) {
+      case 'name':      va = a.name.toLowerCase(); vb = b.name.toLowerCase(); break;
+      case 'channel':   va = a.channel; vb = b.channel; break;
+      case 'studies':   va = a.calc.studyCount; vb = b.calc.studyCount; break;
+      case 'revenue':   va = a.calc.revenue; vb = b.calc.revenue; break;
+      case 'referrals': va = a.referrals; vb = b.referrals; break;
+      case 'netLTV':    va = a.calc.netLTV; vb = b.calc.netLTV; break;
+      case 'status':    va = a.status; vb = b.status; break;
+      default:          va = a.calc.netLTV; vb = b.calc.netLTV;
+    }
+    if (typeof va === 'string') return lbSortDesc ? vb.localeCompare(va) : va.localeCompare(vb);
+    return lbSortDesc ? vb - va : va - vb;
+  });
+
+  // Update column sort indicators
+  document.querySelectorAll('.lb-table th').forEach(th => {
+    th.classList.toggle('sort-active', th.dataset.sort === lbSortKey);
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.innerHTML = (th.dataset.sort === lbSortKey && !lbSortDesc) ? '&#9650;' : '&#9660;';
+  });
+
+  // Count
+  document.getElementById('lb-count').textContent = `${list.length} of ${participants.length} participants`;
+
+  // Metrics
+  const allCalcs = participants.map(p => getParticipantCalc(p));
+  const totalRev = allCalcs.reduce((s, c) => s + c.revenue, 0);
+  const avgLTV = allCalcs.length ? (allCalcs.reduce((s, c) => s + c.netLTV, 0) / allCalcs.length) : 0;
+  const topPerformer = participants.reduce((best, p) => {
+    const c = getParticipantCalc(p);
+    return c.netLTV > (best.ltv || 0) ? { name: p.name, ltv: c.netLTV } : best;
+  }, {});
+  const avgStudies = allCalcs.length ? (allCalcs.reduce((s, c) => s + c.studyCount, 0) / allCalcs.length) : 0;
+  const totalRefs = participants.reduce((s, p) => s + p.referrals, 0);
+
+  document.getElementById('lb-metrics').innerHTML = `
+    <div class="metric-card">
+      <div class="metric-label">Total Participants</div>
+      <div class="metric-value">${participants.length}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg Net LTV</div>
+      <div class="metric-value" style="color:var(--green);">$${avgLTV.toFixed(0)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Top Performer</div>
+      <div class="metric-value" style="font-size:16px;">${topPerformer.name || '—'}</div>
+      <div style="font-size:11px;color:var(--text-dim);">$${(topPerformer.ltv||0).toLocaleString()} LTV</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg Studies</div>
+      <div class="metric-value">${avgStudies.toFixed(1)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Total Referrals</div>
+      <div class="metric-value">${totalRefs}</div>
+      <div style="font-size:11px;color:var(--text-dim);">$${(totalRefs * referralValue).toLocaleString()} saved</div>
+    </div>
+  `;
+
+  // Render rows
+  const tbody = document.getElementById('lb-tbody');
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" class="lb-empty">No participants match your filters</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  list.forEach((p, i) => {
+    const rank = i + 1;
+    const c = p.calc;
+    const rankClass = rank <= 3 ? ` lb-rank-${rank}` : '';
+    const statusBadge = p.status === 'active'
+      ? '<span class="badge badge-green">Active</span>'
+      : '<span class="badge badge-red">Inactive</span>';
+    const isExpanded = lbExpandedId === p.id;
+    const expandIcon = isExpanded ? '&#9650;' : '&#9660;';
+
+    html += `<tr class="${isExpanded ? 'lb-expanded' : ''}" onclick="toggleParticipantDetail('${p.id}')">
+      <td class="lb-rank${rankClass}">${rank}</td>
+      <td class="lb-name">${p.name}</td>
+      <td><span class="badge badge-blue">${p.channel}</span></td>
+      <td>${c.studyCount}</td>
+      <td>$${c.revenue.toLocaleString()}</td>
+      <td>${p.referrals}</td>
+      <td style="font-weight:700;color:${c.netLTV >= 0 ? 'var(--green)' : 'var(--red)'};">$${c.netLTV.toLocaleString()}</td>
+      <td>${statusBadge}</td>
+      <td style="font-size:10px;color:var(--text-dim);">${expandIcon}</td>
+    </tr>`;
+
+    if (isExpanded) {
+      const studyList = p.studyIds.map(sid => {
+        const s = studies.find(st => st.id === sid);
+        return s ? `<li><span class="study-name">${s.name}</span><span class="study-rev">+$${s.revenue}</span></li>` : '';
+      }).join('');
+
+      html += `<tr class="lb-detail-row"><td colspan="9">
+        <div class="lb-detail-card">
+          <div class="lb-detail-grid">
+            <div class="lb-detail-section">
+              <h4>Study History</h4>
+              <ul class="lb-study-list">${studyList || '<li style="color:var(--text-dim);">No studies completed</li>'}</ul>
+            </div>
+            <div class="lb-detail-section">
+              <h4>LTV Breakdown</h4>
+              <div class="lb-stat-row"><span class="lb-stat-label">Study Revenue</span><span class="lb-stat-value">$${c.revenue.toLocaleString()}</span></div>
+              <div class="lb-stat-row"><span class="lb-stat-label">Referral Value (${p.referrals} × $${referralValue})</span><span class="lb-stat-value">$${c.refValue}</span></div>
+              <div class="lb-stat-row"><span class="lb-stat-label">Acquisition Cost</span><span class="lb-stat-value" style="color:var(--red);">-$${p.cost}</span></div>
+              <div class="lb-stat-row" style="border-top:2px solid var(--border);padding-top:8px;margin-top:4px;">
+                <span class="lb-stat-label" style="font-weight:700;color:var(--text);">Net LTV</span>
+                <span class="lb-stat-value" style="color:var(--green);font-size:16px;">$${c.netLTV.toLocaleString()}</span>
+              </div>
+            </div>
+            <div class="lb-detail-section">
+              <h4>Profile</h4>
+              <div class="lb-stat-row"><span class="lb-stat-label">Channel</span><span class="lb-stat-value">${p.channel}</span></div>
+              <div class="lb-stat-row"><span class="lb-stat-label">Joined</span><span class="lb-stat-value">${p.joined || '—'}</span></div>
+              <div class="lb-stat-row"><span class="lb-stat-label">LTV Ratio</span><span class="lb-stat-value">${c.ratio === Infinity ? '∞' : c.ratio.toFixed(1) + 'x'}</span></div>
+              <div class="lb-stat-row"><span class="lb-stat-label">Status</span><span class="lb-stat-value">${p.status}</span></div>
+              <div style="margin-top:10px;display:flex;gap:6px;">
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 12px;" onclick="event.stopPropagation();editParticipant('${p.id}')">Edit</button>
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 12px;color:var(--red);border-color:var(--red);" onclick="event.stopPropagation();deleteParticipant('${p.id}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td></tr>`;
+    }
+  });
+  tbody.innerHTML = html;
+}
+
+function sortLeaderboard(key) {
+  if (lbSortKey === key) {
+    lbSortDesc = !lbSortDesc;
+  } else {
+    lbSortKey = key;
+    lbSortDesc = true;
+  }
+  renderLeaderboard();
+}
+
+function toggleParticipantDetail(id) {
+  lbExpandedId = lbExpandedId === id ? null : id;
+  renderLeaderboard();
+}
+
+function toggleAddForm() {
+  const wrap = document.getElementById('lb-add-form-wrap');
+  if (wrap.style.display === 'none') {
+    lbEditId = null;
+    document.getElementById('lb-f-edit-id').value = '';
+    document.getElementById('lb-form-title').textContent = 'Add New Participant';
+    document.getElementById('lb-form-save').textContent = 'Add Participant';
+    document.getElementById('lb-f-name').value = '';
+    document.getElementById('lb-f-channel').value = 'Meta Ads';
+    document.getElementById('lb-f-cost').value = '18';
+    document.getElementById('lb-f-referrals').value = '0';
+    document.getElementById('lb-f-status').value = 'active';
+    document.getElementById('lb-f-joined').value = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('#lb-f-studies input').forEach(cb => cb.checked = false);
+    wrap.style.display = 'block';
+    document.getElementById('lb-f-name').focus();
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+function cancelAddForm() {
+  document.getElementById('lb-add-form-wrap').style.display = 'none';
+  lbEditId = null;
+}
+
+function editParticipant(id) {
+  const p = participants.find(x => x.id === id);
+  if (!p) return;
+  lbEditId = id;
+  document.getElementById('lb-f-edit-id').value = id;
+  document.getElementById('lb-form-title').textContent = 'Edit Participant';
+  document.getElementById('lb-form-save').textContent = 'Save Changes';
+  document.getElementById('lb-f-name').value = p.name;
+  document.getElementById('lb-f-channel').value = p.channel;
+  document.getElementById('lb-f-cost').value = p.cost;
+  document.getElementById('lb-f-referrals').value = p.referrals;
+  document.getElementById('lb-f-status').value = p.status;
+  document.getElementById('lb-f-joined').value = p.joined || '';
+  document.querySelectorAll('#lb-f-studies input').forEach(cb => {
+    cb.checked = p.studyIds.includes(cb.value);
+  });
+  document.getElementById('lb-add-form-wrap').style.display = 'block';
+  document.getElementById('lb-f-name').focus();
+}
+
+function deleteParticipant(id) {
+  if (!confirm('Remove this participant from the leaderboard?')) return;
+  participants = participants.filter(p => p.id !== id);
+  localStorage.setItem('ltv-participants', JSON.stringify(participants));
+  if (lbExpandedId === id) lbExpandedId = null;
+  renderLeaderboard();
+}
+
+function saveParticipant() {
+  const name = document.getElementById('lb-f-name').value.trim();
+  if (!name) { document.getElementById('lb-f-name').focus(); return; }
+
+  const channel = document.getElementById('lb-f-channel').value;
+  const cost = parseFloat(document.getElementById('lb-f-cost').value) || 0;
+  const referrals = parseInt(document.getElementById('lb-f-referrals').value) || 0;
+  const status = document.getElementById('lb-f-status').value;
+  const joined = document.getElementById('lb-f-joined').value;
+  const studyIds = [];
+  document.querySelectorAll('#lb-f-studies input:checked').forEach(cb => studyIds.push(cb.value));
+
+  if (lbEditId) {
+    const p = participants.find(x => x.id === lbEditId);
+    if (p) {
+      p.name = name;
+      p.channel = channel;
+      p.cost = cost;
+      p.referrals = referrals;
+      p.status = status;
+      p.joined = joined;
+      p.studyIds = studyIds;
+    }
+  } else {
+    const id = 'p' + Date.now();
+    participants.push({ id, name, channel, cost, studyIds, referrals, status, joined });
+  }
+
+  localStorage.setItem('ltv-participants', JSON.stringify(participants));
+  cancelAddForm();
+  renderLeaderboard();
+}
+
+// Auto-update cost when channel changes in add form
+document.getElementById('lb-f-channel').addEventListener('change', function() {
+  if (lbEditId) return;
+  const map = { 'Meta Ads': 18, 'Newsletter': 5, 'Organic': 0, 'Referral': 0, 'Meta (Complex)': 120 };
+  document.getElementById('lb-f-cost').value = map[this.value] || 0;
 });
 
 // ============================================================
