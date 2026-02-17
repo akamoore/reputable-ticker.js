@@ -70,6 +70,7 @@
     .badge-red { background: var(--red-bg); color: var(--red); }
     .badge-blue { background: var(--blue-bg); color: var(--blue); }
     .badge-gray { background: var(--gray-bg); color: var(--gray); }
+    .badge-accent { background: rgba(108,92,231,0.12); color: var(--accent); }
 
     /* Metric Cards */
     .metrics-grid {
@@ -172,7 +173,6 @@
 
     tr.row-outlier { background: var(--yellow-bg); }
     tr.row-free { background: var(--green-bg); }
-    tr.row-pending { background: var(--gray-bg); }
 
     .totals-row td {
       font-weight: 700;
@@ -220,31 +220,12 @@
     .progress-fill.yellow { background: var(--yellow); }
     .progress-fill.red { background: var(--red); }
     .progress-fill.blue { background: var(--blue); }
+    .progress-fill.accent { background: var(--accent); }
 
     .score-meta {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    /* Discrepancy Notes */
-    .note-card {
-      background: var(--surface2);
-      border-left: 3px solid var(--yellow);
-      border-radius: 0 8px 8px 0;
-      padding: 14px 18px;
-      margin-bottom: 12px;
-    }
-
-    .note-card .note-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
-    .note-card .note-body {
-      font-size: 13px;
       color: var(--text-dim);
     }
 
@@ -345,7 +326,6 @@
 
     .swatch-outlier { background: var(--yellow-bg); border: 1px solid var(--yellow); }
     .swatch-free { background: var(--green-bg); border: 1px solid var(--green); }
-    .swatch-pending { background: var(--gray-bg); border: 1px solid var(--gray); }
 
     @media (max-width: 768px) {
       body { padding: 12px; }
@@ -360,7 +340,7 @@
   <div class="header">
     <div>
       <h1>Recruitment Command Center</h1>
-      <div class="subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 16, 2026</div>
+      <div class="subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 17, 2026</div>
     </div>
     <div>
       <span class="badge badge-green">Live</span>
@@ -377,7 +357,7 @@
     <div class="metric-card">
       <div class="label">All-Time Ad Spend</div>
       <div class="value blue">$22,332.57</div>
-      <div class="sub">Previously reported: $18,132.96</div>
+      <div class="sub">Across 8 paid studies</div>
     </div>
     <div class="metric-card">
       <div class="label">Total Joined</div>
@@ -386,39 +366,38 @@
     </div>
     <div class="metric-card">
       <div class="label">Total Onboarded</div>
-      <div class="value green">1,280</div>
-      <div class="sub">Across 20 studies with known data</div>
+      <div class="value green">857</div>
+      <div class="sub">Across 16 studies with known data</div>
     </div>
     <div class="metric-card">
       <div class="label">Blended CPO (All Studies)</div>
-      <div class="value green">$17.45</div>
-      <div class="sub">$22,332.57 / 1,280 onboarded</div>
+      <div class="value green">$26.06</div>
+      <div class="sub">$22,332.57 / 857 onboarded</div>
     </div>
     <div class="metric-card">
       <div class="label">Paid CPO (Excl. Outliers)</div>
-      <div class="value green">$16.47</div>
+      <div class="value green">$18.60</div>
       <div class="sub">Standard paid studies only</div>
     </div>
     <div class="metric-card">
       <div class="label">Completed Studies</div>
-      <div class="value">18</div>
-      <div class="sub">4 still recruiting &middot; 2 awaiting data</div>
+      <div class="value">9</div>
+      <div class="sub">7 active/recruiting &middot; 6 coming soon</div>
     </div>
     <div class="metric-card">
       <div class="label">Avg Days to Recruit</div>
       <div class="value">24.5</div>
-      <div class="sub">Across 9 studies with duration data</div>
+      <div class="sub">Across 10 studies with duration data</div>
     </div>
   </div>
 
   <!-- ==================== COST ANALYSIS TABLE ==================== -->
   <div class="section">
-    <h2>Cost Analysis — All 15 Studies</h2>
+    <h2>Cost Analysis — All 16 Studies</h2>
 
     <div class="legend">
       <div class="legend-item"><div class="legend-swatch swatch-outlier"></div> Outlier Study</div>
       <div class="legend-item"><div class="legend-swatch swatch-free"></div> $0 Ad Spend (Organic)</div>
-      <div class="legend-item"><div class="legend-swatch swatch-pending"></div> Awaiting Data</div>
     </div>
 
     <div class="table-wrap">
@@ -447,13 +426,13 @@
             <td><span class="badge badge-blue">RCT</span></td>
             <td class="align-right">$6,469.62</td>
             <td class="align-right">293</td>
-            <td class="align-right">81</td>
+            <td class="align-right">87</td>
             <td class="align-right">240</td>
-            <td class="align-right">$79.87</td>
+            <td class="align-right">$74.36</td>
             <td>Oura</td>
             <td class="align-right">—</td>
             <td><span class="badge badge-yellow">Recruiting</span></td>
-            <td>OUTLIER — app issues, pre-launch ad spend</td>
+            <td>OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question</td>
           </tr>
           <tr class="row-outlier">
             <td>2</td>
@@ -467,7 +446,7 @@
             <td>WHOOP</td>
             <td class="align-right">—</td>
             <td><span class="badge badge-yellow">Recruiting</span></td>
-            <td>OUTLIER — WHOOP user base issue, lab bottleneck, 5 campaigns</td>
+            <td>OUTLIER — WHOOP user base issue, lab bottleneck</td>
           </tr>
           <tr>
             <td>3</td>
@@ -483,19 +462,19 @@
             <td><span class="badge badge-green">Complete</span></td>
             <td>Nov 20 – Dec 13, 2025</td>
           </tr>
-          <tr class="row-pending">
+          <tr>
             <td>4</td>
             <td>Berkeley Life (Nitrate Supp.)</td>
-            <td><span class="badge badge-green">RWE</span></td>
+            <td><span class="badge badge-blue">RCT</span></td>
             <td class="align-right">$2,632.02</td>
-            <td class="align-right">TBD</td>
-            <td class="align-right">TBD</td>
-            <td class="align-right">TBD</td>
             <td class="align-right">—</td>
+            <td class="align-right">70</td>
+            <td class="align-right">70</td>
+            <td class="align-right">$37.60</td>
             <td>—</td>
             <td class="align-right">—</td>
-            <td><span class="badge badge-gray">Complete</span></td>
-            <td>Was missing — mislabeled as "Unmapped Campaigns"</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
           </tr>
           <tr>
             <td>5</td>
@@ -508,7 +487,7 @@
             <td class="align-right">$20.53</td>
             <td>Oura</td>
             <td class="align-right">17</td>
-            <td><span class="badge badge-green">Complete</span></td>
+            <td><span class="badge badge-blue">Active</span></td>
             <td>Dec 23 – Jan 9</td>
           </tr>
           <tr>
@@ -539,19 +518,19 @@
             <td><span class="badge badge-green">Complete</span></td>
             <td>Nov 26 – Dec 15, 2025</td>
           </tr>
-          <tr class="row-pending">
+          <tr>
             <td>8</td>
             <td>Quantum Upgrade</td>
-            <td><span class="badge badge-green">RWE</span></td>
+            <td><span class="badge badge-blue">RCT</span></td>
             <td class="align-right">$266.14</td>
-            <td class="align-right">TBD</td>
-            <td class="align-right">TBD</td>
             <td class="align-right">—</td>
-            <td class="align-right">—</td>
+            <td class="align-right">35</td>
+            <td class="align-right">35</td>
+            <td class="align-right">$7.60</td>
             <td>—</td>
             <td class="align-right">—</td>
-            <td><span class="badge badge-gray">Complete</span></td>
-            <td>Awaiting data from Manpreet</td>
+            <td><span class="badge badge-green">Complete</span></td>
+            <td></td>
           </tr>
 
           <!-- $0 AD SPEND STUDIES -->
@@ -566,7 +545,7 @@
             <td class="align-right">$0</td>
             <td>Oura / Fitbit / WHOOP</td>
             <td class="align-right">15</td>
-            <td><span class="badge badge-green">Complete</span></td>
+            <td><span class="badge badge-blue">Active</span></td>
             <td></td>
           </tr>
           <tr class="row-free">
@@ -650,8 +629,22 @@
             <td class="align-right">$0</td>
             <td>Oura</td>
             <td class="align-right">64</td>
-            <td><span class="badge badge-green">Complete</span></td>
+            <td><span class="badge badge-blue">Active</span></td>
             <td></td>
+          </tr>
+          <tr class="row-free">
+            <td>16</td>
+            <td>HOP Box</td>
+            <td><span class="badge badge-yellow">VEP</span></td>
+            <td class="align-right">$0</td>
+            <td class="align-right">—</td>
+            <td class="align-right">18</td>
+            <td class="align-right">35</td>
+            <td class="align-right">$0</td>
+            <td>—</td>
+            <td class="align-right">—</td>
+            <td><span class="badge badge-yellow">Recruiting</span></td>
+            <td>Since Feb 12 — needs 17 more</td>
           </tr>
         </tbody>
         <tfoot>
@@ -661,8 +654,8 @@
             <td></td>
             <td class="align-right">$22,332.57</td>
             <td class="align-right">1,753</td>
-            <td class="align-right">728</td>
-            <td class="align-right">916</td>
+            <td class="align-right">857</td>
+            <td class="align-right">1,036</td>
             <td class="align-right">—</td>
             <td></td>
             <td class="align-right">—</td>
@@ -678,18 +671,18 @@
     <div class="avg-grid">
       <div class="avg-card">
         <div class="avg-label">Blended CPO (All Studies incl. $0)</div>
-        <div class="avg-value green" style="color:var(--green)">$17.45</div>
-        <div class="avg-detail">$22,332.57 spend &divide; 1,280 onboarded</div>
+        <div class="avg-value green" style="color:var(--green)">$26.06</div>
+        <div class="avg-detail">$22,332.57 spend &divide; 857 onboarded</div>
       </div>
       <div class="avg-card">
         <div class="avg-label">Paid Studies CPO (Excl. Outliers)</div>
-        <div class="avg-value" style="color:var(--blue)">$16.47</div>
-        <div class="avg-detail">$7,278.61 spend &divide; 442 onboarded &middot; Studies 3, 5, 6, 7</div>
+        <div class="avg-value" style="color:var(--blue)">$18.60</div>
+        <div class="avg-detail">$10,176.77 spend &divide; 547 onboarded &middot; Studies 3–8 (excl. outliers)</div>
       </div>
       <div class="avg-card">
         <div class="avg-label">Paid Studies CPO (Incl. Outliers)</div>
-        <div class="avg-value" style="color:var(--yellow)">$34.83</div>
-        <div class="avg-detail">$19,434.41 spend &divide; 558 onboarded &middot; Studies 1–3, 5–7</div>
+        <div class="avg-value" style="color:var(--yellow)">$33.38</div>
+        <div class="avg-detail">$22,332.57 spend &divide; 669 onboarded &middot; All 8 paid studies</div>
       </div>
     </div>
   </div>
@@ -702,9 +695,9 @@
       <!-- Still Recruiting -->
       <div class="score-card">
         <div class="study-name">Melatonin Sleep Study (Somato) <span class="badge badge-yellow">Recruiting</span></div>
-        <div class="score-meta"><span>81 / 240 onboarded</span><span>33.8%</span></div>
-        <div class="progress-bar"><div class="progress-fill red" style="width:33.8%"></div></div>
-        <div class="score-meta"><span>CPO: $79.87</span><span>OUTLIER — app issues, pre-launch spend</span></div>
+        <div class="score-meta"><span>87 / 240 onboarded</span><span>36.3%</span></div>
+        <div class="progress-bar"><div class="progress-fill red" style="width:36.3%"></div></div>
+        <div class="score-meta"><span>CPO: $74.36</span><span>~150 lost to baseline bug, ~48 to eligibility question</span></div>
       </div>
 
       <div class="score-card">
@@ -721,19 +714,41 @@
         <div class="score-meta"><span>CPO: $0 (organic)</span><span>VEP — needs 5 more participants</span></div>
       </div>
 
+      <div class="score-card">
+        <div class="study-name">HOP Box <span class="badge badge-yellow">Recruiting</span></div>
+        <div class="score-meta"><span>18 / 35 onboarded</span><span>51.4%</span></div>
+        <div class="progress-bar"><div class="progress-fill yellow" style="width:51.4%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>Since Feb 12 — needs 17 more</span></div>
+      </div>
+
+      <!-- Active Studies -->
+      <div class="score-card">
+        <div class="study-name">Peptide Supplement: Sleep &amp; Recovery <span class="badge badge-blue">Active</span></div>
+        <div class="score-meta"><span>120 / 120 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $20.53</span><span>17 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Sleep Mushrooms+ <span class="badge badge-blue">Active</span></div>
+        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>15 days</span></div>
+      </div>
+
+      <div class="score-card">
+        <div class="study-name">Vitamin D Boost: Clearlight <span class="badge badge-blue">Active</span></div>
+        <div class="score-meta"><span>20 / 20 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span>64 days</span></div>
+      </div>
+
       <!-- Completed — Paid -->
       <div class="score-card">
         <div class="study-name">Enhanced Brew — Coffee Study <span class="badge badge-green">Complete</span></div>
         <div class="score-meta"><span>192 / 192 onboarded</span><span>100%</span></div>
         <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
         <div class="score-meta"><span>CPO: $16.59</span><span>23 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Peptide Supplement: Sleep &amp; Recovery <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>120 / 120 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $20.53</span><span>17 days</span></div>
       </div>
 
       <div class="score-card">
@@ -750,14 +765,21 @@
         <div class="score-meta"><span>CPO: $11.65</span><span>19 days</span></div>
       </div>
 
-      <!-- Completed — $0 Spend -->
       <div class="score-card">
-        <div class="study-name">Sleep Mushrooms+ <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
+        <div class="study-name">Berkeley Life (Nitrate Supp.) <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>70 / 70 onboarded</span><span>100%</span></div>
         <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>15 days</span></div>
+        <div class="score-meta"><span>CPO: $37.60</span><span></span></div>
       </div>
 
+      <div class="score-card">
+        <div class="study-name">Quantum Upgrade <span class="badge badge-green">Complete</span></div>
+        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="score-meta"><span>CPO: $7.60</span><span></span></div>
+      </div>
+
+      <!-- Completed — $0 Spend -->
       <div class="score-card">
         <div class="study-name">Better Sleep with NatPat <span class="badge badge-green">Complete</span></div>
         <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
@@ -786,109 +808,47 @@
         <div class="score-meta"><span>$0 spend (organic)</span><span>22 days</span></div>
       </div>
 
+      <!-- Coming Soon -->
       <div class="score-card">
-        <div class="study-name">Vitamin D Boost: Clearlight <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>20 / 20 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>64 days</span></div>
-      </div>
-
-      <!-- New Studies -->
-      <div class="score-card">
-        <div class="study-name">Leela Quantum <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="study-name">Leela Quantum <span class="badge badge-accent">Coming Soon</span></div>
+        <div class="score-meta"><span>0 / 35 onboarded</span><span>0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
         <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
       </div>
 
       <div class="score-card">
-        <div class="study-name">Neuvana <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>40 / 40 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="study-name">Neuvana <span class="badge badge-accent">Coming Soon</span></div>
+        <div class="score-meta"><span>0 / 40 onboarded</span><span>0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
         <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
       </div>
 
       <div class="score-card">
-        <div class="study-name">Percepta <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>154 / 154 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>Very difficult recruitment</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">HOP Box <span class="badge badge-yellow">Recruiting</span></div>
-        <div class="score-meta"><span>18 / 35 onboarded</span><span>51.4%</span></div>
-        <div class="progress-bar"><div class="progress-fill yellow" style="width:51.4%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>Since Feb 12 — needs 17 more</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Young Goose <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>35 / 35 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>Target may increase</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Cure Hydration <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>70 / 70 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="study-name">Percepta <span class="badge badge-accent">Coming Soon</span></div>
+        <div class="score-meta"><span>0 / 154 onboarded</span><span>0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
         <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
       </div>
 
       <div class="score-card">
-        <div class="study-name">Moon Brew <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>200 / 200 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        <div class="study-name">Young Goose <span class="badge badge-accent">Coming Soon</span></div>
+        <div class="score-meta"><span>0 / 35 onboarded</span><span>0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
         <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
       </div>
 
-      <!-- Awaiting Data -->
       <div class="score-card">
-        <div class="study-name">Berkeley Life (Nitrate Supp.) <span class="badge badge-gray">Awaiting Data</span></div>
-        <div class="score-meta"><span>TBD / TBD onboarded</span><span>—</span></div>
-        <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
-        <div class="score-meta"><span>Spend: $2,632.02</span><span>Was mislabeled as Unmapped Campaigns</span></div>
+        <div class="study-name">Cure Hydration <span class="badge badge-accent">Coming Soon</span></div>
+        <div class="score-meta"><span>0 / 70 onboarded</span><span>0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
       </div>
 
       <div class="score-card">
-        <div class="study-name">Quantum Upgrade <span class="badge badge-gray">Awaiting Data</span></div>
-        <div class="score-meta"><span>TBD / TBD onboarded</span><span>—</span></div>
-        <div class="progress-bar"><div class="progress-fill blue" style="width:0%"></div></div>
-        <div class="score-meta"><span>Spend: $266.14</span><span>Awaiting data from Manpreet</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== DATA DISCREPANCY NOTES ==================== -->
-  <div class="section">
-    <h2>Data Discrepancy Notes</h2>
-
-    <div class="note-card">
-      <div class="note-title">ProleevaMax: Spend increased $4,125 &rarr; $5,686.18</div>
-      <div class="note-body">
-        Previous dashboard showed $4,125. Actual spend is $5,686.18 — difference of $1,561.18 was from a missing active campaign not tracked in the original export. Study also had 5 separate campaigns contributing to total spend.
-      </div>
-    </div>
-
-    <div class="note-card">
-      <div class="note-title">Berkeley Life: Missing entirely &rarr; $2,632.02 recovered</div>
-      <div class="note-body">
-        Berkeley Life was not displayed on the previous dashboard. Its $2,632.02 in ad spend was likely mislabeled as "Unmapped Campaigns" in the ads platform. Joined/onboarded data still TBD.
-      </div>
-    </div>
-
-    <div class="note-card">
-      <div class="note-title">Total gap: ~$4,200 previously unaccounted</div>
-      <div class="note-body">
-        Combined discrepancy from ProleevaMax ($1,561) and Berkeley Life ($2,632) accounts for approximately $4,193 in ad spend that was missing from the previous dashboard total of $18,132.96. Corrected total: $22,332.57.
-      </div>
-    </div>
-
-    <div class="note-card">
-      <div class="note-title">7 organic studies ($0 spend) were missing from the previous dashboard</div>
-      <div class="note-body">
-        Studies 9–15 (VEP and self-serve studies) were not included in the previous dashboard. These represent 170 additional onboarded participants at zero cost and significantly reduce the blended CPO.
+        <div class="study-name">Moon Brew <span class="badge badge-accent">Coming Soon</span></div>
+        <div class="score-meta"><span>0 / 200 onboarded</span><span>0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
+        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
       </div>
     </div>
   </div>
@@ -900,13 +860,14 @@
     <div class="proj-grid">
       <div class="proj-card">
         <div class="proj-name">Melatonin Sleep Study (Somato)</div>
-        <div class="proj-row"><span>Current onboarded</span><span>81 / 240</span></div>
-        <div class="proj-row"><span>Remaining to recruit</span><span>159 participants</span></div>
-        <div class="proj-row"><span>Current CPO</span><span>$79.87 (outlier)</span></div>
-        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$12,699</span></div>
-        <div class="proj-row"><span>Est. remaining cost at standard CPO ($16.47)</span><span>$2,619</span></div>
+        <div class="proj-row"><span>Current onboarded</span><span>87 / 240</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>153 participants</span></div>
+        <div class="proj-row"><span>Current CPO</span><span>$74.36 (outlier)</span></div>
+        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$11,377</span></div>
+        <div class="proj-row"><span>Est. remaining cost at standard CPO ($18.60)</span><span>$2,846</span></div>
         <div class="proj-row"><span>First joined</span><span>Jan 13, 2026</span></div>
-        <div class="proj-row"><span>Note</span><span>App issues being resolved; CPO should improve</span></div>
+        <div class="proj-row"><span>Est. completion</span><span>~Mar 15, 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>~150 lost to baseline bug (fix ETA this week), ~48 to eligibility question</span></div>
       </div>
 
       <div class="proj-card">
@@ -916,7 +877,8 @@
         <div class="proj-row"><span>Current CPO</span><span>$162.46 (outlier)</span></div>
         <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$650</span></div>
         <div class="proj-row"><span>First joined</span><span>Jan 5, 2026</span></div>
-        <div class="proj-row"><span>Note</span><span>Near completion — lab completion bottleneck</span></div>
+        <div class="proj-row"><span>Est. completion</span><span>~End of Feb 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>Near completion — targeting existing users from insufficient baseline list</span></div>
       </div>
 
       <div class="proj-card">
@@ -925,16 +887,27 @@
         <div class="proj-row"><span>Remaining to recruit</span><span>5 participants</span></div>
         <div class="proj-row"><span>Ad spend</span><span>$0 (organic / VEP)</span></div>
         <div class="proj-row"><span>Est. remaining cost</span><span>$0</span></div>
+        <div class="proj-row"><span>Est. completion</span><span>~End of Feb 2026</span></div>
         <div class="proj-row"><span>Note</span><span>Organic recruitment, no ad spend needed</span></div>
       </div>
 
       <div class="proj-card">
+        <div class="proj-name">HOP Box</div>
+        <div class="proj-row"><span>Current onboarded</span><span>18 / 35</span></div>
+        <div class="proj-row"><span>Remaining to recruit</span><span>17 participants</span></div>
+        <div class="proj-row"><span>Ad spend</span><span>$0 (organic)</span></div>
+        <div class="proj-row"><span>Est. remaining cost</span><span>$0</span></div>
+        <div class="proj-row"><span>Recruiting since</span><span>Feb 12, 2026</span></div>
+        <div class="proj-row"><span>Note</span><span>Opened Friday — monitoring through Thursday before escalating</span></div>
+      </div>
+
+      <div class="proj-card">
         <div class="proj-name">Projection Summary</div>
-        <div class="proj-row"><span>Total remaining participants</span><span>168</span></div>
-        <div class="proj-row"><span>Est. cost at current CPO rates</span><span>~$13,349</span></div>
-        <div class="proj-row"><span>Est. cost at standard CPO ($16.47)</span><span>~$2,619</span></div>
-        <div class="proj-row"><span>Best-case total spend at completion</span><span>~$24,952</span></div>
-        <div class="proj-row"><span>Worst-case total spend at completion</span><span>~$35,682</span></div>
+        <div class="proj-row"><span>Total remaining participants</span><span>179</span></div>
+        <div class="proj-row"><span>Est. cost at current CPO rates</span><span>~$12,027</span></div>
+        <div class="proj-row"><span>Est. cost at standard CPO ($18.60)</span><span>~$2,846</span></div>
+        <div class="proj-row"><span>Best-case total spend at completion</span><span>~$25,179</span></div>
+        <div class="proj-row"><span>Worst-case total spend at completion</span><span>~$34,360</span></div>
       </div>
     </div>
   </div>
@@ -956,23 +929,23 @@
         <tbody>
           <tr>
             <td><span class="badge badge-blue">RCT</span> Randomized Controlled Trial</td>
-            <td class="align-right">4</td>
-            <td class="align-right">$13,165.65</td>
-            <td class="align-right">473</td>
-            <td class="align-right">$27.83</td>
+            <td class="align-right">6</td>
+            <td class="align-right">$16,063.81</td>
+            <td class="align-right">584</td>
+            <td class="align-right">$27.51</td>
           </tr>
           <tr>
             <td><span class="badge badge-green">RWE</span> Real World Evidence</td>
-            <td class="align-right">4</td>
-            <td class="align-right">$3,480.74</td>
-            <td class="align-right">105*</td>
-            <td class="align-right">—</td>
+            <td class="align-right">2</td>
+            <td class="align-right">$6,268.76</td>
+            <td class="align-right">85</td>
+            <td class="align-right">$73.75</td>
           </tr>
           <tr>
-            <td><span class="badge badge-yellow">VEP</span> Validated Experience Program</td>
-            <td class="align-right">6</td>
+            <td><span class="badge badge-yellow">VEP</span> Verified Evidence Program</td>
+            <td class="align-right">7</td>
             <td class="align-right">$0</td>
-            <td class="align-right">150</td>
+            <td class="align-right">168</td>
             <td class="align-right">$0</td>
           </tr>
           <tr>
@@ -986,19 +959,18 @@
         <tfoot>
           <tr class="totals-row">
             <td><strong>Total</strong></td>
-            <td class="align-right"><strong>15</strong></td>
+            <td class="align-right"><strong>16</strong></td>
             <td class="align-right"><strong>$22,332.57</strong></td>
-            <td class="align-right"><strong>728*</strong></td>
-            <td class="align-right"><strong>$30.68</strong></td>
+            <td class="align-right"><strong>857</strong></td>
+            <td class="align-right"><strong>$26.06</strong></td>
           </tr>
         </tfoot>
       </table>
     </div>
-    <p style="font-size:12px; color:var(--text-dim); margin-top:8px;">* RWE onboarded excludes Berkeley Life and Quantum Upgrade (TBD). Actual totals will be higher.</p>
   </div>
 
   <div class="footer">
-    Recruitment Command Center &middot; Reputable &middot; Last updated Feb 16, 2026 &middot; Data corrected from full ad platform export
+    Recruitment Command Center &middot; Reputable &middot; Last updated Feb 17, 2026
   </div>
 
 </body>
