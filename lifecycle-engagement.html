@@ -436,8 +436,8 @@ a{color:inherit;text-decoration:none}
     <div class="nav-links" id="navLinks">
       <a href="#lifecycle">Stages</a>
       <a href="#segmentation">Segmentation</a>
-      <a href="#phases">Phases</a>
       <a href="#integrations">Integrations</a>
+      <a href="#phases">Phases</a>
       <a href="#summary">Summary</a>
     </div>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -938,62 +938,6 @@ a{color:inherit;text-decoration:none}
   </div>
 </section>
 
-<hr class="section-divider">
-<section class="section section-alt" id="phases">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-label">Roadmap</div>
-      <h2 class="section-title">Implementation Phases</h2>
-      <p class="section-subtitle">Two-phase rollout &mdash; Phase 1 infrastructure makes Phase 2 automation possible.</p>
-    </div>
-    <div class="phase-row">
-      <div class="phase-block p1 reveal-left">
-        <div class="phase-head">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          <h3>Phase 1: Minimum Viable</h3>
-          <span class="phase-time">Now &rarr; 4 weeks</span>
-        </div>
-        <div class="phase-body">
-          <ul>
-            <li><strong>Data cleanup (CRITICAL)</strong> &mdash; Remove test/dummy accounts inflating numbers and hurting email deliverability. This is the #1 priority &mdash; accurate numbers and clean lists are the foundation for everything below. Establish naming conventions so they&rsquo;re auto-excluded going forward.</li>
-            <li><strong>Basic segmentation queries</strong> &mdash; Even manual list pulls would be a huge step. Minimum: &ldquo;give me everyone not in an active study, not in washout, and has not tried Study X.&rdquo; Multi-select filters across both in-app and lead databases.</li>
-            <li><strong>Eligibility drop-off by question</strong> &mdash; Real-time monitoring so we catch problems within the first 10&ndash;20 people, not after 100+. Critical for every study launch.</li>
-            <li><strong>Resolve Insufficient Baseline Bug</strong> &mdash; ~150 participants were stalled/lost due to data connection delays causing false &ldquo;Insufficient Baseline&rdquo; status. Fix in testing/release phase.</li>
-            <li><strong>Dashboard spend accuracy</strong> &mdash; Ensure all campaigns mapped. Fix spend gaps. Implement 30-day vs all-time views.</li>
-            <li><strong>Source attribution</strong> &mdash; UTMs and OneLinks are set up for every channel since January &mdash; data needs to flow into the dashboard. Add organic social &amp; website tracking.</li>
-            <li><strong>Manual queue visibility</strong> &mdash; For studies with off-app steps (labs, wearable setup), show Pending vs Completed status so we know exactly who&rsquo;s stuck.</li>
-            <li><strong>Document in-app vs outside-app touchpoints</strong> &mdash; Map every stage&rsquo;s in-app and outside-app actions so the team operates from one coordinated playbook.</li>
-            <li><strong>Basic email segmentation by lifecycle stage</strong> &mdash; Stop sending one blast to everyone. Segment by active, washout, available, churned at minimum.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="phase-block p2 reveal-right">
-        <div class="phase-head">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-          <h3>Phase 2: Full System</h3>
-          <span class="phase-time">4 wks &rarr; 3 months</span>
-        </div>
-        <div class="phase-body">
-          <ul>
-            <li><strong>Automated email campaigns</strong> &mdash; One-click segmented sends from dashboard. Trigger-based drip campaigns for each lifecycle stage (welcome series, washout engagement, re-enrollment prompts).</li>
-            <li><strong>Push notifications &amp; in-app messaging</strong> &mdash; Reach the "silent drop-off" people who installed but never joined. Nudge them toward studies they're eligible for.</li>
-            <li><strong>Washout period tracking</strong> &mdash; Auto-track when washout starts and ends. Notify participants when they're eligible for new studies. Engage them with public studies in the interim.</li>
-            <li><strong>Churn detection &amp; re-engagement</strong> &mdash; Flag 3+ months inactivity. Auto-trigger re-engagement campaigns with incentives like bonus heartbeats.</li>
-            <li><strong>Coordinated in-app + email drip campaigns</strong> &mdash; Unified sequences that span both channels at every lifecycle moment.</li>
-            <li><strong>VIP tier system</strong> &mdash; Badges and exclusive content for participants who've completed 3+ studies. Targeted referral asks to high-value participants.</li>
-            <li><strong>Compliance monitoring</strong> &mdash; At-risk flagging for active participants who stop completing tasks. Alert clinical team before it becomes a dropout.</li>
-            <li><strong>Auto-exclusion rules</strong> &mdash; Once someone joins a study, automatically remove from all other recruitment campaigns. No more accidental double-recruitment.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="phase-callout reveal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      <p>Phase 1 infrastructure makes Phase 2 possible. The data cleanup, segmentation queries, and dashboard fixes are the foundation everything else builds on. We need Phase 1 right to unlock the full automation vision.</p>
-    </div>
-  </div>
-</section>
-
 <hr class="section-divider teal">
 <section class="section" id="integrations">
   <div class="container">
@@ -1195,6 +1139,62 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <hr class="section-divider">
+<section class="section section-alt" id="phases">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-title">Implementation Phases</h2>
+      <p class="section-subtitle">Two-phase rollout &mdash; Phase 1 infrastructure makes Phase 2 automation possible.</p>
+    </div>
+    <div class="phase-row">
+      <div class="phase-block p1 reveal-left">
+        <div class="phase-head">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <h3>Phase 1: Minimum Viable</h3>
+          <span class="phase-time">Now &rarr; 4 weeks</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li><strong>Data cleanup (CRITICAL)</strong> &mdash; Remove test/dummy accounts inflating numbers and hurting email deliverability. This is the #1 priority &mdash; accurate numbers and clean lists are the foundation for everything below. Establish naming conventions so they&rsquo;re auto-excluded going forward.</li>
+            <li><strong>Basic segmentation queries</strong> &mdash; Even manual list pulls would be a huge step. Minimum: &ldquo;give me everyone not in an active study, not in washout, and has not tried Study X.&rdquo; Multi-select filters across both in-app and lead databases.</li>
+            <li><strong>Eligibility drop-off by question</strong> &mdash; Real-time monitoring so we catch problems within the first 10&ndash;20 people, not after 100+. Critical for every study launch.</li>
+            <li><strong>Resolve Insufficient Baseline Bug</strong> &mdash; ~150 participants were stalled/lost due to data connection delays causing false &ldquo;Insufficient Baseline&rdquo; status. Fix in testing/release phase.</li>
+            <li><strong>Dashboard spend accuracy</strong> &mdash; Ensure all campaigns mapped. Fix spend gaps. Implement 30-day vs all-time views.</li>
+            <li><strong>Source attribution</strong> &mdash; UTMs and OneLinks are set up for every channel since January &mdash; data needs to flow into the dashboard. Add organic social &amp; website tracking.</li>
+            <li><strong>Manual queue visibility</strong> &mdash; For studies with off-app steps (labs, wearable setup), show Pending vs Completed status so we know exactly who&rsquo;s stuck.</li>
+            <li><strong>Document in-app vs outside-app touchpoints</strong> &mdash; Map every stage&rsquo;s in-app and outside-app actions so the team operates from one coordinated playbook.</li>
+            <li><strong>Basic email segmentation by lifecycle stage</strong> &mdash; Stop sending one blast to everyone. Segment by active, washout, available, churned at minimum.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase-block p2 reveal-right">
+        <div class="phase-head">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          <h3>Phase 2: Full System</h3>
+          <span class="phase-time">4 wks &rarr; 3 months</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li><strong>Automated email campaigns</strong> &mdash; One-click segmented sends from dashboard. Trigger-based drip campaigns for each lifecycle stage (welcome series, washout engagement, re-enrollment prompts).</li>
+            <li><strong>Push notifications &amp; in-app messaging</strong> &mdash; Reach the "silent drop-off" people who installed but never joined. Nudge them toward studies they're eligible for.</li>
+            <li><strong>Washout period tracking</strong> &mdash; Auto-track when washout starts and ends. Notify participants when they're eligible for new studies. Engage them with public studies in the interim.</li>
+            <li><strong>Churn detection &amp; re-engagement</strong> &mdash; Flag 3+ months inactivity. Auto-trigger re-engagement campaigns with incentives like bonus heartbeats.</li>
+            <li><strong>Coordinated in-app + email drip campaigns</strong> &mdash; Unified sequences that span both channels at every lifecycle moment.</li>
+            <li><strong>VIP tier system</strong> &mdash; Badges and exclusive content for participants who've completed 3+ studies. Targeted referral asks to high-value participants.</li>
+            <li><strong>Compliance monitoring</strong> &mdash; At-risk flagging for active participants who stop completing tasks. Alert clinical team before it becomes a dropout.</li>
+            <li><strong>Auto-exclusion rules</strong> &mdash; Once someone joins a study, automatically remove from all other recruitment campaigns. No more accidental double-recruitment.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="phase-callout reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <p>Phase 1 infrastructure makes Phase 2 possible. The data cleanup, segmentation queries, and dashboard fixes are the foundation everything else builds on. We need Phase 1 right to unlock the full automation vision.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
 <section class="section section-alt" id="summary">
   <div class="container">
     <div class="section-header reveal">
@@ -1240,7 +1240,7 @@ a{color:inherit;text-decoration:none}
           <tr><td class="stage-num">1</td><td class="stage-nm">Awareness &amp; Lead Capture</td><td><span class="status-badge partial">Partial</span></td><td>Meta ads live, but no organic or website tracking yet</td></tr>
           <tr><td class="stage-num">2</td><td class="stage-nm">App Install &amp; Onboarding</td><td><span class="status-badge partial">Partial</span></td><td>AppsFlyer set up; attribution gaps remain</td></tr>
           <tr><td class="stage-num">3</td><td class="stage-nm">Browse / Explore</td><td><span class="status-badge not-built">Not Built</span></td><td>No personalized study recommendations or nudges</td></tr>
-          <tr><td class="stage-num">4</td><td class="stage-nm">Eligibility Survey</td><td><span class="status-badge live">Live</span></td><td>Needs real-time question-level drop-off monitoring</td></tr>
+          <tr><td class="stage-num">4</td><td class="stage-nm">Eligibility Survey</td><td><span class="status-badge partial">Partial</span></td><td>Typeform has question-level drop-off capability, but not yet integrated into our dashboard</td></tr>
           <tr><td class="stage-num">5</td><td class="stage-nm">Onboarding &amp; Manual Queue</td><td><span class="status-badge partial">Partial</span></td><td>No Pending vs Completed visibility for labs/wearables</td></tr>
           <tr><td class="stage-num">6</td><td class="stage-nm">Active in Study</td><td><span class="status-badge live">Live</span></td><td>Needs at-risk compliance flagging</td></tr>
           <tr><td class="stage-num">7</td><td class="stage-nm">Study Completion</td><td><span class="status-badge partial">Partial</span></td><td>No automated next-study suggestions</td></tr>
