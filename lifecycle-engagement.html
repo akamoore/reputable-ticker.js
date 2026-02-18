@@ -149,6 +149,71 @@ a{color:inherit;text-decoration:none}
 .stage-details{max-height:0;overflow:hidden;transition:max-height .45s ease,opacity .3s ease;opacity:0}
 .stage-card.expanded .stage-details{max-height:1200px;opacity:1;margin-top:14px}
 
+/* Stage illustrations */
+.stage-illus{height:56px;border-radius:var(--radius-sm);margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.stage-illus svg{opacity:0;transition:opacity .4s ease .15s}
+.stage-card.expanded .stage-illus svg{opacity:1}
+
+/* 1 — Lead Capture: magnet pulling dots */
+.stage-illus.s1{background:linear-gradient(135deg,#f0fdfa,#e0f2fe)}
+@keyframes dotDrift{0%{transform:translateX(40px);opacity:0}40%{opacity:1}100%{transform:translateX(0);opacity:1}}
+.stage-card.expanded .stage-illus.s1 .drift{animation:dotDrift .8s ease both}
+.stage-card.expanded .stage-illus.s1 .drift:nth-child(2){animation-delay:.15s}
+.stage-card.expanded .stage-illus.s1 .drift:nth-child(3){animation-delay:.3s}
+.stage-card.expanded .stage-illus.s1 .drift:nth-child(4){animation-delay:.45s}
+
+/* 2 — App Install: phone download arrow */
+.stage-illus.s2{background:linear-gradient(135deg,#eff6ff,#dbeafe)}
+@keyframes arrowBounce{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+.stage-card.expanded .stage-illus.s2 .bounce-arrow{animation:arrowBounce 1s ease-in-out infinite}
+
+/* 3 — Browse: scanning magnifier */
+.stage-illus.s3{background:linear-gradient(135deg,#f0fdfa,#ccfbf1)}
+@keyframes scanSlide{0%{transform:translateX(-12px)}50%{transform:translateX(12px)}100%{transform:translateX(-12px)}}
+.stage-card.expanded .stage-illus.s3 .scan{animation:scanSlide 2.5s ease-in-out infinite}
+
+/* 4 — Eligibility: checklist checks appearing */
+.stage-illus.s4{background:linear-gradient(135deg,#fefce8,#fef3c7)}
+@keyframes checkPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
+.stage-card.expanded .stage-illus.s4 .cpop{animation:checkPop .4s ease both}
+.stage-card.expanded .stage-illus.s4 .cpop:nth-child(2){animation-delay:.25s}
+.stage-card.expanded .stage-illus.s4 .cpop:nth-child(3){animation-delay:.5s}
+
+/* 5 — Onboarding: progress steps filling */
+.stage-illus.s5{background:linear-gradient(135deg,#faf5ff,#f3e8ff)}
+@keyframes stepFill{0%{width:0}100%{width:100%}}
+.stage-card.expanded .stage-illus.s5 .sfill{animation:stepFill .6s ease both}
+.stage-card.expanded .stage-illus.s5 .sfill:nth-child(2){animation-delay:.2s}
+.stage-card.expanded .stage-illus.s5 .sfill:nth-child(3){animation-delay:.4s}
+
+/* 6 — Active: heartbeat pulse line */
+.stage-illus.s6{background:linear-gradient(135deg,#eff6ff,#e0f2fe)}
+@keyframes heartDraw{0%{stroke-dashoffset:200}100%{stroke-dashoffset:0}}
+.stage-card.expanded .stage-illus.s6 .hline{animation:heartDraw 1.2s ease both}
+@keyframes heartBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.stage-card.expanded .stage-illus.s6 .hbeat{animation:heartBeat 1s ease-in-out .8s infinite}
+
+/* 7 — Completion: trophy shine */
+.stage-illus.s7{background:linear-gradient(135deg,#fefce8,#fef9c3)}
+@keyframes trophyRise{0%{transform:translateY(8px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes sparkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.1)}}
+.stage-card.expanded .stage-illus.s7 .trophy{animation:trophyRise .5s ease both}
+.stage-card.expanded .stage-illus.s7 .spark{animation:sparkle 1.2s ease-in-out .4s infinite}
+.stage-card.expanded .stage-illus.s7 .spark:nth-child(2){animation-delay:.7s}
+
+/* 8 — Washout: hourglass with flowing sand */
+.stage-illus.s8{background:linear-gradient(135deg,#f0fdf4,#dcfce7)}
+@keyframes sandFlow{0%{transform:translateY(-6px);opacity:0}50%{opacity:1}100%{transform:translateY(6px);opacity:0}}
+.stage-card.expanded .stage-illus.s8 .sand{animation:sandFlow 1.5s ease-in-out infinite}
+@keyframes glassRock{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.stage-card.expanded .stage-illus.s8 .glass{animation:glassRock 3s ease-in-out infinite}
+
+/* 9 — Re-engagement: refresh arrow with sparkle */
+.stage-illus.s9{background:linear-gradient(135deg,#fdf2f8,#fce7f3)}
+@keyframes spinIn{0%{transform:rotate(-180deg);opacity:0}100%{transform:rotate(0);opacity:1}}
+.stage-card.expanded .stage-illus.s9 .rspin{animation:spinIn .6s ease both}
+.stage-card.expanded .stage-illus.s9 .rspark{animation:sparkle 1.4s ease-in-out .5s infinite}
+
 /* Two-channel columns */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 @media(max-width:600px){.two-col{grid-template-columns:1fr}}
@@ -417,14 +482,25 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s1">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <path d="M30 8 L30 32 L42 26 L42 14 Z" fill="#00b39f" opacity=".8"/>
+                <path d="M42 14 Q50 20 42 26" fill="#007768"/>
+                <circle class="drift" cx="70" cy="20" r="4" fill="#3b82f6" opacity=".7"/>
+                <circle class="drift" cx="90" cy="12" r="3" fill="#14b8a6" opacity=".6"/>
+                <circle class="drift" cx="85" cy="28" r="3.5" fill="#3b82f6" opacity=".5"/>
+                <circle class="drift" cx="110" cy="20" r="3" fill="#14b8a6" opacity=".7"/>
+                <text x="130" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">leads flowing in</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="ch-na">N/A &mdash; not in the app yet</div></div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Lead capture from Meta Ads, Google, landing pages</li><li>Organic Social (Instagram/bio links) with auto-import &amp; source attribution</li><li>Website Direct Joins (participant forms on site) with auto-import &amp; UTMs</li><li>Confirmation email: &ldquo;Welcome to Reputable&rdquo;</li><li>Referral links from existing participants</li></ul>
+                <ul class="ch-list"><li>Meta Ads, Google, landing pages</li><li>Organic social &amp; website form joins</li><li>Welcome email + referral links</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Auto-import leads from Meta Ads &amp; forms into participant DB</li><li>Auto-import from organic social (Instagram/bio) &amp; website forms</li><li>UTM parameter tracking on all inbound links (including organic &amp; website)</li><li>Referral code generation &amp; tracking</li><li><strong>Key metric: Total Leads</strong> &mdash; top-of-funnel count (landing page submissions + ad emails) tracked before &ldquo;Joined&rdquo;</li></ul>
+              <ul class="sys-list"><li>Auto-import all leads into participant DB</li><li>UTM tracking on all inbound links</li><li>Referral code generation &amp; tracking</li></ul>
             </div>
           </div>
         </div>
@@ -438,16 +514,27 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s2">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <rect x="28" y="4" width="24" height="32" rx="4" stroke="#3b82f6" stroke-width="2" fill="#eff6ff"/>
+                <rect x="36" y="30" width="8" height="2" rx="1" fill="#3b82f6" opacity=".4"/>
+                <g class="bounce-arrow">
+                  <path d="M40 12 L40 22" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M35 18 L40 23 L45 18" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </g>
+                <text x="64" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">download &amp; first open</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Onboarding screens &amp; account creation</li><li>Prompt to enable push notifications</li></ul>
+                <ul class="ch-list"><li>Onboarding screens &amp; account setup</li><li>Push notification opt-in</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>"Thanks for downloading" email + quick start guide</li><li>Study code delivery if relevant</li></ul>
+                <ul class="ch-list"><li>Welcome email + quick start guide</li><li>Study code delivery</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>AppsFlyer SDK &amp; install attribution</li><li>OneLink tracking &amp; deferred deep linking</li><li>Install event triggers participant record creation</li></ul>
+              <ul class="sys-list"><li>AppsFlyer install attribution</li><li>OneLink deep linking</li><li>Auto-create participant record on install</li></ul>
             </div>
           </div>
         </div>
@@ -461,16 +548,28 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s3">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <rect x="20" y="8" width="16" height="24" rx="3" stroke="#94a3b8" stroke-width="1.5" fill="#f8fafc"/>
+                <rect x="44" y="8" width="16" height="24" rx="3" stroke="#94a3b8" stroke-width="1.5" fill="#f8fafc"/>
+                <rect x="68" y="8" width="16" height="24" rx="3" stroke="#94a3b8" stroke-width="1.5" fill="#f8fafc"/>
+                <g class="scan">
+                  <circle cx="48" cy="18" r="8" stroke="#14b8a6" stroke-width="2" fill="none"/>
+                  <path d="M54 24 L60 30" stroke="#14b8a6" stroke-width="2" stroke-linecap="round"/>
+                </g>
+                <text x="100" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">exploring studies</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Explore studies screen with filtering</li><li>"Recommended for you" nudges</li><li>Featured studies &amp; in-app banners</li></ul>
+                <ul class="ch-list"><li>Study catalog with filtering</li><li>Personalized recommendations</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Email: "Top studies for you"</li><li>Push: "New studies you may qualify for"</li><li>Email digests of available studies</li></ul>
+                <ul class="ch-list"><li>Study recommendation emails</li><li>Push nudges for new studies</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Browse activity tracking (views, clicks, time)</li><li>Push notification service (segmented)</li><li>Personalized study recommendation engine</li></ul>
+              <ul class="sys-list"><li>Browse activity tracking</li><li>Segmented push notifications</li><li>Study recommendation engine</li></ul>
             </div>
           </div>
         </div>
@@ -484,20 +583,30 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s4">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <rect x="28" y="4" width="22" height="32" rx="3" stroke="#d97706" stroke-width="1.5" fill="#fffbeb"/>
+                <rect x="33" y="2" width="12" height="5" rx="2" fill="#d97706"/>
+                <g class="cpop"><path d="M32 14 L36 18 L44 10" stroke="#22c55e" stroke-width="2" stroke-linecap="round" fill="none"/></g>
+                <g class="cpop"><path d="M32 22 L36 26 L44 18" stroke="#22c55e" stroke-width="2" stroke-linecap="round" fill="none"/></g>
+                <g class="cpop"><rect x="32" y="28" width="12" height="2" rx="1" fill="#cbd5e1"/></g>
+                <text x="62" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">screening criteria</text>
+              </svg>
+            </div>
             <div class="policy-box">
               <div class="policy-box-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg> Policy Update</div>
-              <p><strong>We will no longer use variable metrics (e.g., sleep scores) for ongoing inclusion/exclusion criteria. Fixed criteria only.</strong> This prevents accidental mass disqualifications like the Sleep Score &lt;75 logic that caused ~48&ndash;70 disqualifications.</p>
+              <p><strong>Fixed criteria only.</strong> No variable metrics (e.g., sleep scores) for inclusion/exclusion.</p>
             </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Eligibility questionnaire with progress bar</li><li>Partial save &amp; resume</li><li>Real-time eligibility feedback</li></ul>
+                <ul class="ch-list"><li>Questionnaire with save &amp; resume</li><li>Real-time eligibility feedback</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Reminder email/SMS if they dropped off</li><li>Push nudge to finish survey</li></ul>
+                <ul class="ch-list"><li>Reminder email/push if dropped off</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Question-level drop-off tracking</li><li>Disqualification reason logging</li><li>Real-time drop-off monitoring &mdash; catch issues within first 10&ndash;20 people, not after 100+</li><li>Real-time monitoring dashboard</li></ul>
+              <ul class="sys-list"><li>Question-level drop-off tracking</li><li>Disqualification reason logging</li><li>Real-time monitoring dashboard</li></ul>
             </div>
           </div>
         </div>
@@ -511,16 +620,29 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s5">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <g>
+                  <rect x="20" y="16" width="32" height="8" rx="4" fill="#e2e8f0"/>
+                  <rect x="20" y="16" width="32" height="8" rx="4" fill="#8b5cf6" class="sfill" style="clip-path:inset(0 0 0 0)"/>
+                  <rect x="60" y="16" width="32" height="8" rx="4" fill="#e2e8f0"/>
+                  <rect x="60" y="16" width="32" height="8" rx="4" fill="#8b5cf6" opacity=".7" class="sfill" style="clip-path:inset(0 0 0 0)"/>
+                  <rect x="100" y="16" width="32" height="8" rx="4" fill="#e2e8f0"/>
+                  <rect x="100" y="16" width="32" height="8" rx="4" fill="#8b5cf6" opacity=".4" class="sfill" style="clip-path:inset(0 0 0 0)"/>
+                </g>
+                <text x="142" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">steps filling</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Onboarding checklist with step tracking</li><li><strong>Pending vs Completed status</strong> for every manual step (labs, wearables) &mdash; currently we can&rsquo;t see who is &ldquo;stuck,&rdquo; making recruitment targets impossible to project</li><li>Scheduling links for labs/calls</li></ul>
+                <ul class="ch-list"><li>Onboarding checklist with step tracking</li><li>Pending vs Completed status per step</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Email with lab kit / wearable instructions</li><li>Reminders: "You haven't completed your lab yet"</li><li>SMS follow-ups for time-sensitive steps</li></ul>
+                <ul class="ch-list"><li>Lab/wearable instruction emails</li><li>Reminders for incomplete steps</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li><strong>Manual queue tracking with clear Pending vs Completed status</strong> for labs &amp; wearables</li><li>Onboarding timeout alerts for stalled participants</li><li>Wearable device pairing verification</li><li>Visibility into exactly who is stuck and at which step</li></ul>
+              <ul class="sys-list"><li>Manual queue: Pending vs Completed tracking</li><li>Timeout alerts for stalled participants</li><li>Wearable pairing verification</li></ul>
             </div>
           </div>
         </div>
@@ -534,16 +656,23 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s6">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <polyline class="hline" points="10,20 30,20 36,20 40,8 44,32 48,14 52,26 56,20 80,20" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke-dasharray="200" stroke-dashoffset="200"/>
+                <circle class="hbeat" cx="90" cy="20" r="5" fill="#ef4444" opacity=".8"/>
+                <text x="104" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">tracking daily</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Study home with daily tasks &amp; progress</li><li>In-app reminders &amp; reward/heartbeat display</li><li>At-risk flagging for low compliance</li></ul>
+                <ul class="ch-list"><li>Daily tasks &amp; progress tracking</li><li>Rewards display &amp; at-risk flags</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Occasional check-in emails</li><li>Educational content related to study</li><li>Minimal outreach to avoid noise</li></ul>
+                <ul class="ch-list"><li>Check-in emails (minimal)</li><li>Educational content</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Real-time compliance scoring engine</li><li>At-risk participant flagging &amp; alerts</li><li>Auto-exclude from recruitment campaigns while active</li></ul>
+              <ul class="sys-list"><li>Compliance scoring &amp; at-risk alerts</li><li>Auto-exclude from recruitment while active</li></ul>
             </div>
           </div>
         </div>
@@ -557,16 +686,30 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s7">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <g class="trophy">
+                  <path d="M32 10 H48 L46 24 H34 Z" fill="#f59e0b"/>
+                  <rect x="37" y="24" width="6" height="4" fill="#d97706"/>
+                  <rect x="34" y="28" width="12" height="3" rx="1" fill="#d97706"/>
+                  <path d="M32 10 Q24 14 28 22 L34 20" fill="#fbbf24" opacity=".6"/>
+                  <path d="M48 10 Q56 14 52 22 L46 20" fill="#fbbf24" opacity=".6"/>
+                </g>
+                <circle class="spark" cx="24" cy="8" r="2" fill="#f59e0b"/>
+                <circle class="spark" cx="56" cy="6" r="1.5" fill="#fbbf24"/>
+                <text x="68" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">congrats &amp; rewards</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Completion screen with congrats animation</li><li>Points/heartbeats awarded</li><li>Next-study suggestions based on profile</li></ul>
+                <ul class="ch-list"><li>Congrats screen + heartbeats awarded</li><li>Next-study suggestions</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>"Thank you" email + study summary</li><li>Invite to next relevant studies</li><li>Community content &amp; success stories</li></ul>
+                <ul class="ch-list"><li>Thank you email + study summary</li><li>Next-study invitations</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Auto-trigger exit survey then washout period</li><li>Reward distribution engine</li><li>Next-study recommendation engine</li></ul>
+              <ul class="sys-list"><li>Auto-trigger exit survey &rarr; washout</li><li>Reward distribution + next-study engine</li></ul>
             </div>
           </div>
         </div>
@@ -580,16 +723,28 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s8">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <g class="glass">
+                  <path d="M30 6 H50 L42 18 H38 Z" stroke="#22c55e" stroke-width="1.5" fill="#dcfce7"/>
+                  <path d="M30 34 H50 L42 22 H38 Z" stroke="#22c55e" stroke-width="1.5" fill="#dcfce7"/>
+                  <path d="M38 24 L34 30 H46 L42 24" fill="#86efac"/>
+                </g>
+                <circle class="sand" cx="40" cy="20" r="1.5" fill="#22c55e"/>
+                <circle class="sand" cx="40" cy="20" r="1" fill="#16a34a" style="animation-delay:.3s"/>
+                <text x="62" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">cool-down timer</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Banner: &ldquo;Washout until [date]&rdquo; with countdown</li><li><strong>Public Study Track</strong> (e.g., Sleep or Stress public studies) to keep users active daily during washout &mdash; telling them &ldquo;come back in 14 days&rdquo; causes drop-off</li><li>Recommend allowed public studies</li><li>Auto-notification when washout ends</li></ul>
+                <ul class="ch-list"><li>Countdown banner + public study track</li><li>Auto-notify when washout ends</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Educational content &amp; community emails</li><li>NO conflicting clinical study invites</li><li>Curated study email when washout ends</li></ul>
+                <ul class="ch-list"><li>Educational &amp; community content</li><li>Curated study email at washout end</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Auto-track washout dates per participant</li><li>Exclude from clinical recruitment during washout</li><li>Washout expiry triggers &amp; eligibility re-check</li></ul>
+              <ul class="sys-list"><li>Auto-track washout dates per participant</li><li>Exclude from clinical recruitment</li><li>Expiry triggers &amp; eligibility re-check</li></ul>
             </div>
           </div>
         </div>
@@ -603,16 +758,27 @@ a{color:inherit;text-decoration:none}
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="stage-illus s9">
+              <svg width="200" height="40" viewBox="0 0 200 40" fill="none">
+                <g class="rspin">
+                  <path d="M44 8 A12 12 0 1 1 32 20" stroke="#ec4899" stroke-width="2" fill="none" stroke-linecap="round"/>
+                  <path d="M44 4 L44 12 L36 8 Z" fill="#ec4899"/>
+                </g>
+                <circle class="rspark" cx="56" cy="10" r="2" fill="#f472b6"/>
+                <circle class="rspark" cx="24" cy="28" r="1.5" fill="#ec4899" style="animation-delay:.8s"/>
+                <text x="68" y="24" font-size="10" fill="#64748b" font-weight="600" font-family="inherit">win them back</text>
+              </svg>
+            </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>"We miss you" card on next open</li><li>VIP badges &amp; tier recognition</li><li>Early access to new studies for top participants</li></ul>
+                <ul class="ch-list"><li>&ldquo;We miss you&rdquo; card + VIP badges</li><li>Early access for top participants</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Re-engagement: "Come back &amp; earn X heartbeats"</li><li>VIP newsletters &amp; referral asks</li><li>Email-only leads: app install pushes with value props</li></ul>
+                <ul class="ch-list"><li>Heartbeat incentive emails</li><li>App install pushes for email-only leads</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Churn detection (3+ months inactivity)</li><li>Engagement scoring &amp; VIP tier system</li><li>Email-only segment &amp; app install conversion tracking</li><li>A/B testing for re-engagement messages</li></ul>
+              <ul class="sys-list"><li>Churn detection (3+ months inactive)</li><li>VIP tier system + engagement scoring</li><li>Email-only conversion tracking</li></ul>
             </div>
           </div>
         </div>
