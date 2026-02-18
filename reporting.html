@@ -1265,12 +1265,12 @@
 
     <div class="pace-grid">
       <div class="pace-card">
-        <div class="pace-title">Year-to-Date Progress</div>
+        <div class="pace-title">2026 Year-to-Date Progress</div>
         <div class="ring-wrap">
           <svg width="140" height="140" viewBox="0 0 140 140">
             <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
-            <!-- 1385 / 4500 midpoint = 30.8% → dashoffset = 364.4*(1-0.308) = 252.2 -->
-            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="364.4" stroke-dashoffset="252.2"></circle>
+            <!-- 1057 / 4000 = 26.4% → dashoffset = 364.4*(1-0.264) = 268.3 -->
+            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="364.4" stroke-dashoffset="268.3"></circle>
             <defs>
               <linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="var(--accent)"/>
@@ -1279,33 +1279,39 @@
             </defs>
           </svg>
           <div class="ring-center">
-            <div class="ring-value" style="color: var(--green);">1,385</div>
-            <div class="ring-label">of 4,000–5,000</div>
+            <div class="ring-value" style="color: var(--green);">1,057</div>
+            <div class="ring-label">of 4,000</div>
           </div>
         </div>
         <div class="pace-stats">
-          <div class="pace-stat-row"><span>Weeks elapsed</span><span>~6</span></div>
-          <div class="pace-stat-row"><span>Weekly run rate</span><span>~231 / wk</span></div>
+          <div class="pace-stat-row"><span>Weeks elapsed (2026)</span><span>~7</span></div>
+          <div class="pace-stat-row"><span>2026 weekly rate</span><span>~151 / wk</span></div>
+          <div class="pace-stat-row"><span>All-time onboarded</span><span>1,379</span></div>
+          <div class="pace-stat-row"><span>Pre-2026 onboarded</span><span>322</span></div>
           <div class="pace-stat-row"><span>Active studies</span><span>22</span></div>
         </div>
+        <p style="font-size: 10px; color: var(--text-dim); margin-top: 8px;">
+          Pre-2026: Enhanced Brew Coffee (192), Enhanced Brew Formula (80), Rootless (50). All other studies counted as 2026.
+        </p>
       </div>
 
       <div class="pace-card">
-        <div class="pace-title">Pace Check</div>
+        <div class="pace-title">Pace Check (2026 Target: 4,000)</div>
         <div class="ring-wrap">
           <svg width="140" height="140" viewBox="0 0 140 140">
             <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
-            <!-- 231 / 90 required = 257% → cap at 100% → offset 0 -->
+            <!-- 151 / 77 required = 196% → cap at 100% → offset 0 -->
             <circle class="ring-fill" cx="70" cy="70" r="58" stroke="var(--green)" stroke-dasharray="364.4" stroke-dashoffset="0"></circle>
           </svg>
           <div class="ring-center">
-            <div class="ring-value" style="color: var(--green);">257%</div>
+            <div class="ring-value" style="color: var(--green);">196%</div>
             <div class="ring-label">of required pace</div>
           </div>
         </div>
         <div class="pace-stats">
-          <div class="pace-stat-row"><span>Required rate</span><span>68–90 / wk</span></div>
-          <div class="pace-stat-row"><span>Current rate</span><span style="color: var(--green); font-weight: 600;">~231 / wk</span></div>
+          <div class="pace-stat-row"><span>Required rate (4,000 / yr)</span><span>~77 / wk</span></div>
+          <div class="pace-stat-row"><span>2026 YTD rate</span><span style="color: var(--green); font-weight: 600;">~151 / wk</span></div>
+          <div class="pace-stat-row"><span>All-time rate (1,379 / 7 wk)</span><span style="font-weight: 600;">~197 / wk</span></div>
           <div class="pace-stat-row"><span>Status</span><span><span class="status-chip on-track">Ahead of pace</span></span></div>
         </div>
       </div>
