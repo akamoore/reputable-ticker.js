@@ -125,12 +125,27 @@ a{color:inherit;text-decoration:none}
 .ch-box.in-app .ch-list li::before{background:var(--blue-200)}
 .ch-box.outside .ch-list li::before{background:var(--teal-200)}
 .ch-na{font-size:.8rem;color:var(--slate-400);font-style:italic}
+.ch-box-label{cursor:pointer;user-select:none}
+.ch-box-label .ch-toggle{width:12px;height:12px;margin-left:auto;opacity:.5;transition:transform .2s ease;flex-shrink:0}
+.ch-box.collapsed .ch-toggle{transform:rotate(-90deg)}
+.ch-box.collapsed .ch-list,.ch-box.collapsed .ch-na{max-height:0;overflow:hidden;opacity:0;margin:0;padding:0;transition:all .2s ease}
+.ch-box .ch-list,.ch-box .ch-na{max-height:500px;opacity:1;transition:all .3s ease}
 .sys-box{background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius-sm);padding:12px 14px}
 .sys-box-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--slate-500);margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .sys-box-label .dot{width:7px;height:7px;border-radius:50%;background:var(--slate-400);flex-shrink:0}
 .sys-list{list-style:none;padding:0}
 .sys-list li{font-size:.8rem;color:var(--slate-600);padding:2px 0 2px 14px;position:relative;text-align:left}
 .sys-list li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--slate-300)}
+.sys-box-label{cursor:pointer;user-select:none}
+.sys-box-label .ch-toggle{width:12px;height:12px;margin-left:auto;opacity:.5;transition:transform .2s ease;flex-shrink:0}
+.sys-box.collapsed .ch-toggle{transform:rotate(-90deg)}
+.sys-box.collapsed .sys-list{max-height:0;overflow:hidden;opacity:0;margin:0;padding:0;transition:all .2s ease}
+.sys-box .sys-list{max-height:500px;opacity:1;transition:all .3s ease}
+.policy-box{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid #f59e0b;border-left:4px solid #d97706;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px}
+.policy-box-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#92400e;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.policy-box-label svg{width:14px;height:14px;color:#d97706}
+.policy-box p{font-size:.8rem;color:#78350f;line-height:1.5}
+.policy-box strong{color:#92400e}
 
 /* Loop */
 .loop-indicator{text-align:center;margin:36px auto 0;padding:20px;background:linear-gradient(135deg,var(--indigo-50),var(--indigo-100));border:2px dashed var(--indigo-300);border-radius:var(--radius-lg);max-width:440px;transition:all .3s ease}
@@ -148,6 +163,12 @@ a{color:inherit;text-decoration:none}
 .seg-icon svg{width:18px;height:18px;color:var(--indigo-500)}
 .seg-text{font-size:.85rem;font-weight:600;color:var(--slate-700);line-height:1.4}
 .seg-desc{font-size:.75rem;color:var(--slate-400);margin-top:1px;font-weight:400}
+.seg-category{grid-column:1/-1;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:10px 0 2px;display:flex;align-items:center;gap:8px}
+.seg-category .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.seg-category.in-app-cat{color:var(--blue-600)}
+.seg-category.in-app-cat .cat-dot{background:var(--blue-500)}
+.seg-category.outside-cat{color:var(--teal-600)}
+.seg-category.outside-cat .cat-dot{background:var(--teal-500)}
 
 /* Phases (team-briefing style) */
 .phase-row{display:flex;gap:20px;flex-wrap:wrap}
@@ -172,10 +193,24 @@ a{color:inherit;text-decoration:none}
 /* Filter bar (segmentation) */
 .filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:14px 20px;margin-bottom:16px}
 .filter-bar-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-400);margin-right:4px;white-space:nowrap}
-.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;border:1px solid var(--slate-200);background:var(--slate-50);color:var(--slate-600);transition:all .2s ease;cursor:pointer}
+.filter-dropdown{position:relative}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;border:1px solid var(--slate-200);background:var(--slate-50);color:var(--slate-600);transition:all .2s ease;cursor:pointer;user-select:none}
 .filter-chip:hover{border-color:var(--indigo-300);background:var(--indigo-50);color:var(--indigo-600)}
 .filter-chip.active{background:var(--indigo-100);border-color:var(--indigo-300);color:var(--indigo-700)}
-.filter-chip svg{width:12px;height:12px;opacity:.5}
+.filter-chip.open{border-color:var(--indigo-400);background:var(--indigo-100);color:var(--indigo-700);box-shadow:0 0 0 2px rgba(0,179,159,.15)}
+.filter-chip svg.chevron{width:12px;height:12px;opacity:.5;transition:transform .2s ease;flex-shrink:0}
+.filter-chip.open svg.chevron{transform:rotate(180deg);opacity:.8}
+.filter-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:180px;background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);padding:4px 0;z-index:80;opacity:0;transform:translateY(-4px);pointer-events:none;transition:all .15s ease}
+.filter-dropdown.open .filter-menu{opacity:1;transform:translateY(0);pointer-events:auto}
+.filter-option{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:.82rem;font-weight:500;color:var(--slate-600);cursor:pointer;transition:all .15s ease;white-space:nowrap}
+.filter-option:hover{background:var(--indigo-50);color:var(--indigo-700)}
+.filter-option.selected{background:var(--indigo-50);color:var(--indigo-700);font-weight:600}
+.filter-option .check-icon{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--slate-300);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s ease}
+.filter-option.selected .check-icon{background:var(--indigo-500);border-color:var(--indigo-500)}
+.filter-option.selected .check-icon svg{display:block}
+.filter-option .check-icon svg{width:10px;height:10px;color:#fff;display:none}
+.filter-menu-header{padding:6px 14px 4px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-400);border-bottom:1px solid var(--slate-100);margin-bottom:2px}
+.filter-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;border-radius:8px;background:var(--indigo-500);color:#fff;font-size:.65rem;font-weight:700;padding:0 4px;margin-left:2px}
 .filter-reset{font-size:.75rem;font-weight:600;color:var(--indigo-500);margin-left:auto;cursor:pointer;padding:4px 10px;border-radius:4px;transition:background .2s;white-space:nowrap}
 .filter-reset:hover{background:var(--indigo-50)}
 .multi-note{display:flex;align-items:flex-start;gap:10px;background:var(--indigo-50);border:1px solid var(--indigo-200);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:20px}
@@ -195,6 +230,13 @@ a{color:inherit;text-decoration:none}
 .summary-card li::before{content:'';position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%}
 .summary-card.positive li::before{background:var(--teal-500)}
 .summary-card.next li::before{background:var(--blue-500)}
+.summary-card.outlier{border-left:4px solid #d97706}
+.summary-card.outlier h4 svg{color:#d97706}
+.summary-card.outlier li::before{background:#d97706}
+.policy-banner{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid #fbbf24;border-left:4px solid #d97706;border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+.policy-banner h4{font-size:.88rem;font-weight:700;color:#92400e;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.policy-banner h4 svg{width:18px;height:18px;color:#d97706}
+.policy-banner p{font-size:.84rem;color:#78350f;line-height:1.6}
 .closing-quote{background:linear-gradient(135deg,var(--indigo-600),var(--indigo-800));color:#fff;border-radius:var(--radius-lg);padding:36px 32px;text-align:center;position:relative;overflow:hidden}
 .closing-quote::before{content:'';position:absolute;top:-30%;right:-10%;width:50%;height:160%;background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
 .closing-quote blockquote{font-size:clamp(1rem,2.5vw,1.3rem);font-weight:600;line-height:1.5;max-width:700px;margin:0 auto;position:relative;z-index:1}
@@ -272,18 +314,18 @@ a{color:inherit;text-decoration:none}
         <div class="stage-number">1</div>
         <div class="stage-content">
           <div class="stage-header">
-            <div><div class="stage-name">Lead Capture</div><div class="stage-subtitle">Ads, forms, referrals, organic</div></div>
+            <div><div class="stage-name">Lead Capture</div><div class="stage-subtitle">Ads, forms, referrals, organic social, website joins</div></div>
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div><div class="ch-na">N/A &mdash; not in the app yet</div></div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
-                <ul class="ch-list"><li>Lead capture from Meta Ads, Google, landing pages</li><li>Confirmation email: "Welcome to Reputable"</li><li>Referral links from existing participants</li></ul>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div><div class="ch-na">N/A &mdash; not in the app yet</div></div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+                <ul class="ch-list"><li>Lead capture from Meta Ads, Google, landing pages</li><li>Organic Social (Instagram/bio links) with auto-import &amp; source attribution</li><li>Website Direct Joins (participant forms on site) with auto-import &amp; UTMs</li><li>Confirmation email: &ldquo;Welcome to Reputable&rdquo;</li><li>Referral links from existing participants</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
-              <ul class="sys-list"><li>Auto-import leads from Meta Ads &amp; forms into participant DB</li><li>UTM parameter tracking on all inbound links</li><li>Referral code generation &amp; tracking</li></ul>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <ul class="sys-list"><li>Auto-import leads from Meta Ads &amp; forms into participant DB</li><li>Auto-import from organic social (Instagram/bio) &amp; website forms</li><li>UTM parameter tracking on all inbound links (including organic &amp; website)</li><li>Referral code generation &amp; tracking</li><li><strong>Key metric: Total Leads</strong> &mdash; top-of-funnel count (landing page submissions + ad emails) tracked before &ldquo;Joined&rdquo;</li></ul>
             </div>
           </div>
         </div>
@@ -298,14 +340,14 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Onboarding screens &amp; account creation</li><li>Prompt to enable push notifications</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>"Thanks for downloading" email + quick start guide</li><li>Study code delivery if relevant</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <ul class="sys-list"><li>AppsFlyer SDK &amp; install attribution</li><li>OneLink tracking &amp; deferred deep linking</li><li>Install event triggers participant record creation</li></ul>
             </div>
           </div>
@@ -321,14 +363,14 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Explore studies screen with filtering</li><li>"Recommended for you" nudges</li><li>Featured studies &amp; in-app banners</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Email: "Top studies for you"</li><li>Push: "New studies you may qualify for"</li><li>Email digests of available studies</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <ul class="sys-list"><li>Browse activity tracking (views, clicks, time)</li><li>Push notification service (segmented)</li><li>Personalized study recommendation engine</li></ul>
             </div>
           </div>
@@ -339,20 +381,24 @@ a{color:inherit;text-decoration:none}
         <div class="stage-number">4</div>
         <div class="stage-content">
           <div class="stage-header">
-            <div><div class="stage-name">Eligibility Survey</div><div class="stage-subtitle">In-app screening with drop-off tracking</div></div>
+            <div><div class="stage-name">Eligibility Survey</div><div class="stage-subtitle">In-app screening &mdash; fixed criteria only, real-time drop-off monitoring</div></div>
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
+            <div class="policy-box">
+              <div class="policy-box-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg> Policy Update</div>
+              <p><strong>We will no longer use variable metrics (e.g., sleep scores) for ongoing inclusion/exclusion criteria. Fixed criteria only.</strong> This prevents accidental mass disqualifications like the Sleep Score &lt;75 logic that caused ~48&ndash;70 disqualifications.</p>
+            </div>
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Eligibility questionnaire with progress bar</li><li>Partial save &amp; resume</li><li>Real-time eligibility feedback</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Reminder email/SMS if they dropped off</li><li>Push nudge to finish survey</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
-              <ul class="sys-list"><li>Question-level drop-off tracking</li><li>Disqualification reason logging</li><li>Real-time monitoring dashboard</li></ul>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <ul class="sys-list"><li>Question-level drop-off tracking</li><li>Disqualification reason logging</li><li>Real-time drop-off monitoring &mdash; catch issues within first 10&ndash;20 people, not after 100+</li><li>Real-time monitoring dashboard</li></ul>
             </div>
           </div>
         </div>
@@ -362,20 +408,20 @@ a{color:inherit;text-decoration:none}
         <div class="stage-number">5</div>
         <div class="stage-content">
           <div class="stage-header">
-            <div><div class="stage-name">Onboarding</div><div class="stage-subtitle">Join study, labs, wearable setup, manual steps</div></div>
+            <div><div class="stage-name">Onboarding &amp; Manual Queue</div><div class="stage-subtitle">Join study, labs, wearable setup &mdash; pending vs completed visibility</div></div>
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
-                <ul class="ch-list"><li>Onboarding checklist with step tracking</li><li>Status indicator for pending manual steps</li><li>Scheduling links for labs/calls</li></ul>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+                <ul class="ch-list"><li>Onboarding checklist with step tracking</li><li><strong>Pending vs Completed status</strong> for every manual step (labs, wearables) &mdash; currently we can&rsquo;t see who is &ldquo;stuck,&rdquo; making recruitment targets impossible to project</li><li>Scheduling links for labs/calls</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Email with lab kit / wearable instructions</li><li>Reminders: "You haven't completed your lab yet"</li><li>SMS follow-ups for time-sensitive steps</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
-              <ul class="sys-list"><li>Manual queue tracking (pending vs completed)</li><li>Onboarding timeout alerts for stalled participants</li><li>Wearable device pairing verification</li></ul>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <ul class="sys-list"><li><strong>Manual queue tracking with clear Pending vs Completed status</strong> for labs &amp; wearables</li><li>Onboarding timeout alerts for stalled participants</li><li>Wearable device pairing verification</li><li>Visibility into exactly who is stuck and at which step</li></ul>
             </div>
           </div>
         </div>
@@ -390,14 +436,14 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Study home with daily tasks &amp; progress</li><li>In-app reminders &amp; reward/heartbeat display</li><li>At-risk flagging for low compliance</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Occasional check-in emails</li><li>Educational content related to study</li><li>Minimal outreach to avoid noise</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <ul class="sys-list"><li>Real-time compliance scoring engine</li><li>At-risk participant flagging &amp; alerts</li><li>Auto-exclude from recruitment campaigns while active</li></ul>
             </div>
           </div>
@@ -413,14 +459,14 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Completion screen with congrats animation</li><li>Points/heartbeats awarded</li><li>Next-study suggestions based on profile</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>"Thank you" email + study summary</li><li>Invite to next relevant studies</li><li>Community content &amp; success stories</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <ul class="sys-list"><li>Auto-trigger exit survey then washout period</li><li>Reward distribution engine</li><li>Next-study recommendation engine</li></ul>
             </div>
           </div>
@@ -431,19 +477,19 @@ a{color:inherit;text-decoration:none}
         <div class="stage-number">8</div>
         <div class="stage-content">
           <div class="stage-header">
-            <div><div class="stage-name">Washout Period</div><div class="stage-subtitle">Waiting period, public study nudges, washout end</div></div>
+            <div><div class="stage-name">Washout Period</div><div class="stage-subtitle">Keep users active daily via public studies &mdash; &ldquo;come back in 14 days&rdquo; causes churn</div></div>
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
-                <ul class="ch-list"><li>Banner: "Washout until [date]" with countdown</li><li>Recommend allowed public studies</li><li>Auto-notification when washout ends</li></ul>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+                <ul class="ch-list"><li>Banner: &ldquo;Washout until [date]&rdquo; with countdown</li><li><strong>Public Study Track</strong> (e.g., Sleep or Stress public studies) to keep users active daily during washout &mdash; telling them &ldquo;come back in 14 days&rdquo; causes drop-off</li><li>Recommend allowed public studies</li><li>Auto-notification when washout ends</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Educational content &amp; community emails</li><li>NO conflicting clinical study invites</li><li>Curated study email when washout ends</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <ul class="sys-list"><li>Auto-track washout dates per participant</li><li>Exclude from clinical recruitment during washout</li><li>Washout expiry triggers &amp; eligibility re-check</li></ul>
             </div>
           </div>
@@ -459,14 +505,14 @@ a{color:inherit;text-decoration:none}
           </div>
           <div class="stage-details">
             <div class="two-col">
-              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App</div>
+              <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>"We miss you" card on next open</li><li>VIP badges &amp; tier recognition</li><li>Early access to new studies for top participants</li></ul>
               </div>
-              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App</div>
+              <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
                 <ul class="ch-list"><li>Re-engagement: "Come back &amp; earn X heartbeats"</li><li>VIP newsletters &amp; referral asks</li><li>Email-only leads: app install pushes with value props</li></ul>
               </div>
             </div>
-            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements</div>
+            <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
               <ul class="sys-list"><li>Churn detection (3+ months inactivity)</li><li>Engagement scoring &amp; VIP tier system</li><li>Email-only segment &amp; app install conversion tracking</li><li>A/B testing for re-engagement messages</li></ul>
             </div>
           </div>
@@ -486,27 +532,127 @@ a{color:inherit;text-decoration:none}
   <div class="container">
     <div class="section-header reveal">
       <div class="section-label">Targeting</div>
-      <h2 class="section-title">Segmentation Rules</h2>
-      <p class="section-subtitle">Multi-select filters for targeted campaigns. Combine any filters to build precise audience segments.</p>
+      <h2 class="section-title">Multi-Select Filters</h2>
+      <p class="section-subtitle">Filters must be combinable. Example: &ldquo;Give me everyone who is [Not in Active Study] AND [Not in Washout] AND [Has not tried Study X]&rdquo; = your eligible recruitment list.</p>
     </div>
 
     <div class="filter-bar reveal">
       <div class="filter-bar-label">Filters</div>
-      <div class="filter-chip active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Active: All</div>
-      <div class="filter-chip active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Washout: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Study: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Baseline: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Channel: All</div>
-      <div class="filter-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg> Engagement: All</div>
+
+      <div class="filter-dropdown" data-filter="active">
+        <div class="filter-chip active"><span class="filter-chip-text">Active: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Active Status</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Yes"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Yes</div>
+          <div class="filter-option" data-value="No"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> No</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="washout">
+        <div class="filter-chip active"><span class="filter-chip-text">Washout: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Washout Status</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Yes"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Yes</div>
+          <div class="filter-option" data-value="No"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> No</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="study">
+        <div class="filter-chip"><span class="filter-chip-text">Study: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Study History</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Has Not Tried"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Has Not Tried</div>
+          <div class="filter-option" data-value="Currently Enrolled"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Currently Enrolled</div>
+          <div class="filter-option" data-value="Previously Completed"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Previously Completed</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="baseline">
+        <div class="filter-chip"><span class="filter-chip-text">Baseline: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Baseline Data</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="30+ Days"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 30+ Days</div>
+          <div class="filter-option" data-value="14-29 Days"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 14&ndash;29 Days</div>
+          <div class="filter-option" data-value="Insufficient"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Insufficient</div>
+          <div class="filter-option" data-value="N/A"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> N/A</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="channel">
+        <div class="filter-chip"><span class="filter-chip-text">Channel: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Lead Source</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Meta Ads"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Meta Ads</div>
+          <div class="filter-option" data-value="Organic Social"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Organic Social</div>
+          <div class="filter-option" data-value="Website"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Website</div>
+          <div class="filter-option" data-value="Referral"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Referral</div>
+          <div class="filter-option" data-value="Newsletter"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Newsletter</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="engagement">
+        <div class="filter-chip"><span class="filter-chip-text">Engagement: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Engagement Level</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Active (7 days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Active (7 days)</div>
+          <div class="filter-option" data-value="Dormant (30+ days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Dormant (30+ days)</div>
+          <div class="filter-option" data-value="Churned (90+ days)"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Churned (90+ days)</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="gender">
+        <div class="filter-chip"><span class="filter-chip-text">Gender: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Gender</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="Male"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Male</div>
+          <div class="filter-option" data-value="Female"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Female</div>
+          <div class="filter-option" data-value="Non-binary"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Non-binary</div>
+          <div class="filter-option" data-value="Prefer not to say"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Prefer not to say</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="location">
+        <div class="filter-chip"><span class="filter-chip-text">Location: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Location</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="USA"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> USA</div>
+          <div class="filter-option" data-value="Canada"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Canada</div>
+          <div class="filter-option" data-value="Other"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> Other</div>
+        </div>
+      </div>
+
+      <div class="filter-dropdown" data-filter="age">
+        <div class="filter-chip"><span class="filter-chip-text">Age: All</span> <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="filter-menu">
+          <div class="filter-menu-header">Age Range</div>
+          <div class="filter-option selected" data-value="All"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> All</div>
+          <div class="filter-option" data-value="18-24"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 18&ndash;24</div>
+          <div class="filter-option" data-value="25-34"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 25&ndash;34</div>
+          <div class="filter-option" data-value="35-44"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 35&ndash;44</div>
+          <div class="filter-option" data-value="45-54"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 45&ndash;54</div>
+          <div class="filter-option" data-value="55-64"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 55&ndash;64</div>
+          <div class="filter-option" data-value="65+"><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></span> 65+</div>
+        </div>
+      </div>
+
       <div class="filter-reset">Reset filters</div>
     </div>
 
     <div class="multi-note reveal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-      <p>These are <strong>multi-select filters</strong> &mdash; combine any of them to build the exact audience you need. For example: <em>"Not in active study + Not in washout + Has not tried Study X"</em> gives you your eligible recruitment list for a specific study. Works across both in-app participants and outside-app leads.</p>
+      <p><strong>Multi-Select Filtering Capability:</strong> The system must allow combining multiple filters simultaneously to build precise segments. Example query: <em>[Not in Active Study] + [Not in Washout] + [Has Not Attempted Study X] = Eligible Recruitment List.</em> Filters apply across two categories: <strong>In-App Participants</strong> (active app users) and <strong>Outside-App Leads</strong> (email-only contacts who haven&rsquo;t downloaded).</p>
     </div>
 
     <div class="seg-grid">
+      <div class="seg-category in-app-cat"><span class="cat-dot"></span> In-App Participants</div>
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div><div><div class="seg-text">Not in any active study</div><div class="seg-desc">Available for new recruitment</div></div></div>
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="seg-text">Not in washout period</div><div class="seg-desc">Cleared for a new clinical study</div></div></div>
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></div><div><div class="seg-text">Has not tried Study X</div><div class="seg-desc">Eligible for specific recruitment</div></div></div>
@@ -514,11 +660,14 @@ a{color:inherit;text-decoration:none}
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="seg-text">Has verified phone number</div><div class="seg-desc">Reachable via SMS</div></div></div>
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div><div><div class="seg-text">Not logged in 3+ months</div><div class="seg-desc">Targets for re-engagement</div></div></div>
       <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><div><div class="seg-text">Downloaded but never joined a study</div><div class="seg-desc">High-intent, needs a push</div></div></div>
-      <div class="seg-card reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg></div><div><div class="seg-text">Clicked ad, never downloaded</div><div class="seg-desc">Top-of-funnel retargeting</div></div></div>
       <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M12 11v4M10 13h4"/></svg></div><div><div class="seg-text">In manual queue (pending lab/wearable)</div><div class="seg-desc">Waiting on off-app steps</div></div></div>
       <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="seg-text">Washout ending within 7 days</div><div class="seg-desc">Prime for re-engagement</div></div></div>
       <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div><div class="seg-text">VIP / 3+ studies completed</div><div class="seg-desc">Top-tier for exclusive content</div></div></div>
+      <div class="seg-category outside-cat"><span class="cat-dot"></span> Outside-App Leads (Email-Only)</div>
       <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg></div><div><div class="seg-text">Email-only leads (never downloaded)</div><div class="seg-desc">Target for app install conversion</div></div></div>
+      <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg></div><div><div class="seg-text">Clicked ad, never downloaded</div><div class="seg-desc">Top-of-funnel retargeting</div></div></div>
+      <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg></div><div><div class="seg-text">Organic social / website form lead</div><div class="seg-desc">Captured via Instagram bio or site form</div></div></div>
+      <div class="seg-card new-seg reveal"><div class="seg-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg></div><div><div class="seg-text">Newsletter subscriber, no app activity</div><div class="seg-desc">Warm lead for conversion campaign</div></div></div>
     </div>
   </div>
 </section>
@@ -539,13 +688,14 @@ a{color:inherit;text-decoration:none}
         </div>
         <div class="phase-body">
           <ul>
-            <li><strong>Data cleanup (URGENT)</strong> &mdash; Remove test/dummy accounts inflating numbers and hurting email deliverability. Establish naming conventions so they're auto-excluded going forward.</li>
-            <li><strong>Basic segmentation queries</strong> &mdash; Even manual list pulls would be a huge step. Minimum: "give me everyone not in an active study, not in washout, and has not tried Study X." Multi-select filters across both in-app and lead databases.</li>
+            <li><strong>Data cleanup (CRITICAL)</strong> &mdash; Remove test/dummy accounts inflating numbers and hurting email deliverability. This is the #1 priority &mdash; accurate numbers and clean lists are the foundation for everything below. Establish naming conventions so they&rsquo;re auto-excluded going forward.</li>
+            <li><strong>Basic segmentation queries</strong> &mdash; Even manual list pulls would be a huge step. Minimum: &ldquo;give me everyone not in an active study, not in washout, and has not tried Study X.&rdquo; Multi-select filters across both in-app and lead databases.</li>
             <li><strong>Eligibility drop-off by question</strong> &mdash; Real-time monitoring so we catch problems within the first 10&ndash;20 people, not after 100+. Critical for every study launch.</li>
+            <li><strong>Resolve Insufficient Baseline Bug</strong> &mdash; ~150 participants were stalled/lost due to data connection delays causing false &ldquo;Insufficient Baseline&rdquo; status. Fix in testing/release phase.</li>
             <li><strong>Dashboard spend accuracy</strong> &mdash; Ensure all campaigns mapped. Fix spend gaps. Implement 30-day vs all-time views.</li>
             <li><strong>Source attribution</strong> &mdash; UTMs and OneLinks are set up for every channel since January &mdash; data needs to flow into the dashboard. Add organic social &amp; website tracking.</li>
-            <li><strong>Manual queue visibility</strong> &mdash; For studies with off-app steps (labs, wearable setup), show pending vs completed status so we know exactly who's stuck.</li>
-            <li><strong>Document in-app vs outside-app touchpoints</strong> &mdash; Map every stage's in-app and outside-app actions so the team operates from one coordinated playbook.</li>
+            <li><strong>Manual queue visibility</strong> &mdash; For studies with off-app steps (labs, wearable setup), show Pending vs Completed status so we know exactly who&rsquo;s stuck.</li>
+            <li><strong>Document in-app vs outside-app touchpoints</strong> &mdash; Map every stage&rsquo;s in-app and outside-app actions so the team operates from one coordinated playbook.</li>
             <li><strong>Basic email segmentation by lifecycle stage</strong> &mdash; Stop sending one blast to everyone. Segment by active, washout, available, churned at minimum.</li>
           </ul>
         </div>
@@ -590,7 +740,8 @@ a{color:inherit;text-decoration:none}
       <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Newsletter signups &mdash; SendGrid only</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Sync with participant database</div></div></div>
       <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">App installs &mdash; AppsFlyer only</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">AppsFlyer into real-time dashboard</div></div></div>
       <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Study joins &mdash; in-app only</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Real-time dashboard with status tracking</div></div></div>
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Email sends &mdash; manual SendGrid</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">One-click campaigns from dashboard</div></div></div>
+      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Email sends &mdash; can create templates manually, but no segmentation (blast to all only, not viable)</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Segmented one-click campaigns from dashboard</div></div></div>
+      <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Website forms &mdash; not connected</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Website forms auto-import to participant database</div></div></div>
       <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">In-app notifications &mdash; no lifecycle triggers</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Automated triggers at each stage</div></div></div>
       <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Push notifications &mdash; not being used</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Segmented pushes for recs &amp; re-engagement</div></div></div>
       <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Communication log &mdash; no central tracking</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Unified in-app + email touchpoint view</div></div></div>
@@ -606,16 +757,21 @@ a{color:inherit;text-decoration:none}
       <p class="section-subtitle">What we've built, what's working, and what comes next.</p>
     </div>
 
+    <div class="policy-banner reveal">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Recruitment Protocol Change</h4>
+      <p>Going forward, we will never utilize variable metrics (e.g., daily sleep scores) as ongoing inclusion/exclusion criteria. Recruitment will rely on <strong>fixed criteria only</strong> to prevent accidental mass disqualifications.</p>
+    </div>
+
     <div class="summary-grid">
       <div class="summary-card positive reveal">
-        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> What's Working</h4>
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> What&rsquo;s Working</h4>
         <ul>
           <li>Complete 9-stage lifecycle mapped with in-app + outside-app touchpoints</li>
           <li>Two-channel model treats participants like customers with a coordinated journey</li>
-          <li>12 segmentation rules identified as multi-select filters for targeted campaigns</li>
+          <li>Multi-select filters identified for targeted campaigns across in-app &amp; outside-app segments</li>
           <li>Integration points documented (today vs target state for each system)</li>
           <li>Phased roadmap with clear Phase 1 (4 weeks) and Phase 2 (3 months) priorities</li>
-          <li>Rule established: no variable metrics for inclusion/exclusion criteria going forward</li>
+          <li>Protocol updated: fixed criteria only for inclusion/exclusion going forward</li>
         </ul>
       </div>
       <div class="summary-card next reveal">
@@ -624,11 +780,21 @@ a{color:inherit;text-decoration:none}
           <li>Data cleanup: remove test/dummy accounts inflating numbers and hurting deliverability</li>
           <li>Build basic multi-select segmentation queries (manual pulls to start)</li>
           <li>Eligibility drop-off monitoring by question for every study launch</li>
+          <li>Resolve Insufficient Baseline bug (~150 participants stalled)</li>
           <li>Fix dashboard spend accuracy and get all campaigns properly mapped</li>
-          <li>Manual queue visibility for studies with off-app steps (labs, wearables)</li>
+          <li>Manual queue visibility: Pending vs Completed for off-app steps (labs, wearables)</li>
           <li>Stop single-blast emails &mdash; basic lifecycle stage segmentation at minimum</li>
         </ul>
       </div>
+    </div>
+
+    <div class="summary-card outlier reveal" style="margin-bottom:24px">
+      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg> Impact of Technical Issues (Outliers)</h4>
+      <ul>
+        <li><strong>Eligibility Logic:</strong> ~70 users lost due to strict variable metric logic (Sleep Score &lt;75). Protocol now updated to fixed criteria only.</li>
+        <li><strong>Insufficient Baseline:</strong> ~150 users stalled/lost due to &ldquo;Insufficient Baseline&rdquo; bug caused by data sync delays. Fix in testing/release phase.</li>
+        <li><strong>Resolution:</strong> Protocol updated to fixed criteria; Baseline bug fix in testing/release phase. Dashboard will be the source of truth once numbers are updated.</li>
+      </ul>
     </div>
 
     <div class="closing-quote reveal">
@@ -678,13 +844,74 @@ a{color:inherit;text-decoration:none}
       if(!was)card.classList.add('expanded');
     });
   });
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.stage-card.expanded').forEach(function(c){c.classList.remove('expanded')})});
-  // Filter chip toggle (interactive demo)
-  document.querySelectorAll('.filter-chip').forEach(function(chip){
-    chip.addEventListener('click',function(){chip.classList.toggle('active')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){
+    document.querySelectorAll('.stage-card.expanded').forEach(function(c){c.classList.remove('expanded')});
+    closeAllDropdowns();
+  }});
+
+  // ── Collapsible In-App / Outside-App / System boxes ──
+  document.querySelectorAll('.ch-box-label, .sys-box-label').forEach(function(label){
+    label.addEventListener('click',function(e){
+      e.stopPropagation();
+      var box=label.parentElement;
+      box.classList.toggle('collapsed');
+    });
   });
-  document.querySelector('.filter-reset')&&document.querySelector('.filter-reset').addEventListener('click',function(){
-    document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active')});
+
+  // ── Filter dropdown logic ──
+  function closeAllDropdowns(){
+    document.querySelectorAll('.filter-dropdown').forEach(function(d){
+      d.classList.remove('open');
+      d.querySelector('.filter-chip').classList.remove('open');
+    });
+  }
+
+  document.querySelectorAll('.filter-dropdown').forEach(function(dropdown){
+    var chip=dropdown.querySelector('.filter-chip');
+    var chipText=chip.querySelector('.filter-chip-text');
+    var filterName=dropdown.dataset.filter;
+    var displayName=filterName.charAt(0).toUpperCase()+filterName.slice(1);
+
+    // Toggle dropdown on chip click
+    chip.addEventListener('click',function(e){
+      e.stopPropagation();
+      var wasOpen=dropdown.classList.contains('open');
+      closeAllDropdowns();
+      if(!wasOpen){dropdown.classList.add('open');chip.classList.add('open')}
+    });
+
+    // Select option
+    dropdown.querySelectorAll('.filter-option').forEach(function(opt){
+      opt.addEventListener('click',function(e){
+        e.stopPropagation();
+        // Deselect all options in this dropdown
+        dropdown.querySelectorAll('.filter-option').forEach(function(o){o.classList.remove('selected')});
+        opt.classList.add('selected');
+        var val=opt.dataset.value;
+        chipText.textContent=displayName+': '+val;
+        chip.classList.toggle('active',val!=='All');
+        closeAllDropdowns();
+      });
+    });
+  });
+
+  // Close dropdowns on outside click
+  document.addEventListener('click',function(){closeAllDropdowns()});
+
+  // Reset filters
+  document.querySelector('.filter-reset')&&document.querySelector('.filter-reset').addEventListener('click',function(e){
+    e.stopPropagation();
+    document.querySelectorAll('.filter-dropdown').forEach(function(dropdown){
+      var chip=dropdown.querySelector('.filter-chip');
+      var chipText=chip.querySelector('.filter-chip-text');
+      var filterName=dropdown.dataset.filter;
+      var displayName=filterName.charAt(0).toUpperCase()+filterName.slice(1);
+      dropdown.querySelectorAll('.filter-option').forEach(function(o){o.classList.remove('selected')});
+      dropdown.querySelector('.filter-option[data-value="All"]').classList.add('selected');
+      chipText.textContent=displayName+': All';
+      chip.classList.remove('active');
+    });
+    closeAllDropdowns();
   });
 })();
 </script>
