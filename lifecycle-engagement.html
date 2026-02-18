@@ -260,33 +260,35 @@ a{color:inherit;text-decoration:none}
 .closing-quote .quote-mark{font-size:4rem;line-height:1;opacity:.25;font-family:Georgia,serif;margin-bottom:-20px}
 
 /* Integration — expandable cards */
-.int-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:960px;margin:0 auto}
-@media(max-width:768px){.int-grid{grid-template-columns:1fr}}
-.int-card{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;transition:all .3s ease}
-.int-card:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
-.int-card-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none;transition:background .2s ease}
-.int-card-header:hover{background:var(--slate-50)}
-.int-card-icon{width:38px;height:38px;border-radius:10px;background:var(--indigo-50);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.int-card-icon svg{width:18px;height:18px;color:var(--indigo-500)}
-.int-card-title{font-size:.9rem;font-weight:700;color:var(--slate-800);flex:1}
-.int-card-chevron{width:20px;height:20px;color:var(--slate-400);transition:transform .25s ease;flex-shrink:0}
+.int-grid{display:grid;grid-template-columns:1fr;gap:0;max-width:860px;margin:0 auto}
+.int-card{border-bottom:1px solid var(--slate-200);transition:all .2s ease}
+.int-card:last-child{border-bottom:none}
+.int-card-header{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none;transition:background .15s ease;border-radius:var(--radius-sm)}
+.int-card-header:hover{background:var(--indigo-50)}
+.int-card-icon{width:32px;height:32px;border-radius:8px;background:var(--indigo-50);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.int-card.open .int-card-icon{background:var(--indigo-500)}
+.int-card-icon svg{width:16px;height:16px;color:var(--indigo-500)}
+.int-card.open .int-card-icon svg{color:#fff}
+.int-card-title{font-size:.88rem;font-weight:600;color:var(--slate-700);flex:1}
+.int-card.open .int-card-title{font-weight:700;color:var(--slate-900)}
+.int-card-chevron{width:18px;height:18px;color:var(--slate-300);transition:transform .25s ease;flex-shrink:0}
 .int-card.open .int-card-chevron{transform:rotate(180deg);color:var(--indigo-500)}
-.int-card-body{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease;opacity:0}
-.int-card.open .int-card-body{max-height:600px;opacity:1}
-.int-card-inner{padding:0 20px 20px}
-.int-state{border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px}
-.int-state-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.int-state-label span{display:inline-block;width:7px;height:7px;border-radius:50%}
+.int-card-body{max-height:0;overflow:hidden;transition:max-height .3s ease,opacity .2s ease;opacity:0}
+.int-card.open .int-card-body{max-height:400px;opacity:1}
+.int-card-inner{padding:4px 16px 16px 60px}
+.int-state{border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:6px}
+.int-state-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.int-state-label span{display:inline-block;width:6px;height:6px;border-radius:50%}
 .int-state.today{background:#fef2f2;border:1px solid #fecaca}
 .int-state.today .int-state-label{color:#991b1b}
 .int-state.today .int-state-label span{background:#ef4444}
 .int-state.target{background:#ecfdf5;border:1px solid #a7f3d0}
 .int-state.target .int-state-label{color:#065f46}
 .int-state.target .int-state-label span{background:#10b981}
-.int-state p{font-size:.82rem;color:var(--slate-600);line-height:1.55}
+.int-state p{font-size:.8rem;color:var(--slate-600);line-height:1.45}
 .int-state p strong{color:var(--slate-800)}
-.int-card-arrow{display:flex;justify-content:center;padding:4px 0;color:var(--indigo-300)}
-.int-card-arrow svg{width:16px;height:16px}
+.int-card-arrow{display:flex;justify-content:center;padding:2px 0;color:var(--indigo-300)}
+.int-card-arrow svg{width:14px;height:14px}
 
 /* Footer */
 .footer{text-align:center;padding:36px 0;border-top:1px solid var(--slate-200);color:var(--slate-400);font-size:.82rem}
@@ -776,12 +778,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>Manually downloading lead data from Ads Manager. <strong>Campaign-to-study mapping is incomplete.</strong> No real-time spend visibility.</p>
+              <p>Manual lead downloads. Incomplete campaign mapping. No real-time spend.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>Auto-feed spend and lead data into dashboard with UTM attribution. All campaigns mapped to studies. <strong>Real-time cost-per-lead by study.</strong></p>
+              <p>Auto-feed spend + leads with UTM attribution. Real-time cost-per-lead by study.</p>
             </div>
           </div>
         </div>
@@ -798,12 +800,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>One blast to ~1,900 people with <strong>130+ bounces per send</strong>. No segmentation. Can&rsquo;t target by study status, lifecycle stage, or engagement level.</p>
+              <p>One blast to everyone. No segmentation by status, stage, or engagement.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>Segmented sends from dashboard (feature already started). Trigger-based drip campaigns. <strong>Automatic suppression of active study participants.</strong> Clean list = fewer bounces.</p>
+              <p>Segmented sends from dashboard. Auto-suppress active participants. Drip campaigns.</p>
             </div>
           </div>
         </div>
@@ -820,12 +822,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>Install data doesn&rsquo;t match dashboard. Can&rsquo;t confidently say which channel drives installs. We can&rsquo;t track exactly where people drop off between ad click and install.</p>
+              <p>Install data doesn&rsquo;t match dashboard. Can&rsquo;t attribute installs to channels.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>Unified install attribution &mdash; single source of truth. <strong>Tie ad click &rarr; install &rarr; study join</strong> into one cohesive journey. Required for accurate cost-per-install metrics.</p>
+              <p>Single source of truth: ad click &rarr; install &rarr; study join in one view.</p>
             </div>
           </div>
         </div>
@@ -842,12 +844,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>No question-level drop-off visibility. Can&rsquo;t see which questions cause disqualifications. The GLP-1/metformin question in HOP may be unnecessarily filtering people out &mdash; <strong>we don&rsquo;t know.</strong></p>
+              <p>No question-level drop-off data. Can&rsquo;t see which questions disqualify people.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>Real-time monitoring: drop-off rate by question, disqualification reason breakdown, average time to complete. <strong>Catch problems in the first 10&ndash;20 people, not after 100+.</strong></p>
+              <p>Real-time drop-off by question. Catch issues in first 10&ndash;20 people.</p>
             </div>
           </div>
         </div>
@@ -864,12 +866,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>Need to ask 5 different people for status updates. No unified view of who&rsquo;s in which stage. <strong>&ldquo;Joined&rdquo; and &ldquo;onboarded&rdquo; are conflated</strong> &mdash; ProleevaMax shows 152 joins but only 35 onboarded because labs are the bottleneck.</p>
+              <p>No unified view. &ldquo;Joined&rdquo; and &ldquo;onboarded&rdquo; are conflated. Status requires asking multiple people.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>One dashboard with real-time lifecycle status per participant. <strong>Clear distinction between joined / onboarding / active / completed / washout.</strong> Manual queue tracking for lab-dependent studies.</p>
+              <p>Real-time lifecycle status per participant. Clear stage distinctions + manual queue tracking.</p>
             </div>
           </div>
         </div>
@@ -886,12 +888,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>No automated tracking whatsoever. Can&rsquo;t tell who&rsquo;s in washout, how long they&rsquo;ve been there, or when they&rsquo;ll be available. <strong>Participants could be doing public studies to stay engaged &mdash; but we&rsquo;re not nudging them.</strong></p>
+              <p>No automated tracking. Can&rsquo;t tell who&rsquo;s in washout or when they&rsquo;re available.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>Auto-track washout start/end dates. Engage participants with public studies during washout. <strong>Auto-notify when eligible for new sponsored studies.</strong> These are our highest-value re-enrollment targets.</p>
+              <p>Auto-track dates. Route to public studies during washout. Notify when eligible.</p>
             </div>
           </div>
         </div>
@@ -908,12 +910,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>Landing page forms and website signups are <strong>not connected to the participant database</strong>. Newsletter signups live in SendGrid only. Organic social leads from Instagram bio and website forms are captured but siloed.</p>
+              <p>Forms and signups not connected to participant database. Leads siloed across tools.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>All form submissions auto-import to participant database. <strong>Newsletter, website, and social leads unified</strong> into one system with source attribution for each.</p>
+              <p>All form submissions auto-import. Unified leads with source attribution.</p>
             </div>
           </div>
         </div>
@@ -930,12 +932,12 @@ a{color:inherit;text-decoration:none}
           <div class="int-card-inner">
             <div class="int-state today">
               <div class="int-state-label"><span></span> Current State</div>
-              <p>Push notifications are <strong>not being used at all</strong>. In-app notifications have no lifecycle triggers. No central communication log tracking what each participant has received.</p>
+              <p>Push not used. In-app has no lifecycle triggers. No central communication log.</p>
             </div>
             <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
             <div class="int-state target">
               <div class="int-state-label"><span></span> Target State</div>
-              <p>Segmented pushes for study recommendations &amp; re-engagement. <strong>Automated lifecycle triggers at each stage.</strong> Unified in-app + email + push touchpoint view per participant.</p>
+              <p>Automated lifecycle triggers. Segmented pushes. Unified touchpoint log.</p>
             </div>
           </div>
         </div>
