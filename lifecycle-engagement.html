@@ -500,7 +500,7 @@ a{color:inherit;text-decoration:none}
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Auto-import all leads into participant DB</li><li>UTM tracking on all inbound links</li><li>Referral code generation &amp; tracking</li></ul>
+              <ul class="sys-list"><li>Auto-import all leads into DB + auto-tag status (e.g., email-only, app installed, never downloaded)</li><li>UTM tracking on all inbound links</li><li>Referral code generation &amp; tracking</li></ul>
             </div>
           </div>
         </div>
@@ -530,11 +530,11 @@ a{color:inherit;text-decoration:none}
                 <ul class="ch-list"><li>Onboarding screens &amp; account setup</li><li>Push notification opt-in</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Welcome email + quick start guide</li><li>Study code delivery</li></ul>
+                <ul class="ch-list"><li>Welcome email + quick start guide</li><li>Study code delivery</li><li>Auto-nudge sequence for non-installers (email at 24hr, 48hr, 72hr with direct deep link)</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>AppsFlyer install attribution</li><li>OneLink deep linking</li><li>Auto-create participant record on install</li></ul>
+              <ul class="sys-list"><li>AppsFlyer install attribution</li><li>OneLink deep linking</li><li>Link install event to existing lead record automatically</li><li>Auto-trigger install nudge sequence for email-only leads who haven&rsquo;t installed after 24hrs</li></ul>
             </div>
           </div>
         </div>
@@ -602,11 +602,11 @@ a{color:inherit;text-decoration:none}
                 <ul class="ch-list"><li>Questionnaire with save &amp; resume</li><li>Real-time eligibility feedback</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Reminder email/push if dropped off</li></ul>
+                <ul class="ch-list"><li>&ldquo;You&rsquo;re almost there&rdquo; nudge (push + email) if survey incomplete</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Question-level drop-off tracking</li><li>Disqualification reason logging</li><li>Real-time monitoring dashboard</li></ul>
+              <ul class="sys-list"><li>Question-level drop-off tracking</li><li>Auto-trigger nudge sequence on incomplete survey (abandoned-cart style)</li><li>Disqualification reason logging</li><li>Real-time monitoring dashboard</li></ul>
             </div>
           </div>
         </div>
@@ -638,11 +638,11 @@ a{color:inherit;text-decoration:none}
                 <ul class="ch-list"><li>Onboarding checklist with step tracking</li><li>Pending vs Completed status per step</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Lab/wearable instruction emails</li><li>Reminders for incomplete steps</li></ul>
+                <ul class="ch-list"><li>Lab/wearable instruction emails</li><li>&ldquo;You left something incomplete&rdquo; nudge (push + email) per stalled step</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Manual queue: Pending vs Completed tracking</li><li>Timeout alerts for stalled participants</li><li>Wearable pairing verification</li></ul>
+              <ul class="sys-list"><li>Manual queue: Pending vs Completed tracking</li><li>Auto-trigger abandoned-step nudge (push + email) after inactivity threshold</li><li>Timeout alerts for stalled participants</li><li>Wearable pairing verification</li></ul>
             </div>
           </div>
         </div>
@@ -665,14 +665,14 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Daily tasks &amp; progress tracking</li><li>Rewards display &amp; at-risk flags</li></ul>
+                <ul class="ch-list"><li>Daily tasks &amp; progress tracking</li><li>Rewards display &amp; at-risk flags</li><li>Mid-study milestone celebrations (e.g., &ldquo;50% done! Bonus heartbeats earned&rdquo;)</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Check-in emails (minimal)</li><li>Educational content</li></ul>
+                <ul class="ch-list"><li>Check-in emails (minimal)</li><li>Educational content</li><li>Milestone push notifications (25%, 50%, 75% complete)</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Compliance scoring &amp; at-risk alerts</li><li>Auto-exclude from recruitment while active</li></ul>
+              <ul class="sys-list"><li>Auto-exclude from recruitment while active</li><li>Milestone progress tracker with auto-triggered celebration &amp; bonus rewards at 25/50/75%</li></ul>
             </div>
           </div>
         </div>
@@ -702,14 +702,14 @@ a{color:inherit;text-decoration:none}
             </div>
             <div class="two-col">
               <div class="ch-box in-app"><div class="ch-box-label"><span class="dot"></span> In-App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Congrats screen + heartbeats awarded</li><li>Next-study suggestions</li></ul>
+                <ul class="ch-list"><li>Congrats screen + heartbeats awarded</li><li>Next-study suggestions</li><li>Referral prompt at peak satisfaction (&ldquo;Share Reputable &amp; earn heartbeats&rdquo;)</li></ul>
               </div>
               <div class="ch-box outside"><div class="ch-box-label"><span class="dot"></span> Outside App <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-                <ul class="ch-list"><li>Thank you email + study summary</li><li>Next-study invitations</li></ul>
+                <ul class="ch-list"><li>Thank you email + study summary</li><li>Next-study invitations</li><li>Referral CTA in completion email (share link with bonus incentive)</li></ul>
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Auto-trigger exit survey &rarr; washout</li><li>Reward distribution + next-study engine</li></ul>
+              <ul class="sys-list"><li>Auto-trigger exit survey &rarr; washout</li><li>Reward distribution + next-study engine</li><li>Auto-surface referral prompt + pre-filled share link on completion screen</li></ul>
             </div>
           </div>
         </div>
@@ -744,7 +744,7 @@ a{color:inherit;text-decoration:none}
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Auto-track washout dates per participant</li><li>Exclude from clinical recruitment</li><li>Expiry triggers &amp; eligibility re-check</li></ul>
+              <ul class="sys-list"><li>Auto-track washout dates per participant</li><li>Exclude from clinical recruitment</li><li>Auto-notify participant + re-check eligibility when washout ends</li></ul>
             </div>
           </div>
         </div>
@@ -754,7 +754,7 @@ a{color:inherit;text-decoration:none}
         <div class="stage-number">9</div>
         <div class="stage-content">
           <div class="stage-header">
-            <div><div class="stage-name">Re-engagement</div><div class="stage-subtitle">Churn detection, VIP recognition, email-only leads</div></div>
+            <div><div class="stage-name">Re-engagement</div><div class="stage-subtitle">Tiered churn detection (7d / 30d / 90d), VIP recognition, email-only leads</div></div>
             <div class="stage-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
           </div>
           <div class="stage-details">
@@ -778,7 +778,7 @@ a{color:inherit;text-decoration:none}
               </div>
             </div>
             <div class="sys-box"><div class="sys-box-label"><span class="dot"></span> System Requirements <svg class="ch-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></div>
-              <ul class="sys-list"><li>Churn detection (3+ months inactive)</li><li>VIP tier system + engagement scoring</li><li>Email-only conversion tracking</li></ul>
+              <ul class="sys-list"><li>Tiered churn escalation: 7 days inactive &rarr; gentle nudge, 30 days &rarr; incentive offer, 90 days &rarr; final re-engagement campaign</li><li>VIP tier system + engagement scoring</li><li>Email-only conversion tracking</li></ul>
             </div>
           </div>
         </div>
