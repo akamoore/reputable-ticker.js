@@ -217,47 +217,76 @@ a{color:inherit;text-decoration:none}
 .multi-note svg{width:18px;height:18px;color:var(--indigo-500);flex-shrink:0;margin-top:1px}
 .multi-note p{font-size:.84rem;color:var(--indigo-700);font-weight:500;line-height:1.5}
 
-/* Summary */
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-@media(max-width:768px){.summary-grid{grid-template-columns:1fr}}
-.summary-card{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:20px 24px}
-.summary-card h4{font-size:.92rem;font-weight:700;color:var(--slate-900);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.summary-card h4 svg{width:18px;height:18px}
-.summary-card.positive h4 svg{color:var(--teal-500)}
-.summary-card.next h4 svg{color:var(--blue-500)}
-.summary-card ul{list-style:none;padding:0}
-.summary-card li{font-size:.84rem;color:var(--slate-600);padding:4px 0 4px 16px;position:relative}
-.summary-card li::before{content:'';position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%}
-.summary-card.positive li::before{background:var(--teal-500)}
-.summary-card.next li::before{background:var(--blue-500)}
-.summary-card.outlier{border-left:4px solid #d97706}
-.summary-card.outlier h4 svg{color:#d97706}
-.summary-card.outlier li::before{background:#d97706}
-.policy-banner{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid #fbbf24;border-left:4px solid #d97706;border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+/* Summary — KPI cards */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.kpi-row{grid-template-columns:1fr}}
+.kpi-card{background:#fff;border:1px solid var(--slate-200);border-left:4px solid var(--teal-500);border-radius:var(--radius);padding:20px 22px;transition:all .3s ease}
+.kpi-card:hover{box-shadow:var(--shadow-md);border-left-color:var(--teal-600)}
+.kpi-value{font-size:1.65rem;font-weight:800;color:var(--teal-600);line-height:1.2;margin-bottom:4px}
+.kpi-label{font-size:.78rem;font-weight:600;color:var(--slate-400);text-transform:uppercase;letter-spacing:.04em;line-height:1.4}
+
+/* Summary — bullet insights */
+.insight-list{list-style:none;padding:0;margin:0 0 28px;display:flex;flex-direction:column;gap:8px}
+.insight-list li{font-size:.88rem;color:var(--slate-600);padding:6px 0 6px 20px;position:relative;line-height:1.55}
+.insight-list li::before{content:'';position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--teal-500)}
+.insight-list li strong{color:var(--slate-800)}
+
+/* Summary — status table */
+.status-table-wrap{overflow-x:auto;margin-bottom:28px;border-radius:var(--radius);border:1px solid var(--slate-200)}
+.status-table{width:100%;border-collapse:collapse;font-size:.84rem}
+.status-table thead{background:var(--slate-50)}
+.status-table th{text-align:left;padding:10px 16px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--slate-400);border-bottom:2px solid var(--slate-200)}
+.status-table td{padding:12px 16px;border-bottom:1px solid var(--slate-100);color:var(--slate-600);vertical-align:middle}
+.status-table tr:last-child td{border-bottom:none}
+.status-table tr:hover{background:var(--slate-50)}
+.status-table .stage-num{font-weight:800;color:var(--indigo-600);width:50px}
+.status-table .stage-nm{font-weight:600;color:var(--slate-800)}
+.status-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.status-badge.live{background:#d1fae5;color:#065f46}
+.status-badge.partial{background:#fef3c7;color:#92400e}
+.status-badge.not-built{background:#fee2e2;color:#991b1b}
+
+/* Summary — policy callout */
+.policy-banner{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid #fbbf24;border-left:4px solid #d97706;border-radius:var(--radius);padding:20px 24px;margin-bottom:24px}
 .policy-banner h4{font-size:.88rem;font-weight:700;color:#92400e;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .policy-banner h4 svg{width:18px;height:18px;color:#d97706}
 .policy-banner p{font-size:.84rem;color:#78350f;line-height:1.6}
-.closing-quote{background:linear-gradient(135deg,var(--indigo-600),var(--indigo-800));color:#fff;border-radius:var(--radius-lg);padding:36px 32px;text-align:center;position:relative;overflow:hidden}
+
+/* Summary — closing quote */
+.closing-quote{background:linear-gradient(135deg,var(--teal-600,#0d9488),var(--teal-800,#115e59));color:#fff;border-radius:var(--radius-lg);padding:36px 32px;text-align:center;position:relative;overflow:hidden}
 .closing-quote::before{content:'';position:absolute;top:-30%;right:-10%;width:50%;height:160%;background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%);pointer-events:none}
 .closing-quote blockquote{font-size:clamp(1rem,2.5vw,1.3rem);font-weight:600;line-height:1.5;max-width:700px;margin:0 auto;position:relative;z-index:1}
 .closing-quote .quote-mark{font-size:4rem;line-height:1;opacity:.25;font-family:Georgia,serif;margin-bottom:-20px}
 
-/* Integration */
-.int-grid{display:grid;gap:12px;max-width:860px;margin:0 auto}
-.int-row{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);padding:16px 20px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;transition:all .3s ease}
-.int-row:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
-.int-row.new-row{border-left:3px solid var(--teal-500)}
-@media(max-width:600px){.int-row{grid-template-columns:1fr;text-align:center}}
-.int-from,.int-to{display:flex;flex-direction:column;gap:1px}
-.int-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.int-from .int-label{color:var(--slate-400)}
-.int-to .int-label{color:var(--indigo-500)}
-.int-value{font-size:.84rem;font-weight:600;color:var(--slate-700)}
-.int-to .int-value{color:var(--indigo-700)}
-.int-arrow{width:36px;height:36px;border-radius:50%;background:var(--indigo-50);display:flex;align-items:center;justify-content:center}
-.int-arrow svg{width:16px;height:16px;color:var(--indigo-400)}
-.int-row:hover .int-arrow svg{animation:bounceArrow 1s ease infinite}
-@media(max-width:600px){.int-arrow{margin:0 auto}}
+/* Integration — expandable cards */
+.int-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:960px;margin:0 auto}
+@media(max-width:768px){.int-grid{grid-template-columns:1fr}}
+.int-card{background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);overflow:hidden;transition:all .3s ease}
+.int-card:hover{border-color:var(--indigo-300);box-shadow:var(--shadow-md)}
+.int-card-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none;transition:background .2s ease}
+.int-card-header:hover{background:var(--slate-50)}
+.int-card-icon{width:38px;height:38px;border-radius:10px;background:var(--indigo-50);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.int-card-icon svg{width:18px;height:18px;color:var(--indigo-500)}
+.int-card-title{font-size:.9rem;font-weight:700;color:var(--slate-800);flex:1}
+.int-card-chevron{width:20px;height:20px;color:var(--slate-400);transition:transform .25s ease;flex-shrink:0}
+.int-card.open .int-card-chevron{transform:rotate(180deg);color:var(--indigo-500)}
+.int-card-body{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease;opacity:0}
+.int-card.open .int-card-body{max-height:600px;opacity:1}
+.int-card-inner{padding:0 20px 20px}
+.int-state{border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px}
+.int-state-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.int-state-label span{display:inline-block;width:7px;height:7px;border-radius:50%}
+.int-state.today{background:#fef2f2;border:1px solid #fecaca}
+.int-state.today .int-state-label{color:#991b1b}
+.int-state.today .int-state-label span{background:#ef4444}
+.int-state.target{background:#ecfdf5;border:1px solid #a7f3d0}
+.int-state.target .int-state-label{color:#065f46}
+.int-state.target .int-state-label span{background:#10b981}
+.int-state p{font-size:.82rem;color:var(--slate-600);line-height:1.55}
+.int-state p strong{color:var(--slate-800)}
+.int-card-arrow{display:flex;justify-content:center;padding:4px 0;color:var(--indigo-300)}
+.int-card-arrow svg{width:16px;height:16px}
 
 /* Footer */
 .footer{text-align:center;padding:36px 0;border-top:1px solid var(--slate-200);color:var(--slate-400);font-size:.82rem}
@@ -735,16 +764,183 @@ a{color:inherit;text-decoration:none}
       <p class="section-subtitle">Where data lives today vs. where it needs to go.</p>
     </div>
     <div class="int-grid">
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Meta Ads leads &mdash; manual download</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Auto-feed into participant database</div></div></div>
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Landing page forms &mdash; sits on page</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Auto-import to participant database</div></div></div>
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Newsletter signups &mdash; SendGrid only</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Sync with participant database</div></div></div>
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">App installs &mdash; AppsFlyer only</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">AppsFlyer into real-time dashboard</div></div></div>
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Study joins &mdash; in-app only</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Real-time dashboard with status tracking</div></div></div>
-      <div class="int-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Email sends &mdash; can create templates manually, but no segmentation (blast to all only, not viable)</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Segmented one-click campaigns from dashboard</div></div></div>
-      <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Website forms &mdash; not connected</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Website forms auto-import to participant database</div></div></div>
-      <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">In-app notifications &mdash; no lifecycle triggers</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Automated triggers at each stage</div></div></div>
-      <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Push notifications &mdash; not being used</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Segmented pushes for recs &amp; re-engagement</div></div></div>
-      <div class="int-row new-row reveal"><div class="int-from"><div class="int-label">Today</div><div class="int-value">Communication log &mdash; no central tracking</div></div><div class="int-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div><div class="int-to"><div class="int-label">Target</div><div class="int-value">Unified in-app + email touchpoint view</div></div></div>
+
+      <!-- Meta Ads → Dashboard -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="int-card-title">Meta Ads &rarr; Dashboard</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>Manually downloading lead data from Ads Manager. <strong>Campaign-to-study mapping is incomplete.</strong> No real-time spend visibility.</p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>Auto-feed spend and lead data into dashboard with UTM attribution. All campaigns mapped to studies. <strong>Real-time cost-per-lead by study.</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email System -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="int-card-title">Email System</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>One blast to ~1,900 people with <strong>130+ bounces per send</strong>. No segmentation. Can&rsquo;t target by study status, lifecycle stage, or engagement level.</p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>Segmented sends from dashboard (feature already started). Trigger-based drip campaigns. <strong>Automatic suppression of active study participants.</strong> Clean list = fewer bounces.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AppsFlyer -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+          <div class="int-card-title">AppsFlyer (Install Attribution)</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>Install data doesn&rsquo;t match dashboard. Can&rsquo;t confidently say which channel drives installs. We can&rsquo;t track exactly where people drop off between ad click and install.</p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>Unified install attribution &mdash; single source of truth. <strong>Tie ad click &rarr; install &rarr; study join</strong> into one cohesive journey. Required for accurate cost-per-install metrics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eligibility Surveys -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div class="int-card-title">Eligibility Surveys</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>No question-level drop-off visibility. Can&rsquo;t see which questions cause disqualifications. The GLP-1/metformin question in HOP may be unnecessarily filtering people out &mdash; <strong>we don&rsquo;t know.</strong></p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>Real-time monitoring: drop-off rate by question, disqualification reason breakdown, average time to complete. <strong>Catch problems in the first 10&ndash;20 people, not after 100+.</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participant Status -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="int-card-title">Participant Status</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>Need to ask 5 different people for status updates. No unified view of who&rsquo;s in which stage. <strong>&ldquo;Joined&rdquo; and &ldquo;onboarded&rdquo; are conflated</strong> &mdash; ProleevaMax shows 152 joins but only 35 onboarded because labs are the bottleneck.</p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>One dashboard with real-time lifecycle status per participant. <strong>Clear distinction between joined / onboarding / active / completed / washout.</strong> Manual queue tracking for lab-dependent studies.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Washout Tracking -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10"/><path d="M20.49 15a9 9 0 01-14.85 3.36L1 14"/></svg></div>
+          <div class="int-card-title">Washout Tracking</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>No automated tracking whatsoever. Can&rsquo;t tell who&rsquo;s in washout, how long they&rsquo;ve been there, or when they&rsquo;ll be available. <strong>Participants could be doing public studies to stay engaged &mdash; but we&rsquo;re not nudging them.</strong></p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>Auto-track washout start/end dates. Engage participants with public studies during washout. <strong>Auto-notify when eligible for new sponsored studies.</strong> These are our highest-value re-enrollment targets.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Website & Forms -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+          <div class="int-card-title">Website &amp; Landing Pages</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>Landing page forms and website signups are <strong>not connected to the participant database</strong>. Newsletter signups live in SendGrid only. Organic social leads from Instagram bio and website forms are captured but siloed.</p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>All form submissions auto-import to participant database. <strong>Newsletter, website, and social leads unified</strong> into one system with source attribution for each.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Push & In-App Notifications -->
+      <div class="int-card reveal">
+        <div class="int-card-header">
+          <div class="int-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/><line x1="12" y1="2" x2="12" y2="4"/></svg></div>
+          <div class="int-card-title">Push &amp; In-App Notifications</div>
+          <svg class="int-card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="int-card-body">
+          <div class="int-card-inner">
+            <div class="int-state today">
+              <div class="int-state-label"><span></span> Current State</div>
+              <p>Push notifications are <strong>not being used at all</strong>. In-app notifications have no lifecycle triggers. No central communication log tracking what each participant has received.</p>
+            </div>
+            <div class="int-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
+            <div class="int-state target">
+              <div class="int-state-label"><span></span> Target State</div>
+              <p>Segmented pushes for study recommendations &amp; re-engagement. <strong>Automated lifecycle triggers at each stage.</strong> Unified in-app + email + push touchpoint view per participant.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -757,49 +953,61 @@ a{color:inherit;text-decoration:none}
       <p class="section-subtitle">What we've built, what's working, and what comes next.</p>
     </div>
 
+    <div class="kpi-row reveal">
+      <div class="kpi-card">
+        <div class="kpi-value">9</div>
+        <div class="kpi-label">Lifecycle stages mapped</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">2-Channel</div>
+        <div class="kpi-label">In-App + Outside-App model</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">~220</div>
+        <div class="kpi-label">Users impacted by tech issues</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">13+</div>
+        <div class="kpi-label">Segmentation filters defined</div>
+      </div>
+    </div>
+
+    <ul class="insight-list reveal">
+      <li><strong>Complete lifecycle framework</strong> &mdash; 9-stage journey with coordinated in-app and outside-app touchpoints at every stage. Two-channel model treats participants like customers.</li>
+      <li><strong>Multi-select segmentation ready</strong> &mdash; 13+ combinable filters defined across both in-app participants and outside-app leads. Manual queries can start immediately.</li>
+      <li><strong>Protocol updated</strong> &mdash; Variable metrics (e.g., daily sleep scores) will no longer be used for inclusion/exclusion. Fixed criteria only going forward to prevent mass disqualifications.</li>
+      <li><strong>~70 users lost to eligibility logic</strong> &mdash; Sleep Score &lt;75 variable metric caused accidental disqualifications. Policy now corrected.</li>
+      <li><strong>~150 users stalled on Insufficient Baseline</strong> &mdash; Data sync delays caused false &ldquo;Insufficient Baseline&rdquo; status. Bug fix in testing/release phase.</li>
+      <li><strong>Integration points documented</strong> &mdash; 10 system connections mapped from current state to target state, with clear Phase 1 and Phase 2 priorities.</li>
+    </ul>
+
+    <div class="status-table-wrap reveal">
+      <table class="status-table">
+        <thead>
+          <tr><th>Stage</th><th>Name</th><th>Current Status</th><th>Biggest Need</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="stage-num">1</td><td class="stage-nm">Awareness &amp; Lead Capture</td><td><span class="status-badge partial">Partial</span></td><td>Meta ads live, but no organic or website tracking yet</td></tr>
+          <tr><td class="stage-num">2</td><td class="stage-nm">App Install &amp; Onboarding</td><td><span class="status-badge partial">Partial</span></td><td>AppsFlyer set up; attribution gaps remain</td></tr>
+          <tr><td class="stage-num">3</td><td class="stage-nm">Browse / Explore</td><td><span class="status-badge not-built">Not Built</span></td><td>No personalized study recommendations or nudges</td></tr>
+          <tr><td class="stage-num">4</td><td class="stage-nm">Eligibility Survey</td><td><span class="status-badge live">Live</span></td><td>Needs real-time question-level drop-off monitoring</td></tr>
+          <tr><td class="stage-num">5</td><td class="stage-nm">Onboarding &amp; Manual Queue</td><td><span class="status-badge partial">Partial</span></td><td>No Pending vs Completed visibility for labs/wearables</td></tr>
+          <tr><td class="stage-num">6</td><td class="stage-nm">Active in Study</td><td><span class="status-badge live">Live</span></td><td>Needs at-risk compliance flagging</td></tr>
+          <tr><td class="stage-num">7</td><td class="stage-nm">Study Completion</td><td><span class="status-badge partial">Partial</span></td><td>No automated next-study suggestions</td></tr>
+          <tr><td class="stage-num">8</td><td class="stage-nm">Washout Period</td><td><span class="status-badge not-built">Not Built</span></td><td>No tracking, no public study routing during washout</td></tr>
+          <tr><td class="stage-num">9</td><td class="stage-nm">Re-engagement</td><td><span class="status-badge not-built">Not Built</span></td><td>No churn detection or VIP tier system</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="policy-banner reveal">
       <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Recruitment Protocol Change</h4>
       <p>Going forward, we will never utilize variable metrics (e.g., daily sleep scores) as ongoing inclusion/exclusion criteria. Recruitment will rely on <strong>fixed criteria only</strong> to prevent accidental mass disqualifications.</p>
     </div>
 
-    <div class="summary-grid">
-      <div class="summary-card positive reveal">
-        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> What&rsquo;s Working</h4>
-        <ul>
-          <li>Complete 9-stage lifecycle mapped with in-app + outside-app touchpoints</li>
-          <li>Two-channel model treats participants like customers with a coordinated journey</li>
-          <li>Multi-select filters identified for targeted campaigns across in-app &amp; outside-app segments</li>
-          <li>Integration points documented (today vs target state for each system)</li>
-          <li>Phased roadmap with clear Phase 1 (4 weeks) and Phase 2 (3 months) priorities</li>
-          <li>Protocol updated: fixed criteria only for inclusion/exclusion going forward</li>
-        </ul>
-      </div>
-      <div class="summary-card next reveal">
-        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Immediate Next Steps</h4>
-        <ul>
-          <li>Data cleanup: remove test/dummy accounts inflating numbers and hurting deliverability</li>
-          <li>Build basic multi-select segmentation queries (manual pulls to start)</li>
-          <li>Eligibility drop-off monitoring by question for every study launch</li>
-          <li>Resolve Insufficient Baseline bug (~150 participants stalled)</li>
-          <li>Fix dashboard spend accuracy and get all campaigns properly mapped</li>
-          <li>Manual queue visibility: Pending vs Completed for off-app steps (labs, wearables)</li>
-          <li>Stop single-blast emails &mdash; basic lifecycle stage segmentation at minimum</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="summary-card outlier reveal" style="margin-bottom:24px">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg> Impact of Technical Issues (Outliers)</h4>
-      <ul>
-        <li><strong>Eligibility Logic:</strong> ~70 users lost due to strict variable metric logic (Sleep Score &lt;75). Protocol now updated to fixed criteria only.</li>
-        <li><strong>Insufficient Baseline:</strong> ~150 users stalled/lost due to &ldquo;Insufficient Baseline&rdquo; bug caused by data sync delays. Fix in testing/release phase.</li>
-        <li><strong>Resolution:</strong> Protocol updated to fixed criteria; Baseline bug fix in testing/release phase. Dashboard will be the source of truth once numbers are updated.</li>
-      </ul>
-    </div>
-
     <div class="closing-quote reveal">
       <div class="quote-mark">&ldquo;</div>
-      <blockquote>We're not asking for everything at once. We have a phased plan with clear priorities. We're defining what we need &mdash; and asking the product team to tell us how to implement it. The infrastructure we build in Phase 1 is what turns this from a manual operation into a scalable system.</blockquote>
+      <blockquote>We&rsquo;re not asking for everything at once. We have a phased plan with clear priorities &mdash; the infrastructure we build in Phase 1 is what turns this from a manual operation into a scalable system.</blockquote>
     </div>
   </div>
 </section>
@@ -897,6 +1105,16 @@ a{color:inherit;text-decoration:none}
 
   // Close dropdowns on outside click
   document.addEventListener('click',function(){closeAllDropdowns()});
+
+  // ── Integration card expand/collapse ──
+  document.querySelectorAll('.int-card-header').forEach(function(header){
+    header.addEventListener('click',function(e){
+      e.stopPropagation();
+      var card=header.parentElement;
+      var wasOpen=card.classList.contains('open');
+      card.classList.toggle('open');
+    });
+  });
 
   // Reset filters
   document.querySelector('.filter-reset')&&document.querySelector('.filter-reset').addEventListener('click',function(e){
