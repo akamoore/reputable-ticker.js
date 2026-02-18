@@ -1,414 +1,492 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reputable Dashboard — Quick Reference Guide</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0d12; font-family: 'DM Sans', sans-serif; color: #e5e7eb; min-height: 100vh; }
-    #root { min-height: 100vh; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reputable Dashboard — Quick Reference Guide</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --indigo-50:#e7faf6;--indigo-100:#c8f2ea;--indigo-200:#93e7d8;
+  --indigo-300:#50d7c3;--indigo-400:#00d5be;--indigo-500:#00b39f;
+  --indigo-600:#009180;--indigo-700:#007768;--indigo-800:#005c51;
+  --indigo-900:#00433b;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;
+  --slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;
+  --slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;
+  --slate-900:#0f172a;
+  --red-50:#fef2f2;--red-100:#fee2e2;--red-500:#ef4444;--red-600:#dc2626;
+  --green-600:#16a34a;--green-700:#15803d;
+  --amber-600:#d97706;
+  --radius:12px;
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+}
+html{font-size:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  color:var(--slate-800);background:var(--slate-50);line-height:1.65;
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.dg-header{
+  border-bottom:1px solid var(--slate-200);
+  padding:20px 32px;display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.dg-header-icon{
+  width:36px;height:36px;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--indigo-500),var(--indigo-700));
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.dg-header-icon svg{width:18px;height:18px;color:#fff}
+.dg-header-title{font-size:.95rem;font-weight:800;color:var(--indigo-700)}
+.dg-header-sub{font-size:.75rem;color:var(--slate-500);font-weight:600;letter-spacing:.03em}
+.dg-header-badge{
+  margin-left:auto;background:var(--indigo-100);color:var(--indigo-700);
+  border-radius:20px;padding:5px 14px;font-size:.75rem;font-weight:700;letter-spacing:.03em;
+}
+
+/* ── Tab Nav ────────────────────────────────────────── */
+.dg-tabs{
+  display:flex;gap:2px;padding:12px 32px 0;
+  border-bottom:1px solid var(--slate-200);background:#fff;
+}
+.dg-tab{
+  background:transparent;color:var(--slate-500);border:none;
+  border-bottom:2px solid transparent;padding:10px 20px;
+  font-size:.82rem;font-weight:500;cursor:pointer;
+  border-radius:8px 8px 0 0;transition:all .2s ease;
+  font-family:inherit;white-space:nowrap;
+}
+.dg-tab:hover{color:var(--slate-700);background:var(--slate-100)}
+.dg-tab.active{
+  background:var(--indigo-100);color:var(--indigo-700);
+  border-bottom-color:var(--indigo-500);font-weight:700;
+}
+
+/* ── Content Area ───────────────────────────────────── */
+.dg-content{padding:36px 32px;max-width:960px}
+.dg-content h1{font-size:1.5rem;font-weight:800;color:var(--slate-900);margin:0 0 6px;line-height:1.2}
+.dg-content .subtitle{color:var(--slate-500);font-size:.92rem;margin:0 0 28px;line-height:1.5}
+
+/* ── Section Label ──────────────────────────────────── */
+.dg-label{
+  font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--indigo-600);margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;
+}
+.dg-label svg{width:14px;height:14px}
+
+/* ── Sections ───────────────────────────────────────── */
+.dg-section{margin-bottom:32px}
+.dg-section:last-child{margin-bottom:0}
+
+/* ── Table ──────────────────────────────────────────── */
+.dg-table{border-radius:var(--radius);overflow:hidden;border:1px solid var(--slate-200);background:#fff}
+.dg-table-row{display:grid;grid-template-columns:180px 1fr}
+.dg-table-row:not(:last-child){border-bottom:1px solid var(--slate-100)}
+.dg-table-row:nth-child(odd){background:var(--slate-50)}
+.dg-table-row:nth-child(even){background:#fff}
+.dg-table-key{
+  padding:12px 16px;font-size:.82rem;font-weight:700;color:var(--indigo-700);
+  border-right:1px solid var(--slate-100);
+}
+.dg-table-val{padding:12px 16px;color:var(--slate-600);font-size:.85rem;line-height:1.55}
+
+/* ── Funnel Bar ─────────────────────────────────────── */
+.dg-funnel{display:flex;gap:4px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.dg-funnel-btn{
+  background:#fff;color:var(--slate-500);border:1px solid var(--slate-200);
+  border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:500;
+  cursor:pointer;transition:all .2s ease;white-space:nowrap;font-family:inherit;
+}
+.dg-funnel-btn:hover{border-color:var(--indigo-300);color:var(--slate-700)}
+.dg-funnel-btn.active{
+  background:var(--indigo-100);color:var(--indigo-800);
+  border-color:var(--indigo-500);font-weight:700;
+}
+.dg-funnel-sep{color:var(--slate-300);font-size:14px}
+.dg-funnel-detail{
+  background:linear-gradient(135deg,var(--indigo-50),#fff);
+  border:1px solid var(--indigo-200);border-left:4px solid var(--indigo-500);
+  border-radius:var(--radius);padding:16px 20px;font-size:.88rem;
+  color:var(--slate-700);line-height:1.6;margin-bottom:8px;
+}
+.dg-funnel-detail strong{color:var(--indigo-700);display:block;margin-bottom:4px}
+
+/* ── Accordion ──────────────────────────────────────── */
+.dg-accordion{display:flex;flex-direction:column;gap:8px}
+.dg-acc-item{
+  background:#fff;border:1px solid var(--slate-200);border-radius:var(--radius);
+  overflow:hidden;transition:box-shadow .2s ease;
+}
+.dg-acc-item.open{box-shadow:var(--shadow-md)}
+.dg-acc-q{
+  width:100%;background:none;border:none;padding:14px 18px;text-align:left;
+  color:var(--slate-800);font-size:.88rem;font-weight:600;font-family:inherit;
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  gap:12px;line-height:1.5;
+}
+.dg-acc-q:hover{background:var(--slate-50)}
+.dg-acc-icon{
+  color:var(--indigo-500);font-size:18px;flex-shrink:0;width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s ease;
+}
+.dg-acc-item.open .dg-acc-icon{transform:rotate(45deg)}
+.dg-acc-a{
+  padding:0 18px 16px;color:var(--slate-500);font-size:.85rem;
+  line-height:1.65;border-top:1px solid var(--slate-100);display:none;
+}
+.dg-acc-a-inner{padding-top:12px}
+.dg-acc-item.open .dg-acc-a{display:block}
+
+/* ── Callout Boxes ──────────────────────────────────── */
+.dg-callout{
+  border-radius:var(--radius);padding:16px 20px;font-size:.92rem;
+  color:var(--slate-700);display:flex;align-items:flex-start;gap:12px;
+}
+.dg-callout svg{flex-shrink:0;margin-top:2px;width:20px;height:20px}
+.dg-callout.teal{
+  background:linear-gradient(135deg,var(--indigo-50),#fff);
+  border:1px solid var(--indigo-200);border-left:4px solid var(--indigo-500);
+}
+.dg-callout.teal strong{color:var(--indigo-700)}
+.dg-callout.teal svg{color:var(--indigo-500)}
+.dg-callout.red{
+  background:linear-gradient(135deg,var(--red-50),#fff);
+  border:1px solid var(--red-100);border-left:4px solid var(--red-500);
+}
+.dg-callout.red strong{color:var(--red-600)}
+.dg-callout.red svg{color:var(--red-500)}
+.dg-callout.neutral{
+  background:#fff;border:1px solid var(--slate-200);
+  color:var(--slate-500);
+}
+.dg-callout.neutral span{color:var(--indigo-700);font-weight:600}
+
+/* ── Significance Badges ────────────────────────────── */
+.dg-badges{display:flex;gap:10px;margin-bottom:12px}
+.dg-badge{
+  color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;
+  border-radius:4px;letter-spacing:.04em;
+}
+.dg-badge.green{background:var(--green-600)}
+.dg-badge.amber{background:var(--amber-600)}
+.dg-badge.gray{background:var(--slate-500)}
+.dg-badge-note{font-size:.85rem;color:var(--slate-500);line-height:1.6}
+
+/* ── Tab Panel (hidden by default) ──────────────────── */
+.dg-panel{display:none}
+.dg-panel.active{display:block}
+
+@media(max-width:640px){
+  .dg-header{padding:16px 20px}
+  .dg-tabs{padding:10px 20px 0}
+  .dg-tab{padding:8px 14px;font-size:.75rem}
+  .dg-content{padding:24px 20px}
+  .dg-table-row{grid-template-columns:140px 1fr}
+}
+</style>
 </head>
 <body>
-  <div id="root"></div>
 
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<!-- ══ Header ═══════════════════════════════════════════ -->
+<div class="dg-header">
+  <div class="dg-header-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+  </div>
+  <div>
+    <div class="dg-header-title">Dashboard Guide</div>
+    <div class="dg-header-sub">Quick Reference</div>
+  </div>
+  <span class="dg-header-badge">ACTIVE</span>
+</div>
 
-  <script type="text/babel">
-    const { useState } = React;
+<!-- ══ Tab Nav ══════════════════════════════════════════ -->
+<div class="dg-tabs" id="tabNav">
+  <button class="dg-tab active" data-tab="recruitment">&uarr; Recruitment</button>
+  <button class="dg-tab" data-tab="compliance">&check; Compliance</button>
+  <button class="dg-tab" data-tab="results">&#x25C8; Results</button>
+  <button class="dg-tab" data-tab="general">? General</button>
+</div>
 
-    const tabs = [
-      { id: "recruitment", label: "Recruitment", icon: "\u2B06" },
-      { id: "compliance", label: "Compliance", icon: "\u2713" },
-      { id: "results", label: "Results", icon: "\u25C8" },
-      { id: "general", label: "General", icon: "?" },
-    ];
+<!-- ══ Content ═════════════════════════════════════════ -->
+<div class="dg-content">
 
-    const data = {
-      recruitment: {
-        title: "Recruitment",
-        subtitle: "Top-of-funnel view \u2014 tracks progress from interest to acceptance.",
-        funnel: [
-          { stage: "All", desc: "Everyone who has shown interest, at any stage." },
-          { stage: "Joined Study", desc: "Signed up and begun onboarding." },
-          { stage: "Connected Wearable", desc: "Linked a compatible wearable device." },
-          { stage: "Eligible", desc: "Meets all initial eligibility criteria." },
-          { stage: "Verified SMS", desc: "Confirmed identity via SMS." },
-          { stage: "Signed Consent", desc: "Signed the informed consent form." },
-          { stage: "Completed Baseline", desc: "Finished baseline surveys or assessments." },
-          { stage: "Ordered Product", desc: "Cleared all steps; eligible to receive product. Does not mean shipped." },
-        ],
-        extra: [
-          { status: "Waitlisted", desc: "Interested before launch; queued until spots open." },
-          { status: "Insufficient Baseline", desc: "Connected wearable but lacked enough baseline data." },
-          { status: "Ineligible", desc: "Did not meet one or more eligibility requirements." },
-          { status: "Aborted", desc: "Dropped off during enrollment before completing all steps." },
-        ],
-        faqs: [
-          { q: "Why is the top of the funnel so much larger than the bottom?", a: "By design. A large pool is screened down to qualified participants. Drop-off at each stage is expected and normal." },
-          { q: "What does 'Ordered Product' actually mean?", a: "The participant cleared all prerequisites. It does not mean product was shipped \u2014 an additional checkpoint (e.g. a cognitive assessment) may still be required." },
-          { q: "What\u2019s the difference between Aborted and Ineligible?", a: "Ineligible = didn\u2019t meet study criteria. Aborted = started the process but dropped off before finishing, regardless of eligibility." },
-          { q: "What is the Waitlist?", a: "People who signaled interest before the study launched. They may enter the active funnel as spots open up." },
-        ],
-      },
-      compliance: {
-        title: "Compliance",
-        subtitle: "Monitors accepted participants during the active study period.",
-        statuses: [
-          { status: "All", desc: "All fully onboarded, accepted participants." },
-          { status: "Waiting for Order", desc: "Accepted but still waiting to receive study product." },
-          { status: "Has Not Started", desc: "Received materials but hasn\u2019t begun the protocol." },
-          { status: "Compliant", desc: "Actively engaged and meeting all requirements." },
-          { status: "At Risk", desc: "Fallen behind (missed surveys, wearable gaps). Auto-reminders are sent." },
-          { status: "Completed", desc: "Finished all required study activities." },
-          { status: "Surveys Outstanding", desc: "Has surveys due but not yet completed." },
-          { status: "Withdrawn", desc: "Fully accepted but later removed (voluntary or non-compliance)." },
-        ],
-        fields: [
-          { field: "Onboarding Complete", desc: "Date the participant finished onboarding." },
-          { field: "Forecasted Finish Date", desc: "Projected date to complete all study activities." },
-          { field: "Broadcast (Last Sent)", desc: "Date of most recent broadcast message to this participant." },
-          { field: "Synced", desc: "Last date wearable data synced with the platform." },
-        ],
-        faqs: [
-          { q: "What does 'At Risk' mean?", a: "The participant hasn\u2019t completed a required activity on time. Common causes: missed survey, wearable data gap. Auto-reminders are sent to help them catch up." },
-          { q: "What\u2019s the difference between Withdrawn and Aborted?", a: "Aborted = dropped off during enrollment. Withdrawn = accepted into the study, then removed later." },
-          { q: "Can I message participants from the dashboard?", a: "Yes. Use Broadcast for group messages. Use the Chat icon on individual participant rows for one-on-one communication." },
-        ],
-      },
-      results: {
-        title: "Results",
-        subtitle: "Aggregate wearable-derived outcomes, broken down by study arm.",
-        elements: [
-          { el: "All Arms", desc: "Combined data across all study groups." },
-          { el: "Group A / B / etc.", desc: "Filters to a specific study arm (names from your study setup)." },
-          { el: "Top Movers", desc: "Metrics with the most significant change since study start." },
-          { el: "Sleep / Health / Activity", desc: "Category filters for different wearable metric types." },
-          { el: "Control Group", desc: "Placebo or no-intervention group, shown alongside active group for comparison." },
-        ],
-        cards: [
-          { comp: "Metric Name", desc: "The wearable measure (e.g. HRV, Time Awake, Avg HR)." },
-          { comp: "Percentage Value", desc: "Green \u2191 = improvement. Red \u2193 = worsening. Based on desired direction, not raw number." },
-          { comp: "Progress Bar", desc: "Visual comparison of active group change vs. control." },
-          { comp: "Significance Badge", desc: "'Significant' = statistically meaningful. 'Trend' = promising but not yet significant. 'Not Significant' = no meaningful difference." },
-        ],
-        faqs: [
-          { q: "Can I see which participants are in Group A vs. B?", a: "No. The dashboard maintains blinding. Group assignments are never revealed \u2014 the participant list doesn\u2019t change when you switch arms." },
-          { q: "Why does a metric show improvement when the number went down?", a: "Improvement is relative to the desired outcome. For metrics where lower is better (e.g. time awake, resting HR), a decrease shows as improvement." },
-          { q: "What does 'Trend' mean?", a: "The data is moving in a positive direction but hasn\u2019t reached statistical significance yet. More data may push it to Significant." },
-          { q: "How often is data updated?", a: "On a rolling basis as wearable data syncs and surveys are completed." },
-        ],
-      },
-      general: {
-        title: "General",
-        subtitle: "Cross-tab FAQs and quick-reference.",
-        overview: [
-          { tab: "Recruitment", desc: "Tracks participant enrollment from interest to acceptance." },
-          { tab: "Compliance", desc: "Monitors active participants during the study." },
-          { tab: "Results", desc: "Shows aggregate study outcomes by arm." },
-          { tab: "Study Setup", desc: "Your study configuration." },
-          { tab: "Heartbeats", desc: "System-level notifications and activity logs." },
-        ],
-        faqs: [
-          { q: "How do participants move from Recruitment to Compliance?", a: "They must complete every funnel step: join, connect wearable, meet eligibility, verify SMS, sign consent, complete baseline, and clear any extra checkpoints. Then they appear on the Compliance tab." },
-          { q: "What does Broadcast do?", a: "Sends a message to a group of participants directly from the dashboard \u2014 useful for updates, reminders, or announcements." },
-          { q: "Can I export data?", a: "Contact your Reputable Health point of contact for export options." },
-        ],
-      },
-    };
+  <!-- ─── Recruitment ────────────────────────────────── -->
+  <div class="dg-panel active" id="panel-recruitment">
+    <h1>Recruitment</h1>
+    <p class="subtitle">Top-of-funnel view &mdash; tracks progress from interest to acceptance.</p>
 
-    const Badge = ({ text }) => {
-      const colors = {
-        Significant: "#22c55e",
-        Trend: "#f59e0b",
-        "Not Significant": "#6b7280",
-      };
-      return (
-        <span style={{
-          background: colors[text] || "#6b7280",
-          color: "#fff",
-          fontSize: "10px",
-          fontWeight: 700,
-          padding: "2px 8px",
-          borderRadius: "4px",
-          letterSpacing: "0.05em",
-        }}>{text}</span>
-      );
-    };
-
-    const FunnelBar = ({ stages, activeIdx, setActiveIdx }) => (
-      <div style={{ display: "flex", gap: "4px", alignItems: "center", marginBottom: "20px", flexWrap: "wrap" }}>
-        {stages.map((s, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <button
-              onClick={() => setActiveIdx(i === activeIdx ? null : i)}
-              style={{
-                background: activeIdx === i ? "#4ade80" : "rgba(255,255,255,0.06)",
-                color: activeIdx === i ? "#000" : "#9ca3af",
-                border: "none",
-                borderRadius: "6px",
-                padding: "5px 10px",
-                fontSize: "11px",
-                fontFamily: "'DM Mono', monospace",
-                cursor: "pointer",
-                fontWeight: activeIdx === i ? 700 : 400,
-                transition: "all 0.15s",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {s.stage}
-            </button>
-            {i < stages.length - 1 && <span style={{ color: "#374151", fontSize: "12px" }}>{"\u203A"}</span>}
-          </div>
-        ))}
+    <div class="dg-section">
+      <div class="dg-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Funnel Stages &mdash; click any stage to expand
       </div>
-    );
+      <div class="dg-funnel" id="funnelBar"></div>
+      <div id="funnelDetail"></div>
+    </div>
 
-    const Accordion = ({ items, qKey = "q", aKey = "a" }) => {
-      const [open, setOpen] = useState(null);
-      return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-          {items.map((item, i) => (
-            <div key={i} style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: "8px",
-              overflow: "hidden",
-            }}>
-              <button
-                onClick={() => setOpen(open === i ? null : i)}
-                style={{
-                  width: "100%",
-                  background: "none",
-                  border: "none",
-                  padding: "12px 16px",
-                  textAlign: "left",
-                  color: "#e5e7eb",
-                  fontSize: "13px",
-                  fontFamily: "'DM Sans', sans-serif",
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <span>{item[qKey]}</span>
-                <span style={{ color: "#4ade80", fontSize: "16px", flexShrink: 0, transform: open === i ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}>+</span>
-              </button>
-              {open === i && (
-                <div style={{ padding: "0 16px 14px", color: "#9ca3af", fontSize: "13px", lineHeight: "1.6", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-                  <div style={{ paddingTop: "12px" }}>{item[aKey]}</div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      );
-    };
+    <div class="dg-section">
+      <div class="dg-label">Additional Statuses</div>
+      <div class="dg-table" id="tbl-extra"></div>
+    </div>
 
-    const Table = ({ rows, col1, col2 }) => (
-      <div style={{ display: "flex", flexDirection: "column", gap: "1px", borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.07)" }}>
-        {rows.map((row, i) => (
-          <div key={i} style={{
-            display: "grid",
-            gridTemplateColumns: "180px 1fr",
-            background: i % 2 === 0 ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.04)",
-          }}>
-            <div style={{ padding: "10px 14px", color: "#4ade80", fontSize: "12px", fontFamily: "'DM Mono', monospace", fontWeight: 600, borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-              {row[col1]}
-            </div>
-            <div style={{ padding: "10px 14px", color: "#9ca3af", fontSize: "12px", lineHeight: "1.5" }}>
-              {row[col2]}
-            </div>
-          </div>
-        ))}
+    <div class="dg-section">
+      <div class="dg-label">FAQs</div>
+      <div class="dg-accordion" id="acc-recruitment"></div>
+    </div>
+  </div>
+
+  <!-- ─── Compliance ─────────────────────────────────── -->
+  <div class="dg-panel" id="panel-compliance">
+    <h1>Compliance</h1>
+    <p class="subtitle">Monitors accepted participants during the active study period.</p>
+
+    <div class="dg-section">
+      <div class="dg-label">Participant Statuses</div>
+      <div class="dg-table" id="tbl-statuses"></div>
+    </div>
+
+    <div class="dg-section">
+      <div class="dg-label">Table Fields</div>
+      <div class="dg-table" id="tbl-fields"></div>
+    </div>
+
+    <div class="dg-section">
+      <div class="dg-callout teal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span><strong>Automated Reminders</strong> &mdash; Participants flagged as <em>At Risk</em> automatically receive notifications to complete surveys, sync wearables, or take required actions.</span>
       </div>
-    );
+    </div>
 
-    function App() {
-      const [activeTab, setActiveTab] = useState("recruitment");
-      const [funnelIdx, setFunnelIdx] = useState(null);
-      const section = data[activeTab];
+    <div class="dg-section">
+      <div class="dg-label">FAQs</div>
+      <div class="dg-accordion" id="acc-compliance"></div>
+    </div>
+  </div>
 
-      return (
-        <div style={{
-          minHeight: "100vh",
-          background: "#0a0d12",
-          fontFamily: "'DM Sans', sans-serif",
-          color: "#e5e7eb",
-        }}>
-          {/* Header */}
-          <div style={{
-            borderBottom: "1px solid rgba(255,255,255,0.07)",
-            padding: "20px 32px",
-            display: "flex",
-            alignItems: "center",
-            gap: "14px",
-            background: "rgba(255,255,255,0.01)",
-          }}>
-            <div style={{ width: "30px", height: "30px", borderRadius: "50%", background: "linear-gradient(135deg, #4ade80, #22d3ee)" }} />
-            <div>
-              <div style={{ fontSize: "14px", fontWeight: 700, letterSpacing: "0.05em", color: "#fff" }}>REPUTABLE DASHBOARD</div>
-              <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.08em" }}>QUICK REFERENCE GUIDE</div>
-            </div>
-            <div style={{ marginLeft: "auto" }}>
-              <span style={{ background: "rgba(74,222,128,0.1)", color: "#4ade80", border: "1px solid rgba(74,222,128,0.3)", borderRadius: "20px", padding: "4px 12px", fontSize: "11px", fontFamily: "'DM Mono', monospace" }}>ACTIVE</span>
-            </div>
-          </div>
+  <!-- ─── Results ────────────────────────────────────── -->
+  <div class="dg-panel" id="panel-results">
+    <h1>Results</h1>
+    <p class="subtitle">Aggregate wearable-derived outcomes, broken down by study arm.</p>
 
-          {/* Tab Nav */}
-          <div style={{
-            display: "flex",
-            gap: "2px",
-            padding: "16px 32px 0",
-            borderBottom: "1px solid rgba(255,255,255,0.07)",
-          }}>
-            {tabs.map(t => (
-              <button
-                key={t.id}
-                onClick={() => { setActiveTab(t.id); setFunnelIdx(null); }}
-                style={{
-                  background: activeTab === t.id ? "rgba(74,222,128,0.08)" : "transparent",
-                  color: activeTab === t.id ? "#4ade80" : "#6b7280",
-                  border: "none",
-                  borderBottom: activeTab === t.id ? "2px solid #4ade80" : "2px solid transparent",
-                  padding: "10px 20px",
-                  fontSize: "13px",
-                  fontWeight: activeTab === t.id ? 600 : 400,
-                  cursor: "pointer",
-                  borderRadius: "6px 6px 0 0",
-                  transition: "all 0.15s",
-                  fontFamily: "'DM Sans', sans-serif",
-                }}
-              >
-                {t.icon} {t.label}
-              </button>
-            ))}
-          </div>
+    <div class="dg-section">
+      <div class="dg-label">View Elements</div>
+      <div class="dg-table" id="tbl-elements"></div>
+    </div>
 
-          {/* Content */}
-          <div style={{ padding: "28px 32px", maxWidth: "900px" }}>
-            <div style={{ marginBottom: "24px" }}>
-              <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#fff", margin: "0 0 6px" }}>{section.title}</h1>
-              <p style={{ color: "#6b7280", fontSize: "13px", margin: 0 }}>{section.subtitle}</p>
-            </div>
+    <div class="dg-section">
+      <div class="dg-label">Metric Card Components</div>
+      <div class="dg-table" id="tbl-cards"></div>
+    </div>
 
-            {/* Recruitment Tab */}
-            {activeTab === "recruitment" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>FUNNEL STAGES {"\u2014"} click any stage to expand</div>
-                  <FunnelBar stages={data.recruitment.funnel} activeIdx={funnelIdx} setActiveIdx={setFunnelIdx} />
-                  {funnelIdx !== null && (
-                    <div style={{ background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.2)", borderRadius: "8px", padding: "14px 18px", fontSize: "13px", color: "#d1fae5", lineHeight: "1.6" }}>
-                      <strong style={{ color: "#4ade80", display: "block", marginBottom: "4px" }}>{data.recruitment.funnel[funnelIdx].stage}</strong>
-                      {data.recruitment.funnel[funnelIdx].desc}
-                    </div>
-                  )}
-                </div>
+    <div class="dg-section">
+      <div class="dg-label">Significance Badges</div>
+      <div class="dg-badges">
+        <span class="dg-badge green">Significant</span>
+        <span class="dg-badge amber">Trend</span>
+        <span class="dg-badge gray">Not Significant</span>
+      </div>
+      <div class="dg-badge-note">Green % = improvement (relative to desired direction, not raw increase). E.g. Time Awake going <em>down</em> shows as improvement.</div>
+    </div>
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>ADDITIONAL STATUSES</div>
-                  <Table rows={data.recruitment.extra} col1="status" col2="desc" />
-                </div>
+    <div class="dg-section">
+      <div class="dg-callout red">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span><strong>Blinding Maintained</strong> &mdash; All results are aggregate only. Individual participant-to-group assignments are never revealed.</span>
+      </div>
+    </div>
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>FAQs</div>
-                  <Accordion items={data.recruitment.faqs} />
-                </div>
-              </div>
-            )}
+    <div class="dg-section">
+      <div class="dg-label">FAQs</div>
+      <div class="dg-accordion" id="acc-results"></div>
+    </div>
+  </div>
 
-            {/* Compliance Tab */}
-            {activeTab === "compliance" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>PARTICIPANT STATUSES</div>
-                  <Table rows={data.compliance.statuses} col1="status" col2="desc" />
-                </div>
+  <!-- ─── General ────────────────────────────────────── -->
+  <div class="dg-panel" id="panel-general">
+    <h1>General</h1>
+    <p class="subtitle">Cross-tab FAQs and quick-reference.</p>
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>TABLE FIELDS</div>
-                  <Table rows={data.compliance.fields} col1="field" col2="desc" />
-                </div>
+    <div class="dg-section">
+      <div class="dg-label">The 5 Tabs at a Glance</div>
+      <div class="dg-table" id="tbl-overview"></div>
+    </div>
 
-                <div style={{ background: "rgba(99,102,241,0.05)", border: "1px solid rgba(99,102,241,0.2)", borderRadius: "8px", padding: "14px 18px", fontSize: "13px", color: "#c7d2fe" }}>
-                  <strong style={{ color: "#818cf8" }}>{"\u26A1"} Automated Reminders</strong> {"\u2014"} Participants flagged as <em>At Risk</em> automatically receive notifications to complete surveys, sync wearables, or take required actions.
-                </div>
+    <div class="dg-section">
+      <div class="dg-label">FAQs</div>
+      <div class="dg-accordion" id="acc-general"></div>
+    </div>
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>FAQs</div>
-                  <Accordion items={data.compliance.faqs} />
-                </div>
-              </div>
-            )}
+    <div class="dg-section">
+      <div class="dg-callout neutral">
+        Questions not covered here? Contact your <span>Reputable Health point of contact</span>.
+      </div>
+    </div>
+  </div>
 
-            {/* Results Tab */}
-            {activeTab === "results" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>VIEW ELEMENTS</div>
-                  <Table rows={data.results.elements} col1="el" col2="desc" />
-                </div>
+</div>
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>METRIC CARD COMPONENTS</div>
-                  <Table rows={data.results.cards} col1="comp" col2="desc" />
-                </div>
+<script>
+(function(){
+  /* ── Data ─────────────────────────────────────────── */
+  var funnel = [
+    {stage:"All", desc:"Everyone who has shown interest, at any stage."},
+    {stage:"Joined Study", desc:"Signed up and begun onboarding."},
+    {stage:"Connected Wearable", desc:"Linked a compatible wearable device."},
+    {stage:"Eligible", desc:"Meets all initial eligibility criteria."},
+    {stage:"Verified SMS", desc:"Confirmed identity via SMS."},
+    {stage:"Signed Consent", desc:"Signed the informed consent form."},
+    {stage:"Completed Baseline", desc:"Finished baseline surveys or assessments."},
+    {stage:"Ordered Product", desc:"Cleared all steps; eligible to receive product. Does not mean shipped."}
+  ];
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>SIGNIFICANCE BADGES</div>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <Badge text="Significant" />
-                    <Badge text="Trend" />
-                    <Badge text="Not Significant" />
-                  </div>
-                  <div style={{ marginTop: "10px", fontSize: "12px", color: "#6b7280", lineHeight: "1.6" }}>
-                    Green % = improvement (relative to desired direction, not raw increase). E.g. Time Awake going <em>down</em> shows as improvement.
-                  </div>
-                </div>
+  var tables = {
+    "tbl-extra": {col1:"status",col2:"desc",rows:[
+      {status:"Waitlisted", desc:"Interested before launch; queued until spots open."},
+      {status:"Insufficient Baseline", desc:"Connected wearable but lacked enough baseline data."},
+      {status:"Ineligible", desc:"Did not meet one or more eligibility requirements."},
+      {status:"Aborted", desc:"Dropped off during enrollment before completing all steps."}
+    ]},
+    "tbl-statuses": {col1:"status",col2:"desc",rows:[
+      {status:"All", desc:"All fully onboarded, accepted participants."},
+      {status:"Waiting for Order", desc:"Accepted but still waiting to receive study product."},
+      {status:"Has Not Started", desc:"Received materials but hasn\u2019t begun the protocol."},
+      {status:"Compliant", desc:"Actively engaged and meeting all requirements."},
+      {status:"At Risk", desc:"Fallen behind (missed surveys, wearable gaps). Auto-reminders are sent."},
+      {status:"Completed", desc:"Finished all required study activities."},
+      {status:"Surveys Outstanding", desc:"Has surveys due but not yet completed."},
+      {status:"Withdrawn", desc:"Fully accepted but later removed (voluntary or non-compliance)."}
+    ]},
+    "tbl-fields": {col1:"field",col2:"desc",rows:[
+      {field:"Onboarding Complete", desc:"Date the participant finished onboarding."},
+      {field:"Forecasted Finish Date", desc:"Projected date to complete all study activities."},
+      {field:"Broadcast (Last Sent)", desc:"Date of most recent broadcast message to this participant."},
+      {field:"Synced", desc:"Last date wearable data synced with the platform."}
+    ]},
+    "tbl-elements": {col1:"el",col2:"desc",rows:[
+      {el:"All Arms", desc:"Combined data across all study groups."},
+      {el:"Group A / B / etc.", desc:"Filters to a specific study arm (names from your study setup)."},
+      {el:"Top Movers", desc:"Metrics with the most significant change since study start."},
+      {el:"Sleep / Health / Activity", desc:"Category filters for different wearable metric types."},
+      {el:"Control Group", desc:"Placebo or no-intervention group, shown alongside active group for comparison."}
+    ]},
+    "tbl-cards": {col1:"comp",col2:"desc",rows:[
+      {comp:"Metric Name", desc:"The wearable measure (e.g. HRV, Time Awake, Avg HR)."},
+      {comp:"Percentage Value", desc:"Green \u2191 = improvement. Red \u2193 = worsening. Based on desired direction, not raw number."},
+      {comp:"Progress Bar", desc:"Visual comparison of active group change vs. control."},
+      {comp:"Significance Badge", desc:"\u2018Significant\u2019 = statistically meaningful. \u2018Trend\u2019 = promising but not yet significant. \u2018Not Significant\u2019 = no meaningful difference."}
+    ]},
+    "tbl-overview": {col1:"tab",col2:"desc",rows:[
+      {tab:"Recruitment", desc:"Tracks participant enrollment from interest to acceptance."},
+      {tab:"Compliance", desc:"Monitors active participants during the study."},
+      {tab:"Results", desc:"Shows aggregate study outcomes by arm."},
+      {tab:"Study Setup", desc:"Your study configuration."},
+      {tab:"Heartbeats", desc:"System-level notifications and activity logs."}
+    ]}
+  };
 
-                <div style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: "8px", padding: "14px 18px", fontSize: "13px", color: "#fca5a5" }}>
-                  <strong style={{ color: "#f87171" }}>{"\uD83D\uDD12"} Blinding Maintained</strong> {"\u2014"} All results are aggregate only. Individual participant-to-group assignments are never revealed.
-                </div>
+  var faqs = {
+    "acc-recruitment": [
+      {q:"Why is the top of the funnel so much larger than the bottom?", a:"By design. A large pool is screened down to qualified participants. Drop-off at each stage is expected and normal."},
+      {q:"What does \u2018Ordered Product\u2019 actually mean?", a:"The participant cleared all prerequisites. It does not mean product was shipped \u2014 an additional checkpoint (e.g. a cognitive assessment) may still be required."},
+      {q:"What\u2019s the difference between Aborted and Ineligible?", a:"Ineligible = didn\u2019t meet study criteria. Aborted = started the process but dropped off before finishing, regardless of eligibility."},
+      {q:"What is the Waitlist?", a:"People who signaled interest before the study launched. They may enter the active funnel as spots open up."}
+    ],
+    "acc-compliance": [
+      {q:"What does \u2018At Risk\u2019 mean?", a:"The participant hasn\u2019t completed a required activity on time. Common causes: missed survey, wearable data gap. Auto-reminders are sent to help them catch up."},
+      {q:"What\u2019s the difference between Withdrawn and Aborted?", a:"Aborted = dropped off during enrollment. Withdrawn = accepted into the study, then removed later."},
+      {q:"Can I message participants from the dashboard?", a:"Yes. Use Broadcast for group messages. Use the Chat icon on individual participant rows for one-on-one communication."}
+    ],
+    "acc-results": [
+      {q:"Can I see which participants are in Group A vs. B?", a:"No. The dashboard maintains blinding. Group assignments are never revealed \u2014 the participant list doesn\u2019t change when you switch arms."},
+      {q:"Why does a metric show improvement when the number went down?", a:"Improvement is relative to the desired outcome. For metrics where lower is better (e.g. time awake, resting HR), a decrease shows as improvement."},
+      {q:"What does \u2018Trend\u2019 mean?", a:"The data is moving in a positive direction but hasn\u2019t reached statistical significance yet. More data may push it to Significant."},
+      {q:"How often is data updated?", a:"On a rolling basis as wearable data syncs and surveys are completed."}
+    ],
+    "acc-general": [
+      {q:"How do participants move from Recruitment to Compliance?", a:"They must complete every funnel step: join, connect wearable, meet eligibility, verify SMS, sign consent, complete baseline, and clear any extra checkpoints. Then they appear on the Compliance tab."},
+      {q:"What does Broadcast do?", a:"Sends a message to a group of participants directly from the dashboard \u2014 useful for updates, reminders, or announcements."},
+      {q:"Can I export data?", a:"Contact your Reputable Health point of contact for export options."}
+    ]
+  };
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>FAQs</div>
-                  <Accordion items={data.results.faqs} />
-                </div>
-              </div>
-            )}
+  /* ── Render tables ────────────────────────────────── */
+  Object.keys(tables).forEach(function(id){
+    var t = tables[id], el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = t.rows.map(function(row){
+      return '<div class="dg-table-row"><div class="dg-table-key">' +
+        row[t.col1] + '</div><div class="dg-table-val">' + row[t.col2] + '</div></div>';
+    }).join('');
+  });
 
-            {/* General Tab */}
-            {activeTab === "general" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>THE 5 TABS AT A GLANCE</div>
-                  <Table rows={data.general.overview} col1="tab" col2="desc" />
-                </div>
+  /* ── Render accordions ────────────────────────────── */
+  Object.keys(faqs).forEach(function(id){
+    var items = faqs[id], el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = items.map(function(item, i){
+      return '<div class="dg-acc-item" data-idx="' + i + '">' +
+        '<button class="dg-acc-q"><span>' + item.q + '</span><span class="dg-acc-icon">+</span></button>' +
+        '<div class="dg-acc-a"><div class="dg-acc-a-inner">' + item.a + '</div></div></div>';
+    }).join('');
 
-                <div>
-                  <div style={{ fontSize: "11px", color: "#4b5563", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "12px" }}>FAQs</div>
-                  <Accordion items={data.general.faqs} />
-                </div>
+    el.addEventListener('click', function(e){
+      var btn = e.target.closest('.dg-acc-q');
+      if(!btn) return;
+      var item = btn.parentElement;
+      var wasOpen = item.classList.contains('open');
+      el.querySelectorAll('.dg-acc-item').forEach(function(x){ x.classList.remove('open'); });
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
 
-                <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "8px", padding: "16px 18px", fontSize: "13px", color: "#6b7280" }}>
-                  Questions not covered here? Contact your <span style={{ color: "#4ade80" }}>Reputable Health point of contact</span>.
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+  /* ── Render funnel bar ────────────────────────────── */
+  var funnelBar = document.getElementById('funnelBar');
+  var funnelDetailEl = document.getElementById('funnelDetail');
+  var activeFunnel = -1;
+
+  funnelBar.innerHTML = funnel.map(function(s, i){
+    var sep = i < funnel.length - 1 ? '<span class="dg-funnel-sep">\u203A</span>' : '';
+    return '<button class="dg-funnel-btn" data-idx="' + i + '">' + s.stage + '</button>' + sep;
+  }).join('');
+
+  funnelBar.addEventListener('click', function(e){
+    var btn = e.target.closest('.dg-funnel-btn');
+    if(!btn) return;
+    var idx = parseInt(btn.dataset.idx, 10);
+    funnelBar.querySelectorAll('.dg-funnel-btn').forEach(function(b){ b.classList.remove('active'); });
+    if(idx === activeFunnel){
+      activeFunnel = -1;
+      funnelDetailEl.innerHTML = '';
+    } else {
+      activeFunnel = idx;
+      btn.classList.add('active');
+      funnelDetailEl.innerHTML = '<div class="dg-funnel-detail"><strong>' +
+        funnel[idx].stage + '</strong>' + funnel[idx].desc + '</div>';
     }
+  });
 
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
-  </script>
+  /* ── Tab switching ────────────────────────────────── */
+  var tabNav = document.getElementById('tabNav');
+  tabNav.addEventListener('click', function(e){
+    var btn = e.target.closest('.dg-tab');
+    if(!btn) return;
+    var tabId = btn.dataset.tab;
+    tabNav.querySelectorAll('.dg-tab').forEach(function(t){ t.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.dg-panel').forEach(function(p){ p.classList.remove('active'); });
+    var panel = document.getElementById('panel-' + tabId);
+    if(panel) panel.classList.add('active');
+    // Reset funnel selection on tab switch
+    activeFunnel = -1;
+    funnelBar.querySelectorAll('.dg-funnel-btn').forEach(function(b){ b.classList.remove('active'); });
+    funnelDetailEl.innerHTML = '';
+  });
+})();
+</script>
 </body>
 </html>
