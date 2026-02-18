@@ -546,6 +546,35 @@
       color: var(--yellow);
     }
 
+    /* Period filter */
+    .period-filter {
+      display: flex;
+      gap: 4px;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      width: fit-content;
+      margin: 8px 0 0;
+    }
+    .filter-btn {
+      padding: 6px 16px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { color: var(--text); }
+    .filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+    .section-hidden { display: none !important; }
+
     /* Benchmark pills */
     .bench-grid {
       display: grid;
@@ -600,7 +629,12 @@
   <div class="header">
     <div>
       <h1>Recruitment Command Center</h1>
-      <div class="subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 17, 2026</div>
+      <div class="subtitle" id="dashboard-subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 17, 2026</div>
+      <div class="period-filter">
+        <button class="filter-btn active" data-filter="all">All Time</button>
+        <button class="filter-btn" data-filter="2025">2025</button>
+        <button class="filter-btn" data-filter="2026">2026 YTD</button>
+      </div>
     </div>
     <div>
       <span class="badge badge-green">Live</span>
@@ -1373,6 +1407,280 @@
   <div class="footer">
     Recruitment Command Center &middot; Reputable &middot; Last updated Feb 17, 2026
   </div>
+
+<script>
+(function() {
+  // Study-to-period mapping (by row number in table)
+  var PERIOD = {1:'2026',2:'2026',3:'2025',4:'2025',5:'2026',6:'2025',7:'2025',8:'2025',
+    9:'2026',10:'2026',11:'2026',12:'2026',13:'2026',14:'2026',15:'2026',16:'2026'};
+
+  // Score card name fragments to period
+  var CARD_PERIODS = {
+    'Melatonin':'2026','ProleevaMax':'2026','Tapping':'2026','HOP Box':'2026',
+    'Peptide':'2026','Sleep Mushrooms':'2026','Clearlight':'2026',
+    'Enhanced Brew —':'2025','Enhanced Brew Formula':'2025',
+    'Rootless':'2025','Berkeley Life':'2025','Quantum Upgrade':'2025',
+    'NatPat':'2026','Sensate':'2026','LyfeFuel':'2026','Hapbee':'2026',
+    'Leela Quantum':'coming','Neuvana':'coming','Percepta':'coming',
+    'Young Goose':'coming','Cure Hydration':'coming'
+  };
+
+  // Pre-computed metrics for each period
+  var M = {
+    all: {
+      subtitle: 'Reputable \u2014 All-Time Study Dashboard \u00b7 Updated Feb 17, 2026',
+      totalStudies: '21', totalStudiesSub: '8 paid \u00b7 8 $0 spend \u00b7 5 coming soon',
+      completed: '12', completedSub: '4 recruiting \u00b7 5 coming soon',
+      avgDays: '24.5', avgDaysSub: 'Across 10 studies with duration data',
+      joined: '1,899', joinedSub: 'Across all 16 studies',
+      onboarded: '851', onboardedSub: 'Across all 16 studies',
+      spendLabel: 'All-Time Ad Spend', spend: '$22,332.57', spendSub: 'Across 8 paid studies',
+      cpoLabel: 'Blended CPO (All Studies)', cpo: '$26.24', cpoSub: '$22,332.57 / 851 onboarded',
+      paidCpo: '$18.60', paidCpoSub: 'Standard paid studies only',
+      footerSpend:'$22,332.57', footerJoined:'1,899', footerOnboarded:'851', footerTarget:'1,032',
+      avgBlended:'$26.24', avgBlendedDetail:'$22,332.57 spend \u00f7 851 onboarded',
+      avgExcl:'$18.60', avgExclDetail:'$10,176.77 spend \u00f7 547 onboarded \u00b7 Studies 3\u20138 (excl. outliers)',
+      avgIncl:'$33.68', avgInclDetail:'$22,332.57 spend \u00f7 663 onboarded \u00b7 All 8 paid studies',
+      typeRCT:['6','$16,063.81','584','$27.51'],
+      typeRWE:['2','$6,268.76','79','$79.35'],
+      typeVEP:['6','$0','150','$0'],
+      typeRWE0:['2','$0','38','$0'],
+      typeTotal:['16','$22,332.57','851','$26.24']
+    },
+    '2025': {
+      subtitle: 'Reputable \u2014 2025 Studies \u00b7 Updated Feb 17, 2026',
+      totalStudies: '5', totalStudiesSub: '5 paid \u00b7 0 $0 spend',
+      completed: '5', completedSub: 'All studies complete',
+      avgDays: '30.3', avgDaysSub: 'Across 3 studies with duration data',
+      joined: '799', joinedSub: 'Across 5 studies',
+      onboarded: '427', onboardedSub: 'Across 5 studies',
+      spendLabel: '2025 Ad Spend', spend: '$7,712.66', spendSub: 'Across 5 paid studies',
+      cpoLabel: 'Blended CPO (2025)', cpo: '$18.07', cpoSub: '$7,712.66 / 427 onboarded',
+      paidCpo: '$18.07', paidCpoSub: 'All studies paid, no outliers',
+      footerSpend:'$7,712.66', footerJoined:'799', footerOnboarded:'427', footerTarget:'427',
+      avgBlended:'$18.07', avgBlendedDetail:'$7,712.66 spend \u00f7 427 onboarded',
+      avgExcl:'$18.07', avgExclDetail:'$7,712.66 spend \u00f7 427 onboarded \u00b7 All 5 paid (no outliers)',
+      avgIncl:'$18.07', avgInclDetail:'$7,712.66 spend \u00f7 427 onboarded \u00b7 All 5 paid',
+      typeRCT:['4','$7,130.08','377','$18.91'],
+      typeRWE:['1','$582.58','50','$11.65'],
+      typeVEP:['0','$0','0','\u2014'],
+      typeRWE0:['0','$0','0','\u2014'],
+      typeTotal:['5','$7,712.66','427','$18.07']
+    },
+    '2026': {
+      subtitle: 'Reputable \u2014 2026 Year-to-Date \u00b7 Updated Feb 17, 2026',
+      totalStudies: '16', totalStudiesSub: '3 paid \u00b7 8 $0 spend \u00b7 5 coming soon',
+      completed: '7', completedSub: '4 recruiting \u00b7 5 coming soon',
+      avgDays: '22.0', avgDaysSub: 'Across 7 studies with duration data',
+      joined: '1,100', joinedSub: 'Across 11 studies',
+      onboarded: '424', onboardedSub: 'Across 11 studies',
+      spendLabel: '2026 YTD Ad Spend', spend: '$14,619.91', spendSub: 'Across 3 paid studies',
+      cpoLabel: 'Blended CPO (2026 YTD)', cpo: '$34.48', cpoSub: '$14,619.91 / 424 onboarded',
+      paidCpo: '$20.53', paidCpoSub: 'Peptide only (excl. outliers)',
+      footerSpend:'$14,619.91', footerJoined:'1,100', footerOnboarded:'424', footerTarget:'605',
+      avgBlended:'$34.48', avgBlendedDetail:'$14,619.91 spend \u00f7 424 onboarded',
+      avgExcl:'$20.53', avgExclDetail:'$2,464.11 spend \u00f7 120 onboarded \u00b7 Study 5 only',
+      avgIncl:'$61.95', avgInclDetail:'$14,619.91 spend \u00f7 236 onboarded \u00b7 3 paid studies',
+      typeRCT:['2','$8,933.73','207','$43.16'],
+      typeRWE:['1','$5,686.18','29','$196.08'],
+      typeVEP:['6','$0','150','$0'],
+      typeRWE0:['2','$0','38','$0'],
+      typeTotal:['11','$14,619.91','424','$34.48']
+    }
+  };
+
+  // Helper: find metric card by label text
+  function findMetric(label) {
+    var cards = document.querySelectorAll('.metric-card');
+    for (var i = 0; i < cards.length; i++) {
+      var l = cards[i].querySelector('.label');
+      if (l && l.textContent.trim().indexOf(label) !== -1) return cards[i];
+    }
+    return null;
+  }
+
+  // Helper: find avg card by label
+  function findAvg(label) {
+    var labels = document.querySelectorAll('.avg-label');
+    for (var i = 0; i < labels.length; i++) {
+      if (labels[i].textContent.trim().indexOf(label) !== -1) return labels[i].parentElement;
+    }
+    return null;
+  }
+
+  // Helper: get study type breakdown rows
+  function getTypeRows() {
+    var section = null;
+    var h2s = document.querySelectorAll('h2');
+    for (var i = 0; i < h2s.length; i++) {
+      if (h2s[i].textContent.indexOf('Study Type') !== -1) { section = h2s[i].closest('.section'); break; }
+    }
+    if (!section) return {};
+    var rows = section.querySelectorAll('tbody tr');
+    var foot = section.querySelector('tfoot .totals-row');
+    return { rct: rows[0], rwe: rows[1], vep: rows[2], rwe0: rows[3], total: foot };
+  }
+
+  // Helper: get sections by heading text
+  function findSection(text) {
+    var h2s = document.querySelectorAll('h2');
+    for (var i = 0; i < h2s.length; i++) {
+      if (h2s[i].textContent.indexOf(text) !== -1) return h2s[i].closest('.section');
+    }
+    return null;
+  }
+
+  function setTypeRow(row, vals) {
+    if (!row) return;
+    var cells = row.querySelectorAll('td.align-right, th.align-right');
+    if (row.classList && row.classList.contains('totals-row')) {
+      // tfoot row has <strong> wrappers
+      var strongs = row.querySelectorAll('strong');
+      if (strongs.length >= 4) {
+        strongs[0].textContent = vals[0];
+        strongs[1].textContent = vals[1];
+        strongs[2].textContent = vals[2];
+        strongs[3].textContent = vals[3];
+      }
+    } else if (cells.length >= 4) {
+      cells[0].textContent = vals[0];
+      cells[1].textContent = vals[1];
+      cells[2].textContent = vals[2];
+      cells[3].textContent = vals[3];
+    }
+  }
+
+  function applyFilter(period) {
+    var m = M[period];
+
+    // 1. Update subtitle
+    var sub = document.getElementById('dashboard-subtitle');
+    if (sub) sub.innerHTML = m.subtitle;
+
+    // 2. Update metric cards
+    var mc;
+    mc = findMetric('Total Studies');
+    if (mc) { mc.querySelector('.value').textContent = m.totalStudies; mc.querySelector('.sub').textContent = m.totalStudiesSub; }
+    mc = findMetric('Completed Recruitment');
+    if (mc) { mc.querySelector('.value').textContent = m.completed; mc.querySelector('.sub').textContent = m.completedSub; }
+    mc = findMetric('Avg Days');
+    if (mc) { mc.querySelector('.value').textContent = m.avgDays; mc.querySelector('.sub').textContent = m.avgDaysSub; }
+    mc = findMetric('Total Joined');
+    if (mc) { mc.querySelector('.value').textContent = m.joined; mc.querySelector('.sub').textContent = m.joinedSub; }
+    mc = findMetric('Total Onboarded');
+    if (mc) { mc.querySelector('.value').textContent = m.onboarded; mc.querySelector('.sub').textContent = m.onboardedSub; }
+    mc = findMetric('Ad Spend');
+    if (mc) { mc.querySelector('.label').textContent = m.spendLabel; mc.querySelector('.value').textContent = m.spend; mc.querySelector('.sub').textContent = m.spendSub; }
+    mc = findMetric('Blended CPO');
+    if (mc) { mc.querySelector('.label').textContent = m.cpoLabel; mc.querySelector('.value').textContent = m.cpo; mc.querySelector('.sub').textContent = m.cpoSub; }
+    mc = findMetric('Paid CPO');
+    if (mc) { mc.querySelector('.value').textContent = m.paidCpo; mc.querySelector('.sub').textContent = m.paidCpoSub; }
+
+    // 3. Toggle table rows
+    var rows = document.querySelectorAll('.section .table-wrap tbody tr');
+    var mainTable = findSection('Cost Analysis');
+    if (mainTable) {
+      var trs = mainTable.querySelectorAll('tbody tr');
+      for (var i = 0; i < trs.length; i++) {
+        var numCell = trs[i].querySelector('td:first-child');
+        if (!numCell) continue;
+        var num = parseInt(numCell.textContent);
+        if (isNaN(num)) continue;
+        var rowPeriod = PERIOD[num];
+        trs[i].style.display = (period === 'all' || rowPeriod === period) ? '' : 'none';
+      }
+      // Update footer
+      var foot = mainTable.querySelector('tfoot .totals-row');
+      if (foot) {
+        var cells = foot.querySelectorAll('td.align-right');
+        if (cells.length >= 3) {
+          cells[0].textContent = m.footerSpend;
+          cells[1].textContent = m.footerJoined;
+          cells[2].textContent = m.footerOnboarded;
+          cells[3].textContent = m.footerTarget;
+        }
+      }
+    }
+
+    // 4. Update CPO averages
+    var ac;
+    ac = findAvg('Blended CPO');
+    if (ac) { ac.querySelector('.avg-value').textContent = m.avgBlended; ac.querySelector('.avg-detail').textContent = m.avgBlendedDetail; }
+    ac = findAvg('Excl. Outliers');
+    if (ac) { ac.querySelector('.avg-value').textContent = m.avgExcl; ac.querySelector('.avg-detail').textContent = m.avgExclDetail; }
+    ac = findAvg('Incl. Outliers');
+    if (ac) { ac.querySelector('.avg-value').textContent = m.avgIncl; ac.querySelector('.avg-detail').textContent = m.avgInclDetail; }
+
+    // 5. Toggle score cards
+    var cards = document.querySelectorAll('.score-card');
+    for (var i = 0; i < cards.length; i++) {
+      var nameEl = cards[i].querySelector('.study-name');
+      if (!nameEl) continue;
+      var name = nameEl.textContent;
+      var cardPeriod = null;
+      for (var key in CARD_PERIODS) {
+        if (name.indexOf(key) !== -1) { cardPeriod = CARD_PERIODS[key]; break; }
+      }
+      if (!cardPeriod) continue;
+      if (period === 'all') {
+        cards[i].style.display = '';
+      } else if (period === '2026') {
+        cards[i].style.display = (cardPeriod === '2026' || cardPeriod === 'coming') ? '' : 'none';
+      } else {
+        cards[i].style.display = (cardPeriod === period) ? '' : 'none';
+      }
+    }
+
+    // 6. Toggle sections that only apply to certain periods
+    var projSection = findSection('Recruitment Projections');
+    var targetSection = findSection('Target KPIs');
+    var paceH3 = document.querySelector('h3');
+    var paceSection = null;
+    var h3s = document.querySelectorAll('h3');
+    for (var i = 0; i < h3s.length; i++) {
+      if (h3s[i].textContent.indexOf('2026 Annual') !== -1) {
+        // The pace grid is a sibling after this h3
+        paceSection = h3s[i];
+        break;
+      }
+    }
+
+    if (projSection) projSection.classList.toggle('section-hidden', period === '2025');
+    if (targetSection) targetSection.classList.toggle('section-hidden', period === '2025');
+    // Hide pace section for 2025
+    if (paceSection) {
+      paceSection.style.display = (period === '2025') ? 'none' : '';
+      var paceGrid = paceSection.nextElementSibling;
+      if (paceGrid && paceGrid.classList.contains('pace-grid')) {
+        paceGrid.style.display = (period === '2025') ? 'none' : '';
+      }
+    }
+
+    // 7. Update Study Type Breakdown
+    var tr = getTypeRows();
+    setTypeRow(tr.rct, m.typeRCT);
+    setTypeRow(tr.rwe, m.typeRWE);
+    setTypeRow(tr.vep, m.typeVEP);
+    setTypeRow(tr.rwe0, m.typeRWE0);
+    setTypeRow(tr.total, m.typeTotal);
+  }
+
+  // Bind filter buttons
+  var btns = document.querySelectorAll('.filter-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function() {
+      for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+      this.classList.add('active');
+      applyFilter(this.getAttribute('data-filter'));
+    });
+  }
+
+  // Fix Study Type Breakdown on load (ProleevaMax cascade was missed)
+  var tr = getTypeRows();
+  setTypeRow(tr.rwe, M.all.typeRWE);
+  setTypeRow(tr.total, M.all.typeTotal);
+})();
+</script>
 
 </body>
 </html>
