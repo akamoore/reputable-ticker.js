@@ -541,6 +541,10 @@
       background: var(--green-bg);
       color: var(--green);
     }
+    .status-chip.behind {
+      background: var(--yellow-bg, rgba(251,191,36,0.1));
+      color: var(--yellow);
+    }
 
     /* Benchmark pills */
     .bench-grid {
@@ -1244,8 +1248,8 @@
         <div class="ring-wrap">
           <svg width="140" height="140" viewBox="0 0 140 140">
             <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
-            <!-- 529 / 4000 = 13.2% → dashoffset = 364.4*(1-0.132) = 316.3 -->
-            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="364.4" stroke-dashoffset="316.3"></circle>
+            <!-- 424 / 4000 = 10.6% → dashoffset = 364.4*(1-0.106) = 325.8 -->
+            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="364.4" stroke-dashoffset="325.8"></circle>
             <defs>
               <linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="var(--accent)"/>
@@ -1254,19 +1258,19 @@
             </defs>
           </svg>
           <div class="ring-center">
-            <div class="ring-value" style="color: var(--green);">529</div>
+            <div class="ring-value" style="color: var(--green);">424</div>
             <div class="ring-label">of 4,000</div>
           </div>
         </div>
         <div class="pace-stats">
           <div class="pace-stat-row"><span>Weeks elapsed (2026)</span><span>~7</span></div>
-          <div class="pace-stat-row"><span>2026 weekly rate</span><span>~76 / wk</span></div>
+          <div class="pace-stat-row"><span>2026 weekly rate</span><span>~61 / wk</span></div>
           <div class="pace-stat-row"><span>All-time onboarded</span><span>851</span></div>
-          <div class="pace-stat-row"><span>Pre-2026 onboarded</span><span>322</span></div>
+          <div class="pace-stat-row"><span>Pre-2026 onboarded</span><span>427</span></div>
           <div class="pace-stat-row"><span>Active studies</span><span>16</span></div>
         </div>
         <p style="font-size: 10px; color: var(--text-dim); margin-top: 8px;">
-          Pre-2026: Enhanced Brew Coffee (192), Enhanced Brew Formula (80), Rootless (50). All other studies counted as 2026.
+          Pre-2026: Enhanced Brew Coffee (192), Enhanced Brew Formula (80), Berkeley Life (70), Rootless (50), Quantum Upgrade (35). All other studies counted as 2026.
         </p>
       </div>
 
@@ -1275,19 +1279,19 @@
         <div class="ring-wrap">
           <svg width="140" height="140" viewBox="0 0 140 140">
             <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
-            <!-- 76 / 77 required = 99% → dashoffset = 364.4*(1-0.99) = 3.6 -->
-            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="var(--green)" stroke-dasharray="364.4" stroke-dashoffset="3.6"></circle>
+            <!-- 61 / 77 required = 79% → dashoffset = 364.4*(1-0.79) = 76.5 -->
+            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="var(--yellow)" stroke-dasharray="364.4" stroke-dashoffset="76.5"></circle>
           </svg>
           <div class="ring-center">
-            <div class="ring-value" style="color: var(--green);">99%</div>
+            <div class="ring-value" style="color: var(--yellow);">79%</div>
             <div class="ring-label">of required pace</div>
           </div>
         </div>
         <div class="pace-stats">
           <div class="pace-stat-row"><span>Required rate (4,000 / yr)</span><span>~77 / wk</span></div>
-          <div class="pace-stat-row"><span>2026 YTD rate</span><span style="color: var(--green); font-weight: 600;">~76 / wk</span></div>
+          <div class="pace-stat-row"><span>2026 YTD rate</span><span style="color: var(--yellow); font-weight: 600;">~61 / wk</span></div>
           <div class="pace-stat-row"><span>All-time rate (851 / 7 wk)</span><span style="font-weight: 600;">~122 / wk</span></div>
-          <div class="pace-stat-row"><span>Status</span><span><span class="status-chip on-track">On Pace</span></span></div>
+          <div class="pace-stat-row"><span>Status</span><span><span class="status-chip behind">Behind Pace</span></span></div>
         </div>
       </div>
 
