@@ -1,16 +1,408 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
-    <title>Reputable — Washout Journey</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Washout Journey — Reputable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e14;
+  --surface: #111720;
+  --surface2: #161d28;
+  --border: rgba(255,255,255,0.07);
+  --teal: #3ecfb2;
+  --teal-dim: rgba(62,207,178,0.12);
+  --teal-mid: rgba(62,207,178,0.3);
+  --gold: #c9a96e;
+  --gold-dim: rgba(201,169,110,0.12);
+  --muted: rgba(255,255,255,0.4);
+  --text: rgba(255,255,255,0.88);
+  --ease: cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+button { font-family: inherit; }
+
+/* Ambient bg */
+.ambient {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(62,207,178,0.06) 0%, transparent 70%);
+}
+
+/* Grain */
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+main { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; padding: 0 1.25rem 3rem; }
+
+/* Animations */
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.anim { animation: fadeUp .5s var(--ease) both; }
+
+/* Range slider */
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%;
+  height: 6px; border-radius: 3px; background: var(--surface2); outline: none; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--teal); cursor: pointer; box-shadow: 0 0 12px rgba(62,207,178,0.4);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%; background: var(--teal);
+  cursor: pointer; border: none; box-shadow: 0 0 12px rgba(62,207,178,0.4);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* Utility */
+.pill {
+  font-size: .7rem; padding: .25rem .65rem; border-radius: 999px;
+  background: var(--teal-dim); color: var(--teal); font-weight: 500; display: inline-block;
+}
+.label {
+  font-size: .7rem; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; margin: 0 0 .25rem;
+}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="grain"></div>
+<main id="app"></main>
+
+<script>
+// ── Data ──
+const phases = [
+  { id:'entry', dayStart:0, dayEnd:13, range:'Day 1 \u2013 13', title:'Washout Begins', icon:'\u{1F331}',
+    body:"Your clinical study has ended, and your washout period has officially started. Over the next two weeks, your body will begin returning to its natural baseline. We\u2019ll track your biometrics daily and ask one simple question to monitor how you\u2019re feeling.",
+    pills:['Wearable tracking active','1 daily question','+5 \u2665 per answer','Invite-only access'] },
+  { id:'fork-14', dayStart:14, dayEnd:14, range:'Day 14 \u2014 Decision Point', title:'A New Study Is Ready', icon:'\u26A1',
+    body:"You\u2019ve reached the halfway mark. A new Real-World Evidence (RWE) study is available and you qualify for priority enrollment. You can join now or continue your washout for the full 30-day rebaseline.",
+    pills:['Priority study access','In-app + email notification','No pressure \u2014 both paths valid'],
+    hasFork:true, forkOptions:[
+      { label:'Available now', title:'Join the RWE Study', desc:'Start your next intervention with priority enrollment. Your washout data carries over.', highlight:true },
+      { label:'Continue washout', title:'Stay the Course', desc:'Complete the full 30-day rebaseline. First in line for clinical studies at Day 30.', highlight:false }
+    ] },
+  { id:'deep', dayStart:15, dayEnd:29, range:'Day 15 \u2013 29', title:'Deep Rebaseline', icon:'\u{1F4CA}',
+    body:"You\u2019ve chosen to continue your washout. This phase goes deeper \u2014 questions become more reflective, and your biometric data paints a clearer picture of your true baseline. Your commitment here unlocks priority access to clinical-grade studies.",
+    pills:['Deeper survey questions','HRV & recovery tracking','Comparison vs. study period'] },
+  { id:'complete', dayStart:30, dayEnd:30, range:'Day 30 \u2014 Washout Complete', title:"You\u2019re Clear to Go", icon:'\u{1F3C6}',
+    body:"Congratulations \u2014 your 30-day washout is complete. Your baseline has been fully re-established, and you\u2019re now eligible for the most rigorous clinical studies on the platform. Your dedication has earned you top-tier status.",
+    pills:['Washout summary delivered','Clinical study eligibility unlocked','Tier status upgraded','Heartbeat bonus earned'],
+    hasFork:true, forkOptions:[
+      { label:'Exclusive access', title:'Join a Clinical Study', desc:'Your rebaseline qualifies you for our most rigorous, highest-value studies.', highlight:true },
+      { label:'Coming soon', title:'Browse the Catalog', desc:'Explore available public and RWE studies at your own pace.', highlight:false }
+    ] }
+];
+
+const questions = [
+  "How would you rate your energy levels today compared to during the study?",
+  "Did you sleep better, worse, or about the same last night?",
+  "How is your mood today \u2014 any noticeable changes since the study ended?",
+  "Are you experiencing any lingering effects from the study intervention?",
+  "How would you describe your appetite and eating patterns today?",
+  "Do you feel more or less rested than you did during the study?",
+  "How would you rate your overall physical comfort today?",
+  "Have you maintained any new habits you developed during the study?",
+  "Are you currently taking any supplements or medications regularly?",
+  "How has your exercise routine changed since the study ended?",
+  "Have you noticed any changes in your daily routine or lifestyle?",
+  "How consistent has your sleep schedule been this past week?",
+  "Are you tracking any health metrics on your own outside of this program?",
+  "Reflecting on the past two weeks, how do you feel about your progress?",
+  "How would you describe your stress levels compared to the start of washout?",
+  "Have you noticed any patterns in your heart rate variability data?",
+  "How does your current energy compare to your pre-study baseline?",
+  "What aspects of your daily wellness routine feel most established now?",
+  "How would you rate your mental clarity and focus this week?",
+  "Have you noticed any correlation between your sleep and recovery metrics?",
+  "How confident are you in the accuracy of your wearable data?",
+  "How ready do you feel to participate in another study?",
+  "What was the most surprising thing you learned about your body during washout?",
+  "How has your perspective on clinical studies changed through this experience?",
+  "What health goals would you like to pursue in your next study?",
+  "How would you rate your overall wellbeing compared to Day 1 of washout?",
+  "What type of study interests you most for your next participation?",
+  "How valuable has the daily check-in process been for your self-awareness?",
+  "Looking back at your full washout journey, what stands out most?",
+  "How would you summarize your readiness for the next chapter?"
+];
+
+const answerOptions = ['Much better','Somewhat better','About the same','Somewhat worse'];
+
+// ── State ──
+let state = { day: 1, view: 'journey', forks: {}, answers: {} };
+
+function activePhase() {
+  return phases.find(p => state.day >= p.dayStart && state.day <= p.dayEnd);
+}
+
+// ── Metrics ──
+function getMetrics(d) {
+  return {
+    hrv: Math.round(52 - d*0.28 + Math.sin(d*0.7)*3),
+    hr: Math.round(62 + d*0.12 + Math.cos(d*0.5)*1.5),
+    sleep: Math.round(88 - d*0.2 + Math.sin(d*0.4)*4),
+  };
+}
+function sparkData(d, fn) {
+  const out = [];
+  for (let i = Math.max(0, d-6); i <= d; i++) out.push(fn(i));
+  return out;
+}
+function sparkHTML(data) {
+  if (!data.length) return '';
+  const min = Math.min(...data), max = Math.max(...data), range = max-min||1;
+  return '<div style="display:flex;align-items:flex-end;gap:3px;height:32px;margin-top:.5rem">' +
+    data.map((v,i) => {
+      const h = Math.max(((v-min)/range)*100, 10);
+      const bg = i===data.length-1 ? 'var(--teal)' : 'var(--teal-dim)';
+      return '<div style="flex:1;height:'+h+'%;border-radius:2px;background:'+bg+';transition:height .3s var(--ease)"></div>';
+    }).join('') + '</div>';
+}
+function insightText(d) {
+  if (d<=6) return "Your HRV is trending down since your study ended \u2014 this is expected and validates your intervention\u2019s effect.";
+  if (d<=13) return "One week in. Your resting heart rate is stabilizing and sleep quality metrics are beginning to normalize.";
+  if (d<=20) return "Halfway through your washout. Metrics are approaching your pre-study baseline \u2014 the rebaseline is working.";
+  return "Your metrics have stabilized and converged on your true baseline. You\u2019re washout-ready.";
+}
+
+// ── HTML helper ──
+function el(tag, attrs, ...children) {
+  const parts = ['<'+tag];
+  if (attrs) for (const [k,v] of Object.entries(attrs)) {
+    if (k === 'style' && typeof v === 'object')
+      parts.push(' style="'+Object.entries(v).map(([p,val])=>p.replace(/[A-Z]/g,m=>'-'+m.toLowerCase())+':'+val).join(';')+'"');
+    else parts.push(' '+k+'="'+v+'"');
+  }
+  if (['input','br','hr','img'].includes(tag)) return parts.join('')+'>';
+  parts.push('>');
+  for (const c of children) if (c != null) parts.push(c);
+  parts.push('</'+tag+'>');
+  return parts.join('');
+}
+
+// ── Render sections ──
+function renderHeader() {
+  return el('header',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'1rem 0',borderBottom:'1px solid var(--border)',marginBottom:'1.5rem'}},
+    el('div',{style:{display:'flex',alignItems:'center',gap:'.6rem'}},
+      el('div',{style:{width:'28px',height:'28px',borderRadius:'8px',background:'var(--teal)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'.8rem',fontWeight:'700',color:'var(--bg)'}},'R'),
+      el('span',{style:{fontSize:'.9rem',fontWeight:'600',letterSpacing:'-.01em'}},'Reputable')
+    ),
+    el('div',{style:{display:'flex',alignItems:'center',gap:'.5rem'}},
+      el('span',{style:{fontSize:'.75rem',color:'var(--gold)',fontWeight:'500',background:'var(--gold-dim)',padding:'.25rem .6rem',borderRadius:'999px'}},'\u2665 42'),
+      el('div',{style:{width:'30px',height:'30px',borderRadius:'50%',background:'var(--surface2)',border:'1px solid var(--border)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'.7rem',color:'var(--muted)'}},'JD')
+    )
+  );
+}
+
+function renderHero() {
+  const phase = activePhase();
+  const sub = state.day === 0
+    ? 'Your study has ended. Your washout begins now.'
+    : 'Day '+state.day+' of 30 \u2014 '+(phase?.range ?? '');
+  return el('section',{class:'anim',style:{marginBottom:'1.5rem'}},
+    el('p',{class:'label',style:{color:'var(--teal)',margin:'0 0 .35rem'}},'Washout Journey'),
+    el('h1',{style:{fontSize:'clamp(1.5rem,4vw,2rem)',margin:'0 0 .35rem',lineHeight:'1.2'}}, phase ? phase.title : 'Your Journey'),
+    el('p',{style:{fontSize:'.9rem',color:'var(--muted)',lineHeight:'1.5'}}, sub)
+  );
+}
+
+function renderSlider() {
+  const label = state.day === 0 ? 'Study End' : 'Day '+state.day;
+  return el('div',{class:'anim',style:{display:'flex',alignItems:'center',gap:'1rem',marginBottom:'1.5rem',animationDelay:'50ms'}},
+    el('span',{style:{fontSize:'1.5rem',fontWeight:'600',color:'var(--teal)',minWidth:'100px',fontFamily:"'DM Serif Display',serif"}}, label),
+    '<input type="range" min="0" max="30" value="'+state.day+'" oninput="setDay(this.value)" aria-label="Simulate day" style="flex:1">'
+  );
+}
+
+function renderTimeline() {
+  const markers = [{d:0,l:'0'},{d:7,l:'7'},{d:14,l:'14',dec:true},{d:21,l:'21'},{d:30,l:'30',dec:true}];
+  const pct = (state.day/30)*100;
+  return el('div',{class:'anim',style:{marginBottom:'1.5rem',animationDelay:'100ms'}},
+    el('div',{style:{position:'relative',height:'4px',background:'var(--surface2)',borderRadius:'2px',overflow:'hidden'}},
+      el('div',{style:{height:'100%',width:pct+'%',background:'var(--teal)',borderRadius:'2px',transition:'width .6s var(--ease)'}})
+    ),
+    el('div',{style:{display:'flex',justifyContent:'space-between',marginTop:'.5rem'}},
+      ...markers.map(m => {
+        const past = state.day >= m.d, active = state.day === m.d;
+        const sz = m.dec ? '14px' : '10px';
+        const bg = (active||past) ? 'var(--teal)' : 'var(--surface2)';
+        const shadow = active ? '0 0 10px rgba(62,207,178,0.5)' : 'none';
+        return el('button',{onclick:'setDay('+m.d+')',style:{background:'none',border:'none',padding:'4px 2px',cursor:'pointer',display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}},
+          el('span',{style:{display:'inline-flex',alignItems:'center',justifyContent:'center',width:sz,height:sz,borderRadius:'50%',background:bg,boxShadow:shadow,transition:'all .3s var(--ease)',fontSize:'7px',lineHeight:'1',color:'var(--bg)'}}, m.dec?'\u2726':''),
+          el('span',{style:{fontSize:'.65rem',color:past?'var(--teal)':'var(--muted)',fontWeight:active?'600':'400'}}, m.l)
+        );
+      })
+    )
+  );
+}
+
+function renderTabs() {
+  const tabs = [{id:'journey',l:'Journey'},{id:'daily',l:'Daily Q'},{id:'metrics',l:'Metrics'}];
+  return el('div',{class:'anim',style:{display:'flex',gap:'.25rem',background:'var(--surface)',borderRadius:'10px',padding:'3px',marginBottom:'1.5rem',animationDelay:'150ms'}},
+    ...tabs.map(t => {
+      const a = state.view === t.id;
+      return el('button',{onclick:"setView('"+t.id+"')",style:{flex:'1',padding:'.5rem 0',borderRadius:'8px',border:'none',background:a?'var(--surface2)':'transparent',color:a?'var(--teal)':'var(--muted)',fontSize:'.8rem',fontWeight:'600',cursor:'pointer',transition:'all .2s var(--ease)'}}, t.l);
+    })
+  );
+}
+
+function renderJourney() {
+  return phases.map((p,i) => {
+    const active = activePhase()?.id === p.id;
+    const done = state.day > p.dayEnd;
+    const op = active ? 1 : done ? 0.65 : 0.4;
+    const bg = active ? 'linear-gradient(135deg,var(--surface) 0%,var(--teal-dim) 100%)' : 'var(--surface)';
+    const bl = active ? '3px solid var(--teal)' : '3px solid transparent';
+    const tx = active ? '4px' : '0';
+
+    let fork = '';
+    if (p.hasFork && active) {
+      fork = el('div',{style:{marginTop:'1rem'}},
+        el('p',{style:{color:'var(--gold)',fontSize:'.8rem',fontWeight:'600',letterSpacing:'.05em',marginBottom:'.75rem',textTransform:'uppercase'}},'\u2726 Choose your path'),
+        el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:'.75rem'}},
+          ...p.forkOptions.map((o,j) => {
+            const sel = state.forks[p.id] === j;
+            const bdr = sel ? '1.5px solid var(--teal)' : o.highlight ? '1.5px solid var(--teal-mid)' : '1.5px solid var(--border)';
+            return el('button',{onclick:"selectFork('"+p.id+"',"+j+")",style:{textAlign:'left',padding:'1rem',borderRadius:'10px',border:bdr,background:sel?'var(--teal-dim)':'var(--surface)',cursor:'pointer',transition:'all .25s var(--ease)',color:'var(--text)'}},
+              el('span',{style:{display:'inline-block',fontSize:'.65rem',fontWeight:'600',letterSpacing:'.06em',textTransform:'uppercase',color:o.highlight?'var(--teal)':'var(--muted)',marginBottom:'.4rem'}},o.label),
+              el('h4',{style:{fontSize:'1rem',margin:'0 0 .35rem'}},o.title),
+              el('p',{style:{fontSize:'.8rem',color:'var(--muted)',margin:'0',lineHeight:'1.5'}},o.desc)
+            );
+          })
+        )
+      );
+    }
+
+    return el('div',{class:'anim',style:{animationDelay:(250+i*50)+'ms'}},
+      el('div',{style:{opacity:String(op),padding:'1.25rem',borderRadius:'12px',background:bg,borderLeft:bl,transform:'translateX('+tx+')',transition:'all .35s var(--ease)',marginBottom:'.75rem'}},
+        el('div',{style:{display:'flex',alignItems:'center',gap:'.5rem',marginBottom:'.15rem'}},
+          el('span',{style:{fontSize:'1.25rem'}},p.icon),
+          el('span',{class:'label',style:{color:active?'var(--teal)':'var(--muted)',margin:'0'}},p.range)
+        ),
+        el('h3',{style:{fontSize:'1.2rem',margin:'.35rem 0 .5rem'}},p.title),
+        el('p',{style:{fontSize:'.85rem',color:'var(--muted)',lineHeight:'1.6',margin:'0 0 .75rem'}},p.body),
+        el('div',{style:{display:'flex',flexWrap:'wrap',gap:'.4rem'}},
+          ...p.pills.map(pill => el('span',{class:'pill'},pill))
+        ),
+        fork
+      )
+    );
+  }).join('');
+}
+
+function renderDaily() {
+  const q = questions[state.day - 1];
+  const answered = state.answers[state.day] ?? null;
+
+  let card;
+  if (!q) {
+    card = el('div',{style:{background:'var(--surface)',borderRadius:'12px',padding:'2rem',textAlign:'center',border:'1px solid var(--border)'}},
+      el('p',{style:{color:'var(--muted)'}},'No question available for this day.')
+    );
+  } else {
+    const reward = answered
+      ? el('div',{style:{display:'flex',alignItems:'center',gap:'.75rem'}},
+          el('span',{style:{fontSize:'.75rem',color:'var(--gold)',fontWeight:'600',background:'var(--gold-dim)',padding:'.3rem .75rem',borderRadius:'999px'}},'+5 \u2665 heartbeats'),
+          el('span',{style:{fontSize:'.75rem',color:'var(--teal)'}},'\u2713 Submitted')
+        )
+      : '';
+    card = el('div',{style:{background:'var(--surface)',borderRadius:'12px',padding:'1.5rem',border:'1px solid var(--border)',marginBottom:'1rem'}},
+      el('p',{class:'label',style:{color:'var(--teal)',margin:'0 0 .5rem'}},'Day '+state.day+' \u2014 Daily Check-in'),
+      el('h3',{style:{fontSize:'1.1rem',margin:'0 0 1.25rem',lineHeight:'1.5'}},q),
+      el('div',{style:{display:'flex',flexWrap:'wrap',gap:'.5rem',marginBottom:answered?'1rem':'0'}},
+        ...answerOptions.map(o => {
+          const sel = answered === o;
+          const escaped = o.replace(/'/g,"\\'");
+          return el('button',{onclick:"answer('"+escaped+"')",style:{padding:'.5rem 1rem',borderRadius:'999px',border:sel?'1.5px solid var(--teal)':'1.5px solid var(--border)',background:sel?'var(--teal-dim)':'var(--surface2)',color:sel?'var(--teal)':'var(--text)',cursor:'pointer',fontSize:'.8rem',fontWeight:'500',transition:'all .2s var(--ease)'}},o);
+        })
+      ),
+      reward
+    );
+  }
+
+  // Upcoming questions
+  const upcoming = [];
+  for (let i=1; i<=2; i++) {
+    const idx = state.day + i - 1;
+    if (idx < questions.length) upcoming.push({day:state.day+i, q:questions[idx], op:i===1?0.4:0.25});
+  }
+  let queue = '';
+  if (upcoming.length) {
+    queue = el('div',{style:{marginTop:'.5rem'}},
+      el('p',{class:'label',style:{color:'var(--muted)',marginBottom:'.75rem'}},'Coming up'),
+      ...upcoming.map((u,i) =>
+        el('div',{style:{opacity:String(u.op),background:'var(--surface)',borderRadius:'10px',padding:'1rem 1.25rem',border:'1px solid var(--border)',marginBottom:'.5rem',transition:'opacity .3s var(--ease)'}},
+          el('p',{style:{fontSize:'.65rem',fontWeight:'600',textTransform:'uppercase',letterSpacing:'.06em',color:'var(--muted)',margin:'0 0 .25rem'}},'Day '+u.day),
+          el('p',{style:{fontSize:'.85rem',margin:'0',lineHeight:'1.5'}}, state.day>=3&&i===1 ? 'Unlocks tomorrow...' : u.q)
+        )
+      )
+    );
+  }
+
+  return el('div',{class:'anim',style:{animationDelay:'200ms'}}, card, queue);
+}
+
+function renderMetrics() {
+  const m = getMetrics(state.day);
+  const cards = [
+    {label:'HRV', value:m.hrv+' ms', sub:'Heart rate variability', data:sparkData(state.day, d=>52-d*0.28+Math.sin(d*0.7)*3)},
+    {label:'Resting HR', value:m.hr+' bpm', sub:'Resting heart rate', data:sparkData(state.day, d=>62+d*0.12+Math.cos(d*0.5)*1.5)},
+    {label:'Sleep Score', value:m.sleep+'%', sub:'Sleep quality index', data:sparkData(state.day, d=>88-d*0.2+Math.sin(d*0.4)*4)},
+  ];
+  return el('div',{class:'anim',style:{animationDelay:'200ms'}},
+    el('div',{style:{background:'var(--teal-dim)',borderRadius:'10px',padding:'1rem 1.25rem',border:'1px solid var(--teal-mid)',marginBottom:'1.25rem'}},
+      el('p',{class:'label',style:{color:'var(--teal)',margin:'0 0 .35rem'}},'\u2726 Insight'),
+      el('p',{style:{fontSize:'.85rem',margin:'0',lineHeight:'1.6'}}, insightText(state.day))
+    ),
+    el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:'.75rem'}},
+      ...cards.map((c,i) =>
+        el('div',{class:'anim',style:{animationDelay:(250+i*50)+'ms'}},
+          el('div',{style:{background:'var(--surface)',borderRadius:'12px',padding:'1.25rem',border:'1px solid var(--border)'}},
+            el('p',{class:'label',style:{color:'var(--muted)'}}, c.label),
+            el('p',{style:{fontSize:'1.75rem',fontWeight:'600',fontFamily:"'DM Serif Display',serif",margin:'0 0 .15rem'}}, c.value),
+            el('p',{style:{fontSize:'.75rem',color:'var(--muted)',margin:'0'}}, c.sub),
+            sparkHTML(c.data)
+          )
+        )
+      )
+    )
+  );
+}
+
+function render() {
+  let content = '';
+  if (state.view === 'journey') content = renderJourney();
+  else if (state.view === 'daily') content = renderDaily();
+  else content = renderMetrics();
+  document.getElementById('app').innerHTML =
+    renderHeader() + renderHero() + renderSlider() + renderTimeline() + renderTabs() + content;
+}
+
+// ── Actions (global) ──
+function setDay(d) { state.day = Number(d); render(); }
+function setView(v) { state.view = v; render(); }
+function selectFork(pid, idx) { state.forks[pid] = idx; render(); }
+function answer(opt) { state.answers[state.day] = opt; render(); }
+
+render();
+</script>
+</body>
 </html>
