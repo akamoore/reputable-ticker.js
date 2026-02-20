@@ -65,6 +65,9 @@
             .study-label-pad { padding: 12px 16px !important; }
             .study-body-pad  { padding: 16px 16px 18px 16px !important; }
             .coming-soon-pad { padding: 14px 14px !important; }
+            /* Coming Soon: show mobile badge above name, hide desktop badge */
+            .mobile-coming-soon { display: table-row !important; }
+            .desktop-coming-soon { display: none !important; width: 0 !important; padding: 0 !important; overflow: hidden !important; }
             /* Candy hearts: stack vertically on small screens */
             .heart-row  { display: block !important; width: 100% !important; }
             .heart-cell { display: block !important; width: 100% !important; padding: 6px 0 !important; text-align: center !important; }
@@ -592,6 +595,12 @@
                         <tr>
                             <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
                                 <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <!-- Mobile-only Coming Soon badge (hidden on desktop) -->
+                                    <tr class="mobile-coming-soon" style="display: none;">
+                                        <td colspan="2" style="padding: 0 0 8px 0;">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td valign="top" style="padding-right: 12px;">
                                             <!-- ✏️: Study name -->
@@ -601,7 +610,8 @@
                                             <!-- ✏️: Tag / requirement pill -->
                                             <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
                                         </td>
-                                        <td valign="middle" align="right" width="80">
+                                        <!-- Desktop-only Coming Soon badge (hidden on mobile) -->
+                                        <td class="desktop-coming-soon" valign="middle" align="right" width="80">
                                             <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
                                         </td>
                                     </tr>
@@ -618,6 +628,12 @@
                         <tr>
                             <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
                                 <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <!-- Mobile-only Coming Soon badge (hidden on desktop) -->
+                                    <tr class="mobile-coming-soon" style="display: none;">
+                                        <td colspan="2" style="padding: 0 0 8px 0;">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td valign="top" style="padding-right: 12px;">
                                             <!-- ✏️: Study name -->
@@ -627,7 +643,8 @@
                                             <!-- ✏️: Tag / requirement pill -->
                                             <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
                                         </td>
-                                        <td valign="middle" align="right" width="80">
+                                        <!-- Desktop-only Coming Soon badge (hidden on mobile) -->
+                                        <td class="desktop-coming-soon" valign="middle" align="right" width="80">
                                             <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
                                         </td>
                                     </tr>
