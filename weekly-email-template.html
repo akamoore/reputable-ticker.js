@@ -64,6 +64,7 @@
             .poll-card-pad   { padding: 14px 14px !important; }
             .study-label-pad { padding: 12px 16px !important; }
             .study-body-pad  { padding: 16px 16px 18px 16px !important; }
+            .coming-soon-pad { padding: 14px 14px !important; }
             /* Candy hearts: stack vertically on small screens */
             .heart-row  { display: block !important; width: 100% !important; }
             .heart-cell { display: block !important; width: 100% !important; padding: 6px 0 !important; text-align: center !important; }
@@ -95,15 +96,14 @@
             .dm-poll-3             { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
             .dm-poll-4             { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
             .dm-poll-5             { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+            .dm-coming-soon        { border-color: #3a3a3a !important; }
+            .dm-pill               { background-color: #2a2a2e !important; color: #9CA3AF !important; }
             .dm-bubble-1           { background-color: #3A1A2A !important; }
             .dm-bubble-2           { background-color: #1A2A3A !important; }
             .dm-bubble-3           { background-color: #1A3A2A !important; }
             .dm-bubble-4           { background-color: #3A3020 !important; }
             .dm-bubble-5           { background-color: #2D2640 !important; }
             .dm-divider            { border-color: #3a3a3a !important; }
-            .dm-heart-1            { background-color: #2A3A50 !important; }
-            .dm-heart-2            { background-color: #3A3020 !important; }
-            .dm-heart-3            { background-color: #3A1A2A !important; }
         }
         /* ─── DARK MODE — Gmail (u + .body hack) ─────────── */
         u + .body .outer-bg              { background-color: #000000 !important; }
@@ -129,15 +129,14 @@
         u + .body .dm-poll-3             { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
         u + .body .dm-poll-4             { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
         u + .body .dm-poll-5             { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+        u + .body .dm-coming-soon        { border-color: #3a3a3a !important; }
+        u + .body .dm-pill               { background-color: #2a2a2e !important; color: #9CA3AF !important; }
         u + .body .dm-bubble-1           { background-color: #3A1A2A !important; }
         u + .body .dm-bubble-2           { background-color: #1A2A3A !important; }
         u + .body .dm-bubble-3           { background-color: #1A3A2A !important; }
         u + .body .dm-bubble-4           { background-color: #3A3020 !important; }
         u + .body .dm-bubble-5           { background-color: #2D2640 !important; }
         u + .body .dm-divider            { border-color: #3a3a3a !important; }
-        u + .body .dm-heart-1            { background-color: #2A3A50 !important; }
-        u + .body .dm-heart-2            { background-color: #3A3020 !important; }
-        u + .body .dm-heart-3            { background-color: #3A1A2A !important; }
         /* ─── DARK MODE — Outlook.com / OWA ──────────────── */
         [data-ogsc] .outer-bg            { background-color: #000000 !important; }
         [data-ogsc] .dm-card             { background-color: #1c1c1e !important; }
@@ -162,15 +161,14 @@
         [data-ogsc] .dm-poll-3           { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
         [data-ogsc] .dm-poll-4           { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
         [data-ogsc] .dm-poll-5           { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+        [data-ogsc] .dm-coming-soon      { border-color: #3a3a3a !important; }
+        [data-ogsc] .dm-pill             { background-color: #2a2a2e !important; color: #9CA3AF !important; }
         [data-ogsc] .dm-bubble-1         { background-color: #3A1A2A !important; }
         [data-ogsc] .dm-bubble-2         { background-color: #1A2A3A !important; }
         [data-ogsc] .dm-bubble-3         { background-color: #1A3A2A !important; }
         [data-ogsc] .dm-bubble-4         { background-color: #3A3020 !important; }
         [data-ogsc] .dm-bubble-5         { background-color: #2D2640 !important; }
         [data-ogsc] .dm-divider          { border-color: #3a3a3a !important; }
-        [data-ogsc] .dm-heart-1          { background-color: #2A3A50 !important; }
-        [data-ogsc] .dm-heart-2          { background-color: #3A3020 !important; }
-        [data-ogsc] .dm-heart-3          { background-color: #3A1A2A !important; }
     </style>
 </head>
 <body class="body" style="margin: 0; padding: 0; background-color: #F8F5F2;">
@@ -444,7 +442,7 @@
                     </h2>
                     <!-- ✏️ 4c: Section subtitle -->
                     <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
-                        Last week&#8217;s community poll chose The Reading Ritual &#8212; and we built it. Spots are limited, so join now before they fill up.
+                        The Reading Ritual won last week&#8217;s poll with <strong>29% of the vote</strong> &#8212; and we built it. Spots are limited, so join now before they fill up.
                     </p>
                 </td>
             </tr>
@@ -511,7 +509,7 @@
 <!-- ✏️ EDIT 5 — YOUTUBE VIDEO FEATURE                       -->
 <!-- Update: eyebrow · headline · description · video ID     -->
 <!-- Video thumbnail pulls automatically from YouTube.       -->
-<!-- Replace dKRJ5ZIJdYw in the 3 URLs below with new ID    -->
+<!-- Replace dKRJ5ZIJdYw in both URLs below with new ID     -->
 <!-- when swapping videos week to week.                      -->
 <!-- ════════════════════════════════════════════════════════ -->
 <tr>
@@ -567,6 +565,83 @@
 </tr>
 <tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 4.5 — COMING SOON STUDIES                       -->
+<!-- Update: study name · description · tag line             -->
+<!-- Add/remove study rows as needed                         -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-card card-padding" style="background-color: #FFFFFF; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #E11D48; text-align: center;">
+                        &#128337; Coming Soon
+                    </p>
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; line-height: 1.2; text-align: center;">
+                        Studies on the Horizon
+                    </h2>
+                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
+                        Here&#8217;s a sneak peek at what&#8217;s coming to Reputable. Stay tuned.
+                    </p>
+                </td>
+            </tr>
+            <!-- ── COMING SOON STUDY 1 ─────────────────────── -->
+            <tr>
+                <td style="padding: 0 0 12px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td valign="top" style="padding-right: 12px;">
+                                            <!-- ✏️: Study name -->
+                                            <p class="sans-text dm-heading" style="margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #1E293B;">&#129504; Neuvana Xen Device</p>
+                                            <!-- ✏️: Study description -->
+                                            <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.5;">A 6-week study exploring the impact of daily vagus nerve stimulation on sleep quality using wearable sleep data. Oura Ring required.</p>
+                                            <!-- ✏️: Tag / requirement pill -->
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
+                                        </td>
+                                        <td valign="middle" align="right" width="80">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- ── COMING SOON STUDY 2 ─────────────────────── -->
+            <tr>
+                <td style="padding: 12px 0 0 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td valign="top" style="padding-right: 12px;">
+                                            <!-- ✏️: Study name -->
+                                            <p class="sans-text dm-heading" style="margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #1E293B;">&#129702; Vampire Serum: Skin Renewal</p>
+                                            <!-- ✏️: Study description -->
+                                            <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.5;">A 90-day skincare study exploring how daily use of Vampire Serum impacts skin health, measuring changes in wrinkles, texture, radiance, and more through AI-powered skin analysis and surveys.</p>
+                                            <!-- ✏️: Tag / requirement pill -->
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
+                                        </td>
+                                        <td valign="middle" align="right" width="80">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
 <!-- ✏️ EDIT 6 — REFERRAL / REWARDS SECTION                  -->
 <!-- Usually evergreen. Update headline + CTA URL if themed. -->
 <!-- Decorative candy hearts: update bg color + label text   -->
@@ -575,39 +650,6 @@
     <!-- ✏️ 6a: Section bg color -->
     <td class="card-padding" style="background-color: #881337; border-radius: 16px; padding: 40px 30px;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <!-- Decorative candy hearts (themed — swap colors/text each week or remove) -->
-            <tr>
-                <td align="center" style="padding: 0 0 28px 0;">
-                    <table cellpadding="0" cellspacing="0" border="0" class="heart-row">
-                        <tr>
-                            <td align="center" style="padding: 0 8px;" class="heart-cell">
-                                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <!-- ✏️ 6b: Candy heart 1 bg + label -->
-                                    <td align="center" class="heart-candy dm-heart-1" style="background-color: #BFDBFE; width: 100px; height: 90px; border-radius: 50px 50px 50px 10px; text-align: center; vertical-align: middle;">
-                                        <span class="sans-text" style="font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;"><font color="#64748B">YOU &amp;<br>ME</font></span>
-                                    </td>
-                                </tr></table>
-                            </td>
-                            <td align="center" style="padding: 0 8px;" class="heart-cell">
-                                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <!-- ✏️ 6c: Candy heart 2 bg + label -->
-                                    <td align="center" class="heart-candy dm-heart-2" style="background-color: #FEF3C7; width: 100px; height: 90px; border-radius: 50px 50px 50px 10px; text-align: center; vertical-align: middle;">
-                                        <span class="sans-text" style="font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;"><font color="#64748B">WE &#10084;<br>DATA</font></span>
-                                    </td>
-                                </tr></table>
-                            </td>
-                            <td align="center" style="padding: 0 8px;" class="heart-cell">
-                                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <!-- ✏️ 6d: Candy heart 3 bg + label -->
-                                    <td align="center" class="heart-candy dm-heart-3" style="background-color: #FBCFE8; width: 100px; height: 90px; border-radius: 50px 50px 10px 50px; text-align: center; vertical-align: middle;">
-                                        <span class="sans-text" style="font-size: 11px; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;"><font color="#64748B">SHARE<br>THE LOVE</font></span>
-                                    </td>
-                                </tr></table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
             <tr>
                 <td align="center">
                     <!-- ✏️ 6e: Section headline -->
