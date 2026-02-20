@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║   REPUTABLE HEALTH — WEEKLY EMAIL TEMPLATE                   ║
+    ╠══════════════════════════════════════════════════════════════╣
+    ║                                                              ║
+    ║  HOW TO USE: Search "✏️ EDIT" to find every spot to update.  ║
+    ║  Do NOT touch anything else — structure & dark mode are set. ║
+    ║                                                              ║
+    ║  WEEKLY CHECKLIST:                                           ║
+    ║  [ ] 1. Title & UTM date  (update "DATE" everywhere)         ║
+    ║  [ ] 2. Banner            (emoji, label, headline, subtitle)  ║
+    ║  [ ] 3. Poll ×5           (emoji, title, desc, vote URL)     ║
+    ║  [ ] 4. Studies ×2        (label, headline, desc, perks, URL)║
+    ║  [ ] 5. Community Corner  (question, comments ×5, study box) ║
+    ║  [ ] 6. Referral section  (usually evergreen)                ║
+    ║                                                              ║
+    ║  BANNER COLOR THEMES  (swap into the banner section):        ║
+    ║  Spring/Rose: bg #FDE8E8→#FBCFE8  label #BE185D  title#881337║
+    ║  Ocean:       bg #E0F2FE→#BAE6FD  label #0369A1  title#0C4A6E║
+    ║  Forest:      bg #D1FAE5→#A7F3D0  label #065F46  title#064E3B║
+    ║  Amber:       bg #FEF3C7→#FDE68A  label #92400E  title#78350F║
+    ║  Slate:       bg #F1F5F9→#E2E8F0  label #475569  title#0F172A║
+    ║                                                              ║
+    ║  POLL COLOR PAIRS  (class → light bg / border / accent):     ║
+    ║  dm-poll-1 → #F5F3FF / #DDD6FE / #8B5CF6  (purple)          ║
+    ║  dm-poll-2 → #ECFEFF / #A5F3FC / #06B6D4  (cyan)            ║
+    ║  dm-poll-3 → #ECFDF5 / #A7F3D0 / #10B981  (green)           ║
+    ║  dm-poll-4 → #FFF1F2 / #FECDD3 / #F43F5E  (rose)            ║
+    ║  dm-poll-5 → #FFFBEB / #FDE68A / #F59E0B  (amber)           ║
+    ╚══════════════════════════════════════════════════════════════╝
+    -->
+    <!-- ✏️ EDIT 1: Email subject / browser title -->
+    <title>Your Weekly Study Update — Reputable Health</title>
+    <!--[if mso]>
+    <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+    <![endif]-->
+    <style>
+        /* ─── RESET ──────────────────────────────────────── */
+        :root { color-scheme: light dark; supported-color-schemes: light dark; }
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 100%; }
+        body { margin: 0; padding: 0; width: 100% !important; height: 100% !important; background-color: #F8F5F2; }
+        /* ─── FONT STACKS ────────────────────────────────── */
+        .sans-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .serif-head { font-family: Georgia, 'Times New Roman', serif; }
+        /* ─── MOBILE ─────────────────────────────────────── */
+        @media screen and (max-width: 600px) {
+            .email-container { width: 100% !important; }
+            .mobile-padding  { padding-left: 20px !important; padding-right: 20px !important; }
+            .card-padding    { padding: 25px 20px !important; }
+            h1 { font-size: 24px !important; line-height: 1.3 !important; }
+            h2 { font-size: 20px !important; line-height: 1.3 !important; }
+            h3 { font-size: 18px !important; }
+            .poll-card-pad   { padding: 14px 14px !important; }
+            .study-label-pad { padding: 12px 16px !important; }
+            .study-body-pad  { padding: 16px 16px 18px 16px !important; }
+            .coming-soon-pad { padding: 14px 14px !important; }
+            /* Candy hearts: stack vertically on small screens */
+            .heart-row  { display: block !important; width: 100% !important; }
+            .heart-cell { display: block !important; width: 100% !important; padding: 6px 0 !important; text-align: center !important; }
+            .heart-candy { margin: 0 auto !important; }
+        }
+        /* ─── DARK MODE — @media (Apple Mail, iOS, most clients) ── */
+        @media (prefers-color-scheme: dark) {
+            body                   { background-color: #000000 !important; }
+            .outer-bg              { background-color: #000000 !important; }
+            .dm-card               { background-color: #1c1c1e !important; }
+            .white-card            { background-color: #1c1c1e !important; }
+            .dm-studies-wrap       { background-color: #1c1c1e !important; }
+            .banner-wrap,
+            .banner-top,
+            .banner-sub            { background: #1c1c1e !important; background-color: #1c1c1e !important; }
+            .banner-title          { color: #FFFFFF !important; }
+            .banner-label          { color: #FB7185 !important; }
+            .banner-subtitle       { color: #D1D5DB !important; }
+            .dm-heading            { color: #FFFFFF !important; }
+            .dm-text               { color: #E5E7EB !important; }
+            .dm-subtext            { color: #9CA3AF !important; }
+            .dm-accent             { color: #FB7185 !important; }
+            .heading-text          { color: #FFFFFF !important; }
+            .body-text             { color: #E5E7EB !important; }
+            .subtext               { color: #9CA3AF !important; }
+            .dm-footer-link        { color: #9CA3AF !important; }
+            .dm-poll-1             { background-color: #2D2640 !important; border-color: #4C3D7A !important; }
+            .dm-poll-2             { background-color: #1A3A40 !important; border-color: #2A5A60 !important; }
+            .dm-poll-3             { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
+            .dm-poll-4             { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
+            .dm-poll-5             { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+            .dm-coming-soon        { border-color: #3a3a3a !important; }
+            .dm-pill               { background-color: #2a2a2e !important; color: #9CA3AF !important; }
+            .dm-bubble-1           { background-color: #3A1A2A !important; }
+            .dm-bubble-2           { background-color: #1A2A3A !important; }
+            .dm-bubble-3           { background-color: #1A3A2A !important; }
+            .dm-bubble-4           { background-color: #3A3020 !important; }
+            .dm-bubble-5           { background-color: #2D2640 !important; }
+            .dm-divider            { border-color: #3a3a3a !important; }
+        }
+        /* ─── DARK MODE — Gmail (u + .body hack) ─────────── */
+        u + .body .outer-bg              { background-color: #000000 !important; }
+        u + .body .dm-card               { background-color: #1c1c1e !important; }
+        u + .body .white-card            { background-color: #1c1c1e !important; }
+        u + .body .dm-studies-wrap       { background-color: #1c1c1e !important; }
+        u + .body .banner-wrap,
+        u + .body .banner-top,
+        u + .body .banner-sub            { background: #1c1c1e !important; background-color: #1c1c1e !important; }
+        u + .body .banner-title          { color: #FFFFFF !important; }
+        u + .body .banner-label          { color: #FB7185 !important; }
+        u + .body .banner-subtitle       { color: #D1D5DB !important; }
+        u + .body .dm-heading            { color: #FFFFFF !important; }
+        u + .body .dm-text               { color: #E5E7EB !important; }
+        u + .body .dm-subtext            { color: #9CA3AF !important; }
+        u + .body .dm-accent             { color: #FB7185 !important; }
+        u + .body .heading-text          { color: #FFFFFF !important; }
+        u + .body .body-text             { color: #E5E7EB !important; }
+        u + .body .subtext               { color: #9CA3AF !important; }
+        u + .body .dm-footer-link        { color: #9CA3AF !important; }
+        u + .body .dm-poll-1             { background-color: #2D2640 !important; border-color: #4C3D7A !important; }
+        u + .body .dm-poll-2             { background-color: #1A3A40 !important; border-color: #2A5A60 !important; }
+        u + .body .dm-poll-3             { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
+        u + .body .dm-poll-4             { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
+        u + .body .dm-poll-5             { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+        u + .body .dm-coming-soon        { border-color: #3a3a3a !important; }
+        u + .body .dm-pill               { background-color: #2a2a2e !important; color: #9CA3AF !important; }
+        u + .body .dm-bubble-1           { background-color: #3A1A2A !important; }
+        u + .body .dm-bubble-2           { background-color: #1A2A3A !important; }
+        u + .body .dm-bubble-3           { background-color: #1A3A2A !important; }
+        u + .body .dm-bubble-4           { background-color: #3A3020 !important; }
+        u + .body .dm-bubble-5           { background-color: #2D2640 !important; }
+        u + .body .dm-divider            { border-color: #3a3a3a !important; }
+        /* ─── DARK MODE — Outlook.com / OWA ──────────────── */
+        [data-ogsc] .outer-bg            { background-color: #000000 !important; }
+        [data-ogsc] .dm-card             { background-color: #1c1c1e !important; }
+        [data-ogsc] .white-card          { background-color: #1c1c1e !important; }
+        [data-ogsc] .dm-studies-wrap     { background-color: #1c1c1e !important; }
+        [data-ogsc] .banner-wrap,
+        [data-ogsc] .banner-top,
+        [data-ogsc] .banner-sub          { background: #1c1c1e !important; background-color: #1c1c1e !important; }
+        [data-ogsc] .banner-title        { color: #FFFFFF !important; }
+        [data-ogsc] .banner-label        { color: #FB7185 !important; }
+        [data-ogsc] .banner-subtitle     { color: #D1D5DB !important; }
+        [data-ogsc] .dm-heading          { color: #FFFFFF !important; }
+        [data-ogsc] .dm-text             { color: #E5E7EB !important; }
+        [data-ogsc] .dm-subtext          { color: #9CA3AF !important; }
+        [data-ogsc] .dm-accent           { color: #FB7185 !important; }
+        [data-ogsc] .heading-text        { color: #FFFFFF !important; }
+        [data-ogsc] .body-text           { color: #E5E7EB !important; }
+        [data-ogsc] .subtext             { color: #9CA3AF !important; }
+        [data-ogsc] .dm-footer-link      { color: #9CA3AF !important; }
+        [data-ogsc] .dm-poll-1           { background-color: #2D2640 !important; border-color: #4C3D7A !important; }
+        [data-ogsc] .dm-poll-2           { background-color: #1A3A40 !important; border-color: #2A5A60 !important; }
+        [data-ogsc] .dm-poll-3           { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
+        [data-ogsc] .dm-poll-4           { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
+        [data-ogsc] .dm-poll-5           { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+        [data-ogsc] .dm-coming-soon      { border-color: #3a3a3a !important; }
+        [data-ogsc] .dm-pill             { background-color: #2a2a2e !important; color: #9CA3AF !important; }
+        [data-ogsc] .dm-bubble-1         { background-color: #3A1A2A !important; }
+        [data-ogsc] .dm-bubble-2         { background-color: #1A2A3A !important; }
+        [data-ogsc] .dm-bubble-3         { background-color: #1A3A2A !important; }
+        [data-ogsc] .dm-bubble-4         { background-color: #3A3020 !important; }
+        [data-ogsc] .dm-bubble-5         { background-color: #2D2640 !important; }
+        [data-ogsc] .dm-divider          { border-color: #3a3a3a !important; }
+    </style>
+</head>
+<body class="body" style="margin: 0; padding: 0; background-color: #F8F5F2;">
+<table class="outer-bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F8F5F2;">
+<tr><td align="center" style="padding: 40px 10px;">
+<table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%;">
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- LOGO (evergreen — only update utm_campaign date)        -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td align="center" style="padding: 0 0 30px 0;">
+        <!-- ✏️ EDIT 1: Replace DATE with e.g. 2_20 -->
+        <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=logo" target="_blank">
+            <img src="https://cdn.mcauto-images-production.sendgrid.net/038ff234df6bb31f/13341f9c-5580-483b-bba3-4196d62e8664/1156x276.png"
+                 alt="Reputable" width="130" style="display: block;" border="0">
+        </a>
+    </td>
+</tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 2 — BANNER                                      -->
+<!-- Swap emoji, label, headline, subtitle, & gradient colors-->
+<!-- See color theme options in the header comment block     -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <!-- ✏️ 2a: bg color = gradient start color -->
+    <td class="banner-wrap" style="background-color: #FDE8E8; border-radius: 16px; padding: 0; overflow: hidden;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <!-- ✏️ 2b: update gradient colors to match theme -->
+                <td class="banner-top" align="center"
+                    style="background: linear-gradient(135deg, #FDE8E8 0%, #FBCFE8 50%, #FDE8E8 100%); padding: 35px 20px 35px 20px;">
+                    <!-- ✏️ 2c: Large decorative emoji -->
+                    <p style="margin: 0 0 6px 0; font-size: 44px; line-height: 1;">&#128200;</p>
+                    <!-- ✏️ 2d: Eyebrow label (e.g. date or themed label) -->
+                    <p class="sans-text banner-label"
+                       style="margin: 0 0 4px 0; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #BE185D;">
+                        Week of February 20, 2026
+                    </p>
+                    <!-- ✏️ 2e: Main headline -->
+                    <h1 class="serif-head banner-title"
+                        style="margin: 0 0 12px 0; font-size: 28px; font-weight: 700; color: #881337; line-height: 1.3; text-align: center;">
+                        Your Weekly Study Digest
+                    </h1>
+                    <!-- ✏️ 2f: Subtitle -->
+                    <p class="sans-text banner-subtitle"
+                       style="margin: 0; font-size: 15px; line-height: 1.6; max-width: 460px; color: #9F1239; text-align: center;">
+                        New studies, real data, and ways to take better care of yourself. Let&#8217;s dive in.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- APP DOWNLOAD BUTTON (evergreen — update utm date only)  -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td align="center" style="padding: 0 20px 30px 20px;">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td style="background-color: #E11D48; border-radius: 8px;">
+                    <!-- ✏️ EDIT: Replace DATE -->
+                    <a href="https://onelink.to/5rsn43?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=download_app_button"
+                       class="sans-text"
+                       style="display: block; padding: 14px 32px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600; text-align: center;">
+                        Download the App
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 3 — COMMUNITY POLL                              -->
+<!-- Update section headline + subtitle, then each of the    -->
+<!-- 5 options: emoji · title · description · vote URL       -->
+<!-- Keep color classes as-is (dm-poll-1 through dm-poll-5)  -->
+<!-- but update the inline bg/border/accent colors to match  -->
+<!-- (see Poll Color Pairs table in the header above)        -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-card card-padding" style="background-color: #FFFFFF; border-radius: 16px; padding: 35px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <p class="sans-text dm-accent" style="margin: 0 0 10px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #E11D48; text-align: center;">
+                        &#128202; Community Poll
+                    </p>
+                    <!-- ✏️ 3a: Section headline -->
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; line-height: 1.2; text-align: center;">
+                        Which Biohack Are You Most Bullish On?
+                    </h2>
+                    <!-- ✏️ 3b: Section subtitle -->
+                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
+                        The space is moving fast. Tell us where you&#8217;re putting your chips &#8212; results shown instantly!
+                    </p>
+                </td>
+            </tr>
+            <!-- ── POLL OPTION 1 ─ Purple (dm-poll-1) ─────── -->
+            <!--    bg: #F5F3FF  border: #DDD6FE  accent: #8B5CF6 -->
+            <tr>
+                <td style="padding: 0 0 10px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td class="dm-poll-1" style="background-color: #F5F3FF; border: 2px solid #DDD6FE; border-left: 5px solid #8B5CF6; border-radius: 12px;">
+                            <!-- ✏️ 3c: vote URL + poll option content -->
+                            <a href="https://reputable.health/poll-results?vote=peptides&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=poll_1"
+                               target="_blank" style="display: block; padding: 14px 16px; text-decoration: none;" class="poll-card-pad">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                    <td width="36" valign="top" style="font-size: 22px; line-height: 1.2;">&#129516;</td><!-- 🧬 -->
+                                    <td valign="top" style="padding: 0 10px;">
+                                        <span class="sans-text dm-heading" style="font-size: 15px; font-weight: 700; color: #1E293B; display: block;">Peptides</span>
+                                        <span class="sans-text dm-subtext" style="font-size: 13px; color: #64748B; line-height: 1.45; display: block; margin-top: 3px;">BPC-157, TB-500, GLP-1 and the broader peptide frontier</span>
+                                    </td>
+                                    <td width="36" valign="middle" align="right">
+                                        <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                            <td style="background-color: #8B5CF6; border-radius: 50%; width: 28px; height: 28px; text-align: center; vertical-align: middle;"><!-- ✏️ accent -->
+                                                <span style="font-size: 14px; color: #FFFFFF; line-height: 28px;"><font color="#FFFFFF">&#8594;</font></span>
+                                            </td>
+                                        </tr></table>
+                                    </td>
+                                </tr></table>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- ── POLL OPTION 2 ─ Cyan (dm-poll-2) ──────── -->
+            <!--    bg: #ECFEFF  border: #A5F3FC  accent: #06B6D4 -->
+            <tr>
+                <td style="padding: 0 0 10px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td class="dm-poll-2" style="background-color: #ECFEFF; border: 2px solid #A5F3FC; border-left: 5px solid #06B6D4; border-radius: 12px;">
+                            <!-- ✏️ 3d: vote URL + poll option content -->
+                            <a href="https://reputable.health/poll-results?vote=nad&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=poll_2"
+                               target="_blank" style="display: block; padding: 14px 16px; text-decoration: none;" class="poll-card-pad">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                    <td width="36" valign="top" style="font-size: 22px; line-height: 1.2;">&#9889;</td><!-- ⚡ -->
+                                    <td valign="top" style="padding: 0 10px;">
+                                        <span class="sans-text dm-heading" style="font-size: 15px; font-weight: 700; color: #1E293B; display: block;">NAD+ Supplementation</span>
+                                        <span class="sans-text dm-subtext" style="font-size: 13px; color: #64748B; line-height: 1.45; display: block; margin-top: 3px;">NMN, NR, and the mitochondrial energy debate</span>
+                                    </td>
+                                    <td width="36" valign="middle" align="right">
+                                        <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                            <td style="background-color: #06B6D4; border-radius: 50%; width: 28px; height: 28px; text-align: center; vertical-align: middle;"><!-- ✏️ accent -->
+                                                <span style="font-size: 14px; color: #FFFFFF; line-height: 28px;"><font color="#FFFFFF">&#8594;</font></span>
+                                            </td>
+                                        </tr></table>
+                                    </td>
+                                </tr></table>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- ── POLL OPTION 3 ─ Green (dm-poll-3) ─────── -->
+            <!--    bg: #ECFDF5  border: #A7F3D0  accent: #10B981 -->
+            <tr>
+                <td style="padding: 0 0 10px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td class="dm-poll-3" style="background-color: #ECFDF5; border: 2px solid #A7F3D0; border-left: 5px solid #10B981; border-radius: 12px;">
+                            <!-- ✏️ 3e: vote URL + poll option content -->
+                            <a href="https://reputable.health/poll-results?vote=exosomes&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=poll_3"
+                               target="_blank" style="display: block; padding: 14px 16px; text-decoration: none;" class="poll-card-pad">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                    <td width="36" valign="top" style="font-size: 22px; line-height: 1.2;">&#129704;</td><!-- 🫧 -->
+                                    <td valign="top" style="padding: 0 10px;">
+                                        <span class="sans-text dm-heading" style="font-size: 15px; font-weight: 700; color: #1E293B; display: block;">Exosomes</span>
+                                        <span class="sans-text dm-subtext" style="font-size: 13px; color: #64748B; line-height: 1.45; display: block; margin-top: 3px;">Cell-derived vesicles as the next frontier in regenerative therapy</span>
+                                    </td>
+                                    <td width="36" valign="middle" align="right">
+                                        <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                            <td style="background-color: #10B981; border-radius: 50%; width: 28px; height: 28px; text-align: center; vertical-align: middle;"><!-- ✏️ accent -->
+                                                <span style="font-size: 14px; color: #FFFFFF; line-height: 28px;"><font color="#FFFFFF">&#8594;</font></span>
+                                            </td>
+                                        </tr></table>
+                                    </td>
+                                </tr></table>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- ── POLL OPTION 4 ─ Rose (dm-poll-4) ──────── -->
+            <!--    bg: #FFF1F2  border: #FECDD3  accent: #F43F5E -->
+            <tr>
+                <td style="padding: 0 0 10px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td class="dm-poll-4" style="background-color: #FFF1F2; border: 2px solid #FECDD3; border-left: 5px solid #F43F5E; border-radius: 12px;">
+                            <!-- ✏️ 3f: vote URL + poll option content -->
+                            <a href="https://reputable.health/poll-results?vote=methylene-blue&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=poll_4"
+                               target="_blank" style="display: block; padding: 14px 16px; text-decoration: none;" class="poll-card-pad">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                    <td width="36" valign="top" style="font-size: 22px; line-height: 1.2;">&#128309;</td><!-- 🔵 -->
+                                    <td valign="top" style="padding: 0 10px;">
+                                        <span class="sans-text dm-heading" style="font-size: 15px; font-weight: 700; color: #1E293B; display: block;">Methylene Blue</span>
+                                        <span class="sans-text dm-subtext" style="font-size: 13px; color: #64748B; line-height: 1.45; display: block; margin-top: 3px;">The century-old compound making a comeback for cognitive performance &amp; mitochondria</span>
+                                    </td>
+                                    <td width="36" valign="middle" align="right">
+                                        <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                            <td style="background-color: #F43F5E; border-radius: 50%; width: 28px; height: 28px; text-align: center; vertical-align: middle;"><!-- ✏️ accent -->
+                                                <span style="font-size: 14px; color: #FFFFFF; line-height: 28px;"><font color="#FFFFFF">&#8594;</font></span>
+                                            </td>
+                                        </tr></table>
+                                    </td>
+                                </tr></table>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- ── POLL OPTION 5 ─ Amber (dm-poll-5) ─────── -->
+            <!--    bg: #FFFBEB  border: #FDE68A  accent: #F59E0B -->
+            <tr>
+                <td style="padding: 0 0 10px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td class="dm-poll-5" style="background-color: #FFFBEB; border: 2px solid #FDE68A; border-left: 5px solid #F59E0B; border-radius: 12px;">
+                            <!-- ✏️ 3g: vote URL + poll option content -->
+                            <a href="https://reputable.health/poll-results?vote=rapamycin&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=poll_5"
+                               target="_blank" style="display: block; padding: 14px 16px; text-decoration: none;" class="poll-card-pad">
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                    <td width="36" valign="top" style="font-size: 22px; line-height: 1.2;">&#128137;</td><!-- 💉 -->
+                                    <td valign="top" style="padding: 0 10px;">
+                                        <span class="sans-text dm-heading" style="font-size: 15px; font-weight: 700; color: #1E293B; display: block;">Rapamycin &amp; Senolytics</span>
+                                        <span class="sans-text dm-subtext" style="font-size: 13px; color: #64748B; line-height: 1.45; display: block; margin-top: 3px;">Clearing senescent cells and targeting mTOR for lifespan extension</span>
+                                    </td>
+                                    <td width="36" valign="middle" align="right">
+                                        <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                            <td style="background-color: #F59E0B; border-radius: 50%; width: 28px; height: 28px; text-align: center; vertical-align: middle;"><!-- ✏️ accent -->
+                                                <span style="font-size: 14px; color: #FFFFFF; line-height: 28px;"><font color="#FFFFFF">&#8594;</font></span>
+                                            </td>
+                                        </tr></table>
+                                    </td>
+                                </tr></table>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- Poll footer (evergreen) -->
+            <tr>
+                <td align="center" style="padding: 12px 0 0 0;">
+                    <p class="sans-text dm-subtext" style="margin: 0; font-size: 12px; color: #94A3B8;">
+                        Your vote is anonymous &bull; See live results instantly
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 4 — NOW RECRUITING (STUDIES)                    -->
+<!-- Update: section eyebrow, headline, subtitle             -->
+<!-- Study 1: label bar text · gradient · headline · desc ·  -->
+<!--          perks list · CTA color + URL                   -->
+<!-- Study 2: same pattern                                   -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-studies-wrap card-padding" style="background-color: #FEFCE8; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <!-- ✏️ 4a: Section eyebrow -->
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #B45309; text-align: center;">
+                        &#127881; Now Recruiting
+                    </p>
+                    <!-- ✏️ 4b: Section headline -->
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; text-align: center; line-height: 1.2;">
+                        You Voted. It&#8217;s Live.
+                    </h2>
+                    <!-- ✏️ 4c: Section subtitle -->
+                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
+                        The Reading Ritual won last week&#8217;s poll with <strong>29% of the vote</strong> &#8212; and we built it. Spots are limited, so join now before they fill up.
+                    </p>
+                </td>
+            </tr>
+            <!-- ══ STUDY CARD: THE READING RITUAL ══════════ -->
+            <tr>
+                <td style="padding: 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background-color: #1C1130; border-radius: 14px; padding: 0; overflow: hidden;">
+                            <!-- Label bar -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td class="study-label-pad" style="background: linear-gradient(135deg, #3B1F6A 0%, #6D28D9 100%); padding: 14px 22px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td>
+                                            <span class="sans-text" style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #C4B5FD;">
+                                                <font color="#C4B5FD">&#128077; Community Choice &bull; 14 Days</font>
+                                            </span>
+                                        </td>
+                                        <td align="right">
+                                            <span class="sans-text" style="font-size: 11px; font-weight: 700; color: #FFFFFF; background-color: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 100px;">
+                                                <font color="#FFFFFF">Now Live</font>
+                                            </span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                            </tr></table>
+                            <!-- Card body -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td class="study-body-pad" style="padding: 20px 22px 22px 22px;">
+                                    <p class="sans-text" style="font-size: 19px; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0; line-height: 1.3;">
+                                        <font color="#FFFFFF">&#128214; The Reading Ritual</font>
+                                    </p>
+                                    <p class="sans-text" style="font-size: 14px; color: #C4B5FD; margin: 0 0 16px 0; line-height: 1.5;">
+                                        <font color="#C4B5FD">Can reading a physical book for 20 minutes before bed improve your sleep onset? You asked for this one &#8212; now let&#8217;s find out together.</font>
+                                    </p>
+                                    <!-- Details box -->
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 18px;"><tr>
+                                        <td style="padding: 14px 16px;">
+                                            <p class="sans-text" style="font-size: 12px; font-weight: 700; color: #A78BFA; margin: 0 0 8px 0; letter-spacing: 0.5px; text-transform: uppercase;"><font color="#A78BFA">What You&#8217;ll Do</font></p>
+                                            <p class="sans-text" style="font-size: 13px; color: #DDD6FE; margin: 0 0 6px 0; line-height: 1.5;"><font color="#DDD6FE">&#10003; &nbsp;Read a physical book for 20 min before bed each night</font></p>
+                                            <p class="sans-text" style="font-size: 13px; color: #DDD6FE; margin: 0 0 6px 0; line-height: 1.5;"><font color="#DDD6FE">&#10003; &nbsp;Log your sleep onset time in the Reputable app</font></p>
+                                            <p class="sans-text" style="font-size: 13px; color: #DDD6FE; margin: 0; line-height: 1.5;"><font color="#DDD6FE">&#10003; &nbsp;Compatible with any wearable &#8212; or no wearable at all</font></p>
+                                        </td>
+                                    </tr></table>
+                                    <!-- ✏️ 4k: Update URL when study page is live -->
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                        <td style="background-color: #7C3AED; border-radius: 8px;">
+                                            <a href="https://reputablestudies.com/reading-ritual?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=reading_ritual_join"
+                                               class="sans-text" style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
+                                                <font color="#FFFFFF">Join This Study &#8594;</font>
+                                            </a>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 5 — YOUTUBE VIDEO FEATURE                       -->
+<!-- Update: eyebrow · headline · description · video ID     -->
+<!-- Video thumbnail pulls automatically from YouTube.       -->
+<!-- Replace dKRJ5ZIJdYw in both URLs below with new ID     -->
+<!-- when swapping videos week to week.                      -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-card card-padding" style="background-color: #FFFFFF; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <!-- ✏️ 5a: Eyebrow label -->
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #E11D48; text-align: center;">
+                        &#127909; From the Channel
+                    </p>
+                    <!-- ✏️ 5b: Video title -->
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 700; color: #0F172A; text-align: center; line-height: 1.3;">
+                        What is a Washout Period?<br>(And why you need one) &#9201;&#65039;
+                    </h2>
+                    <!-- ✏️ 5c: Video description -->
+                    <p class="sans-text dm-text" style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #334155; text-align: center; max-width: 440px;">
+                        New to clinical studies? A washout period is one of those terms that sounds complicated but is actually simple &#8212; and understanding it makes you a better study participant!
+                    </p>
+                </td>
+            </tr>
+            <!-- Video thumbnail — clickable, links to YouTube -->
+            <!-- ✏️ 5d: Replace dKRJ5ZIJdYw with the new video ID in BOTH the href and img src -->
+            <tr>
+                <td style="padding: 0 0 8px 0;">
+                    <a href="https://youtu.be/dKRJ5ZIJdYw?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=washout_video"
+                       target="_blank" style="display: block; text-decoration: none;">
+                        <img src="https://img.youtube.com/vi/dKRJ5ZIJdYw/maxresdefault.jpg"
+                             alt="What is a Washout Period? — Reputable Health"
+                             width="540" border="0"
+                             style="display: block; width: 100%; border-radius: 12px;">
+                    </a>
+                </td>
+            </tr>
+            <!-- CTA -->
+            <tr>
+                <td align="center" style="padding-top: 16px;">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td style="background-color: #FF0000; border-radius: 8px;">
+                                <a href="https://youtu.be/dKRJ5ZIJdYw?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=washout_video_cta"
+                                   class="sans-text" target="_blank"
+                                   style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
+                                    <font color="#FFFFFF">Watch on YouTube &#8594;</font>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 4.5 — COMING SOON STUDIES                       -->
+<!-- Update: study name · description · tag line             -->
+<!-- Add/remove study rows as needed                         -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-card card-padding" style="background-color: #FFFFFF; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #E11D48; text-align: center;">
+                        &#128337; Coming Soon
+                    </p>
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; line-height: 1.2; text-align: center;">
+                        Studies on the Horizon
+                    </h2>
+                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
+                        Here&#8217;s a sneak peek at what&#8217;s coming to Reputable. Stay tuned.
+                    </p>
+                </td>
+            </tr>
+            <!-- ── COMING SOON STUDY 1 ─────────────────────── -->
+            <tr>
+                <td style="padding: 0 0 12px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td valign="top" style="padding-right: 12px;">
+                                            <!-- ✏️: Study name -->
+                                            <p class="sans-text dm-heading" style="margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #1E293B;">&#129504; Neuvana Xen Device</p>
+                                            <!-- ✏️: Study description -->
+                                            <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.5;">A 6-week study exploring the impact of daily vagus nerve stimulation on sleep quality using wearable sleep data. Oura Ring required.</p>
+                                            <!-- ✏️: Tag / requirement pill -->
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
+                                        </td>
+                                        <td valign="middle" align="right" width="80">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- ── COMING SOON STUDY 2 ─────────────────────── -->
+            <tr>
+                <td style="padding: 12px 0 0 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td valign="top" style="padding-right: 12px;">
+                                            <!-- ✏️: Study name -->
+                                            <p class="sans-text dm-heading" style="margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #1E293B;">&#129702; Vampire Serum: Skin Renewal</p>
+                                            <!-- ✏️: Study description -->
+                                            <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.5;">A 90-day skincare study exploring how daily use of Vampire Serum impacts skin health, measuring changes in wrinkles, texture, radiance, and more through AI-powered skin analysis and surveys.</p>
+                                            <!-- ✏️: Tag / requirement pill -->
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
+                                        </td>
+                                        <td valign="middle" align="right" width="80">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 6 — REFERRAL / REWARDS SECTION                  -->
+<!-- Usually evergreen. Update headline + CTA URL if themed. -->
+<!-- Decorative candy hearts: update bg color + label text   -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <!-- ✏️ 6a: Section bg color -->
+    <td class="card-padding" style="background-color: #881337; border-radius: 16px; padding: 40px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <!-- ✏️ 6e: Section headline -->
+                    <h2 class="serif-head" style="margin: 0 0 10px 0; font-size: 26px; font-weight: 700; color: #FFFFFF; text-align: center; line-height: 1.2;">
+                        <font color="#FFFFFF">Share the Love with Heartbeats</font>
+                    </h2>
+                    <!-- ✏️ 6f: Section subtitle -->
+                    <p class="sans-text" style="margin: 0 0 28px 0; font-size: 15px; line-height: 1.6; color: #FECDD3; text-align: center; max-width: 420px;">
+                        <font color="#FECDD3">Give your friends the gift of better health &#8212; and earn rewards together.</font>
+                    </p>
+                </td>
+            </tr>
+            <!-- Steps card (evergreen — edit text if process changes) -->
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.12); border-radius: 14px;"><tr>
+                        <td style="padding: 24px 22px;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 16px;"><tr>
+                                <td width="40" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td style="background-color: #FFFFFF; border-radius: 50%; width: 32px; height: 32px; text-align: center; vertical-align: middle;">
+                                            <span class="sans-text" style="color: #881337; font-size: 14px; font-weight: 800; line-height: 32px;"><font color="#881337">1</font></span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">Get your unique link</font></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #FCA5A5; line-height: 1.5;"><font color="#FCA5A5">Open the Reputable app &#8594; Settings &#8594; Rewards &#8594; Invite Friends</font></p>
+                                </td>
+                            </tr></table>
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 16px;"><tr>
+                                <td width="40" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td style="background-color: #FFFFFF; border-radius: 50%; width: 32px; height: 32px; text-align: center; vertical-align: middle;">
+                                            <span class="sans-text" style="color: #881337; font-size: 14px; font-weight: 800; line-height: 32px;"><font color="#881337">2</font></span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">Share with friends</font></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #FCA5A5; line-height: 1.5;"><font color="#FCA5A5">Send your personal referral link via text, email, or social media</font></p>
+                                </td>
+                            </tr></table>
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                <td width="40" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td style="background-color: #FFFFFF; border-radius: 50%; width: 32px; height: 32px; text-align: center; vertical-align: middle;">
+                                            <span class="sans-text" style="color: #881337; font-size: 14px; font-weight: 800; line-height: 32px;"><font color="#881337">3</font></span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">Earn together</font></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #FCA5A5; line-height: 1.5;"><font color="#FCA5A5">When your friend joins a study, you both earn heartbeats (amounts vary by study)</font></p>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding-top: 24px;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td style="background-color: #FFFFFF; border-radius: 8px;">
+                            <!-- ✏️ 6g: Heartbeats CTA URL — update utm date -->
+                            <a href="https://reputable.health/heartbeats/?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=heartbeats_cta"
+                               class="sans-text" style="display: block; padding: 14px 32px; color: #DC2626; text-decoration: none; font-size: 14px; font-weight: 800; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
+                                <font color="#881337">Learn More About Heartbeats</font>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td height="30" style="font-size: 30px; line-height: 30px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CLOSING + FOOTER (evergreen)                            -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="mobile-padding" style="padding: 0 20px;">
+        <p class="sans-text subtext" style="margin: 0; font-size: 14px; color: #64748B; text-align: center; line-height: 1.6;">
+            Questions? Just reply to this email
+        </p>
+    </td>
+</tr>
+<tr><td height="40" style="font-size: 40px; line-height: 40px;">&nbsp;</td></tr>
+<tr>
+    <td align="center" style="padding: 0 20px;">
+        <p class="sans-text subtext" style="margin: 0 0 10px 0; font-size: 12px; color: #94A3B8;">
+            &copy; 2026 Reputable Health, Inc. &middot;
+            <!-- ✏️ update utm date -->
+            <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=footer_link"
+               class="dm-footer-link" style="color: #6B7280; text-decoration: underline;">reputable.health</a>
+        </p>
+        <p class="sans-text subtext" style="margin: 0; font-size: 11px; color: #94A3B8;">
+            <a href="{{{unsubscribe}}}" class="dm-footer-link" style="color: #6B7280; text-decoration: underline;">Unsubscribe</a> from these emails
+        </p>
+    </td>
+</tr>
+<tr><td height="20" style="font-size: 20px; line-height: 20px;">&nbsp;</td></tr>
+</table><!-- /email-container -->
+</td></tr>
+</table><!-- /outer-bg -->
+</body>
+</html>
