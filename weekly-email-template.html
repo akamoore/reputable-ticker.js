@@ -58,16 +58,35 @@
             .email-container { width: 100% !important; }
             .mobile-padding  { padding-left: 20px !important; padding-right: 20px !important; }
             .card-padding    { padding: 25px 20px !important; }
+            /* Reduce outer wrapper padding on mobile */
+            .outer-padding   { padding: 20px 8px !important; }
+            /* Typography */
             h1 { font-size: 24px !important; line-height: 1.3 !important; }
             h2 { font-size: 20px !important; line-height: 1.3 !important; }
             h3 { font-size: 18px !important; }
-            .poll-card-pad   { padding: 14px 14px !important; }
+            /* Poll card — tighten padding on mobile */
+            .poll-card-pad     { padding: 14px 14px !important; }
+            .poll-header-pad   { padding: 22px 18px 4px !important; }
+            .poll-options-pad  { padding: 0 12px 6px !important; }
+            .poll-option-inner { padding: 12px 12px !important; }
+            .poll-footer-pad   { padding: 4px 18px 20px !important; }
+            /* Study cards */
             .study-label-pad { padding: 12px 16px !important; }
             .study-body-pad  { padding: 16px 16px 18px 16px !important; }
             .coming-soon-pad { padding: 14px 14px !important; }
             /* Coming Soon: show mobile badge above name, hide desktop badge */
             .mobile-coming-soon { display: table-row !important; }
             .desktop-coming-soon { display: none !important; width: 0 !important; padding: 0 !important; overflow: hidden !important; }
+            /* Full-width CTA buttons on mobile */
+            .mobile-btn-full { width: 100% !important; }
+            .mobile-btn-full td { width: 100% !important; }
+            /* Reduce spacer heights on mobile */
+            .spacer-sm { height: 16px !important; font-size: 16px !important; line-height: 16px !important; }
+            .spacer-md { height: 20px !important; font-size: 20px !important; line-height: 20px !important; }
+            /* Referral steps — tighten inner padding */
+            .steps-inner-pad { padding: 18px 16px !important; }
+            /* Banner — slightly less vertical padding */
+            .banner-inner-pad { padding: 28px 16px 28px 16px !important; }
             /* Candy hearts: stack vertically on small screens */
             .heart-row  { display: block !important; width: 100% !important; }
             .heart-cell { display: block !important; width: 100% !important; padding: 6px 0 !important; text-align: center !important; }
@@ -176,7 +195,7 @@
 </head>
 <body class="body" style="margin: 0; padding: 0; background-color: #F8F5F2;">
 <table class="outer-bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F8F5F2;">
-<tr><td align="center" style="padding: 40px 10px;">
+<tr><td align="center" class="outer-padding" style="padding: 40px 10px;">
 <table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%;">
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- LOGO (evergreen — only update utm_campaign date)        -->
@@ -201,7 +220,7 @@
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <!-- ✏️ 2b: update gradient colors to match theme -->
-                <td class="banner-top" align="center"
+                <td class="banner-top banner-inner-pad" align="center"
                     style="background: linear-gradient(135deg, #FDE8E8 0%, #FBCFE8 50%, #FDE8E8 100%); padding: 35px 20px 35px 20px;">
                     <!-- ✏️ 2c: Large decorative emoji -->
                     <p style="margin: 0 0 6px 0; font-size: 44px; line-height: 1;">&#128200;</p>
@@ -225,13 +244,13 @@
         </table>
     </td>
 </tr>
-<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- APP DOWNLOAD BUTTON (evergreen — update utm date only)  -->
 <!-- ════════════════════════════════════════════════════════ -->
 <tr>
     <td align="center" style="padding: 0 20px 30px 20px;">
-        <table cellpadding="0" cellspacing="0" border="0">
+        <table class="mobile-btn-full" cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <td style="background-color: #E11D48; border-radius: 8px;">
                     <!-- ✏️ EDIT: Replace DATE -->
@@ -263,7 +282,7 @@
                      style="background-color: #0e1419; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden;">
                 <!-- Header -->
                 <tr>
-                  <td style="padding: 28px 24px 6px; text-align: center;">
+                  <td class="poll-header-pad" style="padding: 28px 24px 6px; text-align: center;">
                     <p style="font-family: 'Courier New', Courier, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #00e5c3; margin: 0 0 12px 0;">
                       ● &nbsp;Community Poll
                     </p>
@@ -279,13 +298,13 @@
                 </tr>
                 <!-- Options -->
                 <tr>
-                  <td style="padding: 0 16px 8px;">
+                  <td class="poll-options-pad" style="padding: 0 16px 8px;">
                     <!-- ✏️ 3c: Option 1 — Peptides -->
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
                       <tr>
                         <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
                           <a href="https://reputable.health/biohacking-poll-results?vote=peptides" target="_blank"
-                             style="display: block; padding: 14px 16px; text-decoration: none;">
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                               <tr>
                                 <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">🧬</td>
@@ -307,7 +326,7 @@
                       <tr>
                         <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
                           <a href="https://reputable.health/biohacking-poll-results?vote=nad" target="_blank"
-                             style="display: block; padding: 14px 16px; text-decoration: none;">
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                               <tr>
                                 <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">⚡</td>
@@ -329,7 +348,7 @@
                       <tr>
                         <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
                           <a href="https://reputable.health/biohacking-poll-results?vote=exosomes" target="_blank"
-                             style="display: block; padding: 14px 16px; text-decoration: none;">
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                               <tr>
                                 <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">🫧</td>
@@ -351,7 +370,7 @@
                       <tr>
                         <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
                           <a href="https://reputable.health/biohacking-poll-results?vote=methylene" target="_blank"
-                             style="display: block; padding: 14px 16px; text-decoration: none;">
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                               <tr>
                                 <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">🔵</td>
@@ -373,7 +392,7 @@
                       <tr>
                         <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
                           <a href="https://reputable.health/biohacking-poll-results?vote=rapamycin" target="_blank"
-                             style="display: block; padding: 14px 16px; text-decoration: none;">
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                               <tr>
                                 <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">🔬</td>
@@ -394,7 +413,7 @@
                 </tr>
                 <!-- Footer note -->
                 <tr>
-                  <td style="padding: 4px 24px 24px; text-align: center;">
+                  <td class="poll-footer-pad" style="padding: 4px 24px 24px; text-align: center;">
                     <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; margin: 0;">
                       Your vote is anonymous &nbsp;·&nbsp; See live results instantly
                     </p>
@@ -406,7 +425,7 @@
         </table>
     </td>
 </tr>
-<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- ✏️ EDIT 4 — NOW RECRUITING (STUDIES)                    -->
 <!-- Update: section eyebrow, headline, subtitle             -->
@@ -491,7 +510,7 @@
         </table>
     </td>
 </tr>
-<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- ✏️ EDIT 5 — YOUTUBE VIDEO FEATURE                       -->
 <!-- Update: eyebrow · headline · description · video ID     -->
@@ -534,7 +553,7 @@
             <!-- CTA -->
             <tr>
                 <td align="center" style="padding-top: 16px;">
-                    <table cellpadding="0" cellspacing="0" border="0">
+                    <table class="mobile-btn-full" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                             <td style="background-color: #FF0000; border-radius: 8px;">
                                 <a href="https://youtu.be/dKRJ5ZIJdYw?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=washout_video_cta"
@@ -550,7 +569,7 @@
         </table>
     </td>
 </tr>
-<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- ✏️ EDIT 4.5 — COMING SOON STUDIES                       -->
 <!-- Update: study name · description · tag line             -->
@@ -612,7 +631,7 @@
         </table>
     </td>
 </tr>
-<tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- ✏️ EDIT 6 — REFERRAL / REWARDS SECTION                  -->
 <!-- Usually evergreen. Update headline + CTA URL if themed. -->
@@ -638,7 +657,7 @@
             <tr>
                 <td>
                     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.12); border-radius: 14px;"><tr>
-                        <td style="padding: 24px 22px;">
+                        <td class="steps-inner-pad" style="padding: 24px 22px;">
                             <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 16px;"><tr>
                                 <td width="40" valign="top">
                                     <table cellpadding="0" cellspacing="0" border="0"><tr>
@@ -698,7 +717,7 @@
         </table>
     </td>
 </tr>
-<tr><td height="30" style="font-size: 30px; line-height: 30px;">&nbsp;</td></tr>
+<tr><td class="spacer-md" height="30" style="font-size: 30px; line-height: 30px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
 <!-- CLOSING + FOOTER (evergreen)                            -->
 <!-- ════════════════════════════════════════════════════════ -->
