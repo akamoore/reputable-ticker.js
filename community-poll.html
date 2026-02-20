@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Poll — Reputable Health</title>
+  <style>
+    :root {
+      /* ── Dark surfaces (matched to reputable.health) ──── */
+      --bg-base:       #0a0a0a;
+      --bg-raised:     #141414;
+      --bg-surface:    #1a1a1a;
+      --bg-hover:      #1f1f1f;
+      /* ── Borders ───────────────────────────────────────── */
+      --border:        #262626;
+      --border-subtle: #1c1c1c;
+      /* ── Text ──────────────────────────────────────────── */
+      --text-primary:   #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --text-muted:     #6b6b6b;
+      /* ── Lime accent (Reputable brand) ─────────────────── */
+      --lime:        #c8e64a;
+      --lime-dim:    #a3c232;
+      --lime-bg:     rgba(200,230,74,.08);
+      --lime-border: rgba(200,230,74,.2);
+      --lime-glow:   rgba(200,230,74,.12);
+      /* ── Option accent colours ─────────────────────────── */
+      --c1: #a78bfa;
+      --c2: #34d399;
+      --c3: #fb7185;
+      --c4: #60a5fa;
+      --c5: #fbbf24;
+      /* ── Layout ────────────────────────────────────────── */
+      --radius: 12px;
+      --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 48px 16px 80px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Subtle lime background glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 420px;
+      background: radial-gradient(ellipse, var(--lime-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Card ─────────────────────────────────────────── */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px 32px;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ── Label ────────────────────────────────────────── */
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 14px;
+    }
+    .label::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.75); }
+    }
+
+    /* ── Heading ──────────────────────────────────────── */
+    h1 {
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 32px;
+    }
+
+    /* ── Thank-you state ─────────────────────────────── */
+    .thankyou {
+      display: none;
+      text-align: center;
+      padding: 8px 0 16px;
+    }
+    .thankyou .checkmark {
+      font-size: 42px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .thankyou h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--lime);
+      margin-bottom: 6px;
+    }
+    .thankyou p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ── Poll options ─────────────────────────────────── */
+    .options { display: flex; flex-direction: column; gap: 10px; }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.18s, border-color 0.18s, transform 0.12s;
+      position: relative;
+      overflow: hidden;
+    }
+    .option:hover {
+      background: var(--bg-hover);
+      transform: translateY(-1px);
+    }
+    .option:active { transform: translateY(0); }
+
+    .option-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .option-text { flex: 1; min-width: 0; }
+
+    .option-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .option-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .option-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--lime-bg);
+      border: 1px solid var(--lime-border);
+      color: var(--lime);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .option:hover .option-arrow {
+      transform: translateX(3px);
+      background: var(--lime);
+      color: var(--bg-base);
+    }
+
+    /* Per-option icon background colours */
+    .option-1 .option-icon { background: rgba(167,139,250,0.12); }
+    .option-1:hover { border-color: rgba(167,139,250,0.3); }
+
+    .option-2 .option-icon { background: rgba(52,211,153,0.10); }
+    .option-2:hover { border-color: rgba(52,211,153,0.3); }
+
+    .option-3 .option-icon { background: rgba(251,113,133,0.10); }
+    .option-3:hover { border-color: rgba(251,113,133,0.3); }
+
+    .option-4 .option-icon { background: rgba(96,165,250,0.10); }
+    .option-4:hover { border-color: rgba(96,165,250,0.3); }
+
+    .option-5 .option-icon { background: rgba(251,191,36,0.10); }
+    .option-5:hover { border-color: rgba(251,191,36,0.3); }
+
+    /* ── Results bars ─────────────────────────────────── */
+    .results { display: none; flex-direction: column; gap: 10px; }
+
+    .result-row { display: flex; flex-direction: column; gap: 6px; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .result-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .result-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .result-pct {
+      font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .bar-track {
+      height: 6px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .result-1 .result-icon { background: rgba(167,139,250,0.12); }
+    .result-1 .result-pct  { color: var(--c1); }
+    .result-1 .bar-fill    { background: var(--c1); }
+
+    .result-2 .result-icon { background: rgba(52,211,153,0.10); }
+    .result-2 .result-pct  { color: var(--c2); }
+    .result-2 .bar-fill    { background: var(--c2); }
+
+    .result-3 .result-icon { background: rgba(251,113,133,0.10); }
+    .result-3 .result-pct  { color: var(--c3); }
+    .result-3 .bar-fill    { background: var(--c3); }
+
+    .result-4 .result-icon { background: rgba(96,165,250,0.10); }
+    .result-4 .result-pct  { color: var(--c4); }
+    .result-4 .bar-fill    { background: var(--c4); }
+
+    .result-5 .result-icon { background: rgba(251,191,36,0.10); }
+    .result-5 .result-pct  { color: var(--c5); }
+    .result-5 .bar-fill    { background: var(--c5); }
+
+    /* Highlight winner */
+    .result-row.winner .result-label::after {
+      content: ' 👑';
+      font-size: 12px;
+    }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .footer-note {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .total-votes {
+      font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .brand {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+    .brand a {
+      color: var(--lime-dim);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .brand a:hover { color: var(--lime); }
+
+    /* ── Entry animation ─────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card   { animation: fadeUp 0.5s ease both; }
+    .option { animation: fadeUp 0.5s ease both; }
+    .option:nth-child(1) { animation-delay: 0.05s; }
+    .option:nth-child(2) { animation-delay: 0.10s; }
+    .option:nth-child(3) { animation-delay: 0.15s; }
+    .option:nth-child(4) { animation-delay: 0.20s; }
+    .option:nth-child(5) { animation-delay: 0.25s; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="label">Community Poll</div>
+  <h1>What's the Most Promising Biohack Right Now?</h1>
+  <p class="subtitle">The space is moving fast. Tell us where you're putting your chips — results shown instantly!</p>
+
+  <!-- Thank-you message (hidden until voted) -->
+  <div class="thankyou" id="thankyou">
+    <span class="checkmark">⚡</span>
+    <h2>Vote recorded!</h2>
+    <p>Here's how the community is leaning:</p>
+  </div>
+
+  <!-- Voting options -->
+  <div class="options" id="options">
+    <a href="#" class="option option-1" data-vote="peptides">
+      <div class="option-icon">🧬</div>
+      <div class="option-text">
+        <span class="option-title">Peptides</span>
+        <span class="option-desc">BPC-157, TB-500, GLP-1 and the broader peptide frontier</span>
+      </div>
+      <div class="option-arrow">→</div>
+    </a>
+    <a href="#" class="option option-2" data-vote="nad">
+      <div class="option-icon">⚡</div>
+      <div class="option-text">
+        <span class="option-title">NAD+ Supplementation</span>
+        <span class="option-desc">NMN, NR, and the mitochondrial energy debate</span>
+      </div>
+      <div class="option-arrow">→</div>
+    </a>
+    <a href="#" class="option option-3" data-vote="exosomes">
+      <div class="option-icon">🫧</div>
+      <div class="option-text">
+        <span class="option-title">Exosomes</span>
+        <span class="option-desc">Cell-derived vesicles as the next frontier in regenerative therapy</span>
+      </div>
+      <div class="option-arrow">→</div>
+    </a>
+    <a href="#" class="option option-4" data-vote="methylene">
+      <div class="option-icon">🔵</div>
+      <div class="option-text">
+        <span class="option-title">Methylene Blue</span>
+        <span class="option-desc">The century-old compound making a comeback for cognitive performance &amp; mitochondria</span>
+      </div>
+      <div class="option-arrow">→</div>
+    </a>
+    <a href="#" class="option option-5" data-vote="rapamycin">
+      <div class="option-icon">🔬</div>
+      <div class="option-text">
+        <span class="option-title">Rapamycin &amp; Senolytics</span>
+        <span class="option-desc">Clearing senescent cells and targeting mTOR for lifespan extension</span>
+      </div>
+      <div class="option-arrow">→</div>
+    </a>
+  </div>
+
+  <!-- Results (hidden until voted) -->
+  <div class="results" id="results">
+    <div class="result-row result-1" id="row-peptides">
+      <div class="result-header">
+        <div class="result-icon">🧬</div>
+        <span class="result-label">Peptides</span>
+        <span class="result-pct" id="pct-peptides">0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="bar-peptides"></div></div>
+    </div>
+    <div class="result-row result-2" id="row-nad">
+      <div class="result-header">
+        <div class="result-icon">⚡</div>
+        <span class="result-label">NAD+ Supplementation</span>
+        <span class="result-pct" id="pct-nad">0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="bar-nad"></div></div>
+    </div>
+    <div class="result-row result-3" id="row-exosomes">
+      <div class="result-header">
+        <div class="result-icon">🫧</div>
+        <span class="result-label">Exosomes</span>
+        <span class="result-pct" id="pct-exosomes">0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="bar-exosomes"></div></div>
+    </div>
+    <div class="result-row result-4" id="row-methylene">
+      <div class="result-header">
+        <div class="result-icon">🔵</div>
+        <span class="result-label">Methylene Blue</span>
+        <span class="result-pct" id="pct-methylene">0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="bar-methylene"></div></div>
+    </div>
+    <div class="result-row result-5" id="row-rapamycin">
+      <div class="result-header">
+        <div class="result-icon">🔬</div>
+        <span class="result-label">Rapamycin &amp; Senolytics</span>
+        <span class="result-pct" id="pct-rapamycin">0%</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="bar-rapamycin"></div></div>
+    </div>
+    <div class="total-votes" id="total-votes"></div>
+  </div>
+
+  <div class="footer-note" id="footer-note">Your vote is anonymous · See live results instantly</div>
+  <div class="brand"><a href="https://reputable.health">reputable.health</a></div>
+</div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────────────────────
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV8GTNUIMLKXxrKYI5e05dowp2C3KZ8J3pazV1pHJHk8CuPz4hu6qzNkYYiXGHhq11HQ/exec';
+  const OPTIONS = ['peptides', 'nad', 'exosomes', 'methylene', 'rapamycin'];
+  // ────────────────────────────────────────────────────────────────────────
+
+  const params = new URLSearchParams(window.location.search);
+  const voteParam = params.get('vote');
+
+  function showResults(votes) {
+    const total = Object.values(votes).reduce((a, b) => a + b, 0);
+    const maxVotes = Math.max(...Object.values(votes));
+
+    OPTIONS.forEach(id => {
+      const count = votes[id] || 0;
+      const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+      document.getElementById('pct-' + id).textContent = pct + '%';
+
+      // Animate bar after short delay
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.getElementById('bar-' + id).style.width = pct + '%';
+        }, 80);
+      });
+
+      // Crown the leader
+      if (count === maxVotes && maxVotes > 0) {
+        document.getElementById('row-' + id).classList.add('winner');
+      }
+    });
+
+    document.getElementById('total-votes').textContent =
+      total.toLocaleString() + (total === 1 ? ' vote so far' : ' votes so far');
+
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('thankyou').style.display = 'block';
+    document.getElementById('results').style.display = 'flex';
+    document.getElementById('footer-note').style.display = 'none';
+  }
+
+  async function castVote(study) {
+    try {
+      const url = APPS_SCRIPT_URL + '?study=' + encodeURIComponent(study);
+      const res = await fetch(url);
+      const data = await res.json();
+      showResults(data.votes);
+    } catch (err) {
+      console.error('Vote failed:', err);
+      // Show a friendly error but still hide options
+      document.getElementById('options').style.display = 'none';
+      document.getElementById('thankyou').style.display = 'block';
+      document.getElementById('thankyou').querySelector('p').textContent =
+        'Something went wrong — please try again.';
+    }
+  }
+
+  async function fetchResultsOnly() {
+    try {
+      const res = await fetch(APPS_SCRIPT_URL);
+      const data = await res.json();
+      showResults(data.votes);
+      // On results-only view, hide thank-you header
+      document.getElementById('thankyou').style.display = 'none';
+      document.getElementById('results').style.display = 'flex';
+      document.getElementById('options').style.display = 'none';
+      document.getElementById('footer-note').textContent = 'Live results · Updated in real-time';
+      document.getElementById('footer-note').style.display = 'block';
+    } catch (err) {
+      console.error('Could not load results:', err);
+    }
+  }
+
+  // Auto-vote if ?vote= param is present
+  if (voteParam && OPTIONS.includes(voteParam)) {
+    castVote(voteParam);
+  }
+
+  // Attach click handlers for the in-page poll
+  document.querySelectorAll('.option[data-vote]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      const vote = el.getAttribute('data-vote');
+      castVote(vote);
+    });
+  });
+
+  // If ?results=1 is in URL, just show live results without voting
+  if (params.get('results') === '1') {
+    fetchResultsOnly();
+  }
+</script>
+</body>
+</html>
