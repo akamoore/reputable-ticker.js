@@ -13,16 +13,17 @@ const browser = await puppeteer.launch({
 });
 
 const page = await browser.newPage();
-await page.setViewport({ width: 1080, height: 1080 });
+await page.setViewport({ width: 1080, height: 1080, deviceScaleFactor: 2 });
 await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0', timeout: 30000 });
 
-// Wait a bit for fonts to load
+// Wait for fonts to fully load
+await page.evaluate(() => document.fonts.ready);
 await new Promise(r => setTimeout(r, 2000));
 
 await page.screenshot({
   path: outputPath,
   type: 'jpeg',
-  quality: 95,
+  quality: 100,
   clip: { x: 0, y: 0, width: 1080, height: 1080 },
 });
 
