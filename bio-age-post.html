@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bio Age Post</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #020a12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: linear-gradient(135deg, #020a12 0%, #041525 50%, #020e1a 100%);
+    overflow: hidden;
+  }
+
+  /* Background grid */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(215, 254, 131, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(215, 254, 131, 0.04) 1px, transparent 1px);
+    background-size: 54px 54px;
+  }
+
+  /* Ambient glow orbs */
+  .glow-left {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 220, 180, 0.08) 0%, transparent 70%);
+    top: -100px;
+    left: -150px;
+  }
+
+  .glow-right {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(80, 120, 255, 0.07) 0%, transparent 70%);
+    bottom: -200px;
+    right: -150px;
+  }
+
+  /* DNA helix SVG background */
+  .dna-bg {
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.12;
+  }
+
+  /* Top label */
+  .top-label {
+    position: absolute;
+    top: 58px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d7fe83;
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(215, 254, 131, 0.7);
+  }
+
+  .label-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: #d7fe83;
+    text-transform: uppercase;
+  }
+
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(215,254,131,0.4), transparent);
+  }
+
+  /* Main headline */
+  .headline-wrap {
+    position: absolute;
+    top: 120px;
+    left: 70px;
+    right: 70px;
+  }
+
+  .headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 74px;
+    font-weight: 900;
+    line-height: 1.0;
+    color: #f0f8ff;
+    letter-spacing: -0.02em;
+  }
+
+  .headline em {
+    font-style: italic;
+    color: #d7fe83;
+  }
+
+  /* Age comparison block */
+  .age-compare {
+    position: absolute;
+    top: 380px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .age-box {
+    flex: 1;
+    padding: 28px 30px;
+    position: relative;
+  }
+
+  .age-box.left {
+    border: 1px solid rgba(215,254,131,0.2);
+    border-right: none;
+    background: rgba(215, 254, 131, 0.04);
+  }
+
+  .age-box.right {
+    border: 1px solid rgba(80, 140, 255, 0.2);
+    border-left: 1px solid rgba(80, 140, 255, 0.15);
+    background: rgba(80, 140, 255, 0.04);
+  }
+
+  .age-divider {
+    width: 1px;
+    height: 120px;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.15), transparent);
+    flex-shrink: 0;
+  }
+
+  .age-tag {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 8px;
+  }
+
+  .age-birth {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 6px;
+    font-weight: 300;
+  }
+
+  .age-birth span {
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+  }
+
+  .age-bio {
+    font-size: 48px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .age-bio.green { color: #d7fe83; }
+  .age-bio.blue { color: #7BA8FF; }
+
+  .age-bio-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .age-vs {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #020a12;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.3);
+    z-index: 10;
+  }
+
+  /* Body text */
+  .body-text {
+    position: absolute;
+    bottom: 160px;
+    left: 70px;
+    right: 70px;
+  }
+
+  .body-line {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+  }
+
+  .body-line strong {
+    color: rgba(255,255,255,0.78);
+    font-weight: 500;
+  }
+
+  /* Divider */
+  .body-divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(215,254,131,0.4);
+    margin: 18px 0;
+  }
+
+  /* Tags / factors */
+  .factors {
+    position: absolute;
+    bottom: 84px;
+    left: 70px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .factor-tag {
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #d7fe83, #5090FF, transparent);
+    opacity: 0.8;
+  }
+
+  /* Scan line decoration */
+  .scan-line {
+    position: absolute;
+    left: 70px;
+    right: 70px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(215,254,131,0.15), rgba(215,254,131,0.15), transparent);
+  }
+
+  .scan-line.top { top: 100px; }
+  .scan-line.mid { top: 370px; }
+
+  /* Corner marks */
+  .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+  }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(215,254,131,0.3); border-left: 1px solid rgba(215,254,131,0.3); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(215,254,131,0.3); border-right: 1px solid rgba(215,254,131,0.3); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(215,254,131,0.3); border-left: 1px solid rgba(215,254,131,0.3); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(215,254,131,0.3); border-right: 1px solid rgba(215,254,131,0.3); }
+
+  /* Methylation dots pattern */
+  .methyl-pattern {
+    position: absolute;
+    top: 130px;
+    right: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0.25;
+  }
+
+  .methyl-row {
+    display: flex;
+    gap: 5px;
+  }
+
+  .methyl-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #d7fe83;
+  }
+
+  .methyl-dot.off {
+    background: transparent;
+    border: 1px solid rgba(215,254,131,0.4);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="glow-left"></div>
+  <div class="glow-right"></div>
+
+  <!-- Corner marks -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- DNA / methylation dots pattern (top right) -->
+  <div class="methyl-pattern">
+    <div class="methyl-row"><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div></div>
+    <div class="methyl-row"><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div></div>
+    <div class="methyl-row"><div class="methyl-dot"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div></div>
+    <div class="methyl-row"><div class="methyl-dot off"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot"></div></div>
+    <div class="methyl-row"><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div></div>
+    <div class="methyl-row"><div class="methyl-dot off"></div><div class="methyl-dot"></div><div class="methyl-dot"></div><div class="methyl-dot off"></div><div class="methyl-dot off"></div><div class="methyl-dot"></div></div>
+  </div>
+
+  <!-- Scan lines -->
+  <div class="scan-line top"></div>
+  <div class="scan-line mid"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">DNA Methylation Science</div>
+    <div class="label-line"></div>
+  </div>
+
+  <!-- Headline -->
+  <div class="headline-wrap">
+    <div class="headline">Your biological<br>age might<br><em>surprise you</em></div>
+  </div>
+
+  <!-- Age comparison -->
+  <div class="age-compare">
+    <div class="age-box left">
+      <div class="age-tag">Same birth year</div>
+      <div class="age-birth">Chronological: <span>40</span></div>
+      <div class="age-bio green">33</div>
+      <div class="age-bio-label">Biological age</div>
+    </div>
+    <div class="age-divider"></div>
+    <div class="age-box right">
+      <div class="age-tag">Same birth year</div>
+      <div class="age-birth">Chronological: <span>40</span></div>
+      <div class="age-bio blue">52</div>
+      <div class="age-bio-label">Biological age</div>
+    </div>
+  </div>
+
+  <!-- Body copy -->
+  <div class="body-text">
+    <div class="body-line">
+      DNA methylation markers reveal how fast your body is <strong>actually aging</strong> —
+      not how many years you've been alive.
+    </div>
+    <div class="body-divider"></div>
+    <div class="body-line">
+      The difference isn't fate — it's <strong>measurable</strong>. And measurable means <strong>changeable</strong>.
+    </div>
+  </div>
+
+  <!-- Factor tags -->
+  <div class="factors">
+    <div class="factor-tag">Sleep</div>
+    <div class="factor-tag">Stress</div>
+    <div class="factor-tag">Nutrition</div>
+    <div class="factor-tag">Lifestyle</div>
+    <div class="factor-tag">Epigenetics</div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
