@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VVP-02 — Vitamin vs. Painkiller</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,900&family=DM+Mono:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-base:    #0a0a0a;
+    --bg-raised:  #141414;
+    --bg-surface: #1a1a1a;
+    --border:     #262626;
+    --border-subtle: #1c1c1c;
+    --text-primary:   #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --text-muted:     #6b6b6b;
+    --lime:        #c8e64a;
+    --lime-dim:    #a3c232;
+    --lime-bg:     rgba(200,230,74,.08);
+    --lime-border: rgba(200,230,74,.2);
+    --lime-glow:   rgba(200,230,74,.12);
+  }
+
+  body {
+    background: #050505;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  /* Download button — outside the canvas */
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-raised);
+    border: 1px solid var(--lime-border);
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.12s, box-shadow 0.2s;
+  }
+  .download-btn:hover {
+    background: var(--lime);
+    color: var(--bg-base);
+    box-shadow: 0 0 24px rgba(200,230,74,.25);
+    transform: translateY(-1px);
+  }
+  .download-btn:active { transform: translateY(0); }
+  .download-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  /* ══════════════════════════════════════════════
+     THE 1080 x 1080 CANVAS
+     ══════════════════════════════════════════════ */
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: linear-gradient(160deg, #0a0a0a 0%, #0e1210 40%, #0a0a0a 100%);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Background grid */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.03) 1px, transparent 1px);
+    background-size: 54px 54px;
+  }
+
+  /* Ambient glow orbs */
+  .glow-tl {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,230,74,0.06) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+    pointer-events: none;
+  }
+  .glow-br {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,230,74,0.04) 0%, transparent 70%);
+    bottom: -150px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  /* Corner marks */
+  .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+  }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.3); border-left: 1px solid rgba(200,230,74,0.3); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.3); border-right: 1px solid rgba(200,230,74,0.3); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.3); border-left: 1px solid rgba(200,230,74,0.3); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.3); border-right: 1px solid rgba(200,230,74,0.3); }
+
+  /* Scan lines */
+  .scan-line {
+    position: absolute;
+    left: 70px;
+    right: 70px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.12), rgba(200,230,74,0.12), transparent);
+  }
+  .scan-line.s1 { top: 100px; }
+  .scan-line.s2 { top: 580px; }
+
+  /* ── Top label ─────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 58px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lime);
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(200,230,74,0.7);
+  }
+  .label-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--lime);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.4), transparent);
+  }
+  .label-series {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── Big stat ──────────────────────────────── */
+  .stat-block {
+    position: absolute;
+    top: 130px;
+    left: 70px;
+  }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 220px;
+    line-height: 0.85;
+    color: var(--text-primary);
+    letter-spacing: -0.04em;
+    display: block;
+  }
+  .stat-pct {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--lime);
+    opacity: 0.6;
+    display: block;
+    margin-top: -10px;
+    margin-left: 6px;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 20px;
+    display: block;
+    line-height: 1.7;
+  }
+
+  /* ── Question block ────────────────────────── */
+  .question-block {
+    position: absolute;
+    top: 148px;
+    right: 70px;
+    width: 420px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .q-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 36px;
+    line-height: 1.25;
+    color: var(--text-secondary);
+  }
+  .q-text strong {
+    font-weight: 900;
+    font-style: normal;
+    color: var(--lime);
+  }
+
+  /* ── Right-side data panel ─────────────────── */
+  .data-panel {
+    position: absolute;
+    top: 440px;
+    right: 70px;
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .data-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--lime-bg);
+    border: 1px solid var(--lime-border);
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    width: fit-content;
+    margin-bottom: 14px;
+  }
+  .data-pill::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+
+  /* ── Bottom content area ───────────────────── */
+  .bottom-content {
+    position: absolute;
+    bottom: 80px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: flex-end;
+    gap: 48px;
+  }
+
+  .bottom-left {
+    flex: 1;
+  }
+  .bl-headline {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+  }
+  .bl-headline .accent {
+    color: var(--lime);
+  }
+  .bl-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 440px;
+  }
+  .bl-body em {
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+
+  .bottom-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Mini bar chart */
+  .mini-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 50px;
+  }
+  .bar {
+    width: 10px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .bar.you {
+    background: var(--lime);
+    border-color: var(--lime);
+    box-shadow: 0 0 12px rgba(200,230,74,0.35);
+  }
+
+  .bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  /* ── Closing line ──────────────────────────── */
+  .closing {
+    position: absolute;
+    bottom: 36px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .closing-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+  .closing-brand {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lime-dim);
+    opacity: 0.6;
+  }
+
+  /* Bottom accent bar */
+  .accent-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lime), rgba(200,230,74,0.3), transparent);
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+
+<!-- Download button -->
+<button class="download-btn" id="downloadBtn" onclick="downloadJpeg()">
+  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 12L3 7h3V1h4v6h3L8 12zm-5 2v2h10v-2H3z"/></svg>
+  Download JPEG
+</button>
+
+<!-- ═══ 1080 x 1080 Canvas ═══ -->
+<div class="canvas" id="canvas">
+  <div class="grid"></div>
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+
+  <!-- Corner marks -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Scan lines -->
+  <div class="scan-line s1"></div>
+  <div class="scan-line s2"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Vitamin vs. Painkiller</div>
+    <div class="label-line"></div>
+    <div class="label-series">VVP — 02</div>
+  </div>
+
+  <!-- Big 60 stat -->
+  <div class="stat-block">
+    <span class="stat-number">60</span>
+    <span class="stat-pct">percent</span>
+    <span class="stat-label">of participants respond<br>positively in aggregate studies</span>
+  </div>
+
+  <!-- Question card (right side, upper) -->
+  <div class="question-block">
+    <span class="q-eyebrow">The question nobody asks</span>
+    <div class="q-text">
+      But <strong>which</strong> 60%?<br>
+      And are <strong>you</strong><br>in it?
+    </div>
+  </div>
+
+  <!-- Data pill + context (right side, mid) -->
+  <div class="data-panel">
+    <div class="data-pill">Personalized Data</div>
+    <span class="q-eyebrow" style="margin-bottom: 12px;">Why aggregate studies aren't enough</span>
+    <div class="bl-body" style="max-width: 100%;">
+      Aggregate results hide individual variation. Your baseline, your response curve, your threshold — <em>none of that shows up in a population average.</em>
+    </div>
+  </div>
+
+  <!-- Bottom section -->
+  <div class="bottom-content">
+    <div class="bottom-left">
+      <div class="bl-headline">
+        Your body<br>has its<br><span class="accent">own data.</span>
+      </div>
+      <div class="bl-body">
+        What moves the needle for most people may do nothing for you. The difference is measurable — <em>and measurable means actionable.</em>
+      </div>
+    </div>
+    <div class="bottom-right">
+      <div class="mini-bars">
+        <div class="bar" style="height: 20px;"></div>
+        <div class="bar" style="height: 32px;"></div>
+        <div class="bar" style="height: 24px;"></div>
+        <div class="bar" style="height: 40px;"></div>
+        <div class="bar" style="height: 28px;"></div>
+        <div class="bar" style="height: 36px;"></div>
+        <div class="bar" style="height: 22px;"></div>
+        <div class="bar" style="height: 44px;"></div>
+        <div class="bar you" style="height: 16px;"></div>
+        <div class="bar" style="height: 34px;"></div>
+        <div class="bar" style="height: 38px;"></div>
+        <div class="bar" style="height: 26px;"></div>
+      </div>
+      <div class="bar-label">You &ne; the average</div>
+    </div>
+  </div>
+
+  <!-- Closing line -->
+  <div class="closing">
+    <span class="closing-text">You're not an average. Your health data shouldn't be either.</span>
+    <span class="closing-brand">Reputable</span>
+  </div>
+
+  <!-- Bottom accent bar -->
+  <div class="accent-bar"></div>
+</div>
+
+<!-- html2canvas for JPEG export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  async function downloadJpeg() {
+    const btn = document.getElementById('downloadBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Generating...';
+    btn.style.pointerEvents = 'none';
+
+    try {
+      const canvas = await html2canvas(document.getElementById('canvas'), {
+        width: 1080,
+        height: 1080,
+        scale: 1,
+        useCORS: true,
+        backgroundColor: '#0a0a0a',
+        logging: false,
+      });
+
+      const link = document.createElement('a');
+      link.download = 'vvp-02-reputable.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 0.95);
+      link.click();
+    } catch (err) {
+      console.error('Export failed:', err);
+      alert('Export failed — check the console for details.');
+    }
+
+    btn.innerHTML = originalText;
+    btn.style.pointerEvents = '';
+  }
+</script>
+</body>
+</html>
