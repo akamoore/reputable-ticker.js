@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Journey — Instagram Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(200,230,74,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 70%, rgba(120,80,220,0.025) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 120px;
+    left: 72px;
+    right: 72px;
+  }
+  .headline {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+  .headline-sub {
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+
+  /* ── Journey timeline ──────────────────────────── */
+  .journey {
+    position: absolute;
+    top: 356px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+  }
+
+  /* ── Timeline rail ─────────────────────────────── */
+  .rail {
+    width: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .step-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .connector {
+    width: 2px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+
+  /* Step variants */
+  .step.s1 .step-num { background: rgba(200,230,74,0.12); color: #c8e64a; border: 1.5px solid rgba(200,230,74,0.25); }
+  .step.s1 .connector { background: linear-gradient(180deg, rgba(200,230,74,0.2), rgba(167,139,250,0.2)); }
+
+  .step.s2 .step-num { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1.5px solid rgba(167,139,250,0.25); }
+  .step.s2 .connector { background: linear-gradient(180deg, rgba(167,139,250,0.2), rgba(52,211,153,0.2)); }
+
+  .step.s3 .step-num { background: rgba(52,211,153,0.1); color: #34d399; border: 1.5px solid rgba(52,211,153,0.25); }
+  .step.s3 .connector { background: linear-gradient(180deg, rgba(52,211,153,0.2), rgba(96,165,250,0.2)); }
+
+  .step.s4 .step-num { background: rgba(96,165,250,0.1); color: #60a5fa; border: 1.5px solid rgba(96,165,250,0.25); }
+
+  /* ── Step content ──────────────────────────────── */
+  .step-content {
+    flex: 1;
+    padding: 4px 0 0;
+    min-height: 96px;
+  }
+
+  .step-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .step.s1 .step-label { color: rgba(200,230,74,0.5); }
+  .step.s2 .step-label { color: rgba(167,139,250,0.5); }
+  .step.s3 .step-label { color: rgba(52,211,153,0.5); }
+  .step.s4 .step-label { color: rgba(96,165,250,0.5); }
+
+  .step-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+    max-width: 680px;
+  }
+  .step-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Detail pills floating right ───────────────── */
+  .step-pills {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    display: flex;
+    gap: 8px;
+  }
+  .step-pill {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .step.s1 .step-pill { background: rgba(200,230,74,0.06); color: rgba(200,230,74,0.5); border: 1px solid rgba(200,230,74,0.1); }
+  .step.s2 .step-pill { background: rgba(167,139,250,0.06); color: rgba(167,139,250,0.5); border: 1px solid rgba(167,139,250,0.1); }
+  .step.s3 .step-pill { background: rgba(52,211,153,0.06); color: rgba(52,211,153,0.5); border: 1px solid rgba(52,211,153,0.1); }
+  .step.s4 .step-pill { background: rgba(96,165,250,0.06); color: rgba(96,165,250,0.5); border: 1px solid rgba(96,165,250,0.1); }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 80px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cta-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cta-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(200,230,74,0.08);
+    border: 1px solid rgba(200,230,74,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .cta-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+  }
+  .cta-text strong {
+    color: #c8e64a;
+    font-weight: 700;
+  }
+
+  .brand {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #a78bfa, #34d399, #60a5fa);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">How It Works</div>
+    <div class="label-line"></div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="headline">You Applied for<br>a Study. <span class="accent">Now What?</span></div>
+    <div class="headline-sub">Here's exactly what happens after you hit "join."</div>
+  </div>
+
+  <!-- Journey timeline -->
+  <div class="journey">
+
+    <!-- Step 1 -->
+    <div class="step s1">
+      <div class="rail">
+        <div class="step-num">01</div>
+        <div class="connector"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-label">First</div>
+        <div class="step-title">Screening</div>
+        <div class="step-desc">Quick check to make sure the <strong>study protocol aligns with your health goals</strong> and baseline.</div>
+        <div class="step-pills"><span class="step-pill">Eligibility</span></div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step s2">
+      <div class="rail">
+        <div class="step-num">02</div>
+        <div class="connector"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-label">Then</div>
+        <div class="step-title">Baseline</div>
+        <div class="step-desc">Sync your wearable and live normally. We build a <strong>clear, objective picture</strong> of where you're starting.</div>
+        <div class="step-pills"><span class="step-pill">2–4 Weeks</span></div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step s3">
+      <div class="rail">
+        <div class="step-num">03</div>
+        <div class="connector"></div>
+      </div>
+      <div class="step-content">
+        <div class="step-label">Next</div>
+        <div class="step-title">Active Phase</div>
+        <div class="step-desc">Introduce the product, complete <strong>daily check-ins</strong>, and let your wearable handle tracking automatically.</div>
+        <div class="step-pills"><span class="step-pill">Auto-Tracked</span></div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step s4">
+      <div class="rail">
+        <div class="step-num">04</div>
+      </div>
+      <div class="step-content">
+        <div class="step-label">Finally</div>
+        <div class="step-title">Your Results</div>
+        <div class="step-desc">Data analyzed, anonymized, and <strong>shared back with you</strong> — see what actually moved the needle.</div>
+        <div class="step-pills"><span class="step-pill">Personal Report</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-left">
+      <div class="cta-icon">💚</div>
+      <div class="cta-text"><strong>Stop guessing.</strong> Start tracking — link in bio.</div>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
