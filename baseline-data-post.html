@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baseline Data — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #F5F2ED;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #F5F2ED;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(200,190,170,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 75%, rgba(190,185,165,0.12) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 60px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6a8c20;
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #6a8c20;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(106,140,32,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.25);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), rgba(0,0,0,0.06), transparent);
+  }
+  .scan-line.s1 { top: 102px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 50px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+  .headline .green { color: #6a8c20; }
+
+  /* ── Circle illustration ─────────────────────── */
+  .seal-area {
+    position: absolute;
+    top: 380px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 610px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    padding: 24px 22px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.025);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: #6a8c20; }
+  .pillar.p2::before { background: #3b82f6; }
+  .pillar.p3::before { background: #8b5cf6; }
+
+  .pillar-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(0,0,0,0.6);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .scan-line.s2 { top: 836px; }
+
+  .tagline {
+    position: absolute;
+    top: 856px;
+    left: 72px;
+    right: 72px;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.45);
+    line-height: 1.5;
+  }
+  .tagline strong {
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+  .tagline .green {
+    color: #6a8c20;
+    font-weight: 700;
+  }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 92px;
+    left: 72px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6a8c20;
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 52px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 72px;
+  }
+  .bar-left {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.55);
+  }
+  .bar-right {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Study Design</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">The most important part of any health study happens before you even take the product.</div>
+    <div class="headline">Why Your<br><span class="green">Baseline</span><br>Changes Everything</div>
+  </div>
+
+  <!-- Circle illustration — waveform + centered text -->
+  <div class="seal-area">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ringGrad" x1="100" y1="10" x2="100" y2="190" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(106,140,32,0.18)"/>
+          <stop offset="100%" stop-color="rgba(106,140,32,0.04)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Outer rings -->
+      <circle cx="100" cy="100" r="90" stroke="rgba(106,140,32,0.12)" stroke-width="1" fill="none"/>
+      <circle cx="100" cy="100" r="82" stroke="rgba(106,140,32,0.08)" stroke-width="0.5" fill="none"/>
+
+      <!-- Main circle face -->
+      <circle cx="100" cy="100" r="72" fill="url(#ringGrad)" stroke="rgba(106,140,32,0.15)" stroke-width="1"/>
+      <circle cx="100" cy="100" r="66" fill="#F5F2ED" stroke="rgba(106,140,32,0.08)" stroke-width="0.5"/>
+
+      <!-- Heartbeat / waveform line (centered in upper half of circle) -->
+      <polyline points="42,82 58,82 66,82 72,68 78,96 84,60 90,94 96,72 100,82 106,82 112,82"
+                stroke="#6a8c20" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+
+      <!-- Flat baseline reference line -->
+      <line x1="42" y1="82" x2="160" y2="82" stroke="rgba(106,140,32,0.12)" stroke-width="1" stroke-dasharray="3,4"/>
+
+      <!-- Small delta arrow -->
+      <path d="M130 72 L140 82 L130 92" stroke="#6a8c20" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+      <text x="148" y="86" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" fill="rgba(106,140,32,0.35)">&#x0394;</text>
+
+      <!-- "BASELINE" text — centered in circle -->
+      <text x="100" y="118" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" font-weight="800" letter-spacing="0.2em" fill="rgba(0,0,0,0.3)">BASELINE</text>
+
+      <!-- "DATA" text — centered below -->
+      <text x="100" y="133" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="9" font-weight="700" letter-spacing="0.15em" fill="rgba(106,140,32,0.45)">DATA</text>
+    </svg>
+  </div>
+
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">📊</span>
+      <div class="pillar-title">Your Unique Normal</div>
+      <div class="pillar-desc">Your normal isn't someone else's. We collect <strong>your wearable data while you live your normal life</strong> first.</div>
+    </div>
+    <div class="pillar p2">
+      <span class="pillar-icon">📐</span>
+      <div class="pillar-title">The True Delta</div>
+      <div class="pillar-desc">Measuring the <strong>actual, measurable change</strong> an intervention causes in your body — not just numbers without context.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">🧬</span>
+      <div class="pillar-title">Your Biology</div>
+      <div class="pillar-desc">Strip away the noise and placebo to find <strong>what actually moves the needle</strong> for your specific biology.</div>
+    </div>
+  </div>
+
+  <div class="scan-line s2"></div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    Without a baseline, <strong>data is just numbers without context</strong>.<br>Your starting line is <span class="green">how we find the truth</span>.
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <span class="cta-icon">💚</span>
+    <span class="cta-text">Discover your baseline and see what actually works — link in bio</span>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <span class="bar-left">Science Editorial — Study Design</span>
+    <span class="bar-right">Reputable</span>
+  </div>
+</div>
+</body>
+</html>
