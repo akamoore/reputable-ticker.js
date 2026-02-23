@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oura Ring Data — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #F5F2ED;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #F5F2ED;
+    overflow: hidden;
+  }
+
+  /* ── Warm radials ─────────────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(200,190,170,0.22) 0%, transparent 50%),
+      radial-gradient(ellipse at 25% 80%, rgba(190,185,165,0.12) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* ── Corner marks ─────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+
+  /* ── Top label ────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 60px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6a8c20;
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #6a8c20;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(106,140,32,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.25);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), rgba(0,0,0,0.06), transparent);
+  }
+  .scan-line.s1 { top: 102px; }
+
+  /* ── Headline ─────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: flex-start;
+    gap: 48px;
+  }
+  .headline-text {
+    flex: 1;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+  .headline .green {
+    color: #6a8c20;
+  }
+
+  /* ── Ring illustration ────────────────────────── */
+  .ring-wrap {
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  /* ── Metric cards ─────────────────────────────── */
+  .metrics {
+    position: absolute;
+    top: 400px;
+    left: 72px;
+    right: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .metric-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    padding: 26px 26px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.025);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Colored top accent strip */
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .metric-card.hrv::before { background: #6a8c20; }
+  .metric-card.readiness::before { background: #3b82f6; }
+  .metric-card.temp::before { background: #ef4444; }
+  .metric-card.sleep::before { background: #8b5cf6; }
+
+  .metric-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.3);
+  }
+
+  .metric-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .metric-card.hrv .metric-badge { background: rgba(106,140,32,0.1); color: #6a8c20; }
+  .metric-card.readiness .metric-badge { background: rgba(59,130,246,0.08); color: #3b82f6; }
+  .metric-card.temp .metric-badge { background: rgba(239,68,68,0.08); color: #ef4444; }
+  .metric-card.sleep .metric-badge { background: rgba(139,92,246,0.08); color: #8b5cf6; }
+
+  .metric-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .metric-what {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 8px;
+  }
+
+  .metric-insight {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.5;
+  }
+  .metric-insight strong {
+    color: rgba(0,0,0,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Mini sparkline SVGs ──────────────────────── */
+  .spark-wrap {
+    margin: 10px 0 4px;
+    height: 32px;
+  }
+
+  /* ── Engagement prompt ────────────────────────── */
+  .prompt-area {
+    position: absolute;
+    bottom: 96px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .prompt-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(106,140,32,0.08);
+    border: 1px solid rgba(106,140,32,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .prompt-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.45);
+    line-height: 1.4;
+  }
+  .prompt-text strong {
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+
+  /* ── Bottom bar ───────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 72px;
+  }
+  .bar-left {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.55);
+  }
+  .bar-right {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Wearable Data 101</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline + ring -->
+  <div class="headline-area">
+    <div class="headline-text">
+      <div class="kicker">Your ring collects a lot every night. Here's what actually matters.</div>
+      <div class="headline">How to<br>Actually Read<br>Your <span class="green">Oura Ring</span><br>Data</div>
+    </div>
+
+    <!-- Oura Ring SVG illustration -->
+    <div class="ring-wrap">
+      <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ringOuter" x1="30" y1="30" x2="150" y2="150">
+            <stop offset="0%" stop-color="#c8c8c8"/>
+            <stop offset="20%" stop-color="#a0a0a0"/>
+            <stop offset="40%" stop-color="#d4d4d4"/>
+            <stop offset="55%" stop-color="#8a8a8a"/>
+            <stop offset="75%" stop-color="#b8b8b8"/>
+            <stop offset="100%" stop-color="#9a9a9a"/>
+          </linearGradient>
+          <linearGradient id="ringInner" x1="50" y1="40" x2="130" y2="140">
+            <stop offset="0%" stop-color="#e8e8e8"/>
+            <stop offset="30%" stop-color="#c0c0c0"/>
+            <stop offset="60%" stop-color="#d8d8d8"/>
+            <stop offset="100%" stop-color="#a8a8a8"/>
+          </linearGradient>
+          <radialGradient id="ringGloss" cx="38%" cy="32%" r="50%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="60%" stop-color="rgba(255,255,255,0.1)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+          <filter id="ringShadow" x="-20%" y="-10%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+            <feOffset dx="0" dy="6" result="shifted"/>
+            <feFlood flood-color="#000" flood-opacity="0.1" result="color"/>
+            <feComposite in="color" in2="shifted" operator="in" result="shadow"/>
+            <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Ring shadow -->
+        <ellipse cx="90" cy="96" rx="60" ry="14" fill="rgba(0,0,0,0.06)"/>
+
+        <!-- Ring body (tilted perspective) -->
+        <g filter="url(#ringShadow)">
+          <!-- Outer band -->
+          <circle cx="90" cy="90" r="68" fill="url(#ringOuter)"/>
+          <!-- Flat top face -->
+          <circle cx="90" cy="90" r="62" fill="#c0c0c0"/>
+          <!-- Inner channel (darker) -->
+          <circle cx="90" cy="90" r="52" fill="#2a2a2a"/>
+          <!-- Inner surface -->
+          <circle cx="90" cy="90" r="48" fill="#1a1a1a"/>
+          <!-- Sensor bumps on inner surface -->
+          <circle cx="78" cy="108" r="4" fill="#111"/>
+          <circle cx="90" cy="112" r="4" fill="#111"/>
+          <circle cx="102" cy="108" r="4" fill="#111"/>
+          <!-- Outer ring gloss -->
+          <circle cx="90" cy="90" r="68" fill="url(#ringGloss)" opacity="0.6"/>
+          <!-- Top highlight arc -->
+          <path d="M 40,70 A 60,60 0 0,1 140,70" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+          <!-- Subtle bevel line -->
+          <circle cx="90" cy="90" r="58" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" fill="none"/>
+        </g>
+
+        <!-- LED glow (green) -->
+        <circle cx="90" cy="76" r="3" fill="#6a8c20" opacity="0.7"/>
+        <circle cx="90" cy="76" r="8" fill="#6a8c20" opacity="0.08"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 4 metric cards in 2x2 grid -->
+  <div class="metrics">
+
+    <!-- HRV -->
+    <div class="metric-card hrv">
+      <div class="metric-top">
+        <div class="metric-label">Metric 01</div>
+        <div class="metric-badge">Recovery</div>
+      </div>
+      <div class="metric-title">HRV</div>
+      <div class="metric-what">Stress &amp; recovery gauge</div>
+      <div class="spark-wrap">
+        <svg width="100%" height="32" viewBox="0 0 420 32" preserveAspectRatio="none">
+          <polyline points="0,24 30,20 60,18 90,22 120,14 150,16 180,10 210,12 240,8 270,14 300,6 330,10 360,4 390,8 420,2"
+                    stroke="#6a8c20" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+          <polyline points="0,24 30,20 60,18 90,22 120,14 150,16 180,10 210,12 240,8 270,14 300,6 330,10 360,4 390,8 420,2"
+                    stroke="none" fill="url(#hrvFill)" opacity="0.08"/>
+          <defs><linearGradient id="hrvFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6a8c20"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+        </svg>
+      </div>
+      <div class="metric-insight"><strong>Trends over weeks</strong> matter more than any single night's reading.</div>
+    </div>
+
+    <!-- Readiness -->
+    <div class="metric-card readiness">
+      <div class="metric-top">
+        <div class="metric-label">Metric 02</div>
+        <div class="metric-badge">Daily</div>
+      </div>
+      <div class="metric-title">Readiness Score</div>
+      <div class="metric-what">Starting point, not the full picture</div>
+      <div class="spark-wrap">
+        <svg width="100%" height="32" viewBox="0 0 420 32" preserveAspectRatio="none">
+          <rect x="0" y="4" width="26" height="28" rx="3" fill="#3b82f6" opacity="0.2"/>
+          <rect x="32" y="8" width="26" height="24" rx="3" fill="#3b82f6" opacity="0.15"/>
+          <rect x="64" y="2" width="26" height="30" rx="3" fill="#3b82f6" opacity="0.25"/>
+          <rect x="96" y="6" width="26" height="26" rx="3" fill="#3b82f6" opacity="0.2"/>
+          <rect x="128" y="14" width="26" height="18" rx="3" fill="#3b82f6" opacity="0.12"/>
+          <rect x="160" y="4" width="26" height="28" rx="3" fill="#3b82f6" opacity="0.22"/>
+          <rect x="192" y="0" width="26" height="32" rx="3" fill="#3b82f6" opacity="0.3"/>
+          <rect x="224" y="6" width="26" height="26" rx="3" fill="#3b82f6" opacity="0.2"/>
+          <rect x="256" y="10" width="26" height="22" rx="3" fill="#3b82f6" opacity="0.15"/>
+          <rect x="288" y="2" width="26" height="30" rx="3" fill="#3b82f6" opacity="0.25"/>
+          <rect x="320" y="8" width="26" height="24" rx="3" fill="#3b82f6" opacity="0.18"/>
+          <rect x="352" y="4" width="26" height="28" rx="3" fill="#3b82f6" opacity="0.22"/>
+          <rect x="384" y="6" width="26" height="26" rx="3" fill="#3b82f6" opacity="0.2"/>
+        </svg>
+      </div>
+      <div class="metric-insight">Dig into the breakdown. <strong>A resting HR spike tells a separate story.</strong></div>
+    </div>
+
+    <!-- Temperature -->
+    <div class="metric-card temp">
+      <div class="metric-top">
+        <div class="metric-label">Metric 03</div>
+        <div class="metric-badge">Early Warning</div>
+      </div>
+      <div class="metric-title">Temp Trends</div>
+      <div class="metric-what">The earliest signal</div>
+      <div class="spark-wrap">
+        <svg width="100%" height="32" viewBox="0 0 420 32" preserveAspectRatio="none">
+          <polyline points="0,16 40,16 80,15 120,16 160,15 200,16 240,14 280,12 300,8 320,4 340,2 360,6 380,10 400,14 420,16"
+                    stroke="#ef4444" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+          <!-- Spike highlight -->
+          <circle cx="340" cy="2" r="4" fill="#ef4444" opacity="0.2"/>
+          <circle cx="340" cy="2" r="2" fill="#ef4444" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="metric-insight">Illness, overtraining, hormonal shifts — <strong>you'll see it here first.</strong></div>
+    </div>
+
+    <!-- Sleep Stages -->
+    <div class="metric-card sleep">
+      <div class="metric-top">
+        <div class="metric-label">Metric 04</div>
+        <div class="metric-badge">Quality</div>
+      </div>
+      <div class="metric-title">Sleep Stages</div>
+      <div class="metric-what">Beyond the composite score</div>
+      <div class="spark-wrap">
+        <svg width="100%" height="32" viewBox="0 0 420 32" preserveAspectRatio="none">
+          <!-- Stacked sleep stage bars -->
+          <rect x="0" y="0" width="420" height="32" rx="4" fill="rgba(139,92,246,0.04)"/>
+          <!-- Deep sleep -->
+          <rect x="0" y="20" width="420" height="12" rx="0" fill="#8b5cf6" opacity="0.2"/>
+          <!-- REM -->
+          <rect x="0" y="10" width="280" height="10" rx="0" fill="#8b5cf6" opacity="0.12"/>
+          <!-- Light -->
+          <rect x="0" y="0" width="420" height="10" rx="4" fill="#8b5cf6" opacity="0.06"/>
+          <!-- Labels -->
+          <text x="8" y="29" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#8b5cf6" opacity="0.6">DEEP</text>
+          <text x="8" y="18" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#8b5cf6" opacity="0.4">REM</text>
+          <text x="8" y="8" font-family="-apple-system,sans-serif" font-size="8" font-weight="600" fill="#8b5cf6" opacity="0.25">LIGHT</text>
+        </svg>
+      </div>
+      <div class="metric-insight"><strong>Deep sleep &amp; REM</strong> matter more than your total sleep score.</div>
+    </div>
+  </div>
+
+  <!-- Engagement prompt -->
+  <div class="prompt-area">
+    <div class="prompt-icon">👇</div>
+    <div class="prompt-text"><strong>Which metric do you check first</strong> every morning? Tell us below.</div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <span class="bar-left">Science Editorial — Oura Ring Data</span>
+    <span class="bar-right">Reputable</span>
+  </div>
+</div>
+</body>
+</html>
