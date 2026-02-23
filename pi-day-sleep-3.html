@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pi Day Sleep — Slide 3: CTA</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #07070a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(200,230,74,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 80%, rgba(91,141,239,0.04) 0%, transparent 40%),
+      #07070a;
+    overflow: hidden;
+  }
+
+  .dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.15); border-left: 1px solid rgba(200,230,74,0.15); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.15); border-right: 1px solid rgba(200,230,74,0.15); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.15); border-left: 1px solid rgba(200,230,74,0.15); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.15); border-right: 1px solid rgba(200,230,74,0.15); }
+
+  .top-bar {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .top-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px;
+    left: 72px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+
+  .headline {
+    position: absolute;
+    top: 175px;
+    left: 72px;
+    right: 72px;
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+  .headline .dim { color: rgba(255,255,255,0.22); }
+
+  .divider {
+    position: absolute;
+    top: 368px;
+    left: 72px;
+    width: 50px;
+    height: 2px;
+    background: rgba(200,230,74,0.3);
+  }
+
+  .body-text {
+    position: absolute;
+    top: 400px;
+    left: 72px;
+    right: 160px;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.32);
+    line-height: 1.65;
+  }
+  .body-text strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ---- PROTOCOLS ---- */
+  .protocols {
+    position: absolute;
+    top: 560px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+  .protocol {
+    flex: 1;
+    padding: 28px 24px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .protocol::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .protocol.hydration::before { background: linear-gradient(90deg, #5B8DEF, #9B72F0); }
+  .protocol.reading::before { background: linear-gradient(90deg, #9B72F0, #34D399); }
+  .protocol.timing::before { background: linear-gradient(90deg, #34D399, #c8e64a); }
+
+  .protocol-icon { font-size: 32px; margin-bottom: 14px; }
+  .protocol-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #f0f0f0;
+    margin-bottom: 6px;
+  }
+  .protocol-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.28);
+    line-height: 1.5;
+  }
+  .protocol-result {
+    margin-top: 14px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+  .protocol.hydration .protocol-result { color: #5B8DEF; background: rgba(91,141,239,0.1); }
+  .protocol.reading .protocol-result { color: #9B72F0; background: rgba(155,114,240,0.1); }
+  .protocol.timing .protocol-result { color: #34D399; background: rgba(52,211,153,0.1); }
+
+  /* ---- CTA ---- */
+  .cta-card {
+    position: absolute;
+    top: 808px;
+    left: 72px;
+    right: 72px;
+    padding: 34px 38px;
+    background: linear-gradient(135deg, rgba(200,230,74,0.06), rgba(52,211,153,0.03));
+    border: 1.5px solid rgba(200,230,74,0.14);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cta-left {}
+  .cta-heading {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f0f0f0;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .cta-heading .accent { color: #c8e64a; }
+  .cta-body {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-block;
+    padding: 16px 40px;
+    background: #c8e64a;
+    color: #0a0a0a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 24px rgba(200,230,74,0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ---- QUESTION ---- */
+  .question {
+    position: absolute;
+    top: 936px;
+    left: 72px;
+    right: 72px;
+    text-align: center;
+  }
+  .question-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.22);
+    line-height: 1.5;
+  }
+  .question-text strong {
+    color: rgba(255,255,255,0.4);
+    font-weight: 700;
+  }
+  .question-arrow {
+    display: block;
+    margin-top: 6px;
+    font-size: 18px;
+    color: rgba(200,230,74,0.35);
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 58px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #5B8DEF, #9B72F0, #34D399, #c8e64a);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="dots"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-text">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Sleep Science</div>
+  </div>
+
+  <div class="section-label">Reputable Studies</div>
+
+  <div class="headline">We don't just track<br><span class="dim">if you slept —</span> we track<br>how <span class="accent">each slice</span> changes.</div>
+
+  <div class="divider"></div>
+
+  <div class="body-text">Different interventions change the size of <strong>specific sleep stages.</strong> Here's what we're measuring in real-world protocols right now.</div>
+
+  <div class="protocols">
+    <div class="protocol hydration">
+      <div class="protocol-icon">💧</div>
+      <div class="protocol-name">Hydration</div>
+      <div class="protocol-desc">Pre-bed electrolyte timing &amp; sleep stage impact</div>
+      <div class="protocol-result">Deep sleep focus</div>
+    </div>
+    <div class="protocol reading">
+      <div class="protocol-icon">📖</div>
+      <div class="protocol-name">Reading</div>
+      <div class="protocol-desc">Screen-off wind-down &amp; REM onset latency</div>
+      <div class="protocol-result">REM duration</div>
+    </div>
+    <div class="protocol timing">
+      <div class="protocol-icon">⏰</div>
+      <div class="protocol-name">Meal Timing</div>
+      <div class="protocol-desc">Last-meal cutoff &amp; HRV correlation</div>
+      <div class="protocol-result">Overall quality</div>
+    </div>
+  </div>
+
+  <div class="cta-card">
+    <div class="cta-left">
+      <div class="cta-heading">What does your <span class="accent">sleep pie</span> look like?</div>
+      <div class="cta-body">Getting enough Deep &amp; REM? Tell us below.</div>
+    </div>
+    <div class="cta-button">Comment &darr;</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">03 / 03</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

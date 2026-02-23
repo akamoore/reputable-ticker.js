@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pi Day Sleep — Slide 1: Cover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 48%, rgba(120,100,220,0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 70%, rgba(96,165,250,0.06) 0%, transparent 40%),
+      radial-gradient(ellipse at 70% 30%, rgba(52,211,153,0.05) 0%, transparent 40%),
+      #07070a;
+    overflow: hidden;
+  }
+
+  /* subtle dot grid */
+  .dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.15); border-left: 1px solid rgba(200,230,74,0.15); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.15); border-right: 1px solid rgba(200,230,74,0.15); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.15); border-left: 1px solid rgba(200,230,74,0.15); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.15); border-right: 1px solid rgba(200,230,74,0.15); }
+
+  .top-bar {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .top-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; white-space: nowrap; }
+
+  /* ---- PI BADGE ---- */
+  .pi-badge {
+    position: absolute;
+    top: 116px;
+    left: 72px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .pi-symbol {
+    font-size: 42px;
+    font-weight: 900;
+    color: #c8e64a;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(200,230,74,0.4);
+  }
+  .pi-badge-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .pi-label {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.02em;
+  }
+  .pi-sub {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.06em;
+  }
+
+  .march-tag {
+    position: absolute;
+    top: 128px;
+    right: 72px;
+  }
+  .march-tag span {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.6);
+    padding: 7px 18px;
+    border: 1.5px solid rgba(200,230,74,0.15);
+    border-radius: 100px;
+    background: rgba(200,230,74,0.04);
+  }
+
+  /* ---- PIE CHART ---- */
+  .pie-container {
+    position: absolute;
+    top: 220px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px;
+    height: 440px;
+  }
+
+  .pie-glow {
+    position: absolute;
+    inset: -40px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(120,100,220,0.12) 0%,
+      rgba(96,165,250,0.06) 30%,
+      transparent 65%
+    );
+    pointer-events: none;
+  }
+
+  .pie {
+    width: 440px;
+    height: 440px;
+    border-radius: 50%;
+    position: relative;
+    /* Light 50% = 180deg, Deep 22% = 79.2deg, REM 23% = 82.8deg, Awake 5% = 18deg */
+    background: conic-gradient(
+      #5B8DEF 0deg,
+      #4A7AE0 180deg,
+      #9B72F0 180deg,
+      #7C5CD6 259.2deg,
+      #34D399 259.2deg,
+      #2BB882 342deg,
+      rgba(255,255,255,0.08) 342deg,
+      rgba(255,255,255,0.05) 360deg
+    );
+    box-shadow:
+      0 0 60px rgba(91,141,239,0.15),
+      0 0 60px rgba(155,114,240,0.1),
+      0 0 60px rgba(52,211,153,0.08);
+  }
+
+  .pie-hole {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #0c0c10;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .pie-center-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 4px;
+  }
+  .pie-center-value {
+    font-size: 38px;
+    font-weight: 900;
+    color: #f0f0f0;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .pie-center-unit {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.2);
+    margin-top: 4px;
+  }
+
+  /* Segment gap lines */
+  .seg-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 220px;
+    transform-origin: 0 0;
+    background: rgba(7,7,10,0.8);
+  }
+  .seg-line.l1 { transform: rotate(180deg); }
+  .seg-line.l2 { transform: rotate(259.2deg); }
+  .seg-line.l3 { transform: rotate(342deg); }
+
+  /* ---- LEGEND ---- */
+  .legend {
+    position: absolute;
+    top: 700px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+  }
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-dot.light { background: #5B8DEF; box-shadow: 0 0 8px rgba(91,141,239,0.4); }
+  .legend-dot.deep { background: #9B72F0; box-shadow: 0 0 8px rgba(155,114,240,0.4); }
+  .legend-dot.rem { background: #34D399; box-shadow: 0 0 8px rgba(52,211,153,0.4); }
+  .legend-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+  }
+  .legend-pct {
+    font-size: 14px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.8);
+    margin-left: 2px;
+  }
+
+  /* ---- HEADLINE ---- */
+  .headline {
+    position: absolute;
+    top: 800px;
+    left: 72px;
+    right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline h1 .accent { color: #c8e64a; }
+
+  .subtext {
+    position: absolute;
+    top: 920px;
+    left: 140px;
+    right: 140px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.28);
+    line-height: 1.55;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 58px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #5B8DEF, #9B72F0, #34D399, #c8e64a);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="dots"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-text">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Sleep Science</div>
+  </div>
+
+  <div class="pi-badge">
+    <div class="pi-symbol">&pi;</div>
+    <div class="pi-badge-text">
+      <div class="pi-label">Happy Pi Day!</div>
+      <div class="pi-sub">March 14 &middot; 3.14159&hellip;</div>
+    </div>
+  </div>
+  <div class="march-tag"><span>March 14</span></div>
+
+  <div class="pie-container">
+    <div class="pie-glow"></div>
+    <div class="pie">
+      <div class="seg-line l1"></div>
+      <div class="seg-line l2"></div>
+      <div class="seg-line l3"></div>
+      <div class="pie-hole">
+        <div class="pie-center-label">Total Sleep</div>
+        <div class="pie-center-value">8h 02m</div>
+        <div class="pie-center-unit">optimal night</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot light"></div>
+      <span class="legend-label">Light</span>
+      <span class="legend-pct">50%</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot deep"></div>
+      <span class="legend-label">Deep</span>
+      <span class="legend-pct">22%</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot rem"></div>
+      <span class="legend-label">REM</span>
+      <span class="legend-pct">23%</span>
+    </div>
+  </div>
+
+  <div class="headline">
+    <h1>Your Sleep <span class="accent">Pie Chart</span></h1>
+  </div>
+
+  <div class="subtext">The most important pie chart you look at every single morning — and how to actually read it.</div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 03</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
