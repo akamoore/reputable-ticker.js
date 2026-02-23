@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalized Dosing — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 45% 30%, rgba(139,92,246,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 65% 70%, rgba(200,230,74,0.025) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(200,230,74,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 50px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+
+  /* ── Circle illustration ─────────────────────── */
+  .seal-area {
+    position: absolute;
+    top: 368px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 230px;
+    height: 230px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 620px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    padding: 24px 22px 22px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: rgba(200,230,74,0.6); }
+  .pillar.p2::before { background: #34d399; }
+  .pillar.p3::before { background: #a78bfa; }
+
+  .pillar-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    bottom: 124px;
+    left: 72px;
+    right: 72px;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .tagline .lime { color: #c8e64a; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.45);
+  }
+  .brand {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.6), #34d399, #a78bfa);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Personalized Wellness</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">The back of the bottle says "Take 2 capsules daily." But who exactly were those designed for?</div>
+    <div class="headline">Your Dose Is<br>Not <span class="accent">My Dose.</span></div>
+  </div>
+
+  <!-- Circle illustration — capsule + HRV waveform -->
+  <div class="seal-area">
+    <svg width="230" height="230" viewBox="0 0 230 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ringGrad" x1="115" y1="10" x2="115" y2="220" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(167,139,250,0.12)"/>
+          <stop offset="100%" stop-color="rgba(200,230,74,0.03)"/>
+        </linearGradient>
+        <filter id="circleGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/>
+          <feFlood flood-color="#a78bfa" flood-opacity="0.05" result="color"/>
+          <feComposite in="color" in2="blur" operator="in" result="glow"/>
+          <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Outer rings -->
+      <circle cx="115" cy="115" r="110" stroke="rgba(167,139,250,0.06)" stroke-width="1" fill="none"/>
+      <circle cx="115" cy="115" r="102" stroke="rgba(167,139,250,0.04)" stroke-width="0.5" fill="none"/>
+
+      <!-- Main circle -->
+      <g filter="url(#circleGlow)">
+        <circle cx="115" cy="115" r="84" fill="url(#ringGrad)" stroke="rgba(167,139,250,0.16)" stroke-width="1"/>
+      </g>
+      <circle cx="115" cy="115" r="76" fill="rgba(10,10,10,0.88)" stroke="rgba(167,139,250,0.06)" stroke-width="0.5"/>
+
+      <!-- HRV waveform running through the circle -->
+      <polyline points="35,115 50,115 60,113 68,117 76,112 82,118 88,108 92,115 96,115 100,115 104,115 108,100 112,80 116,125 120,140 124,85 128,115 132,115 136,115 142,115 150,113 158,117 166,114 174,116 184,115 195,115"
+                stroke="rgba(200,230,74,0.5)" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+
+      <!-- Capsule icon at center top -->
+      <rect x="108" y="52" width="14" height="18" rx="7" fill="rgba(200,230,74,0.35)" stroke="rgba(200,230,74,0.5)" stroke-width="0.5"/>
+      <rect x="108" y="66" width="14" height="18" rx="7" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+
+      <!-- "N=1" text — centered in circle -->
+      <text x="115" y="126" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="15" font-weight="800" letter-spacing="0.2em" fill="rgba(200,230,74,0.45)">N = 1</text>
+
+      <!-- "DOSING" text — centered below -->
+      <text x="115" y="142" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="7.5" font-weight="700" letter-spacing="0.14em" fill="rgba(167,139,250,0.4)">DOSING</text>
+    </svg>
+  </div>
+
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">🧬</span>
+      <div class="pillar-title">Your Metabolism</div>
+      <div class="pillar-desc">How you <strong>absorb and process</strong> a compound depends on genetics, gut health, and baseline.</div>
+    </div>
+    <div class="pillar p2">
+      <span class="pillar-icon">⌚</span>
+      <div class="pillar-title">Your Data</div>
+      <div class="pillar-desc">Continuously tracking <strong>HRV, resting heart rate, and deep sleep</strong> shows the real impact.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">📊</span>
+      <div class="pillar-title">Your Answer</div>
+      <div class="pillar-desc">Shift the question from "does this work?" to <strong>"does this work for me?"</strong></div>
+    </div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    You can't optimize your physiology with <span class="lime">generalized instructions.</span>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-left">
+      <span class="cta-icon">💚</span>
+      <span class="cta-text">Measure your own results — link in bio</span>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
