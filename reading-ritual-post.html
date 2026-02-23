@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Ritual — Instagram Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(30, 50, 80, 0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(20, 35, 65, 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 75%, rgba(25, 40, 70, 0.3) 0%, transparent 50%),
+      #0c1a2e;
+    overflow: hidden;
+  }
+
+  /* ── Subtle texture noise ─────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ── Top badge: COMMUNITY VOTED ──────────────── */
+  .top-badge {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .top-badge span {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e8dcc8;
+    padding: 10px 28px;
+    border: 1.5px solid rgba(232, 220, 200, 0.2);
+    border-radius: 100px;
+    background: rgba(232, 220, 200, 0.04);
+  }
+
+  /* ── "Study of the Week" ─────────────────────── */
+  .study-label {
+    position: absolute;
+    top: 158px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(232, 220, 200, 0.55);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Hero title ──────────────────────────────── */
+  .hero-title {
+    position: absolute;
+    top: 204px;
+    left: 60px;
+    right: 60px;
+    text-align: center;
+    font-size: 72px;
+    font-weight: 800;
+    color: #f5ead6;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Subtitle / question ─────────────────────── */
+  .question {
+    position: absolute;
+    top: 375px;
+    left: 120px;
+    right: 120px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(200, 195, 180, 0.55);
+    line-height: 1.55;
+  }
+
+  /* ── Book SVG illustration ───────────────────── */
+  .book-wrap {
+    position: absolute;
+    top: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+  }
+
+  /* ── Purple study card ───────────────────────── */
+  .study-card {
+    position: absolute;
+    top: 732px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460px;
+    background: linear-gradient(135deg, rgba(120, 80, 220, 0.2) 0%, rgba(100, 60, 200, 0.12) 100%);
+    border: 1px solid rgba(140, 100, 240, 0.25);
+    border-radius: 20px;
+    padding: 22px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .study-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .study-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(180, 160, 240, 0.7);
+  }
+
+  .study-card-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #c8b5ff;
+    letter-spacing: -0.01em;
+  }
+
+  .now-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    padding: 10px 22px;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+
+  .now-live::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212, 255, 80, 0.6);
+  }
+
+  /* ── Divider line ────────────────────────────── */
+  .divider {
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140, 120, 180, 0.35), transparent);
+  }
+
+  /* ── Brand footer ────────────────────────────── */
+  .brand {
+    position: absolute;
+    bottom: 68px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(232, 220, 200, 0.45);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Top badge -->
+  <div class="top-badge">
+    <span>Community Voted</span>
+  </div>
+
+  <!-- Study of the week -->
+  <div class="study-label">Study of the Week</div>
+
+  <!-- Hero title -->
+  <div class="hero-title">The Reading<br>Ritual</div>
+
+  <!-- Question -->
+  <div class="question">Can reading a physical book for 20 min<br>before bed improve your sleep onset?</div>
+
+  <!-- Book illustration (inline SVG) -->
+  <div class="book-wrap">
+    <svg width="320" height="220" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Book spine shadow -->
+      <ellipse cx="160" cy="200" rx="140" ry="12" fill="rgba(0,0,0,0.2)"/>
+
+      <!-- Left page (back) -->
+      <path d="M160 30 C 160 30, 158 180, 160 185 C 120 182, 30 175, 25 60 C 22 30, 50 18, 160 30Z" fill="#d4c4a0" opacity="0.6"/>
+
+      <!-- Right page (back) -->
+      <path d="M160 30 C 160 30, 162 180, 160 185 C 200 182, 290 175, 295 60 C 298 30, 270 18, 160 30Z" fill="#d4c4a0" opacity="0.6"/>
+
+      <!-- Left page (front) -->
+      <path d="M160 35 C 160 35, 158 178, 160 183 C 125 180, 40 174, 35 65 C 32 38, 58 26, 160 35Z" fill="#ecdcb8"/>
+
+      <!-- Left page lines -->
+      <line x1="70" y1="70" x2="140" y2="62" stroke="rgba(180,160,130,0.3)" stroke-width="1.5"/>
+      <line x1="68" y1="85" x2="142" y2="78" stroke="rgba(180,160,130,0.25)" stroke-width="1.5"/>
+      <line x1="66" y1="100" x2="144" y2="94" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
+      <line x1="64" y1="115" x2="145" y2="110" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
+      <line x1="62" y1="130" x2="146" y2="126" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
+      <line x1="60" y1="145" x2="148" y2="142" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
+
+      <!-- Right page (front) -->
+      <path d="M160 35 C 160 35, 162 178, 160 183 C 195 180, 280 174, 285 65 C 288 38, 262 26, 160 35Z" fill="#f5ead6"/>
+
+      <!-- Right page lines -->
+      <line x1="180" y1="62" x2="250" y2="70" stroke="rgba(180,160,130,0.3)" stroke-width="1.5"/>
+      <line x1="178" y1="78" x2="252" y2="85" stroke="rgba(180,160,130,0.25)" stroke-width="1.5"/>
+      <line x1="176" y1="94" x2="254" y2="100" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
+      <line x1="175" y1="110" x2="256" y2="115" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
+      <line x1="174" y1="126" x2="258" y2="130" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
+      <line x1="172" y1="142" x2="260" y2="145" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
+
+      <!-- Spine center line -->
+      <path d="M160 28 C 160 28, 160 180, 160 185" stroke="rgba(160,140,110,0.3)" stroke-width="2"/>
+
+      <!-- Page curl hint (right) -->
+      <path d="M275 170 C 278 165, 282 160, 280 172 C 279 176, 276 178, 270 177" fill="#e8d8c0" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Purple study card -->
+  <div class="study-card">
+    <div class="study-card-left">
+      <div class="study-card-label">Community Choice</div>
+      <div class="study-card-value">28% of votes</div>
+    </div>
+    <div class="now-live">Now Live</div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- Brand -->
+  <div class="brand">Reputable</div>
+
+</div>
+</body>
+</html>
