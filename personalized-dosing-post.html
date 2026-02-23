@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalized Dosing — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(30, 50, 80, 0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(20, 35, 65, 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 75%, rgba(25, 40, 70, 0.3) 0%, transparent 50%),
+      #0c1a2e;
+    overflow: hidden;
+  }
+
+  /* ── Subtle texture ─────────────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ── Top badge ──────────────────────────────────── */
+  .top-badge {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+  .top-badge span {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e8dcc8;
+    padding: 10px 28px;
+    border: 1.5px solid rgba(232,220,200,0.2);
+    border-radius: 100px;
+    background: rgba(232,220,200,0.04);
+  }
+
+  /* ── Study label ────────────────────────────────── */
+  .study-label {
+    position: absolute;
+    top: 158px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(232,220,200,0.55);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Hero title ─────────────────────────────────── */
+  .hero-title {
+    position: absolute;
+    top: 204px;
+    left: 60px;
+    right: 60px;
+    text-align: center;
+    font-size: 72px;
+    font-weight: 800;
+    color: #f5ead6;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Question ───────────────────────────────────── */
+  .question {
+    position: absolute;
+    top: 380px;
+    left: 120px;
+    right: 120px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(200,195,180,0.55);
+    line-height: 1.55;
+  }
+
+  /* ── Illustration ───────────────────────────────── */
+  .illus-wrap {
+    position: absolute;
+    top: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 16px 40px rgba(0,0,0,0.3));
+  }
+
+  /* ── Study card ─────────────────────────────────── */
+  .study-card {
+    position: absolute;
+    top: 732px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460px;
+    background: linear-gradient(135deg, rgba(120,80,220,0.2) 0%, rgba(100,60,200,0.12) 100%);
+    border: 1px solid rgba(140,100,240,0.25);
+    border-radius: 20px;
+    padding: 22px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(180,160,240,0.7);
+  }
+  .card-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #c8b5ff;
+    letter-spacing: -0.01em;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    padding: 10px 22px;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+  .cta-btn::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+  }
+
+  /* ── Divider ────────────────────────────────────── */
+  .divider {
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140,120,180,0.35), transparent);
+  }
+
+  /* ── Brand footer ───────────────────────────────── */
+  .brand {
+    position: absolute;
+    bottom: 68px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(232,220,200,0.45);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Top badge -->
+  <div class="top-badge">
+    <span>Evidence Based</span>
+  </div>
+
+  <!-- Study label -->
+  <div class="study-label">Personalized Wellness</div>
+
+  <!-- Hero title -->
+  <div class="hero-title">Your Dose Is<br>Not My Dose</div>
+
+  <!-- Question -->
+  <div class="question">Standard dosing is based on an average person.<br>Your biology isn't average. We measure the difference.</div>
+
+  <!-- Capsule + HRV waveform illustration -->
+  <div class="illus-wrap">
+    <svg width="460" height="200" viewBox="0 0 460 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="capsGrad" x1="190" y1="50" x2="270" y2="150" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#c8cbdf"/>
+          <stop offset="60%" stop-color="#9a96be"/>
+          <stop offset="100%" stop-color="#6b61a0"/>
+        </linearGradient>
+        <linearGradient id="waveGrad" x1="0" y1="100" x2="460" y2="100" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(140,100,240,0)"/>
+          <stop offset="15%" stop-color="rgba(140,100,240,0.25)"/>
+          <stop offset="50%" stop-color="rgba(200,180,255,0.5)"/>
+          <stop offset="85%" stop-color="rgba(140,100,240,0.25)"/>
+          <stop offset="100%" stop-color="rgba(140,100,240,0)"/>
+        </linearGradient>
+        <filter id="capsGlow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="14" result="blur"/>
+          <feFlood flood-color="#b8a0f0" flood-opacity="0.15" result="color"/>
+          <feComposite in="color" in2="blur" operator="in" result="glow"/>
+          <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- HRV / heartbeat waveform running horizontally -->
+      <polyline
+        points="
+          0,100
+          40,100
+          60,100
+          80,98
+          100,102
+          120,96
+          135,104
+          148,92
+          158,100
+          170,100
+          180,100
+          190,100
+          198,100
+          204,80
+          210,60
+          216,110
+          222,130
+          228,70
+          234,100
+          240,100
+          248,100
+          258,100
+          268,100
+          280,100
+          298,96
+          310,104
+          322,98
+          335,102
+          350,100
+          370,100
+          395,100
+          420,100
+          460,100
+        "
+        stroke="url(#waveGrad)"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+
+      <!-- Capsule centered over the heartbeat peak -->
+      <g filter="url(#capsGlow)">
+        <!-- Capsule body (vertical, two halves) -->
+        <!-- Top half -->
+        <rect x="213" y="54" width="34" height="40" rx="17" fill="url(#capsGrad)"/>
+        <!-- Bottom half -->
+        <rect x="213" y="88" width="34" height="40" rx="17" fill="rgba(232,220,200,0.25)"/>
+        <!-- Highlight -->
+        <rect x="224" y="60" width="4" height="50" rx="2" fill="rgba(255,255,255,0.06)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Study card -->
+  <div class="study-card">
+    <div class="card-left">
+      <div class="card-label">Active Studies</div>
+      <div class="card-value">Oura Ring Required</div>
+    </div>
+    <div class="cta-btn">Explore</div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- Brand -->
+  <div class="brand">Reputable</div>
+
+</div>
+</body>
+</html>
