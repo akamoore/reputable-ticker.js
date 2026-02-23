@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleep Cycles — Data Visualization</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(200,230,74,0.03) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 70%, rgba(139,92,246,0.025) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .label-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .label-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent); }
+  .label-right { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; white-space: nowrap; }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Title area ────────────────────────────────── */
+  .title-area {
+    position: absolute;
+    top: 128px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+    margin-bottom: 14px;
+  }
+  .headline {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+    margin-bottom: 12px;
+  }
+  .headline .accent { color: #c8e64a; }
+  .subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+
+  /* ── Chart container ───────────────────────────── */
+  .chart-wrapper {
+    position: absolute;
+    top: 370px;
+    left: 72px;
+    right: 72px;
+    height: 460px;
+  }
+
+  /* ── Y-axis labels ─────────────────────────────── */
+  .y-labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 72px;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .y-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: right;
+    padding-right: 16px;
+    text-transform: uppercase;
+  }
+  .y-label.wake { color: rgba(255,255,255,0.25); }
+  .y-label.rem { color: #a78bfa; }
+  .y-label.light { color: #34d399; }
+  .y-label.deep { color: #3b82f6; }
+
+  /* ── Chart area ────────────────────────────────── */
+  .chart-area {
+    position: absolute;
+    top: 0;
+    left: 88px;
+    right: 0;
+    height: 380px;
+  }
+
+  /* Horizontal grid lines */
+  .h-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+  .h-line.l0 { top: 0; background: rgba(255,255,255,0.04); }
+  .h-line.l1 { top: 33.33%; background: rgba(167,139,250,0.08); }
+  .h-line.l2 { top: 66.66%; background: rgba(52,211,153,0.08); }
+  .h-line.l3 { top: 100%; background: rgba(59,130,246,0.08); }
+
+  /* Stage zone shading */
+  .zone {
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+  .zone.rem-zone {
+    top: 0;
+    height: 33.33%;
+    background: linear-gradient(180deg, rgba(167,139,250,0.02) 0%, rgba(167,139,250,0.01) 100%);
+  }
+  .zone.light-zone {
+    top: 33.33%;
+    height: 33.33%;
+    background: linear-gradient(180deg, rgba(52,211,153,0.015) 0%, rgba(52,211,153,0.01) 100%);
+  }
+  .zone.deep-zone {
+    top: 66.66%;
+    height: 33.34%;
+    background: linear-gradient(180deg, rgba(59,130,246,0.015) 0%, rgba(59,130,246,0.03) 100%);
+  }
+
+  /* SVG chart */
+  .chart-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── X-axis labels ─────────────────────────────── */
+  .x-labels {
+    position: absolute;
+    top: 398px;
+    left: 88px;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .x-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Cycle markers ─────────────────────────────── */
+  .cycle-markers {
+    position: absolute;
+    top: 430px;
+    left: 88px;
+    right: 0;
+    display: flex;
+  }
+  .cycle-marker {
+    height: 22px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.5);
+    border: 1px solid rgba(200,230,74,0.1);
+    background: rgba(200,230,74,0.02);
+  }
+  .cycle-marker:nth-child(1) { width: 21%; margin-right: 1%; }
+  .cycle-marker:nth-child(2) { width: 21%; margin-right: 1%; }
+  .cycle-marker:nth-child(3) { width: 21%; margin-right: 1%; }
+  .cycle-marker:nth-child(4) { width: 21%; margin-right: 1%; }
+  .cycle-marker:nth-child(5) { width: 12%; }
+
+  /* ── Legend ─────────────────────────────────────── */
+  .legend {
+    position: absolute;
+    bottom: 116px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  .legend-dot.wake { background: rgba(255,255,255,0.2); }
+  .legend-dot.rem { background: #a78bfa; }
+  .legend-dot.light { background: #34d399; }
+  .legend-dot.deep { background: #3b82f6; }
+  .legend-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ── Footer ────────────────────────────────────── */
+  .footer {
+    position: absolute;
+    bottom: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .footer-note { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.12); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #a78bfa, #34d399, #3b82f6, #c8e64a);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Sleep Science</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <div class="title-area">
+    <div class="kicker">Sleep Architecture</div>
+    <div class="headline">Your <span class="accent">Sleep Cycles</span><br>Over 8 Hours</div>
+    <div class="subtitle">A typical night's sleep consists of 4–5 cycles, each lasting ~90 minutes. Deep sleep dominates early; REM increases toward morning.</div>
+  </div>
+
+  <div class="chart-wrapper">
+
+    <!-- Y-axis labels -->
+    <div class="y-labels">
+      <div class="y-label wake">Wake</div>
+      <div class="y-label rem">REM</div>
+      <div class="y-label light">Light</div>
+      <div class="y-label deep">Deep</div>
+    </div>
+
+    <!-- Chart area -->
+    <div class="chart-area">
+      <!-- Zone shading -->
+      <div class="zone rem-zone"></div>
+      <div class="zone light-zone"></div>
+      <div class="zone deep-zone"></div>
+
+      <!-- Horizontal grid lines -->
+      <div class="h-line l0"></div>
+      <div class="h-line l1"></div>
+      <div class="h-line l2"></div>
+      <div class="h-line l3"></div>
+
+      <!-- SVG hypnogram -->
+      <svg class="chart-svg" viewBox="0 0 848 380" preserveAspectRatio="none">
+        <!-- Vertical grid lines (time markers) -->
+        <line x1="106" y1="0" x2="106" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+        <line x1="212" y1="0" x2="212" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+        <line x1="318" y1="0" x2="318" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+        <line x1="424" y1="0" x2="424" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+        <line x1="530" y1="0" x2="530" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+        <line x1="636" y1="0" x2="636" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+        <line x1="742" y1="0" x2="742" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+
+        <!-- Glow filter -->
+        <defs>
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#a78bfa"/>
+            <stop offset="30%" stop-color="#34d399"/>
+            <stop offset="60%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#c8e64a"/>
+          </linearGradient>
+          <!-- Area fill gradient -->
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(200,230,74,0.08)"/>
+            <stop offset="100%" stop-color="rgba(200,230,74,0)"/>
+          </linearGradient>
+        </defs>
+
+        <!--
+          Y positions: Wake=10, REM=127, Light=253, Deep=370
+          X positions: 0=10pm, 106=11pm, 212=12am, 318=1am, 424=2am, 530=3am, 636=4am, 742=5am, 848=6am
+          Each hour = 106px
+
+          Typical sleep cycle:
+          - Cycle 1 (10pm-11:30pm): Wake→Light→Deep→REM
+          - Cycle 2 (11:30pm-1am): REM→Light→Deep→REM
+          - Cycle 3 (1am-2:30am): REM→Light→Deep→Light→REM
+          - Cycle 4 (2:30am-4:30am): REM→Light→Deep→Light→REM (less deep)
+          - Cycle 5 (4:30am-6am): REM→Light→REM→Light→Wake
+        -->
+
+        <!-- Area fill under the line -->
+        <path d="
+          M 0,10
+          L 15,10
+          L 30,253
+          L 55,253
+          L 75,370
+          L 120,370
+          L 140,253
+          L 155,127
+          L 175,127
+
+          L 190,253
+          L 210,253
+          L 240,370
+          L 290,370
+          L 310,253
+          L 325,127
+          L 350,127
+
+          L 360,10
+          L 370,10
+          L 380,253
+          L 400,253
+          L 430,370
+          L 470,345
+          L 490,253
+          L 510,127
+          L 545,127
+
+          L 555,253
+          L 575,253
+          L 600,320
+          L 620,253
+          L 640,127
+          L 680,127
+
+          L 690,253
+          L 710,253
+          L 720,127
+          L 755,127
+          L 775,253
+          L 790,127
+          L 815,127
+          L 830,10
+          L 848,10
+
+          L 848,380
+          L 0,380
+          Z
+        " fill="url(#areaGrad)" opacity="0.5"/>
+
+        <!-- Main sleep cycle line -->
+        <path d="
+          M 0,10
+          L 15,10
+          L 30,253
+          L 55,253
+          L 75,370
+          L 120,370
+          L 140,253
+          L 155,127
+          L 175,127
+
+          L 190,253
+          L 210,253
+          L 240,370
+          L 290,370
+          L 310,253
+          L 325,127
+          L 350,127
+
+          L 360,10
+          L 370,10
+          L 380,253
+          L 400,253
+          L 430,370
+          L 470,345
+          L 490,253
+          L 510,127
+          L 545,127
+
+          L 555,253
+          L 575,253
+          L 600,320
+          L 620,253
+          L 640,127
+          L 680,127
+
+          L 690,253
+          L 710,253
+          L 720,127
+          L 755,127
+          L 775,253
+          L 790,127
+          L 815,127
+          L 830,10
+          L 848,10
+        " fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linejoin="round" filter="url(#glow)"/>
+      </svg>
+    </div>
+
+    <!-- X-axis labels -->
+    <div class="x-labels">
+      <div class="x-label">10 PM</div>
+      <div class="x-label">11 PM</div>
+      <div class="x-label">12 AM</div>
+      <div class="x-label">1 AM</div>
+      <div class="x-label">2 AM</div>
+      <div class="x-label">3 AM</div>
+      <div class="x-label">4 AM</div>
+      <div class="x-label">5 AM</div>
+      <div class="x-label">6 AM</div>
+    </div>
+
+    <!-- Cycle markers -->
+    <div class="cycle-markers">
+      <div class="cycle-marker">Cycle 1</div>
+      <div class="cycle-marker">Cycle 2</div>
+      <div class="cycle-marker">Cycle 3</div>
+      <div class="cycle-marker">Cycle 4</div>
+      <div class="cycle-marker">Cycle 5</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot wake"></div>
+      <div class="legend-label">Wake</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot rem"></div>
+      <div class="legend-label">REM Sleep</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot light"></div>
+      <div class="legend-label">Light Sleep</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot deep"></div>
+      <div class="legend-label">Deep Sleep</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="footer-note">Typical adult sleep architecture · illustrative</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
