@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Privacy — Instagram Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(200,230,74,0.035) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 75%, rgba(52,211,153,0.025) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 122px;
+    left: 72px;
+    right: 72px;
+  }
+  .headline {
+    font-size: 58px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+  .headline-sub {
+    margin-top: 16px;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+    max-width: 700px;
+  }
+
+  /* ── Shield illustration ───────────────────────── */
+  .shield-area {
+    position: absolute;
+    top: 395px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 660px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    padding: 24px 22px 22px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Top color accent */
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: #c8e64a; }
+  .pillar.p2::before { background: #34d399; }
+  .pillar.p3::before { background: #60a5fa; }
+
+  .pillar-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    bottom: 124px;
+    left: 72px;
+    right: 72px;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .tagline .lime { color: #c8e64a; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon {
+    font-size: 16px;
+  }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.45);
+  }
+  .brand {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #60a5fa);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Data &amp; Privacy</div>
+    <div class="label-line"></div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="headline">Your Data Powers<br>the Science.<br><span class="accent">Your Identity<br>Stays Private.</span></div>
+    <div class="headline-sub">You should never have to choose between participating in real research and protecting your privacy.</div>
+  </div>
+
+  <!-- Shield illustration -->
+  <div class="shield-area">
+    <svg width="260" height="260" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="shieldFill" x1="130" y1="20" x2="130" y2="240" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(200,230,74,0.1)"/>
+          <stop offset="100%" stop-color="rgba(200,230,74,0.02)"/>
+        </linearGradient>
+        <linearGradient id="shieldStroke" x1="130" y1="20" x2="130" y2="240" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(200,230,74,0.35)"/>
+          <stop offset="100%" stop-color="rgba(200,230,74,0.08)"/>
+        </linearGradient>
+        <filter id="shieldGlow" x="-30%" y="-20%" width="160%" height="160%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="16" result="blur"/>
+          <feFlood flood-color="#c8e64a" flood-opacity="0.06" result="color"/>
+          <feComposite in="color" in2="blur" operator="in" result="glow"/>
+          <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Outer glow ring -->
+      <circle cx="130" cy="130" r="120" stroke="rgba(200,230,74,0.04)" stroke-width="1" fill="none"/>
+      <circle cx="130" cy="130" r="108" stroke="rgba(200,230,74,0.03)" stroke-width="0.5" fill="none"/>
+
+      <!-- Shield shape -->
+      <g filter="url(#shieldGlow)">
+        <path d="M130 28 L210 68 C214 70 216 74 216 78 L216 138 C216 178 180 214 130 236 C80 214 44 178 44 138 L44 78 C44 74 46 70 50 68 Z"
+              fill="url(#shieldFill)" stroke="url(#shieldStroke)" stroke-width="1.5"/>
+      </g>
+
+      <!-- Inner shield outline -->
+      <path d="M130 48 L196 80 C198 81 200 84 200 86 L200 136 C200 168 170 198 130 216 C90 198 60 168 60 136 L60 86 C60 84 62 81 64 80 Z"
+            fill="none" stroke="rgba(200,230,74,0.08)" stroke-width="0.8"/>
+
+      <!-- Lock body -->
+      <rect x="110" y="122" width="40" height="32" rx="6" fill="rgba(200,230,74,0.15)" stroke="rgba(200,230,74,0.3)" stroke-width="1.2"/>
+
+      <!-- Lock shackle -->
+      <path d="M116 122 L116 108 C116 98 122 92 130 92 C138 92 144 98 144 108 L144 122"
+            stroke="rgba(200,230,74,0.3)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+      <!-- Keyhole -->
+      <circle cx="130" cy="136" r="4" fill="rgba(200,230,74,0.4)"/>
+      <rect x="128.5" y="138" width="3" height="7" rx="1" fill="rgba(200,230,74,0.3)"/>
+
+      <!-- Data flow dots (entering the shield) -->
+      <!-- Left stream -->
+      <circle cx="36" cy="100" r="3" fill="#c8e64a" opacity="0.15"/>
+      <circle cx="50" cy="94" r="2.5" fill="#c8e64a" opacity="0.2"/>
+      <circle cx="62" cy="90" r="2" fill="#c8e64a" opacity="0.25"/>
+
+      <!-- Right stream -->
+      <circle cx="224" cy="100" r="3" fill="#34d399" opacity="0.15"/>
+      <circle cx="210" cy="94" r="2.5" fill="#34d399" opacity="0.2"/>
+      <circle cx="198" cy="90" r="2" fill="#34d399" opacity="0.25"/>
+
+      <!-- Top stream -->
+      <circle cx="130" cy="14" r="2.5" fill="#60a5fa" opacity="0.15"/>
+      <circle cx="130" cy="26" r="2" fill="#60a5fa" opacity="0.2"/>
+
+      <!-- Bottom output (anonymized) -->
+      <circle cx="115" cy="248" r="2" fill="rgba(255,255,255,0.08)"/>
+      <circle cx="130" cy="250" r="2.5" fill="rgba(255,255,255,0.1)"/>
+      <circle cx="145" cy="248" r="2" fill="rgba(255,255,255,0.08)"/>
+
+      <!-- Small checkmark inside shield -->
+      <path d="M110 170 L124 182 L154 156" stroke="rgba(200,230,74,0.2)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">🔐</span>
+      <div class="pillar-title">Encrypted</div>
+      <div class="pillar-desc">Biometric data is <strong>anonymized and encrypted</strong> from day one.</div>
+    </div>
+    <div class="pillar p2">
+      <span class="pillar-icon">🚫</span>
+      <div class="pillar-title">Never Sold</div>
+      <div class="pillar-desc">Your personal information is <strong>never sold or shared</strong>. Period.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">👤</span>
+      <div class="pillar-title">You Own It</div>
+      <div class="pillar-desc">You power the research, but <strong>you always own your data</strong>.</div>
+    </div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    Real science. <span class="lime">Real privacy.</span> No compromise.
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-left">
+      <span class="cta-icon">💚</span>
+      <span class="cta-text">Learn how our platform works — link in bio</span>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
