@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRB Approved — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #F5F2ED;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #F5F2ED;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(200,190,170,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 75%, rgba(190,185,165,0.12) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 60px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6a8c20;
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #6a8c20;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(106,140,32,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.25);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), rgba(0,0,0,0.06), transparent);
+  }
+  .scan-line.s1 { top: 102px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+  .headline .green { color: #6a8c20; }
+
+  /* ── Certificate / seal illustration ───────────── */
+  .seal-area {
+    position: absolute;
+    top: 380px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 610px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    padding: 24px 22px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.025);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: #6a8c20; }
+  .pillar.p2::before { background: #3b82f6; }
+  .pillar.p3::before { background: #8b5cf6; }
+
+  .pillar-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(0,0,0,0.6);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .scan-line.s2 { top: 836px; }
+
+  .tagline {
+    position: absolute;
+    top: 856px;
+    left: 72px;
+    right: 72px;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.45);
+    line-height: 1.5;
+  }
+  .tagline strong {
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+  .tagline .green {
+    color: #6a8c20;
+    font-weight: 700;
+  }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 92px;
+    left: 72px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6a8c20;
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 52px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 72px;
+  }
+  .bar-left {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.55);
+  }
+  .bar-right {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Research Ethics</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">You see "IRB-approved" on our studies. Here's what that actually means for you.</div>
+    <div class="headline">What Does<br><span class="green">IRB-Approved</span><br>Actually Mean?</div>
+  </div>
+
+  <!-- Seal / certificate illustration -->
+  <div class="seal-area">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sealRing" x1="100" y1="10" x2="100" y2="190" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(106,140,32,0.2)"/>
+          <stop offset="100%" stop-color="rgba(106,140,32,0.05)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Outer decorative ring -->
+      <circle cx="100" cy="100" r="90" stroke="rgba(106,140,32,0.12)" stroke-width="1" fill="none"/>
+      <circle cx="100" cy="100" r="82" stroke="rgba(106,140,32,0.08)" stroke-width="0.5" fill="none"/>
+
+      <!-- Notched seal border (starburst) -->
+      <polygon points="100,14 108,30 118,16 122,34 134,22 134,40 148,32 144,50 158,46 150,62 166,62 154,74 170,78 156,88 170,94 154,100 170,106 156,112 170,122 154,126 166,138 150,138 158,154 144,150 148,168 134,160 134,178 122,166 118,184 108,170 100,186 92,170 82,184 78,166 66,178 66,160 52,168 56,150 42,154 50,138 34,138 46,126 30,122 44,112 30,106 46,100 30,94 44,88 30,78 46,74 34,62 50,62 42,46 56,50 52,32 66,40 66,22 78,34 82,16 92,30"
+              fill="url(#sealRing)" stroke="rgba(106,140,32,0.15)" stroke-width="0.8"/>
+
+      <!-- Inner circle face -->
+      <circle cx="100" cy="100" r="62" fill="#F5F2ED" stroke="rgba(106,140,32,0.15)" stroke-width="1"/>
+      <circle cx="100" cy="100" r="56" fill="none" stroke="rgba(106,140,32,0.06)" stroke-width="0.5"/>
+
+      <!-- Checkmark -->
+      <path d="M74 100 L92 116 L128 82" stroke="#6a8c20" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+
+      <!-- "IRB" text -->
+      <text x="100" y="145" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12" font-weight="800" letter-spacing="0.2em" fill="rgba(0,0,0,0.25)">IRB</text>
+
+      <!-- "APPROVED" text -->
+      <text x="100" y="160" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="0.15em" fill="rgba(106,140,32,0.4)">APPROVED</text>
+
+      <!-- Ribbon tails -->
+      <path d="M72 178 L72 200 L80 192 L88 200 L88 178" fill="#6a8c20" opacity="0.15"/>
+      <path d="M112 178 L112 200 L120 192 L128 200 L128 178" fill="#6a8c20" opacity="0.15"/>
+    </svg>
+  </div>
+
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">🛡️</span>
+      <div class="pillar-title">Independent Review</div>
+      <div class="pillar-desc">An <strong>external board of medical and ethical experts</strong> reviews every detail of our protocol.</div>
+    </div>
+    <div class="pillar p2">
+      <span class="pillar-icon">⚖️</span>
+      <div class="pillar-title">Your Rights Protected</div>
+      <div class="pillar-desc">They ensure the study is <strong>safe and your rights are fully protected</strong>. Their only job is to protect you.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">🔬</span>
+      <div class="pillar-title">Gold Standard</div>
+      <div class="pillar-desc">Not marketing tests — <strong>real, rigorous science</strong> held to the highest ethical bar.</div>
+    </div>
+  </div>
+
+  <div class="scan-line s2"></div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    Your well-being <strong>always comes before the data</strong>.<br>That's not a tagline — it's <span class="green">how we're built</span>.
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <span class="cta-icon">💚</span>
+    <span class="cta-text">Participate in science you can trust — link in bio</span>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <span class="bar-left">Science Editorial — Research Ethics</span>
+    <span class="bar-right">Reputable</span>
+  </div>
+</div>
+</body>
+</html>
