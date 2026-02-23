@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weekly Newsletter — Instagram Post</title>
+<title>Weekly Newsletter — Instagram Story</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     width: 1080px;
-    height: 1080px;
+    height: 1920px;
     overflow: hidden;
     background: #0a0a0a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -18,12 +18,12 @@
 
   .canvas {
     width: 1080px;
-    height: 1080px;
+    height: 1920px;
     position: relative;
     background:
-      radial-gradient(ellipse at 50% 40%, rgba(200, 230, 74, 0.04) 0%, transparent 55%),
-      radial-gradient(ellipse at 25% 75%, rgba(120, 80, 220, 0.03) 0%, transparent 45%),
-      radial-gradient(ellipse at 75% 80%, rgba(52, 211, 153, 0.02) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 35%, rgba(200, 230, 74, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 65%, rgba(120, 80, 220, 0.03) 0%, transparent 45%),
+      radial-gradient(ellipse at 75% 75%, rgba(52, 211, 153, 0.02) 0%, transparent 40%),
       #0a0a0a;
     overflow: hidden;
   }
@@ -49,7 +49,7 @@
   /* ── Top label ────────────────────────────────── */
   .top-label {
     position: absolute;
-    top: 62px;
+    top: 100px;
     left: 70px;
     right: 70px;
     display: flex;
@@ -84,7 +84,7 @@
     text-transform: uppercase;
   }
 
-  /* ── Scan line ────────────────────────────────── */
+  /* ── Scan lines ────────────────────────────────── */
   .scan-line {
     position: absolute;
     left: 70px;
@@ -92,17 +92,19 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(200,230,74,0.1), rgba(200,230,74,0.1), transparent);
   }
-  .scan-line.s1 { top: 104px; }
+  .scan-line.s1 { top: 148px; }
+  .scan-line.s2 { top: 1380px; }
+  .scan-line.s3 { top: 1680px; }
 
   /* ── Headline ─────────────────────────────────── */
   .headline {
     position: absolute;
-    top: 124px;
+    top: 200px;
     left: 70px;
     right: 70px;
   }
   .headline h1 {
-    font-size: 60px;
+    font-size: 80px;
     font-weight: 800;
     line-height: 1.05;
     letter-spacing: -0.025em;
@@ -112,8 +114,8 @@
     color: #c8e64a;
   }
   .headline .sub {
-    margin-top: 16px;
-    font-size: 20px;
+    margin-top: 28px;
+    font-size: 26px;
     font-weight: 400;
     color: rgba(255,255,255,0.35);
     line-height: 1.5;
@@ -122,11 +124,11 @@
   /* ── Newsletter mockup ────────────────────────── */
   .mockup-area {
     position: absolute;
-    top: 340px;
+    top: 680px;
     left: 50%;
     transform: translateX(-50%);
-    width: 860px;
-    height: 480px;
+    width: 920px;
+    height: 600px;
     perspective: 1200px;
   }
 
@@ -134,12 +136,12 @@
     position: absolute;
     top: 0;
     left: 50%;
-    transform: translateX(-50%) rotateX(8deg) rotateY(0deg);
-    width: 520px;
+    transform: translateX(-50%) rotateX(6deg) rotateY(0deg);
+    width: 620px;
     background: #141414;
     border: 1px solid #262626;
-    border-radius: 16px;
-    padding: 28px 28px 24px;
+    border-radius: 18px;
+    padding: 32px 32px 28px;
     box-shadow:
       0 30px 80px rgba(0,0,0,0.5),
       0 0 0 1px rgba(255,255,255,0.03) inset;
@@ -151,19 +153,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
   .mock-logo {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #c8e64a;
   }
   .mock-date {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.08em;
     color: rgba(255,255,255,0.2);
@@ -174,23 +176,23 @@
   .mock-section {
     background: #1a1a1a;
     border: 1px solid #222;
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .mock-section:last-child { margin-bottom: 0; }
 
   .mock-section-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 15px;
+    font-size: 16px;
     flex-shrink: 0;
   }
   .mock-section-icon.poll { background: rgba(167,139,250,0.12); }
@@ -203,24 +205,24 @@
     min-width: 0;
   }
   .mock-section-title {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     color: rgba(255,255,255,0.8);
     letter-spacing: 0.01em;
   }
   .mock-section-desc {
-    font-size: 10px;
+    font-size: 11px;
     color: rgba(255,255,255,0.25);
     margin-top: 2px;
   }
 
   .mock-badge {
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 5px 10px;
+    border-radius: 5px;
     flex-shrink: 0;
   }
   .mock-badge.active {
@@ -238,17 +240,17 @@
 
   /* Mock CTA button */
   .mock-cta {
-    margin-top: 14px;
+    margin-top: 16px;
     width: 100%;
-    padding: 12px 0;
+    padding: 14px 0;
     text-align: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #0a0a0a;
     background: #c8e64a;
-    border-radius: 8px;
+    border-radius: 10px;
   }
 
   /* ── Floating pills ───────────────────────────── */
@@ -257,38 +259,38 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 18px;
+    padding: 12px 20px;
     background: rgba(20,20,20,0.85);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 100px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: rgba(255,255,255,0.7);
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     white-space: nowrap;
   }
   .float-pill .pill-dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
   }
 
-  .fp1 { top: 370px; left: 56px; }
+  .fp1 { top: 700px; left: 50px; }
   .fp1 .pill-dot { background: #a78bfa; }
 
-  .fp2 { top: 500px; right: 56px; }
+  .fp2 { top: 870px; right: 50px; }
   .fp2 .pill-dot { background: #c8e64a; }
 
-  .fp3 { top: 640px; left: 74px; }
+  .fp3 { top: 1050px; left: 66px; }
   .fp3 .pill-dot { background: #34d399; }
 
-  .fp4 { top: 760px; right: 72px; }
+  .fp4 { top: 1220px; right: 64px; }
   .fp4 .pill-dot { background: #fbbf24; }
 
   /* ── CTA area ─────────────────────────────────── */
   .cta-area {
     position: absolute;
-    bottom: 120px;
+    top: 1460px;
     left: 0;
     right: 0;
     text-align: center;
@@ -298,10 +300,10 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 18px 44px;
+    padding: 24px 56px;
     background: #c8e64a;
     border-radius: 100px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 800;
     letter-spacing: 0.04em;
     color: #0a0a0a;
@@ -311,12 +313,12 @@
       0 0 0 1px rgba(200,230,74,0.3);
   }
   .cta-button .arrow {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .cta-note {
-    margin-top: 14px;
-    font-size: 13px;
+    margin-top: 18px;
+    font-size: 15px;
     color: rgba(255,255,255,0.2);
     letter-spacing: 0.02em;
   }
@@ -324,7 +326,7 @@
   /* ── Brand footer ─────────────────────────────── */
   .brand-bar {
     position: absolute;
-    bottom: 48px;
+    bottom: 70px;
     left: 70px;
     right: 70px;
     display: flex;
@@ -332,14 +334,14 @@
     justify-content: space-between;
   }
   .brand-name {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: rgba(200,230,74,0.4);
   }
   .brand-tag {
-    font-size: 11px;
+    font-size: 12px;
     color: rgba(255,255,255,0.15);
     letter-spacing: 0.06em;
   }
@@ -375,6 +377,8 @@
   </div>
 
   <div class="scan-line s1"></div>
+  <div class="scan-line s2"></div>
+  <div class="scan-line s3"></div>
 
   <!-- Headline -->
   <div class="headline">
