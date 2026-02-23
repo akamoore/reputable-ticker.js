@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vagus Nerve — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #F5F2ED;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #F5F2ED;
+    overflow: hidden;
+  }
+
+  /* ── Warm radials ─────────────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 25%, rgba(200,190,170,0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 70%, rgba(190,185,165,0.15) 0%, transparent 45%);
+    pointer-events: none;
+  }
+
+  /* ── Corner marks ─────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+
+  /* ── Top label ────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 60px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6a8c20;
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #6a8c20;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(106,140,32,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.25);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── Scan line ────────────────────────────────── */
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), rgba(0,0,0,0.06), transparent);
+  }
+  .scan-line.s1 { top: 102px; }
+
+  /* ── Headline ─────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 400px;
+  }
+  .kicker {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+  .headline .green {
+    color: #6a8c20;
+  }
+
+  /* ── SVG illustration ─────────────────────────── */
+  .illustration {
+    position: absolute;
+    top: 80px;
+    right: 40px;
+    width: 360px;
+    height: 460px;
+  }
+
+  /* ── Key points ───────────────────────────────── */
+  .points {
+    position: absolute;
+    top: 508px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .point-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 24px 22px 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+  }
+
+  .point-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  .point-icon.hrv { background: rgba(106,140,32,0.1); }
+  .point-icon.inflammation { background: rgba(96,165,250,0.1); }
+  .point-icon.sleep { background: rgba(139,92,246,0.1); }
+  .point-icon.digest { background: rgba(251,191,36,0.1); }
+
+  .point-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 4px;
+  }
+
+  .point-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+    margin-bottom: 2px;
+  }
+  .point-title.up { color: #6a8c20; }
+  .point-title.down { color: #3b82f6; }
+
+  .point-desc {
+    font-size: 12px;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.4;
+  }
+
+  /* ── Divider ──────────────────────────────────── */
+  .scan-line.s2 { top: 758px; }
+
+  /* ── Takeaway ─────────────────────────────────── */
+  .takeaway {
+    position: absolute;
+    top: 778px;
+    left: 72px;
+    right: 72px;
+  }
+
+  .takeaway-text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: rgba(0,0,0,0.5);
+    max-width: 780px;
+  }
+  .takeaway-text strong {
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+  .takeaway-text .emph {
+    color: #6a8c20;
+    font-weight: 700;
+  }
+
+  /* ── Save prompt ──────────────────────────────── */
+  .save-prompt {
+    position: absolute;
+    top: 892px;
+    left: 72px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .save-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(106,140,32,0.1);
+    border: 1px solid rgba(106,140,32,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .save-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6a8c20;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Bottom bar ───────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 72px;
+  }
+  .bar-left {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.6);
+  }
+  .bar-right {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Corner marks -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Vagus Nerve 101</div>
+  </div>
+
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">Your body has a built-in reset button — and science is learning how to press it.</div>
+    <div class="headline">The Science<br>Behind<br><span class="green">Vagus Nerve</span><br>Stimulation</div>
+  </div>
+
+  <!-- Vagus nerve illustration -->
+  <div class="illustration">
+    <svg width="360" height="460" viewBox="0 0 360 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Subtle body silhouette (head + torso outline) -->
+      <g opacity="0.06">
+        <!-- Head -->
+        <ellipse cx="180" cy="58" rx="42" ry="50" fill="#1a1a1a"/>
+        <!-- Neck -->
+        <rect x="166" y="100" width="28" height="30" rx="8" fill="#1a1a1a"/>
+        <!-- Torso -->
+        <path d="M120 130 Q 110 140 105 180 Q 100 260 105 340 Q 108 370 125 390 L 235 390 Q 252 370 255 340 Q 260 260 255 180 Q 250 140 240 130 Z"
+              fill="#1a1a1a" rx="20"/>
+      </g>
+
+      <!-- ═══ BRAIN (brainstem) ═══ -->
+      <g>
+        <!-- Brain mass -->
+        <ellipse cx="180" cy="42" rx="34" ry="28" fill="rgba(106,140,32,0.08)" stroke="rgba(106,140,32,0.2)" stroke-width="1"/>
+        <!-- Brainstem -->
+        <rect x="174" y="66" width="12" height="22" rx="5" fill="rgba(106,140,32,0.06)" stroke="rgba(106,140,32,0.18)" stroke-width="1"/>
+        <!-- Brain label -->
+        <text x="240" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" letter-spacing="0.1em" fill="rgba(0,0,0,0.3)">BRAINSTEM</text>
+        <line x1="216" y1="46" x2="234" y2="46" stroke="rgba(0,0,0,0.12)" stroke-width="0.8"/>
+      </g>
+
+      <!-- ═══ VAGUS NERVE PATHWAY ═══ -->
+      <!-- Main trunk — left vagus (dominant) -->
+      <path d="M180 88 C 180 100, 172 120, 168 140 C 162 170, 155 200, 152 230 C 148 270, 145 310, 150 350 C 152 370, 155 390, 158 410"
+            stroke="#6a8c20" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+      <!-- Nerve glow -->
+      <path d="M180 88 C 180 100, 172 120, 168 140 C 162 170, 155 200, 152 230 C 148 270, 145 310, 150 350 C 152 370, 155 390, 158 410"
+            stroke="#6a8c20" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.06"/>
+
+      <!-- Right vagus (thinner) -->
+      <path d="M180 88 C 180 100, 188 120, 192 140 C 198 170, 205 200, 208 230 C 212 270, 215 310, 210 350 C 208 370, 205 390, 202 410"
+            stroke="#6a8c20" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.3"/>
+
+      <!-- ═══ BRANCH TO HEART ═══ -->
+      <path d="M164 175 C 156 185, 142 195, 130 200 C 120 205, 112 210, 108 218"
+            stroke="#6a8c20" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.45"
+            stroke-dasharray="4 3"/>
+
+      <!-- Heart organ -->
+      <g transform="translate(94, 220)">
+        <path d="M0 10 C 0 -4, 16 -4, 16 6 C 16 -4, 32 -4, 32 10 C 32 24, 16 34, 16 34 C 16 34, 0 24, 0 10Z"
+              fill="rgba(239,68,68,0.12)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+      </g>
+      <!-- Heart label -->
+      <text x="58" y="260" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="rgba(0,0,0,0.3)">HEART</text>
+
+      <!-- ═══ BRANCH TO LUNGS ═══ -->
+      <path d="M192 165 C 204 172, 218 180, 232 190 C 242 197, 248 204, 250 212"
+            stroke="#6a8c20" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"
+            stroke-dasharray="4 3"/>
+
+      <!-- Lung shape -->
+      <ellipse cx="255" cy="228" rx="22" ry="28" fill="rgba(96,165,250,0.08)" stroke="rgba(96,165,250,0.2)" stroke-width="1"/>
+      <!-- Lung label -->
+      <text x="286" y="232" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="rgba(0,0,0,0.3)">LUNGS</text>
+
+      <!-- ═══ BRANCH TO GUT ═══ -->
+      <path d="M152 340 C 148 352, 140 360, 132 368 C 124 376, 118 384, 118 396"
+            stroke="#6a8c20" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.45"
+            stroke-dasharray="4 3"/>
+
+      <!-- Gut shape -->
+      <g transform="translate(100, 398)">
+        <path d="M 0,12 C 0,4 8,0 18,0 C 28,0 36,4 36,12 C 36,20 28,28 18,30 C 8,28 0,20 0,12Z"
+              fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.25)" stroke-width="1"/>
+        <!-- Internal fold lines -->
+        <path d="M8 10 Q 18 16 28 10" stroke="rgba(251,191,36,0.15)" stroke-width="0.8" fill="none"/>
+        <path d="M10 18 Q 18 22 26 18" stroke="rgba(251,191,36,0.12)" stroke-width="0.8" fill="none"/>
+      </g>
+      <!-- Gut label -->
+      <text x="58" y="420" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="rgba(0,0,0,0.3)">GUT</text>
+
+      <!-- ═══ BRANCH TO IMMUNE ═══ -->
+      <path d="M208 340 C 214 355, 222 365, 232 375"
+            stroke="#6a8c20" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"
+            stroke-dasharray="4 3"/>
+
+      <!-- Immune / spleen -->
+      <ellipse cx="245" cy="388" rx="18" ry="14" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
+      <text x="272" y="392" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="rgba(0,0,0,0.3)">IMMUNE</text>
+
+      <!-- ═══ SIGNAL PULSES along nerve ═══ -->
+      <circle cx="176" cy="110" r="3.5" fill="#6a8c20" opacity="0.5"/>
+      <circle cx="176" cy="110" r="7" fill="none" stroke="#6a8c20" stroke-width="0.8" opacity="0.2"/>
+
+      <circle cx="166" cy="160" r="3" fill="#6a8c20" opacity="0.4"/>
+      <circle cx="166" cy="160" r="6" fill="none" stroke="#6a8c20" stroke-width="0.7" opacity="0.15"/>
+
+      <circle cx="155" cy="240" r="3" fill="#6a8c20" opacity="0.35"/>
+      <circle cx="155" cy="240" r="6" fill="none" stroke="#6a8c20" stroke-width="0.7" opacity="0.12"/>
+
+      <circle cx="148" cy="310" r="3" fill="#6a8c20" opacity="0.3"/>
+      <circle cx="148" cy="310" r="6" fill="none" stroke="#6a8c20" stroke-width="0.7" opacity="0.1"/>
+
+      <!-- "Longest cranial nerve" annotation -->
+      <g transform="translate(260, 310)">
+        <rect x="0" y="0" width="90" height="40" rx="6" fill="rgba(106,140,32,0.06)" stroke="rgba(106,140,32,0.15)" stroke-width="0.8"/>
+        <text x="45" y="16" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="0.06em" fill="rgba(0,0,0,0.3)">CRANIAL</text>
+        <text x="45" y="30" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="0.06em" fill="rgba(0,0,0,0.3)">NERVE X</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Key points -->
+  <div class="points">
+    <div class="point-card">
+      <div class="point-icon hrv">📈</div>
+      <div class="point-label">When stimulated</div>
+      <div class="point-title up">HRV ↑</div>
+      <div class="point-desc">Heart rate variability increases</div>
+    </div>
+    <div class="point-card">
+      <div class="point-icon inflammation">🧊</div>
+      <div class="point-label">Inflammatory markers</div>
+      <div class="point-title down">Inflammation ↓</div>
+      <div class="point-desc">Systemic inflammation drops</div>
+    </div>
+    <div class="point-card">
+      <div class="point-icon sleep">😴</div>
+      <div class="point-label">Recovery signal</div>
+      <div class="point-title up">Sleep ↑</div>
+      <div class="point-desc">Onset &amp; quality improve</div>
+    </div>
+    <div class="point-card">
+      <div class="point-icon digest">🫁</div>
+      <div class="point-label">Gut-brain axis</div>
+      <div class="point-title up">Digestion ↑</div>
+      <div class="point-desc">Parasympathetic drive restored</div>
+    </div>
+  </div>
+
+  <div class="scan-line s2"></div>
+
+  <!-- Takeaway -->
+  <div class="takeaway">
+    <div class="takeaway-text">
+      The vagus nerve is your body's <strong>master recovery switch</strong>. When it's under-activated — from stress, poor sleep, or overtraining — <span class="emph">everything trends the wrong way</span>.
+    </div>
+  </div>
+
+  <!-- Save prompt -->
+  <div class="save-prompt">
+    <div class="save-icon">💚</div>
+    <div class="save-text">Save this for later</div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <span class="bar-left">Science Editorial — Vagus Nerve</span>
+    <span class="bar-right">Reputable</span>
+  </div>
+</div>
+</body>
+</html>
