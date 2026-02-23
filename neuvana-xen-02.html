@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neuvana Xen Study — Slide 2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,900&family=DM+Mono:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-base:    #0a0a0a;
+    --bg-raised:  #141414;
+    --bg-surface: #1a1a1a;
+    --border:     #262626;
+    --border-subtle: #1c1c1c;
+    --text-primary:   #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --text-muted:     #6b6b6b;
+    --lime:        #c8e64a;
+    --lime-dim:    #a3c232;
+    --lime-bg:     rgba(200,230,74,.08);
+    --lime-border: rgba(200,230,74,.2);
+    --lime-glow:   rgba(200,230,74,.12);
+  }
+
+  body {
+    background: #050505;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  /* ══════════════════════════════════════════════
+     THE 1080 x 1080 CANVAS — DARK
+     ══════════════════════════════════════════════ */
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: linear-gradient(160deg, #0a0a0a 0%, #0e1210 40%, #0a0a0a 100%);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Background grid */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.03) 1px, transparent 1px);
+    background-size: 54px 54px;
+  }
+
+  /* Ambient glow */
+  .glow-tl {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,230,74,0.05) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+    pointer-events: none;
+  }
+  .glow-br {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,230,74,0.03) 0%, transparent 70%);
+    bottom: -150px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  /* Corner marks */
+  .corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+  }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.3); border-left: 1px solid rgba(200,230,74,0.3); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.3); border-right: 1px solid rgba(200,230,74,0.3); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.3); border-left: 1px solid rgba(200,230,74,0.3); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.3); border-right: 1px solid rgba(200,230,74,0.3); }
+
+  /* Scan lines */
+  .scan-line {
+    position: absolute;
+    left: 70px;
+    right: 70px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.12), rgba(200,230,74,0.12), transparent);
+  }
+  .scan-line.s1 { top: 100px; }
+  .scan-line.s2 { top: 640px; }
+
+  /* ── Top label ──────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 58px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lime);
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(200,230,74,0.7);
+  }
+  .label-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--lime);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.4), transparent);
+  }
+  .label-series {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── Question headline ──────────────────────── */
+  .question {
+    position: absolute;
+    top: 130px;
+    left: 70px;
+    right: 70px;
+  }
+  .question h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 42px;
+    line-height: 1.2;
+    color: var(--text-secondary);
+    max-width: 700px;
+  }
+  .question h1 strong {
+    font-weight: 900;
+    font-style: normal;
+    color: var(--text-primary);
+  }
+  .question h1 .lime {
+    color: var(--lime);
+    font-weight: 900;
+    font-style: normal;
+  }
+
+  /* ── Metric cards ───────────────────────────── */
+  .metrics {
+    position: absolute;
+    top: 280px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .metric-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 28px;
+    background: rgba(20,20,20,0.6);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(--lime-bg);
+    border: 1px solid var(--lime-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .metric-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--lime);
+  }
+
+  .metric-info {
+    flex: 1;
+  }
+  .metric-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .metric-desc {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  .metric-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--lime-bg);
+    border: 1px solid var(--lime-border);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .metric-status::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--lime);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .metric-status span {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lime);
+  }
+
+  /* ── Sparkline placeholder ──────────────────── */
+  .sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 28px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+  .spark-bar {
+    width: 4px;
+    border-radius: 1px;
+    background: rgba(200,230,74,0.15);
+  }
+  .spark-bar.active {
+    background: rgba(200,230,74,0.4);
+  }
+
+  /* ── Study details ──────────────────────────── */
+  .study-details {
+    position: absolute;
+    top: 670px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    gap: 24px;
+  }
+
+  .detail-card {
+    flex: 1;
+    padding: 22px 24px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(20,20,20,0.4);
+  }
+  .detail-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .detail-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .detail-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── CTA area ───────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    top: 870px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--lime);
+    border: none;
+    border-radius: 8px;
+    color: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 30px rgba(200,230,74,0.25);
+    flex-shrink: 0;
+  }
+  .cta-button svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .cta-note {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-muted);
+    max-width: 400px;
+  }
+  .cta-note strong {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  /* ── Factor tags ────────────────────────────── */
+  .factors {
+    position: absolute;
+    top: 940px;
+    left: 70px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .factor-tag {
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    border-radius: 2px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* ── Closing line ───────────────────────────── */
+  .closing {
+    position: absolute;
+    bottom: 42px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+  }
+  .closing-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+  .closing-brand {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--lime-dim);
+    opacity: 0.6;
+  }
+
+  /* Bottom accent bar */
+  .accent-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--lime), rgba(200,230,74,0.3), transparent);
+    opacity: 0.7;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="grid"></div>
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+
+  <!-- Corner marks -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Scan lines -->
+  <div class="scan-line s1"></div>
+  <div class="scan-line s2"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Neuvana Xen Study</div>
+    <div class="label-line"></div>
+    <div class="label-series">What We're Measuring</div>
+  </div>
+
+  <!-- Question -->
+  <div class="question">
+    <h1>What does <span class="lime">vagus nerve stimulation</span> actually do?</h1>
+  </div>
+
+  <!-- Metric cards -->
+  <div class="metrics">
+    <!-- HRV -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg viewBox="0 0 24 24"><path d="M3.17 12.5L2 11.33l2.83-2.83 3.54 3.54 5.66-5.66L17.07 9.42l-8.49 8.49L3.17 12.5zm18.83-2.5h-3l-2 4-3-8-2.5 6H7"/></svg>
+      </div>
+      <div class="metric-info">
+        <div class="metric-name">Heart Rate Variability</div>
+        <div class="metric-desc">Autonomic nervous system balance, stress resilience, recovery capacity</div>
+      </div>
+      <div class="sparkline">
+        <div class="spark-bar" style="height:12px;"></div>
+        <div class="spark-bar" style="height:18px;"></div>
+        <div class="spark-bar" style="height:14px;"></div>
+        <div class="spark-bar" style="height:22px;"></div>
+        <div class="spark-bar active" style="height:20px;"></div>
+        <div class="spark-bar active" style="height:26px;"></div>
+        <div class="spark-bar active" style="height:24px;"></div>
+      </div>
+      <div class="metric-status"><span>Measuring</span></div>
+    </div>
+
+    <!-- Sleep -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg viewBox="0 0 24 24"><path d="M12.1 22c-4.97 0-9-4.03-9-9s4.03-9 9-9c.34 0 .68.02 1.01.07-1.53 1.33-2.51 3.29-2.51 5.47 0 4.01 3.24 7.26 7.26 7.26.85 0 1.66-.15 2.42-.42C19.11 19.52 15.86 22 12.1 22z"/></svg>
+      </div>
+      <div class="metric-info">
+        <div class="metric-name">Sleep Quality</div>
+        <div class="metric-desc">Deep sleep duration, sleep onset latency, night-time restfulness</div>
+      </div>
+      <div class="sparkline">
+        <div class="spark-bar" style="height:16px;"></div>
+        <div class="spark-bar" style="height:10px;"></div>
+        <div class="spark-bar" style="height:20px;"></div>
+        <div class="spark-bar" style="height:15px;"></div>
+        <div class="spark-bar active" style="height:22px;"></div>
+        <div class="spark-bar active" style="height:28px;"></div>
+        <div class="spark-bar active" style="height:25px;"></div>
+      </div>
+      <div class="metric-status"><span>Measuring</span></div>
+    </div>
+
+    <!-- Recovery -->
+    <div class="metric-card">
+      <div class="metric-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      </div>
+      <div class="metric-info">
+        <div class="metric-name">Recovery Score</div>
+        <div class="metric-desc">Post-session recovery metrics, readiness trends, physiological rebound</div>
+      </div>
+      <div class="sparkline">
+        <div class="spark-bar" style="height:8px;"></div>
+        <div class="spark-bar" style="height:14px;"></div>
+        <div class="spark-bar" style="height:11px;"></div>
+        <div class="spark-bar" style="height:18px;"></div>
+        <div class="spark-bar active" style="height:16px;"></div>
+        <div class="spark-bar active" style="height:22px;"></div>
+        <div class="spark-bar active" style="height:26px;"></div>
+      </div>
+      <div class="metric-status"><span>Measuring</span></div>
+    </div>
+  </div>
+
+  <!-- Study details row -->
+  <div class="study-details">
+    <div class="detail-card">
+      <span class="detail-eyebrow">Duration</span>
+      <div class="detail-value">8 Weeks</div>
+      <div class="detail-sub">Wearable-verified daily</div>
+    </div>
+    <div class="detail-card">
+      <span class="detail-eyebrow">What You Get</span>
+      <div class="detail-value">Xen Device</div>
+      <div class="detail-sub">+ personalized insights</div>
+    </div>
+    <div class="detail-card">
+      <span class="detail-eyebrow">Rewards</span>
+      <div class="detail-value">Heartbeats</div>
+      <div class="detail-sub">Earned on completion</div>
+    </div>
+  </div>
+
+  <!-- CTA area -->
+  <div class="cta-area">
+    <div class="cta-button">
+      <svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm1 12H7V7h2v5zm0-7H7V3h2v2z"/></svg>
+      Apply Now
+    </div>
+    <div class="cta-note">
+      Spots are limited. Participants receive a Neuvana Xen device and <strong>personalized wearable insights</strong> throughout the study.
+    </div>
+  </div>
+
+  <!-- Factor tags -->
+  <div class="factors">
+    <div class="factor-tag">Vagus Nerve</div>
+    <div class="factor-tag">HRV</div>
+    <div class="factor-tag">tVNS</div>
+    <div class="factor-tag">Sleep</div>
+    <div class="factor-tag">Recovery</div>
+    <div class="factor-tag">N-of-1</div>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing">
+    <span class="closing-text">Real interventions. Real data. Your body.</span>
+    <span class="closing-brand">Reputable</span>
+  </div>
+
+  <!-- Bottom accent bar -->
+  <div class="accent-bar"></div>
+</div>
+
+</body>
+</html>
