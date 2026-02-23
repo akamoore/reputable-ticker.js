@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circadian Reset — Slide 1: Cover</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  /* warm subtle texture */
+  .grain {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 70% 20%, rgba(200,230,74,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 80%, rgba(255,180,50,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* thin grid */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+
+  .top-bar {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #8AB417;
+    box-shadow: 0 0 8px rgba(138,180,23,0.4);
+    flex-shrink: 0;
+  }
+  .top-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.2em;
+    color: #8AB417; text-transform: uppercase;
+  }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap;
+  }
+
+  /* ---- CLOCK ICON ---- */
+  .clock-wrap {
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+  }
+  .clock-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 3px solid rgba(0,0,0,0.06);
+    box-shadow:
+      0 8px 40px rgba(0,0,0,0.06),
+      0 2px 8px rgba(0,0,0,0.04);
+    position: relative;
+  }
+  .clock-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #1a1a1a;
+  }
+  .hand {
+    position: absolute;
+    bottom: 50%; left: 50%;
+    transform-origin: bottom center;
+    border-radius: 4px;
+  }
+  .hand.hour {
+    width: 5px; height: 52px;
+    background: #1a1a1a;
+    transform: translateX(-50%) rotate(60deg);
+  }
+  .hand.minute {
+    width: 3.5px; height: 72px;
+    background: #8AB417;
+    transform: translateX(-50%) rotate(180deg);
+  }
+  /* hour markers */
+  .tick {
+    position: absolute;
+    width: 2px; height: 12px;
+    background: rgba(0,0,0,0.12);
+    top: 12px; left: 50%;
+    transform-origin: 50% 88px;
+  }
+  .tick.major { height: 16px; width: 3px; background: rgba(0,0,0,0.2); }
+
+  /* sun glow behind clock */
+  .sun-glow {
+    position: absolute;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,200,50,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ---- BADGE ---- */
+  .badge {
+    position: absolute;
+    top: 360px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .badge span {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #8AB417;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(138,180,23,0.2);
+    border-radius: 100px;
+    background: rgba(138,180,23,0.04);
+  }
+
+  /* ---- HEADLINE ---- */
+  .headline {
+    position: absolute;
+    top: 430px;
+    left: 72px;
+    right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 58px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: #1a1a1a;
+  }
+  .headline h1 .accent {
+    color: #8AB417;
+  }
+  .headline h1 .dim {
+    color: rgba(0,0,0,0.22);
+  }
+
+  .sub {
+    position: absolute;
+    top: 700px;
+    left: 140px;
+    right: 140px;
+    text-align: center;
+  }
+  .sub-divider {
+    width: 50px;
+    height: 2px;
+    background: rgba(138,180,23,0.35);
+    margin: 0 auto 24px;
+  }
+  .sub-text {
+    font-size: 17px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.6;
+  }
+  .sub-text strong {
+    color: rgba(0,0,0,0.55);
+    font-weight: 700;
+  }
+
+  /* ---- TAGS ---- */
+  .tags {
+    position: absolute;
+    top: 850px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+  .tag {
+    padding: 12px 22px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tag-icon { font-size: 18px; }
+  .tag-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.45);
+  }
+
+  /* ---- SWIPE ---- */
+  .swipe {
+    position: absolute;
+    top: 940px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swipe-text {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.18);
+  }
+  .swipe-arrow {
+    font-size: 14px;
+    color: rgba(138,180,23,0.5);
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 58px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(138,180,23,0.4);
+  }
+  .slide-num {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    color: rgba(0,0,0,0.15);
+  }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8AB417, #c8e64a, #FFB832);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Circadian Science</div>
+  </div>
+
+  <div class="sun-glow"></div>
+
+  <div class="clock-wrap">
+    <div class="clock-circle">
+      <div class="tick major" style="transform: translateX(-50%) rotate(0deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(30deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(60deg)"></div>
+      <div class="tick major" style="transform: translateX(-50%) rotate(90deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(120deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(150deg)"></div>
+      <div class="tick major" style="transform: translateX(-50%) rotate(180deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(210deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(240deg)"></div>
+      <div class="tick major" style="transform: translateX(-50%) rotate(270deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(300deg)"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(330deg)"></div>
+      <div class="hand hour"></div>
+      <div class="hand minute"></div>
+      <div class="clock-center"></div>
+    </div>
+  </div>
+
+  <div class="badge"><span>Circadian Reset Protocol</span></div>
+
+  <div class="headline">
+    <h1>Your Clock<br><span class="dim">Changed.</span><br>Your Body <span class="accent">Didn't.</span></h1>
+  </div>
+
+  <div class="sub">
+    <div class="sub-divider"></div>
+    <div class="sub-text">Losing an hour was annoying. The <strong>circadian drag</strong> you're still feeling today? That's the real problem.</div>
+  </div>
+
+  <div class="tags">
+    <div class="tag">
+      <span class="tag-icon">📉</span>
+      <span class="tag-text">HRV Tanked</span>
+    </div>
+    <div class="tag">
+      <span class="tag-icon">😶‍🌫️</span>
+      <span class="tag-text">Persistent Fog</span>
+    </div>
+    <div class="tag">
+      <span class="tag-icon">😴</span>
+      <span class="tag-text">Low Efficiency</span>
+    </div>
+  </div>
+
+  <div class="swipe">
+    <span class="swipe-text">Swipe for the reset protocol</span>
+    <span class="swipe-arrow">→</span>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

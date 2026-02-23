@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circadian Reset — Slide 3: The Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 60% 30%, rgba(200,230,74,0.08) 0%, transparent 45%),
+      radial-gradient(ellipse at 30% 85%, rgba(255,180,50,0.04) 0%, transparent 35%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px; left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.18);
+  }
+
+  .headline {
+    position: absolute;
+    top: 178px; left: 72px; right: 72px;
+    font-size: 42px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -0.04em; color: #1a1a1a;
+  }
+  .headline .accent { color: #8AB417; }
+
+  /* ---- PROTOCOL STEPS ---- */
+  .steps {
+    position: absolute;
+    top: 340px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .step {
+    padding: 30px 32px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    border-radius: 20px 0 0 20px;
+  }
+  .step.sun::before { background: linear-gradient(180deg, #FFB832, #F59E0B); }
+  .step.coffee::before { background: linear-gradient(180deg, #8B6914, #A67C00); }
+  .step.screen::before { background: linear-gradient(180deg, #6366F1, #8B5CF6); }
+
+  .step-num-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step.sun .step-num-wrap { background: rgba(255,184,50,0.1); }
+  .step.coffee .step-num-wrap { background: rgba(139,105,20,0.08); }
+  .step.screen .step-num-wrap { background: rgba(99,102,241,0.08); }
+
+  .step-num {
+    font-size: 22px; font-weight: 900;
+  }
+  .step.sun .step-num { color: #D97706; }
+  .step.coffee .step-num { color: #92710A; }
+  .step.screen .step-num { color: #6366F1; }
+
+  .step-content { flex: 1; }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .step-icon { font-size: 22px; }
+  .step-title {
+    font-size: 20px; font-weight: 800; color: #1a1a1a;
+  }
+  .step-timing {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .step.sun .step-timing { color: #D97706; background: rgba(255,184,50,0.1); }
+  .step.coffee .step-timing { color: #92710A; background: rgba(139,105,20,0.08); }
+  .step.screen .step-timing { color: #6366F1; background: rgba(99,102,241,0.08); }
+
+  .step-desc {
+    font-size: 14.5px; font-weight: 450; color: rgba(0,0,0,0.35);
+    line-height: 1.55; margin-top: 8px;
+  }
+  .step-desc strong { color: rgba(0,0,0,0.58); font-weight: 700; }
+
+  .step-why {
+    margin-top: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(0,0,0,0.22);
+    line-height: 1.5;
+    padding-left: 14px;
+    border-left: 2px solid rgba(0,0,0,0.06);
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #8AB417, #c8e64a, #FFB832); opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Reset Protocol</div>
+  </div>
+
+  <div class="section-label">The Reputable Protocol</div>
+
+  <div class="headline">The <span class="accent">Circadian Reset</span><br>Protocol</div>
+
+  <div class="steps">
+    <!-- Step 1 -->
+    <div class="step sun">
+      <div class="step-num-wrap"><div class="step-num">01</div></div>
+      <div class="step-content">
+        <div class="step-header">
+          <span class="step-icon">☀️</span>
+          <span class="step-title">Get Outside Immediately</span>
+          <span class="step-timing">Within 1 hour</span>
+        </div>
+        <div class="step-desc"><strong>10–20 minutes of direct sunlight</strong> within an hour of waking. The single most powerful signal to anchor your circadian clock and suppress melatonin.</div>
+        <div class="step-why">Light entering the eye triggers the suprachiasmatic nucleus — your master clock.</div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step coffee">
+      <div class="step-num-wrap"><div class="step-num">02</div></div>
+      <div class="step-content">
+        <div class="step-header">
+          <span class="step-icon">☕</span>
+          <span class="step-title">Delay Your Caffeine</span>
+          <span class="step-timing">Wait 90 min</span>
+        </div>
+        <div class="step-desc">Let your <strong>natural cortisol rise</strong> and clear out adenosine (sleep pressure) instead of just masking it with caffeine.</div>
+        <div class="step-why">Caffeine too early blocks adenosine clearance, causing a harder crash later.</div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step screen">
+      <div class="step-num-wrap"><div class="step-num">03</div></div>
+      <div class="step-content">
+        <div class="step-header">
+          <span class="step-icon">📵</span>
+          <span class="step-title">Hard Screen Curfew</span>
+          <span class="step-timing">1 hr before bed</span>
+        </div>
+        <div class="step-desc">The new "10 PM" feels like "9 PM" to your body. <strong>Eliminate artificial blue light</strong> at least an hour before your target bedtime.</div>
+        <div class="step-why">Even dim screen light suppresses melatonin onset by up to 30 minutes.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">03 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
