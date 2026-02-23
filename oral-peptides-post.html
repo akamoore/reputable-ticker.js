@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oral Peptides — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(200,230,74,0.035) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 75%, rgba(52,211,153,0.025) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(200,230,74,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+
+  /* ── Circle illustration ─────────────────────── */
+  .seal-area {
+    position: absolute;
+    top: 380px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 630px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    padding: 24px 22px 22px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: #c8e64a; }
+  .pillar.p2::before { background: #34d399; }
+  .pillar.p3::before { background: #60a5fa; }
+
+  .pillar-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    bottom: 124px;
+    left: 72px;
+    right: 72px;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .tagline .lime { color: #c8e64a; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.45);
+  }
+  .brand {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #60a5fa);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Therapeutics</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">Peptides are some of the most powerful tools in health optimization. But historically, you had to inject them.</div>
+    <div class="headline">The Future of<br>Peptides Is<br><span class="accent">Oral.</span></div>
+  </div>
+
+  <!-- Circle illustration — capsule with centered text -->
+  <div class="seal-area">
+    <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ringGrad" x1="110" y1="10" x2="110" y2="210" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(200,230,74,0.12)"/>
+          <stop offset="100%" stop-color="rgba(200,230,74,0.02)"/>
+        </linearGradient>
+        <filter id="circleGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/>
+          <feFlood flood-color="#c8e64a" flood-opacity="0.06" result="color"/>
+          <feComposite in="color" in2="blur" operator="in" result="glow"/>
+          <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Outer rings -->
+      <circle cx="110" cy="110" r="104" stroke="rgba(200,230,74,0.06)" stroke-width="1" fill="none"/>
+      <circle cx="110" cy="110" r="96" stroke="rgba(200,230,74,0.04)" stroke-width="0.5" fill="none"/>
+
+      <!-- Main circle -->
+      <g filter="url(#circleGlow)">
+        <circle cx="110" cy="110" r="80" fill="url(#ringGrad)" stroke="rgba(200,230,74,0.18)" stroke-width="1"/>
+      </g>
+      <circle cx="110" cy="110" r="72" fill="rgba(10,10,10,0.85)" stroke="rgba(200,230,74,0.06)" stroke-width="0.5"/>
+
+      <!-- Capsule icon — two-tone pill (centered in upper portion) -->
+      <!-- Left half (green) -->
+      <rect x="88" y="62" width="16" height="36" rx="8" fill="rgba(200,230,74,0.3)" stroke="rgba(200,230,74,0.45)" stroke-width="1"/>
+      <!-- Right half (teal) -->
+      <rect x="104" y="62" width="16" height="36" rx="8" fill="rgba(52,211,153,0.25)" stroke="rgba(52,211,153,0.4)" stroke-width="1"/>
+      <!-- Dividing line -->
+      <line x1="104" y1="64" x2="104" y2="96" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+
+      <!-- Small molecule dots orbiting -->
+      <circle cx="72" cy="78" r="2.5" fill="#c8e64a" opacity="0.25"/>
+      <circle cx="66" cy="92" r="1.8" fill="#34d399" opacity="0.2"/>
+      <circle cx="148" cy="74" r="2" fill="#34d399" opacity="0.2"/>
+      <circle cx="152" cy="88" r="1.5" fill="#c8e64a" opacity="0.18"/>
+      <circle cx="80" cy="66" r="1.5" fill="#60a5fa" opacity="0.15"/>
+      <circle cx="140" cy="66" r="2" fill="#60a5fa" opacity="0.15"/>
+
+      <!-- "ORAL" text — centered in circle -->
+      <text x="110" y="125" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" font-weight="800" letter-spacing="0.22em" fill="rgba(200,230,74,0.5)">ORAL</text>
+
+      <!-- "PEPTIDES" text — centered below -->
+      <text x="110" y="142" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="9" font-weight="700" letter-spacing="0.15em" fill="rgba(255,255,255,0.2)">PEPTIDES</text>
+    </svg>
+  </div>
+
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">💊</span>
+      <div class="pillar-title">The Old Problem</div>
+      <div class="pillar-desc">Your stomach acid <strong>destroys traditional peptides</strong> before they reach your bloodstream.</div>
+    </div>
+    <div class="pillar p2">
+      <span class="pillar-icon">🔬</span>
+      <div class="pillar-title">The Breakthrough</div>
+      <div class="pillar-desc"><strong>Advanced nanocarriers</strong> and permeation enhancers now survive the digestive tract.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">📊</span>
+      <div class="pillar-title">The Real Question</div>
+      <div class="pillar-desc">It works in a lab — but <strong>how does it work for <em>you</em></strong> and your biometric data?</div>
+    </div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    No more needles. <span class="lime">Same targeted science.</span>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-left">
+      <span class="cta-icon">💚</span>
+      <span class="cta-text">Explore our active clinical studies — link in bio</span>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
