@@ -9,7 +9,7 @@
 
   body {
     width: 1080px;
-    height: 1080px;
+    height: 1920px;
     overflow: hidden;
     background: #0a0a0a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -18,7 +18,7 @@
 
   .canvas {
     width: 1080px;
-    height: 1080px;
+    height: 1920px;
     position: relative;
     background:
       radial-gradient(ellipse at 50% 35%, rgba(200,230,74,0.05) 0%, transparent 50%),
@@ -92,12 +92,12 @@
     background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
   }
   .scan-line.s1 { top: 104px; }
-  .scan-line.s2 { top: 540px; }
+  .scan-line.s2 { top: 880px; }
 
   /* ── Series badge ──────────────────────────────── */
   .series-badge {
     position: absolute;
-    top: 160px;
+    top: 200px;
     left: 72px;
   }
   .series-badge span {
@@ -116,10 +116,10 @@
   /* ── Brand name ────────────────────────────────── */
   .partner-name {
     position: absolute;
-    top: 240px;
+    top: 320px;
     left: 72px;
     right: 72px;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 500;
     color: rgba(255,255,255,0.3);
     letter-spacing: 0.02em;
@@ -128,10 +128,10 @@
   /* ── Main headline ─────────────────────────────── */
   .headline {
     position: absolute;
-    top: 290px;
+    top: 400px;
     left: 72px;
     right: 72px;
-    font-size: 56px;
+    font-size: 74px;
     font-weight: 800;
     line-height: 1.06;
     letter-spacing: -0.03em;
@@ -142,7 +142,7 @@
   /* ── Divider ───────────────────────────────────── */
   .divider {
     position: absolute;
-    top: 564px;
+    top: 910px;
     left: 72px;
     width: 60px;
     height: 2px;
@@ -152,10 +152,10 @@
   /* ── Subtext ───────────────────────────────────── */
   .subtext {
     position: absolute;
-    top: 596px;
+    top: 960px;
     left: 72px;
-    right: 180px;
-    font-size: 18px;
+    right: 120px;
+    font-size: 21px;
     font-weight: 400;
     color: rgba(255,255,255,0.35);
     line-height: 1.6;
@@ -164,31 +164,41 @@
   /* ── Stat chips ────────────────────────────────── */
   .stat-chips {
     position: absolute;
-    top: 740px;
+    top: 1140px;
     left: 72px;
     right: 72px;
     display: flex;
-    gap: 14px;
+    flex-direction: column;
+    gap: 12px;
   }
   .stat-chip {
-    padding: 14px 24px;
+    padding: 24px 30px;
     background: rgba(255,255,255,0.025);
     border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 12px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
   }
   .stat-chip .chip-icon {
-    font-size: 18px;
+    font-size: 22px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(200,230,74,0.06);
+    border-radius: 12px;
+    flex-shrink: 0;
   }
   .stat-chip .chip-label {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
+    flex: 1;
   }
   .stat-chip .chip-value {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 800;
     color: #c8e64a;
   }
@@ -196,23 +206,22 @@
   /* ── Big stat callout ──────────────────────────── */
   .big-stat {
     position: absolute;
-    top: 840px;
+    top: 1520px;
     left: 72px;
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
+    right: 72px;
   }
   .big-stat-number {
-    font-size: 72px;
+    font-size: 120px;
     font-weight: 800;
     color: #c8e64a;
     letter-spacing: -0.03em;
     line-height: 1;
+    margin-bottom: 8px;
   }
   .big-stat-label {
-    font-size: 18px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.35);
+    font-size: 24px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
     line-height: 1.4;
   }
 
