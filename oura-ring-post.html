@@ -124,12 +124,12 @@
   /* ── Ring illustration ────────────────────────── */
   .ring-wrap {
     flex-shrink: 0;
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   /* ── Metric cards ─────────────────────────────── */
@@ -314,66 +314,134 @@
       <div class="headline">How to<br>Actually Read<br>Your <span class="green">Oura Ring</span><br>Data</div>
     </div>
 
-    <!-- Oura Ring SVG illustration -->
+    <!-- Oura Ring SVG illustration — 3D perspective view -->
     <div class="ring-wrap">
-      <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="240" height="260" viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="ringOuter" x1="30" y1="30" x2="150" y2="150">
-            <stop offset="0%" stop-color="#c8c8c8"/>
-            <stop offset="20%" stop-color="#a0a0a0"/>
-            <stop offset="40%" stop-color="#d4d4d4"/>
-            <stop offset="55%" stop-color="#8a8a8a"/>
-            <stop offset="75%" stop-color="#b8b8b8"/>
-            <stop offset="100%" stop-color="#9a9a9a"/>
-          </linearGradient>
-          <linearGradient id="ringInner" x1="50" y1="40" x2="130" y2="140">
+          <!-- Outer band: bright silver/white -->
+          <linearGradient id="outerBand" x1="40" y1="40" x2="200" y2="200" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#e8e8e8"/>
-            <stop offset="30%" stop-color="#c0c0c0"/>
-            <stop offset="60%" stop-color="#d8d8d8"/>
-            <stop offset="100%" stop-color="#a8a8a8"/>
+            <stop offset="15%" stop-color="#d0d0d0"/>
+            <stop offset="35%" stop-color="#f2f2f2"/>
+            <stop offset="50%" stop-color="#c8c8c8"/>
+            <stop offset="70%" stop-color="#e0e0e0"/>
+            <stop offset="85%" stop-color="#b8b8b8"/>
+            <stop offset="100%" stop-color="#d0d0d0"/>
           </linearGradient>
-          <radialGradient id="ringGloss" cx="38%" cy="32%" r="50%">
-            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
-            <stop offset="60%" stop-color="rgba(255,255,255,0.1)"/>
+
+          <!-- Band side/depth gradient -->
+          <linearGradient id="bandSide" x1="120" y1="20" x2="120" y2="140" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#f0f0f0"/>
+            <stop offset="40%" stop-color="#d8d8d8"/>
+            <stop offset="100%" stop-color="#aaa"/>
+          </linearGradient>
+
+          <!-- Inner channel gradient (dark) -->
+          <linearGradient id="innerChannel" x1="120" y1="60" x2="120" y2="180" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#3a3a3a"/>
+            <stop offset="40%" stop-color="#1e1e1e"/>
+            <stop offset="100%" stop-color="#111"/>
+          </linearGradient>
+
+          <!-- Gloss highlight -->
+          <radialGradient id="glossHighlight" cx="35%" cy="25%" r="45%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+            <stop offset="50%" stop-color="rgba(255,255,255,0.2)"/>
             <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
           </radialGradient>
-          <filter id="ringShadow" x="-20%" y="-10%" width="140%" height="140%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-            <feOffset dx="0" dy="6" result="shifted"/>
-            <feFlood flood-color="#000" flood-opacity="0.1" result="color"/>
+
+          <!-- Drop shadow -->
+          <filter id="ringShadow" x="-25%" y="-15%" width="150%" height="160%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="blur"/>
+            <feOffset dx="2" dy="10" result="shifted"/>
+            <feFlood flood-color="#000" flood-opacity="0.15" result="color"/>
+            <feComposite in="color" in2="shifted" operator="in" result="shadow"/>
+            <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Sensor window shadow -->
+          <filter id="sensorShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur"/>
+            <feOffset dx="0" dy="1" result="shifted"/>
+            <feFlood flood-color="#000" flood-opacity="0.3" result="color"/>
             <feComposite in="color" in2="shifted" operator="in" result="shadow"/>
             <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
 
-        <!-- Ring shadow -->
-        <ellipse cx="90" cy="96" rx="60" ry="14" fill="rgba(0,0,0,0.06)"/>
+        <!-- ═══ GROUND SHADOW ═══ -->
+        <ellipse cx="122" cy="240" rx="72" ry="12" fill="rgba(0,0,0,0.06)"/>
 
-        <!-- Ring body (tilted perspective) -->
+        <!-- ═══ RING BODY — tilted 3D perspective ═══ -->
         <g filter="url(#ringShadow)">
-          <!-- Outer band -->
-          <circle cx="90" cy="90" r="68" fill="url(#ringOuter)"/>
-          <!-- Flat top face -->
-          <circle cx="90" cy="90" r="62" fill="#c0c0c0"/>
-          <!-- Inner channel (darker) -->
-          <circle cx="90" cy="90" r="52" fill="#2a2a2a"/>
-          <!-- Inner surface -->
-          <circle cx="90" cy="90" r="48" fill="#1a1a1a"/>
-          <!-- Sensor bumps on inner surface -->
-          <circle cx="78" cy="108" r="4" fill="#111"/>
-          <circle cx="90" cy="112" r="4" fill="#111"/>
-          <circle cx="102" cy="108" r="4" fill="#111"/>
-          <!-- Outer ring gloss -->
-          <circle cx="90" cy="90" r="68" fill="url(#ringGloss)" opacity="0.6"/>
-          <!-- Top highlight arc -->
-          <path d="M 40,70 A 60,60 0 0,1 140,70" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
-          <!-- Subtle bevel line -->
-          <circle cx="90" cy="90" r="58" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" fill="none"/>
-        </g>
 
-        <!-- LED glow (green) -->
-        <circle cx="90" cy="76" r="3" fill="#6a8c20" opacity="0.7"/>
-        <circle cx="90" cy="76" r="8" fill="#6a8c20" opacity="0.08"/>
+          <!-- == OUTER BAND (bottom half visible — ring thickness) == -->
+          <!-- Back rim visible through the tilt -->
+          <ellipse cx="120" cy="105" rx="88" ry="72" fill="url(#outerBand)"/>
+
+          <!-- Band thickness / depth strip (visible below top face) -->
+          <path d="M 32,105 A 88,72 0 0,0 208,105 L 208,130 A 88,72 0 0,1 32,130 Z"
+                fill="url(#bandSide)"/>
+          <!-- Band bottom edge -->
+          <ellipse cx="120" cy="130" rx="88" ry="72" fill="url(#outerBand)"/>
+
+          <!-- == TOP FACE of the band (the flat silver ring face) == -->
+          <ellipse cx="120" cy="105" rx="88" ry="72" fill="url(#outerBand)"/>
+
+          <!-- Top face lighter overlay -->
+          <ellipse cx="120" cy="105" rx="88" ry="72" fill="url(#glossHighlight)" opacity="0.5"/>
+
+          <!-- == INNER HOLE — dark channel == -->
+          <!-- Inner opening (top) -->
+          <ellipse cx="120" cy="108" rx="62" ry="50" fill="url(#innerChannel)"/>
+
+          <!-- Inner wall depth visible (the channel depth) -->
+          <path d="M 58,108 A 62,50 0 0,0 182,108 L 182,122 A 62,50 0 0,1 58,122 Z"
+                fill="#1a1a1a"/>
+
+          <!-- Inner bottom surface (what sensors sit on) -->
+          <ellipse cx="120" cy="122" rx="62" ry="50" fill="#141414"/>
+
+          <!-- ═══ SENSOR WINDOWS (dark rectangles on inner surface) ═══ -->
+          <g filter="url(#sensorShadow)">
+            <!-- Center sensor (largest — PPG) -->
+            <rect x="110" y="140" width="20" height="12" rx="2.5" fill="#0a0a0a" opacity="0.9"/>
+            <!-- Left sensor -->
+            <rect x="82" y="138" width="16" height="10" rx="2" fill="#0a0a0a" opacity="0.85" transform="rotate(-8, 90, 143)"/>
+            <!-- Right sensor -->
+            <rect x="142" y="138" width="16" height="10" rx="2" fill="#0a0a0a" opacity="0.85" transform="rotate(8, 150, 143)"/>
+          </g>
+
+          <!-- ═══ LED INDICATORS ═══ -->
+          <!-- Green LED (left of center sensor) -->
+          <circle cx="100" cy="152" r="2.5" fill="#22c55e" opacity="0.8"/>
+          <circle cx="100" cy="152" r="5" fill="#22c55e" opacity="0.15"/>
+          <!-- Red LED (right of center sensor) -->
+          <circle cx="140" cy="152" r="2.5" fill="#ef4444" opacity="0.7"/>
+          <circle cx="140" cy="152" r="5" fill="#ef4444" opacity="0.12"/>
+          <!-- IR LED (far right, dimmer) -->
+          <circle cx="155" cy="148" r="1.8" fill="#ef4444" opacity="0.4"/>
+
+          <!-- ═══ OUTER SURFACE DETAILS ═══ -->
+          <!-- Top rim highlight arc (sharp gloss reflection) -->
+          <path d="M 52,75 Q 120,42 188,75" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" fill="none"/>
+
+          <!-- Secondary reflection arc -->
+          <path d="M 65,82 Q 120,56 175,82" stroke="rgba(255,255,255,0.2)" stroke-width="0.8" fill="none"/>
+
+          <!-- Subtle edge bevel -->
+          <ellipse cx="120" cy="105" rx="86" ry="70" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" fill="none"/>
+
+          <!-- Band side highlight (left edge catch) -->
+          <path d="M 34,108 Q 32,118 34,128" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Band side highlight (right edge) -->
+          <path d="M 206,108 Q 208,118 206,128" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+          <!-- Inner rim highlight (top edge of inner channel) -->
+          <path d="M 70,98 Q 120,78 170,98" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" fill="none"/>
+
+        </g>
       </svg>
     </div>
   </div>
