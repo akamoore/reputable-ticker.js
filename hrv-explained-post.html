@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRV Explained — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #F5F2ED;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #F5F2ED;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(200,190,170,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 75%, rgba(190,185,165,0.12) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-left: 1px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(0,0,0,0.07); border-right: 1px solid rgba(0,0,0,0.07); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 60px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6a8c20;
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #6a8c20;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(106,140,32,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(0,0,0,0.25);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), rgba(0,0,0,0.06), transparent);
+  }
+  .scan-line.s1 { top: 102px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 50px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #1a1a1a;
+  }
+  .headline .green { color: #6a8c20; }
+
+  /* ── Circle illustration ─────────────────────── */
+  .seal-area {
+    position: absolute;
+    top: 370px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 615px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    padding: 24px 22px 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.025);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: #6a8c20; }
+  .pillar.p2::before { background: #3b82f6; }
+  .pillar.p3::before { background: #8b5cf6; }
+
+  .pillar-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(0,0,0,0.6);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .scan-line.s2 { top: 840px; }
+
+  .tagline {
+    position: absolute;
+    top: 858px;
+    left: 72px;
+    right: 72px;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.45);
+    line-height: 1.5;
+  }
+  .tagline strong {
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+  .tagline .green {
+    color: #6a8c20;
+    font-weight: 700;
+  }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 92px;
+    left: 72px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6a8c20;
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 52px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 72px;
+  }
+  .bar-left {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.55);
+  }
+  .bar-right {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Biometrics</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">You probably know your resting heart rate. But do you know your Heart Rate Variability?</div>
+    <div class="headline">The Metric<br>Your Body Is<br><span class="green">Already Tracking</span></div>
+  </div>
+
+  <!-- Circle illustration — heartbeat with variable intervals -->
+  <div class="seal-area">
+    <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ringGrad" x1="110" y1="10" x2="110" y2="210" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(106,140,32,0.18)"/>
+          <stop offset="100%" stop-color="rgba(106,140,32,0.04)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Outer rings -->
+      <circle cx="110" cy="110" r="104" stroke="rgba(106,140,32,0.1)" stroke-width="1" fill="none"/>
+      <circle cx="110" cy="110" r="96" stroke="rgba(106,140,32,0.06)" stroke-width="0.5" fill="none"/>
+
+      <!-- Main circle face -->
+      <circle cx="110" cy="110" r="82" fill="url(#ringGrad)" stroke="rgba(106,140,32,0.15)" stroke-width="1"/>
+      <circle cx="110" cy="110" r="74" fill="#F5F2ED" stroke="rgba(106,140,32,0.06)" stroke-width="0.5"/>
+
+      <!-- ECG-style heartbeat with variable R-R intervals -->
+      <!-- Beat 1 — shorter interval -->
+      <polyline points="38,78 50,78 54,78 56,72 58,78 60,78 62,56 64,94 66,78 72,78"
+                stroke="#6a8c20" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+      <!-- Beat 2 — longer interval (the "variability") -->
+      <polyline points="72,78 88,78 92,78 94,72 96,78 98,78 100,52 102,98 104,78 114,78"
+                stroke="#6a8c20" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+      <!-- Beat 3 — medium interval -->
+      <polyline points="114,78 126,78 130,78 132,72 134,78 136,78 138,58 140,92 142,78 150,78"
+                stroke="#6a8c20" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+      <!-- Trailing flatline -->
+      <polyline points="150,78 164,78 182,78"
+                stroke="#6a8c20" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.25"/>
+
+      <!-- R-R interval markers — showing the "variability" -->
+      <!-- Short interval -->
+      <line x1="62" y1="100" x2="100" y2="100" stroke="rgba(106,140,32,0.25)" stroke-width="0.8"/>
+      <line x1="62" y1="97" x2="62" y2="103" stroke="rgba(106,140,32,0.25)" stroke-width="0.8"/>
+      <line x1="100" y1="97" x2="100" y2="103" stroke="rgba(106,140,32,0.25)" stroke-width="0.8"/>
+      <!-- Long interval -->
+      <line x1="100" y1="106" x2="138" y2="106" stroke="rgba(59,130,246,0.3)" stroke-width="0.8"/>
+      <line x1="100" y1="103" x2="100" y2="109" stroke="rgba(59,130,246,0.3)" stroke-width="0.8"/>
+      <line x1="138" y1="103" x2="138" y2="109" stroke="rgba(59,130,246,0.3)" stroke-width="0.8"/>
+
+      <!-- "HRV" text — centered in circle -->
+      <text x="110" y="132" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="16" font-weight="800" letter-spacing="0.22em" fill="rgba(0,0,0,0.3)">HRV</text>
+
+      <!-- "VARIABILITY" text — centered below -->
+      <text x="110" y="148" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="0.15em" fill="rgba(106,140,32,0.45)">VARIABILITY</text>
+    </svg>
+  </div>
+
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">💚</span>
+      <div class="pillar-title">High HRV</div>
+      <div class="pillar-desc">Your body is <strong>responsive, recovered, and ready</strong> to adapt. Rest &amp; digest mode is in control.</div>
+    </div>
+    <div class="pillar p2">
+      <span class="pillar-icon">⚡</span>
+      <div class="pillar-title">Low HRV</div>
+      <div class="pillar-desc">Your system is <strong>working overtime</strong> — dealing with stress, fatigue, or fighting something off.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">📈</span>
+      <div class="pillar-title">Why We Track It</div>
+      <div class="pillar-desc">See exactly how a protocol <strong>impacts your deep recovery</strong> over time — not just how you feel.</div>
+    </div>
+  </div>
+
+  <div class="scan-line s2"></div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    You might <em>feel</em> fine. But your HRV will tell you<br>if your body <span class="green">actually is</span>.
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <span class="cta-icon">💚</span>
+    <span class="cta-text">Find out what actually improves your recovery — link in bio</span>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar">
+    <span class="bar-left">Science Editorial — Biometrics</span>
+    <span class="bar-right">Reputable</span>
+  </div>
+</div>
+</body>
+</html>
