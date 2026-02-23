@@ -11,7 +11,7 @@
     width: 1080px;
     height: 1080px;
     overflow: hidden;
-    background: #0c1228;
+    background: #0a0a0a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -21,305 +21,322 @@
     height: 1080px;
     position: relative;
     background:
-      radial-gradient(ellipse at 50% 32%, rgba(30, 45, 90, 0.6) 0%, transparent 55%),
-      radial-gradient(ellipse at 25% 75%, rgba(20, 30, 70, 0.4) 0%, transparent 50%),
-      radial-gradient(ellipse at 75% 70%, rgba(60, 40, 110, 0.15) 0%, transparent 45%),
-      #0c1228;
+      radial-gradient(ellipse at 45% 30%, rgba(139,92,246,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 65% 70%, rgba(200,230,74,0.025) 0%, transparent 40%),
+      #0a0a0a;
     overflow: hidden;
   }
 
-  /* ── Subtle texture ─────────────────────────────── */
-  .canvas::before {
-    content: '';
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
     position: absolute;
     inset: 0;
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    opacity: 0.5;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
     pointer-events: none;
   }
 
-  /* ── Top badge ──────────────────────────────────── */
-  .top-badge {
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
     position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    text-align: center;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
-  .top-badge span {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #d4ff50;
-    padding: 10px 28px;
-    border: 1.5px solid rgba(212,255,80,0.25);
-    border-radius: 100px;
-    background: rgba(212,255,80,0.04);
-  }
-  .top-badge span::before {
-    content: '';
-    display: inline-block;
-    width: 7px;
-    height: 7px;
+  .label-dot {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: #d4ff50;
-    box-shadow: 0 0 8px rgba(212,255,80,0.6);
-    margin-right: 10px;
-    vertical-align: middle;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(200,230,74,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
-  /* ── Study label ────────────────────────────────── */
-  .study-label {
+  .scan-line {
     position: absolute;
-    top: 158px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 32px;
-    font-weight: 400;
-    font-style: italic;
-    color: rgba(180,190,220,0.45);
-    letter-spacing: 0.01em;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
   }
+  .scan-line.s1 { top: 104px; }
 
-  /* ── Hero title ─────────────────────────────────── */
-  .hero-title {
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
     position: absolute;
-    top: 204px;
-    left: 60px;
-    right: 60px;
-    text-align: center;
-    font-size: 72px;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 50px;
     font-weight: 800;
-    color: #eef0f8;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
   }
+  .headline .accent { color: #c8e64a; }
 
-  /* ── Question ───────────────────────────────────── */
-  .question {
+  /* ── Circle illustration ─────────────────────── */
+  .seal-area {
     position: absolute;
-    top: 380px;
-    left: 120px;
-    right: 120px;
-    text-align: center;
-    font-size: 22px;
-    font-weight: 400;
-    color: rgba(180,190,220,0.45);
-    line-height: 1.55;
-  }
-
-  /* ── Illustration ───────────────────────────────── */
-  .illus-wrap {
-    position: absolute;
-    top: 480px;
+    top: 368px;
     left: 50%;
     transform: translateX(-50%);
-    width: 460px;
-    height: 200px;
+    width: 230px;
+    height: 230px;
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 16px 40px rgba(0,0,0,0.3));
   }
 
-  /* ── Study card ─────────────────────────────────── */
-  .study-card {
+  /* ── Three pillars ─────────────────────────────── */
+  .pillars {
     position: absolute;
-    top: 732px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 460px;
-    background: linear-gradient(135deg, rgba(120,80,220,0.2) 0%, rgba(100,60,200,0.12) 100%);
-    border: 1px solid rgba(140,100,240,0.25);
-    border-radius: 20px;
-    padding: 22px 30px;
+    top: 620px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .pillar {
+    flex: 1;
+    padding: 24px 22px 22px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pillar.p1::before { background: rgba(200,230,74,0.6); }
+  .pillar.p2::before { background: #34d399; }
+  .pillar.p3::before { background: #a78bfa; }
+
+  .pillar-icon {
+    font-size: 24px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .pillar-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    bottom: 124px;
+    left: 72px;
+    right: 72px;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .tagline .lime { color: #c8e64a; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 72px;
+    left: 72px;
+    right: 72px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-
-  .card-left {
+  .cta-left {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 10px;
   }
-  .card-label {
-    font-size: 11px;
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.45);
+  }
+  .brand {
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(180,160,240,0.7);
-  }
-  .card-value {
-    font-size: 26px;
-    font-weight: 800;
-    color: #c8b5ff;
-    letter-spacing: -0.01em;
+    color: rgba(200,230,74,0.3);
   }
 
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: #fff;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-    padding: 10px 22px;
-    border-radius: 100px;
-    text-transform: uppercase;
-  }
-  .cta-btn::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #d4ff50;
-    box-shadow: 0 0 8px rgba(212,255,80,0.6);
-  }
-
-  /* ── Divider ────────────────────────────────────── */
-  .divider {
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
     position: absolute;
-    bottom: 130px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(140,120,200,0.3), transparent);
-  }
-
-  /* ── Brand footer ───────────────────────────────── */
-  .brand {
-    position: absolute;
-    bottom: 68px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 22px;
-    font-weight: 600;
-    color: rgba(180,190,220,0.35);
-    letter-spacing: 0.06em;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.6), #34d399, #a78bfa);
+    opacity: 0.4;
   }
 </style>
 </head>
 <body>
 <div class="canvas">
+  <div class="grid"></div>
 
-  <!-- Top badge -->
-  <div class="top-badge">
-    <span>Evidence Based</span>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Personalized Wellness</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">The back of the bottle says "Take 2 capsules daily." But who exactly were those designed for?</div>
+    <div class="headline">Your Dose Is<br>Not <span class="accent">My Dose.</span></div>
   </div>
 
-  <!-- Study label -->
-  <div class="study-label">Personalized Wellness</div>
-
-  <!-- Hero title -->
-  <div class="hero-title">Your Dose Is<br>Not My Dose</div>
-
-  <!-- Question -->
-  <div class="question">Standard dosing is based on an average person.<br>Your biology isn't average. We measure the difference.</div>
-
-  <!-- Capsule + HRV waveform illustration -->
-  <div class="illus-wrap">
-    <svg width="460" height="200" viewBox="0 0 460 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circle illustration — capsule + HRV waveform -->
+  <div class="seal-area">
+    <svg width="230" height="230" viewBox="0 0 230 230" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="capsGrad" x1="190" y1="50" x2="270" y2="150" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#c8cbdf"/>
-          <stop offset="60%" stop-color="#9a96be"/>
-          <stop offset="100%" stop-color="#6b61a0"/>
+        <linearGradient id="ringGrad" x1="115" y1="10" x2="115" y2="220" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(167,139,250,0.12)"/>
+          <stop offset="100%" stop-color="rgba(200,230,74,0.03)"/>
         </linearGradient>
-        <linearGradient id="waveGrad" x1="0" y1="100" x2="460" y2="100" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="rgba(140,100,240,0)"/>
-          <stop offset="15%" stop-color="rgba(140,100,240,0.25)"/>
-          <stop offset="50%" stop-color="rgba(200,180,255,0.5)"/>
-          <stop offset="85%" stop-color="rgba(140,100,240,0.25)"/>
-          <stop offset="100%" stop-color="rgba(140,100,240,0)"/>
-        </linearGradient>
-        <filter id="capsGlow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="14" result="blur"/>
-          <feFlood flood-color="#b8a0f0" flood-opacity="0.15" result="color"/>
+        <filter id="circleGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur"/>
+          <feFlood flood-color="#a78bfa" flood-opacity="0.05" result="color"/>
           <feComposite in="color" in2="blur" operator="in" result="glow"/>
           <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
 
-      <!-- HRV / heartbeat waveform running horizontally -->
-      <polyline
-        points="
-          0,100
-          40,100
-          60,100
-          80,98
-          100,102
-          120,96
-          135,104
-          148,92
-          158,100
-          170,100
-          180,100
-          190,100
-          198,100
-          204,80
-          210,60
-          216,110
-          222,130
-          228,70
-          234,100
-          240,100
-          248,100
-          258,100
-          268,100
-          280,100
-          298,96
-          310,104
-          322,98
-          335,102
-          350,100
-          370,100
-          395,100
-          420,100
-          460,100
-        "
-        stroke="url(#waveGrad)"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        fill="none"
-      />
+      <!-- Outer rings -->
+      <circle cx="115" cy="115" r="110" stroke="rgba(167,139,250,0.06)" stroke-width="1" fill="none"/>
+      <circle cx="115" cy="115" r="102" stroke="rgba(167,139,250,0.04)" stroke-width="0.5" fill="none"/>
 
-      <!-- Capsule centered over the heartbeat peak -->
-      <g filter="url(#capsGlow)">
-        <!-- Capsule body (vertical, two halves) -->
-        <!-- Top half -->
-        <rect x="213" y="54" width="34" height="40" rx="17" fill="url(#capsGrad)"/>
-        <!-- Bottom half -->
-        <rect x="213" y="88" width="34" height="40" rx="17" fill="rgba(232,220,200,0.25)"/>
-        <!-- Highlight -->
-        <rect x="224" y="60" width="4" height="50" rx="2" fill="rgba(255,255,255,0.06)"/>
+      <!-- Main circle -->
+      <g filter="url(#circleGlow)">
+        <circle cx="115" cy="115" r="84" fill="url(#ringGrad)" stroke="rgba(167,139,250,0.16)" stroke-width="1"/>
       </g>
+      <circle cx="115" cy="115" r="76" fill="rgba(10,10,10,0.88)" stroke="rgba(167,139,250,0.06)" stroke-width="0.5"/>
+
+      <!-- HRV waveform running through the circle -->
+      <polyline points="35,115 50,115 60,113 68,117 76,112 82,118 88,108 92,115 96,115 100,115 104,115 108,100 112,80 116,125 120,140 124,85 128,115 132,115 136,115 142,115 150,113 158,117 166,114 174,116 184,115 195,115"
+                stroke="rgba(200,230,74,0.5)" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+
+      <!-- Capsule icon at center top -->
+      <rect x="108" y="52" width="14" height="18" rx="7" fill="rgba(200,230,74,0.35)" stroke="rgba(200,230,74,0.5)" stroke-width="0.5"/>
+      <rect x="108" y="66" width="14" height="18" rx="7" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+
+      <!-- "N=1" text — centered in circle -->
+      <text x="115" y="126" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="15" font-weight="800" letter-spacing="0.2em" fill="rgba(200,230,74,0.45)">N = 1</text>
+
+      <!-- "DOSING" text — centered below -->
+      <text x="115" y="142" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="7.5" font-weight="700" letter-spacing="0.14em" fill="rgba(167,139,250,0.4)">DOSING</text>
     </svg>
   </div>
 
-  <!-- Study card -->
-  <div class="study-card">
-    <div class="card-left">
-      <div class="card-label">Active Studies</div>
-      <div class="card-value">Oura Ring Required</div>
+  <!-- Three pillars -->
+  <div class="pillars">
+    <div class="pillar p1">
+      <span class="pillar-icon">🧬</span>
+      <div class="pillar-title">Your Metabolism</div>
+      <div class="pillar-desc">How you <strong>absorb and process</strong> a compound depends on genetics, gut health, and baseline.</div>
     </div>
-    <div class="cta-btn">Explore</div>
+    <div class="pillar p2">
+      <span class="pillar-icon">⌚</span>
+      <div class="pillar-title">Your Data</div>
+      <div class="pillar-desc">Continuously tracking <strong>HRV, resting heart rate, and deep sleep</strong> shows the real impact.</div>
+    </div>
+    <div class="pillar p3">
+      <span class="pillar-icon">📊</span>
+      <div class="pillar-title">Your Answer</div>
+      <div class="pillar-desc">Shift the question from "does this work?" to <strong>"does this work for me?"</strong></div>
+    </div>
   </div>
 
-  <!-- Divider -->
-  <div class="divider"></div>
+  <!-- Tagline -->
+  <div class="tagline">
+    You can't optimize your physiology with <span class="lime">generalized instructions.</span>
+  </div>
 
-  <!-- Brand -->
-  <div class="brand">Reputable</div>
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-left">
+      <span class="cta-icon">💚</span>
+      <span class="cta-text">Measure your own results — link in bio</span>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
 
+  <div class="bottom-bar"></div>
 </div>
 </body>
 </html>
