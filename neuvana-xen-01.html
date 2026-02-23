@@ -38,9 +38,6 @@
     gap: 24px;
   }
 
-  /* ══════════════════════════════════════════════
-     THE 1080 x 1080 CANVAS — LIGHT
-     ══════════════════════════════════════════════ */
   .canvas {
     width: 1080px;
     height: 1080px;
@@ -50,7 +47,6 @@
     flex-shrink: 0;
   }
 
-  /* Subtle warm grain texture */
   .grain {
     position: absolute;
     inset: 0;
@@ -60,7 +56,6 @@
     pointer-events: none;
   }
 
-  /* Corner marks — light version */
   .corner {
     position: absolute;
     width: 18px;
@@ -71,7 +66,6 @@
   .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(0,0,0,0.08); border-left: 1px solid rgba(0,0,0,0.08); }
   .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(0,0,0,0.08); border-right: 1px solid rgba(0,0,0,0.08); }
 
-  /* ── Top label bar ──────────────────────────── */
   .top-label {
     position: absolute;
     top: 58px;
@@ -111,7 +105,6 @@
     white-space: nowrap;
   }
 
-  /* Thin scan line */
   .scan-line {
     position: absolute;
     left: 70px;
@@ -137,109 +130,6 @@
     overflow: hidden;
   }
 
-  /* SVG illustration of the Xen device */
-  .device-illustration {
-    position: relative;
-    width: 500px;
-    height: 440px;
-  }
-
-  /* The main hub/body */
-  .device-hub {
-    position: absolute;
-    top: 80px;
-    left: 130px;
-    width: 240px;
-    height: 240px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #f8f8f8, #e0e0e0);
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow:
-      0 20px 60px rgba(0,0,0,0.08),
-      0 4px 16px rgba(0,0,0,0.04),
-      inset 0 1px 0 rgba(255,255,255,0.8);
-  }
-
-  /* Inner ring on the hub */
-  .device-hub-inner {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #ececec, #f5f5f5);
-    border: 1px solid rgba(0,0,0,0.04);
-  }
-
-  /* LED indicator */
-  .device-led {
-    position: absolute;
-    top: 85px;
-    left: 85px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--lime-light);
-    box-shadow: 0 0 16px rgba(200,230,74,0.6), 0 0 40px rgba(200,230,74,0.2);
-  }
-
-  /* Cable going to left earbud */
-  .cable-left {
-    position: absolute;
-    top: 200px;
-    left: 40px;
-    width: 100px;
-    height: 120px;
-  }
-
-  /* Cable going to right earbud */
-  .cable-right {
-    position: absolute;
-    top: 200px;
-    right: 40px;
-    width: 100px;
-    height: 120px;
-  }
-
-  /* Earbud tips */
-  .earbud {
-    position: absolute;
-    width: 44px;
-    height: 56px;
-    border-radius: 22px 22px 18px 18px;
-    background: linear-gradient(145deg, #f0f0f0, #d8d8d8);
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow:
-      0 8px 24px rgba(0,0,0,0.08),
-      inset 0 1px 0 rgba(255,255,255,0.6);
-  }
-  .earbud-left {
-    bottom: 60px;
-    left: 60px;
-    transform: rotate(-15deg);
-  }
-  .earbud-right {
-    bottom: 60px;
-    right: 60px;
-    transform: rotate(15deg);
-  }
-
-  /* Earbud transparent tip */
-  .earbud-tip {
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 16px;
-    border-radius: 0 0 10px 10px;
-    background: rgba(200,230,74,0.15);
-    border: 1px solid rgba(200,230,74,0.25);
-    box-shadow: 0 0 12px rgba(200,230,74,0.2);
-  }
-
-  /* Floating label */
   .product-label {
     position: absolute;
     bottom: 24px;
@@ -300,12 +190,64 @@
     font-size: 16px;
     line-height: 1.5;
     color: var(--text-muted);
-    max-width: 600px;
+    max-width: 700px;
   }
   .sub-text strong {
     color: var(--text-secondary);
     font-weight: 600;
   }
+
+  /* Oura requirement badge */
+  .requirement-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 6px 12px;
+    background: rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .requirement-badge .ring-icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--text-secondary);
+  }
+
+  /* ── Metric pills (floating on product area) ── */
+  .metric-float {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .metric-float .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+  .metric-float.m1 { top: 150px; right: 100px; }
+  .metric-float.m2 { top: 260px; right: 80px; }
+  .metric-float.m3 { bottom: 180px; left: 100px; }
 
   /* ── Bottom bar (dark strip) ────────────────── */
   .bottom-bar {
@@ -337,53 +279,20 @@
     color: rgba(200,230,74,0.5);
   }
 
-  /* ── Metric pills (floating on product area) ── */
-  .metric-float {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(0,0,0,0.06);
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-  }
-  .metric-float .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--lime);
-  }
-  .metric-float.m1 { top: 160px; right: 100px; }
-  .metric-float.m2 { top: 260px; right: 80px; }
-  .metric-float.m3 { bottom: 160px; left: 100px; }
-
 </style>
 </head>
 <body>
 
-<!-- ═══ 1080 x 1080 Canvas ═══ -->
 <div class="canvas" id="canvas">
   <div class="grain"></div>
 
-  <!-- Corner marks -->
   <div class="corner tl"></div>
   <div class="corner tr"></div>
   <div class="corner bl"></div>
   <div class="corner br"></div>
 
-  <!-- Scan line -->
   <div class="scan-line s1"></div>
 
-  <!-- Top label -->
   <div class="top-label">
     <div class="label-dot"></div>
     <div class="label-text">Reputable Study</div>
@@ -391,34 +300,100 @@
     <div class="label-series">Now Enrolling</div>
   </div>
 
-  <!-- Product image area -->
+  <!-- Product image area with accurate Xen SVG -->
   <div class="product-area">
-    <div class="device-illustration">
-      <!-- SVG cables -->
-      <svg viewBox="0 0 500 440" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
-        <!-- Left cable -->
-        <path d="M 250,200 C 220,240 140,260 102,310" stroke="#d0d0d0" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- Right cable -->
-        <path d="M 250,200 C 280,240 360,260 398,310" stroke="#d0d0d0" stroke-width="2" fill="none" stroke-linecap="round"/>
-      </svg>
+    <svg width="540" height="420" viewBox="0 0 540 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shadow under device -->
+      <ellipse cx="270" cy="360" rx="180" ry="20" fill="rgba(0,0,0,0.06)"/>
 
-      <!-- Hub -->
-      <div class="device-hub">
-        <div class="device-hub-inner">
-          <div class="device-led"></div>
-        </div>
-      </div>
+      <!-- Left cable from puck to left earbud -->
+      <path d="M 205,195 C 180,230 120,270 95,310 C 85,325 80,335 82,345" stroke="#2a2a2a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Right cable from puck to right earbud -->
+      <path d="M 335,195 C 360,230 420,270 445,310 C 455,325 460,335 458,345" stroke="#2a2a2a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 
-      <!-- Earbuds -->
-      <div class="earbud earbud-left">
-        <div class="earbud-tip"></div>
-      </div>
-      <div class="earbud earbud-right">
-        <div class="earbud-tip"></div>
-      </div>
-    </div>
+      <!-- ═══ MAIN PUCK BODY — Glossy black oval with chrome rim ═══ -->
+      <!-- Chrome/silver outer rim -->
+      <ellipse cx="270" cy="170" rx="118" ry="78" fill="url(#chromeRim)"/>
+      <!-- Black glossy face -->
+      <ellipse cx="270" cy="170" rx="112" ry="72" fill="url(#blackFace)"/>
+      <!-- Top gloss reflection -->
+      <ellipse cx="255" cy="140" rx="70" ry="28" fill="url(#glossShine)" opacity="0.5"/>
+      <!-- Subtle inner ring -->
+      <ellipse cx="270" cy="170" rx="60" ry="40" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" fill="none"/>
 
-    <div class="product-label">Neuvana Xen Device</div>
+      <!-- Lotus/flower logo in center -->
+      <g transform="translate(270,170)" opacity="0.15">
+        <!-- Center petal (top) -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(0)"/>
+        <!-- Petal right -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(45)"/>
+        <!-- Petal far right -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(90)"/>
+        <!-- Petal bottom right -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(135)"/>
+        <!-- Petal bottom -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(180)"/>
+        <!-- Petal bottom left -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(225)"/>
+        <!-- Petal far left -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(270)"/>
+        <!-- Petal left -->
+        <ellipse cx="0" cy="-12" rx="5" ry="12" fill="white" transform="rotate(315)"/>
+        <!-- Center dot -->
+        <circle cx="0" cy="0" r="3" fill="white"/>
+      </g>
+
+      <!-- ═══ LEFT EARBUD — Black in-ear style ═══ -->
+      <g transform="translate(82, 345) rotate(-12)">
+        <!-- Earbud body -->
+        <ellipse cx="0" cy="0" rx="14" ry="18" fill="url(#earbudBlack)"/>
+        <!-- Glossy highlight -->
+        <ellipse cx="-3" cy="-6" rx="6" ry="4" fill="rgba(255,255,255,0.1)"/>
+        <!-- Ear tip (black silicone) -->
+        <ellipse cx="0" cy="20" rx="8" ry="6" fill="#1a1a1a"/>
+        <ellipse cx="0" cy="22" rx="5" ry="4" fill="#0d0d0d"/>
+      </g>
+
+      <!-- ═══ RIGHT EARBUD — Black in-ear style ═══ -->
+      <g transform="translate(458, 345) rotate(12)">
+        <!-- Earbud body -->
+        <ellipse cx="0" cy="0" rx="14" ry="18" fill="url(#earbudBlack)"/>
+        <!-- Glossy highlight -->
+        <ellipse cx="-3" cy="-6" rx="6" ry="4" fill="rgba(255,255,255,0.1)"/>
+        <!-- Ear tip (black silicone) -->
+        <ellipse cx="0" cy="20" rx="8" ry="6" fill="#1a1a1a"/>
+        <ellipse cx="0" cy="22" rx="5" ry="4" fill="#0d0d0d"/>
+      </g>
+
+      <!-- "neuvana" text on puck (very subtle) -->
+      <text x="270" y="220" text-anchor="middle" font-family="'Helvetica Neue', Arial, sans-serif" font-size="8" font-weight="300" letter-spacing="3" fill="rgba(255,255,255,0.12)" text-transform="uppercase">NEUVANA</text>
+
+      <!-- Gradient definitions -->
+      <defs>
+        <linearGradient id="chromeRim" x1="152" y1="92" x2="388" y2="248">
+          <stop offset="0%" stop-color="#d0d0d0"/>
+          <stop offset="30%" stop-color="#b8b8b8"/>
+          <stop offset="50%" stop-color="#e8e8e8"/>
+          <stop offset="70%" stop-color="#a0a0a0"/>
+          <stop offset="100%" stop-color="#c0c0c0"/>
+        </linearGradient>
+        <linearGradient id="blackFace" x1="158" y1="98" x2="382" y2="242">
+          <stop offset="0%" stop-color="#2a2a2a"/>
+          <stop offset="40%" stop-color="#1a1a1a"/>
+          <stop offset="100%" stop-color="#0f0f0f"/>
+        </linearGradient>
+        <radialGradient id="glossShine" cx="50%" cy="30%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.35)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+        <linearGradient id="earbudBlack" x1="0" y1="-18" x2="0" y2="18">
+          <stop offset="0%" stop-color="#333"/>
+          <stop offset="100%" stop-color="#1a1a1a"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="product-label">Neuvana Xen &mdash; tVNS Device</div>
 
     <!-- Floating metrics -->
     <div class="metric-float m1"><span class="dot"></span> HRV</div>
@@ -428,18 +403,21 @@
 
   <!-- Headline area -->
   <div class="headline-area">
-    <div class="study-pill">New Study</div>
+    <div class="study-pill">New Study &mdash; 6 Weeks</div>
     <div class="main-headline">
       The <span class="device-name">Neuvana Xen</span><br>Study
     </div>
     <div class="sub-text">
-      Measuring the real-world impact of <strong>vagus nerve stimulation</strong> on HRV, sleep, and recovery — with <strong>wearable-verified data</strong>.
+      Measuring the real-world impact of <strong>vagus nerve stimulation</strong> on HRV, sleep, and recovery — tracked with your <strong>Oura Ring</strong>.
+    </div>
+    <div class="requirement-badge">
+      <div class="ring-icon"></div>
+      Oura Ring Required
     </div>
   </div>
 
-  <!-- Dark bottom bar -->
   <div class="bottom-bar">
-    <span class="bottom-bar-text">Neuvana Xen &mdash; Vagus Nerve Stimulation</span>
+    <span class="bottom-bar-text">6-Week Study &mdash; Oura Ring Verified</span>
     <span class="bottom-bar-brand">Reputable</span>
   </div>
 </div>
