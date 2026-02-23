@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapping Study — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(25, 55, 70, 0.55) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 75%, rgba(20, 45, 60, 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 65%, rgba(50, 35, 100, 0.15) 0%, transparent 45%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  /* ── Subtle texture ─────────────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ── Top badge ──────────────────────────────────── */
+  .top-badge {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+  .top-badge span {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #d4ff50;
+    padding: 10px 28px;
+    border: 1.5px solid rgba(212,255,80,0.25);
+    border-radius: 100px;
+    background: rgba(212,255,80,0.04);
+  }
+  .top-badge span::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  /* ── Study label ────────────────────────────────── */
+  .study-label {
+    position: absolute;
+    top: 148px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(160,200,210,0.45);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Hero title ─────────────────────────────────── */
+  .hero-title {
+    position: absolute;
+    top: 194px;
+    left: 60px;
+    right: 60px;
+    text-align: center;
+    font-size: 72px;
+    font-weight: 800;
+    color: #eef0f8;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Question ───────────────────────────────────── */
+  .question {
+    position: absolute;
+    top: 368px;
+    left: 120px;
+    right: 120px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(160,200,210,0.45);
+    line-height: 1.55;
+  }
+
+  /* ── Illustration ──────────────────────────────── */
+  .illus-wrap {
+    position: absolute;
+    top: 458px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 16px 40px rgba(0,0,0,0.3));
+  }
+
+  /* ── Study steps ────────────────────────────────── */
+  .steps {
+    position: absolute;
+    top: 686px;
+    left: 140px;
+    right: 140px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .step {
+    flex: 1;
+    text-align: center;
+  }
+  .step-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .step-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(160,200,210,0.45);
+    line-height: 1.45;
+  }
+  .step-text strong {
+    color: rgba(220,230,240,0.7);
+    font-weight: 700;
+  }
+
+  /* ── Study card ─────────────────────────────────── */
+  .study-card {
+    position: absolute;
+    top: 808px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 560px;
+    background: linear-gradient(135deg, rgba(100,70,200,0.15) 0%, rgba(80,50,180,0.08) 100%);
+    border: 1px solid rgba(140,100,240,0.2);
+    border-radius: 20px;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(180,160,240,0.6);
+  }
+  .card-value {
+    font-size: 21px;
+    font-weight: 800;
+    color: #c8b5ff;
+    letter-spacing: -0.01em;
+  }
+  .card-sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(180,160,240,0.4);
+    margin-top: 1px;
+  }
+
+  .apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    padding: 12px 24px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .apply-btn::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+  }
+
+  /* ── Dividers ───────────────────────────────────── */
+  .divider {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140,120,200,0.3), transparent);
+  }
+  .divider.d1 { top: 670px; }
+  .divider.d2 { bottom: 122px; }
+
+  /* ── Reward note ────────────────────────────────── */
+  .reward {
+    position: absolute;
+    bottom: 82px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(212,255,80,0.35);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Brand footer ───────────────────────────────── */
+  .brand {
+    position: absolute;
+    bottom: 46px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(180,190,220,0.35);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Top badge -->
+  <div class="top-badge">
+    <span>Now Recruiting</span>
+  </div>
+
+  <!-- Study label -->
+  <div class="study-label">30-Day Stress Study</div>
+
+  <!-- Hero title -->
+  <div class="hero-title">The Tapping<br>Study</div>
+
+  <!-- Question -->
+  <div class="question">Can 5–15 minutes of daily EFT tapping<br>actually change your <em>biometric</em> stress response?</div>
+
+  <!-- Tapping illustration — fingertips with ripple waves -->
+  <div class="illus-wrap">
+    <svg width="320" height="200" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rippleGlow" cx="50%" cy="48%" r="50%">
+          <stop offset="0%" stop-color="rgba(100,200,180,0.06)"/>
+          <stop offset="60%" stop-color="rgba(80,170,160,0.02)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <linearGradient id="handGrad" x1="160" y1="50" x2="160" y2="170" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(160,200,210,0.25)"/>
+          <stop offset="100%" stop-color="rgba(120,160,180,0.1)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Ambient glow -->
+      <circle cx="160" cy="96" r="95" fill="url(#rippleGlow)"/>
+
+      <!-- Concentric ripple rings — calming waves emanating from tap point -->
+      <circle cx="160" cy="86" r="22" stroke="rgba(100,210,190,0.22)" stroke-width="1.5" fill="none"/>
+      <circle cx="160" cy="86" r="38" stroke="rgba(100,210,190,0.15)" stroke-width="1.2" fill="none"/>
+      <circle cx="160" cy="86" r="56" stroke="rgba(100,210,190,0.10)" stroke-width="1" fill="none"/>
+      <circle cx="160" cy="86" r="76" stroke="rgba(100,210,190,0.06)" stroke-width="0.8" fill="none"/>
+      <circle cx="160" cy="86" r="96" stroke="rgba(100,210,190,0.03)" stroke-width="0.6" fill="none"/>
+
+      <!-- Two tapping fingers (index + middle) — simplified elegant shape -->
+      <!-- Index finger -->
+      <path d="M148 56 Q146 40 150 28 Q152 22 156 22 Q160 22 161 28 Q163 40 161 56 L161 86 Q161 90 158 90 Q148 90 148 86 Z"
+            fill="url(#handGrad)" stroke="rgba(160,200,210,0.2)" stroke-width="0.8"/>
+      <!-- Middle finger -->
+      <path d="M166 56 Q164 38 168 24 Q170 18 174 18 Q178 18 179 24 Q181 38 179 56 L179 86 Q179 90 176 90 Q166 90 166 86 Z"
+            fill="url(#handGrad)" stroke="rgba(160,200,210,0.2)" stroke-width="0.8"/>
+
+      <!-- Tap point — small bright dot at fingertip contact -->
+      <circle cx="160" cy="86" r="4" fill="rgba(100,210,190,0.35)"/>
+      <circle cx="160" cy="86" r="2" fill="rgba(100,210,190,0.6)"/>
+
+      <!-- Small particle dots around ripples -->
+      <circle cx="126" cy="68" r="1.2" fill="rgba(100,210,190,0.2)"/>
+      <circle cx="196" cy="74" r="1" fill="rgba(100,210,190,0.15)"/>
+      <circle cx="140" cy="108" r="0.9" fill="rgba(100,210,190,0.12)"/>
+      <circle cx="184" cy="104" r="1.1" fill="rgba(100,210,190,0.14)"/>
+      <circle cx="112" cy="92" r="0.8" fill="rgba(100,210,190,0.1)"/>
+      <circle cx="208" cy="88" r="0.9" fill="rgba(100,210,190,0.1)"/>
+
+      <!-- Calming HRV micro-line below fingers -->
+      <polyline points="110,140 120,140 128,138 134,142 140,136 146,141 152,135 156,140 160,140 164,140 168,138 174,141 180,137 186,140 192,140 200,140 210,140"
+                stroke="rgba(100,210,190,0.2)" stroke-width="1.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="divider d1"></div>
+
+  <!-- Study steps -->
+  <div class="steps">
+    <div class="step">
+      <span class="step-icon">📱</span>
+      <div class="step-text"><strong>Free 1-yr app</strong><br>Tapping Solution ($95)</div>
+    </div>
+    <div class="step">
+      <span class="step-icon">🧘‍♀️</span>
+      <div class="step-text"><strong>5–15 min</strong><br>guided daily session</div>
+    </div>
+    <div class="step">
+      <span class="step-icon">⌚</span>
+      <div class="step-text"><strong>Oura / WHOOP</strong><br>wear day &amp; night</div>
+    </div>
+    <div class="step">
+      <span class="step-icon">✅</span>
+      <div class="step-text"><strong>1-min check-in</strong><br>daily on the app</div>
+    </div>
+  </div>
+
+  <!-- Study card -->
+  <div class="study-card">
+    <div class="card-left">
+      <div class="card-label">EFT Tapping Study</div>
+      <div class="card-value">30 Days · Oura / WHOOP / Fitbit</div>
+      <div class="card-sub">HRV, sleep quality &amp; stress recovery</div>
+    </div>
+    <div class="apply-btn">Apply Now</div>
+  </div>
+
+  <div class="divider d2"></div>
+
+  <!-- Reward -->
+  <div class="reward">Earn Heartbeats redeemable for gift cards ($105 value) + personalized insights</div>
+
+  <!-- Brand -->
+  <div class="brand">Reputable</div>
+
+</div>
+</body>
+</html>
