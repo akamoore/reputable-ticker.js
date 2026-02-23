@@ -218,43 +218,78 @@
 
   <!-- Book illustration (inline SVG) -->
   <div class="book-wrap">
-    <svg width="320" height="220" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Book spine shadow -->
-      <ellipse cx="160" cy="200" rx="140" ry="12" fill="rgba(0,0,0,0.2)"/>
+    <svg width="340" height="240" viewBox="0 0 340 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Soft shadow under the book -->
+      <ellipse cx="170" cy="218" rx="130" ry="14" fill="rgba(0,0,0,0.25)"/>
 
-      <!-- Left page (back) -->
-      <path d="M160 30 C 160 30, 158 180, 160 185 C 120 182, 30 175, 25 60 C 22 30, 50 18, 160 30Z" fill="#d4c4a0" opacity="0.6"/>
+      <!-- == LEFT COVER (hardback visible edge) == -->
+      <path d="M170 22 L170 195 Q130 192 42 188 Q30 187 28 60 Q26 28 60 22 Z"
+            fill="#8b7355" opacity="0.6"/>
+      <!-- Left cover face -->
+      <path d="M170 22 L170 195 Q132 192 48 188 Q36 187 34 58 Q33 28 62 22 Z"
+            fill="#a08b6d"/>
 
-      <!-- Right page (back) -->
-      <path d="M160 30 C 160 30, 162 180, 160 185 C 200 182, 290 175, 295 60 C 298 30, 270 18, 160 30Z" fill="#d4c4a0" opacity="0.6"/>
+      <!-- == LEFT PAGE (back) == -->
+      <path d="M170 28 L170 190 Q134 187 52 184 Q42 183 40 62 Q39 34 66 28 Z"
+            fill="#ddd0b8"/>
 
-      <!-- Left page (front) -->
-      <path d="M160 35 C 160 35, 158 178, 160 183 C 125 180, 40 174, 35 65 C 32 38, 58 26, 160 35Z" fill="#ecdcb8"/>
+      <!-- == LEFT PAGE (front) == -->
+      <path d="M170 30 L170 188 Q136 185 56 182 Q46 181 44 64 Q43 36 68 30 Z"
+            fill="#ede2ce"/>
 
-      <!-- Left page lines -->
-      <line x1="70" y1="70" x2="140" y2="62" stroke="rgba(180,160,130,0.3)" stroke-width="1.5"/>
-      <line x1="68" y1="85" x2="142" y2="78" stroke="rgba(180,160,130,0.25)" stroke-width="1.5"/>
-      <line x1="66" y1="100" x2="144" y2="94" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
-      <line x1="64" y1="115" x2="145" y2="110" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
-      <line x1="62" y1="130" x2="146" y2="126" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
-      <line x1="60" y1="145" x2="148" y2="142" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
+      <!-- Left page text lines -->
+      <line x1="78" y1="60" x2="150" y2="56" stroke="rgba(170,155,130,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="76" y1="74" x2="152" y2="70" stroke="rgba(170,155,130,0.3)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="74" y1="88" x2="153" y2="85" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="73" y1="102" x2="154" y2="99" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="72" y1="116" x2="155" y2="113" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="71" y1="130" x2="156" y2="127" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="70" y1="144" x2="157" y2="141" stroke="rgba(170,155,130,0.15)" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Short paragraph break -->
+      <line x1="69" y1="164" x2="120" y2="162" stroke="rgba(170,155,130,0.18)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="68" y1="178" x2="158" y2="175" stroke="rgba(170,155,130,0.12)" stroke-width="1.2" stroke-linecap="round"/>
 
-      <!-- Right page (front) -->
-      <path d="M160 35 C 160 35, 162 178, 160 183 C 195 180, 280 174, 285 65 C 288 38, 262 26, 160 35Z" fill="#f5ead6"/>
+      <!-- == RIGHT COVER (hardback visible edge) == -->
+      <path d="M170 22 L170 195 Q210 192 298 188 Q310 187 312 60 Q314 28 280 22 Z"
+            fill="#8b7355" opacity="0.6"/>
+      <!-- Right cover face -->
+      <path d="M170 22 L170 195 Q208 192 292 188 Q304 187 306 58 Q307 28 278 22 Z"
+            fill="#a08b6d"/>
 
-      <!-- Right page lines -->
-      <line x1="180" y1="62" x2="250" y2="70" stroke="rgba(180,160,130,0.3)" stroke-width="1.5"/>
-      <line x1="178" y1="78" x2="252" y2="85" stroke="rgba(180,160,130,0.25)" stroke-width="1.5"/>
-      <line x1="176" y1="94" x2="254" y2="100" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
-      <line x1="175" y1="110" x2="256" y2="115" stroke="rgba(180,160,130,0.2)" stroke-width="1.5"/>
-      <line x1="174" y1="126" x2="258" y2="130" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
-      <line x1="172" y1="142" x2="260" y2="145" stroke="rgba(180,160,130,0.15)" stroke-width="1.5"/>
+      <!-- == RIGHT PAGE (back) == -->
+      <path d="M170 28 L170 190 Q206 187 288 184 Q298 183 300 62 Q301 34 274 28 Z"
+            fill="#ddd0b8"/>
 
-      <!-- Spine center line -->
-      <path d="M160 28 C 160 28, 160 180, 160 185" stroke="rgba(160,140,110,0.3)" stroke-width="2"/>
+      <!-- == RIGHT PAGE (front) == -->
+      <path d="M170 30 L170 188 Q204 185 284 182 Q294 181 296 64 Q297 36 272 30 Z"
+            fill="#f5ead6"/>
 
-      <!-- Page curl hint (right) -->
-      <path d="M275 170 C 278 165, 282 160, 280 172 C 279 176, 276 178, 270 177" fill="#e8d8c0" opacity="0.5"/>
+      <!-- Right page text lines -->
+      <line x1="190" y1="56" x2="262" y2="60" stroke="rgba(170,155,130,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="188" y1="70" x2="264" y2="74" stroke="rgba(170,155,130,0.3)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="187" y1="85" x2="266" y2="88" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="186" y1="99" x2="267" y2="102" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="185" y1="113" x2="268" y2="116" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="184" y1="127" x2="269" y2="130" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="183" y1="141" x2="270" y2="144" stroke="rgba(170,155,130,0.15)" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Short line (paragraph end) -->
+      <line x1="183" y1="162" x2="230" y2="164" stroke="rgba(170,155,130,0.18)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="182" y1="175" x2="271" y2="178" stroke="rgba(170,155,130,0.12)" stroke-width="1.2" stroke-linecap="round"/>
+
+      <!-- == SPINE == -->
+      <line x1="170" y1="20" x2="170" y2="196" stroke="rgba(100,85,60,0.35)" stroke-width="2.5"/>
+
+      <!-- == PAGE CURL (bottom-right) == -->
+      <path d="M290 178 Q294 172 296 164 L296 172 Q295 180 288 182 Z" fill="#e0d4be" opacity="0.6"/>
+
+      <!-- == Subtle inner page edges (stacked pages look) == -->
+      <line x1="46" y1="183" x2="170" y2="189" stroke="rgba(190,178,155,0.3)" stroke-width="0.8"/>
+      <line x1="48" y1="185" x2="170" y2="191" stroke="rgba(190,178,155,0.2)" stroke-width="0.8"/>
+      <line x1="170" y1="189" x2="294" y2="183" stroke="rgba(190,178,155,0.3)" stroke-width="0.8"/>
+      <line x1="170" y1="191" x2="292" y2="185" stroke="rgba(190,178,155,0.2)" stroke-width="0.8"/>
+
+      <!-- == Bookmark ribbon == -->
+      <path d="M228 22 L228 52 L234 46 L240 52 L240 22" fill="#b44a5e" opacity="0.7"/>
     </svg>
   </div>
 
