@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circadian Reset — Slide 2: The Problem</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 30% 40%, rgba(255,80,50,0.04) 0%, transparent 45%),
+      radial-gradient(ellipse at 70% 70%, rgba(200,230,74,0.06) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px;
+    left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.18);
+  }
+
+  .headline {
+    position: absolute;
+    top: 185px;
+    left: 72px;
+    right: 72px;
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    color: #1a1a1a;
+  }
+  .headline .accent { color: #8AB417; }
+  .headline .dim { color: rgba(0,0,0,0.2); }
+
+  .body {
+    position: absolute;
+    top: 400px;
+    left: 72px;
+    right: 200px;
+  }
+  .body-divider {
+    width: 50px; height: 2px;
+    background: rgba(138,180,23,0.35);
+    margin-bottom: 24px;
+  }
+  .body-text {
+    font-size: 17px; font-weight: 450; color: rgba(0,0,0,0.38);
+    line-height: 1.65;
+  }
+  .body-text strong { color: rgba(0,0,0,0.6); font-weight: 700; }
+
+  /* ---- IMPACT CARDS ---- */
+  .impacts {
+    position: absolute;
+    top: 600px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+  .impact {
+    flex: 1;
+    padding: 28px 20px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .impact::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #D94E40, #E8723A);
+    border-radius: 18px 18px 0 0;
+  }
+  .impact-icon { font-size: 30px; margin-bottom: 14px; }
+  .impact-metric {
+    font-size: 28px; font-weight: 900; color: #D94E40;
+    letter-spacing: -0.03em; margin-bottom: 4px;
+  }
+  .impact-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+  }
+  .impact-desc {
+    font-size: 13px; font-weight: 450; color: rgba(0,0,0,0.3);
+    line-height: 1.5;
+  }
+
+  /* ---- KEY INSIGHT ---- */
+  .insight {
+    position: absolute;
+    top: 878px;
+    left: 72px;
+    right: 72px;
+    padding: 28px 30px;
+    background: rgba(138,180,23,0.04);
+    border: 1.5px solid rgba(138,180,23,0.12);
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .insight-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .insight-text {
+    font-size: 16px; font-weight: 500; color: rgba(0,0,0,0.4);
+    line-height: 1.55;
+  }
+  .insight-text strong { color: #5A7A0E; font-weight: 700; }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #8AB417, #c8e64a, #FFB832); opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Circadian Science</div>
+  </div>
+
+  <div class="section-label">The Real Problem</div>
+
+  <div class="headline">Your biology <span class="accent">doesn't care</span><br>what the clock on<br>your phone <span class="dim">says.</span></div>
+
+  <div class="body">
+    <div class="body-divider"></div>
+    <div class="body-text">When your internal rhythm is out of sync with the sun, the effects show up in your data <strong>immediately</strong> — and linger for days.</div>
+  </div>
+
+  <div class="impacts">
+    <div class="impact">
+      <div class="impact-icon">💓</div>
+      <div class="impact-metric">↓ HRV</div>
+      <div class="impact-label">Heart Rate Variability</div>
+      <div class="impact-desc">Stress response stays elevated, recovery drops</div>
+    </div>
+    <div class="impact">
+      <div class="impact-icon">📉</div>
+      <div class="impact-metric">↓ Sleep</div>
+      <div class="impact-label">Sleep Efficiency</div>
+      <div class="impact-desc">More time in bed, less actual restorative sleep</div>
+    </div>
+    <div class="impact">
+      <div class="impact-icon">🧠</div>
+      <div class="impact-metric">↓ Focus</div>
+      <div class="impact-label">Cognitive Clarity</div>
+      <div class="impact-desc">Persistent brain fog and slower reaction time</div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-icon">⚡</div>
+    <div class="insight-text">Stop waiting to "catch up." <strong>Start actively resetting your circadian rhythm today.</strong></div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">02 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
