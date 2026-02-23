@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pi Day Sleep — Slide 2: The Breakdown</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #07070a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(120,100,220,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 75%, rgba(52,211,153,0.04) 0%, transparent 40%),
+      #07070a;
+    overflow: hidden;
+  }
+
+  .dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.15); border-left: 1px solid rgba(200,230,74,0.15); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.15); border-right: 1px solid rgba(200,230,74,0.15); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.15); border-left: 1px solid rgba(200,230,74,0.15); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.15); border-right: 1px solid rgba(200,230,74,0.15); }
+
+  .top-bar {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .top-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px;
+    left: 72px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+
+  .headline {
+    position: absolute;
+    top: 170px;
+    left: 72px;
+    right: 72px;
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+
+  /* ---- STAGE CARDS ---- */
+  .stages {
+    position: absolute;
+    top: 310px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .stage-card {
+    padding: 30px 32px;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 18px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  /* color accents */
+  .stage-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    border-radius: 18px 0 0 18px;
+  }
+  .stage-card.light::before { background: linear-gradient(180deg, #5B8DEF, #4A7AE0); }
+  .stage-card.deep::before { background: linear-gradient(180deg, #9B72F0, #7C5CD6); }
+  .stage-card.rem::before { background: linear-gradient(180deg, #34D399, #2BB882); }
+
+  /* glow */
+  .stage-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 120px;
+    height: 100%;
+    pointer-events: none;
+  }
+  .stage-card.light::after { background: linear-gradient(90deg, rgba(91,141,239,0.05), transparent); }
+  .stage-card.deep::after { background: linear-gradient(90deg, rgba(155,114,240,0.05), transparent); }
+  .stage-card.rem::after { background: linear-gradient(90deg, rgba(52,211,153,0.05), transparent); }
+
+  .stage-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .stage-card.light .stage-icon-wrap { background: rgba(91,141,239,0.1); }
+  .stage-card.deep .stage-icon-wrap { background: rgba(155,114,240,0.1); }
+  .stage-card.rem .stage-icon-wrap { background: rgba(52,211,153,0.1); }
+  .stage-icon { font-size: 26px; }
+
+  .stage-content {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .stage-name {
+    font-size: 21px;
+    font-weight: 800;
+    color: #f0f0f0;
+  }
+  .stage-pct {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 4px 14px;
+    border-radius: 100px;
+  }
+  .stage-card.light .stage-pct { color: #5B8DEF; background: rgba(91,141,239,0.1); }
+  .stage-card.deep .stage-pct { color: #9B72F0; background: rgba(155,114,240,0.1); }
+  .stage-card.rem .stage-pct { color: #34D399; background: rgba(52,211,153,0.1); }
+
+  .stage-role {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .stage-card.light .stage-role { color: rgba(91,141,239,0.5); }
+  .stage-card.deep .stage-role { color: rgba(155,114,240,0.5); }
+  .stage-card.rem .stage-role { color: rgba(52,211,153,0.5); }
+
+  .stage-desc {
+    font-size: 14.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.32);
+    line-height: 1.55;
+  }
+  .stage-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ---- INSIGHT ---- */
+  .insight {
+    position: absolute;
+    top: 890px;
+    left: 72px;
+    right: 72px;
+    padding: 26px 28px;
+    background: rgba(200,230,74,0.03);
+    border: 1px solid rgba(200,230,74,0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .insight-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .insight-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.55;
+  }
+  .insight-text strong {
+    color: #c8e64a;
+    font-weight: 700;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 58px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #5B8DEF, #9B72F0, #34D399, #c8e64a);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="dots"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-text">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Sleep Architecture</div>
+  </div>
+
+  <div class="section-label">How the Pie Is Sliced</div>
+
+  <div class="headline">What an Optimal Night<br><span class="accent">Actually Looks Like</span></div>
+
+  <div class="stages">
+    <!-- Light -->
+    <div class="stage-card light">
+      <div class="stage-icon-wrap"><span class="stage-icon">🔵</span></div>
+      <div class="stage-content">
+        <div class="stage-header">
+          <div class="stage-name">Light Sleep</div>
+          <div class="stage-pct">~50%</div>
+        </div>
+        <div class="stage-role">Metabolic Regulation</div>
+        <div class="stage-desc">The transition stage and baseline of your night. Makes up the <strong>bulk of total sleep</strong> and helps regulate metabolism.</div>
+      </div>
+    </div>
+
+    <!-- Deep -->
+    <div class="stage-card deep">
+      <div class="stage-icon-wrap"><span class="stage-icon">🟣</span></div>
+      <div class="stage-content">
+        <div class="stage-header">
+          <div class="stage-name">Deep Sleep</div>
+          <div class="stage-pct">~15-25%</div>
+        </div>
+        <div class="stage-role">Physical Recovery</div>
+        <div class="stage-desc">Your body <strong>repairs tissue, builds bone &amp; muscle,</strong> and strengthens the immune system during this phase.</div>
+      </div>
+    </div>
+
+    <!-- REM -->
+    <div class="stage-card rem">
+      <div class="stage-icon-wrap"><span class="stage-icon">🟢</span></div>
+      <div class="stage-content">
+        <div class="stage-header">
+          <div class="stage-name">REM Sleep</div>
+          <div class="stage-pct">~20-25%</div>
+        </div>
+        <div class="stage-role">Mental Recovery</div>
+        <div class="stage-desc"><strong>Memory consolidation, emotional processing,</strong> and cognitive repair all happen during REM cycles.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-icon">💡</div>
+    <div class="insight-text">If your Deep or REM slices are too small, <strong>you'll feel exhausted even after 8 full hours in bed.</strong></div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">02 / 03</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
