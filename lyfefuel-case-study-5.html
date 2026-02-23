@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LyfeFuel Case Study — Slide 5: Participant Spotlight</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(200,230,74,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 75%, rgba(52,211,153,0.03) 0%, transparent 45%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .label-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .label-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent); }
+  .label-right { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  .section-title {
+    position: absolute;
+    top: 140px;
+    left: 72px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+
+  .headline {
+    position: absolute;
+    top: 190px;
+    left: 72px;
+    right: 72px;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+  .headline .dim { color: rgba(255,255,255,0.3); }
+
+  /* ── Participant card ──────────────────────────── */
+  .participant-card {
+    position: absolute;
+    top: 380px;
+    left: 72px;
+    right: 72px;
+    padding: 36px 40px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    position: relative;
+  }
+  .participant-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #c8e64a, #34d399);
+    border-radius: 20px 20px 0 0;
+  }
+
+  .participant-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .participant-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(200,230,74,0.1);
+    border: 2px solid rgba(200,230,74,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 800;
+    color: #c8e64a;
+  }
+  .participant-info {}
+  .participant-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f0f0f0;
+    margin-bottom: 2px;
+  }
+  .participant-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.45);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Stat row ──────────────────────────────────── */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    flex: 1;
+    padding: 24px 20px;
+    background: rgba(10,10,10,0.6);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .stat-box-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: #c8e64a;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .stat-box-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.02em;
+  }
+
+  .participant-quote {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.6;
+    padding-left: 16px;
+    border-left: 2px solid rgba(200,230,74,0.2);
+  }
+
+  /* ── Bottom note ───────────────────────────────── */
+  .bottom-note {
+    position: absolute;
+    top: 880px;
+    left: 72px;
+    right: 72px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    line-height: 1.5;
+  }
+  .bottom-note strong {
+    color: rgba(255,255,255,0.5);
+    font-weight: 700;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Case Study</div>
+    <div class="label-line"></div>
+    <div class="label-right">LyfeFuel</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <div class="section-title">Participant Spotlight</div>
+
+  <div class="headline">Meet <span class="accent">Julie F.</span><br><span class="dim">Verified Participant</span></div>
+
+  <div class="participant-card">
+    <div class="participant-header">
+      <div class="participant-avatar">JF</div>
+      <div class="participant-info">
+        <div class="participant-name">Julie F.</div>
+        <div class="participant-tag">Verified Participant · 24-Day Study</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-box-value">+126%</div>
+        <div class="stat-box-label">Activity Increase</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-value">+176%</div>
+        <div class="stat-box-label">Steps Increase</div>
+      </div>
+    </div>
+
+    <div class="participant-quote">
+      Her Oura readiness and sleep scores drastically improved over the course of the study.
+    </div>
+  </div>
+
+  <div class="bottom-note">
+    With <strong>~90% protocol adherence</strong>, this study proves what happens when you combine a powerful product with frictionless wearable tracking.
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">05 / 06</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
