@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credible Research — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0d1a0f;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(106,140,32,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 80%, rgba(40,60,20,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 70%, rgba(50,70,25,0.1) 0%, transparent 45%),
+      #0d1a0f;
+    overflow: hidden;
+  }
+
+  /* ── Subtle texture ─────────────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ── Top badge ──────────────────────────────────── */
+  .top-badge {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+  .top-badge span {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #c8e64a;
+    padding: 10px 28px;
+    border: 1.5px solid rgba(200,230,74,0.2);
+    border-radius: 100px;
+    background: rgba(200,230,74,0.04);
+  }
+
+  /* ── Italic label ───────────────────────────────── */
+  .section-label {
+    position: absolute;
+    top: 148px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(200,230,74,0.35);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Hero title ─────────────────────────────────── */
+  .hero-title {
+    position: absolute;
+    top: 192px;
+    left: 80px;
+    right: 80px;
+    text-align: center;
+    font-size: 62px;
+    font-weight: 800;
+    color: #eef0e4;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+  .hero-title .accent { color: #c8e64a; }
+
+  /* ── Subtitle ───────────────────────────────────── */
+  .subtitle {
+    position: absolute;
+    top: 390px;
+    left: 140px;
+    right: 140px;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 400;
+    color: rgba(220,225,200,0.4);
+    line-height: 1.55;
+  }
+
+  /* ── Divider ────────────────────────────────────── */
+  .divider {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.25), transparent);
+  }
+  .divider.d1 { top: 470px; }
+  .divider.d2 { top: 900px; }
+
+  /* ── Checklist items ────────────────────────────── */
+  .checklist {
+    position: absolute;
+    top: 494px;
+    left: 150px;
+    right: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 17px 0;
+    border-bottom: 1px solid rgba(200,230,74,0.06);
+  }
+  .check-item:last-child {
+    border-bottom: none;
+  }
+
+  .check-num {
+    font-size: 14px;
+    font-weight: 800;
+    color: #c8e64a;
+    letter-spacing: 0.05em;
+    min-width: 28px;
+    padding-top: 2px;
+    opacity: 0.7;
+  }
+
+  .check-content {
+    flex: 1;
+  }
+
+  .check-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(238,240,228,0.85);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .check-desc {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(220,225,200,0.3);
+    line-height: 1.5;
+  }
+
+  .check-icon {
+    font-size: 18px;
+    padding-top: 2px;
+  }
+
+  /* ── Tagline ────────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    top: 926px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 600;
+    color: rgba(220,225,200,0.35);
+    line-height: 1.5;
+  }
+  .tagline .lime { color: rgba(200,230,74,0.65); }
+
+  /* ── Brand footer ───────────────────────────────── */
+  .brand {
+    position: absolute;
+    bottom: 58px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.3);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Top badge -->
+  <div class="top-badge">
+    <span>Credibility Check</span>
+  </div>
+
+  <!-- Section label -->
+  <div class="section-label">Before You Buy</div>
+
+  <!-- Hero title -->
+  <div class="hero-title">What Makes<br>Research <span class="accent">Credible?</span></div>
+
+  <!-- Subtitle -->
+  <div class="subtitle">Not all supplement "studies" are created equal.<br>Here's what to look for before trusting the science.</div>
+
+  <div class="divider d1"></div>
+
+  <!-- Checklist -->
+  <div class="checklist">
+    <div class="check-item">
+      <span class="check-num">01</span>
+      <div class="check-content">
+        <div class="check-title">IRB-Approved Protocol</div>
+        <div class="check-desc">An independent ethics board reviewed the study before it started.</div>
+      </div>
+      <span class="check-icon">🛡️</span>
+    </div>
+
+    <div class="check-item">
+      <span class="check-num">02</span>
+      <div class="check-content">
+        <div class="check-title">Pre-Registered Design</div>
+        <div class="check-desc">The hypothesis and methods were locked in advance — no moving the goalposts.</div>
+      </div>
+      <span class="check-icon">📋</span>
+    </div>
+
+    <div class="check-item">
+      <span class="check-num">03</span>
+      <div class="check-content">
+        <div class="check-title">Objective Biometric Data</div>
+        <div class="check-desc">Real wearable metrics like HRV and sleep — not just subjective questionnaires.</div>
+      </div>
+      <span class="check-icon">⌚</span>
+    </div>
+
+    <div class="check-item">
+      <span class="check-num">04</span>
+      <div class="check-content">
+        <div class="check-title">Published Methodology</div>
+        <div class="check-desc">The full protocol is transparent. You can see exactly how the study was run.</div>
+      </div>
+      <span class="check-icon">🔬</span>
+    </div>
+
+    <div class="check-item">
+      <span class="check-num">05</span>
+      <div class="check-content">
+        <div class="check-title">Participants Over Profits</div>
+        <div class="check-desc">The research prioritizes your well-being, not just a marketing claim.</div>
+      </div>
+      <span class="check-icon">💚</span>
+    </div>
+  </div>
+
+  <div class="divider d2"></div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    Ask these questions. <span class="lime">Demand the answers.</span>
+  </div>
+
+  <!-- Brand -->
+  <div class="brand">Reputable</div>
+
+</div>
+</body>
+</html>
