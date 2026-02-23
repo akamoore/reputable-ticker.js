@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>White Paper — Slide 2: The Gap</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1920px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(200,230,74,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 70%, rgba(52,211,153,0.04) 0%, transparent 45%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .label-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .label-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent); }
+  .label-right { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; white-space: nowrap; }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Section title ──────────────────────────────── */
+  .section-title {
+    position: absolute;
+    top: 180px;
+    left: 72px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+
+  /* ── Big statement ──────────────────────────────── */
+  .big-statement {
+    position: absolute;
+    top: 280px;
+    left: 72px;
+    right: 72px;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .big-statement .accent { color: #c8e64a; }
+  .big-statement .dim { color: rgba(255,255,255,0.25); }
+
+  /* ── Explanation block ──────────────────────────── */
+  .explanation {
+    position: absolute;
+    top: 750px;
+    left: 72px;
+    right: 72px;
+  }
+  .explanation-divider {
+    width: 60px;
+    height: 2px;
+    background: rgba(200,230,74,0.3);
+    margin-bottom: 40px;
+  }
+  .explanation-text {
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.65;
+  }
+  .explanation-text strong {
+    color: rgba(255,255,255,0.6);
+    font-weight: 700;
+  }
+
+  /* ── Flawed approach card ───────────────────────── */
+  .flaw-card {
+    position: absolute;
+    top: 1080px;
+    left: 72px;
+    right: 72px;
+    padding: 44px 40px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 20px;
+    position: relative;
+  }
+  .flaw-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #c8e64a, #34d399);
+    border-radius: 20px 20px 0 0;
+  }
+  .flaw-card-icon {
+    font-size: 36px;
+    margin-bottom: 24px;
+  }
+  .flaw-card-heading {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f0f0f0;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+  .flaw-card-heading .accent { color: #c8e64a; }
+  .flaw-card-body {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.65;
+  }
+
+  /* ── Bottom quote ───────────────────────────────── */
+  .bottom-quote {
+    position: absolute;
+    top: 1550px;
+    left: 72px;
+    right: 72px;
+    padding-left: 24px;
+    border-left: 3px solid rgba(200,230,74,0.25);
+  }
+  .bottom-quote-text {
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(255,255,255,0.25);
+    line-height: 1.6;
+  }
+  .bottom-quote-text strong {
+    color: rgba(255,255,255,0.5);
+    font-weight: 700;
+    font-style: normal;
+  }
+  .bottom-quote-attr {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.35);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Footer ─────────────────────────────────────── */
+  .footer {
+    position: absolute;
+    bottom: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">White Paper</div>
+    <div class="label-line"></div>
+    <div class="label-right">Women's Health</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <div class="section-title">The Research Gap</div>
+
+  <div class="big-statement">Assuming <span class="accent">male findings</span> predict <span class="accent">female outcomes</span> <span class="dim">is a fundamentally flawed approach to science.</span></div>
+
+  <div class="explanation">
+    <div class="explanation-divider"></div>
+    <div class="explanation-text">For much of modern medical history, clinical research <strong>predominantly focused on male physiology</strong> — leaving critical gaps in how we understand disease, treatment, and prevention in women.</div>
+  </div>
+
+  <div class="flaw-card">
+    <div class="flaw-card-icon">⚠️</div>
+    <div class="flaw-card-heading">The result? Diseases <span class="accent">manifest differently</span> in women — and we're only beginning to understand how.</div>
+    <div class="flaw-card-body">Symptoms get missed. Diagnoses get delayed. Treatments built on male data don't account for hormonal, immunological, and metabolic differences.</div>
+  </div>
+
+  <div class="bottom-quote">
+    <div class="bottom-quote-text">"The road to balanced healthcare requires a <strong>comprehensive understanding</strong> of the female exposome."</div>
+    <div class="bottom-quote-attr">— Dr. Mackenzie De Jesus</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">02 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
