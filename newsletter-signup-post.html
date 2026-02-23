@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Newsletter — Instagram Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(200, 230, 74, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 75%, rgba(120, 80, 220, 0.03) 0%, transparent 45%),
+      radial-gradient(ellipse at 75% 80%, rgba(52, 211, 153, 0.02) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid texture ─────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200, 230, 74, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 230, 74, 0.025) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corner marks ─────────────────────────────── */
+  .corner { position: absolute; width: 20px; height: 20px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.2); border-left: 1px solid rgba(200,230,74,0.2); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.2); border-right: 1px solid rgba(200,230,74,0.2); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.2); border-left: 1px solid rgba(200,230,74,0.2); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.2); border-right: 1px solid rgba(200,230,74,0.2); }
+
+  /* ── Top label ────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(200,230,74,0.6);
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.25);
+    text-transform: uppercase;
+  }
+
+  /* ── Scan line ────────────────────────────────── */
+  .scan-line {
+    position: absolute;
+    left: 70px;
+    right: 70px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.1), rgba(200,230,74,0.1), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Headline ─────────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 124px;
+    left: 70px;
+    right: 70px;
+  }
+  .headline h1 {
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: #f0f0f0;
+  }
+  .headline h1 .accent {
+    color: #c8e64a;
+  }
+  .headline .sub {
+    margin-top: 16px;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+  }
+
+  /* ── Newsletter mockup ────────────────────────── */
+  .mockup-area {
+    position: absolute;
+    top: 340px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 860px;
+    height: 480px;
+    perspective: 1200px;
+  }
+
+  .mockup-card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) rotateX(8deg) rotateY(0deg);
+    width: 520px;
+    background: #141414;
+    border: 1px solid #262626;
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(255,255,255,0.03) inset;
+    transform-origin: center top;
+  }
+
+  /* Email header inside mockup */
+  .mock-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .mock-logo {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c8e64a;
+  }
+  .mock-date {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+  }
+
+  /* Mini section cards inside the mockup */
+  .mock-section {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mock-section:last-child { margin-bottom: 0; }
+
+  .mock-section-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .mock-section-icon.poll { background: rgba(167,139,250,0.12); }
+  .mock-section-icon.study { background: rgba(200,230,74,0.1); }
+  .mock-section-icon.community { background: rgba(52,211,153,0.1); }
+  .mock-section-icon.channel { background: rgba(251,191,36,0.1); }
+
+  .mock-section-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .mock-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.01em;
+  }
+  .mock-section-desc {
+    font-size: 10px;
+    color: rgba(255,255,255,0.25);
+    margin-top: 2px;
+  }
+
+  .mock-badge {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .mock-badge.active {
+    background: rgba(200,230,74,0.12);
+    color: #c8e64a;
+  }
+  .mock-badge.new {
+    background: rgba(167,139,250,0.12);
+    color: #a78bfa;
+  }
+  .mock-badge.hot {
+    background: rgba(251,113,133,0.1);
+    color: #fb7185;
+  }
+
+  /* Mock CTA button */
+  .mock-cta {
+    margin-top: 14px;
+    width: 100%;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    background: #c8e64a;
+    border-radius: 8px;
+  }
+
+  /* ── Floating pills ───────────────────────────── */
+  .float-pill {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: rgba(20,20,20,0.85);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    white-space: nowrap;
+  }
+  .float-pill .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .fp1 { top: 370px; left: 56px; }
+  .fp1 .pill-dot { background: #a78bfa; }
+
+  .fp2 { top: 500px; right: 56px; }
+  .fp2 .pill-dot { background: #c8e64a; }
+
+  .fp3 { top: 640px; left: 74px; }
+  .fp3 .pill-dot { background: #34d399; }
+
+  .fp4 { top: 760px; right: 72px; }
+  .fp4 .pill-dot { background: #fbbf24; }
+
+  /* ── CTA area ─────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 120px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 44px;
+    background: #c8e64a;
+    border-radius: 100px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #0a0a0a;
+    text-transform: uppercase;
+    box-shadow:
+      0 4px 20px rgba(200,230,74,0.25),
+      0 0 0 1px rgba(200,230,74,0.3);
+  }
+  .cta-button .arrow {
+    font-size: 18px;
+  }
+
+  .cta-note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Brand footer ─────────────────────────────── */
+  .brand-bar {
+    position: absolute;
+    bottom: 48px;
+    left: 70px;
+    right: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+  .brand-tag {
+    font-size: 11px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Bottom bar ───────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #a78bfa, #34d399);
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <!-- Corner marks -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Weekly Newsletter</div>
+    <div class="label-line"></div>
+    <div class="label-right">Every Thursday</div>
+  </div>
+
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline">
+    <h1>Your Weekly<br><span class="accent">Health Edge</span></h1>
+    <div class="sub">Studies, polls, and community insights — delivered free.</div>
+  </div>
+
+  <!-- Newsletter mockup -->
+  <div class="mockup-area">
+    <div class="mockup-card">
+      <!-- Email header -->
+      <div class="mock-header">
+        <div class="mock-logo">Reputable</div>
+        <div class="mock-date">Feb 20, 2026</div>
+      </div>
+
+      <!-- Section cards -->
+      <div class="mock-section">
+        <div class="mock-section-icon poll">🗳️</div>
+        <div class="mock-section-text">
+          <div class="mock-section-title">Community Poll</div>
+          <div class="mock-section-desc">Help pick next week's study</div>
+        </div>
+        <div class="mock-badge new">Vote</div>
+      </div>
+
+      <div class="mock-section">
+        <div class="mock-section-icon study">🧪</div>
+        <div class="mock-section-text">
+          <div class="mock-section-title">Now Recruiting</div>
+          <div class="mock-section-desc">The Reading Ritual — 7 days</div>
+        </div>
+        <div class="mock-badge active">Active</div>
+      </div>
+
+      <div class="mock-section">
+        <div class="mock-section-icon community">💬</div>
+        <div class="mock-section-text">
+          <div class="mock-section-title">Community Corner</div>
+          <div class="mock-section-desc">Member wins &amp; shared results</div>
+        </div>
+        <div class="mock-badge hot">Hot</div>
+      </div>
+
+      <div class="mock-section">
+        <div class="mock-section-icon channel">📊</div>
+        <div class="mock-section-text">
+          <div class="mock-section-title">From the Channel</div>
+          <div class="mock-section-desc">Top biohacking discussions this week</div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="mock-cta">Join This Study</div>
+    </div>
+  </div>
+
+  <!-- Floating pills -->
+  <div class="float-pill fp1">
+    <div class="pill-dot"></div>
+    Live Polls
+  </div>
+  <div class="float-pill fp2">
+    <div class="pill-dot"></div>
+    New Studies
+  </div>
+  <div class="float-pill fp3">
+    <div class="pill-dot"></div>
+    Member Insights
+  </div>
+  <div class="float-pill fp4">
+    <div class="pill-dot"></div>
+    Rewards &amp; Drops
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-button">Subscribe Free <span class="arrow">→</span></div>
+    <div class="cta-note">Join 2,400+ biohackers · No spam, ever</div>
+  </div>
+
+  <!-- Brand -->
+  <div class="brand-bar">
+    <div class="brand-name">Reputable</div>
+    <div class="brand-tag">reputable.health/newsletter</div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
