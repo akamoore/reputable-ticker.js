@@ -276,7 +276,7 @@
   <!-- Question -->
   <div class="question">Can 5–15 minutes of daily EFT tapping<br>actually change your <em>biometric</em> stress response?</div>
 
-  <!-- Tapping illustration — fingertips with ripple waves -->
+  <!-- Tapping illustration — side profile with meridian points + ripples -->
   <div class="illus-wrap">
     <svg width="320" height="200" viewBox="0 0 320 200" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -285,45 +285,80 @@
           <stop offset="60%" stop-color="rgba(80,170,160,0.02)"/>
           <stop offset="100%" stop-color="transparent"/>
         </radialGradient>
-        <linearGradient id="handGrad" x1="160" y1="50" x2="160" y2="170" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="rgba(160,200,210,0.25)"/>
-          <stop offset="100%" stop-color="rgba(120,160,180,0.1)"/>
+        <linearGradient id="profileGrad" x1="160" y1="20" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="rgba(160,200,210,0.2)"/>
+          <stop offset="100%" stop-color="rgba(120,160,180,0.06)"/>
         </linearGradient>
       </defs>
 
       <!-- Ambient glow -->
-      <circle cx="160" cy="96" r="95" fill="url(#rippleGlow)"/>
+      <circle cx="160" cy="100" r="95" fill="url(#rippleGlow)"/>
 
-      <!-- Concentric ripple rings — calming waves emanating from tap point -->
-      <circle cx="160" cy="86" r="22" stroke="rgba(100,210,190,0.22)" stroke-width="1.5" fill="none"/>
-      <circle cx="160" cy="86" r="38" stroke="rgba(100,210,190,0.15)" stroke-width="1.2" fill="none"/>
-      <circle cx="160" cy="86" r="56" stroke="rgba(100,210,190,0.10)" stroke-width="1" fill="none"/>
-      <circle cx="160" cy="86" r="76" stroke="rgba(100,210,190,0.06)" stroke-width="0.8" fill="none"/>
-      <circle cx="160" cy="86" r="96" stroke="rgba(100,210,190,0.03)" stroke-width="0.6" fill="none"/>
+      <!-- Head profile — simplified, elegant side silhouette facing right -->
+      <path d="M142 30
+               Q148 26 156 26
+               Q178 26 188 42
+               Q198 58 196 78
+               Q195 88 192 94
+               L198 100
+               Q200 104 198 108
+               L190 116
+               Q186 118 184 122
+               L184 138
+               Q184 142 180 144
+               L168 148
+               Q164 148 162 146
+               L158 138
+               Q156 134 154 132
+               L148 128
+               Q138 122 134 112
+               Q130 100 130 86
+               Q130 60 142 30 Z"
+            fill="url(#profileGrad)" stroke="rgba(160,200,210,0.18)" stroke-width="1"/>
 
-      <!-- Two tapping fingers (index + middle) — simplified elegant shape -->
-      <!-- Index finger -->
-      <path d="M148 56 Q146 40 150 28 Q152 22 156 22 Q160 22 161 28 Q163 40 161 56 L161 86 Q161 90 158 90 Q148 90 148 86 Z"
-            fill="url(#handGrad)" stroke="rgba(160,200,210,0.2)" stroke-width="0.8"/>
-      <!-- Middle finger -->
-      <path d="M166 56 Q164 38 168 24 Q170 18 174 18 Q178 18 179 24 Q181 38 179 56 L179 86 Q179 90 176 90 Q166 90 166 86 Z"
-            fill="url(#handGrad)" stroke="rgba(160,200,210,0.2)" stroke-width="0.8"/>
+      <!-- EFT Meridian tapping points — glowing dots on the profile -->
+      <!-- Top of head (crown) -->
+      <circle cx="164" cy="28" r="4.5" fill="rgba(100,210,190,0.08)" stroke="rgba(100,210,190,0.35)" stroke-width="1.2"/>
+      <circle cx="164" cy="28" r="2" fill="rgba(100,210,190,0.5)"/>
 
-      <!-- Tap point — small bright dot at fingertip contact -->
-      <circle cx="160" cy="86" r="4" fill="rgba(100,210,190,0.35)"/>
-      <circle cx="160" cy="86" r="2" fill="rgba(100,210,190,0.6)"/>
+      <!-- Eyebrow point -->
+      <circle cx="180" cy="64" r="4.5" fill="rgba(100,210,190,0.08)" stroke="rgba(100,210,190,0.35)" stroke-width="1.2"/>
+      <circle cx="180" cy="64" r="2" fill="rgba(100,210,190,0.5)"/>
 
-      <!-- Small particle dots around ripples -->
-      <circle cx="126" cy="68" r="1.2" fill="rgba(100,210,190,0.2)"/>
-      <circle cx="196" cy="74" r="1" fill="rgba(100,210,190,0.15)"/>
-      <circle cx="140" cy="108" r="0.9" fill="rgba(100,210,190,0.12)"/>
-      <circle cx="184" cy="104" r="1.1" fill="rgba(100,210,190,0.14)"/>
-      <circle cx="112" cy="92" r="0.8" fill="rgba(100,210,190,0.1)"/>
-      <circle cx="208" cy="88" r="0.9" fill="rgba(100,210,190,0.1)"/>
+      <!-- Side of eye -->
+      <circle cx="196" cy="78" r="4.5" fill="rgba(100,210,190,0.08)" stroke="rgba(100,210,190,0.35)" stroke-width="1.2"/>
+      <circle cx="196" cy="78" r="2" fill="rgba(100,210,190,0.5)"/>
 
-      <!-- Calming HRV micro-line below fingers -->
-      <polyline points="110,140 120,140 128,138 134,142 140,136 146,141 152,135 156,140 160,140 164,140 168,138 174,141 180,137 186,140 192,140 200,140 210,140"
-                stroke="rgba(100,210,190,0.2)" stroke-width="1.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- Under eye -->
+      <circle cx="188" cy="92" r="4.5" fill="rgba(100,210,190,0.08)" stroke="rgba(100,210,190,0.35)" stroke-width="1.2"/>
+      <circle cx="188" cy="92" r="2" fill="rgba(100,210,190,0.5)"/>
+
+      <!-- Under nose -->
+      <circle cx="196" cy="106" r="4.5" fill="rgba(100,210,190,0.08)" stroke="rgba(100,210,190,0.35)" stroke-width="1.2"/>
+      <circle cx="196" cy="106" r="2" fill="rgba(100,210,190,0.5)"/>
+
+      <!-- Chin point -->
+      <circle cx="184" cy="122" r="4.5" fill="rgba(100,210,190,0.08)" stroke="rgba(100,210,190,0.35)" stroke-width="1.2"/>
+      <circle cx="184" cy="122" r="2" fill="rgba(100,210,190,0.5)"/>
+
+      <!-- Ripple arcs emanating outward from the profile (calming effect) -->
+      <path d="M210 50 Q230 80 210 120" stroke="rgba(100,210,190,0.18)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <path d="M220 40 Q248 80 220 130" stroke="rgba(100,210,190,0.12)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <path d="M230 32 Q264 80 230 140" stroke="rgba(100,210,190,0.07)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+
+      <!-- Subtle arcs on left side too -->
+      <path d="M118 50 Q98 80 118 120" stroke="rgba(100,210,190,0.1)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M108 42 Q82 80 108 128" stroke="rgba(100,210,190,0.06)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+
+      <!-- Small particle dots -->
+      <circle cx="240" cy="70" r="1.2" fill="rgba(100,210,190,0.15)"/>
+      <circle cx="245" cy="100" r="1" fill="rgba(100,210,190,0.12)"/>
+      <circle cx="96" cy="90" r="0.9" fill="rgba(100,210,190,0.1)"/>
+      <circle cx="252" cy="84" r="0.8" fill="rgba(100,210,190,0.08)"/>
+
+      <!-- Calming HRV line at bottom -->
+      <polyline points="90,170 105,170 115,168 125,172 135,166 142,171 148,164 154,170 160,170 166,170 172,168 178,171 184,167 190,170 196,170 210,170 230,170"
+                stroke="rgba(100,210,190,0.16)" stroke-width="1.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
     </svg>
   </div>
 
