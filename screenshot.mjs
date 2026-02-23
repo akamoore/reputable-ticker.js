@@ -28,7 +28,7 @@ page.on('request', req => {
     req.continue();
   }
 });
-await page.setViewport({ width: 1080, height: 1080, deviceScaleFactor: 2 });
+await page.setViewport({ width: 1080, height: 1080, deviceScaleFactor: 3 });
 await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
 // Let layout settle
