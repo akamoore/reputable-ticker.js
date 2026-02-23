@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapping Study — 1080x1920 Story</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1920px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(25,55,70,0.55) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 60%, rgba(100,70,200,0.12) 0%, transparent 40%),
+      radial-gradient(ellipse at 70% 80%, rgba(20,45,60,0.3) 0%, transparent 45%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  /* noise texture */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* subtle grid */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  /* ── Top bar ────────────────────────────────────── */
+  .top-bar {
+    position: absolute;
+    top: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 10px rgba(212,255,80,0.5);
+    flex-shrink: 0;
+  }
+  .top-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.2em;
+    color: #d4ff50; text-transform: uppercase;
+  }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap;
+  }
+
+  /* ── Recruiting badge ───────────────────────────── */
+  .recruiting {
+    position: absolute;
+    top: 165px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .recruiting span {
+    display: inline-block;
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #d4ff50;
+    padding: 10px 30px;
+    border: 1.5px solid rgba(212,255,80,0.2);
+    border-radius: 100px;
+    background: rgba(212,255,80,0.04);
+  }
+  .recruiting span::before {
+    content: '';
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  /* ── Study subtitle ─────────────────────────────── */
+  .study-sub {
+    position: absolute;
+    top: 260px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(160,200,210,0.35);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Hero headline ──────────────────────────────── */
+  .hero {
+    position: absolute;
+    top: 310px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 88px;
+    font-weight: 800;
+    color: #eef0f8;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+  }
+  .hero h1 .accent { color: #d4ff50; }
+
+  /* ── Question ───────────────────────────────────── */
+  .question {
+    position: absolute;
+    top: 550px;
+    left: 120px; right: 120px;
+    text-align: center;
+  }
+  .q-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140,120,200,0.35), transparent);
+    margin: 0 auto 28px;
+  }
+  .q-text {
+    font-size: 22px;
+    font-weight: 400;
+    color: rgba(160,200,210,0.4);
+    line-height: 1.6;
+  }
+  .q-text em {
+    color: rgba(200,181,255,0.6);
+    font-style: italic;
+  }
+
+  /* ── What you get cards ─────────────────────────── */
+  .cards-label {
+    position: absolute;
+    top: 750px;
+    left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(160,200,210,0.18);
+  }
+
+  .cards {
+    position: absolute;
+    top: 800px;
+    left: 72px; right: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 28px 24px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(140,100,240,0.3), rgba(212,255,80,0.2));
+    border-radius: 18px 18px 0 0;
+  }
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .card-title {
+    font-size: 17px; font-weight: 800;
+    color: rgba(220,230,240,0.75);
+    margin-bottom: 6px;
+  }
+  .card-desc {
+    font-size: 13px; font-weight: 500;
+    color: rgba(160,200,210,0.3);
+    line-height: 1.45;
+  }
+
+  /* ── Study details card ─────────────────────────── */
+  .study-card {
+    position: absolute;
+    top: 1140px;
+    left: 72px; right: 72px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, rgba(100,70,200,0.12), rgba(80,50,180,0.06));
+    border: 1px solid rgba(140,100,240,0.18);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .study-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sc-left {}
+  .sc-label {
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(180,160,240,0.5);
+    margin-bottom: 4px;
+  }
+  .sc-value {
+    font-size: 24px; font-weight: 800;
+    color: #c8b5ff;
+    letter-spacing: -0.02em;
+  }
+  .sc-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #d4ff50;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: rgba(212,255,80,0.08);
+    border: 1px solid rgba(212,255,80,0.15);
+  }
+
+  .study-card-metrics {
+    display: flex;
+    gap: 24px;
+  }
+  .metric {
+    flex: 1;
+    text-align: center;
+    padding: 16px 0;
+    border-top: 1px solid rgba(140,100,240,0.1);
+  }
+  .metric-val {
+    font-size: 20px; font-weight: 800;
+    color: rgba(200,181,255,0.7);
+    margin-bottom: 4px;
+  }
+  .metric-lab {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(180,160,240,0.35);
+  }
+
+  /* ── Rewards section ────────────────────────────── */
+  .rewards {
+    position: absolute;
+    top: 1420px;
+    left: 72px; right: 72px;
+  }
+  .rewards-label {
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(160,200,210,0.18);
+    margin-bottom: 18px;
+  }
+  .reward-items {
+    display: flex;
+    gap: 14px;
+  }
+  .reward-item {
+    flex: 1;
+    padding: 22px 18px;
+    background: rgba(212,255,80,0.02);
+    border: 1px solid rgba(212,255,80,0.06);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .ri-icon { font-size: 24px; margin-bottom: 10px; display: block; }
+  .ri-text {
+    font-size: 13px; font-weight: 700;
+    color: rgba(212,255,80,0.45);
+    line-height: 1.4;
+  }
+  .ri-sub {
+    font-size: 11px; font-weight: 500;
+    color: rgba(160,200,210,0.2);
+    margin-top: 4px;
+  }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 1650px;
+    left: 72px; right: 72px;
+    padding: 36px 40px;
+    background: linear-gradient(135deg, rgba(100,70,200,0.1), rgba(212,255,80,0.04));
+    border: 1.5px solid rgba(140,100,240,0.18);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cta-left {}
+  .cta-heading {
+    font-size: 26px; font-weight: 800;
+    color: #eef0f8;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .cta-heading .accent { color: #d4ff50; }
+  .cta-body {
+    font-size: 15px; font-weight: 450;
+    color: rgba(160,200,210,0.35);
+    line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    font-size: 14px; font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 24px rgba(124,58,237,0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .cta-button::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+  }
+
+  /* ── Footer ─────────────────────────────────────── */
+  .footer {
+    position: absolute;
+    bottom: 72px;
+    left: 72px; right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(180,190,220,0.25);
+  }
+  .footer-note {
+    font-size: 11px; font-weight: 500;
+    color: rgba(160,200,210,0.15);
+  }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #7c3aed, #a855f7, #d4ff50);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Study Recruitment</div>
+  </div>
+
+  <!-- Recruiting badge -->
+  <div class="recruiting"><span>Now Recruiting</span></div>
+
+  <!-- Study subtitle -->
+  <div class="study-sub">30-Day Stress Study</div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>The <span class="accent">Tapping</span><br>Study</h1>
+  </div>
+
+  <!-- Question -->
+  <div class="question">
+    <div class="q-divider"></div>
+    <div class="q-text">Can 5–15 minutes of daily EFT tapping<br>actually change your <em>biometric</em> stress response?</div>
+  </div>
+
+  <!-- What's involved -->
+  <div class="cards-label">What's Involved</div>
+  <div class="cards">
+    <div class="card">
+      <span class="card-icon">📱</span>
+      <div class="card-title">Free 1-Year App</div>
+      <div class="card-desc">The Tapping Solution app ($95 value) included free</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">🧘‍♀️</span>
+      <div class="card-title">5–15 Min Daily</div>
+      <div class="card-desc">Guided EFT session each morning or evening</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">⌚</span>
+      <div class="card-title">Oura or WHOOP</div>
+      <div class="card-desc">Wear your wearable day &amp; night for 30 days</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">✅</span>
+      <div class="card-title">1-Min Check-In</div>
+      <div class="card-desc">Quick daily log in the Reputable app</div>
+    </div>
+  </div>
+
+  <!-- Study details card -->
+  <div class="study-card">
+    <div class="study-card-top">
+      <div class="sc-left">
+        <div class="sc-label">EFT Tapping Study</div>
+        <div class="sc-value">30 Days · Wearable Required</div>
+      </div>
+      <div class="sc-badge">Enrolling Now</div>
+    </div>
+    <div class="study-card-metrics">
+      <div class="metric">
+        <div class="metric-val">HRV</div>
+        <div class="metric-lab">Primary Metric</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">Sleep</div>
+        <div class="metric-lab">Quality Tracked</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">Stress</div>
+        <div class="metric-lab">Recovery Score</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rewards -->
+  <div class="rewards">
+    <div class="rewards-label">What You Earn</div>
+    <div class="reward-items">
+      <div class="reward-item">
+        <span class="ri-icon">💰</span>
+        <div class="ri-text">$105 Value</div>
+        <div class="ri-sub">Heartbeats for gift cards</div>
+      </div>
+      <div class="reward-item">
+        <span class="ri-icon">📊</span>
+        <div class="ri-text">Personal Insights</div>
+        <div class="ri-sub">Your biometric report</div>
+      </div>
+      <div class="reward-item">
+        <span class="ri-icon">📱</span>
+        <div class="ri-text">Free App Year</div>
+        <div class="ri-sub">Tapping Solution ($95)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Ready to <span class="accent">join?</span></div>
+      <div class="cta-body">Limited spots available. Apply now.</div>
+    </div>
+    <div class="cta-button">Apply Now</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="footer-note">reputable.health</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

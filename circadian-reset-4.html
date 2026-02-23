@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circadian Reset — Slide 4: CTA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 50% 50%, rgba(200,230,74,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(255,180,50,0.04) 0%, transparent 35%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-left: 1.5px solid rgba(0,0,0,0.08); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.08); border-right: 1.5px solid rgba(0,0,0,0.08); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px; left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.18);
+  }
+
+  .headline {
+    position: absolute;
+    top: 185px; left: 72px; right: 72px;
+    font-size: 46px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -0.04em; color: #1a1a1a;
+  }
+  .headline .accent { color: #8AB417; }
+  .headline .dim { color: rgba(0,0,0,0.18); }
+
+  .divider {
+    position: absolute;
+    top: 400px; left: 72px;
+    width: 50px; height: 2px;
+    background: rgba(138,180,23,0.35);
+  }
+
+  .body-text {
+    position: absolute;
+    top: 432px; left: 72px; right: 200px;
+    font-size: 18px; font-weight: 450; color: rgba(0,0,0,0.35);
+    line-height: 1.65;
+  }
+  .body-text strong { color: rgba(0,0,0,0.58); font-weight: 700; }
+
+  /* ---- COMPARISON CARDS ---- */
+  .compare {
+    position: absolute;
+    top: 570px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+  .compare-card {
+    flex: 1;
+    padding: 30px 28px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .compare-card.before {
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+  .compare-card.after {
+    background: linear-gradient(135deg, rgba(138,180,23,0.06), rgba(200,230,74,0.08));
+    border: 1.5px solid rgba(138,180,23,0.15);
+  }
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .compare-card.before::before { background: linear-gradient(90deg, #D94E40, #E8723A); }
+  .compare-card.after::before { background: linear-gradient(90deg, #8AB417, #c8e64a); }
+
+  .compare-badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+  }
+  .compare-card.before .compare-badge {
+    color: #D94E40; background: rgba(217,78,64,0.08);
+  }
+  .compare-card.after .compare-badge {
+    color: #5A7A0E; background: rgba(138,180,23,0.1);
+  }
+
+  .compare-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .metric-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .metric-icon { font-size: 20px; flex-shrink: 0; }
+  .metric-info { flex: 1; }
+  .metric-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: rgba(0,0,0,0.25);
+    margin-bottom: 2px;
+  }
+  .metric-value {
+    font-size: 22px; font-weight: 900; letter-spacing: -0.02em;
+  }
+  .compare-card.before .metric-value { color: #D94E40; }
+  .compare-card.after .metric-value { color: #5A7A0E; }
+  .metric-change {
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
+    flex-shrink: 0;
+  }
+  .compare-card.after .metric-change {
+    color: #5A7A0E; background: rgba(138,180,23,0.1);
+  }
+
+  /* ---- CTA ---- */
+  .cta {
+    position: absolute;
+    top: 870px;
+    left: 72px;
+    right: 72px;
+    padding: 30px 36px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(138,180,23,0.15);
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(138,180,23,0.08);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .cta-left { flex: 1; }
+  .cta-heading {
+    font-size: 21px; font-weight: 800; color: #1a1a1a;
+    line-height: 1.25; margin-bottom: 5px;
+  }
+  .cta-heading .accent { color: #8AB417; }
+  .cta-body {
+    font-size: 14px; font-weight: 450; color: rgba(0,0,0,0.3);
+    line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-block;
+    padding: 16px 38px;
+    background: #8AB417;
+    color: #FFFFFF;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 20px rgba(138,180,23,0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #8AB417, #c8e64a, #FFB832); opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Circadian Science</div>
+  </div>
+
+  <div class="section-label">Your Data Doesn't Lie</div>
+
+  <div class="headline">Check your <span class="accent">trends today</span><br><span class="dim">compared to</span> last week.</div>
+
+  <div class="divider"></div>
+
+  <div class="body-text">Your wearable data tells the real story. Here's what the reset protocol looks like <strong>in your numbers.</strong></div>
+
+  <div class="compare">
+    <!-- Before -->
+    <div class="compare-card before">
+      <div class="compare-badge">This Week</div>
+      <div class="compare-metrics">
+        <div class="metric-row">
+          <span class="metric-icon">💓</span>
+          <div class="metric-info">
+            <div class="metric-label">HRV</div>
+            <div class="metric-value">32 ms</div>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-icon">😴</span>
+          <div class="metric-info">
+            <div class="metric-label">Sleep Efficiency</div>
+            <div class="metric-value">74%</div>
+          </div>
+        </div>
+        <div class="metric-row">
+          <span class="metric-icon">🧠</span>
+          <div class="metric-info">
+            <div class="metric-label">Focus Score</div>
+            <div class="metric-value">Low</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- After -->
+    <div class="compare-card after">
+      <div class="compare-badge">After Reset</div>
+      <div class="compare-metrics">
+        <div class="metric-row">
+          <span class="metric-icon">💓</span>
+          <div class="metric-info">
+            <div class="metric-label">HRV</div>
+            <div class="metric-value">58 ms</div>
+          </div>
+          <span class="metric-change">+81%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-icon">😴</span>
+          <div class="metric-info">
+            <div class="metric-label">Sleep Efficiency</div>
+            <div class="metric-value">91%</div>
+          </div>
+          <span class="metric-change">+23%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-icon">🧠</span>
+          <div class="metric-info">
+            <div class="metric-label">Focus Score</div>
+            <div class="metric-value">High</div>
+          </div>
+          <span class="metric-change">Restored</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Which step are you <span class="accent">committing to</span> today?</div>
+      <div class="cta-body">Let us know in the comments below.</div>
+    </div>
+    <div class="cta-button">Comment ↓</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">04 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
