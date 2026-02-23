@@ -38,11 +38,21 @@ await new Promise(r => setTimeout(r, 1000));
 const canvasEl = await page.$('.canvas') || await page.$('body');
 const box = await canvasEl.boundingBox();
 
+// Auto-detect canvas dimensions from the element
+const canvasWidth = Math.round(box.width);
+const canvasHeight = Math.round(box.height);
+
+// Resize viewport if canvas is taller than default
+if (canvasHeight > 1080) {
+  await page.setViewport({ width: canvasWidth, height: canvasHeight, deviceScaleFactor: 3 });
+  await new Promise(r => setTimeout(r, 500));
+}
+
 await page.screenshot({
   path: outputPath,
   type: 'jpeg',
   quality: 100,
-  clip: { x: box.x, y: box.y, width: 1080, height: 1080 },
+  clip: { x: box.x, y: box.y, width: canvasWidth, height: canvasHeight },
 });
 
 await browser.close();

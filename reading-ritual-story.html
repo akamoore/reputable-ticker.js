@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Ritual — Instagram Story</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #0c1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1920px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(30, 50, 80, 0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 70%, rgba(20, 35, 65, 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 65%, rgba(25, 40, 70, 0.3) 0%, transparent 50%),
+      #0c1a2e;
+    overflow: hidden;
+  }
+
+  /* ── Subtle texture noise ─────────────────────── */
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ── Top badge: COMMUNITY VOTED ──────────────── */
+  .top-badge {
+    position: absolute;
+    top: 250px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .top-badge span {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #e8dcc8;
+    padding: 10px 28px;
+    border: 1.5px solid rgba(232, 220, 200, 0.2);
+    border-radius: 100px;
+    background: rgba(232, 220, 200, 0.04);
+  }
+
+  /* ── "Study of the Week" ─────────────────────── */
+  .study-label {
+    position: absolute;
+    top: 348px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(232, 220, 200, 0.55);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Hero title ──────────────────────────────── */
+  .hero-title {
+    position: absolute;
+    top: 410px;
+    left: 60px;
+    right: 60px;
+    text-align: center;
+    font-size: 80px;
+    font-weight: 800;
+    color: #f5ead6;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Subtitle / question ─────────────────────── */
+  .question {
+    position: absolute;
+    top: 640px;
+    left: 100px;
+    right: 100px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 400;
+    color: rgba(200, 195, 180, 0.55);
+    line-height: 1.55;
+  }
+
+  /* ── Book SVG illustration ───────────────────── */
+  .book-wrap {
+    position: absolute;
+    top: 820px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+  }
+
+  /* ── Purple study card ───────────────────────── */
+  .study-card {
+    position: absolute;
+    top: 1240px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 520px;
+    background: linear-gradient(135deg, rgba(120, 80, 220, 0.2) 0%, rgba(100, 60, 200, 0.12) 100%);
+    border: 1px solid rgba(140, 100, 240, 0.25);
+    border-radius: 20px;
+    padding: 26px 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .study-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .study-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(180, 160, 240, 0.7);
+  }
+
+  .study-card-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #c8b5ff;
+    letter-spacing: -0.01em;
+  }
+
+  .now-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    padding: 12px 26px;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+
+  .now-live::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212, 255, 80, 0.6);
+  }
+
+  /* ── Swipe-up CTA ──────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 1460px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .cta-arrow {
+    font-size: 28px;
+    color: rgba(232, 220, 200, 0.35);
+  }
+  .cta-text {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(232, 220, 200, 0.4);
+  }
+
+  /* ── Divider line ────────────────────────────── */
+  .divider {
+    position: absolute;
+    top: 1600px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140, 120, 180, 0.35), transparent);
+  }
+
+  /* ── Brand footer ────────────────────────────── */
+  .brand {
+    position: absolute;
+    top: 1645px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(232, 220, 200, 0.45);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Top badge -->
+  <div class="top-badge">
+    <span>Community Voted</span>
+  </div>
+
+  <!-- Study of the week -->
+  <div class="study-label">Study of the Week</div>
+
+  <!-- Hero title -->
+  <div class="hero-title">The Reading<br>Ritual</div>
+
+  <!-- Question -->
+  <div class="question">Can reading a physical book for 20 min<br>before bed improve your sleep onset?</div>
+
+  <!-- Book illustration (inline SVG) — scaled up for story -->
+  <div class="book-wrap">
+    <svg width="420" height="300" viewBox="0 0 340 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Soft shadow under the book -->
+      <ellipse cx="170" cy="218" rx="130" ry="14" fill="rgba(0,0,0,0.25)"/>
+
+      <!-- == LEFT COVER (hardback visible edge) == -->
+      <path d="M170 22 L170 195 Q130 192 42 188 Q30 187 28 60 Q26 28 60 22 Z"
+            fill="#8b7355" opacity="0.6"/>
+      <!-- Left cover face -->
+      <path d="M170 22 L170 195 Q132 192 48 188 Q36 187 34 58 Q33 28 62 22 Z"
+            fill="#a08b6d"/>
+
+      <!-- == LEFT PAGE (back) == -->
+      <path d="M170 28 L170 190 Q134 187 52 184 Q42 183 40 62 Q39 34 66 28 Z"
+            fill="#ddd0b8"/>
+
+      <!-- == LEFT PAGE (front) == -->
+      <path d="M170 30 L170 188 Q136 185 56 182 Q46 181 44 64 Q43 36 68 30 Z"
+            fill="#ede2ce"/>
+
+      <!-- Left page text lines -->
+      <line x1="78" y1="60" x2="150" y2="56" stroke="rgba(170,155,130,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="76" y1="74" x2="152" y2="70" stroke="rgba(170,155,130,0.3)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="74" y1="88" x2="153" y2="85" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="73" y1="102" x2="154" y2="99" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="72" y1="116" x2="155" y2="113" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="71" y1="130" x2="156" y2="127" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="70" y1="144" x2="157" y2="141" stroke="rgba(170,155,130,0.15)" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Short paragraph break -->
+      <line x1="69" y1="164" x2="120" y2="162" stroke="rgba(170,155,130,0.18)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="68" y1="178" x2="158" y2="175" stroke="rgba(170,155,130,0.12)" stroke-width="1.2" stroke-linecap="round"/>
+
+      <!-- == RIGHT COVER (hardback visible edge) == -->
+      <path d="M170 22 L170 195 Q210 192 298 188 Q310 187 312 60 Q314 28 280 22 Z"
+            fill="#8b7355" opacity="0.6"/>
+      <!-- Right cover face -->
+      <path d="M170 22 L170 195 Q208 192 292 188 Q304 187 306 58 Q307 28 278 22 Z"
+            fill="#a08b6d"/>
+
+      <!-- == RIGHT PAGE (back) == -->
+      <path d="M170 28 L170 190 Q206 187 288 184 Q298 183 300 62 Q301 34 274 28 Z"
+            fill="#ddd0b8"/>
+
+      <!-- == RIGHT PAGE (front) == -->
+      <path d="M170 30 L170 188 Q204 185 284 182 Q294 181 296 64 Q297 36 272 30 Z"
+            fill="#f5ead6"/>
+
+      <!-- Right page text lines -->
+      <line x1="190" y1="56" x2="262" y2="60" stroke="rgba(170,155,130,0.35)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="188" y1="70" x2="264" y2="74" stroke="rgba(170,155,130,0.3)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="187" y1="85" x2="266" y2="88" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="186" y1="99" x2="267" y2="102" stroke="rgba(170,155,130,0.25)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="185" y1="113" x2="268" y2="116" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="184" y1="127" x2="269" y2="130" stroke="rgba(170,155,130,0.2)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="183" y1="141" x2="270" y2="144" stroke="rgba(170,155,130,0.15)" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Short line (paragraph end) -->
+      <line x1="183" y1="162" x2="230" y2="164" stroke="rgba(170,155,130,0.18)" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="182" y1="175" x2="271" y2="178" stroke="rgba(170,155,130,0.12)" stroke-width="1.2" stroke-linecap="round"/>
+
+      <!-- == SPINE == -->
+      <line x1="170" y1="20" x2="170" y2="196" stroke="rgba(100,85,60,0.35)" stroke-width="2.5"/>
+
+      <!-- == PAGE CURL (bottom-right) == -->
+      <path d="M290 178 Q294 172 296 164 L296 172 Q295 180 288 182 Z" fill="#e0d4be" opacity="0.6"/>
+
+      <!-- == Subtle inner page edges (stacked pages look) == -->
+      <line x1="46" y1="183" x2="170" y2="189" stroke="rgba(190,178,155,0.3)" stroke-width="0.8"/>
+      <line x1="48" y1="185" x2="170" y2="191" stroke="rgba(190,178,155,0.2)" stroke-width="0.8"/>
+      <line x1="170" y1="189" x2="294" y2="183" stroke="rgba(190,178,155,0.3)" stroke-width="0.8"/>
+      <line x1="170" y1="191" x2="292" y2="185" stroke="rgba(190,178,155,0.2)" stroke-width="0.8"/>
+
+      <!-- == Bookmark ribbon == -->
+      <path d="M228 22 L228 52 L234 46 L240 52 L240 22" fill="#b44a5e" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <!-- Purple study card -->
+  <div class="study-card">
+    <div class="study-card-left">
+      <div class="study-card-label">Community Choice</div>
+      <div class="study-card-value">28% of votes</div>
+    </div>
+    <div class="now-live">Now Live</div>
+  </div>
+
+  <!-- Swipe up CTA -->
+  <div class="cta">
+    <div class="cta-arrow">⌃</div>
+    <div class="cta-text">Join the Study</div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- Brand -->
+  <div class="brand">Reputable</div>
+
+</div>
+</body>
+</html>
