@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LyfeFuel Case Study — Slide 1: Cover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(200,230,74,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 75%, rgba(52,211,153,0.03) 0%, transparent 45%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(200,230,74,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+  .scan-line.s2 { top: 540px; }
+
+  /* ── Series badge ──────────────────────────────── */
+  .series-badge {
+    position: absolute;
+    top: 160px;
+    left: 72px;
+  }
+  .series-badge span {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #c8e64a;
+    padding: 10px 24px;
+    border: 1.5px solid rgba(200,230,74,0.2);
+    border-radius: 100px;
+    background: rgba(200,230,74,0.04);
+  }
+
+  /* ── Brand name ────────────────────────────────── */
+  .partner-name {
+    position: absolute;
+    top: 240px;
+    left: 72px;
+    right: 72px;
+    font-size: 22px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Main headline ─────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 290px;
+    left: 72px;
+    right: 72px;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+
+  /* ── Divider ───────────────────────────────────── */
+  .divider {
+    position: absolute;
+    top: 564px;
+    left: 72px;
+    width: 60px;
+    height: 2px;
+    background: rgba(200,230,74,0.3);
+  }
+
+  /* ── Subtext ───────────────────────────────────── */
+  .subtext {
+    position: absolute;
+    top: 596px;
+    left: 72px;
+    right: 180px;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.6;
+  }
+
+  /* ── Stat chips ────────────────────────────────── */
+  .stat-chips {
+    position: absolute;
+    top: 740px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 14px;
+  }
+  .stat-chip {
+    padding: 14px 24px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stat-chip .chip-icon {
+    font-size: 18px;
+  }
+  .stat-chip .chip-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+  }
+  .stat-chip .chip-value {
+    font-size: 14px;
+    font-weight: 800;
+    color: #c8e64a;
+  }
+
+  /* ── Big stat callout ──────────────────────────── */
+  .big-stat {
+    position: absolute;
+    top: 840px;
+    left: 72px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .big-stat-number {
+    font-size: 72px;
+    font-weight: 800;
+    color: #c8e64a;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .big-stat-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.4;
+  }
+
+  /* ── Footer ────────────────────────────────────── */
+  .footer {
+    position: absolute;
+    bottom: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+  }
+  .slide-num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.15);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Case Study</div>
+    <div class="label-line"></div>
+    <div class="label-right">Verified Evidence</div>
+  </div>
+  <div class="scan-line s1"></div>
+  <div class="scan-line s2"></div>
+
+  <div class="series-badge"><span>Case Study</span></div>
+
+  <div class="partner-name">LyfeFuel x Reputable</div>
+
+  <div class="headline">Does Your<br>Plant-Based Meal<br>Replacement<br>Actually Give You<br>More <span class="accent">Energy?</span></div>
+
+  <div class="divider"></div>
+
+  <div class="subtext">A Verified Evidence Study tracking real-world biometrics to prove what customers already felt.</div>
+
+  <div class="stat-chips">
+    <div class="stat-chip">
+      <span class="chip-icon">👥</span>
+      <span class="chip-label">Participants</span>
+      <span class="chip-value">22</span>
+    </div>
+    <div class="stat-chip">
+      <span class="chip-icon">⏱️</span>
+      <span class="chip-label">Duration</span>
+      <span class="chip-value">24 days</span>
+    </div>
+    <div class="stat-chip">
+      <span class="chip-icon">💍</span>
+      <span class="chip-label">Tracked via</span>
+      <span class="chip-value">Oura Ring</span>
+    </div>
+  </div>
+
+  <div class="big-stat">
+    <div class="big-stat-number">+23%</div>
+    <div class="big-stat-label">increase in<br>activity levels</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 06</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

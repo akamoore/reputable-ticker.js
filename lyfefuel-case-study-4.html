@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LyfeFuel Case Study — Slide 4: The Results</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(200,230,74,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 75%, rgba(52,211,153,0.03) 0%, transparent 45%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot { width: 8px; height: 8px; border-radius: 50%; background: #c8e64a; box-shadow: 0 0 10px rgba(200,230,74,0.5); flex-shrink: 0; }
+  .label-text { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: #c8e64a; text-transform: uppercase; }
+  .label-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent); }
+  .label-right { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: rgba(200,230,74,0.3); text-transform: uppercase; }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  .section-title {
+    position: absolute;
+    top: 140px;
+    left: 72px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.4);
+  }
+
+  .headline {
+    position: absolute;
+    top: 190px;
+    left: 72px;
+    right: 72px;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+
+  .subtitle {
+    position: absolute;
+    top: 336px;
+    left: 72px;
+    right: 200px;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.55;
+  }
+
+  /* ── Hero stat ─────────────────────────────────── */
+  .hero-stat {
+    position: absolute;
+    top: 450px;
+    left: 72px;
+    right: 72px;
+    padding: 48px;
+    background: rgba(200,230,74,0.04);
+    border: 1px solid rgba(200,230,74,0.12);
+    border-radius: 20px;
+    text-align: center;
+  }
+  .hero-stat-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.5);
+    margin-bottom: 12px;
+  }
+  .hero-stat-number {
+    font-size: 110px;
+    font-weight: 800;
+    color: #c8e64a;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .hero-stat-desc {
+    margin-top: 12px;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── Supporting stats ──────────────────────────── */
+  .support-stats {
+    position: absolute;
+    top: 780px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+  .support-stat {
+    flex: 1;
+    padding: 22px 20px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .support-stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f0f0f0;
+    margin-bottom: 4px;
+  }
+  .support-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    top: 904px;
+    left: 72px;
+    right: 72px;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(200,230,74,0.3); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.15); }
+
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Case Study</div>
+    <div class="label-line"></div>
+    <div class="label-right">LyfeFuel</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <div class="section-title">The Results</div>
+
+  <div class="headline">The Results Weren't<br>Just Positive.<br>They Were <span class="accent">Measurable.</span></div>
+
+  <div class="subtitle">On average, participants saw significant improvements in real-world activity data.</div>
+
+  <div class="hero-stat">
+    <div class="hero-stat-label">Average Increase in Activity</div>
+    <div class="hero-stat-number">+23%</div>
+    <div class="hero-stat-desc">across all 22 participants</div>
+  </div>
+
+  <div class="support-stats">
+    <div class="support-stat">
+      <div class="support-stat-value">22</div>
+      <div class="support-stat-label">Participants Completed</div>
+    </div>
+    <div class="support-stat">
+      <div class="support-stat-value">24</div>
+      <div class="support-stat-label">Days of Data</div>
+    </div>
+    <div class="support-stat">
+      <div class="support-stat-value">~90%</div>
+      <div class="support-stat-label">Protocol Adherence</div>
+    </div>
+  </div>
+
+  <div class="tagline">Continuously tracked via Oura Ring — no self-reported guesswork.</div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">04 / 06</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
