@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verified Evidence — Slide 3: Why Reputable</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(25,55,70,0.55) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 75%, rgba(50,35,100,0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 75% 65%, rgba(212,255,80,0.04) 0%, transparent 40%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px; left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(212,255,80,0.35);
+  }
+
+  .headline {
+    position: absolute;
+    top: 162px; left: 72px; right: 72px;
+  }
+  .headline h2 {
+    font-size: 44px; font-weight: 800;
+    line-height: 1.08; letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h2 .accent { color: #d4ff50; }
+  .headline h2 .dim { color: rgba(160,200,210,0.25); }
+
+  /* ── Advantage cards ────────────────────────────── */
+  .advantages {
+    position: absolute;
+    top: 350px;
+    left: 72px; right: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .adv-card {
+    padding: 28px 30px;
+    background: rgba(212,255,80,0.03);
+    border: 1px solid rgba(212,255,80,0.08);
+    border-radius: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .adv-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #d4ff50, rgba(212,255,80,0.3));
+    border-radius: 18px 0 0 18px;
+  }
+
+  .ac-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(212,255,80,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .ac-content { flex: 1; }
+  .ac-title {
+    font-size: 19px; font-weight: 800;
+    color: rgba(220,230,240,0.8);
+    margin-bottom: 6px;
+  }
+  .ac-desc {
+    font-size: 15px; font-weight: 450;
+    color: rgba(160,200,210,0.35);
+    line-height: 1.55;
+  }
+  .ac-desc strong { color: rgba(212,255,80,0.6); font-weight: 700; }
+
+  /* ── Bottom quote ───────────────────────────────── */
+  .quote {
+    position: absolute;
+    top: 870px;
+    left: 72px; right: 72px;
+    padding-left: 22px;
+    border-left: 3px solid rgba(212,255,80,0.15);
+  }
+  .quote-text {
+    font-size: 17px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(160,200,210,0.3);
+    line-height: 1.55;
+  }
+  .quote-text strong {
+    color: rgba(220,230,240,0.55);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, rgba(255,120,120,0.6), rgba(140,100,240,0.4), #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Verified Evidence</div>
+  </div>
+
+  <div class="section-label">Why Reputable</div>
+
+  <div class="headline">
+    <h2><span class="dim">Why brands are choosing</span><br><span class="accent">third-party data</span></h2>
+  </div>
+
+  <div class="advantages">
+    <div class="adv-card">
+      <div class="ac-icon">🚫</div>
+      <div class="ac-content">
+        <div class="ac-title">Eliminating Bias</div>
+        <div class="ac-desc">The brand doesn't cherry-pick success stories. We publish the <strong>full, verified dataset.</strong></div>
+      </div>
+    </div>
+    <div class="adv-card">
+      <div class="ac-icon">📊</div>
+      <div class="ac-content">
+        <div class="ac-title">Objective Metrics</div>
+        <div class="ac-desc">We don't ask if they "slept better." We use <strong>continuous wearable data</strong> to measure Deep Sleep, REM, and HRV.</div>
+      </div>
+    </div>
+    <div class="adv-card">
+      <div class="ac-icon">🤝</div>
+      <div class="ac-content">
+        <div class="ac-title">Retail & Regulatory Trust</div>
+        <div class="ac-desc">Retailers and regulators require rigorous proof. Third-party data provides <strong>undisputed evidence</strong> to back up claims.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quote">
+    <div class="quote-text">The future of wellness isn't built on subjective testimonials. It's built on <strong>verified, continuous data.</strong></div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">03 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
