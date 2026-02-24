@@ -33,9 +33,13 @@
     @media only screen and (max-width: 600px) {
       .email-container { width: 100% !important; }
       .fluid { max-width: 100% !important; height: auto !important; }
-      .stack-column { display: block !important; width: 100% !important; }
+      .stack-column { display: block !important; width: 100% !important; padding-bottom: 8px !important; }
+      .stack-column:last-child { padding-bottom: 0 !important; }
+      .spacer-column { display: none !important; width: 0 !important; height: 0 !important; font-size: 0 !important; line-height: 0 !important; }
       .testimonial-option { display: block !important; width: 100% !important; }
       .mobile-padding { padding-left: 24px !important; padding-right: 24px !important; }
+      .mobile-cta { width: 100% !important; }
+      .mobile-cta a { display: block !important; padding: 17px 24px !important; text-align: center !important; }
     }
   </style>
 </head>
@@ -124,7 +128,7 @@
                       </p>
                     </div>
                   </td>
-                  <td width="4%" style="font-size: 1px;">&nbsp;</td>
+                  <td class="spacer-column" width="4%" style="font-size: 1px;">&nbsp;</td>
                   <!-- STAT 2: Light Sleep -->
                   <td class="stack-column" width="48%" valign="top">
                     <div style="background-color: #1a1d27; border-radius: 12px; padding: 20px;">
@@ -198,7 +202,7 @@
             <td align="center" style="padding: 32px 48px 12px 48px;" class="mobile-padding">
               <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                 <tr>
-                  <td style="border-radius: 10px; background: linear-gradient(135deg, #2d6a4f, #40916c);" align="center">
+                  <td class="mobile-cta" style="border-radius: 10px; background: linear-gradient(135deg, #2d6a4f, #40916c);" align="center">
                     <!--[if mso]>
                     <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.videoask.com/fz4w5i6ou" style="height:56px;v-text-anchor:middle;width:360px;" arcsize="18%" strokecolor="#2d6a4f" fillcolor="#2d6a4f">
                       <w:anchorlock/>
