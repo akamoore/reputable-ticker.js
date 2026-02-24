@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RWD vs Clinical Trials — Slide 1: Cover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 28%, rgba(25,55,70,0.55) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 75%, rgba(50,35,100,0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 75% 65%, rgba(20,45,60,0.3) 0%, transparent 45%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  /* ── Hook question ───────────────────────────────── */
+  .hook {
+    position: absolute;
+    top: 148px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .hook-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(160,200,210,0.4);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .hook-text em { color: rgba(200,181,255,0.6); font-style: italic; }
+
+  /* ── Badge ──────────────────────────────────────── */
+  .badge {
+    position: absolute;
+    top: 268px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .badge span {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #d4ff50;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(212,255,80,0.2);
+    border-radius: 100px;
+    background: rgba(212,255,80,0.04);
+  }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 338px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h1 .dim { color: rgba(160,200,210,0.25); }
+  .headline h1 .accent { color: #d4ff50; }
+  .headline h1 .blue { color: rgba(100,180,255,0.8); }
+
+  /* ── Subtext ────────────────────────────────────── */
+  .sub {
+    position: absolute;
+    top: 570px;
+    left: 110px; right: 110px;
+    text-align: center;
+  }
+  .sub-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140,120,200,0.35), transparent);
+    margin: 0 auto 24px;
+  }
+  .sub-text {
+    font-size: 19px; font-weight: 400;
+    color: rgba(160,200,210,0.4);
+    line-height: 1.6;
+  }
+  .sub-text em { color: rgba(212,255,80,0.6); font-style: italic; font-weight: 600; }
+
+  /* ── Comparison cards ───────────────────────────── */
+  .compare {
+    position: absolute;
+    top: 745px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+  .compare-card {
+    flex: 1;
+    padding: 26px 24px;
+    border-radius: 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 18px 18px 0 0;
+  }
+  .compare-card.trials {
+    background: rgba(100,180,255,0.04);
+    border: 1px solid rgba(100,180,255,0.1);
+  }
+  .compare-card.trials::before { background: linear-gradient(90deg, rgba(100,180,255,0.5), rgba(100,180,255,0.15)); }
+  .compare-card.rwd {
+    background: rgba(212,255,80,0.04);
+    border: 1px solid rgba(212,255,80,0.1);
+  }
+  .compare-card.rwd::before { background: linear-gradient(90deg, rgba(212,255,80,0.5), rgba(212,255,80,0.15)); }
+
+  .cc-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .cc-title { font-size: 16px; font-weight: 800; margin-bottom: 5px; }
+  .compare-card.trials .cc-title { color: rgba(100,180,255,0.7); }
+  .compare-card.rwd .cc-title { color: rgba(212,255,80,0.7); }
+  .cc-sub {
+    font-size: 13px; font-weight: 500;
+    color: rgba(160,200,210,0.3);
+    line-height: 1.45;
+  }
+
+  /* ── Swipe ──────────────────────────────────────── */
+  .swipe {
+    position: absolute;
+    top: 930px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .swipe-text { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(160,200,210,0.15); }
+  .swipe-arrow { font-size: 14px; color: rgba(212,255,80,0.3); }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, rgba(100,180,255,0.6), rgba(140,100,240,0.4), #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Evidence Deep Dive</div>
+  </div>
+
+  <div class="hook">
+    <div class="hook-text">Are clinical trials the <em>only</em> way to prove<br>a health product actually works? 🔬</div>
+  </div>
+
+  <div class="badge"><span>Rethinking Evidence</span></div>
+
+  <div class="headline">
+    <h1><span class="blue">Clinical Trials</span><br><span class="dim">vs</span><br><span class="accent">Real-World Data</span></h1>
+  </div>
+
+  <div class="sub">
+    <div class="sub-divider"></div>
+    <div class="sub-text">For consumer health, a sterile lab doesn't always tell the whole story. RWD is a powerful, <em>complementary approach</em> to evidence.</div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card trials">
+      <span class="cc-icon">🧪</span>
+      <div class="cc-title">Clinical Trials</div>
+      <div class="cc-sub">The gold standard for pharma. Controlled, precise, expensive.</div>
+    </div>
+    <div class="compare-card rwd">
+      <span class="cc-icon">🌍</span>
+      <div class="cc-title">Real-World Data</div>
+      <div class="cc-sub">Continuous wearable data. How products perform in real life.</div>
+    </div>
+  </div>
+
+  <div class="swipe">
+    <span class="swipe-text">Swipe to learn why RWD matters</span>
+    <span class="swipe-arrow">→</span>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
