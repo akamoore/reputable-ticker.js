@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women's Health White Paper — Slide 3: Key Findings</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 40% 30%, rgba(138,72,160,0.03) 0%, transparent 45%),
+      radial-gradient(ellipse at 65% 75%, rgba(138,180,23,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.022) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.18); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px; left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.16);
+  }
+
+  .headline {
+    position: absolute;
+    top: 175px; left: 72px; right: 72px;
+    font-size: 44px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -0.04em; color: #1a1a1a;
+  }
+  .headline .accent { color: #8B5A9E; }
+
+  /* ── Disease cards ──────────────────────────── */
+  .disease-cards {
+    position: absolute;
+    top: 340px;
+    left: 72px; right: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .disease-card {
+    padding: 28px 30px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.025);
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .disease-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    border-radius: 20px 0 0 20px;
+  }
+  .disease-card.cardio::before { background: linear-gradient(180deg, #C43B3B, #E85D5D); }
+  .disease-card.autoimmune::before { background: linear-gradient(180deg, #4A90D9, #5BA3EC); }
+  .disease-card.mental::before { background: linear-gradient(180deg, #8B5A9E, #B87FD4); }
+
+  .card-icon-wrap {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .disease-card.cardio .card-icon-wrap { background: rgba(196,59,59,0.06); }
+  .disease-card.autoimmune .card-icon-wrap { background: rgba(74,144,217,0.06); }
+  .disease-card.mental .card-icon-wrap { background: rgba(139,90,158,0.06); }
+  .card-icon { font-size: 28px; }
+
+  .card-content { flex: 1; }
+  .card-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 20px; font-weight: 800; color: #1a1a1a;
+  }
+  .card-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .disease-card.cardio .card-badge { color: #C43B3B; background: rgba(196,59,59,0.06); }
+  .disease-card.autoimmune .card-badge { color: #4A90D9; background: rgba(74,144,217,0.06); }
+  .disease-card.mental .card-badge { color: #8B5A9E; background: rgba(139,90,158,0.06); }
+
+  .card-desc {
+    font-size: 15px; font-weight: 450; color: rgba(0,0,0,0.35);
+    line-height: 1.55;
+  }
+  .card-desc strong { color: rgba(0,0,0,0.55); font-weight: 700; }
+
+  /* ── Bottom insight ─────────────────────────── */
+  .insight {
+    position: absolute;
+    top: 850px;
+    left: 72px; right: 72px;
+    padding-left: 22px;
+    border-left: 3px solid rgba(139,90,158,0.15);
+  }
+  .insight-text {
+    font-size: 17px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(0,0,0,0.25);
+    line-height: 1.55;
+  }
+  .insight-text strong {
+    color: rgba(0,0,0,0.45);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.13); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #8B5A9E, #B87FD4, #8AB417, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Women's Health</div>
+  </div>
+
+  <div class="section-label">Key Findings</div>
+
+  <div class="headline">How Diseases Manifest<br><span class="accent">Differently</span> in Women</div>
+
+  <div class="disease-cards">
+    <div class="disease-card cardio">
+      <div class="card-icon-wrap"><span class="card-icon">🫀</span></div>
+      <div class="card-content">
+        <div class="card-header">
+          <div class="card-title">Cardiovascular Disease</div>
+          <div class="card-badge">#1 killer of women</div>
+        </div>
+        <div class="card-desc">Atypical symptoms — fatigue, nausea, jaw pain — lead to <strong>delayed diagnoses</strong> and worse outcomes.</div>
+      </div>
+    </div>
+
+    <div class="disease-card autoimmune">
+      <div class="card-icon-wrap"><span class="card-icon">🛡️</span></div>
+      <div class="card-content">
+        <div class="card-header">
+          <div class="card-title">Autoimmune Conditions</div>
+          <div class="card-badge">~80% are women</div>
+        </div>
+        <div class="card-desc">More reactive immune systems make women <strong>disproportionately affected</strong> by lupus, MS, and RA.</div>
+      </div>
+    </div>
+
+    <div class="disease-card mental">
+      <div class="card-icon-wrap"><span class="card-icon">🧠</span></div>
+      <div class="card-content">
+        <div class="card-header">
+          <div class="card-title">Mental Health</div>
+          <div class="card-badge">2x depression risk</div>
+        </div>
+        <div class="card-desc">Hormonal fluctuations — puberty, pregnancy, menopause — <strong>uniquely impact</strong> women's risk profiles.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-text">These aren't edge cases — they represent <strong>fundamental biological differences</strong> that demand dedicated research.</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">03 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
