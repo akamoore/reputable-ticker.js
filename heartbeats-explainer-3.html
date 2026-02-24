@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heartbeats Explainer — Slide 3: Referral + CTA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 50% 45%, rgba(138,180,23,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 80%, rgba(220,60,60,0.03) 0%, transparent 35%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.022) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.18); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px; left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.16);
+  }
+
+  .headline {
+    position: absolute;
+    top: 178px; left: 72px; right: 72px;
+    font-size: 44px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -0.04em; color: #1a1a1a;
+  }
+  .headline .accent { color: #8AB417; }
+  .headline .dim { color: rgba(0,0,0,0.18); }
+
+  /* ── Referral card ─────────────────────────── */
+  .referral {
+    position: absolute;
+    top: 360px;
+    left: 72px; right: 72px;
+    padding: 36px 36px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(138,180,23,0.12);
+    border-radius: 22px;
+    box-shadow: 0 6px 30px rgba(138,180,23,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .referral::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #8AB417, #c8e64a, #8AB417);
+    border-radius: 22px 22px 0 0;
+  }
+
+  .ref-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #6B8E12;
+    padding: 6px 18px;
+    border-radius: 100px;
+    background: rgba(138,180,23,0.08);
+    margin-bottom: 20px;
+  }
+
+  .ref-title {
+    font-size: 28px; font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  .ref-title .accent { color: #8AB417; }
+
+  .ref-desc {
+    font-size: 16px; font-weight: 450;
+    color: rgba(0,0,0,0.35);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .ref-desc strong { color: rgba(0,0,0,0.55); font-weight: 700; }
+  .ref-desc em { color: #8AB417; font-style: italic; font-weight: 600; }
+
+  .ref-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ref-step {
+    flex: 1;
+    text-align: center;
+    padding: 16px 12px;
+    background: rgba(138,180,23,0.04);
+    border: 1px solid rgba(138,180,23,0.08);
+    border-radius: 14px;
+  }
+  .ref-step-icon { font-size: 24px; margin-bottom: 6px; display: block; }
+  .ref-step-text {
+    font-size: 12px; font-weight: 700;
+    color: rgba(0,0,0,0.4);
+    line-height: 1.35;
+  }
+  .ref-arrow {
+    font-size: 18px; color: rgba(138,180,23,0.35);
+    flex-shrink: 0;
+  }
+
+  /* ── Mission quote ─────────────────────────── */
+  .mission {
+    position: absolute;
+    top: 740px;
+    left: 72px; right: 72px;
+    padding-left: 22px;
+    border-left: 3px solid rgba(196,59,59,0.15);
+  }
+  .mission-text {
+    font-size: 19px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(0,0,0,0.28);
+    line-height: 1.55;
+  }
+  .mission-text strong {
+    color: rgba(0,0,0,0.5);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  /* ── CTA ────────────────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 878px;
+    left: 72px; right: 72px;
+    padding: 30px 36px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(138,180,23,0.15);
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(138,180,23,0.08);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .cta-left { flex: 1; }
+  .cta-heading {
+    font-size: 22px; font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1.25;
+    margin-bottom: 5px;
+  }
+  .cta-heading .accent { color: #8AB417; }
+  .cta-heading .heart { color: #C43B3B; }
+  .cta-body {
+    font-size: 14px; font-weight: 450;
+    color: rgba(0,0,0,0.3); line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-block;
+    padding: 16px 36px;
+    background: #8AB417;
+    color: #FFFFFF;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 20px rgba(138,180,23,0.25);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.13); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #C43B3B, #E85D5D, #8AB417, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Heartbeats</div>
+  </div>
+
+  <div class="section-label">Earn Even More</div>
+
+  <div class="headline">Share. Refer.<br><span class="accent">Earn Together.</span></div>
+
+  <div class="referral">
+    <div class="ref-badge">New — Referral Program</div>
+    <div class="ref-title">Share your link. <span class="accent">Both earn a bonus.</span></div>
+    <div class="ref-desc">When you share your unique Reputable link and a friend joins a study, <em>both of you</em> earn a <strong>Heartbeats bonus.</strong></div>
+    <div class="ref-flow">
+      <div class="ref-step">
+        <span class="ref-step-icon">🔗</span>
+        <div class="ref-step-text">Share your link</div>
+      </div>
+      <div class="ref-arrow">→</div>
+      <div class="ref-step">
+        <span class="ref-step-icon">👋</span>
+        <div class="ref-step-text">Friend joins a study</div>
+      </div>
+      <div class="ref-arrow">→</div>
+      <div class="ref-step">
+        <span class="ref-step-icon">❤️</span>
+        <div class="ref-step-text">Both earn bonus</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mission">
+    <div class="mission-text">Together, we're building the dataset that drives the <strong>future of wellness</strong> — one action, one insight, and one Heartbeat at a time.</div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Start earning <span class="heart">❤️</span> <span class="accent">Heartbeats</span> today</div>
+      <div class="cta-body">Grab your referral link or join a new study.</div>
+    </div>
+    <div class="cta-button">Link in Bio</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">03 / 03</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
