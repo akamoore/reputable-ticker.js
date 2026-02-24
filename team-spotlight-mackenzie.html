@@ -9,7 +9,7 @@
 
   body {
     width: 1080px;
-    height: 1080px;
+    height: 1920px;
     overflow: hidden;
     background: #0a0a0a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -18,19 +18,19 @@
 
   .canvas {
     width: 1080px;
-    height: 1080px;
+    height: 1920px;
     position: relative;
     background: #0a0a0a;
     overflow: hidden;
   }
 
-  /* ── Photo area (left 42%) ──────────────────────── */
+  /* ── Photo strip (top ~25%) ────────────────────── */
   .photo-area {
     position: absolute;
     top: 0;
     left: 0;
-    width: 454px;
-    height: 1080px;
+    right: 0;
+    height: 480px;
     overflow: hidden;
   }
 
@@ -42,7 +42,6 @@
     display: block;
   }
 
-  /* Photo placeholder when no image loaded */
   .photo-placeholder {
     width: 100%;
     height: 100%;
@@ -59,32 +58,22 @@
     opacity: 0.08;
   }
 
-  /* Gradient overlay on photo edge */
-  .photo-fade {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 120px;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, #0a0a0a);
-    pointer-events: none;
-  }
-
+  /* Gradient fade at bottom of photo */
   .photo-fade-bottom {
     position: absolute;
-    bottom: 0;
+    top: 340px;
     left: 0;
-    width: 454px;
-    height: 260px;
+    right: 0;
+    height: 140px;
     background: linear-gradient(180deg, transparent, #0a0a0a);
     pointer-events: none;
   }
 
-  /* ── Grid (right side only) ────────────────────── */
+  /* ── Grid (below photo) ────────────────────────── */
   .grid {
     position: absolute;
-    top: 0;
-    left: 454px;
+    top: 480px;
+    left: 0;
     right: 0;
     bottom: 0;
     background-image:
@@ -96,17 +85,20 @@
 
   /* ── Corners ───────────────────────────────────── */
   .corner { position: absolute; width: 18px; height: 18px; }
-  .corner.tl { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
-  .corner.bl { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
 
-  /* ── Series badge ──────────────────────────────── */
+  /* ── Series badge (over photo) ─────────────────── */
   .series-badge {
     position: absolute;
     top: 52px;
-    left: 490px;
+    left: 72px;
     display: flex;
     align-items: center;
     gap: 10px;
+    z-index: 2;
   }
 
   .badge-pill {
@@ -114,9 +106,10 @@
     align-items: center;
     gap: 6px;
     padding: 6px 14px;
-    border: 1px solid rgba(200,230,74,0.25);
+    border: 1px solid rgba(200,230,74,0.35);
     border-radius: 100px;
-    background: rgba(200,230,74,0.04);
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
   }
 
   .badge-dot {
@@ -135,84 +128,120 @@
     text-transform: uppercase;
   }
 
-  .scan-line {
+  /* ── Photo name overlay ────────────────────────── */
+  .photo-name-overlay {
     position: absolute;
-    left: 490px;
-    right: 54px;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(200,230,74,0.12), transparent);
+    top: 370px;
+    left: 72px;
+    z-index: 2;
   }
-  .scan-line.s1 { top: 92px; }
+
+  .photo-name-overlay .dr {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: rgba(200,230,74,0.6);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .photo-name-overlay .pname {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  }
+
+  /* ── Horizontal divider ────────────────────────── */
+  .divider {
+    position: absolute;
+    top: 480px;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.2), rgba(200,230,74,0.04));
+  }
 
   /* ── Name block ────────────────────────────────── */
   .name-block {
     position: absolute;
-    top: 112px;
-    left: 490px;
+    top: 520px;
+    left: 72px;
     right: 72px;
   }
 
   .role-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     color: rgba(200,230,74,0.4);
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .name {
-    font-size: 40px;
+    font-size: 48px;
     font-weight: 800;
-    line-height: 1.02;
+    line-height: 1.04;
     letter-spacing: -0.03em;
     color: #f0f0f0;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .name .first { color: #f0f0f0; }
   .name .last { color: #c8e64a; }
 
   .title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
-    color: rgba(255,255,255,0.35);
-    margin-top: 12px;
-    line-height: 1.4;
+    color: rgba(255,255,255,0.3);
+    margin-top: 14px;
+    line-height: 1.45;
   }
 
   /* ── Bio blurb ─────────────────────────────────── */
   .bio {
     position: absolute;
-    top: 298px;
-    left: 490px;
+    top: 740px;
+    left: 72px;
     right: 72px;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255,255,255,0.3);
+    line-height: 1.7;
+    color: rgba(255,255,255,0.28);
   }
   .bio strong {
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.5);
     font-weight: 600;
   }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.1), transparent);
+  }
+  .scan-line.s1 { top: 870px; }
 
   /* ── Spotlight cards ───────────────────────────── */
   .cards {
     position: absolute;
-    top: 468px;
-    left: 490px;
+    top: 900px;
+    left: 72px;
     right: 72px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
   }
 
   .card {
-    padding: 20px 22px;
+    padding: 24px 26px;
     background: rgba(255,255,255,0.025);
     border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 14px;
+    border-radius: 16px;
     position: relative;
     overflow: hidden;
   }
@@ -223,7 +252,7 @@
     top: 0; left: 0;
     width: 3px;
     height: 100%;
-    border-radius: 14px 0 0 14px;
+    border-radius: 16px 0 0 16px;
   }
   .card.c1::before { background: #c8e64a; }
   .card.c2::before { background: #ef4444; }
@@ -232,64 +261,72 @@
   .card-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
+    gap: 10px;
+    margin-bottom: 8px;
   }
 
   .card-icon {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .card-label {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.5);
     text-transform: uppercase;
   }
 
   .card-body {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.32);
     line-height: 1.55;
-    padding-left: 0;
   }
   .card-body strong {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.55);
     font-weight: 600;
   }
 
   /* ── Pull quote ────────────────────────────────── */
   .quote-area {
     position: absolute;
-    bottom: 160px;
-    left: 490px;
+    top: 1428px;
+    left: 72px;
     right: 72px;
   }
 
   .quote-mark {
-    font-size: 36px;
+    font-size: 42px;
     font-weight: 800;
     color: rgba(200,230,74,0.2);
     line-height: 1;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .quote-text {
-    font-size: 17px;
+    font-size: 22px;
     font-weight: 600;
     font-style: italic;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.5);
     line-height: 1.45;
   }
   .quote-text .lime { color: #c8e64a; font-style: italic; }
 
   /* ── Bottom CTA ────────────────────────────────── */
+  .cta-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    bottom: 160px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.08), transparent);
+  }
+
   .cta-area {
     position: absolute;
-    bottom: 52px;
-    left: 490px;
+    bottom: 100px;
+    left: 72px;
     right: 72px;
     display: flex;
     align-items: center;
@@ -299,19 +336,19 @@
   .cta-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
-  .cta-icon { font-size: 14px; }
+  .cta-icon { font-size: 16px; }
 
   .cta-text {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: rgba(200,230,74,0.4);
   }
 
   .brand {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -328,87 +365,40 @@
     background: linear-gradient(90deg, #c8e64a, #34d399, #60a5fa);
     opacity: 0.4;
   }
-
-  /* ── Vertical accent line on photo edge ────────── */
-  .vert-accent {
-    position: absolute;
-    top: 52px;
-    bottom: 52px;
-    left: 468px;
-    width: 1px;
-    background: linear-gradient(180deg, rgba(200,230,74,0.2), rgba(200,230,74,0.04), rgba(200,230,74,0.15));
-  }
-
-  /* ── Bottom-left name overlay on photo ────────── */
-  .photo-name-overlay {
-    position: absolute;
-    bottom: 70px;
-    left: 36px;
-    z-index: 2;
-  }
-
-  .photo-name-overlay .dr {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: rgba(200,230,74,0.5);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .photo-name-overlay .pname {
-    font-size: 28px;
-    font-weight: 800;
-    color: #f0f0f0;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
-  }
-
-  .cta-line {
-    position: absolute;
-    left: 490px;
-    right: 72px;
-    bottom: 90px;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(200,230,74,0.08), transparent);
-  }
 </style>
 </head>
 <body>
 <div class="canvas">
 
-  <!-- Photo (left panel) -->
+  <!-- Photo (top strip ~25%) -->
   <div class="photo-area">
-    <!-- Replace src with actual photo path -->
     <img src="https://reputable.health/wp-content/uploads/2025/12/Screenshot-2025-12-30-at-2.52.10-PM.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
     <div class="photo-placeholder" style="display:none;">
       <svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="45" r="22" fill="#c8e64a"/><ellipse cx="60" cy="105" rx="38" ry="28" fill="#c8e64a"/></svg>
     </div>
   </div>
-  <div class="photo-fade"></div>
   <div class="photo-fade-bottom"></div>
 
-  <!-- Photo name overlay -->
-  <div class="photo-name-overlay">
-    <div class="dr">Doctor of Health Science</div>
-    <div class="pname">Mackenzie<br>De Jesus</div>
-  </div>
-
-  <!-- Grid + corners (right side) -->
-  <div class="grid"></div>
-  <div class="corner tl"></div>
-  <div class="corner bl"></div>
-  <div class="vert-accent"></div>
-
-  <!-- Series badge -->
+  <!-- Photo overlay elements -->
   <div class="series-badge">
     <div class="badge-pill">
       <div class="badge-dot"></div>
       <div class="badge-text">Team Spotlight</div>
     </div>
   </div>
-  <div class="scan-line s1"></div>
+
+  <div class="photo-name-overlay">
+    <div class="dr">Doctor of Health Science</div>
+    <div class="pname">Mackenzie De Jesus</div>
+  </div>
+
+  <!-- Grid + corners -->
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+  <div class="divider"></div>
 
   <!-- Name block -->
   <div class="name-block">
@@ -424,6 +414,8 @@
   <div class="bio">
     A personal injury exposed a massive gap between <strong>academic research and real-world care</strong>. She spent the next decade earning her doctorate and leading studies to close that exact gap.
   </div>
+
+  <div class="scan-line s1"></div>
 
   <!-- Spotlight cards -->
   <div class="cards">
