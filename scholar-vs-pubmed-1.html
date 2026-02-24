@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Scholar vs PubMed — Slide 1: Cover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(25,55,70,0.55) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 70%, rgba(60,100,200,0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 75% 75%, rgba(50,35,100,0.15) 0%, transparent 45%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  /* ── Icon area ──────────────────────────────────── */
+  .icon-area {
+    position: absolute;
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .tool-icon {
+    width: 100px; height: 100px;
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 52px;
+    position: relative;
+  }
+  .tool-icon.scholar {
+    background: rgba(66,133,244,0.08);
+    border: 1px solid rgba(66,133,244,0.15);
+  }
+  .tool-icon.pubmed {
+    background: rgba(0,150,136,0.08);
+    border: 1px solid rgba(0,150,136,0.15);
+  }
+  .vs-text {
+    font-size: 24px; font-weight: 800;
+    color: rgba(160,200,210,0.25);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── Badge ──────────────────────────────────────── */
+  .badge {
+    position: absolute;
+    top: 280px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .badge span {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #d4ff50;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(212,255,80,0.2);
+    border-radius: 100px;
+    background: rgba(212,255,80,0.04);
+  }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 348px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h1 .scholar-color { color: #6ea8fe; }
+  .headline h1 .dim { color: rgba(160,200,210,0.3); }
+  .headline h1 .pubmed-color { color: #5ce0d0; }
+
+  /* ── Subtext ────────────────────────────────────── */
+  .sub {
+    position: absolute;
+    top: 580px;
+    left: 140px; right: 140px;
+    text-align: center;
+  }
+  .sub-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(140,120,200,0.35), transparent);
+    margin: 0 auto 24px;
+  }
+  .sub-text {
+    font-size: 20px; font-weight: 400;
+    color: rgba(160,200,210,0.4);
+    line-height: 1.6;
+  }
+  .sub-text em {
+    color: rgba(200,181,255,0.6);
+    font-style: italic;
+  }
+
+  /* ── Comparison pills ───────────────────────────── */
+  .compare {
+    position: absolute;
+    top: 740px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+  .compare-card {
+    flex: 1;
+    padding: 28px 24px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 18px 18px 0 0;
+  }
+  .compare-card.scholar::before { background: linear-gradient(90deg, rgba(66,133,244,0.4), rgba(66,133,244,0.1)); }
+  .compare-card.pubmed::before { background: linear-gradient(90deg, rgba(0,150,136,0.4), rgba(0,150,136,0.1)); }
+
+  .cc-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .cc-title {
+    font-size: 18px; font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .compare-card.scholar .cc-title { color: #6ea8fe; }
+  .compare-card.pubmed .cc-title { color: #5ce0d0; }
+  .cc-sub {
+    font-size: 13px; font-weight: 500;
+    color: rgba(160,200,210,0.35);
+    line-height: 1.45;
+  }
+
+  /* ── Swipe ──────────────────────────────────────── */
+  .swipe {
+    position: absolute;
+    top: 930px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swipe-text {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(160,200,210,0.15);
+  }
+  .swipe-arrow { font-size: 14px; color: rgba(212,255,80,0.3); }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #4285f4, #6ea8fe, #5ce0d0, #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Research Guide</div>
+  </div>
+
+  <div class="icon-area">
+    <div class="tool-icon scholar">📚</div>
+    <div class="vs-text">vs</div>
+    <div class="tool-icon pubmed">🏥</div>
+  </div>
+
+  <div class="badge"><span>Cheat Sheet</span></div>
+
+  <div class="headline">
+    <h1><span class="scholar-color">Google Scholar</span><br><span class="dim">vs</span><br><span class="pubmed-color">PubMed</span></h1>
+  </div>
+
+  <div class="sub">
+    <div class="sub-divider"></div>
+    <div class="sub-text">Two of the most popular research tools.<br>But they are <em>definitely not</em> created equal.</div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card scholar">
+      <span class="cc-icon">📚</span>
+      <div class="cc-title">The Broad Net</div>
+      <div class="cc-sub">Massive interdisciplinary search across all fields</div>
+    </div>
+    <div class="compare-card pubmed">
+      <span class="cc-icon">🏥</span>
+      <div class="cc-title">The Specialist</div>
+      <div class="cc-sub">Focused biomedical &amp; life sciences literature</div>
+    </div>
+  </div>
+
+  <div class="swipe">
+    <span class="swipe-text">Swipe for the breakdown</span>
+    <span class="swipe-arrow">→</span>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
