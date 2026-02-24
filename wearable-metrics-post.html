@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wearable Metrics — Editorial Post</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 30% 25%, rgba(200,230,74,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 75%, rgba(52,211,153,0.03) 0%, transparent 40%),
+      #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Grid ──────────────────────────────────────── */
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-left: 1px solid rgba(200,230,74,0.18); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Top label ─────────────────────────────────── */
+  .top-label {
+    position: absolute;
+    top: 62px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    flex-shrink: 0;
+  }
+  .label-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.3), transparent);
+  }
+  .label-right {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(200,230,74,0.3);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 72px;
+    right: 72px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,230,74,0.08), rgba(200,230,74,0.08), transparent);
+  }
+  .scan-line.s1 { top: 104px; }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline-area {
+    position: absolute;
+    top: 118px;
+    left: 72px;
+    right: 72px;
+  }
+  .kicker {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.28);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .headline {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+  }
+  .headline .accent { color: #c8e64a; }
+
+  /* ── 2×2 Metric cards ──────────────────────────── */
+  .metrics {
+    position: absolute;
+    top: 380px;
+    left: 72px;
+    right: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .metric {
+    padding: 28px 24px 24px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .metric.m1::before { background: #ef4444; }
+  .metric.m2::before { background: #a78bfa; }
+  .metric.m3::before { background: #38bdf8; }
+  .metric.m4::before { background: #c8e64a; }
+
+  .metric-icon {
+    font-size: 26px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .metric-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .metric-desc {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .metric-desc strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Tagline ───────────────────────────────────── */
+  .tagline {
+    position: absolute;
+    bottom: 124px;
+    left: 72px;
+    right: 72px;
+    font-size: 21px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .tagline .lime { color: #c8e64a; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 72px;
+    left: 72px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cta-icon { font-size: 16px; }
+  .cta-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.45);
+  }
+  .brand {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ef4444, #a78bfa, #38bdf8, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- Top label -->
+  <div class="top-label">
+    <div class="label-dot"></div>
+    <div class="label-text">Science Editorial</div>
+    <div class="label-line"></div>
+    <div class="label-right">Wearable Metrics</div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Headline -->
+  <div class="headline-area">
+    <div class="kicker">Your smartwatch is doing a lot more than just counting your steps. It's powering the future of clinical research.</div>
+    <div class="headline">The Power of<br><span class="accent">Wearable Metrics</span><br>in Health Studies</div>
+  </div>
+
+  <!-- 2×2 Metric cards -->
+  <div class="metrics">
+    <div class="metric m1">
+      <span class="metric-icon">&#x1FAC0;</span>
+      <div class="metric-title">Heart Rate &amp; HRV</div>
+      <div class="metric-desc">Measuring your <strong>autonomic function</strong> and actual resilience to stress.</div>
+    </div>
+    <div class="metric m2">
+      <span class="metric-icon">&#x1F4A4;</span>
+      <div class="metric-title">Sleep Architecture</div>
+      <div class="metric-desc">Tracking <strong>Light, Deep, and REM</strong> stages to see how protocols impact recovery.</div>
+    </div>
+    <div class="metric m3">
+      <span class="metric-icon">&#x1FAC1;</span>
+      <div class="metric-title">Respiration &amp; SpO2</div>
+      <div class="metric-desc">Critical indicators for detecting <strong>baseline shifts</strong> in systemic health.</div>
+    </div>
+    <div class="metric m4">
+      <span class="metric-icon">&#x1F50B;</span>
+      <div class="metric-title">Recovery Scores</div>
+      <div class="metric-desc">Combining <strong>daily strain and overnight data</strong> to understand your readiness.</div>
+    </div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    Real-time, longitudinal data for <span class="lime">personalized, evidence-based</span> interventions.
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-area">
+    <div class="cta-left">
+      <span class="cta-icon">&#x1F49A;</span>
+      <span class="cta-text">Read the full breakdown — link in bio</span>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

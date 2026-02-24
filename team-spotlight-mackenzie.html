@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Spotlight — Dr. Mackenzie De Jesus</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+
+  /* ── Photo area (left 42%) ──────────────────────── */
+  .photo-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 454px;
+    height: 1080px;
+    overflow: hidden;
+  }
+
+  .photo-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    display: block;
+  }
+
+  /* Photo placeholder when no image loaded */
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(200,230,74,0.06) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(200,230,74,0.03) 0%, rgba(10,10,10,0.9) 100%),
+      #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-placeholder svg {
+    opacity: 0.08;
+  }
+
+  /* Gradient overlay on photo edge */
+  .photo-fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #0a0a0a);
+    pointer-events: none;
+  }
+
+  .photo-fade-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 454px;
+    height: 260px;
+    background: linear-gradient(180deg, transparent, #0a0a0a);
+    pointer-events: none;
+  }
+
+  /* ── Grid (right side only) ────────────────────── */
+  .grid {
+    position: absolute;
+    top: 0;
+    left: 454px;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.015) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Corners ───────────────────────────────────── */
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 36px; right: 36px; border-top: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+  .corner.bl { bottom: 36px; right: 36px; border-bottom: 1px solid rgba(200,230,74,0.18); border-right: 1px solid rgba(200,230,74,0.18); }
+
+  /* ── Series badge ──────────────────────────────── */
+  .series-badge {
+    position: absolute;
+    top: 52px;
+    left: 490px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid rgba(200,230,74,0.25);
+    border-radius: 100px;
+    background: rgba(200,230,74,0.04);
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c8e64a;
+    box-shadow: 0 0 8px rgba(200,230,74,0.5);
+  }
+
+  .badge-text {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #c8e64a;
+    text-transform: uppercase;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 490px;
+    right: 54px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.12), transparent);
+  }
+  .scan-line.s1 { top: 92px; }
+
+  /* ── Name block ────────────────────────────────── */
+  .name-block {
+    position: absolute;
+    top: 112px;
+    left: 490px;
+    right: 72px;
+  }
+
+  .role-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: rgba(200,230,74,0.4);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .name {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: #f0f0f0;
+    margin-bottom: 4px;
+  }
+
+  .name .first { color: #f0f0f0; }
+  .name .last { color: #c8e64a; }
+
+  .title {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.35);
+    margin-top: 12px;
+    line-height: 1.4;
+  }
+
+  /* ── Bio blurb ─────────────────────────────────── */
+  .bio {
+    position: absolute;
+    top: 298px;
+    left: 490px;
+    right: 72px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.3);
+  }
+  .bio strong {
+    color: rgba(255,255,255,0.55);
+    font-weight: 600;
+  }
+
+  /* ── Spotlight cards ───────────────────────────── */
+  .cards {
+    position: absolute;
+    top: 468px;
+    left: 490px;
+    right: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 20px 22px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 14px 0 0 14px;
+  }
+  .card.c1::before { background: #c8e64a; }
+  .card.c2::before { background: #ef4444; }
+  .card.c3::before { background: #38bdf8; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .card-icon {
+    font-size: 16px;
+  }
+
+  .card-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+  }
+
+  .card-body {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.55;
+    padding-left: 0;
+  }
+  .card-body strong {
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+
+  /* ── Pull quote ────────────────────────────────── */
+  .quote-area {
+    position: absolute;
+    bottom: 160px;
+    left: 490px;
+    right: 72px;
+  }
+
+  .quote-mark {
+    font-size: 36px;
+    font-weight: 800;
+    color: rgba(200,230,74,0.2);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .quote-text {
+    font-size: 17px;
+    font-weight: 600;
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.45;
+  }
+  .quote-text .lime { color: #c8e64a; font-style: italic; }
+
+  /* ── Bottom CTA ────────────────────────────────── */
+  .cta-area {
+    position: absolute;
+    bottom: 52px;
+    left: 490px;
+    right: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cta-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cta-icon { font-size: 14px; }
+
+  .cta-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(200,230,74,0.4);
+  }
+
+  .brand {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.25);
+  }
+
+  /* ── Bottom bar ────────────────────────────────── */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #c8e64a, #34d399, #60a5fa);
+    opacity: 0.4;
+  }
+
+  /* ── Vertical accent line on photo edge ────────── */
+  .vert-accent {
+    position: absolute;
+    top: 52px;
+    bottom: 52px;
+    left: 468px;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(200,230,74,0.2), rgba(200,230,74,0.04), rgba(200,230,74,0.15));
+  }
+
+  /* ── Bottom-left name overlay on photo ────────── */
+  .photo-name-overlay {
+    position: absolute;
+    bottom: 70px;
+    left: 36px;
+    z-index: 2;
+  }
+
+  .photo-name-overlay .dr {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: rgba(200,230,74,0.5);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .photo-name-overlay .pname {
+    font-size: 28px;
+    font-weight: 800;
+    color: #f0f0f0;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  }
+
+  .cta-line {
+    position: absolute;
+    left: 490px;
+    right: 72px;
+    bottom: 90px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(200,230,74,0.08), transparent);
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Photo (left panel) -->
+  <div class="photo-area">
+    <!-- Replace src with actual photo path -->
+    <img src="mackenzie-headshot.jpg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+    <div class="photo-placeholder" style="display:none;">
+      <svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="45" r="22" fill="#c8e64a"/><ellipse cx="60" cy="105" rx="38" ry="28" fill="#c8e64a"/></svg>
+    </div>
+  </div>
+  <div class="photo-fade"></div>
+  <div class="photo-fade-bottom"></div>
+
+  <!-- Photo name overlay -->
+  <div class="photo-name-overlay">
+    <div class="dr">Doctor of Health Science</div>
+    <div class="pname">Mackenzie<br>De Jesus</div>
+  </div>
+
+  <!-- Grid + corners (right side) -->
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner bl"></div>
+  <div class="vert-accent"></div>
+
+  <!-- Series badge -->
+  <div class="series-badge">
+    <div class="badge-pill">
+      <div class="badge-dot"></div>
+      <div class="badge-text">Team Spotlight</div>
+    </div>
+  </div>
+  <div class="scan-line s1"></div>
+
+  <!-- Name block -->
+  <div class="name-block">
+    <div class="role-label">Head of Clinical Research</div>
+    <div class="name">
+      <span class="first">Dr. Mackenzie</span><br>
+      <span class="last">De Jesus</span>
+    </div>
+    <div class="title">Leading studies across neuroscience, autoimmune<br>disease, and longevity medicine.</div>
+  </div>
+
+  <!-- Bio -->
+  <div class="bio">
+    A personal injury exposed a massive gap between <strong>academic research and real-world care</strong>. She spent the next decade earning her doctorate and leading studies to close that exact gap.
+  </div>
+
+  <!-- Spotlight cards -->
+  <div class="cards">
+    <div class="card c1">
+      <div class="card-header">
+        <span class="card-icon">&#x1F469;&#x200D;&#x1F52C;</span>
+        <span class="card-label">Her Mission</span>
+      </div>
+      <div class="card-body">Closing the gap between <strong>clinical research</strong> and <strong>real-world application</strong>.</div>
+    </div>
+    <div class="card c2">
+      <div class="card-header">
+        <span class="card-icon">&#x1F4CA;</span>
+        <span class="card-label">Favorite Wearable Metric</span>
+      </div>
+      <div class="card-body"><strong>Overnight HRV</strong> — the ultimate honest feedback loop. You can't fake recovery.</div>
+    </div>
+    <div class="card c3">
+      <div class="card-header">
+        <span class="card-icon">&#x1F9CA;</span>
+        <span class="card-label">Current Biohack</span>
+      </div>
+      <div class="card-body"><strong>Progressive overload</strong>, precise macro tracking, cold exposure, and targeted supplementation.</div>
+    </div>
+  </div>
+
+  <!-- Pull quote -->
+  <div class="quote-area">
+    <div class="quote-mark">&ldquo;</div>
+    <div class="quote-text">Basically, <span class="lime">I am my own clinical trial.</span>&rdquo;</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-line"></div>
+  <div class="cta-area">
+    <div class="cta-left">
+      <span class="cta-icon">&#x1F49A;</span>
+      <span class="cta-text">Welcome Dr. De Jesus in the comments</span>
+    </div>
+    <div class="brand">Reputable</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
