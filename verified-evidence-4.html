@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verified Evidence — Slide 4: CTA</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(25,55,70,0.55) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 75%, rgba(50,35,100,0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 70% 60%, rgba(212,255,80,0.03) 0%, transparent 40%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px; left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(212,255,80,0.35);
+  }
+
+  .headline {
+    position: absolute;
+    top: 162px; left: 72px; right: 72px;
+  }
+  .headline h2 {
+    font-size: 48px; font-weight: 800;
+    line-height: 1.08; letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h2 .accent { color: #d4ff50; }
+  .headline h2 .dim { color: rgba(160,200,210,0.25); }
+
+  /* ── Side-by-side comparison ────────────────────── */
+  .comparison {
+    position: absolute;
+    top: 360px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+
+  .comp-col {
+    flex: 1;
+    border-radius: 20px;
+    padding: 30px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  .comp-col::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .comp-col.old {
+    background: rgba(255,120,120,0.03);
+    border: 1px solid rgba(255,120,120,0.1);
+  }
+  .comp-col.old::before { background: linear-gradient(90deg, rgba(255,120,120,0.5), rgba(255,120,120,0.15)); }
+  .comp-col.new {
+    background: rgba(212,255,80,0.03);
+    border: 1px solid rgba(212,255,80,0.1);
+  }
+  .comp-col.new::before { background: linear-gradient(90deg, rgba(212,255,80,0.5), rgba(212,255,80,0.15)); }
+
+  .comp-header {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .comp-col.old .comp-header { color: rgba(255,120,120,0.6); }
+  .comp-col.new .comp-header { color: rgba(212,255,80,0.6); }
+
+  .comp-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .comp-item:last-child { margin-bottom: 0; }
+  .comp-bullet { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .comp-text {
+    font-size: 14px; font-weight: 500;
+    color: rgba(160,200,210,0.4);
+    line-height: 1.5;
+  }
+
+  /* ── Big quote ──────────────────────────────────── */
+  .big-quote {
+    position: absolute;
+    top: 720px;
+    left: 72px; right: 72px;
+    padding: 32px 36px;
+    background: rgba(212,255,80,0.03);
+    border: 1.5px solid rgba(212,255,80,0.1);
+    border-radius: 20px;
+    text-align: center;
+  }
+  .big-quote-text {
+    font-size: 22px; font-weight: 700;
+    color: rgba(220,230,240,0.6);
+    line-height: 1.45;
+  }
+  .big-quote-text .accent { color: rgba(212,255,80,0.7); font-weight: 800; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 870px;
+    left: 72px; right: 72px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, rgba(100,70,200,0.1), rgba(212,255,80,0.04));
+    border: 1.5px solid rgba(140,100,240,0.18);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cta-left { flex: 1; }
+  .cta-heading {
+    font-size: 22px; font-weight: 800;
+    color: #eef0f8;
+    line-height: 1.25;
+    margin-bottom: 5px;
+  }
+  .cta-heading .accent { color: #d4ff50; }
+  .cta-body {
+    font-size: 14px; font-weight: 450;
+    color: rgba(160,200,210,0.35); line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 24px rgba(124,58,237,0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .cta-button::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, rgba(255,120,120,0.6), rgba(140,100,240,0.4), #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Verified Evidence</div>
+  </div>
+
+  <div class="section-label">The Shift</div>
+
+  <div class="headline">
+    <h2><span class="dim">From testimonials to</span><br><span class="accent">verified proof.</span></h2>
+  </div>
+
+  <div class="comparison">
+    <div class="comp-col old">
+      <div class="comp-header">❌ Old Way</div>
+      <div class="comp-item">
+        <span class="comp-bullet">📋</span>
+        <div class="comp-text">Self-reported surveys</div>
+      </div>
+      <div class="comp-item">
+        <span class="comp-bullet">🍒</span>
+        <div class="comp-text">Cherry-picked highlights</div>
+      </div>
+      <div class="comp-item">
+        <span class="comp-bullet">🏢</span>
+        <div class="comp-text">Brand-run, brand-interpreted</div>
+      </div>
+      <div class="comp-item">
+        <span class="comp-bullet">💬</span>
+        <div class="comp-text">"I felt better" testimonials</div>
+      </div>
+    </div>
+    <div class="comp-col new">
+      <div class="comp-header">✅ Reputable Way</div>
+      <div class="comp-item">
+        <span class="comp-bullet">⌚</span>
+        <div class="comp-text">Continuous wearable data</div>
+      </div>
+      <div class="comp-item">
+        <span class="comp-bullet">📊</span>
+        <div class="comp-text">Full dataset published</div>
+      </div>
+      <div class="comp-item">
+        <span class="comp-bullet">🔬</span>
+        <div class="comp-text">Third-party, independent</div>
+      </div>
+      <div class="comp-item">
+        <span class="comp-bullet">📈</span>
+        <div class="comp-text">HRV, Deep Sleep, REM measured</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="big-quote">
+    <div class="big-quote-text">Turn your customers into <span class="accent">verified proof.</span></div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Ready to <span class="accent">prove it?</span></div>
+      <div class="cta-body">Learn about the Verified Evidence Program.</div>
+    </div>
+    <div class="cta-button">Link in Bio</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">04 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

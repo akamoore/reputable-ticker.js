@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Scholar vs PubMed — Slide 4: Pro Strategy + CTA</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(25,55,70,0.55) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 70%, rgba(60,100,200,0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at 75% 65%, rgba(0,150,136,0.06) 0%, transparent 40%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px; left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(212,255,80,0.35);
+  }
+
+  .headline {
+    position: absolute;
+    top: 162px; left: 72px; right: 72px;
+  }
+  .headline h2 {
+    font-size: 52px; font-weight: 800;
+    line-height: 1.06; letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h2 .accent { color: #d4ff50; }
+  .headline h2 .dim { color: rgba(160,200,210,0.25); }
+
+  /* ── Strategy flow ──────────────────────────────── */
+  .strategy {
+    position: absolute;
+    top: 340px;
+    left: 72px; right: 72px;
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .strat-card {
+    flex: 1;
+    padding: 32px 28px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .strat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .strat-card.step1 {
+    background: rgba(66,133,244,0.05);
+    border: 1px solid rgba(66,133,244,0.12);
+  }
+  .strat-card.step1::before { background: linear-gradient(90deg, #4285f4, #6ea8fe); }
+  .strat-card.step2 {
+    background: rgba(0,150,136,0.05);
+    border: 1px solid rgba(0,150,136,0.12);
+  }
+  .strat-card.step2::before { background: linear-gradient(90deg, #009688, #5ce0d0); }
+
+  .strat-step-num {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 14px;
+    padding: 4px 14px;
+    border-radius: 100px;
+  }
+  .strat-card.step1 .strat-step-num { color: #6ea8fe; background: rgba(66,133,244,0.1); }
+  .strat-card.step2 .strat-step-num { color: #5ce0d0; background: rgba(0,150,136,0.1); }
+
+  .strat-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .strat-title {
+    font-size: 20px; font-weight: 800;
+    color: rgba(220,230,240,0.8);
+    margin-bottom: 8px;
+  }
+  .strat-desc {
+    font-size: 14px; font-weight: 450;
+    color: rgba(160,200,210,0.35);
+    line-height: 1.55;
+  }
+
+  .arrow-between {
+    position: absolute;
+    top: 430px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    color: rgba(212,255,80,0.2);
+  }
+
+  /* ── Quote ──────────────────────────────────────── */
+  .quote {
+    position: absolute;
+    top: 640px;
+    left: 72px; right: 72px;
+    padding-left: 22px;
+    border-left: 3px solid rgba(212,255,80,0.15);
+  }
+  .quote-text {
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(160,200,210,0.35);
+    line-height: 1.6;
+  }
+  .quote-text strong {
+    color: rgba(220,230,240,0.6);
+    font-weight: 700;
+    font-style: normal;
+  }
+  .quote-text .scholar-hl { color: rgba(110,168,254,0.7); font-weight: 700; font-style: normal; }
+  .quote-text .pubmed-hl { color: rgba(92,224,208,0.7); font-weight: 700; font-style: normal; }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 810px;
+    left: 72px; right: 72px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, rgba(100,70,200,0.1), rgba(212,255,80,0.04));
+    border: 1.5px solid rgba(140,100,240,0.18);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cta-left { flex: 1; }
+  .cta-heading {
+    font-size: 22px; font-weight: 800;
+    color: #eef0f8;
+    line-height: 1.25;
+    margin-bottom: 5px;
+  }
+  .cta-heading .accent { color: #d4ff50; }
+  .cta-body {
+    font-size: 14px; font-weight: 450;
+    color: rgba(160,200,210,0.35); line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 24px rgba(124,58,237,0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .cta-button::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #4285f4, #6ea8fe, #5ce0d0, #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Research Guide</div>
+  </div>
+
+  <div class="section-label">The Pro Strategy</div>
+
+  <div class="headline">
+    <h2><span class="accent">Use Both.</span><br><span class="dim">Here's how.</span></h2>
+  </div>
+
+  <div class="strategy">
+    <div class="strat-card step1">
+      <div class="strat-step-num">Step 1</div>
+      <span class="strat-icon">📚</span>
+      <div class="strat-title">Google Scholar</div>
+      <div class="strat-desc">Start with a broad overview across all disciplines and literature types.</div>
+    </div>
+    <div class="strat-card step2">
+      <div class="strat-step-num">Step 2</div>
+      <span class="strat-icon">🏥</span>
+      <div class="strat-title">PubMed</div>
+      <div class="strat-desc">Then drill down into rigorous, peer-reviewed clinical data with precision filters.</div>
+    </div>
+  </div>
+
+  <div class="arrow-between">→</div>
+
+  <div class="quote">
+    <div class="quote-text">Start with <span class="scholar-hl">Google Scholar</span> for the big picture, then use <span class="pubmed-hl">PubMed</span> to <strong>drill down into the evidence.</strong></div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Search like a <span class="accent">pro</span></div>
+      <div class="cta-body">Read the full guide on our blog.</div>
+    </div>
+    <div class="cta-button">Link in Bio</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">04 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

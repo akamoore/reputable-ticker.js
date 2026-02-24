@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women's Health White Paper — Slide 1: Cover</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 55% 30%, rgba(138,72,160,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 35% 75%, rgba(138,180,23,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.022) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.18); text-transform: uppercase; white-space: nowrap; }
+
+  /* ── DNA icon ──────────────────────────────── */
+  .dna-wrap {
+    position: absolute;
+    top: 128px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dna-glow {
+    position: absolute;
+    inset: -25px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(138,72,160,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .dna-icon {
+    font-size: 96px;
+    line-height: 1;
+    filter: drop-shadow(0 6px 20px rgba(138,72,160,0.1));
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Badge ──────────────────────────────────── */
+  .badge {
+    position: absolute;
+    top: 330px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .badge span {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #8B5A9E;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(139,90,158,0.15);
+    border-radius: 100px;
+    background: rgba(139,90,158,0.03);
+  }
+
+  /* ── Author ─────────────────────────────────── */
+  .author {
+    position: absolute;
+    top: 400px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .author-role {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(0,0,0,0.2);
+    margin-bottom: 6px;
+  }
+  .author-name {
+    font-size: 18px; font-weight: 700;
+    color: rgba(0,0,0,0.5);
+  }
+
+  /* ── Headline ──────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 468px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1.06;
+    letter-spacing: -0.04em;
+    color: #1a1a1a;
+  }
+  .headline h1 .accent { color: #8B5A9E; }
+  .headline h1 .dim { color: rgba(0,0,0,0.18); }
+
+  /* ── Subtext ───────────────────────────────── */
+  .sub {
+    position: absolute;
+    top: 700px;
+    left: 130px; right: 130px;
+    text-align: center;
+  }
+  .sub-divider {
+    width: 50px; height: 2px;
+    background: rgba(139,90,158,0.2);
+    margin: 0 auto 24px;
+  }
+  .sub-text {
+    font-size: 17px; font-weight: 500;
+    color: rgba(0,0,0,0.33);
+    line-height: 1.6;
+  }
+  .sub-text strong { color: rgba(0,0,0,0.55); font-weight: 700; }
+
+  /* ── Topic pills ───────────────────────────── */
+  .topics {
+    position: absolute;
+    top: 850px;
+    left: 72px; right: 72px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+  }
+  .topic-pill {
+    padding: 16px 28px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topic-icon { font-size: 22px; }
+  .topic-text {
+    font-size: 13px; font-weight: 700;
+    color: rgba(0,0,0,0.4);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Swipe ──────────────────────────────────── */
+  .swipe {
+    position: absolute;
+    top: 940px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swipe-text {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(0,0,0,0.15);
+  }
+  .swipe-arrow { font-size: 14px; color: rgba(138,180,23,0.4); }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.13); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #8B5A9E, #B87FD4, #8AB417, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">White Paper</div>
+  </div>
+
+  <div class="dna-wrap">
+    <div class="dna-glow"></div>
+    <div class="dna-icon">🧬</div>
+  </div>
+
+  <div class="badge"><span>Reputable Research</span></div>
+
+  <div class="author">
+    <div class="author-role">Head of Clinical Research</div>
+    <div class="author-name">Dr. Mackenzie De Jesus</div>
+  </div>
+
+  <div class="headline">
+    <h1><span class="dim">The Need for</span><br>More Research <span class="dim">in</span><br><span class="accent">Women's Health</span></h1>
+  </div>
+
+  <div class="sub">
+    <div class="sub-divider"></div>
+    <div class="sub-text">For much of modern medical history, clinical research <strong>predominantly focused on male physiology.</strong> It's time to close the gap.</div>
+  </div>
+
+  <div class="topics">
+    <div class="topic-pill">
+      <span class="topic-icon">🫀</span>
+      <span class="topic-text">Cardiovascular</span>
+    </div>
+    <div class="topic-pill">
+      <span class="topic-icon">🛡️</span>
+      <span class="topic-text">Autoimmune</span>
+    </div>
+    <div class="topic-pill">
+      <span class="topic-icon">🧠</span>
+      <span class="topic-text">Mental Health</span>
+    </div>
+  </div>
+
+  <div class="swipe">
+    <span class="swipe-text">Swipe to learn more</span>
+    <span class="swipe-arrow">→</span>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

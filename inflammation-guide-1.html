@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inflammation Guide — Slide 1: Cover</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 55% 30%, rgba(220,60,60,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 35% 75%, rgba(138,180,23,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.022) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.18); text-transform: uppercase; white-space: nowrap; }
+
+  /* ── Icon ───────────────────────────────────────── */
+  .icon-area {
+    position: absolute;
+    top: 128px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-glow {
+    position: absolute; inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(220,60,60,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .icon-emoji { font-size: 80px; position: relative; z-index: 1; filter: drop-shadow(0 4px 16px rgba(220,60,60,0.08)); }
+
+  /* ── Badge ──────────────────────────────────────── */
+  .badge {
+    position: absolute;
+    top: 290px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .badge span {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #C43B3B;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(196,59,59,0.15);
+    border-radius: 100px;
+    background: rgba(196,59,59,0.03);
+  }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 370px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1.06;
+    letter-spacing: -0.04em;
+    color: #1a1a1a;
+  }
+  .headline h1 .red { color: #C43B3B; }
+  .headline h1 .dim { color: rgba(0,0,0,0.18); }
+
+  /* ── Sub ────────────────────────────────────────── */
+  .sub {
+    position: absolute;
+    top: 580px;
+    left: 120px; right: 120px;
+    text-align: center;
+  }
+  .sub-divider {
+    width: 50px; height: 2px;
+    background: rgba(196,59,59,0.2);
+    margin: 0 auto 22px;
+  }
+  .sub-text {
+    font-size: 18px; font-weight: 500;
+    color: rgba(0,0,0,0.33);
+    line-height: 1.6;
+  }
+  .sub-text strong { color: rgba(0,0,0,0.55); font-weight: 700; }
+
+  /* ── Comparison pills ───────────────────────────── */
+  .compare {
+    position: absolute;
+    top: 740px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+  .compare-card {
+    flex: 1;
+    padding: 26px 24px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.025);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 18px 18px 0 0;
+  }
+  .compare-card.acute::before { background: linear-gradient(90deg, #8AB417, #A0D020); }
+  .compare-card.chronic::before { background: linear-gradient(90deg, #C43B3B, #E85D5D); }
+
+  .cc-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .cc-title { font-size: 17px; font-weight: 800; margin-bottom: 5px; }
+  .compare-card.acute .cc-title { color: #6B8E12; }
+  .compare-card.chronic .cc-title { color: #C43B3B; }
+  .cc-sub {
+    font-size: 13px; font-weight: 500;
+    color: rgba(0,0,0,0.3);
+    line-height: 1.45;
+  }
+
+  /* ── Swipe ──────────────────────────────────────── */
+  .swipe {
+    position: absolute;
+    top: 930px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .swipe-text { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.13); }
+  .swipe-arrow { font-size: 14px; color: rgba(138,180,23,0.4); }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.13); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #C43B3B, #E85D5D, #8AB417, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Longevity Science</div>
+  </div>
+
+  <div class="icon-area">
+    <div class="icon-glow"></div>
+    <span class="icon-emoji">🩸</span>
+  </div>
+
+  <div class="badge"><span>Inflammation Guide</span></div>
+
+  <div class="headline">
+    <h1><span class="dim">The Silent Fire</span><br>Inside <span class="red">Your Body</span></h1>
+  </div>
+
+  <div class="sub">
+    <div class="sub-divider"></div>
+    <div class="sub-text">Acute inflammation heals a papercut. <strong>Chronic inflammation accelerates aging.</strong> Which one is happening inside your body right now?</div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card acute">
+      <span class="cc-icon">🩹</span>
+      <div class="cc-title">Acute</div>
+      <div class="cc-sub">Short-term healing response. Your body protecting itself.</div>
+    </div>
+    <div class="compare-card chronic">
+      <span class="cc-icon">🔥</span>
+      <div class="cc-title">Chronic</div>
+      <div class="cc-sub">Low-grade fire burning in the background of your biology.</div>
+    </div>
+  </div>
+
+  <div class="swipe">
+    <span class="swipe-text">Swipe to learn more</span>
+    <span class="swipe-arrow">→</span>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women's Health White Paper — Slide 4: Path Forward + CTA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 50% 40%, rgba(138,180,23,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 80%, rgba(138,72,160,0.03) 0%, transparent 35%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.022) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.18); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px; left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.16);
+  }
+
+  .headline {
+    position: absolute;
+    top: 175px; left: 72px; right: 72px;
+    font-size: 44px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -0.04em; color: #1a1a1a;
+  }
+  .headline .accent { color: #8AB417; }
+  .headline .purple { color: #8B5A9E; }
+  .headline .dim { color: rgba(0,0,0,0.18); }
+
+  /* ── Exposome explanation ───────────────────── */
+  .exposome {
+    position: absolute;
+    top: 390px;
+    left: 72px; right: 72px;
+  }
+  .exposome-divider {
+    width: 50px; height: 2px;
+    background: rgba(139,90,158,0.2);
+    margin-bottom: 24px;
+  }
+  .exposome-text {
+    font-size: 18px; font-weight: 500;
+    color: rgba(0,0,0,0.33);
+    line-height: 1.65;
+  }
+  .exposome-text strong { color: rgba(0,0,0,0.55); font-weight: 700; }
+
+  /* ── Approach pillars ───────────────────────── */
+  .pillars {
+    position: absolute;
+    top: 540px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 16px;
+  }
+  .pillar {
+    flex: 1;
+    padding: 28px 20px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.025);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .pillar:nth-child(1)::before { background: linear-gradient(90deg, #4A90D9, #5BA3EC); }
+  .pillar:nth-child(2)::before { background: linear-gradient(90deg, #8B5A9E, #B87FD4); }
+  .pillar:nth-child(3)::before { background: linear-gradient(90deg, #8AB417, #A0D020); }
+
+  .pillar-icon { font-size: 36px; margin-bottom: 14px; display: block; }
+  .pillar-title {
+    font-size: 18px; font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+  }
+  .pillar-desc {
+    font-size: 13px; font-weight: 500;
+    color: rgba(0,0,0,0.3);
+    line-height: 1.5;
+  }
+
+  /* ── Mission quote ──────────────────────────── */
+  .mission {
+    position: absolute;
+    top: 760px;
+    left: 72px; right: 72px;
+    padding-left: 22px;
+    border-left: 3px solid rgba(138,180,23,0.2);
+  }
+  .mission-text {
+    font-size: 17px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(0,0,0,0.25);
+    line-height: 1.55;
+  }
+  .mission-text strong {
+    color: rgba(0,0,0,0.45);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  /* ── CTA ────────────────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 878px;
+    left: 72px; right: 72px;
+    padding: 30px 36px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(138,180,23,0.15);
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(138,180,23,0.08);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .cta-left { flex: 1; }
+  .cta-heading {
+    font-size: 22px; font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1.25;
+    margin-bottom: 5px;
+  }
+  .cta-heading .accent { color: #8AB417; }
+  .cta-body {
+    font-size: 14px; font-weight: 450;
+    color: rgba(0,0,0,0.3); line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-block;
+    padding: 16px 36px;
+    background: #8AB417;
+    color: #FFFFFF;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 20px rgba(138,180,23,0.25);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.13); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #8B5A9E, #B87FD4, #8AB417, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Women's Health</div>
+  </div>
+
+  <div class="section-label">The Path Forward</div>
+
+  <div class="headline">We can't <span class="accent">optimize</span><br><span class="dim">what we don't accurately</span><br><span class="purple">measure.</span></div>
+
+  <div class="exposome">
+    <div class="exposome-divider"></div>
+    <div class="exposome-text">Balanced healthcare requires a <strong>comprehensive understanding</strong> of the female exposome — the totality of environmental and biological exposures unique to women.</div>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pillar-icon">📊</span>
+      <div class="pillar-title">Measure</div>
+      <div class="pillar-desc">Real-world biometric data from wearables</div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">🔬</span>
+      <div class="pillar-title">Research</div>
+      <div class="pillar-desc">Sex-specific clinical study design</div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">💡</span>
+      <div class="pillar-title">Understand</div>
+      <div class="pillar-desc">Evidence-based health insights</div>
+    </div>
+  </div>
+
+  <div class="mission">
+    <div class="mission-text">The road to balanced healthcare starts with <strong>dedicated, inclusive research.</strong></div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Read the <span class="accent">Full White Paper</span></div>
+      <div class="cta-body">Dr. Mackenzie De Jesus · Head of Clinical Research</div>
+    </div>
+    <div class="cta-button">Link in Bio</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">04 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inflammation Guide — Slide 2: Why It Matters</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background: #FAFAF7;
+    overflow: hidden;
+  }
+
+  .grain {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 40% 30%, rgba(220,60,60,0.03) 0%, transparent 45%),
+      radial-gradient(ellipse at 65% 75%, rgba(138,180,23,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.022) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 16px; height: 16px; }
+  .corner.tl { top: 36px; left: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.tr { top: 36px; right: 36px; border-top: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.bl { bottom: 36px; left: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-left: 1.5px solid rgba(0,0,0,0.07); }
+  .corner.br { bottom: 36px; right: 36px; border-bottom: 1.5px solid rgba(0,0,0,0.07); border-right: 1.5px solid rgba(0,0,0,0.07); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #8AB417; box-shadow: 0 0 8px rgba(138,180,23,0.4); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #8AB417; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(138,180,23,0.3), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.18); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 128px; left: 72px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.16);
+  }
+
+  .headline {
+    position: absolute;
+    top: 178px; left: 72px; right: 72px;
+    font-size: 44px; font-weight: 900; line-height: 1.08;
+    letter-spacing: -0.04em; color: #1a1a1a;
+  }
+  .headline .red { color: #C43B3B; }
+  .headline .dim { color: rgba(0,0,0,0.18); }
+
+  /* ── Fire metaphor quote ────────────────────────── */
+  .quote-block {
+    position: absolute;
+    top: 370px;
+    left: 72px; right: 72px;
+    padding: 30px 34px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(196,59,59,0.1);
+    border-radius: 22px;
+    box-shadow: 0 6px 30px rgba(196,59,59,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #C43B3B, #E85D5D);
+    border-radius: 22px 0 0 22px;
+  }
+  .quote-block-text {
+    font-size: 20px; font-weight: 600;
+    color: #1a1a1a; line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+  .quote-block-text .red { color: #C43B3B; font-weight: 800; }
+
+  /* ── Impact cards ───────────────────────────────── */
+  .impacts-label {
+    position: absolute;
+    top: 538px; left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(0,0,0,0.14);
+  }
+
+  .impacts {
+    position: absolute;
+    top: 580px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 14px;
+  }
+  .impact-card {
+    flex: 1;
+    padding: 24px 18px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .impact-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(196,59,59,0.3), rgba(196,59,59,0.08));
+    border-radius: 16px 16px 0 0;
+  }
+  .ic-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .ic-title {
+    font-size: 14px; font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .ic-desc {
+    font-size: 12px; font-weight: 500;
+    color: rgba(0,0,0,0.3);
+    line-height: 1.4;
+  }
+
+  /* ── Bottom note ────────────────────────────────── */
+  .note {
+    position: absolute;
+    top: 790px;
+    left: 72px; right: 72px;
+    padding: 24px 28px;
+    background: rgba(196,59,59,0.03);
+    border: 1.5px solid rgba(196,59,59,0.08);
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .note-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .note-text {
+    font-size: 15px; font-weight: 500;
+    color: rgba(0,0,0,0.35); line-height: 1.55;
+  }
+  .note-text strong { color: rgba(0,0,0,0.55); font-weight: 700; }
+
+  /* ── Bottom quote ───────────────────────────────── */
+  .bottom-quote {
+    position: absolute;
+    top: 910px;
+    left: 72px; right: 72px;
+    padding-left: 22px;
+    border-left: 3px solid rgba(196,59,59,0.15);
+  }
+  .bottom-quote-text {
+    font-size: 17px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(0,0,0,0.25);
+    line-height: 1.55;
+  }
+  .bottom-quote-text strong {
+    color: rgba(0,0,0,0.45);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(138,180,23,0.4); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(0,0,0,0.13); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #C43B3B, #E85D5D, #8AB417, #c8e64a);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grain"></div>
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Longevity Science</div>
+  </div>
+
+  <div class="section-label">Why It Matters</div>
+
+  <div class="headline"><span class="red">Silent</span> inflammation<br><span class="dim">is the common denominator</span></div>
+
+  <div class="quote-block">
+    <div class="quote-block-text">When your immune system gets stuck in a low-grade, hyper-active state, it's like a <span class="red">fire left burning</span> in the background of your biology. You might not feel it today.</div>
+  </div>
+
+  <div class="impacts-label">Linked To</div>
+
+  <div class="impacts">
+    <div class="impact-card">
+      <span class="ic-icon">🫀</span>
+      <div class="ic-title">Cardiovascular</div>
+      <div class="ic-desc">Heart disease &amp; arterial damage</div>
+    </div>
+    <div class="impact-card">
+      <span class="ic-icon">⚡</span>
+      <div class="ic-title">Metabolic</div>
+      <div class="ic-desc">Insulin resistance &amp; dysfunction</div>
+    </div>
+    <div class="impact-card">
+      <span class="ic-icon">🧠</span>
+      <div class="ic-title">Cognitive</div>
+      <div class="ic-desc">Brain fog &amp; neurodegeneration</div>
+    </div>
+    <div class="impact-card">
+      <span class="ic-icon">⏳</span>
+      <div class="ic-title">Aging</div>
+      <div class="ic-desc">Accelerated cellular decline</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="note-icon">⚠️</div>
+    <div class="note-text"><strong>"Silent" chronic inflammation</strong> is the common denominator in almost every major age-related decline.</div>
+  </div>
+
+  <div class="bottom-quote">
+    <div class="bottom-quote-text">You shouldn't just <strong>guess based on how your joints feel.</strong></div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">02 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
