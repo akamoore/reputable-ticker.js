@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decentralized Research — Slide 1: Cover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 25%, rgba(30,80,120,0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 70%, rgba(60,40,130,0.12) 0%, transparent 40%),
+      radial-gradient(ellipse at 80% 60%, rgba(212,255,80,0.04) 0%, transparent 40%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  /* ── Network node decoration ────────────────────── */
+  .node-deco {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(212,255,80,0.06);
+  }
+  .node-deco.a { width: 320px; height: 320px; top: -80px; right: -60px; }
+  .node-deco.b { width: 200px; height: 200px; bottom: 60px; left: -40px; border-color: rgba(100,140,255,0.05); }
+  .node-deco.c { width: 120px; height: 120px; top: 220px; left: 180px; border-color: rgba(212,255,80,0.04); }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  /* ── Globe icon ─────────────────────────────────── */
+  .icon-area {
+    position: absolute;
+    top: 128px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .icon-glow {
+    position: absolute;
+    width: 160px; height: 160px;
+    top: -30px; left: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100,160,255,0.08) 0%, transparent 60%);
+  }
+  .icon-emoji { font-size: 80px; position: relative; z-index: 1; filter: drop-shadow(0 4px 20px rgba(100,160,255,0.12)); }
+
+  /* ── Badge ──────────────────────────────────────── */
+  .badge {
+    position: absolute;
+    top: 278px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .badge span {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: #6eb4ff;
+    padding: 8px 24px;
+    border: 1.5px solid rgba(110,180,255,0.18);
+    border-radius: 100px;
+    background: rgba(110,180,255,0.04);
+  }
+
+  /* ── Headline ──────────────────────────────────── */
+  .headline {
+    position: absolute;
+    top: 355px;
+    left: 72px; right: 72px;
+    text-align: center;
+  }
+  .headline h1 {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h1 .dim { color: rgba(160,200,210,0.22); }
+  .headline h1 .accent { color: #d4ff50; }
+  .headline h1 .blue { color: #6eb4ff; }
+
+  /* ── Sub ────────────────────────────────────────── */
+  .sub {
+    position: absolute;
+    top: 560px;
+    left: 120px; right: 120px;
+    text-align: center;
+  }
+  .sub-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(110,180,255,0.3), transparent);
+    margin: 0 auto 22px;
+  }
+  .sub-text {
+    font-size: 19px; font-weight: 400;
+    color: rgba(160,200,210,0.38);
+    line-height: 1.6;
+  }
+  .sub-text em { color: rgba(200,220,255,0.55); font-style: italic; }
+
+  /* ── Comparison cards ───────────────────────────── */
+  .compare {
+    position: absolute;
+    top: 728px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+  .compare-card {
+    flex: 1;
+    padding: 26px 24px;
+    border-radius: 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 18px 18px 0 0;
+  }
+  .compare-card.old {
+    background: rgba(255,120,120,0.04);
+    border: 1px solid rgba(255,120,120,0.1);
+  }
+  .compare-card.old::before { background: linear-gradient(90deg, rgba(255,120,120,0.5), rgba(255,120,120,0.15)); }
+  .compare-card.new {
+    background: rgba(212,255,80,0.04);
+    border: 1px solid rgba(212,255,80,0.1);
+  }
+  .compare-card.new::before { background: linear-gradient(90deg, rgba(212,255,80,0.5), rgba(212,255,80,0.15)); }
+
+  .cc-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .cc-title { font-size: 16px; font-weight: 800; margin-bottom: 5px; }
+  .compare-card.old .cc-title { color: rgba(255,120,120,0.7); }
+  .compare-card.new .cc-title { color: rgba(212,255,80,0.7); }
+  .cc-sub {
+    font-size: 13px; font-weight: 500;
+    color: rgba(160,200,210,0.3);
+    line-height: 1.45;
+  }
+
+  .swipe {
+    position: absolute;
+    top: 920px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .swipe-text { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(160,200,210,0.15); }
+  .swipe-arrow { font-size: 14px; color: rgba(212,255,80,0.3); }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, rgba(110,180,255,0.6), rgba(140,100,240,0.4), #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="node-deco a"></div>
+  <div class="node-deco b"></div>
+  <div class="node-deco c"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">DeSci</div>
+  </div>
+
+  <div class="icon-area">
+    <div class="icon-glow"></div>
+    <span class="icon-emoji">🌍</span>
+  </div>
+
+  <div class="badge"><span>Decentralized Research</span></div>
+
+  <div class="headline">
+    <h1><span class="dim">Breaking research</span><br><span class="blue">out of the lab</span><br><span class="accent">into your life.</span></h1>
+  </div>
+
+  <div class="sub">
+    <div class="sub-divider"></div>
+    <div class="sub-text">The most accurate laboratory in the world is <em>the one you're already living in.</em></div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card old">
+      <span class="cc-icon">🏥</span>
+      <div class="cc-title">Old Model</div>
+      <div class="cc-sub">Single clinic snapshots. Strict criteria. Years to publish.</div>
+    </div>
+    <div class="compare-card new">
+      <span class="cc-icon">⌚</span>
+      <div class="cc-title">Decentralized</div>
+      <div class="cc-sub">Continuous wearable data. Anyone. Real-world evidence.</div>
+    </div>
+  </div>
+
+  <div class="swipe">
+    <span class="swipe-text">Swipe to see the shift</span>
+    <span class="swipe-arrow">→</span>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">01 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>

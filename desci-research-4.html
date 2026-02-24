@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decentralized Research — Slide 4: CTA</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 35%, rgba(30,80,120,0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 75%, rgba(60,40,130,0.12) 0%, transparent 40%),
+      radial-gradient(ellipse at 70% 60%, rgba(212,255,80,0.04) 0%, transparent 40%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .node-deco {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(110,180,255,0.05);
+  }
+  .node-deco.a { width: 280px; height: 280px; top: -60px; left: -70px; }
+  .node-deco.b { width: 180px; height: 180px; bottom: 120px; right: -40px; border-color: rgba(212,255,80,0.04); }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px; left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(212,255,80,0.35);
+  }
+
+  .headline {
+    position: absolute;
+    top: 162px; left: 72px; right: 72px;
+  }
+  .headline h2 {
+    font-size: 48px; font-weight: 800;
+    line-height: 1.06; letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h2 .accent { color: #d4ff50; }
+  .headline h2 .blue { color: #6eb4ff; }
+  .headline h2 .dim { color: rgba(160,200,210,0.22); }
+
+  /* ── "You are" statement ────────────────────────── */
+  .you-are {
+    position: absolute;
+    top: 350px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+  .ya-card {
+    flex: 1;
+    padding: 30px 24px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .ya-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .ya-card.clinic {
+    background: rgba(110,180,255,0.04);
+    border: 1px solid rgba(110,180,255,0.1);
+  }
+  .ya-card.clinic::before { background: linear-gradient(90deg, rgba(110,180,255,0.5), rgba(110,180,255,0.15)); }
+  .ya-card.lab {
+    background: rgba(212,255,80,0.04);
+    border: 1px solid rgba(212,255,80,0.1);
+  }
+  .ya-card.lab::before { background: linear-gradient(90deg, rgba(212,255,80,0.5), rgba(212,255,80,0.15)); }
+
+  .ya-icon { font-size: 40px; margin-bottom: 14px; display: block; }
+  .ya-statement {
+    font-size: 20px; font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .ya-card.clinic .ya-statement { color: rgba(110,180,255,0.7); }
+  .ya-card.lab .ya-statement { color: rgba(212,255,80,0.7); }
+  .ya-desc {
+    font-size: 14px; font-weight: 500;
+    color: rgba(160,200,210,0.3);
+    line-height: 1.5;
+  }
+
+  /* ── Big quote ──────────────────────────────────── */
+  .big-quote {
+    position: absolute;
+    top: 575px;
+    left: 72px; right: 72px;
+    padding: 32px 40px;
+    background: rgba(110,180,255,0.03);
+    border: 1.5px solid rgba(110,180,255,0.1);
+    border-radius: 20px;
+    text-align: center;
+  }
+  .big-quote-text {
+    font-size: 26px; font-weight: 700;
+    color: rgba(220,230,240,0.6);
+    line-height: 1.35;
+  }
+  .big-quote-text .blue { color: rgba(110,180,255,0.7); font-weight: 800; }
+  .big-quote-text .accent { color: rgba(212,255,80,0.7); font-weight: 800; }
+
+  /* ── What you need ──────────────────────────────── */
+  .needs {
+    position: absolute;
+    top: 715px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 14px;
+  }
+  .need-pill {
+    flex: 1;
+    padding: 18px 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .np-icon { font-size: 22px; }
+  .np-text { font-size: 14px; font-weight: 700; color: rgba(160,200,210,0.4); }
+
+  /* ── CTA ────────────────────────────────────────── */
+  .cta {
+    position: absolute;
+    top: 830px;
+    left: 72px; right: 72px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, rgba(60,40,130,0.12), rgba(110,180,255,0.06));
+    border: 1.5px solid rgba(110,180,255,0.15);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cta-left { flex: 1; }
+  .cta-heading {
+    font-size: 22px; font-weight: 800;
+    color: #eef0f8;
+    line-height: 1.25;
+    margin-bottom: 5px;
+  }
+  .cta-heading .accent { color: #d4ff50; }
+  .cta-body {
+    font-size: 14px; font-weight: 450;
+    color: rgba(160,200,210,0.35); line-height: 1.5;
+  }
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .cta-button::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #d4ff50;
+    box-shadow: 0 0 8px rgba(212,255,80,0.6);
+  }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, rgba(110,180,255,0.6), rgba(140,100,240,0.4), #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="node-deco a"></div>
+  <div class="node-deco b"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">DeSci</div>
+  </div>
+
+  <div class="section-label">You Are the Lab</div>
+
+  <div class="headline">
+    <h2><span class="blue">You</span> <span class="dim">are the clinic.</span><br><span class="dim">Your wearable is</span><br><span class="accent">the lab equipment.</span></h2>
+  </div>
+
+  <div class="you-are">
+    <div class="ya-card clinic">
+      <span class="ya-icon">🧍</span>
+      <div class="ya-statement">You = The Clinic</div>
+      <div class="ya-desc">Your body generates the richest health data on Earth — every second of every day.</div>
+    </div>
+    <div class="ya-card lab">
+      <span class="ya-icon">⌚</span>
+      <div class="ya-statement">Wearable = The Lab</div>
+      <div class="ya-desc">Continuous HRV, sleep, and recovery monitoring — all from your wrist.</div>
+    </div>
+  </div>
+
+  <div class="big-quote">
+    <div class="big-quote-text">Join the <span class="blue">decentralized science</span> movement<br>and pioneer the <span class="accent">future of wellness.</span></div>
+  </div>
+
+  <div class="needs">
+    <div class="need-pill">
+      <span class="np-icon">📱</span>
+      <span class="np-text">A Smartphone</span>
+    </div>
+    <div class="need-pill">
+      <span class="np-icon">⌚</span>
+      <span class="np-text">A Wearable</span>
+    </div>
+    <div class="need-pill">
+      <span class="np-icon">💚</span>
+      <span class="np-text">Curiosity</span>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-heading">Ready to <span class="accent">enroll?</span></div>
+      <div class="cta-body">Join an active study right from your living room.</div>
+    </div>
+    <div class="cta-button">Link in Bio</div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">04 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
