@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer-core';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
@@ -7,39 +8,62 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const htmlPath = path.join(__dirname, 'verified-evidence-program.html');
 const outputPath = path.join(__dirname, 'Verified_Evidence_Program_Reputable_Health.pdf');
 
-// Read HTML and strip external scripts/imports that block rendering
+// Read HTML — strip external <script> that blocks page load.
 let html = readFileSync(htmlPath, 'utf-8');
-html = html.replace(/@import\s+url\([^)]+\)\s*;?/g, '');
 html = html.replace(/<script\s+src\s*=\s*["']https?:\/\/[^"']+["'][^>]*><\/script>/gi, '');
-html = html.replace(/<link\s+href\s*=\s*["']https?:\/\/fonts[^"']+["'][^>]*>/gi, '');
+
+// Convert relative image paths to absolute file:// URLs so Puppeteer can load them
+const baseDir = path.resolve(__dirname);
+html = html.replace(/src="images\//g, `src="file://${baseDir}/images/`);
+
+// Auto-detect Chrome/Chromium location
+function findChrome() {
+  const candidates = [
+    // Common Linux paths
+    '/root/.cache/ms-playwright/chromium-1194/chrome-linux/chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+    // macOS paths
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+  ];
+  for (const p of candidates) {
+    if (existsSync(p)) return p;
+  }
+  // Try `which`
+  try {
+    return execSync('which google-chrome || which chromium-browser || which chromium', { encoding: 'utf-8' }).trim();
+  } catch {
+    return candidates[0]; // fallback
+  }
+}
 
 const browser = await puppeteer.launch({
-  executablePath: '/root/.cache/ms-playwright/chromium-1194/chrome-linux/chrome',
+  executablePath: findChrome(),
   args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
   headless: true,
 });
 
 const page = await browser.newPage();
 
-// Intercept requests - block external fonts/scripts, allow images
-await page.setRequestInterception(true);
-page.on('request', req => {
-  const type = req.resourceType();
-  if (['font', 'stylesheet', 'script'].includes(type) && req.url().startsWith('http')) {
-    req.abort();
-  } else {
-    req.continue();
-  }
-});
-
 // Set a wide viewport so desktop layout is used
 await page.setViewport({ width: 1200, height: 800, deviceScaleFactor: 2 });
 
-// Load the page
-await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 15000 });
+// Track failed image loads
+const failedImages = [];
+page.on('requestfailed', req => {
+  if (req.resourceType() === 'image') {
+    failedImages.push(req.url());
+  }
+});
 
-// Give images time to load
-await new Promise(r => setTimeout(r, 4000));
+// Load the page and wait for network to settle (images, fonts, icons)
+await page.setContent(html, { waitUntil: 'networkidle0', timeout: 60000 });
+
+// Extra buffer for any slow assets
+await new Promise(r => setTimeout(r, 2000));
 
 // Emulate print media so @media print rules apply during PDF generation
 await page.emulateMediaType('print');
@@ -76,4 +100,12 @@ await page.pdf({
 });
 
 await browser.close();
+
+if (failedImages.length > 0) {
+  console.warn(`\n⚠  ${failedImages.length} image(s) failed to load:`);
+  failedImages.forEach(url => console.warn(`   - ${url}`));
+  console.warn('\nThe PDF was generated but those images will be missing.');
+  console.warn('Run this script on a machine with internet access to include them.\n');
+}
+
 console.log(`PDF saved to: ${outputPath}`);
