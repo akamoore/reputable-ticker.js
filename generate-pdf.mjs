@@ -41,20 +41,21 @@ await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 15000 });
 // Give images time to load
 await new Promise(r => setTimeout(r, 4000));
 
-// Make all reveals visible and inject PDF-specific overrides
+// Emulate print media so @media print rules apply during PDF generation
+await page.emulateMediaType('print');
+
+// Make all reveals visible and hide non-printable elements
 await page.evaluate(() => {
   document.querySelectorAll('.reveal').forEach(el => {
     el.style.opacity = '1';
     el.style.transform = 'none';
   });
 
-  // Hide the fixed background elements (they don't render well in PDF)
   const aura = document.querySelector('.aura-bg');
   if (aura) aura.style.display = 'none';
   const grid = document.querySelector('.grid-overlay');
   if (grid) grid.style.display = 'none';
 
-  // Remove spacers - page breaks handle spacing
   document.querySelectorAll('.section-spacer, .section-spacer-lg').forEach(el => {
     el.style.display = 'none';
   });
