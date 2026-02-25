@@ -8,13 +8,24 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const htmlPath = path.join(__dirname, 'verified-evidence-program.html');
 const outputPath = path.join(__dirname, 'Verified_Evidence_Program_Reputable_Health.pdf');
 
-// Read HTML — strip external <script> that blocks page load.
+// Read HTML — strip external <script> that blocks page load,
+// then embed local images as base64 data URIs so they always render.
 let html = readFileSync(htmlPath, 'utf-8');
 html = html.replace(/<script\s+src\s*=\s*["']https?:\/\/[^"']+["'][^>]*><\/script>/gi, '');
+html = html.replace(/<link\s+href\s*=\s*["']https?:\/\/[^"']+["'][^>]*>/gi, '');
 
-// Convert relative image paths to absolute file:// URLs so Puppeteer can load them
-const baseDir = path.resolve(__dirname);
-html = html.replace(/src="images\//g, `src="file://${baseDir}/images/`);
+// Inline all local images as base64
+html = html.replace(/src="(images\/[^"]+)"/g, (match, imgPath) => {
+  const fullPath = path.join(__dirname, imgPath);
+  if (existsSync(fullPath)) {
+    const data = readFileSync(fullPath);
+    const ext = path.extname(imgPath).slice(1).replace('jpg', 'jpeg');
+    const b64 = data.toString('base64');
+    return `src="data:image/${ext};base64,${b64}"`;
+  }
+  console.warn(`⚠  Image not found: ${fullPath}`);
+  return match;
+});
 
 // Auto-detect Chrome/Chromium location
 function findChrome() {
@@ -59,11 +70,11 @@ page.on('requestfailed', req => {
   }
 });
 
-// Load the page and wait for network to settle (images, fonts, icons)
-await page.setContent(html, { waitUntil: 'networkidle0', timeout: 60000 });
+// Load the page — images are base64-inlined so no network needed
+await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
-// Extra buffer for any slow assets
-await new Promise(r => setTimeout(r, 2000));
+// Brief pause for layout to settle
+await new Promise(r => setTimeout(r, 1000));
 
 // Emulate print media so @media print rules apply during PDF generation
 await page.emulateMediaType('print');
