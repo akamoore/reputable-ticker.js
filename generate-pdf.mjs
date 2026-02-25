@@ -8,10 +8,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const htmlPath = path.join(__dirname, 'verified-evidence-program.html');
 const outputPath = path.join(__dirname, 'Verified_Evidence_Program_Reputable_Health.pdf');
 
-// Read HTML — only strip the external <script> tag that blocks page load.
-// Keep the Google Fonts <link> and let images load normally.
+// Read HTML — strip external <script> that blocks page load.
 let html = readFileSync(htmlPath, 'utf-8');
 html = html.replace(/<script\s+src\s*=\s*["']https?:\/\/[^"']+["'][^>]*><\/script>/gi, '');
+
+// Convert relative image paths to absolute file:// URLs so Puppeteer can load them
+const baseDir = path.resolve(__dirname);
+html = html.replace(/src="images\//g, `src="file://${baseDir}/images/`);
 
 // Auto-detect Chrome/Chromium location
 function findChrome() {
