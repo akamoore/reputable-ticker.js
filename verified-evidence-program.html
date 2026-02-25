@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Verified Evidence Program Overview - Reputable Health</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --brand-lime: #D9FF85;
+            --brand-charcoal: #222220;
+            --bg-body: #0a0a0a;
+            --bg-surface: rgba(255, 255, 255, 0.03);
+            --text-main: #FFFFFF;
+            --text-muted: #999999;
+            --border-dark: rgba(255,255,255,0.08);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-pill: 100px;
+        }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1rem, 5vw, 2rem); }
+        h1, h2, h3, h4 { font-weight: 600; color: white; line-height: 1.2; }
+        h1 { font-size: clamp(2rem, 6vw, 3.5rem); }
+        h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+        h3 { font-size: clamp(1.1rem, 3vw, 1.4rem); }
+
+        p { color: var(--text-muted); font-size: clamp(0.9rem, 2vw, 1rem); }
+        .text-lime { color: var(--brand-lime); }
+        .text-center { text-align: center; }
+
+        /* PDF: make all reveals visible immediately */
+        .reveal { opacity: 1; transform: none; }
+
+        /* Background */
+        .aura-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; background: var(--bg-body); }
+        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; z-index: -1; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; }
+        .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, var(--brand-lime) 0%, transparent 70%); top: -200px; right: -100px; }
+        .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #81BEF9 0%, transparent 70%); bottom: 30%; left: -100px; }
+        /* Hero */
+        .hero { padding: clamp(3rem, 8vw, 5rem) 0; text-align: center; }
+        .tag-pill { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem; background: rgba(217, 255, 133, 0.1); border: 1px solid rgba(217, 255, 133, 0.3); border-radius: 50px; font-size: 0.8rem; color: var(--brand-lime); margin-bottom: 1.5rem; font-weight: 600; text-transform: uppercase; }
+        .hero h1 { margin-bottom: 1rem; }
+        .hero-subtitle { font-size: clamp(1rem, 2.5vw, 1.25rem); color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; }
+        .cta-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: var(--brand-lime); color: var(--brand-charcoal); border-radius: var(--radius-pill); font-weight: 600; font-size: 1rem; transition: all 0.3s; text-decoration: none; }
+        .cta-btn:hover { background: #C4EE6E; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(217, 255, 133, 0.3); }
+        .cta-btn-outline { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: var(--radius-pill); font-weight: 600; font-size: 0.95rem; transition: all 0.3s; text-decoration: none; }
+        .cta-btn-outline:hover { background: rgba(255,255,255,0.05); border-color: white; }
+        .cta-group { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
+        /* Showcase */
+        .showcase { padding: clamp(2rem, 6vw, 4rem) 0; }
+        .showcase-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .showcase-grid { grid-template-columns: 1fr 1fr; } }
+        .showcase-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); border-radius: var(--radius-xl); overflow: hidden; }
+        .showcase-label { padding: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--brand-lime); text-transform: uppercase; background: rgba(217, 255, 133, 0.05); }
+        .showcase-card img { width: 100%; display: block; }
+        /* Customer Intelligence */
+        .intel-section { padding: clamp(3rem, 8vw, 5rem) 0; }
+        .intel-header { text-align: center; margin-bottom: 2.5rem; }
+        .intel-tag { display: inline-block; padding: 0.4rem 1rem; background: rgba(217, 255, 133, 0.1); border-radius: var(--radius-pill); font-size: 0.75rem; color: var(--brand-lime); font-weight: 600; text-transform: uppercase; margin-bottom: 1rem; }
+        .intel-cards { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+        @media (min-width: 768px) { .intel-cards { grid-template-columns: repeat(3, 1fr); } }
+        .intel-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); border-radius: var(--radius-lg); padding: 1.5rem; }
+        .intel-card.featured { border-color: rgba(217, 255, 133, 0.3); background: linear-gradient(135deg, rgba(217, 255, 133, 0.08) 0%, rgba(255,255,255,0.02) 100%); }
+        .intel-card.negative { border-color: rgba(255, 150, 100, 0.3); background: linear-gradient(135deg, rgba(255, 150, 100, 0.08) 0%, rgba(255,255,255,0.02) 100%); }
+        .intel-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+        .intel-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .intel-name { font-weight: 600; color: white; font-size: 0.95rem; }
+        .intel-demo { font-size: 0.75rem; color: var(--text-muted); }
+        .intel-quote { font-size: 0.9rem; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+        .intel-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.75rem; background: rgba(217, 255, 133, 0.15); border-radius: var(--radius-pill); font-size: 0.75rem; color: var(--brand-lime); font-weight: 600; }
+        .intel-badge.neutral { background: rgba(255,255,255,0.1); color: white; }
+        .intel-badge.warning { background: rgba(255, 150, 100, 0.15); color: #FFB380; }
+        .insight-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        @media (min-width: 768px) { .insight-cards { grid-template-columns: repeat(5, 1fr); } }
+        .insight-card { text-align: center; padding: 1.25rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); border-radius: var(--radius-md); }
+        .insight-icon { font-size: 1.5rem; color: var(--brand-lime); margin-bottom: 0.5rem; }
+        .insight-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand-lime); margin-bottom: 0.25rem; font-weight: 600; }
+        .insight-title { font-size: 0.8rem; color: rgba(255,255,255,0.8); }
+        /* Section Images */
+        .section-image { padding: clamp(2rem, 6vw, 4rem) 0; }
+        .section-image img { width: 100%; max-width: 1000px; margin: 0 auto; display: block; border-radius: var(--radius-xl); }
+        /* Process */
+        .process-section { padding: clamp(3rem, 8vw, 5rem) 0; }
+        .process-header { text-align: center; margin-bottom: 3rem; }
+        .process-steps { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .process-steps { grid-template-columns: repeat(3, 1fr); } }
+        .process-step { text-align: center; padding: 2rem 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); border-radius: var(--radius-xl); position: relative; }
+        .step-number { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--brand-lime); color: var(--brand-charcoal); font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: var(--radius-pill); }
+        .step-icon { font-size: 2.5rem; color: var(--brand-lime); margin: 1rem 0; }
+        .process-step h3 { margin-bottom: 0.5rem; }
+        .process-step p { font-size: 0.9rem; margin: 0; }
+        /* Pricing */
+        .pricing-section { padding: clamp(3rem, 8vw, 5rem) 0; }
+        .pricing-card { background: linear-gradient(135deg, rgba(217, 255, 133, 0.08) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid rgba(217, 255, 133, 0.2); border-radius: var(--radius-xl); padding: clamp(2rem, 5vw, 3rem); max-width: 700px; margin: 0 auto; text-align: center; }
+        .pricing-amount { font-size: clamp(3rem, 8vw, 4.5rem); font-weight: 700; color: var(--brand-lime); margin-bottom: 1.5rem; }
+        .pricing-details { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 2rem; margin-bottom: 1.5rem; }
+        .pricing-detail { font-size: 0.9rem; color: rgba(255,255,255,0.8); }
+        .pricing-detail strong { color: var(--brand-lime); }
+        .pricing-note { font-size: 0.85rem; color: var(--text-muted); padding-top: 1rem; border-top: 1px solid var(--border-dark); }
+        /* Trust Badges */
+        .trust-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 2rem 0; }
+        .trust-badge { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-dark); border-radius: var(--radius-pill); font-size: 0.85rem; color: white; }
+        .trust-badge i { color: var(--brand-lime); font-size: 1.1rem; }
+        /* CTA */
+        .cta-section { padding: clamp(3rem, 8vw, 5rem) 0; }
+        .cta-card { background: linear-gradient(135deg, rgba(217, 255, 133, 0.1) 0%, rgba(34, 34, 32, 0.9) 100%); border: 1px solid rgba(217, 255, 133, 0.3); border-radius: var(--radius-xl); padding: clamp(2.5rem, 6vw, 4rem); max-width: 800px; margin: 0 auto; text-align: center; }
+        .cta-card h2 { margin-bottom: 1rem; }
+        .cta-card > p { max-width: 600px; margin: 0 auto 2rem; }
+        .cta-contact { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-dark); }
+        .cta-name { font-weight: 600; color: white; font-size: 1.1rem; margin-bottom: 0.25rem; }
+        .cta-email a { color: var(--brand-lime); text-decoration: none; font-size: 0.95rem; }
+        .cta-email a:hover { text-decoration: underline; }
+        /* Spacers */
+        .section-spacer { height: clamp(2rem, 6vw, 4rem); }
+        .section-spacer-lg { height: clamp(3rem, 8vw, 6rem); }
+
+        /* ===== PDF / PRINT STYLES ===== */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            .aura-bg, .grid-overlay, .orb { display: none !important; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+
+            /* Page break controls */
+            .hero { page-break-after: always; }
+            .showcase { page-break-after: always; }
+            .intel-section { page-break-before: always; }
+            .section-image { page-break-before: always; }
+            .process-section { page-break-before: always; }
+            .pricing-section { page-break-before: always; }
+            .cta-section { page-break-before: always; }
+
+            /* Prevent breaking inside compound elements */
+            .showcase-card,
+            .intel-card,
+            .process-step,
+            .pricing-card,
+            .cta-card { page-break-inside: avoid; }
+            .insight-cards { page-break-inside: avoid; }
+            .intel-cards { page-break-inside: avoid; }
+            .process-steps { page-break-inside: avoid; }
+            .trust-badges { page-break-inside: avoid; }
+
+            .section-spacer, .section-spacer-lg { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="aura-bg">
+        <div class="grid-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container reveal">
+                <div class="tag-pill"><i class="ph ph-lightning"></i> From Product to Proof in 90 Days</div>
+                <h1>Verified <span class="text-lime">Evidence</span> Program</h1>
+                <p class="hero-subtitle">Create the proof that wins customer trust.</p>
+                <div class="cta-group">
+                    <a href="https://calendly.com/reputablehealth/intro" target="_blank" class="cta-btn">Schedule a Call <i class="ph ph-arrow-right"></i></a>
+                    <a href="https://reputable.health/study-report-sample/" target="_blank" class="cta-btn-outline"><i class="ph ph-chart-bar"></i> View Sample Report</a>
+                </div>
+            </div>
+        </section>
+        <!-- Showcase -->
+        <section class="showcase">
+            <div class="container">
+                <div class="showcase-grid reveal">
+                    <div class="showcase-card">
+                        <div class="showcase-label"><i class="ph ph-instagram-logo"></i> Social Ready</div>
+                        <img src="https://reputable.health/wp-content/uploads/2026/02/zenrest-story.jpeg" alt="Instagram story example">
+                    </div>
+                    <div class="showcase-card">
+                        <div class="showcase-label"><i class="ph ph-user-circle"></i> Customer Story</div>
+                        <img src="https://reputable.health/wp-content/uploads/2026/02/zenrest-social.jpeg" alt="Verified customer story">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Customer Intelligence -->
+        <section class="intel-section">
+            <div class="container">
+                <div class="intel-header reveal">
+                    <div class="intel-tag">Customer Intelligence</div>
+                    <h2>Stop guessing. <span class="text-lime">Know your customers.</span></h2>
+                </div>
+                <div class="intel-cards reveal">
+                    <div class="intel-card featured">
+                        <div class="intel-card-header">
+                            <img class="intel-avatar" src="https://reputable.health/wp-content/uploads/2026/02/avatar-julie.jpg" alt="Julie F.">
+                            <div>
+                                <div class="intel-name">Julie F.</div>
+                                <div class="intel-demo">Female · 46-55 · Denver, CO</div>
+                            </div>
+                        </div>
+                        <p class="intel-quote">"My Oura readiness and sleep scores were drastically improved!"</p>
+                        <div class="intel-badge"><i class="ph ph-trend-up"></i> +126% Activity</div>
+                    </div>
+                    <div class="intel-card">
+                        <div class="intel-card-header">
+                            <img class="intel-avatar" src="https://reputable.health/wp-content/uploads/2026/02/avatar-trinity.jpg" alt="Trinity L.">
+                            <div>
+                                <div class="intel-name">Trinity L.</div>
+                                <div class="intel-demo">Female · 56-65 · Austin, TX</div>
+                            </div>
+                        </div>
+                        <p class="intel-quote">"I felt so much more focus and energy throughout the day!"</p>
+                        <div class="intel-badge neutral"><i class="ph ph-seal-check"></i> Verified by Wearable</div>
+                    </div>
+                    <div class="intel-card negative">
+                        <div class="intel-card-header">
+                            <img class="intel-avatar" src="https://reputable.health/wp-content/uploads/2026/02/avatar-marco.jpg" alt="Marco W.">
+                            <div>
+                                <div class="intel-name">Marco W.</div>
+                                <div class="intel-demo">Male · 36-45 · Miami, FL</div>
+                            </div>
+                        </div>
+                        <p class="intel-quote">"The taste of this product was not very pleasant. Gritty too."</p>
+                        <div class="intel-badge warning"><i class="ph ph-warning"></i> Product Insight</div>
+                    </div>
+                </div>
+                <div class="insight-cards reveal">
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="ph ph-users"></i></div>
+                        <div class="insight-label">Who</div>
+                        <div class="insight-title">Customer profiles & demographics</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="ph ph-chart-bar"></i></div>
+                        <div class="insight-label">What</div>
+                        <div class="insight-title">Product efficacy by segment</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="ph ph-map-pin"></i></div>
+                        <div class="insight-label">Where</div>
+                        <div class="insight-title">Geographic & channel insights</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="ph ph-calendar"></i></div>
+                        <div class="insight-label">When</div>
+                        <div class="insight-title">Usage patterns & timing</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon"><i class="ph ph-lightbulb"></i></div>
+                        <div class="insight-label">Why</div>
+                        <div class="insight-title">Buyer motivation insights</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Marketing Assets Image -->
+        <section class="section-image">
+            <div class="container">
+                <div class="text-center reveal" style="margin-bottom: 2rem;">
+                    <div class="tag-pill"><i class="ph ph-image-square"></i> Marketing Assets</div>
+                    <h2>How to Use <span class="text-lime">Your Data</span></h2>
+                </div>
+                <img src="https://reputable.health/wp-content/uploads/2026/02/marketing-assets.jpeg" alt="How to use your data - Social Media, Product Pages, Video Ads, Email Marketing" class="reveal">
+            </div>
+        </section>
+        <!-- Widget Section Image -->
+        <section class="section-image">
+            <div class="container">
+                <div class="text-center reveal" style="margin-bottom: 2rem;">
+                    <div class="tag-pill"><i class="ph ph-code"></i> Embeddable Widget</div>
+                    <h2>Show Real Results on <span class="text-lime">Your Product Pages</span></h2>
+                    <p style="max-width: 700px; margin: 1rem auto 0;">Embed a live widget on your product pages showing verified participant results. Updates automatically as new data comes in.</p>
+                </div>
+                <img src="https://reputable.health/wp-content/uploads/2026/02/widget-mockup.jpeg" alt="Product page widget" class="reveal">
+                <p class="text-center reveal" style="margin-top: 1.5rem; font-size: 0.9rem;"><i class="ph ph-rocket-launch" style="color: var(--brand-lime);"></i> <strong>Deploy anywhere:</strong> Product pages, Amazon, paid ads, emails, investor decks, sales calls.</p>
+            </div>
+        </section>
+        <!-- Process -->
+        <section class="process-section">
+            <div class="container">
+                <div class="process-header reveal">
+                    <div class="tag-pill"><i class="ph ph-arrows-left-right"></i> How It Works</div>
+                    <h2>Three <span class="text-lime">Simple Steps</span></h2>
+                </div>
+                <div class="process-steps reveal">
+                    <div class="process-step">
+                        <div class="step-number">01</div>
+                        <div class="step-icon"><i class="ph ph-paper-plane-tilt"></i></div>
+                        <h3>You Invite</h3>
+                        <p>Your customers prove the product works for them</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">02</div>
+                        <div class="step-icon"><i class="ph ph-watch"></i></div>
+                        <h3>We Capture</h3>
+                        <p>Wearable + survey data collected automatically</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">03</div>
+                        <div class="step-icon"><i class="ph ph-sparkle"></i></div>
+                        <h3>You Receive</h3>
+                        <p>Customer intelligence and verified proof</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Pricing -->
+        <section class="pricing-section">
+            <div class="container">
+                <div class="pricing-card reveal" style="text-align: center;">
+                    <div class="pricing-amount" style="font-size: clamp(2.5rem, 6vw, 3.5rem);">$400<span style="font-size: 0.4em; font-weight: 500; opacity: 0.6;">/mo</span></div>
+                    <div class="pricing-details">
+                        <div class="pricing-detail">Cancel anytime</div>
+                    </div>
+                    <div style="margin-top: 1.25rem; padding: 0.5rem 1.25rem; background: #D9FF85; color: #222220; border-radius: 100px; display: inline-block; font-weight: 700; font-size: 0.9rem;">Try your first month free</div>
+                    <div class="pricing-note" style="margin-top: 1rem;"></div>
+                </div>
+                <div class="trust-badges reveal">
+                    <div class="trust-badge"><i class="ph ph-shield-check"></i> FDA Compliant</div>
+                    <div class="trust-badge"><i class="ph ph-lock"></i> HIPAA Secure</div>
+                    <div class="trust-badge"><i class="ph ph-certificate"></i> IRB Pathway</div>
+                </div>
+            </div>
+        </section>
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-card reveal">
+                    <h2>Ready to understand your customers <span class="text-lime">like never before</span>?</h2>
+                    <p>Let's talk about what verified evidence can do for your brand.</p>
+                    <div class="cta-group">
+                        <a href="https://calendly.com/reputablehealth/intro" target="_blank" class="cta-btn">Schedule a Call <i class="ph ph-arrow-right"></i></a>
+                        <a href="attached_assets/Verified_Evidence_Program_-_Reputable_Health_(4)_1770237416454.pdf" download class="cta-btn-outline"><i class="ph ph-download-simple"></i> Download PDF</a>
+                    </div>
+                    <div class="cta-contact">
+                        <div class="cta-name">Kyle Bergquist</div>
+                        <div class="cta-email"><a href="mailto:kyle@reputable.health">kyle@reputable.health</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
