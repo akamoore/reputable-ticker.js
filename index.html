@@ -23,10 +23,9 @@
       --blue-bg: rgba(116,185,255,0.12);
       --gray: #636e80;
       --gray-bg: rgba(99,110,128,0.12);
+      --card-bg: var(--surface);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
@@ -34,7 +33,6 @@
       line-height: 1.5;
       padding: 24px;
     }
-
     .header {
       display: flex;
       justify-content: space-between;
@@ -43,18 +41,8 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-
-    .header h1 {
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .header .subtitle {
-      color: var(--text-dim);
-      font-size: 13px;
-    }
-
+    .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; }
     .badge {
       display: inline-block;
       padding: 3px 10px;
@@ -64,29 +52,24 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
     .badge-green { background: var(--green-bg); color: var(--green); }
     .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
     .badge-red { background: var(--red-bg); color: var(--red); }
     .badge-blue { background: var(--blue-bg); color: var(--blue); }
     .badge-gray { background: var(--gray-bg); color: var(--gray); }
     .badge-accent { background: rgba(108,92,231,0.12); color: var(--accent); }
-
-    /* Metric Cards */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 28px;
     }
-
     .metric-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
     }
-
     .metric-card .label {
       font-size: 12px;
       color: var(--text-dim);
@@ -94,24 +77,12 @@
       letter-spacing: 0.5px;
       margin-bottom: 6px;
     }
-
-    .metric-card .value {
-      font-size: 28px;
-      font-weight: 700;
-    }
-
-    .metric-card .sub {
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-top: 4px;
-    }
-
+    .metric-card .value { font-size: 28px; font-weight: 700; }
+    .metric-card .sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
     .metric-card .value.green { color: var(--green); }
     .metric-card .value.blue { color: var(--blue); }
     .metric-card .value.yellow { color: var(--yellow); }
     .metric-card .value.accent { color: var(--accent); }
-
-    /* Sections */
     .section {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -119,7 +90,6 @@
       padding: 24px;
       margin-bottom: 24px;
     }
-
     .section h2 {
       font-size: 18px;
       font-weight: 600;
@@ -128,7 +98,6 @@
       align-items: center;
       gap: 8px;
     }
-
     .section h3 {
       font-size: 14px;
       font-weight: 600;
@@ -137,20 +106,8 @@
       letter-spacing: 0.5px;
       margin: 20px 0 10px;
     }
-
-    /* Tables */
-    .table-wrap {
-      overflow-x: auto;
-      margin: 0 -8px;
-      padding: 0 8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
+    .table-wrap { overflow-x: auto; margin: 0 -8px; padding: 0 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th {
       text-align: left;
       padding: 10px 12px;
@@ -162,45 +119,24 @@
       border-bottom: 2px solid var(--border);
       white-space: nowrap;
     }
-
-    td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
-
     tr.row-outlier { background: var(--yellow-bg); }
     tr.row-free { background: var(--green-bg); }
-
-    .totals-row td {
-      font-weight: 700;
-      border-top: 2px solid var(--border);
-      padding-top: 14px;
-    }
-
+    tr.row-crossyear { background: rgba(108,92,231,0.08); }
+    .totals-row td { font-weight: 700; border-top: 2px solid var(--border); padding-top: 14px; }
     .align-right { text-align: right; }
-
-    /* Scorecard */
     .scorecard-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 16px;
     }
-
     .score-card {
       background: var(--surface2);
       border-radius: 10px;
       padding: 16px;
     }
-
-    .score-card .study-name {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
+    .score-card .study-name { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
     .progress-bar {
       width: 100%;
       height: 8px;
@@ -209,76 +145,46 @@
       overflow: hidden;
       margin: 8px 0;
     }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.5s ease;
-    }
-
+    .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
     .progress-fill.green { background: var(--green); }
     .progress-fill.yellow { background: var(--yellow); }
     .progress-fill.red { background: var(--red); }
     .progress-fill.blue { background: var(--blue); }
     .progress-fill.accent { background: var(--accent); }
-
     .score-meta {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
       color: var(--text-dim);
     }
-
-    /* CPO Averages */
+    .score-date {
+      display: flex;
+      gap: 16px;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
+    }
+    .score-date span { display: flex; align-items: center; gap: 4px; }
+    .score-date .date-label { font-weight: 600; color: var(--text-dim); text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; }
     .avg-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
       margin-top: 16px;
     }
-
-    .avg-card {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .avg-card .avg-label {
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-bottom: 6px;
-    }
-
-    .avg-card .avg-value {
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .avg-card .avg-detail {
-      font-size: 11px;
-      color: var(--text-dim);
-      margin-top: 4px;
-    }
-
-    /* Projection */
+    .avg-card { background: var(--surface2); border-radius: 10px; padding: 16px; text-align: center; }
+    .avg-card .avg-label { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+    .avg-card .avg-value { font-size: 24px; font-weight: 700; }
+    .avg-card .avg-detail { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
     .proj-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 16px;
     }
-
-    .proj-card {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 16px;
-    }
-
-    .proj-card .proj-name {
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
+    .proj-card { background: var(--surface2); border-radius: 10px; padding: 16px; }
+    .proj-card .proj-name { font-weight: 600; margin-bottom: 8px; }
     .proj-card .proj-row {
       display: flex;
       justify-content: space-between;
@@ -286,13 +192,7 @@
       padding: 4px 0;
       color: var(--text-dim);
     }
-
-    .proj-card .proj-row span:last-child {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    /* Footer */
+    .proj-card .proj-row span:last-child { color: var(--text); font-weight: 500; }
     .footer {
       text-align: center;
       color: var(--text-dim);
@@ -301,8 +201,6 @@
       padding-top: 16px;
       border-top: 1px solid var(--border);
     }
-
-    /* Legend */
     .legend {
       display: flex;
       gap: 20px;
@@ -311,23 +209,11 @@
       font-size: 12px;
       color: var(--text-dim);
     }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .legend-swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 3px;
-    }
-
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
     .swatch-outlier { background: var(--yellow-bg); border: 1px solid var(--yellow); }
     .swatch-free { background: var(--green-bg); border: 1px solid var(--green); }
-
-    /* KPI Section */
+    .swatch-crossyear { background: rgba(108,92,231,0.08); border: 1px solid var(--accent); }
     .kpi-section {
       background: linear-gradient(135deg, var(--surface) 0%, rgba(108,92,231,0.06) 100%);
       border: 1px solid var(--border);
@@ -337,40 +223,16 @@
       position: relative;
       overflow: hidden;
     }
-
     .kpi-section::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, var(--accent), var(--blue), var(--green));
     }
-
-    .kpi-section h2 {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .kpi-section h3 {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 24px 0 12px;
-    }
-
-    .kpi-section h3:first-of-type {
-      margin-top: 0;
-    }
-
-    /* Target vs Actual bar */
+    .kpi-section h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .kpi-section h3 { font-size: 13px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 24px 0 12px; }
+    .kpi-section h3:first-of-type { margin-top: 0; }
     .target-row {
       display: flex;
       align-items: center;
@@ -380,13 +242,7 @@
       border-radius: 8px;
       margin-bottom: 8px;
     }
-
-    .target-row .target-label {
-      min-width: 140px;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
+    .target-row .target-label { min-width: 140px; font-size: 13px; font-weight: 500; }
     .target-row .target-bar-wrap {
       flex: 1;
       position: relative;
@@ -395,7 +251,6 @@
       border-radius: 6px;
       overflow: hidden;
     }
-
     .target-row .target-bar-fill {
       height: 100%;
       border-radius: 6px;
@@ -408,21 +263,17 @@
       color: #fff;
       transition: width 0.6s ease;
     }
-
     .target-row .target-bar-fill.green { background: linear-gradient(90deg, rgba(0,184,148,0.4), var(--green)); }
     .target-row .target-bar-fill.blue { background: linear-gradient(90deg, rgba(116,185,255,0.4), var(--blue)); }
     .target-row .target-bar-fill.yellow { background: linear-gradient(90deg, rgba(253,203,110,0.4), var(--yellow)); color: var(--bg); }
     .target-row .target-bar-fill.accent { background: linear-gradient(90deg, rgba(108,92,231,0.4), var(--accent)); }
-
     .target-row .target-marker {
       position: absolute;
-      top: 0;
-      bottom: 0;
+      top: 0; bottom: 0;
       width: 2px;
       background: var(--text);
       opacity: 0.6;
     }
-
     .target-row .target-marker::after {
       content: attr(data-label);
       position: absolute;
@@ -433,25 +284,13 @@
       color: var(--text-dim);
       white-space: nowrap;
     }
-
-    .target-row .target-vals {
-      min-width: 110px;
-      text-align: right;
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    .target-row .target-vals strong {
-      color: var(--text);
-    }
-
-    /* Pace ring */
+    .target-row .target-vals { min-width: 110px; text-align: right; font-size: 12px; color: var(--text-dim); }
+    .target-row .target-vals strong { color: var(--text); }
     .pace-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
     }
-
     .pace-card {
       background: var(--surface2);
       border-radius: 10px;
@@ -460,93 +299,20 @@
       flex-direction: column;
       align-items: center;
     }
-
-    .pace-card .pace-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .ring-wrap {
-      position: relative;
-      width: 140px;
-      height: 140px;
-      margin-bottom: 12px;
-    }
-
-    .ring-wrap svg {
-      transform: rotate(-90deg);
-    }
-
-    .ring-bg {
-      fill: none;
-      stroke: var(--border);
-      stroke-width: 10;
-    }
-
-    .ring-fill {
-      fill: none;
-      stroke-width: 10;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 1s ease;
-    }
-
-    .ring-center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    .ring-center .ring-value {
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .ring-center .ring-label {
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-
-    .pace-stats {
-      width: 100%;
-      margin-top: 4px;
-    }
-
-    .pace-stat-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      padding: 3px 0;
-      color: var(--text-dim);
-    }
-
-    .pace-stat-row span:last-child {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .status-chip {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .status-chip.on-track {
-      background: var(--green-bg);
-      color: var(--green);
-    }
-    .status-chip.behind {
-      background: var(--yellow-bg, rgba(251,191,36,0.1));
-      color: var(--yellow);
-    }
-
-    /* Period filter */
+    .pace-card .pace-title { font-weight: 600; font-size: 14px; margin-bottom: 16px; text-align: center; }
+    .ring-wrap { position: relative; width: 140px; height: 140px; margin-bottom: 12px; }
+    .ring-wrap svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+    .ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+    .ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .ring-center .ring-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
+    .ring-center .ring-label { font-size: 11px; color: var(--text-dim); }
+    .pace-stats { width: 100%; margin-top: 4px; }
+    .pace-stat-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; color: var(--text-dim); }
+    .pace-stat-row span:last-child { color: var(--text); font-weight: 500; }
+    .status-chip { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .status-chip.on-track { background: var(--green-bg); color: var(--green); }
+    .status-chip.behind { background: var(--yellow-bg); color: var(--yellow); }
     .period-filter {
       display: flex;
       gap: 4px;
@@ -569,48 +335,61 @@
       transition: all 0.2s;
     }
     .filter-btn:hover { color: var(--text); }
-    .filter-btn.active {
-      background: var(--accent);
-      color: #fff;
-    }
+    .filter-btn.active { background: var(--accent); color: #fff; }
     .section-hidden { display: none !important; }
-
-    /* Benchmark pills */
     .bench-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 10px;
     }
-
-    .bench-pill {
-      background: var(--surface2);
-      border-radius: 8px;
-      padding: 14px 16px;
-      border-left: 3px solid var(--border);
-    }
-
+    .bench-pill { background: var(--surface2); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--border); }
     .bench-pill.blue-accent { border-left-color: var(--blue); }
     .bench-pill.green-accent { border-left-color: var(--green); }
     .bench-pill.accent-accent { border-left-color: var(--accent); }
     .bench-pill.yellow-accent { border-left-color: var(--yellow); }
-
-    .bench-pill .bench-size {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 2px;
+    .bench-pill .bench-size { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .bench-pill .bench-detail { font-size: 11px; color: var(--text-dim); }
+    .bench-pill .bench-days { font-size: 20px; font-weight: 700; margin: 4px 0; }
+    /* Year breakdown table */
+    .yoy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
     }
-
-    .bench-pill .bench-detail {
+    .yoy-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .yoy-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .yoy-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .yoy-row:last-child { border-bottom: none; }
+    .yoy-row .yoy-label { color: var(--text-dim); }
+    .yoy-row .yoy-val { font-weight: 600; }
+    .crossyear-note {
       font-size: 11px;
       color: var(--text-dim);
+      background: rgba(108,92,231,0.06);
+      border: 1px solid rgba(108,92,231,0.15);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-top: 12px;
     }
-
-    .bench-pill .bench-days {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 4px 0;
-    }
-
+    .crossyear-note strong { color: var(--accent); }
     @media (max-width: 768px) {
       body { padding: 12px; }
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -621,6 +400,7 @@
       .target-row .target-label { min-width: auto; }
       .target-row .target-vals { text-align: left; }
       .pace-grid { grid-template-columns: 1fr; }
+      .scorecard-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -629,76 +409,25 @@
   <div class="header">
     <div>
       <h1>Recruitment Command Center</h1>
-      <div class="subtitle" id="dashboard-subtitle">Reputable — All-Time Study Dashboard &middot; Updated Feb 18, 2026</div>
+      <div class="subtitle" id="dashboard-subtitle"></div>
       <div class="period-filter">
         <button class="filter-btn active" data-filter="all">All Time</button>
         <button class="filter-btn" data-filter="2025">2025</button>
         <button class="filter-btn" data-filter="2026">2026 YTD</button>
       </div>
     </div>
-    <div>
-      <span class="badge badge-green">Live</span>
-    </div>
+    <div><span class="badge badge-green">Live</span></div>
   </div>
 
-  <!-- ==================== TOP METRIC CARDS ==================== -->
-  <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="label">Total Studies</div>
-      <div class="value accent">22</div>
-      <div class="sub">8 paid &middot; 9 $0 spend &middot; 5 coming soon</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Completed Recruitment</div>
-      <div class="value">13</div>
-      <div class="sub">4 recruiting &middot; 5 coming soon</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Avg Days to Recruit</div>
-      <div class="value">23.8</div>
-      <div class="sub">Across 11 studies with duration data</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Total Leads</div>
-      <div class="value">5,975</div>
-      <div class="sub">Across 10 studies with lead data</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Total Joined</div>
-      <div class="value">1,987</div>
-      <div class="sub">Across all 17 studies</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Total Onboarded</div>
-      <div class="value green">902</div>
-      <div class="sub">Across all 17 studies</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">All-Time Ad Spend</div>
-      <div class="value blue">$22,332.57</div>
-      <div class="sub">Across 8 paid studies</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Blended CPO (All Studies)</div>
-      <div class="value green">$24.76</div>
-      <div class="sub">$22,332.57 / 902 onboarded</div>
-    </div>
-    <div class="metric-card">
-      <div class="label">Paid CPO (Excl. Outliers)</div>
-      <div class="value green">$17.49</div>
-      <div class="sub">Standard paid studies only</div>
-    </div>
-  </div>
+  <div class="metrics-grid" id="metrics-grid"></div>
 
-  <!-- ==================== COST ANALYSIS TABLE ==================== -->
-  <div class="section">
-    <h2>Cost Analysis — All 17 Studies</h2>
-
+  <div class="section" id="cost-analysis-section">
+    <h2 id="cost-analysis-title"></h2>
     <div class="legend">
       <div class="legend-item"><div class="legend-swatch swatch-outlier"></div> Outlier Study</div>
       <div class="legend-item"><div class="legend-swatch swatch-free"></div> $0 Ad Spend (Organic)</div>
+      <div class="legend-item"><div class="legend-swatch swatch-crossyear"></div> Cross-Year Study</div>
     </div>
-
     <div class="table-wrap">
       <table>
         <thead>
@@ -706,6 +435,8 @@
             <th>#</th>
             <th>Study Name</th>
             <th>Type</th>
+            <th>Launch Date</th>
+            <th>End Date</th>
             <th class="align-right">Ad Spend</th>
             <th class="align-right">Leads</th>
             <th class="align-right">Joined</th>
@@ -714,584 +445,50 @@
             <th class="align-right">CPO</th>
             <th>Wearable</th>
             <th class="align-right">Days</th>
+            <th>Manual Queue</th>
             <th>Status</th>
             <th>Notes</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- PAID STUDIES -->
-          <tr class="row-outlier">
-            <td>1</td>
-            <td>Melatonin Sleep Study (Somato)</td>
-            <td><span class="badge badge-blue">RCT</span></td>
-            <td class="align-right">$6,469.62</td>
-            <td class="align-right">1,240</td>
-            <td class="align-right">312</td>
-            <td class="align-right">90</td>
-            <td class="align-right">240</td>
-            <td class="align-right">$71.88</td>
-            <td>Oura</td>
-            <td class="align-right">—</td>
-            <td><span class="badge badge-yellow">Recruiting</span></td>
-            <td>OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question</td>
-          </tr>
-          <tr class="row-outlier">
-            <td>2</td>
-            <td>Pain Relief: ProleevaMax</td>
-            <td><span class="badge badge-green">RWE</span></td>
-            <td class="align-right">$5,686.18</td>
-            <td class="align-right">719</td>
-            <td class="align-right">102</td>
-            <td class="align-right">29</td>
-            <td class="align-right">35</td>
-            <td class="align-right">$196.08</td>
-            <td>WHOOP</td>
-            <td class="align-right">—</td>
-            <td><span class="badge badge-yellow">Recruiting</span></td>
-            <td>OUTLIER — WHOOP user base issue, lab bottleneck</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Enhanced Brew — Coffee Study</td>
-            <td><span class="badge badge-blue">RCT</span></td>
-            <td class="align-right">$3,184.93</td>
-            <td class="align-right">1,932</td>
-            <td class="align-right">520</td>
-            <td class="align-right">192</td>
-            <td class="align-right">192</td>
-            <td class="align-right">$16.59</td>
-            <td>Oura</td>
-            <td class="align-right">23</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td>Nov 20 – Dec 13, 2025</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Berkeley Life (Nitrate Supp.)</td>
-            <td><span class="badge badge-blue">RCT</span></td>
-            <td class="align-right">$2,632.02</td>
-            <td class="align-right">—</td>
-            <td class="align-right">70</td>
-            <td class="align-right">70</td>
-            <td class="align-right">70</td>
-            <td class="align-right">$37.60</td>
-            <td>Oura</td>
-            <td class="align-right">—</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td>Prescreening happened outside of the app</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Peptide Supplement: Sleep &amp; Recovery</td>
-            <td><span class="badge badge-blue">RCT</span></td>
-            <td class="align-right">$2,464.11</td>
-            <td class="align-right">1,135</td>
-            <td class="align-right">338</td>
-            <td class="align-right">120</td>
-            <td class="align-right">120</td>
-            <td class="align-right">$20.53</td>
-            <td>Oura</td>
-            <td class="align-right">17</td>
-            <td><span class="badge badge-blue">Active</span></td>
-            <td>Dec 23 – Jan 9</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>Enhanced Brew Formula (RCT)</td>
-            <td><span class="badge badge-blue">RCT</span></td>
-            <td class="align-right">$1,046.99</td>
-            <td class="align-right">310</td>
-            <td class="align-right">82</td>
-            <td class="align-right">80</td>
-            <td class="align-right">80</td>
-            <td class="align-right">$13.09</td>
-            <td>Oura</td>
-            <td class="align-right">49</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td>Jun 4 – Jul 23, 2025</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>Rootless &amp; Women's Health</td>
-            <td><span class="badge badge-green">RWE</span></td>
-            <td class="align-right">$582.58</td>
-            <td class="align-right">165</td>
-            <td class="align-right">92</td>
-            <td class="align-right">50</td>
-            <td class="align-right">50</td>
-            <td class="align-right">$11.65</td>
-            <td>Oura</td>
-            <td class="align-right">19</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td>Nov 26 – Dec 15, 2025</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>Quantum Upgrade</td>
-            <td><span class="badge badge-blue">RCT</span></td>
-            <td class="align-right">$266.14</td>
-            <td class="align-right">—</td>
-            <td class="align-right">70</td>
-            <td class="align-right">70</td>
-            <td class="align-right">70</td>
-            <td class="align-right">$3.80</td>
-            <td>Oura</td>
-            <td class="align-right">—</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td></td>
-          </tr>
-
-          <!-- $0 AD SPEND STUDIES -->
-          <tr class="row-free">
-            <td>9</td>
-            <td>Sleep Mushrooms+</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">—</td>
-            <td class="align-right">67</td>
-            <td class="align-right">50</td>
-            <td class="align-right">50</td>
-            <td class="align-right">$0</td>
-            <td>Oura / Fitbit / WHOOP</td>
-            <td class="align-right">15</td>
-            <td><span class="badge badge-blue">Active</span></td>
-            <td></td>
-          </tr>
-          <tr class="row-free">
-            <td>10</td>
-            <td>Tapping Solutions for Stress Relief</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">—</td>
-            <td class="align-right">60</td>
-            <td class="align-right">16</td>
-            <td class="align-right">20</td>
-            <td class="align-right">$0</td>
-            <td>Oura / Fitbit / WHOOP</td>
-            <td class="align-right">—</td>
-            <td><span class="badge badge-yellow">Recruiting</span></td>
-            <td>80% to target</td>
-          </tr>
-          <tr class="row-free">
-            <td>11</td>
-            <td>Better Sleep with NatPat</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">—</td>
-            <td class="align-right">38</td>
-            <td class="align-right">25</td>
-            <td class="align-right">25</td>
-            <td class="align-right">$0</td>
-            <td>Oura</td>
-            <td class="align-right">29</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td></td>
-          </tr>
-          <tr class="row-free">
-            <td>12</td>
-            <td>Sleep Well, Stress Less: Sensate</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">150</td>
-            <td class="align-right">57</td>
-            <td class="align-right">25</td>
-            <td class="align-right">25</td>
-            <td class="align-right">$0</td>
-            <td>Oura</td>
-            <td class="align-right">5</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td></td>
-          </tr>
-          <tr class="row-free">
-            <td>13</td>
-            <td>LyfeFuel Daily Essentials Shake</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">102</td>
-            <td class="align-right">52</td>
-            <td class="align-right">25</td>
-            <td class="align-right">25</td>
-            <td class="align-right">$0</td>
-            <td>Oura</td>
-            <td class="align-right">2</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td></td>
-          </tr>
-          <tr class="row-free">
-            <td>14</td>
-            <td>Rest &amp; Recharge: Hapbee</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">—</td>
-            <td class="align-right">15</td>
-            <td class="align-right">10</td>
-            <td class="align-right">10</td>
-            <td class="align-right">$0</td>
-            <td>Oura</td>
-            <td class="align-right">22</td>
-            <td><span class="badge badge-green">Complete</span></td>
-            <td></td>
-          </tr>
-          <tr class="row-free">
-            <td>15</td>
-            <td>Mimio: Energy and Metabolic Health</td>
-            <td><span class="badge badge-yellow">VEP</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">—</td>
-            <td class="align-right">30</td>
-            <td class="align-right">12</td>
-            <td class="align-right">12</td>
-            <td class="align-right">$0</td>
-            <td>Oura / Fitbit / WHOOP</td>
-            <td class="align-right">17</td>
-            <td><span class="badge badge-blue">Active</span></td>
-            <td>Jan 12 – Jan 29</td>
-          </tr>
-          <tr class="row-free">
-            <td>16</td>
-            <td>Vitamin D Boost: Clearlight</td>
-            <td><span class="badge badge-green">RWE</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">30</td>
-            <td class="align-right">40</td>
-            <td class="align-right">20</td>
-            <td class="align-right">20</td>
-            <td class="align-right">$0</td>
-            <td>Oura</td>
-            <td class="align-right">64</td>
-            <td><span class="badge badge-blue">Active</span></td>
-            <td></td>
-          </tr>
-          <tr class="row-free">
-            <td>17</td>
-            <td>HOP Box</td>
-            <td><span class="badge badge-green">RWE</span></td>
-            <td class="align-right">$0</td>
-            <td class="align-right">192</td>
-            <td class="align-right">42</td>
-            <td class="align-right">18</td>
-            <td class="align-right">35</td>
-            <td class="align-right">$0</td>
-            <td>Oura</td>
-            <td class="align-right">—</td>
-            <td><span class="badge badge-yellow">Recruiting</span></td>
-            <td>Since Feb 12 — needs 17 more</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr class="totals-row">
-            <td></td>
-            <td><strong>TOTALS (known data)</strong></td>
-            <td></td>
-            <td class="align-right">$22,332.57</td>
-            <td class="align-right">5,975</td>
-            <td class="align-right">1,987</td>
-            <td class="align-right">902</td>
-            <td class="align-right">1,079</td>
-            <td class="align-right">—</td>
-            <td></td>
-            <td class="align-right">—</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tfoot>
+        <tbody id="cost-table-body"></tbody>
+        <tfoot id="cost-table-foot"></tfoot>
       </table>
     </div>
-
-    <!-- CPO Averages -->
     <h3>Cost Per Onboard Averages</h3>
-    <div class="avg-grid">
-      <div class="avg-card">
-        <div class="avg-label">Blended CPO (All Studies incl. $0)</div>
-        <div class="avg-value green" style="color:var(--green)">$24.76</div>
-        <div class="avg-detail">$22,332.57 spend &divide; 902 onboarded</div>
-      </div>
-      <div class="avg-card">
-        <div class="avg-label">Paid Studies CPO (Excl. Outliers)</div>
-        <div class="avg-value" style="color:var(--blue)">$17.49</div>
-        <div class="avg-detail">$10,176.77 spend &divide; 582 onboarded &middot; Studies 3–8 (excl. outliers)</div>
-      </div>
-      <div class="avg-card">
-        <div class="avg-label">Paid Studies CPO (Incl. Outliers)</div>
-        <div class="avg-value" style="color:var(--yellow)">$31.86</div>
-        <div class="avg-detail">$22,332.57 spend &divide; 701 onboarded &middot; All 8 paid studies</div>
-      </div>
-    </div>
+    <div class="avg-grid" id="avg-grid"></div>
   </div>
 
-  <!-- ==================== STUDY HEALTH SCORECARD ==================== -->
-  <div class="section">
-    <h2>Study Health Scorecard</h2>
-
-    <div class="scorecard-grid">
-      <!-- Still Recruiting -->
-      <div class="score-card">
-        <div class="study-name">Melatonin Sleep Study (Somato) <span class="badge badge-yellow">Recruiting</span></div>
-        <div class="score-meta"><span>90 / 240 onboarded</span><span>37.5%</span></div>
-        <div class="progress-bar"><div class="progress-fill red" style="width:37.5%"></div></div>
-        <div class="score-meta"><span>CPO: $71.88</span><span>~150 lost to baseline bug, ~48 to eligibility question</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Pain Relief: ProleevaMax <span class="badge badge-yellow">Recruiting</span></div>
-        <div class="score-meta"><span>29 / 35 onboarded</span><span>82.9%</span></div>
-        <div class="progress-bar"><div class="progress-fill yellow" style="width:82.9%"></div></div>
-        <div class="score-meta"><span>CPO: $196.08</span><span>OUTLIER — WHOOP issue, lab bottleneck</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Tapping Solutions for Stress Relief <span class="badge badge-yellow">Recruiting</span></div>
-        <div class="score-meta"><span>16 / 20 onboarded</span><span>80.0%</span></div>
-        <div class="progress-bar"><div class="progress-fill yellow" style="width:80%"></div></div>
-        <div class="score-meta"><span>CPO: $0 (organic)</span><span>VEP — needs 4 more participants</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">HOP Box <span class="badge badge-yellow">Recruiting</span></div>
-        <div class="score-meta"><span>18 / 35 onboarded</span><span>51.4%</span></div>
-        <div class="progress-bar"><div class="progress-fill yellow" style="width:51.4%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>Since Feb 12 — needs 17 more</span></div>
-      </div>
-
-      <!-- Active Studies -->
-      <div class="score-card">
-        <div class="study-name">Peptide Supplement: Sleep &amp; Recovery <span class="badge badge-blue">Active</span></div>
-        <div class="score-meta"><span>120 / 120 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $20.53</span><span>17 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Sleep Mushrooms+ <span class="badge badge-blue">Active</span></div>
-        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>15 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Vitamin D Boost: Clearlight <span class="badge badge-blue">Active</span></div>
-        <div class="score-meta"><span>20 / 20 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>64 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Mimio: Energy and Metabolic Health <span class="badge badge-blue">Active</span></div>
-        <div class="score-meta"><span>12 / 12 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>17 days</span></div>
-      </div>
-
-      <!-- Completed — Paid -->
-      <div class="score-card">
-        <div class="study-name">Enhanced Brew — Coffee Study <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>192 / 192 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $16.59</span><span>23 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Enhanced Brew Formula (RCT) <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>80 / 80 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $13.09</span><span>49 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Rootless &amp; Women's Health <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>50 / 50 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $11.65</span><span>19 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Berkeley Life (Nitrate Supp.) <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>70 / 70 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $37.60</span><span></span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Quantum Upgrade <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>70 / 70 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>CPO: $3.80</span><span></span></div>
-      </div>
-
-      <!-- Completed — $0 Spend -->
-      <div class="score-card">
-        <div class="study-name">Better Sleep with NatPat <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>29 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Sleep Well, Stress Less: Sensate <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>5 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">LyfeFuel Daily Essentials Shake <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>25 / 25 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>2 days</span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Rest &amp; Recharge: Hapbee <span class="badge badge-green">Complete</span></div>
-        <div class="score-meta"><span>10 / 10 onboarded</span><span>100%</span></div>
-        <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span>22 days</span></div>
-      </div>
-
-      <!-- Coming Soon -->
-      <div class="score-card">
-        <div class="study-name">Leela Quantum <span class="badge badge-accent">Coming Soon</span></div>
-        <div class="score-meta"><span>0 / 35 onboarded</span><span>0%</span></div>
-        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Neuvana <span class="badge badge-accent">Coming Soon</span></div>
-        <div class="score-meta"><span>0 / 40 onboarded</span><span>0%</span></div>
-        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Percepta <span class="badge badge-accent">Coming Soon</span></div>
-        <div class="score-meta"><span>0 / 154 onboarded</span><span>0%</span></div>
-        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Young Goose <span class="badge badge-accent">Coming Soon</span></div>
-        <div class="score-meta"><span>0 / 35 onboarded</span><span>0%</span></div>
-        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
-      </div>
-
-      <div class="score-card">
-        <div class="study-name">Cure Hydration <span class="badge badge-accent">Coming Soon</span></div>
-        <div class="score-meta"><span>0 / 70 onboarded</span><span>0%</span></div>
-        <div class="progress-bar"><div class="progress-fill accent" style="width:0%"></div></div>
-        <div class="score-meta"><span>$0 spend (organic)</span><span></span></div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ==================== RECRUITMENT PROJECTIONS ==================== -->
-  <div class="section">
-    <h2>Recruitment Projections — Active Studies</h2>
-
-    <div class="proj-grid">
-      <div class="proj-card">
-        <div class="proj-name">Melatonin Sleep Study (Somato)</div>
-        <div class="proj-row"><span>Current onboarded</span><span>90 / 240</span></div>
-        <div class="proj-row"><span>Remaining to recruit</span><span>150 participants</span></div>
-        <div class="proj-row"><span>Current CPO</span><span>$71.88 (outlier)</span></div>
-        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$10,782</span></div>
-        <div class="proj-row"><span>Est. remaining cost at standard CPO ($18.60)</span><span>$2,790</span></div>
-        <div class="proj-row"><span>First joined</span><span>Jan 13, 2026</span></div>
-        <div class="proj-row"><span>Est. completion</span><span>~Mar 15, 2026</span></div>
-        <div class="proj-row"><span>Note</span><span>~150 lost to baseline bug (fix ETA this week), ~48 to eligibility question</span></div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-name">Pain Relief: ProleevaMax</div>
-        <div class="proj-row"><span>Current onboarded</span><span>29 / 35</span></div>
-        <div class="proj-row"><span>Remaining to recruit</span><span>6 participants</span></div>
-        <div class="proj-row"><span>Current CPO</span><span>$196.08 (outlier)</span></div>
-        <div class="proj-row"><span>Est. remaining cost at current CPO</span><span>$1,176</span></div>
-        <div class="proj-row"><span>First joined</span><span>Jan 5, 2026</span></div>
-        <div class="proj-row"><span>Est. completion</span><span>~End of Feb 2026</span></div>
-        <div class="proj-row"><span>Note</span><span>Near completion — targeting existing users from insufficient baseline list</span></div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-name">Tapping Solutions for Stress Relief</div>
-        <div class="proj-row"><span>Current onboarded</span><span>16 / 20</span></div>
-        <div class="proj-row"><span>Remaining to recruit</span><span>4 participants</span></div>
-        <div class="proj-row"><span>Ad spend</span><span>$0 (organic / VEP)</span></div>
-        <div class="proj-row"><span>Est. remaining cost</span><span>$0</span></div>
-        <div class="proj-row"><span>Est. completion</span><span>~End of Feb 2026</span></div>
-        <div class="proj-row"><span>Note</span><span>Organic recruitment, no ad spend needed</span></div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-name">HOP Box</div>
-        <div class="proj-row"><span>Current onboarded</span><span>18 / 35</span></div>
-        <div class="proj-row"><span>Remaining to recruit</span><span>17 participants</span></div>
-        <div class="proj-row"><span>Ad spend</span><span>$0 (organic)</span></div>
-        <div class="proj-row"><span>Est. remaining cost</span><span>$0</span></div>
-        <div class="proj-row"><span>Recruiting since</span><span>Feb 12, 2026</span></div>
-        <div class="proj-row"><span>Note</span><span>Opened Friday — monitoring through Thursday before escalating</span></div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-name">Projection Summary</div>
-        <div class="proj-row"><span>Total remaining participants</span><span>177</span></div>
-        <div class="proj-row"><span>Est. cost at current CPO rates</span><span>~$11,958</span></div>
-        <div class="proj-row"><span>Est. cost at standard CPO ($18.60)</span><span>~$2,790</span></div>
-        <div class="proj-row"><span>Best-case total spend at completion</span><span>~$25,123</span></div>
-        <div class="proj-row"><span>Worst-case total spend at completion</span><span>~$34,291</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== TARGET KPIs & 2026 OUTLOOK ==================== -->
-  <div class="kpi-section">
-    <h2>Target KPIs &amp; 2026 Outlook</h2>
-
-    <h3>Cost-per-Participant Targets</h3>
-
-    <div class="target-row">
-      <div class="target-label"><span class="badge badge-blue">RCT</span> Paid</div>
-      <div class="target-bar-wrap">
-        <div class="target-bar-fill green" style="width: 68.4%;">$27.37</div>
-        <div class="target-marker" style="left: 87.5%;" data-label="Target $35"></div>
-      </div>
-      <div class="target-vals"><strong>$27.37</strong> / $35.00</div>
-    </div>
-
-    <div class="target-row">
-      <div class="target-label"><span class="badge badge-green">RWE</span> Paid</div>
-      <div class="target-bar-wrap">
-        <div class="target-bar-fill yellow" style="width: 100%;">$79.35</div>
-        <div class="target-marker" style="left: 31.5%;" data-label="Target $25"></div>
-      </div>
-      <div class="target-vals"><strong>$79.35</strong> / $25.00</div>
-    </div>
-
-    <div class="target-row">
-      <div class="target-label"><span class="badge badge-yellow">VEP</span> Organic</div>
-      <div class="target-bar-wrap">
-        <div class="target-bar-fill green" style="width: 100%;">$0 — on target</div>
-      </div>
-      <div class="target-vals"><strong>$0</strong> / $0</div>
-    </div>
-
-    <div class="target-row" style="background: rgba(108,92,231,0.08); border: 1px solid rgba(108,92,231,0.2);">
-      <div class="target-label" style="font-weight: 700;">Blended</div>
-      <div class="target-bar-wrap">
-        <div class="target-bar-fill accent" style="width: 85.9%;">$25.76</div>
-        <div class="target-marker" style="left: 83.3%;" data-label="Target ≤$25"></div>
-      </div>
-      <div class="target-vals"><strong>$25.76</strong> / &le;$25.00</div>
-    </div>
-
-    <p style="font-size: 11px; color: var(--text-dim); margin-top: 8px;">
-      RWE paid CPO skewed by outliers (ProleevaMax $196, Melatonin $72). Excluding outliers: $18.60. Blended target of $25 achievable as organic share grows.
+  <!-- Manual Queue Comparison -->
+  <div class="section" id="manual-queue-section">
+    <h2>Manual Queue Impact</h2>
+    <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 16px;">
+      Comparing studies with manual steps (e.g., external prescreening, lab requirements) vs. fully automated recruitment flows.
     </p>
+    <div class="avg-grid" id="manual-queue-grid"></div>
+  </div>
 
+  <!-- Year-over-Year Breakdown -->
+  <div class="section" id="yoy-section">
+    <h2>Year-over-Year Breakdown</h2>
+    <div class="yoy-grid" id="yoy-grid"></div>
+  </div>
+
+  <div class="section" id="scorecard-section">
+    <h2>Study Health Scorecard</h2>
+    <div class="scorecard-grid" id="scorecard-grid"></div>
+  </div>
+
+  <div class="section" id="projections-section">
+    <h2>Recruitment Projections — Active Studies</h2>
+    <div class="proj-grid" id="proj-grid"></div>
+  </div>
+
+  <div class="kpi-section" id="kpi-section">
+    <h2>Target KPIs &amp; 2026 Outlook</h2>
+    <h3>Cost-per-Participant Targets</h3>
+    <div id="kpi-bars"></div>
+    <p id="kpi-note" style="font-size: 11px; color: var(--text-dim); margin-top: 8px;"></p>
     <h3>Days-to-Recruit Benchmarks</h3>
-
     <div class="bench-grid">
       <div class="bench-pill blue-accent">
         <div class="bench-size">Small Study</div>
@@ -1318,82 +515,11 @@
         <div class="bench-detail">Partner-dependent; no ad lever to pull</div>
       </div>
     </div>
-
-    <h3>2026 Annual Recruitment Goal</h3>
-
-    <div class="pace-grid">
-      <div class="pace-card">
-        <div class="pace-title">2026 Year-to-Date Progress</div>
-        <div class="ring-wrap">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
-            <!-- 440 / 4000 = 11.0% → dashoffset = 364.4*(1-0.11) = 324.3 -->
-            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="364.4" stroke-dashoffset="324.3"></circle>
-            <defs>
-              <linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="var(--accent)"/>
-                <stop offset="100%" stop-color="var(--green)"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <div class="ring-center">
-            <div class="ring-value" style="color: var(--green);">440</div>
-            <div class="ring-label">of 4,000</div>
-          </div>
-        </div>
-        <div class="pace-stats">
-          <div class="pace-stat-row"><span>Weeks elapsed (2026)</span><span>~7</span></div>
-          <div class="pace-stat-row"><span>2026 weekly rate</span><span>~63 / wk</span></div>
-          <div class="pace-stat-row"><span>All-time onboarded</span><span>867</span></div>
-          <div class="pace-stat-row"><span>Pre-2026 onboarded</span><span>427</span></div>
-          <div class="pace-stat-row"><span>Active studies</span><span>17</span></div>
-        </div>
-        <p style="font-size: 10px; color: var(--text-dim); margin-top: 8px;">
-          Pre-2026: Enhanced Brew Coffee (192), Enhanced Brew Formula (80), Berkeley Life (70), Rootless (50), Quantum Upgrade (70). All other studies counted as 2026.
-        </p>
-      </div>
-
-      <div class="pace-card">
-        <div class="pace-title">Pace Check (2026 Target: 4,000)</div>
-        <div class="ring-wrap">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle class="ring-bg" cx="70" cy="70" r="58"></circle>
-            <!-- 63 / 77 required = 82% → dashoffset = 364.4*(1-0.82) = 65.6 -->
-            <circle class="ring-fill" cx="70" cy="70" r="58" stroke="var(--yellow)" stroke-dasharray="364.4" stroke-dashoffset="65.6"></circle>
-          </svg>
-          <div class="ring-center">
-            <div class="ring-value" style="color: var(--yellow);">82%</div>
-            <div class="ring-label">of required pace</div>
-          </div>
-        </div>
-        <div class="pace-stats">
-          <div class="pace-stat-row"><span>Required rate (4,000 / yr)</span><span>~77 / wk</span></div>
-          <div class="pace-stat-row"><span>2026 YTD rate</span><span style="color: var(--yellow); font-weight: 600;">~63 / wk</span></div>
-          <div class="pace-stat-row"><span>All-time rate (867 / 7 wk)</span><span style="font-weight: 600;">~124 / wk</span></div>
-          <div class="pace-stat-row"><span>Status</span><span><span class="status-chip behind">Behind Pace</span></span></div>
-        </div>
-      </div>
-
-      <div class="pace-card">
-        <div class="pace-title">Budget Projection</div>
-        <div style="text-align: center; margin: 12px 0 16px;">
-          <div style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px;">Spend to date</div>
-          <div style="font-size: 32px; font-weight: 700; color: var(--blue);">$22,333</div>
-        </div>
-        <div class="pace-stats">
-          <div class="pace-stat-row"><span>Remaining (target CPO $20)</span><span>$63K–$83K</span></div>
-          <div class="pace-stat-row"><span>Remaining (current CPO $26)</span><span>$81K–$106K</span></div>
-          <div class="pace-stat-row"><span>If organic stays ~25%</span><span style="color: var(--green);">~25% savings</span></div>
-        </div>
-        <p style="font-size: 11px; color: var(--text-dim); margin-top: 10px; text-align: center;">
-          Growing the VEP / organic pipeline is the biggest lever for cost control
-        </p>
-      </div>
-    </div>
+    <h3 id="pace-heading">2026 Annual Recruitment Goal</h3>
+    <div class="pace-grid" id="pace-grid"></div>
   </div>
 
-  <!-- ==================== STUDY TYPE BREAKDOWN ==================== -->
-  <div class="section">
+  <div class="section" id="type-breakdown-section">
     <h2>Study Type Breakdown</h2>
     <div class="table-wrap">
       <table>
@@ -1404,336 +530,835 @@
             <th class="align-right">Total Spend</th>
             <th class="align-right">Total Onboarded</th>
             <th class="align-right">Avg CPO</th>
+            <th class="align-right">Avg Days to Recruit</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td><span class="badge badge-blue">RCT</span> Randomized Controlled Trial</td>
-            <td class="align-right">6</td>
-            <td class="align-right">$16,063.81</td>
-            <td class="align-right">584</td>
-            <td class="align-right">$27.51</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-green">RWE</span> Real World Evidence</td>
-            <td class="align-right">2</td>
-            <td class="align-right">$6,268.76</td>
-            <td class="align-right">85</td>
-            <td class="align-right">$73.75</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-yellow">VEP</span> Verified Evidence Program</td>
-            <td class="align-right">6</td>
-            <td class="align-right">$0</td>
-            <td class="align-right">150</td>
-            <td class="align-right">$0</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-green">RWE</span> Real World Evidence ($0 spend)</td>
-            <td class="align-right">2</td>
-            <td class="align-right">$0</td>
-            <td class="align-right">38</td>
-            <td class="align-right">$0</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr class="totals-row">
-            <td><strong>Total</strong></td>
-            <td class="align-right"><strong>16</strong></td>
-            <td class="align-right"><strong>$22,332.57</strong></td>
-            <td class="align-right"><strong>857</strong></td>
-            <td class="align-right"><strong>$26.06</strong></td>
-          </tr>
-        </tfoot>
+        <tbody id="type-table-body"></tbody>
+        <tfoot id="type-table-foot"></tfoot>
       </table>
     </div>
   </div>
 
-  <div class="footer">
-    Recruitment Command Center &middot; Reputable &middot; Last updated Feb 18, 2026
-  </div>
+  <div class="footer" id="footer"></div>
 
 <script>
 (function() {
-  // Study-to-period mapping (by row number in table)
-  var PERIOD = {1:'2026',2:'2026',3:'2025',4:'2025',5:'2026',6:'2025',7:'2025',8:'2025',
-    9:'2026',10:'2026',11:'2026',12:'2026',13:'2026',14:'2026',15:'2026',16:'2026',17:'2026'};
-
-  // Score card name fragments to period
-  var CARD_PERIODS = {
-    'Melatonin':'2026','ProleevaMax':'2026','Tapping':'2026','HOP Box':'2026',
-    'Peptide':'2026','Sleep Mushrooms':'2026','Clearlight':'2026','Mimio':'2026',
-    'Enhanced Brew —':'2025','Enhanced Brew Formula':'2025',
-    'Rootless':'2025','Berkeley Life':'2025','Quantum Upgrade':'2025',
-    'NatPat':'2026','Sensate':'2026','LyfeFuel':'2026','Hapbee':'2026',
-    'Leela Quantum':'coming','Neuvana':'coming','Percepta':'coming',
-    'Young Goose':'coming','Cure Hydration':'coming'
-  };
-
-  // Pre-computed metrics for each period
-  var M = {
-    all: {
-      subtitle: 'Reputable \u2014 All-Time Study Dashboard \u00b7 Updated Feb 18, 2026',
-      totalStudies: '22', totalStudiesSub: '8 paid \u00b7 9 $0 spend \u00b7 5 coming soon',
-      completed: '13', completedSub: '4 recruiting \u00b7 5 coming soon',
-      avgDays: '23.8', avgDaysSub: 'Across 11 studies with duration data',
-      joined: '1,987', joinedSub: 'Across all 17 studies',
-      onboarded: '902', onboardedSub: 'Across all 17 studies',
-      spendLabel: 'All-Time Ad Spend', spend: '$22,332.57', spendSub: 'Across 8 paid studies',
-      cpoLabel: 'Blended CPO (All Studies)', cpo: '$24.76', cpoSub: '$22,332.57 / 902 onboarded',
-      paidCpo: '$17.49', paidCpoSub: 'Standard paid studies only',
-      totalLeads:'5,975', totalLeadsSub:'Across 10 studies with lead data',
-      footerSpend:'$22,332.57', footerLeads:'5,975', footerJoined:'1,987', footerOnboarded:'902', footerTarget:'1,079',
-      avgBlended:'$24.76', avgBlendedDetail:'$22,332.57 spend \u00f7 902 onboarded',
-      avgExcl:'$17.49', avgExclDetail:'$10,176.77 spend \u00f7 582 onboarded \u00b7 Studies 3\u20138 (excl. outliers)',
-      avgIncl:'$31.86', avgInclDetail:'$22,332.57 spend \u00f7 701 onboarded \u00b7 All 8 paid studies',
-      typeRCT:['6','$16,063.81','622','$25.83'],
-      typeRWE:['2','$6,268.76','79','$79.35'],
-      typeVEP:['7','$0','163','$0'],
-      typeRWE0:['2','$0','38','$0'],
-      typeTotal:['17','$22,332.57','902','$24.76']
+  // ============================================================
+  // SINGLE DATA SOURCE — all studies defined here
+  // ============================================================
+  // launchYear: year the study LAUNCHED (drives filtering)
+  // crossYear: true if study spans 2025→2026
+  // Dates: use real launch/start and end dates
+  var STUDIES = [
+    {
+      id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT',
+      spend: 6469.62, leads: 1240, joined: 312, onboarded: 90, target: 240,
+      wearable: 'Oura', days: null,
+      launchDate: 'Jan 13, 2026', endDate: null,
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'recruiting', outlier: true,
+      notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question'
     },
-    '2025': {
-      subtitle: 'Reputable \u2014 2025 Studies \u00b7 Updated Feb 18, 2026',
-      totalStudies: '5', totalStudiesSub: '5 paid \u00b7 0 $0 spend',
-      completed: '5', completedSub: 'All studies complete',
-      avgDays: '30.3', avgDaysSub: 'Across 3 studies with duration data',
-      joined: '834', joinedSub: 'Across 5 studies',
-      onboarded: '462', onboardedSub: 'Across 5 studies',
-      spendLabel: '2025 Ad Spend', spend: '$7,712.66', spendSub: 'Across 5 paid studies',
-      cpoLabel: 'Blended CPO (2025)', cpo: '$16.69', cpoSub: '$7,712.66 / 462 onboarded',
-      paidCpo: '$16.69', paidCpoSub: 'All studies paid, no outliers',
-      totalLeads:'2,407', totalLeadsSub:'Across 3 studies with lead data',
-      footerSpend:'$7,712.66', footerLeads:'2,407', footerJoined:'834', footerOnboarded:'462', footerTarget:'462',
-      avgBlended:'$16.69', avgBlendedDetail:'$7,712.66 spend \u00f7 462 onboarded',
-      avgExcl:'$16.69', avgExclDetail:'$7,712.66 spend \u00f7 462 onboarded \u00b7 All 5 paid (no outliers)',
-      avgIncl:'$16.69', avgInclDetail:'$7,712.66 spend \u00f7 462 onboarded \u00b7 All 5 paid',
-      typeRCT:['4','$7,130.08','412','$17.31'],
-      typeRWE:['1','$582.58','50','$11.65'],
-      typeVEP:['0','$0','0','\u2014'],
-      typeRWE0:['0','$0','0','\u2014'],
-      typeTotal:['5','$7,712.66','462','$16.69']
+    {
+      id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE',
+      spend: 5686.18, leads: 719, joined: 102, onboarded: 29, target: 35,
+      wearable: 'WHOOP', days: null,
+      launchDate: 'Jan 5, 2026', endDate: null,
+      launchYear: 2026, crossYear: false, manualQueue: true,
+      status: 'recruiting', outlier: true,
+      notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)'
     },
-    '2026': {
-      subtitle: 'Reputable \u2014 2026 Year-to-Date \u00b7 Updated Feb 18, 2026',
-      totalStudies: '17', totalStudiesSub: '3 paid \u00b7 9 $0 spend \u00b7 5 coming soon',
-      completed: '8', completedSub: '4 recruiting \u00b7 5 coming soon',
-      avgDays: '21.4', avgDaysSub: 'Across 8 studies with duration data',
-      joined: '1,153', joinedSub: 'Across 12 studies',
-      onboarded: '440', onboardedSub: 'Across 12 studies',
-      spendLabel: '2026 YTD Ad Spend', spend: '$14,619.91', spendSub: 'Across 3 paid studies',
-      cpoLabel: 'Blended CPO (2026 YTD)', cpo: '$33.23', cpoSub: '$14,619.91 / 440 onboarded',
-      paidCpo: '$20.53', paidCpoSub: 'Peptide only (excl. outliers)',
-      totalLeads:'3,568', totalLeadsSub:'Across 7 studies with lead data',
-      footerSpend:'$14,619.91', footerLeads:'3,568', footerJoined:'1,153', footerOnboarded:'440', footerTarget:'617',
-      avgBlended:'$33.23', avgBlendedDetail:'$14,619.91 spend \u00f7 440 onboarded',
-      avgExcl:'$20.53', avgExclDetail:'$2,464.11 spend \u00f7 120 onboarded \u00b7 Study 5 only',
-      avgIncl:'$61.17', avgInclDetail:'$14,619.91 spend \u00f7 239 onboarded \u00b7 3 paid studies',
-      typeRCT:['2','$8,933.73','210','$42.54'],
-      typeRWE:['1','$5,686.18','29','$196.08'],
-      typeVEP:['7','$0','163','$0'],
-      typeRWE0:['2','$0','38','$0'],
-      typeTotal:['12','$14,619.91','440','$33.23']
+    {
+      id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT',
+      spend: 3184.93, leads: 1932, joined: 520, onboarded: 192, target: 192,
+      wearable: 'Oura', days: 23,
+      launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025',
+      launchYear: 2025, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 4, name: 'Berkeley Life (Nitrate Supp.)', type: 'RCT',
+      spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70,
+      wearable: 'Oura', days: null,
+      launchDate: '2025', endDate: '2025',
+      launchYear: 2025, crossYear: false, manualQueue: true,
+      status: 'complete', outlier: false,
+      notes: 'Prescreening happened outside of the app (manual step)'
+    },
+    {
+      id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT',
+      spend: 2464.11, leads: 1135, joined: 338, onboarded: 120, target: 120,
+      wearable: 'Oura', days: 17,
+      launchDate: 'Dec 23, 2025', endDate: 'Jan 9, 2026',
+      launchYear: 2025, crossYear: true, manualQueue: false,
+      status: 'active', outlier: false,
+      notes: 'Cross-year: launched 2025, completed 2026'
+    },
+    {
+      id: 6, name: 'Enhanced Brew Formula (RCT)', type: 'RCT',
+      spend: 1046.99, leads: 310, joined: 82, onboarded: 80, target: 80,
+      wearable: 'Oura', days: 49,
+      launchDate: 'Jun 4, 2025', endDate: 'Jul 23, 2025',
+      launchYear: 2025, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 7, name: 'Rootless & Women\'s Health', type: 'RWE',
+      spend: 582.58, leads: 165, joined: 92, onboarded: 50, target: 50,
+      wearable: 'Oura', days: 19,
+      launchDate: 'Nov 26, 2025', endDate: 'Dec 15, 2025',
+      launchYear: 2025, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 8, name: 'Quantum Upgrade', type: 'RCT',
+      spend: 266.14, leads: null, joined: 70, onboarded: 70, target: 70,
+      wearable: 'Oura', days: null,
+      launchDate: '2025', endDate: '2025',
+      launchYear: 2025, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 9, name: 'Sleep Mushrooms+', type: 'VEP',
+      spend: 0, leads: null, joined: 67, onboarded: 50, target: 50,
+      wearable: 'Oura / Fitbit / WHOOP', days: 15,
+      launchDate: 'Jan 2026', endDate: 'Jan 2026',
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'active', outlier: false,
+      notes: ''
+    },
+    {
+      id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP',
+      spend: 0, leads: null, joined: 60, onboarded: 16, target: 20,
+      wearable: 'Oura / Fitbit / WHOOP', days: null,
+      launchDate: 'Jan 2026', endDate: null,
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'recruiting', outlier: false,
+      notes: '80% to target'
+    },
+    {
+      id: 11, name: 'Better Sleep with NatPat', type: 'VEP',
+      spend: 0, leads: null, joined: 38, onboarded: 25, target: 25,
+      wearable: 'Oura', days: 29,
+      launchDate: 'Jan 2026', endDate: 'Feb 2026',
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP',
+      spend: 0, leads: 150, joined: 57, onboarded: 25, target: 25,
+      wearable: 'Oura', days: 5,
+      launchDate: 'Jan 2026', endDate: 'Jan 2026',
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP',
+      spend: 0, leads: 102, joined: 52, onboarded: 25, target: 25,
+      wearable: 'Oura', days: 2,
+      launchDate: 'Jan 2026', endDate: 'Jan 2026',
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP',
+      spend: 0, leads: null, joined: 15, onboarded: 10, target: 10,
+      wearable: 'Oura', days: 22,
+      launchDate: 'Jan 2026', endDate: 'Jan 2026',
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'complete', outlier: false,
+      notes: ''
+    },
+    {
+      id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP',
+      spend: 0, leads: null, joined: 30, onboarded: 12, target: 12,
+      wearable: 'Oura / Fitbit / WHOOP', days: 17,
+      launchDate: 'Jan 12, 2026', endDate: 'Jan 29, 2026',
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'active', outlier: false,
+      notes: ''
+    },
+    {
+      id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE',
+      spend: 0, leads: 30, joined: 40, onboarded: 20, target: 20,
+      wearable: 'Oura', days: 64,
+      launchDate: 'Dec 2025', endDate: 'Feb 2026',
+      launchYear: 2025, crossYear: true, manualQueue: true,
+      status: 'active', outlier: false,
+      notes: 'Cross-year: launched Dec 2025 (manual step)'
+    },
+    {
+      id: 17, name: 'HOP Box', type: 'RWE',
+      spend: 0, leads: 192, joined: 42, onboarded: 18, target: 35,
+      wearable: 'Oura', days: null,
+      launchDate: 'Feb 12, 2026', endDate: null,
+      launchYear: 2026, crossYear: false, manualQueue: false,
+      status: 'recruiting', outlier: false,
+      notes: 'Opened Friday — monitoring through Thursday before escalating'
+    },
+    // Coming soon studies (not yet launched)
+    {
+      id: 18, name: 'Leela Quantum', type: 'RWE',
+      spend: 0, leads: null, joined: null, onboarded: 0, target: 35,
+      wearable: 'Oura', days: null,
+      launchDate: null, endDate: null,
+      launchYear: null, crossYear: false, manualQueue: false,
+      status: 'coming', outlier: false,
+      notes: ''
+    },
+    {
+      id: 19, name: 'Neuvana', type: 'VEP',
+      spend: 0, leads: null, joined: null, onboarded: 0, target: 40,
+      wearable: 'Oura', days: null,
+      launchDate: null, endDate: null,
+      launchYear: null, crossYear: false, manualQueue: false,
+      status: 'coming', outlier: false,
+      notes: ''
+    },
+    {
+      id: 20, name: 'Percepta', type: 'RWE',
+      spend: 0, leads: null, joined: null, onboarded: 0, target: 154,
+      wearable: 'Oura', days: null,
+      launchDate: null, endDate: null,
+      launchYear: null, crossYear: false, manualQueue: false,
+      status: 'coming', outlier: false,
+      notes: ''
+    },
+    {
+      id: 21, name: 'Young Goose', type: 'VEP',
+      spend: 0, leads: null, joined: null, onboarded: 0, target: 35,
+      wearable: 'Oura', days: null,
+      launchDate: null, endDate: null,
+      launchYear: null, crossYear: false, manualQueue: false,
+      status: 'coming', outlier: false,
+      notes: ''
+    },
+    {
+      id: 22, name: 'Cure Hydration', type: 'VEP',
+      spend: 0, leads: null, joined: null, onboarded: 0, target: 70,
+      wearable: 'Oura', days: null,
+      launchDate: null, endDate: null,
+      launchYear: null, crossYear: false, manualQueue: false,
+      status: 'coming', outlier: false,
+      notes: ''
     }
-  };
+  ];
 
-  // Helper: find metric card by label text
-  function findMetric(label) {
-    var cards = document.querySelectorAll('.metric-card');
-    for (var i = 0; i < cards.length; i++) {
-      var l = cards[i].querySelector('.label');
-      if (l && l.textContent.trim().indexOf(label) !== -1) return cards[i];
-    }
-    return null;
+  // ============================================================
+  // HELPERS
+  // ============================================================
+  function $(sel) { return document.querySelector(sel); }
+  function $$(sel) { return document.querySelectorAll(sel); }
+  function fmt(n) { return n == null ? '—' : '$' + n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+  function fmtInt(n) { return n == null ? '—' : n.toLocaleString('en-US'); }
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  function isLaunched(s) { return s.status !== 'coming'; }
+  function isPaid(s) { return s.spend > 0; }
+  function isOrganic(s) { return s.spend === 0 && isLaunched(s); }
+  function isComplete(s) { return s.status === 'complete'; }
+  function isRecruiting(s) { return s.status === 'recruiting'; }
+
+  // Filter studies by period using launchYear
+  function filterByPeriod(studies, period) {
+    if (period === 'all') return studies;
+    var year = parseInt(period);
+    return studies.filter(function(s) {
+      if (s.status === 'coming') return period === '2026'; // show coming soon in 2026 view
+      if (s.crossYear) return true; // cross-year studies show in both
+      return s.launchYear === year;
+    });
   }
 
-  // Helper: find avg card by label
-  function findAvg(label) {
-    var labels = document.querySelectorAll('.avg-label');
-    for (var i = 0; i < labels.length; i++) {
-      if (labels[i].textContent.trim().indexOf(label) !== -1) return labels[i].parentElement;
-    }
-    return null;
+  // Get launched-only studies for a period
+  function launchedForPeriod(studies, period) {
+    return filterByPeriod(studies, period).filter(isLaunched);
   }
 
-  // Helper: get study type breakdown rows
-  function getTypeRows() {
-    var section = null;
-    var h2s = document.querySelectorAll('h2');
-    for (var i = 0; i < h2s.length; i++) {
-      if (h2s[i].textContent.indexOf('Study Type') !== -1) { section = h2s[i].closest('.section'); break; }
+  // ============================================================
+  // COMPUTE METRICS from data
+  // ============================================================
+  function computeMetrics(studies, period) {
+    var all = filterByPeriod(studies, period);
+    var launched = all.filter(isLaunched);
+    var coming = all.filter(function(s) { return s.status === 'coming'; });
+    var paid = launched.filter(isPaid);
+    var organic = launched.filter(isOrganic);
+    var paidNonOutlier = paid.filter(function(s) { return !s.outlier; });
+    var completed = launched.filter(isComplete);
+    var recruiting = launched.filter(isRecruiting);
+    var crossYear = launched.filter(function(s) { return s.crossYear; });
+
+    var totalSpend = launched.reduce(function(a, s) { return a + s.spend; }, 0);
+    var totalLeads = 0; var leadsCount = 0;
+    launched.forEach(function(s) { if (s.leads != null) { totalLeads += s.leads; leadsCount++; } });
+    var totalJoined = launched.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
+    var totalOnboarded = launched.reduce(function(a, s) { return a + s.onboarded; }, 0);
+    var totalTarget = launched.reduce(function(a, s) { return a + s.target; }, 0);
+
+    var daysStudies = launched.filter(function(s) { return s.days != null; });
+    var avgDays = daysStudies.length > 0
+      ? (daysStudies.reduce(function(a, s) { return a + s.days; }, 0) / daysStudies.length).toFixed(1)
+      : '—';
+
+    var blendedCPO = totalOnboarded > 0 ? totalSpend / totalOnboarded : 0;
+
+    var paidNOSpend = paidNonOutlier.reduce(function(a, s) { return a + s.spend; }, 0);
+    var paidNOOnb = paidNonOutlier.reduce(function(a, s) { return a + s.onboarded; }, 0);
+    var paidExclCPO = paidNOOnb > 0 ? paidNOSpend / paidNOOnb : 0;
+
+    var paidAllSpend = paid.reduce(function(a, s) { return a + s.spend; }, 0);
+    var paidAllOnb = paid.reduce(function(a, s) { return a + s.onboarded; }, 0);
+    var paidInclCPO = paidAllOnb > 0 ? paidAllSpend / paidAllOnb : 0;
+
+    // Type breakdown
+    var types = {};
+    launched.forEach(function(s) {
+      var key = s.type + (s.spend === 0 && (s.type === 'RWE') ? '_free' : (s.spend > 0 ? '_paid' : ''));
+      if (s.type === 'VEP') key = 'VEP';
+      else if (s.type === 'RCT' && s.spend > 0) key = 'RCT_paid';
+      else if (s.type === 'RCT' && s.spend === 0) key = 'RCT_free';
+      else if (s.type === 'RWE' && s.spend > 0) key = 'RWE_paid';
+      else key = 'RWE_free';
+
+      if (!types[key]) types[key] = { count: 0, spend: 0, onboarded: 0, totalDays: 0, daysCount: 0 };
+      types[key].count++;
+      types[key].spend += s.spend;
+      types[key].onboarded += s.onboarded;
+      if (s.days != null) { types[key].totalDays += s.days; types[key].daysCount++; }
+    });
+
+    // Manual queue comparison
+    var manualStudies = launched.filter(function(s) { return s.manualQueue; });
+    var autoStudies = launched.filter(function(s) { return !s.manualQueue; });
+
+    function manualMetrics(arr) {
+      var spend = arr.reduce(function(a, s) { return a + s.spend; }, 0);
+      var onb = arr.reduce(function(a, s) { return a + s.onboarded; }, 0);
+      var joined = arr.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
+      var daysArr = arr.filter(function(s) { return s.days != null; });
+      var avgD = daysArr.length > 0 ? (daysArr.reduce(function(a, s) { return a + s.days; }, 0) / daysArr.length).toFixed(1) : '—';
+      var convRate = joined > 0 ? ((onb / joined) * 100).toFixed(1) : '—';
+      return { count: arr.length, spend: spend, onboarded: onb, joined: joined, cpo: onb > 0 && spend > 0 ? spend / onb : 0, avgDays: avgD, convRate: convRate };
     }
-    if (!section) return {};
-    var rows = section.querySelectorAll('tbody tr');
-    var foot = section.querySelector('tfoot .totals-row');
-    return { rct: rows[0], rwe: rows[1], vep: rows[2], rwe0: rows[3], total: foot };
+
+    var manualM = manualMetrics(manualStudies);
+    var autoM = manualMetrics(autoStudies);
+
+    return {
+      all: all, launched: launched, coming: coming, paid: paid, organic: organic,
+      paidNonOutlier: paidNonOutlier, completed: completed, recruiting: recruiting,
+      crossYear: crossYear,
+      totalSpend: totalSpend, totalLeads: totalLeads, leadsCount: leadsCount,
+      totalJoined: totalJoined, totalOnboarded: totalOnboarded, totalTarget: totalTarget,
+      avgDays: avgDays, daysCount: daysStudies.length,
+      blendedCPO: blendedCPO, paidExclCPO: paidExclCPO, paidInclCPO: paidInclCPO,
+      paidNOSpend: paidNOSpend, paidNOOnb: paidNOOnb,
+      paidAllSpend: paidAllSpend, paidAllOnb: paidAllOnb,
+      types: types,
+      manualM: manualM, autoM: autoM,
+      manualStudies: manualStudies, autoStudies: autoStudies
+    };
   }
 
-  // Helper: get sections by heading text
-  function findSection(text) {
-    var h2s = document.querySelectorAll('h2');
-    for (var i = 0; i < h2s.length; i++) {
-      if (h2s[i].textContent.indexOf(text) !== -1) return h2s[i].closest('.section');
-    }
-    return null;
+  // ============================================================
+  // RENDER FUNCTIONS
+  // ============================================================
+
+  function renderSubtitle(period) {
+    var labels = { all: 'All-Time Study Dashboard', '2025': '2025 Studies', '2026': '2026 Year-to-Date' };
+    $('#dashboard-subtitle').textContent = 'Reputable — ' + labels[period] + ' · Updated Feb 18, 2026';
   }
 
-  function setTypeRow(row, vals) {
-    if (!row) return;
-    var cells = row.querySelectorAll('td.align-right, th.align-right');
-    if (row.classList && row.classList.contains('totals-row')) {
-      // tfoot row has <strong> wrappers
-      var strongs = row.querySelectorAll('strong');
-      if (strongs.length >= 4) {
-        strongs[0].textContent = vals[0];
-        strongs[1].textContent = vals[1];
-        strongs[2].textContent = vals[2];
-        strongs[3].textContent = vals[3];
-      }
-    } else if (cells.length >= 4) {
-      cells[0].textContent = vals[0];
-      cells[1].textContent = vals[1];
-      cells[2].textContent = vals[2];
-      cells[3].textContent = vals[3];
+  function renderMetrics(m, period) {
+    var labels = { all: 'All-Time Ad Spend', '2025': '2025 Ad Spend', '2026': '2026 YTD Ad Spend' };
+    var cpoLabels = { all: 'Blended CPO (All Studies)', '2025': 'Blended CPO (2025)', '2026': 'Blended CPO (2026 YTD)' };
+    var comingText = m.coming.length > 0 ? ' · ' + m.coming.length + ' coming soon' : '';
+
+    var html = '';
+    html += '<div class="metric-card"><div class="label">Total Studies</div><div class="value accent">' + m.all.length + '</div>';
+    html += '<div class="sub">' + m.paid.length + ' paid · ' + m.organic.length + ' $0 spend' + comingText + '</div></div>';
+
+    html += '<div class="metric-card"><div class="label">Completed Recruitment</div><div class="value">' + m.completed.length + '</div>';
+    html += '<div class="sub">' + m.recruiting.length + ' recruiting' + (m.coming.length > 0 ? ' · ' + m.coming.length + ' coming soon' : '') + '</div></div>';
+
+    html += '<div class="metric-card"><div class="label">Avg Days to Recruit</div><div class="value">' + m.avgDays + '</div>';
+    html += '<div class="sub">Across ' + m.daysCount + ' studies with duration data</div></div>';
+
+    html += '<div class="metric-card"><div class="label">Total Leads</div><div class="value">' + fmtInt(m.totalLeads) + '</div>';
+    html += '<div class="sub">Across ' + m.leadsCount + ' studies with lead data</div></div>';
+
+    html += '<div class="metric-card"><div class="label">Total Joined</div><div class="value">' + fmtInt(m.totalJoined) + '</div>';
+    html += '<div class="sub">Across ' + m.launched.length + ' studies</div></div>';
+
+    html += '<div class="metric-card"><div class="label">Total Onboarded</div><div class="value green">' + fmtInt(m.totalOnboarded) + '</div>';
+    html += '<div class="sub">Across ' + m.launched.length + ' studies</div></div>';
+
+    html += '<div class="metric-card"><div class="label">' + esc(labels[period]) + '</div><div class="value blue">' + fmt(m.totalSpend) + '</div>';
+    html += '<div class="sub">Across ' + m.paid.length + ' paid studies</div></div>';
+
+    html += '<div class="metric-card"><div class="label">' + esc(cpoLabels[period]) + '</div><div class="value green">' + fmt(m.blendedCPO) + '</div>';
+    html += '<div class="sub">' + fmt(m.totalSpend) + ' / ' + fmtInt(m.totalOnboarded) + ' onboarded</div></div>';
+
+    html += '<div class="metric-card"><div class="label">Paid CPO (Excl. Outliers)</div><div class="value green">' + fmt(m.paidExclCPO) + '</div>';
+    html += '<div class="sub">' + (m.paidNonOutlier.length > 0 ? 'Standard paid studies only' : 'No non-outlier paid studies') + '</div></div>';
+
+    if (m.crossYear.length > 0 && period !== 'all') {
+      html += '<div class="metric-card"><div class="label">Cross-Year Studies</div><div class="value accent">' + m.crossYear.length + '</div>';
+      html += '<div class="sub">' + m.crossYear.map(function(s) { return s.name.split(':')[0].split('—')[0].trim(); }).join(', ') + '</div></div>';
     }
+
+    $('#metrics-grid').innerHTML = html;
   }
 
-  function applyFilter(period) {
-    var m = M[period];
+  function statusBadge(status) {
+    var map = {
+      complete: '<span class="badge badge-green">Complete</span>',
+      active: '<span class="badge badge-blue">Active</span>',
+      recruiting: '<span class="badge badge-yellow">Recruiting</span>',
+      coming: '<span class="badge badge-accent">Coming Soon</span>'
+    };
+    return map[status] || '';
+  }
 
-    // 1. Update subtitle
-    var sub = document.getElementById('dashboard-subtitle');
-    if (sub) sub.innerHTML = m.subtitle;
+  function typeBadge(type) {
+    var map = {
+      RCT: '<span class="badge badge-blue">RCT</span>',
+      RWE: '<span class="badge badge-green">RWE</span>',
+      VEP: '<span class="badge badge-yellow">VEP</span>'
+    };
+    return map[type] || type;
+  }
 
-    // 2. Update metric cards
-    var mc;
-    mc = findMetric('Total Studies');
-    if (mc) { mc.querySelector('.value').textContent = m.totalStudies; mc.querySelector('.sub').textContent = m.totalStudiesSub; }
-    mc = findMetric('Completed Recruitment');
-    if (mc) { mc.querySelector('.value').textContent = m.completed; mc.querySelector('.sub').textContent = m.completedSub; }
-    mc = findMetric('Avg Days');
-    if (mc) { mc.querySelector('.value').textContent = m.avgDays; mc.querySelector('.sub').textContent = m.avgDaysSub; }
-    mc = findMetric('Total Joined');
-    if (mc) { mc.querySelector('.value').textContent = m.joined; mc.querySelector('.sub').textContent = m.joinedSub; }
-    mc = findMetric('Total Onboarded');
-    if (mc) { mc.querySelector('.value').textContent = m.onboarded; mc.querySelector('.sub').textContent = m.onboardedSub; }
-    mc = findMetric('Ad Spend');
-    if (mc) { mc.querySelector('.label').textContent = m.spendLabel; mc.querySelector('.value').textContent = m.spend; mc.querySelector('.sub').textContent = m.spendSub; }
-    mc = findMetric('Blended CPO');
-    if (mc) { mc.querySelector('.label').textContent = m.cpoLabel; mc.querySelector('.value').textContent = m.cpo; mc.querySelector('.sub').textContent = m.cpoSub; }
-    mc = findMetric('Total Leads');
-    if (mc) { mc.querySelector('.value').textContent = m.totalLeads; mc.querySelector('.sub').textContent = m.totalLeadsSub; }
-    mc = findMetric('Paid CPO');
-    if (mc) { mc.querySelector('.value').textContent = m.paidCpo; mc.querySelector('.sub').textContent = m.paidCpoSub; }
+  function renderCostTable(m, period) {
+    var studies = m.launched;
+    $('#cost-analysis-title').textContent = 'Cost Analysis — ' + studies.length + ' Studies' + (period !== 'all' ? ' (' + period + ')' : '');
 
-    // 3. Toggle table rows
-    var rows = document.querySelectorAll('.section .table-wrap tbody tr');
-    var mainTable = findSection('Cost Analysis');
-    if (mainTable) {
-      var trs = mainTable.querySelectorAll('tbody tr');
-      for (var i = 0; i < trs.length; i++) {
-        var numCell = trs[i].querySelector('td:first-child');
-        if (!numCell) continue;
-        var num = parseInt(numCell.textContent);
-        if (isNaN(num)) continue;
-        var rowPeriod = PERIOD[num];
-        trs[i].style.display = (period === 'all' || rowPeriod === period) ? '' : 'none';
-      }
-      // Update footer
-      var foot = mainTable.querySelector('tfoot .totals-row');
-      if (foot) {
-        var cells = foot.querySelectorAll('td.align-right');
-        if (cells.length >= 5) {
-          cells[0].textContent = m.footerSpend;
-          cells[1].textContent = m.footerLeads;
-          cells[2].textContent = m.footerJoined;
-          cells[3].textContent = m.footerOnboarded;
-          cells[4].textContent = m.footerTarget;
-        }
-      }
+    var html = '';
+    studies.forEach(function(s, i) {
+      var cls = '';
+      if (s.outlier) cls = 'row-outlier';
+      else if (s.spend === 0) cls = 'row-free';
+      if (s.crossYear && period !== 'all') cls += ' row-crossyear';
+
+      html += '<tr class="' + cls + '">';
+      html += '<td>' + (i + 1) + '</td>';
+      html += '<td>' + esc(s.name) + '</td>';
+      html += '<td>' + typeBadge(s.type) + '</td>';
+      html += '<td>' + (s.launchDate || '—') + '</td>';
+      html += '<td>' + (s.endDate || '—') + '</td>';
+      html += '<td class="align-right">' + fmt(s.spend) + '</td>';
+      html += '<td class="align-right">' + fmtInt(s.leads) + '</td>';
+      html += '<td class="align-right">' + fmtInt(s.joined) + '</td>';
+      html += '<td class="align-right">' + fmtInt(s.onboarded) + '</td>';
+      html += '<td class="align-right">' + fmtInt(s.target) + '</td>';
+      html += '<td class="align-right">' + (s.onboarded > 0 && s.spend > 0 ? fmt(s.spend / s.onboarded) : s.spend === 0 ? '$0' : '—') + '</td>';
+      html += '<td>' + esc(s.wearable) + '</td>';
+      html += '<td class="align-right">' + (s.days != null ? s.days : '—') + '</td>';
+      html += '<td>' + (s.manualQueue ? '<span class="badge badge-red">Yes</span>' : '<span class="badge badge-gray">No</span>') + '</td>';
+      html += '<td>' + statusBadge(s.status) + '</td>';
+      html += '<td>' + esc(s.notes) + '</td>';
+      html += '</tr>';
+    });
+    $('#cost-table-body').innerHTML = html;
+
+    // Footer
+    var foot = '<tr class="totals-row"><td></td><td><strong>TOTALS</strong></td><td></td><td></td><td></td>';
+    foot += '<td class="align-right">' + fmt(m.totalSpend) + '</td>';
+    foot += '<td class="align-right">' + fmtInt(m.totalLeads) + '</td>';
+    foot += '<td class="align-right">' + fmtInt(m.totalJoined) + '</td>';
+    foot += '<td class="align-right">' + fmtInt(m.totalOnboarded) + '</td>';
+    foot += '<td class="align-right">' + fmtInt(m.totalTarget) + '</td>';
+    foot += '<td class="align-right">—</td><td></td><td class="align-right">—</td><td></td><td></td><td></td></tr>';
+    $('#cost-table-foot').innerHTML = foot;
+
+    // CPO averages
+    var avgHtml = '';
+    avgHtml += '<div class="avg-card"><div class="avg-label">Blended CPO (All Studies incl. $0)</div>';
+    avgHtml += '<div class="avg-value" style="color:var(--green)">' + fmt(m.blendedCPO) + '</div>';
+    avgHtml += '<div class="avg-detail">' + fmt(m.totalSpend) + ' spend ÷ ' + fmtInt(m.totalOnboarded) + ' onboarded</div></div>';
+
+    avgHtml += '<div class="avg-card"><div class="avg-label">Paid Studies CPO (Excl. Outliers)</div>';
+    avgHtml += '<div class="avg-value" style="color:var(--blue)">' + fmt(m.paidExclCPO) + '</div>';
+    avgHtml += '<div class="avg-detail">' + fmt(m.paidNOSpend) + ' spend ÷ ' + fmtInt(m.paidNOOnb) + ' onboarded</div></div>';
+
+    avgHtml += '<div class="avg-card"><div class="avg-label">Paid Studies CPO (Incl. Outliers)</div>';
+    avgHtml += '<div class="avg-value" style="color:var(--yellow)">' + fmt(m.paidInclCPO) + '</div>';
+    avgHtml += '<div class="avg-detail">' + fmt(m.paidAllSpend) + ' spend ÷ ' + fmtInt(m.paidAllOnb) + ' onboarded</div></div>';
+
+    $('#avg-grid').innerHTML = avgHtml;
+  }
+
+  function renderYoY() {
+    var m25 = computeMetrics(STUDIES, '2025');
+    var m26 = computeMetrics(STUDIES, '2026');
+
+    // Identify cross-year studies
+    var crossYear = STUDIES.filter(function(s) { return s.crossYear; });
+
+    function yoyCard(title, color, m) {
+      var html = '<div class="yoy-card"><h4><span style="color:' + color + '">●</span> ' + title + '</h4>';
+      html += '<div class="yoy-row"><span class="yoy-label">Launched studies</span><span class="yoy-val">' + m.launched.length + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Completed</span><span class="yoy-val">' + m.completed.length + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Total ad spend</span><span class="yoy-val">' + fmt(m.totalSpend) + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Total leads</span><span class="yoy-val">' + fmtInt(m.totalLeads) + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Total onboarded</span><span class="yoy-val">' + fmtInt(m.totalOnboarded) + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Blended CPO</span><span class="yoy-val">' + fmt(m.blendedCPO) + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Paid CPO (excl. outliers)</span><span class="yoy-val">' + fmt(m.paidExclCPO) + '</span></div>';
+      html += '<div class="yoy-row"><span class="yoy-label">Avg days to recruit</span><span class="yoy-val">' + m.avgDays + ' days</span></div>';
+      html += '</div>';
+      return html;
     }
 
-    // 4. Update CPO averages
-    var ac;
-    ac = findAvg('Blended CPO');
-    if (ac) { ac.querySelector('.avg-value').textContent = m.avgBlended; ac.querySelector('.avg-detail').textContent = m.avgBlendedDetail; }
-    ac = findAvg('Excl. Outliers');
-    if (ac) { ac.querySelector('.avg-value').textContent = m.avgExcl; ac.querySelector('.avg-detail').textContent = m.avgExclDetail; }
-    ac = findAvg('Incl. Outliers');
-    if (ac) { ac.querySelector('.avg-value').textContent = m.avgIncl; ac.querySelector('.avg-detail').textContent = m.avgInclDetail; }
+    var html = yoyCard('2025 Studies (by launch date)', 'var(--blue)', m25);
+    html += yoyCard('2026 YTD Studies (by launch date)', 'var(--green)', m26);
 
-    // 5. Toggle score cards
-    var cards = document.querySelectorAll('.score-card');
-    for (var i = 0; i < cards.length; i++) {
-      var nameEl = cards[i].querySelector('.study-name');
-      if (!nameEl) continue;
-      var name = nameEl.textContent;
-      var cardPeriod = null;
-      for (var key in CARD_PERIODS) {
-        if (name.indexOf(key) !== -1) { cardPeriod = CARD_PERIODS[key]; break; }
-      }
-      if (!cardPeriod) continue;
-      if (period === 'all') {
-        cards[i].style.display = '';
-      } else if (period === '2026') {
-        cards[i].style.display = (cardPeriod === '2026' || cardPeriod === 'coming') ? '' : 'none';
+    // Cross-year detail
+    if (crossYear.length > 0) {
+      html += '<div class="yoy-card"><h4><span style="color:var(--accent)">●</span> Cross-Year Studies</h4>';
+      crossYear.forEach(function(s) {
+        html += '<div class="yoy-row"><span class="yoy-label">' + esc(s.name) + '</span><span class="yoy-val">' + (s.launchDate || '—') + ' → ' + (s.endDate || 'ongoing') + '</span></div>';
+        html += '<div class="yoy-row"><span class="yoy-label" style="padding-left:12px">Spend / Onboarded</span><span class="yoy-val">' + fmt(s.spend) + ' / ' + s.onboarded + '</span></div>';
+      });
+      html += '<div class="crossyear-note"><strong>Note:</strong> Cross-year studies are bucketed by launch date but appear in both year views. Their spend and onboarded counts are not split between years — the full amount is attributed to the launch year. Future improvement: split spend and onboarded proportionally by date range.</div>';
+      html += '</div>';
+    }
+
+    $('#yoy-grid').innerHTML = html;
+  }
+
+  function renderScorecard(m, period) {
+    var all = filterByPeriod(STUDIES, period);
+
+    // Sort: recruiting first, then active, then complete, then coming
+    var order = { recruiting: 0, active: 1, complete: 2, coming: 3 };
+    var sorted = all.slice().sort(function(a, b) {
+      return (order[a.status] || 9) - (order[b.status] || 9);
+    });
+
+    var html = '';
+    sorted.forEach(function(s) {
+      var pct = s.target > 0 ? Math.round((s.onboarded / s.target) * 1000) / 10 : 0;
+      var barColor = 'green';
+      if (s.status === 'coming') barColor = 'accent';
+      else if (pct < 50) barColor = 'red';
+      else if (pct < 90) barColor = 'yellow';
+
+      var cpoText = s.spend > 0 && s.onboarded > 0
+        ? 'CPO: ' + fmt(s.spend / s.onboarded)
+        : '$0 spend (organic)';
+
+      html += '<div class="score-card">';
+      html += '<div class="study-name">' + esc(s.name) + ' ' + statusBadge(s.status) + (s.manualQueue ? ' <span class="badge badge-red">Manual Queue</span>' : '') + '</div>';
+      html += '<div class="score-meta"><span>' + s.onboarded + ' / ' + s.target + ' onboarded</span><span>' + pct + '%</span></div>';
+      html += '<div class="progress-bar"><div class="progress-fill ' + barColor + '" style="width:' + Math.min(pct, 100) + '%"></div></div>';
+      html += '<div class="score-meta"><span>' + cpoText + '</span><span>' + (s.days != null ? s.days + ' days' : '') + (s.notes ? (s.days ? ' · ' : '') + esc(s.notes) : '') + '</span></div>';
+
+      // Launch / End date row
+      html += '<div class="score-date">';
+      html += '<span><span class="date-label">Launch:</span> ' + (s.launchDate || 'TBD') + '</span>';
+      html += '<span><span class="date-label">End:</span> ' + (s.endDate || (s.status === 'coming' ? 'TBD' : 'Ongoing')) + '</span>';
+      if (s.crossYear) html += '<span class="badge badge-accent" style="font-size:9px;padding:1px 6px;">Cross-Year</span>';
+      html += '</div>';
+
+      html += '</div>';
+    });
+    $('#scorecard-grid').innerHTML = html;
+  }
+
+  function renderProjections(m, period) {
+    var section = $('#projections-section');
+    if (period === '2025') { section.classList.add('section-hidden'); return; }
+    section.classList.remove('section-hidden');
+
+    var recruiting = STUDIES.filter(function(s) { return s.status === 'recruiting'; });
+    var totalRemaining = 0;
+    var estCostCurrent = 0;
+
+    var html = '';
+    recruiting.forEach(function(s) {
+      var remaining = s.target - s.onboarded;
+      totalRemaining += remaining;
+      var currentCPO = s.onboarded > 0 && s.spend > 0 ? s.spend / s.onboarded : 0;
+      var estCurrent = remaining * currentCPO;
+      estCostCurrent += estCurrent;
+
+      html += '<div class="proj-card">';
+      html += '<div class="proj-name">' + esc(s.name) + '</div>';
+      html += '<div class="proj-row"><span>Current onboarded</span><span>' + s.onboarded + ' / ' + s.target + '</span></div>';
+      html += '<div class="proj-row"><span>Remaining to recruit</span><span>' + remaining + ' participants</span></div>';
+      if (s.spend > 0) {
+        html += '<div class="proj-row"><span>Current CPO</span><span>' + fmt(currentCPO) + (s.outlier ? ' (outlier)' : '') + '</span></div>';
+        html += '<div class="proj-row"><span>Est. remaining cost at current CPO</span><span>' + fmt(estCurrent) + '</span></div>';
       } else {
-        cards[i].style.display = (cardPeriod === period) ? '' : 'none';
+        html += '<div class="proj-row"><span>Ad spend</span><span>$0 (organic)</span></div>';
       }
+      html += '<div class="proj-row"><span>Launch date</span><span>' + (s.launchDate || 'TBD') + '</span></div>';
+      if (s.notes) html += '<div class="proj-row"><span>Note</span><span>' + esc(s.notes) + '</span></div>';
+      html += '</div>';
+    });
+
+    // Summary card
+    html += '<div class="proj-card">';
+    html += '<div class="proj-name">Projection Summary</div>';
+    html += '<div class="proj-row"><span>Total remaining participants</span><span>' + totalRemaining + '</span></div>';
+    html += '<div class="proj-row"><span>Est. cost at current CPO rates</span><span>~' + fmt(estCostCurrent) + '</span></div>';
+    html += '<div class="proj-row"><span>Best-case total spend at completion</span><span>~' + fmt(m.totalSpend + estCostCurrent * 0.25) + '</span></div>';
+    html += '<div class="proj-row"><span>Worst-case total spend at completion</span><span>~' + fmt(m.totalSpend + estCostCurrent) + '</span></div>';
+    html += '</div>';
+
+    $('#proj-grid').innerHTML = html;
+  }
+
+  function renderKPIs(m, period) {
+    var section = $('#kpi-section');
+    if (period === '2025') { section.classList.add('section-hidden'); return; }
+    section.classList.remove('section-hidden');
+
+    // Compute type-specific CPOs for paid studies only
+    var rctPaid = m.launched.filter(function(s) { return s.type === 'RCT' && s.spend > 0; });
+    var rwePaid = m.launched.filter(function(s) { return s.type === 'RWE' && s.spend > 0; });
+
+    var rctSpend = rctPaid.reduce(function(a, s) { return a + s.spend; }, 0);
+    var rctOnb = rctPaid.reduce(function(a, s) { return a + s.onboarded; }, 0);
+    var rctCPO = rctOnb > 0 ? rctSpend / rctOnb : 0;
+
+    var rweSpend = rwePaid.reduce(function(a, s) { return a + s.spend; }, 0);
+    var rweOnb = rwePaid.reduce(function(a, s) { return a + s.onboarded; }, 0);
+    var rweCPO = rweOnb > 0 ? rweSpend / rweOnb : 0;
+
+    var barsHtml = '';
+
+    // RCT bar
+    var rctPct = Math.min((rctCPO / 40) * 100, 100);
+    var rctColor = rctCPO <= 35 ? 'green' : 'yellow';
+    barsHtml += '<div class="target-row"><div class="target-label">' + typeBadge('RCT') + ' Paid</div>';
+    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill ' + rctColor + '" style="width:' + rctPct + '%">' + fmt(rctCPO) + '</div>';
+    barsHtml += '<div class="target-marker" style="left:87.5%" data-label="Target $35"></div></div>';
+    barsHtml += '<div class="target-vals"><strong>' + fmt(rctCPO) + '</strong> / $35.00</div></div>';
+
+    // RWE bar
+    var rwePct = Math.min((rweCPO / 80) * 100, 100);
+    var rweColor = rweCPO <= 25 ? 'green' : 'yellow';
+    barsHtml += '<div class="target-row"><div class="target-label">' + typeBadge('RWE') + ' Paid</div>';
+    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill ' + rweColor + '" style="width:' + rwePct + '%">' + fmt(rweCPO) + '</div>';
+    barsHtml += '<div class="target-marker" style="left:31.3%" data-label="Target $25"></div></div>';
+    barsHtml += '<div class="target-vals"><strong>' + fmt(rweCPO) + '</strong> / $25.00</div></div>';
+
+    // VEP bar
+    barsHtml += '<div class="target-row"><div class="target-label">' + typeBadge('VEP') + ' Organic</div>';
+    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill green" style="width:100%">$0 — on target</div></div>';
+    barsHtml += '<div class="target-vals"><strong>$0</strong> / $0</div></div>';
+
+    // Blended bar
+    var blendPct = Math.min((m.blendedCPO / 30) * 100, 100);
+    var blendColor = m.blendedCPO <= 25 ? 'green' : 'accent';
+    barsHtml += '<div class="target-row" style="background:rgba(108,92,231,0.08);border:1px solid rgba(108,92,231,0.2)">';
+    barsHtml += '<div class="target-label" style="font-weight:700">Blended</div>';
+    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill ' + blendColor + '" style="width:' + blendPct + '%">' + fmt(m.blendedCPO) + '</div>';
+    barsHtml += '<div class="target-marker" style="left:83.3%" data-label="Target ≤$25"></div></div>';
+    barsHtml += '<div class="target-vals"><strong>' + fmt(m.blendedCPO) + '</strong> / ≤$25.00</div></div>';
+
+    $('#kpi-bars').innerHTML = barsHtml;
+    $('#kpi-note').textContent = 'RWE paid CPO skewed by outliers (ProleevaMax ' + fmt(5686.18/29) + '). Excluding outliers: ' + fmt(m.paidExclCPO) + '. Blended target of $25 ' + (m.blendedCPO <= 25 ? 'achieved' : 'achievable as organic share grows') + '.';
+
+    // Pace section
+    // Only 2026-launched studies count toward 2026 goal
+    var m26 = computeMetrics(STUDIES, '2026');
+    var ytdOnboarded = m26.totalOnboarded;
+    var annualTarget = 4000;
+    var weeksElapsed = 7;
+    var weeklyRate = Math.round(ytdOnboarded / weeksElapsed);
+    var requiredRate = Math.round(annualTarget / 52);
+    var pacePct = Math.round((weeklyRate / requiredRate) * 100);
+    var onTrack = pacePct >= 100;
+
+    // Pre-2026 studies
+    var pre2026 = STUDIES.filter(function(s) { return s.launchYear === 2025 && !s.crossYear && isLaunched(s); });
+    var pre2026Onb = pre2026.reduce(function(a, s) { return a + s.onboarded; }, 0);
+
+    var circumference = 364.4;
+
+    var paceHtml = '';
+
+    // YTD Progress ring
+    var ytdPct = ytdOnboarded / annualTarget;
+    var ytdOffset = circumference * (1 - ytdPct);
+    paceHtml += '<div class="pace-card"><div class="pace-title">2026 Year-to-Date Progress</div>';
+    paceHtml += '<div class="ring-wrap"><svg width="140" height="140" viewBox="0 0 140 140">';
+    paceHtml += '<circle class="ring-bg" cx="70" cy="70" r="58"></circle>';
+    paceHtml += '<circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + ytdOffset.toFixed(1) + '"></circle>';
+    paceHtml += '<defs><linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--green)"/></linearGradient></defs>';
+    paceHtml += '</svg><div class="ring-center"><div class="ring-value" style="color:var(--green)">' + fmtInt(ytdOnboarded) + '</div><div class="ring-label">of ' + fmtInt(annualTarget) + '</div></div></div>';
+    paceHtml += '<div class="pace-stats">';
+    paceHtml += '<div class="pace-stat-row"><span>Weeks elapsed (2026)</span><span>~' + weeksElapsed + '</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>2026 weekly rate</span><span>~' + weeklyRate + ' / wk</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>All-time onboarded</span><span>' + fmtInt(m.totalOnboarded) + '</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>Pre-2026 onboarded</span><span>' + fmtInt(pre2026Onb) + '</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>Active + coming studies</span><span>' + m.all.length + '</span></div>';
+    paceHtml += '</div>';
+    paceHtml += '<p style="font-size:10px;color:var(--text-dim);margin-top:8px">Year bucketing based on launch date. Cross-year studies included in both views.</p>';
+    paceHtml += '</div>';
+
+    // Pace check ring
+    var paceOffset = circumference * (1 - Math.min(pacePct / 100, 1));
+    var paceColor = onTrack ? 'var(--green)' : 'var(--yellow)';
+    paceHtml += '<div class="pace-card"><div class="pace-title">Pace Check (2026 Target: ' + fmtInt(annualTarget) + ')</div>';
+    paceHtml += '<div class="ring-wrap"><svg width="140" height="140" viewBox="0 0 140 140">';
+    paceHtml += '<circle class="ring-bg" cx="70" cy="70" r="58"></circle>';
+    paceHtml += '<circle class="ring-fill" cx="70" cy="70" r="58" stroke="' + paceColor + '" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + paceOffset.toFixed(1) + '"></circle>';
+    paceHtml += '</svg><div class="ring-center"><div class="ring-value" style="color:' + paceColor + '">' + pacePct + '%</div><div class="ring-label">of required pace</div></div></div>';
+    paceHtml += '<div class="pace-stats">';
+    paceHtml += '<div class="pace-stat-row"><span>Required rate (' + fmtInt(annualTarget) + ' / yr)</span><span>~' + requiredRate + ' / wk</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>2026 YTD rate</span><span style="color:' + paceColor + ';font-weight:600">~' + weeklyRate + ' / wk</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>Status</span><span><span class="status-chip ' + (onTrack ? 'on-track' : 'behind') + '">' + (onTrack ? 'On Track' : 'Behind Pace') + '</span></span></div>';
+    paceHtml += '</div></div>';
+
+    // Budget projection
+    paceHtml += '<div class="pace-card"><div class="pace-title">Budget Projection</div>';
+    paceHtml += '<div style="text-align:center;margin:12px 0 16px"><div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px">Spend to date</div>';
+    paceHtml += '<div style="font-size:32px;font-weight:700;color:var(--blue)">' + fmt(m.totalSpend) + '</div></div>';
+    paceHtml += '<div class="pace-stats">';
+    paceHtml += '<div class="pace-stat-row"><span>Remaining (target CPO $20)</span><span>$63K–$83K</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>Remaining (current CPO ' + fmt(m.blendedCPO) + ')</span><span>$81K–$106K</span></div>';
+    paceHtml += '<div class="pace-stat-row"><span>If organic share grows to ~40%</span><span style="color:var(--green)">~40% savings</span></div>';
+    paceHtml += '</div>';
+    paceHtml += '<p style="font-size:11px;color:var(--text-dim);margin-top:10px;text-align:center">Growing the VEP / organic pipeline is the biggest lever for cost control</p>';
+    paceHtml += '</div>';
+
+    $('#pace-grid').innerHTML = paceHtml;
+    $('#pace-heading').style.display = '';
+    $('#pace-grid').style.display = '';
+  }
+
+  function renderTypeBreakdown(m) {
+    var types = m.types;
+    var rows = [
+      { label: '<span class="badge badge-blue">RCT</span> Randomized Controlled Trial (paid)', key: 'RCT_paid' },
+      { label: '<span class="badge badge-blue">RCT</span> Randomized Controlled Trial ($0)', key: 'RCT_free' },
+      { label: '<span class="badge badge-green">RWE</span> Real World Evidence (paid)', key: 'RWE_paid' },
+      { label: '<span class="badge badge-green">RWE</span> Real World Evidence ($0)', key: 'RWE_free' },
+      { label: '<span class="badge badge-yellow">VEP</span> Verified Evidence Program', key: 'VEP' }
+    ];
+
+    var html = '';
+    var tCount = 0, tSpend = 0, tOnb = 0, tDays = 0, tDaysCount = 0;
+    rows.forEach(function(r) {
+      var t = types[r.key];
+      if (!t || t.count === 0) return;
+      tCount += t.count; tSpend += t.spend; tOnb += t.onboarded;
+      tDays += t.totalDays; tDaysCount += t.daysCount;
+      var avgCpo = t.onboarded > 0 && t.spend > 0 ? fmt(t.spend / t.onboarded) : (t.spend === 0 ? '$0' : '—');
+      var avgDays = t.daysCount > 0 ? (t.totalDays / t.daysCount).toFixed(1) + ' days' : '—';
+      html += '<tr><td>' + r.label + '</td>';
+      html += '<td class="align-right">' + t.count + '</td>';
+      html += '<td class="align-right">' + fmt(t.spend) + '</td>';
+      html += '<td class="align-right">' + t.onboarded + '</td>';
+      html += '<td class="align-right">' + avgCpo + '</td>';
+      html += '<td class="align-right">' + avgDays + '</td></tr>';
+    });
+    $('#type-table-body').innerHTML = html;
+
+    var totalCpo = tOnb > 0 ? fmt(tSpend / tOnb) : '—';
+    var totalAvgDays = tDaysCount > 0 ? (tDays / tDaysCount).toFixed(1) + ' days' : '—';
+    $('#type-table-foot').innerHTML = '<tr class="totals-row"><td><strong>Total</strong></td><td class="align-right"><strong>' + tCount + '</strong></td><td class="align-right"><strong>' + fmt(tSpend) + '</strong></td><td class="align-right"><strong>' + tOnb + '</strong></td><td class="align-right"><strong>' + totalCpo + '</strong></td><td class="align-right"><strong>' + totalAvgDays + '</strong></td></tr>';
+  }
+
+  function renderManualQueue(m) {
+    var manual = m.manualM;
+    var auto = m.autoM;
+
+    function mqCard(title, color, icon, data, studies) {
+      var h = '<div class="avg-card" style="text-align:left;border-left:3px solid ' + color + '">';
+      h += '<div class="avg-label" style="font-weight:600;color:var(--text);font-size:13px;margin-bottom:10px">' + icon + ' ' + title + '</div>';
+      h += '<div class="yoy-row"><span class="yoy-label">Studies</span><span class="yoy-val">' + data.count + '</span></div>';
+      h += '<div class="yoy-row"><span class="yoy-label">Total onboarded</span><span class="yoy-val">' + fmtInt(data.onboarded) + '</span></div>';
+      h += '<div class="yoy-row"><span class="yoy-label">Total ad spend</span><span class="yoy-val">' + fmt(data.spend) + '</span></div>';
+      if (data.spend > 0 && data.onboarded > 0) {
+        h += '<div class="yoy-row"><span class="yoy-label">CPO</span><span class="yoy-val">' + fmt(data.cpo) + '</span></div>';
+      }
+      h += '<div class="yoy-row"><span class="yoy-label">Avg days to recruit</span><span class="yoy-val">' + data.avgDays + (data.avgDays !== '—' ? ' days' : '') + '</span></div>';
+      h += '<div class="yoy-row"><span class="yoy-label">Joined → Onboarded rate</span><span class="yoy-val">' + data.convRate + (data.convRate !== '—' ? '%' : '') + '</span></div>';
+      // List the studies
+      h += '<div style="margin-top:8px;font-size:11px;color:var(--text-dim)">';
+      studies.forEach(function(s) {
+        h += '<div style="padding:2px 0">' + esc(s.name) + ' ' + typeBadge(s.type) + '</div>';
+      });
+      h += '</div></div>';
+      return h;
     }
 
-    // 6. Toggle sections that only apply to certain periods
-    var projSection = findSection('Recruitment Projections');
-    var targetSection = findSection('Target KPIs');
-    var paceH3 = document.querySelector('h3');
-    var paceSection = null;
-    var h3s = document.querySelectorAll('h3');
-    for (var i = 0; i < h3s.length; i++) {
-      if (h3s[i].textContent.indexOf('2026 Annual') !== -1) {
-        // The pace grid is a sibling after this h3
-        paceSection = h3s[i];
-        break;
-      }
+    var html = mqCard('Manual Queue Studies', 'var(--red)', '⚠', manual, m.manualStudies);
+    html += mqCard('Automated Flow Studies', 'var(--green)', '✓', auto, m.autoStudies);
+
+    // Delta card
+    html += '<div class="avg-card" style="text-align:left;border-left:3px solid var(--accent)">';
+    html += '<div class="avg-label" style="font-weight:600;color:var(--text);font-size:13px;margin-bottom:10px">Δ Impact Summary</div>';
+
+    if (manual.avgDays !== '—' && auto.avgDays !== '—') {
+      var daysDiff = parseFloat(manual.avgDays) - parseFloat(auto.avgDays);
+      html += '<div class="yoy-row"><span class="yoy-label">Avg days difference</span><span class="yoy-val" style="color:' + (daysDiff > 0 ? 'var(--red)' : 'var(--green)') + '">' + (daysDiff > 0 ? '+' : '') + daysDiff.toFixed(1) + ' days</span></div>';
     }
 
-    if (projSection) projSection.classList.toggle('section-hidden', period === '2025');
-    if (targetSection) targetSection.classList.toggle('section-hidden', period === '2025');
-    // Hide pace section for 2025
-    if (paceSection) {
-      paceSection.style.display = (period === '2025') ? 'none' : '';
-      var paceGrid = paceSection.nextElementSibling;
-      if (paceGrid && paceGrid.classList.contains('pace-grid')) {
-        paceGrid.style.display = (period === '2025') ? 'none' : '';
-      }
+    if (manual.convRate !== '—' && auto.convRate !== '—') {
+      var convDiff = parseFloat(auto.convRate) - parseFloat(manual.convRate);
+      html += '<div class="yoy-row"><span class="yoy-label">Conversion rate gap</span><span class="yoy-val" style="color:' + (convDiff > 0 ? 'var(--green)' : 'var(--red)') + '">' + (convDiff > 0 ? '+' : '') + convDiff.toFixed(1) + 'pp for automated</span></div>';
     }
 
-    // 7. Update Study Type Breakdown
-    var tr = getTypeRows();
-    setTypeRow(tr.rct, m.typeRCT);
-    setTypeRow(tr.rwe, m.typeRWE);
-    setTypeRow(tr.vep, m.typeVEP);
-    setTypeRow(tr.rwe0, m.typeRWE0);
-    setTypeRow(tr.total, m.typeTotal);
+    if (manual.spend > 0 && manual.onboarded > 0 && auto.spend > 0 && auto.onboarded > 0) {
+      var cpoDiff = manual.cpo - auto.cpo;
+      html += '<div class="yoy-row"><span class="yoy-label">CPO difference</span><span class="yoy-val" style="color:' + (cpoDiff > 0 ? 'var(--red)' : 'var(--green)') + '">' + (cpoDiff > 0 ? '+' : '') + fmt(cpoDiff) + ' for manual</span></div>';
+    }
+
+    html += '<div style="margin-top:10px;font-size:11px;color:var(--text-dim)">Manual steps include: external prescreening, lab requirements, manual data collection. These add friction and reduce conversion rates.</div>';
+    html += '</div>';
+
+    $('#manual-queue-grid').innerHTML = html;
+  }
+
+  // ============================================================
+  // MAIN RENDER
+  // ============================================================
+  function render(period) {
+    var m = computeMetrics(STUDIES, period);
+
+    renderSubtitle(period);
+    renderMetrics(m, period);
+    renderCostTable(m, period);
+    renderManualQueue(m);
+    renderScorecard(m, period);
+    renderProjections(m, period);
+    renderKPIs(m, period);
+    renderTypeBreakdown(m);
+    renderYoY();
+
+    // Show/hide sections by period
+    var yoy = $('#yoy-section');
+    yoy.classList.toggle('section-hidden', period !== 'all');
+
+    $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Feb 18, 2026 · Year buckets based on launch date';
   }
 
   // Bind filter buttons
-  var btns = document.querySelectorAll('.filter-btn');
+  var btns = $$('.filter-btn');
   for (var i = 0; i < btns.length; i++) {
     btns[i].addEventListener('click', function() {
       for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
       this.classList.add('active');
-      applyFilter(this.getAttribute('data-filter'));
+      render(this.getAttribute('data-filter'));
     });
   }
 
-  // Fix Study Type Breakdown on load to match current data
-  var tr = getTypeRows();
-  setTypeRow(tr.rct, M.all.typeRCT);
-  setTypeRow(tr.rwe, M.all.typeRWE);
-  setTypeRow(tr.vep, M.all.typeVEP);
-  setTypeRow(tr.total, M.all.typeTotal);
+  // Initial render
+  render('all');
 })();
 </script>
-
 </body>
 </html>
