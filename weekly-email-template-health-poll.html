@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║   REPUTABLE HEALTH — WEEKLY EMAIL TEMPLATE                   ║
+    ╠══════════════════════════════════════════════════════════════╣
+    ║                                                              ║
+    ║  HOW TO USE: Search "✏️ EDIT" to find every spot to update.  ║
+    ║  Do NOT touch anything else — structure & dark mode are set. ║
+    ║                                                              ║
+    ║  POLL: "What Part of Your Health Do You Most Want to         ║
+    ║         Improve?"                                            ║
+    ║  OPTIONS: Stress, Sleep, Skin Health, Focus & Motivation,    ║
+    ║           Weight Management                                  ║
+    ║  VOTE KEYS: stress, sleep, skin, focus, weight               ║
+    ║  INTERACTIVE PAGE: community-poll-3.html                     ║
+    ║                                                              ║
+    ╚══════════════════════════════════════════════════════════════╝
+    -->
+    <title>Your Weekly Study Update — Reputable Health</title>
+    <!--[if mso]>
+    <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+    <![endif]-->
+    <style>
+        /* ─── RESET ──────────────────────────────────────── */
+        :root { color-scheme: light dark; supported-color-schemes: light dark; }
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; max-width: 100%; }
+        body { margin: 0; padding: 0; width: 100% !important; height: 100% !important; background-color: #F8F5F2; }
+        .sans-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .serif-head { font-family: Georgia, 'Times New Roman', serif; }
+        /* ─── MOBILE ─────────────────────────────────────── */
+        @media screen and (max-width: 600px) {
+            .email-container { width: 100% !important; }
+            .mobile-padding  { padding-left: 20px !important; padding-right: 20px !important; }
+            .card-padding    { padding: 25px 20px !important; }
+            .outer-padding   { padding: 20px 8px !important; }
+            h1 { font-size: 24px !important; line-height: 1.3 !important; }
+            h2 { font-size: 20px !important; line-height: 1.3 !important; }
+            h3 { font-size: 18px !important; }
+            .poll-card-pad     { padding: 14px 14px !important; }
+            .poll-header-pad   { padding: 22px 18px 4px !important; }
+            .poll-options-pad  { padding: 0 12px 6px !important; }
+            .poll-option-inner { padding: 12px 12px !important; }
+            .poll-footer-pad   { padding: 4px 18px 20px !important; }
+            .study-label-pad { padding: 12px 16px !important; }
+            .study-body-pad  { padding: 16px 16px 18px 16px !important; }
+            .coming-soon-pad { padding: 14px 14px !important; }
+            .mobile-coming-soon { display: table-row !important; }
+            .desktop-coming-soon { display: none !important; width: 0 !important; padding: 0 !important; overflow: hidden !important; }
+            .mobile-btn-full { width: 100% !important; }
+            .mobile-btn-full td { width: 100% !important; }
+            .spacer-sm { height: 16px !important; font-size: 16px !important; line-height: 16px !important; }
+            .spacer-md { height: 20px !important; font-size: 20px !important; line-height: 20px !important; }
+            .steps-inner-pad { padding: 18px 16px !important; }
+            .banner-inner-pad { padding: 28px 16px 28px 16px !important; }
+        }
+        /* ─── DARK MODE — @media ─────────────────────────── */
+        @media (prefers-color-scheme: dark) {
+            body                   { background-color: #000000 !important; }
+            .outer-bg              { background-color: #000000 !important; }
+            .dm-card               { background-color: #1c1c1e !important; }
+            .white-card            { background-color: #1c1c1e !important; }
+            .dm-studies-wrap       { background-color: #1c1c1e !important; }
+            .banner-wrap,
+            .banner-top,
+            .banner-sub            { background: #1c1c1e !important; background-color: #1c1c1e !important; }
+            .banner-title          { color: #FFFFFF !important; }
+            .banner-label          { color: #FB7185 !important; }
+            .banner-subtitle       { color: #D1D5DB !important; }
+            .dm-heading            { color: #FFFFFF !important; }
+            .dm-text               { color: #E5E7EB !important; }
+            .dm-subtext            { color: #9CA3AF !important; }
+            .dm-accent             { color: #FB7185 !important; }
+            .heading-text          { color: #FFFFFF !important; }
+            .body-text             { color: #E5E7EB !important; }
+            .subtext               { color: #9CA3AF !important; }
+            .dm-footer-link        { color: #9CA3AF !important; }
+            .dm-poll-1             { background-color: #2D2640 !important; border-color: #4C3D7A !important; }
+            .dm-poll-2             { background-color: #1A3A40 !important; border-color: #2A5A60 !important; }
+            .dm-poll-3             { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
+            .dm-poll-4             { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
+            .dm-poll-5             { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+            .dm-coming-soon        { border-color: #3a3a3a !important; }
+            .dm-pill               { background-color: #2a2a2e !important; color: #9CA3AF !important; }
+            .dm-divider            { border-color: #3a3a3a !important; }
+        }
+        /* ─── DARK MODE — Gmail ──────────────────────────── */
+        u + .body .outer-bg              { background-color: #000000 !important; }
+        u + .body .dm-card               { background-color: #1c1c1e !important; }
+        u + .body .white-card            { background-color: #1c1c1e !important; }
+        u + .body .dm-studies-wrap       { background-color: #1c1c1e !important; }
+        u + .body .banner-wrap,
+        u + .body .banner-top,
+        u + .body .banner-sub            { background: #1c1c1e !important; }
+        u + .body .banner-title          { color: #FFFFFF !important; }
+        u + .body .banner-label          { color: #FB7185 !important; }
+        u + .body .banner-subtitle       { color: #D1D5DB !important; }
+        u + .body .dm-heading            { color: #FFFFFF !important; }
+        u + .body .dm-text               { color: #E5E7EB !important; }
+        u + .body .dm-subtext            { color: #9CA3AF !important; }
+        u + .body .dm-accent             { color: #FB7185 !important; }
+        u + .body .dm-footer-link        { color: #9CA3AF !important; }
+        u + .body .dm-poll-1             { background-color: #2D2640 !important; border-color: #4C3D7A !important; }
+        u + .body .dm-poll-2             { background-color: #1A3A40 !important; border-color: #2A5A60 !important; }
+        u + .body .dm-poll-3             { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
+        u + .body .dm-poll-4             { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
+        u + .body .dm-poll-5             { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+        u + .body .dm-coming-soon        { border-color: #3a3a3a !important; }
+        u + .body .dm-pill               { background-color: #2a2a2e !important; color: #9CA3AF !important; }
+        u + .body .dm-divider            { border-color: #3a3a3a !important; }
+        /* ─── DARK MODE — Outlook.com / OWA ──────────────── */
+        [data-ogsc] .outer-bg            { background-color: #000000 !important; }
+        [data-ogsc] .dm-card             { background-color: #1c1c1e !important; }
+        [data-ogsc] .white-card          { background-color: #1c1c1e !important; }
+        [data-ogsc] .dm-studies-wrap     { background-color: #1c1c1e !important; }
+        [data-ogsc] .banner-wrap,
+        [data-ogsc] .banner-top,
+        [data-ogsc] .banner-sub          { background: #1c1c1e !important; }
+        [data-ogsc] .banner-title        { color: #FFFFFF !important; }
+        [data-ogsc] .banner-label        { color: #FB7185 !important; }
+        [data-ogsc] .banner-subtitle     { color: #D1D5DB !important; }
+        [data-ogsc] .dm-heading          { color: #FFFFFF !important; }
+        [data-ogsc] .dm-text             { color: #E5E7EB !important; }
+        [data-ogsc] .dm-subtext          { color: #9CA3AF !important; }
+        [data-ogsc] .dm-accent           { color: #FB7185 !important; }
+        [data-ogsc] .dm-footer-link      { color: #9CA3AF !important; }
+        [data-ogsc] .dm-poll-1           { background-color: #2D2640 !important; border-color: #4C3D7A !important; }
+        [data-ogsc] .dm-poll-2           { background-color: #1A3A40 !important; border-color: #2A5A60 !important; }
+        [data-ogsc] .dm-poll-3           { background-color: #1A3A2A !important; border-color: #2A5A3A !important; }
+        [data-ogsc] .dm-poll-4           { background-color: #3A1A2A !important; border-color: #5A2A3A !important; }
+        [data-ogsc] .dm-poll-5           { background-color: #3A3020 !important; border-color: #5A4A30 !important; }
+        [data-ogsc] .dm-coming-soon      { border-color: #3a3a3a !important; }
+        [data-ogsc] .dm-pill             { background-color: #2a2a2e !important; color: #9CA3AF !important; }
+        [data-ogsc] .dm-divider          { border-color: #3a3a3a !important; }
+    </style>
+</head>
+<body class="body" style="margin: 0; padding: 0; background-color: #F8F5F2;">
+<table class="outer-bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #F8F5F2;">
+<tr><td align="center" class="outer-padding" style="padding: 40px 10px;">
+<table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; width: 100%;">
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- LOGO                                                    -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td align="center" style="padding: 0 0 30px 0;">
+        <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=logo" target="_blank">
+            <img src="https://cdn.mcauto-images-production.sendgrid.net/038ff234df6bb31f/13341f9c-5580-483b-bba3-4196d62e8664/1156x276.png"
+                 alt="Reputable" width="130" style="display: block;" border="0">
+        </a>
+    </td>
+</tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 2 — BANNER                                      -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="banner-wrap" style="background-color: #FDE8E8; border-radius: 16px; padding: 0; overflow: hidden;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td class="banner-top banner-inner-pad" align="center"
+                    style="background: linear-gradient(135deg, #FDE8E8 0%, #FBCFE8 50%, #FDE8E8 100%); padding: 35px 20px 35px 20px;">
+                    <p style="margin: 0 0 6px 0; font-size: 44px; line-height: 1;">&#128200;</p>
+                    <p class="sans-text banner-label"
+                       style="margin: 0 0 4px 0; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #BE185D;">
+                        Week of February 27, 2026
+                    </p>
+                    <h1 class="serif-head banner-title"
+                        style="margin: 0 0 12px 0; font-size: 28px; font-weight: 700; color: #881337; line-height: 1.3; text-align: center;">
+                        Your Weekly Study Digest
+                    </h1>
+                    <p class="sans-text banner-subtitle"
+                       style="margin: 0; font-size: 15px; line-height: 1.6; max-width: 460px; color: #9F1239; text-align: center;">
+                        New studies, real data, and ways to take better care of yourself. Let&#8217;s dive in.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- APP DOWNLOAD BUTTON                                     -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td align="center" style="padding: 0 20px 30px 20px;">
+        <table class="mobile-btn-full" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td style="background-color: #E11D48; border-radius: 8px;">
+                    <a href="https://onelink.to/5rsn43?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=download_app_button"
+                       class="sans-text"
+                       style="display: block; padding: 14px 32px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600; text-align: center;">
+                        Download the App
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 3 — COMMUNITY POLL (dark card)                  -->
+<!-- "What Part of Your Health Do You Most Want to Improve?" -->
+<!-- Vote keys: stress, sleep, skin, focus, weight           -->
+<!-- Links to: community-poll-3.html                         -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin: 0; padding: 0;">
+          <tr>
+            <td style="padding: 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+                     style="background-color: #0e1419; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                  <td class="poll-header-pad" style="padding: 28px 24px 6px; text-align: center;">
+                    <p style="font-family: 'Courier New', Courier, monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #00e5c3; margin: 0 0 12px 0;">
+                      Community Poll
+                    </p>
+                    <h2 style="font-family: Georgia, 'Times New Roman', serif; font-size: 22px; font-weight: 700; color: #ffffff; margin: 0 0 10px 0; line-height: 1.25;">
+                      What Part of Your Health Do You<br/>Most Want to Improve?
+                    </h2>
+                    <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #6b7a8d; margin: 0 0 24px 0; line-height: 1.55;">
+                      We&#8217;re building studies around what matters to YOU. Cast your vote &#8212; results shown instantly!
+                    </p>
+                  </td>
+                </tr>
+                <!-- Options -->
+                <tr>
+                  <td class="poll-options-pad" style="padding: 0 16px 8px;">
+                    <!-- Option 1 — Stress -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
+                      <tr>
+                        <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
+                          <a href="https://reputable.health/health-poll-results?vote=stress" target="_blank"
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">&#129502;</td>
+                                <td valign="middle" style="padding: 0 10px;">
+                                  <span style="font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: #ffffff; display: block;">Stress</span>
+                                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; line-height: 1.4; display: block; margin-top: 2px;">Calm the nervous system, lower cortisol, feel less overwhelmed</span>
+                                </td>
+                                <td width="30" valign="middle" align="right">
+                                  <span style="display: inline-block; width: 28px; height: 28px; background-color: #7b61ff; border-radius: 50%; text-align: center; line-height: 28px; color: #fff; font-size: 14px;">&#8594;</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- Option 2 — Sleep -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
+                      <tr>
+                        <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
+                          <a href="https://reputable.health/health-poll-results?vote=sleep" target="_blank"
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">&#127769;</td>
+                                <td valign="middle" style="padding: 0 10px;">
+                                  <span style="font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: #ffffff; display: block;">Sleep</span>
+                                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; line-height: 1.4; display: block; margin-top: 2px;">Fall asleep faster, stay asleep longer, wake up restored</span>
+                                </td>
+                                <td width="30" valign="middle" align="right">
+                                  <span style="display: inline-block; width: 28px; height: 28px; background-color: #00c6a2; border-radius: 50%; text-align: center; line-height: 28px; color: #fff; font-size: 14px;">&#8594;</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- Option 3 — Skin Health -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
+                      <tr>
+                        <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
+                          <a href="https://reputable.health/health-poll-results?vote=skin" target="_blank"
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">&#10024;</td>
+                                <td valign="middle" style="padding: 0 10px;">
+                                  <span style="font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: #ffffff; display: block;">Skin Health</span>
+                                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; line-height: 1.4; display: block; margin-top: 2px;">Clearer, firmer, more radiant skin from the inside out</span>
+                                </td>
+                                <td width="30" valign="middle" align="right">
+                                  <span style="display: inline-block; width: 28px; height: 28px; background-color: #e05c7a; border-radius: 50%; text-align: center; line-height: 28px; color: #fff; font-size: 14px;">&#8594;</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- Option 4 — Focus & Motivation -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
+                      <tr>
+                        <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
+                          <a href="https://reputable.health/health-poll-results?vote=focus" target="_blank"
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">&#127919;</td>
+                                <td valign="middle" style="padding: 0 10px;">
+                                  <span style="font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: #ffffff; display: block;">Focus &amp; Motivation</span>
+                                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; line-height: 1.4; display: block; margin-top: 2px;">Sharper thinking, sustained energy, and the drive to get things done</span>
+                                </td>
+                                <td width="30" valign="middle" align="right">
+                                  <span style="display: inline-block; width: 28px; height: 28px; background-color: #3b9eff; border-radius: 50%; text-align: center; line-height: 28px; color: #fff; font-size: 14px;">&#8594;</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- Option 5 — Weight Management -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
+                      <tr>
+                        <td style="background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 0;">
+                          <a href="https://reputable.health/health-poll-results?vote=weight" target="_blank"
+                             class="poll-option-inner" style="display: block; padding: 14px 16px; text-decoration: none;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                              <tr>
+                                <td width="38" valign="middle" style="font-size: 20px; line-height: 1;">&#9878;&#65039;</td>
+                                <td valign="middle" style="padding: 0 10px;">
+                                  <span style="font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: #ffffff; display: block;">Weight Management</span>
+                                  <span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; line-height: 1.4; display: block; margin-top: 2px;">Sustainable approaches to body composition and metabolic health</span>
+                                </td>
+                                <td width="30" valign="middle" align="right">
+                                  <span style="display: inline-block; width: 28px; height: 28px; background-color: #f59e0b; border-radius: 50%; text-align: center; line-height: 28px; color: #000; font-size: 14px;">&#8594;</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <!-- Footer note -->
+                <tr>
+                  <td class="poll-footer-pad" style="padding: 4px 24px 24px; text-align: center;">
+                    <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #6b7a8d; margin: 0;">
+                      Your vote is anonymous
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 4 — NOW RECRUITING (STUDIES)                    -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-studies-wrap card-padding" style="background-color: #FEFCE8; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #B45309; text-align: center;">
+                        &#127881; Now Recruiting
+                    </p>
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; text-align: center; line-height: 1.2;">
+                        You Voted. It&#8217;s Live.
+                    </h2>
+                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
+                        The Reading Ritual won last week&#8217;s poll with <strong>29% of the vote</strong> &#8212; and we built it. Spots are limited, so join now before they fill up.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background-color: #1C1130; border-radius: 14px; padding: 0; overflow: hidden;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td class="study-label-pad" style="background: linear-gradient(135deg, #3B1F6A 0%, #6D28D9 100%); padding: 14px 22px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td>
+                                            <span class="sans-text" style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #C4B5FD;">
+                                                <font color="#C4B5FD">&#128077; Community Choice &bull; 7 Days</font>
+                                            </span>
+                                        </td>
+                                        <td align="right">
+                                            <span class="sans-text" style="font-size: 11px; font-weight: 700; color: #FFFFFF; background-color: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 100px;">
+                                                <font color="#FFFFFF">Now Live</font>
+                                            </span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                            </tr></table>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td class="study-body-pad" style="padding: 20px 22px 22px 22px;">
+                                    <p class="sans-text" style="font-size: 19px; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0; line-height: 1.3;">
+                                        <font color="#FFFFFF">&#128214; The Reading Ritual</font>
+                                    </p>
+                                    <p class="sans-text" style="font-size: 14px; color: #C4B5FD; margin: 0 0 16px 0; line-height: 1.5;">
+                                        <font color="#C4B5FD">Can reading a physical book for 20 minutes before bed improve your sleep onset? You asked for this one &#8212; now let&#8217;s find out together.</font>
+                                    </p>
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 18px;"><tr>
+                                        <td style="padding: 14px 16px;">
+                                            <p class="sans-text" style="font-size: 12px; font-weight: 700; color: #A78BFA; margin: 0 0 8px 0; letter-spacing: 0.5px; text-transform: uppercase;"><font color="#A78BFA">What You&#8217;ll Do</font></p>
+                                            <p class="sans-text" style="font-size: 13px; color: #DDD6FE; margin: 0 0 6px 0; line-height: 1.5;"><font color="#DDD6FE">&#10003; &nbsp;Read a physical book for 20 min before bed each night</font></p>
+                                            <p class="sans-text" style="font-size: 13px; color: #DDD6FE; margin: 0 0 6px 0; line-height: 1.5;"><font color="#DDD6FE">&#10003; &nbsp;Log your sleep onset time in the Reputable app</font></p>
+                                            <p class="sans-text" style="font-size: 13px; color: #DDD6FE; margin: 0; line-height: 1.5;"><font color="#DDD6FE">&#10003; &nbsp;Compatible with any wearable &#8212; or no wearable at all</font></p>
+                                        </td>
+                                    </tr></table>
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                        <td style="background-color: #7C3AED; border-radius: 8px;">
+                                            <a href="https://reputablestudies.com/reading-ritual?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=reading_ritual_join"
+                                               class="sans-text" style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
+                                                <font color="#FFFFFF">Join This Study &#8594;</font>
+                                            </a>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 5 — YOUTUBE VIDEO FEATURE                       -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-card card-padding" style="background-color: #FFFFFF; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #E11D48; text-align: center;">
+                        &#127909; From the Channel
+                    </p>
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 700; color: #0F172A; text-align: center; line-height: 1.3;">
+                        What is a Washout Period?<br>(And why you need one) &#9201;&#65039;
+                    </h2>
+                    <p class="sans-text dm-text" style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #334155; text-align: center; max-width: 440px;">
+                        New to clinical studies? A washout period is one of those terms that sounds complicated but is actually simple &#8212; and understanding it makes you a better study participant!
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 0 0 8px 0;">
+                    <a href="https://youtu.be/dKRJ5ZIJdYw?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=washout_video"
+                       target="_blank" style="display: block; text-decoration: none;">
+                        <img src="https://img.youtube.com/vi/dKRJ5ZIJdYw/maxresdefault.jpg"
+                             alt="What is a Washout Period? — Reputable Health"
+                             width="540" border="0"
+                             style="display: block; width: 100%; border-radius: 12px;">
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding-top: 16px;">
+                    <table class="mobile-btn-full" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td style="background-color: #FF0000; border-radius: 8px;">
+                                <a href="https://youtu.be/dKRJ5ZIJdYw?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=washout_video_cta"
+                                   class="sans-text" target="_blank"
+                                   style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
+                                    <font color="#FFFFFF">Watch on YouTube &#8594;</font>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 4.5 — COMING SOON STUDIES                       -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="dm-card card-padding" style="background-color: #FFFFFF; border-radius: 16px; padding: 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #E11D48; text-align: center;">
+                        &#128337; Coming Soon
+                    </p>
+                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; line-height: 1.2; text-align: center;">
+                        Studies on the Horizon
+                    </h2>
+                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
+                        Here&#8217;s a sneak peek at what&#8217;s coming to Reputable. Stay tuned.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 0 0 12px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td class="dm-coming-soon coming-soon-pad" style="border: 2px solid #E2E8F0; border-left: 5px solid #64748B; border-radius: 12px; padding: 16px 18px;">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr class="mobile-coming-soon" style="display: none;">
+                                        <td colspan="2" style="padding: 0 0 8px 0;">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" style="padding-right: 12px;">
+                                            <p class="sans-text dm-heading" style="margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #1E293B;">&#129504; Neuvana Xen Device</p>
+                                            <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.5;">A 6-week study exploring the impact of daily vagus nerve stimulation on sleep quality using wearable sleep data. Oura Ring required.</p>
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: #64748B; letter-spacing: 0.5px;">&#9711; Oura Ring Required</span>
+                                            <p class="sans-text dm-subtext" style="margin: 10px 0 0 0; font-size: 13px; color: #64748B; line-height: 1.5;">
+                                                <strong class="dm-heading" style="color: #1E293B;">Join the Waitlist</strong><br>
+                                                Code in app: <strong class="dm-heading" style="color: #1E293B;">3K63</strong>
+                                            </p>
+                                        </td>
+                                        <td class="desktop-coming-soon" valign="middle" align="right" width="80">
+                                            <span class="sans-text dm-pill" style="display: inline-block; background-color: #F1F5F9; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: #64748B; white-space: nowrap;">Coming Soon</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="spacer-sm" height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- ✏️ EDIT 6 — REFERRAL / REWARDS SECTION                  -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="card-padding" style="background-color: #881337; border-radius: 16px; padding: 40px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td align="center">
+                    <h2 class="serif-head" style="margin: 0 0 10px 0; font-size: 26px; font-weight: 700; color: #FFFFFF; text-align: center; line-height: 1.2;">
+                        <font color="#FFFFFF">Share the Love with Heartbeats</font>
+                    </h2>
+                    <p class="sans-text" style="margin: 0 0 28px 0; font-size: 15px; line-height: 1.6; color: #FECDD3; text-align: center; max-width: 420px;">
+                        <font color="#FECDD3">Give your friends the gift of better health &#8212; and earn rewards together.</font>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.12); border-radius: 14px;"><tr>
+                        <td class="steps-inner-pad" style="padding: 24px 22px;">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 16px;"><tr>
+                                <td width="40" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td style="background-color: #FFFFFF; border-radius: 50%; width: 32px; height: 32px; text-align: center; vertical-align: middle;">
+                                            <span class="sans-text" style="color: #881337; font-size: 14px; font-weight: 800; line-height: 32px;"><font color="#881337">1</font></span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">Get your unique link</font></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #FCA5A5; line-height: 1.5;"><font color="#FCA5A5">Open the Reputable app &#8594; Settings &#8594; Rewards &#8594; Invite Friends</font></p>
+                                </td>
+                            </tr></table>
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 16px;"><tr>
+                                <td width="40" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td style="background-color: #FFFFFF; border-radius: 50%; width: 32px; height: 32px; text-align: center; vertical-align: middle;">
+                                            <span class="sans-text" style="color: #881337; font-size: 14px; font-weight: 800; line-height: 32px;"><font color="#881337">2</font></span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">Share with friends</font></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #FCA5A5; line-height: 1.5;"><font color="#FCA5A5">Send your personal referral link via text, email, or social media</font></p>
+                                </td>
+                            </tr></table>
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                                <td width="40" valign="top">
+                                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                                        <td style="background-color: #FFFFFF; border-radius: 50%; width: 32px; height: 32px; text-align: center; vertical-align: middle;">
+                                            <span class="sans-text" style="color: #881337; font-size: 14px; font-weight: 800; line-height: 32px;"><font color="#881337">3</font></span>
+                                        </td>
+                                    </tr></table>
+                                </td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">Earn together</font></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #FCA5A5; line-height: 1.5;"><font color="#FCA5A5">When your friend joins a study, you both earn heartbeats (amounts vary by study)</font></p>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding-top: 24px;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td style="background-color: #FFFFFF; border-radius: 8px;">
+                            <a href="https://reputable.health/heartbeats/?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=heartbeats_cta"
+                               class="sans-text" style="display: block; padding: 14px 32px; color: #DC2626; text-decoration: none; font-size: 14px; font-weight: 800; text-align: center; letter-spacing: 0.5px; text-transform: uppercase;">
+                                <font color="#881337">Learn More About Heartbeats</font>
+                            </a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="spacer-md" height="30" style="font-size: 30px; line-height: 30px;">&nbsp;</td></tr>
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CLOSING + FOOTER                                        -->
+<!-- ════════════════════════════════════════════════════════ -->
+<tr>
+    <td class="mobile-padding" style="padding: 0 20px;">
+        <p class="sans-text subtext" style="margin: 0; font-size: 14px; color: #64748B; text-align: center; line-height: 1.6;">
+            Questions? Just reply to this email
+        </p>
+    </td>
+</tr>
+<tr><td height="40" style="font-size: 40px; line-height: 40px;">&nbsp;</td></tr>
+<tr>
+    <td align="center" style="padding: 0 20px;">
+        <p class="sans-text subtext" style="margin: 0 0 10px 0; font-size: 12px; color: #94A3B8;">
+            &copy; 2026 Reputable Health, Inc. &middot;
+            <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=footer_link"
+               class="dm-footer-link" style="color: #6B7280; text-decoration: underline;">reputable.health</a>
+        </p>
+        <p class="sans-text subtext" style="margin: 0; font-size: 11px; color: #94A3B8;">
+            <a href="{{{unsubscribe}}}" class="dm-footer-link" style="color: #6B7280; text-decoration: underline;">Unsubscribe</a> from these emails
+        </p>
+    </td>
+</tr>
+<tr><td height="20" style="font-size: 20px; line-height: 20px;">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
