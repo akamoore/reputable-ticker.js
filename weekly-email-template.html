@@ -19,9 +19,10 @@
     ║  [ ] 1. Title & UTM date  (update "DATE" everywhere)         ║
     ║  [ ] 2. Banner            (emoji, label, headline, subtitle)  ║
     ║  [ ] 3. Heartbeats ticker (update number if needed)          ║
-    ║  [ ] 4. Studies ×2        (label, headline, desc, perks, URL)║
-    ║  [ ] 5. Also Recruiting   (study rows)                       ║
-    ║  [ ] 6. Referral section  (usually evergreen)                ║
+    ║  [ ] 4. YouTube video     (video ID, headline, desc)         ║
+    ║  [ ] 5. Team Spotlight    (photo, name, bio, facts, quote)   ║
+    ║  [ ] 6. Washout studies   (study cards)                      ║
+    ║  [ ] 7. Referral section  (usually evergreen)                ║
     ║                                                              ║
     ║  BANNER COLOR THEMES  (swap into the banner section):        ║
     ║  Spring/Rose: bg #FDE8E8→#FBCFE8  label #BE185D  title#881337║
@@ -94,6 +95,9 @@
             .dm-divider            { border-color: #3a3a3a !important; }
             .ticker-outer          { background-color: #000000 !important; }
             .ticker-inner          { background-color: #0A0F0A !important; border-color: #2A2A2A !important; }
+            .dm-referral-steps     { background-color: #1c1c1e !important; }
+            .dm-step-title         { color: #FFFFFF !important; }
+            .dm-step-desc          { color: #9CA3AF !important; }
         }
         /* ─── DARK MODE — Gmail (u + .body hack) ─────────── */
         u + .body .outer-bg              { background-color: #000000 !important; }
@@ -126,6 +130,9 @@
         u + .body .dm-divider            { border-color: #3a3a3a !important; }
         u + .body .ticker-outer          { background-color: #000000 !important; }
         u + .body .ticker-inner          { background-color: #0A0F0A !important; border-color: #2A2A2A !important; }
+        u + .body .dm-referral-steps     { background-color: #1c1c1e !important; }
+        u + .body .dm-step-title         { color: #FFFFFF !important; }
+        u + .body .dm-step-desc          { color: #9CA3AF !important; }
         /* ─── DARK MODE — Outlook.com / OWA ──────────────── */
         [data-ogsc] .outer-bg            { background-color: #000000 !important; }
         [data-ogsc] .dm-card             { background-color: #1c1c1e !important; }
@@ -157,6 +164,9 @@
         [data-ogsc] .dm-divider          { border-color: #3a3a3a !important; }
         [data-ogsc] .ticker-outer        { background-color: #000000 !important; }
         [data-ogsc] .ticker-inner        { background-color: #0A0F0A !important; border-color: #2A2A2A !important; }
+        [data-ogsc] .dm-referral-steps   { background-color: #1c1c1e !important; }
+        [data-ogsc] .dm-step-title       { color: #FFFFFF !important; }
+        [data-ogsc] .dm-step-desc        { color: #9CA3AF !important; }
     </style>
 </head>
 <body class="body" style="margin: 0; padding: 0; background-color: #F8F5F2;">
@@ -169,7 +179,7 @@
 <tr>
     <td align="center" style="padding: 0 0 30px 0;">
         <!-- ✏️ EDIT 1: Replace DATE with e.g. 2_20 -->
-        <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=logo" target="_blank">
+        <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=logo" target="_blank">
             <img src="https://cdn.mcauto-images-production.sendgrid.net/038ff234df6bb31f/13341f9c-5580-483b-bba3-4196d62e8664/1156x276.png" alt="Reputable" width="130" style="display: block;" border="0">
         </a>
     </td>
@@ -187,13 +197,13 @@
                         Week of February 27, 2026
                     </p>
                     <h1 class="serif-head banner-title" style="margin: 0 0 14px 0; font-size: 30px; font-weight: 700; color: #FFFFFF; line-height: 1.25; text-align: center;">
-                        <font color="#FFFFFF">Your Weekly Study Digest</font>
+                        <font color="#FFFFFF">Reputable Insider</font>
                     </h1>
                     <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto 14px auto;">
                         <tr><td style="width: 40px; height: 2px; background-color: #FFFFFF; opacity: 0.3; border-radius: 2px; font-size: 2px; line-height: 2px;">&nbsp;</td></tr>
                     </table>
                     <p class="sans-text banner-subtitle" style="margin: 0; font-size: 14px; line-height: 1.7; max-width: 400px; color: #FFFFFF; text-align: center; opacity: 0.75;">
-                        <font color="#FFFFFF">New studies, real data, and ways to take better care of yourself. Let&#8217;s dive in.</font>
+                        <font color="#FFFFFF">Exclusive updates for our active research community.</font>
                     </p>
                 </td>
             </tr>
@@ -202,32 +212,14 @@
 </tr>
 <tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
-<!-- APP DOWNLOAD BUTTON (evergreen — update utm date only)  -->
-<!-- ════════════════════════════════════════════════════════ -->
-<tr>
-    <td align="center" style="padding: 0 20px 30px 20px;">
-        <table cellpadding="0" cellspacing="0" border="0">
-            <tr>
-                <td style="background-color: #E11D48; border-radius: 8px;">
-                    <a href="https://onelink.to/5rsn43?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=download_app_button" class="sans-text" style="display: block; padding: 14px 32px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600; text-align: center;">
-                        Download the App
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<!-- ════════════════════════════════════════════════════════ -->
 <!-- ✏️ EDIT 3 — LIVE COMMUNITY TICKER                       -->
 <!-- Update the heartbeat count as needed                    -->
 <!-- ════════════════════════════════════════════════════════ -->
 <tr>
     <td class="ticker-outer" style="background-color: #0A0F0A; border-radius: 16px; padding: 0; overflow: hidden;">
-        <!-- Grid pattern background via repeating SVG -->
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <td style="background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%3E%3Cpath%20d%3D%22M0%200h40v40H0z%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.04%22%20stroke-width%3D%220.5%22%2F%3E%3C%2Fsvg%3E'); background-repeat: repeat; padding: 34px 24px;">
-                    <!-- Inner card with subtle border -->
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                             <td class="ticker-inner" style="background-color: #0F1410; border: 1px solid #1E2E22; border-radius: 14px; padding: 36px 24px;" align="center">
@@ -265,96 +257,38 @@
 </tr>
 <tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
-<!-- ✏️ EDIT 4 — NOW RECRUITING (STUDIES)                    -->
+<!-- ✏️ FROM THE CHANNEL — YouTube video                     -->
 <!-- ════════════════════════════════════════════════════════ -->
 <tr>
-    <td class="dm-studies-wrap" style="background-color: #FEFCE8; border-radius: 16px; padding: 30px 30px;">
+    <td class="dm-card" style="background-color: #0F172A; border-radius: 16px; padding: 30px 30px;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <td align="center">
-                    <p class="sans-text dm-accent" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #B45309; text-align: center;">
-                        &#127881; Now Recruiting
+                    <p class="sans-text" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #F59E0B; text-align: center;">
+                        &#127909; From the Channel
                     </p>
-                    <h2 class="serif-head dm-heading" style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; color: #0F172A; text-align: center; line-height: 1.2;">
-                        New Studies, Now Live
+                    <h2 class="serif-head" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 700; color: #FFFFFF; text-align: center; line-height: 1.3;">
+                        <font color="#FFFFFF">What is a Washout Period?<br>(And why you need one) &#9201;</font>
                     </h2>
-                    <p class="sans-text dm-subtext" style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #64748B; text-align: center; max-width: 440px;">
-                        Spots are limited and filling fast. Join now to secure your place.
+                    <p class="sans-text" style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #94A3B8; text-align: center; max-width: 440px;">
+                        <font color="#94A3B8">New to clinical studies? A washout period is one of those terms that sounds complicated but is actually simple &#8212; and understanding it makes you a better study participant!</font>
                     </p>
                 </td>
             </tr>
-            <!-- ══ STUDY CARD: NEUVANA XEN DEVICE ══════════ -->
             <tr>
-                <td style="padding: 0 0 16px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                        <td style="background-color: #0F1F1A; border-radius: 14px; padding: 0; overflow: hidden;">
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                <td style="background: linear-gradient(135deg, #064E3B 0%, #059669 100%); padding: 14px 22px;">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                        <td><span class="sans-text" style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #FFFFFF;"><font color="#FFFFFF">&#129504; New Study &bull; 6 Weeks</font></span></td>
-                                        <td align="right"><span class="sans-text" style="font-size: 11px; font-weight: 700; color: #065F46; background-color: #FFFFFF; padding: 3px 10px; border-radius: 100px;"><font color="#065F46">Now Live</font></span></td>
-                                    </tr></table>
-                                </td>
-                            </tr></table>
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                <td style="padding: 20px 22px 22px 22px;">
-                                    <p class="sans-text" style="font-size: 19px; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0; line-height: 1.3;"><font color="#FFFFFF">&#9889; Neuvana Xen Device</font></p>
-                                    <p class="sans-text" style="font-size: 14px; color: #6EE7B7; margin: 0 0 16px 0; line-height: 1.5;"><font color="#6EE7B7">A 6-week study exploring the impact of daily vagus nerve stimulation on sleep quality using wearable sleep data.</font></p>
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 18px;"><tr>
-                                        <td style="padding: 14px 16px;">
-                                            <p class="sans-text" style="font-size: 12px; font-weight: 700; color: #34D399; margin: 0 0 8px 0; letter-spacing: 0.5px; text-transform: uppercase;"><font color="#34D399">What You&#8217;ll Do</font></p>
-                                            <p class="sans-text" style="font-size: 13px; color: #D1FAE5; margin: 0 0 6px 0; line-height: 1.5;"><font color="#D1FAE5">&#10003; &nbsp;Use the Neuvana Xen device daily for vagus nerve stimulation</font></p>
-                                            <p class="sans-text" style="font-size: 13px; color: #D1FAE5; margin: 0 0 10px 0; line-height: 1.5;"><font color="#D1FAE5">&#10003; &nbsp;Track sleep quality nightly via your Oura Ring</font></p>
-                                            <p class="sans-text" style="font-size: 11px; color: #94A3B8; margin: 0; line-height: 1.5;"><font color="#94A3B8">&#9201; Oura Ring Required</font></p>
-                                        </td>
-                                    </tr></table>
-                                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-                                        <td style="background-color: #059669; border-radius: 8px;">
-                                            <a href="https://reputablestudies.com/neuvana?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=neuvana_join" class="sans-text" style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
-                                                <font color="#FFFFFF">Join This Study &#8594;</font>
-                                            </a>
-                                        </td>
-                                    </tr></table>
-                                </td>
-                            </tr></table>
-                        </td>
-                    </tr></table>
+                <td style="padding: 0 0 20px 0;">
+                    <a href="https://youtu.be/dKRJ5ZIJdYw?si=Ozg8M_XB01StOYt1&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=washout_video" target="_blank" style="display: block; text-decoration: none;">
+                        <img src="https://img.youtube.com/vi/dKRJ5ZIJdYw/maxresdefault.jpg" alt="What is a Washout Period? — Reputable Health" width="540" border="0" style="display: block; width: 100%; border-radius: 12px;">
+                    </a>
                 </td>
             </tr>
-            <!-- ══ STUDY CARD: THE POWER NAP CHALLENGE ═════ -->
             <tr>
-                <td style="padding: 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                        <td style="background-color: #0C1A2E; border-radius: 14px; padding: 0; overflow: hidden;">
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                <td style="background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%); padding: 14px 22px;">
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                        <td><span class="sans-text" style="font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #FFFFFF;"><font color="#FFFFFF">&#128337; New Study &bull; 7 Days</font></span></td>
-                                        <td align="right"><span class="sans-text" style="font-size: 11px; font-weight: 700; color: #0C4A6E; background-color: #FFFFFF; padding: 3px 10px; border-radius: 100px;"><font color="#0C4A6E">Now Live</font></span></td>
-                                    </tr></table>
-                                </td>
-                            </tr></table>
-                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                <td style="padding: 20px 22px 22px 22px;">
-                                    <p class="sans-text" style="font-size: 19px; font-weight: 800; color: #FFFFFF; margin: 0 0 4px 0; line-height: 1.3;"><font color="#FFFFFF">&#128564; The Power Nap Challenge</font></p>
-                                    <p class="sans-text" style="font-size: 14px; color: #BAE6FD; margin: 0 0 16px 0; line-height: 1.5;"><font color="#BAE6FD">Does a 20-minute power nap boost YOUR afternoon recovery? A 7-day study measuring the impact on HRV, resting heart rate, and nighttime sleep quality.</font></p>
-                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: rgba(255,255,255,0.08); border-radius: 10px; margin-bottom: 18px;"><tr>
-                                        <td style="padding: 14px 16px;">
-                                            <p class="sans-text" style="font-size: 12px; font-weight: 700; color: #38BDF8; margin: 0 0 8px 0; letter-spacing: 0.5px; text-transform: uppercase;"><font color="#38BDF8">What You&#8217;ll Discover</font></p>
-                                            <p class="sans-text" style="font-size: 13px; color: #E0F2FE; margin: 0 0 6px 0; line-height: 1.5;"><font color="#E0F2FE">&#10003; &nbsp;Does a nap between 1&#8211;3 PM improve afternoon HRV &amp; resting heart rate?</font></p>
-                                            <p class="sans-text" style="font-size: 13px; color: #E0F2FE; margin: 0 0 10px 0; line-height: 1.5;"><font color="#E0F2FE">&#10003; &nbsp;Does a daily nap habit disrupt your nighttime sleep onset or recovery scores?</font></p>
-                                            <p class="sans-text" style="font-size: 11px; color: #94A3B8; margin: 0; line-height: 1.5;"><font color="#94A3B8">&#9201; Compatible with Oura Ring, WHOOP, Fitbit, Garmin &amp; Apple Watch</font></p>
-                                        </td>
-                                    </tr></table>
-                                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-                                        <td style="background-color: #0284C7; border-radius: 8px;">
-                                            <a href="https://reputablestudies.com/power-nap?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=power_nap_join" class="sans-text" style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
-                                                <font color="#FFFFFF">Join This Study &#8594;</font>
-                                            </a>
-                                        </td>
-                                    </tr></table>
-                                </td>
-                            </tr></table>
+                <td>
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                        <td style="background-color: #E11D48; border-radius: 8px;">
+                            <a href="https://youtu.be/dKRJ5ZIJdYw?si=Ozg8M_XB01StOYt1&utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=washout_video_cta" class="sans-text" target="_blank" style="display: block; padding: 13px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
+                                <font color="#FFFFFF">Watch on YouTube &#8594;</font>
+                            </a>
                         </td>
                     </tr></table>
                 </td>
@@ -457,85 +391,88 @@
 </tr>
 <tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
-<!-- ✏️ MORE STUDIES OPEN NOW — compact study list            -->
+<!-- ✏️ EDIT 6 — MORE STUDIES OPEN NOW                       -->
 <!-- ════════════════════════════════════════════════════════ -->
 <tr>
-    <td class="dm-card" style="background-color: #FFFFFF; border-radius: 16px; padding: 28px 28px;">
+    <td style="background: linear-gradient(160deg, #0A3622 0%, #1A5C38 60%, #0A3622 100%); border-radius: 16px; padding: 30px 28px;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <!-- Header -->
             <tr>
                 <td align="center" style="padding-bottom: 20px;">
-                    <h2 class="serif-head dm-heading" style="margin: 0; font-size: 20px; font-weight: 700; color: #0F172A; text-align: center; line-height: 1.2;">
-                        More Studies Open Now
+                    <p class="sans-text" style="margin: 0 0 6px 0; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #A3E635; text-align: center;">
+                        &#128300; More Studies Open Now
+                    </p>
+                    <h2 class="serif-head" style="margin: 0 0 10px 0; font-size: 22px; font-weight: 700; color: #FFFFFF; text-align: center; line-height: 1.3;">
+                        <font color="#FFFFFF">Make the Most of Your Break</font>
                     </h2>
+                    <p class="sans-text" style="margin: 0; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.75); text-align: center; max-width: 420px;">
+                        <font color="#D1FAE5">Just finished a study and waiting for the next? You can still participate &#8212; our 7-day studies are designed to fit right inside your washout window.</font>
+                    </p>
                 </td>
             </tr>
-            <!-- ── STUDY ROW 1: HOP Box ───────────────────── -->
-            <tr>
-                <td style="padding: 0 0 12px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <td style="border: 1px solid #E2E8F0; border-left: 4px solid #8B5CF6; border-radius: 10px; padding: 14px 16px;">
-                                <p class="sans-text dm-heading" style="margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #1E293B;">&#129657; HOP Box: Women&#8217;s Longevity</p>
-                                <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.4;">Can daily supplementation impact YOUR biological age?</p>
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <td>
-                                        <span class="sans-text" style="display: inline-block; background-color: #F5F3FF; border-radius: 6px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: #7C3AED;">&#127873; FREE 3-month supply of HOP Box ($600)</span>
-                                    </td>
-                                </tr></table>
-                                <p class="sans-text dm-subtext" style="margin: 8px 0 6px 0; font-size: 11px; color: #94A3B8;">&#9711; Oura Ring &nbsp;&bull;&nbsp; &#9201; 90 days</p>
-                                <span class="sans-text" style="display: inline-block; background-color: #EDE9FE; border-radius: 6px; padding: 5px 12px; font-size: 13px; font-weight: 800; color: #6D28D9; letter-spacing: 1px;">Study Code: OV2W</span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <!-- ── STUDY ROW 2: Melatonin Sleep Study ───────── -->
-            <tr>
-                <td style="padding: 0 0 12px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <td style="border: 1px solid #E2E8F0; border-left: 4px solid #6366F1; border-radius: 10px; padding: 14px 16px;">
-                                <p class="sans-text dm-heading" style="margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #1E293B;">&#127769; Melatonin Sleep Study</p>
-                                <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.4;">How does a plant-based melatonin supplement affect YOUR sleep?</p>
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <td>
-                                        <span class="sans-text" style="display: inline-block; background-color: #EEF2FF; border-radius: 6px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: #4F46E5;">&#127761; 28 nights of personalized sleep insights</span>
-                                    </td>
-                                </tr></table>
-                                <p class="sans-text dm-subtext" style="margin: 8px 0 6px 0; font-size: 11px; color: #94A3B8;">&#9711; Oura Ring &nbsp;&bull;&nbsp; &#9201; 28 days</p>
-                                <span class="sans-text" style="display: inline-block; background-color: #E0E7FF; border-radius: 6px; padding: 5px 12px; font-size: 13px; font-weight: 800; color: #4338CA; letter-spacing: 1px;">Study Code: S3QH</span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <!-- ── STUDY ROW 3: ProleevaMax ──────────────────── -->
+            <!-- Divider -->
             <tr>
                 <td style="padding: 0 0 20px 0;">
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <td style="border: 1px solid #E2E8F0; border-left: 4px solid #F59E0B; border-radius: 10px; padding: 14px 16px;">
-                                <p class="sans-text dm-heading" style="margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #1E293B;">&#128138; Pain Relief: ProleevaMax</p>
-                                <p class="sans-text dm-subtext" style="margin: 0 0 8px 0; font-size: 13px; color: #64748B; line-height: 1.4;">Can natural ingredients reduce YOUR chronic pain and inflammation?</p>
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                                    <td>
-                                        <span class="sans-text" style="display: inline-block; background-color: #FFFBEB; border-radius: 6px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: #B45309;">&#128138; FREE 2-month supply of ProleevaMax ($99)</span>
-                                    </td>
-                                </tr></table>
-                                <p class="sans-text dm-subtext" style="margin: 8px 0 6px 0; font-size: 11px; color: #94A3B8;">&#9711; WHOOP Strap &nbsp;&bull;&nbsp; &#9201; 60 days</p>
-                                <span class="sans-text" style="display: inline-block; background-color: #FEF3C7; border-radius: 6px; padding: 5px 12px; font-size: 13px; font-weight: 800; color: #92400E; letter-spacing: 1px;">Study Code: DB39</span>
-                            </td>
-                        </tr>
+                        <tr><td style="height: 1px; background-color: rgba(255,255,255,0.15); font-size: 1px; line-height: 1px;">&nbsp;</td></tr>
                     </table>
                 </td>
             </tr>
-            <!-- CTA -->
+            <!-- Study 1: Power Nap -->
+            <tr>
+                <td style="padding: 0 0 12px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background-color: rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td width="36" valign="top" style="font-size: 20px; line-height: 1.3;">&#128564;</td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">The Power Nap Challenge</font> <span style="font-size: 11px; font-weight: 600; background-color: #A3E635; color: #0A3622; border-radius: 4px; padding: 2px 7px;">7 days</span></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #A7F3D0; line-height: 1.5;"><font color="#A7F3D0">How does a strategic 20-minute afternoon nap impact your HRV, resting heart rate, and nighttime sleep quality?</font></p>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- Study 2: Hydration Effect -->
+            <tr>
+                <td style="padding: 0 0 12px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background-color: rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td width="36" valign="top" style="font-size: 20px; line-height: 1.3;">&#128167;</td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">The Hydration Effect</font> <span style="font-size: 11px; font-weight: 600; background-color: #A3E635; color: #0A3622; border-radius: 4px; padding: 2px 7px;">7 days</span></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #A7F3D0; line-height: 1.5;"><font color="#A7F3D0">How does consistent daily water intake (2.5&#8211;3 liters) impact your sleep quality and recovery?</font></p>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- Study 3: Reading Ritual -->
+            <tr>
+                <td style="padding: 0 0 20px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background-color: rgba(255,255,255,0.08); border-radius: 12px; padding: 16px 18px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td width="36" valign="top" style="font-size: 20px; line-height: 1.3;">&#128214;</td>
+                                <td valign="top" style="padding-left: 10px;">
+                                    <p class="sans-text" style="margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #FFFFFF;"><font color="#FFFFFF">The Reading Ritual</font> <span style="font-size: 11px; font-weight: 600; background-color: #A3E635; color: #0A3622; border-radius: 4px; padding: 2px 7px;">7 days</span></p>
+                                    <p class="sans-text" style="margin: 0; font-size: 13px; color: #A7F3D0; line-height: 1.5;"><font color="#A7F3D0">How does 20 minutes of reading a physical book before bed impact your sleep onset &#8212; the time it takes to fall asleep?</font></p>
+                                </td>
+                            </tr></table>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- Single CTA -->
             <tr>
                 <td>
                     <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-                        <td style="background-color: #0F172A; border-radius: 10px;">
-                            <a href="https://onelink.to/5rsn43?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=all_studies_cta" class="sans-text" style="display: block; padding: 14px 28px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700; text-align: center;">
-                                <font color="#FFFFFF">View All Open Studies &#8594;</font>
+                        <td style="background-color: #A3E635; border-radius: 10px;">
+                            <a href="https://onelink.to/5rsn43?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=washout_study_catalog" class="sans-text" style="display: block; padding: 14px 28px; color: #0A3622; text-decoration: none; font-size: 14px; font-weight: 800; text-align: center;">
+                                <font color="#0A3622">Explore Study Catalog in App &#8594;</font>
                             </a>
                         </td>
                     </tr></table>
@@ -546,7 +483,7 @@
 </tr>
 <tr><td height="25" style="font-size: 25px; line-height: 25px;">&nbsp;</td></tr>
 <!-- ════════════════════════════════════════════════════════ -->
-<!-- ✏️ EDIT 6 — REFERRAL SECTION                            -->
+<!-- ✏️ EDIT 7 — REFERRAL SECTION                            -->
 <!-- ════════════════════════════════════════════════════════ -->
 <tr>
     <td style="border-radius: 16px; padding: 0; overflow: hidden;">
@@ -565,7 +502,7 @@
                     </p>
                 </td>
             </tr>
-            <!-- Steps on white background -->
+            <!-- Steps on white/dark background -->
             <tr>
                 <td class="dm-referral-steps" style="background-color: #FFFFFF; border-radius: 0 0 16px 16px; padding: 28px 30px;">
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -657,7 +594,7 @@
     <td align="center" style="padding: 0 20px;">
         <p class="sans-text subtext" style="margin: 0 0 10px 0; font-size: 12px; color: #94A3B8;">
             &copy; 2026 Reputable Health, Inc. &middot;
-            <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_2_27&utm_content=footer_link" style="color: #6B7280; text-decoration: underline;">reputable.health</a>
+            <a href="https://reputable.health?utm_source=sendgrid&utm_medium=email&utm_campaign=weekly_newsletter_DATE&utm_content=footer_link" style="color: #6B7280; text-decoration: underline;">reputable.health</a>
         </p>
     </td>
 </tr>
