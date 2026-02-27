@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RWD vs Clinical Trials — Slide 3: Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0c1228;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .canvas {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 30% 25%, rgba(100,180,255,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 75%, rgba(212,255,80,0.04) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(25,55,70,0.4) 0%, transparent 55%),
+      #0c1228;
+    overflow: hidden;
+  }
+
+  .canvas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(140,120,200,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(140,120,200,0.02) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .corner { position: absolute; width: 18px; height: 18px; }
+  .corner.tl { top: 40px; left: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.tr { top: 40px; right: 40px; border-top: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+  .corner.bl { bottom: 40px; left: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-left: 1px solid rgba(212,255,80,0.12); }
+  .corner.br { bottom: 40px; right: 40px; border-bottom: 1px solid rgba(212,255,80,0.12); border-right: 1px solid rgba(212,255,80,0.12); }
+
+  .top-bar {
+    position: absolute; top: 62px; left: 72px; right: 72px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .top-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff50; box-shadow: 0 0 10px rgba(212,255,80,0.5); flex-shrink: 0; }
+  .top-label { font-size: 11px; font-weight: 800; letter-spacing: 0.2em; color: #d4ff50; text-transform: uppercase; }
+  .top-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,255,80,0.25), transparent); }
+  .top-right { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(160,200,210,0.2); text-transform: uppercase; white-space: nowrap; }
+
+  .section-label {
+    position: absolute;
+    top: 120px; left: 72px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(140,120,200,0.4);
+  }
+
+  .headline {
+    position: absolute;
+    top: 162px; left: 72px; right: 72px;
+  }
+  .headline h2 {
+    font-size: 44px; font-weight: 800;
+    line-height: 1.08; letter-spacing: -0.03em;
+    color: #eef0f8;
+  }
+  .headline h2 .accent { color: #d4ff50; }
+  .headline h2 .blue { color: rgba(100,180,255,0.8); }
+  .headline h2 .dim { color: rgba(160,200,210,0.25); }
+
+  /* ── Side-by-side comparison ────────────────────── */
+  .comparison {
+    position: absolute;
+    top: 340px;
+    left: 72px; right: 72px;
+    display: flex;
+    gap: 20px;
+  }
+
+  .comp-col {
+    flex: 1;
+    border-radius: 20px;
+    padding: 30px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  .comp-col::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .comp-col.trials {
+    background: rgba(100,180,255,0.03);
+    border: 1px solid rgba(100,180,255,0.1);
+  }
+  .comp-col.trials::before { background: linear-gradient(90deg, rgba(100,180,255,0.5), rgba(100,180,255,0.15)); }
+  .comp-col.rwd {
+    background: rgba(212,255,80,0.03);
+    border: 1px solid rgba(212,255,80,0.1);
+  }
+  .comp-col.rwd::before { background: linear-gradient(90deg, rgba(212,255,80,0.5), rgba(212,255,80,0.15)); }
+
+  .comp-header {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 22px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .comp-col.trials .comp-header { color: rgba(100,180,255,0.6); }
+  .comp-col.rwd .comp-header { color: rgba(212,255,80,0.6); }
+
+  .comp-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 18px;
+  }
+  .comp-item:last-child { margin-bottom: 0; }
+  .comp-bullet { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .comp-label {
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 3px;
+  }
+  .comp-col.trials .comp-label { color: rgba(100,180,255,0.45); }
+  .comp-col.rwd .comp-label { color: rgba(212,255,80,0.45); }
+  .comp-text {
+    font-size: 14px; font-weight: 500;
+    color: rgba(160,200,210,0.4);
+    line-height: 1.45;
+  }
+
+  /* ── Takeaway ───────────────────────────────────── */
+  .takeaway {
+    position: absolute;
+    top: 830px;
+    left: 72px; right: 72px;
+    padding: 28px 32px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 18px;
+    text-align: center;
+  }
+  .takeaway-icon { font-size: 22px; margin-bottom: 10px; display: block; }
+  .takeaway-text {
+    font-size: 17px; font-weight: 500;
+    color: rgba(160,200,210,0.35);
+    line-height: 1.55;
+  }
+  .takeaway-text strong { color: rgba(212,255,80,0.6); font-weight: 700; }
+  .takeaway-text .blue { color: rgba(100,180,255,0.6); font-weight: 700; }
+
+  .footer {
+    position: absolute; bottom: 58px; left: 72px; right: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(180,190,220,0.25); }
+  .slide-num { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: rgba(160,200,210,0.15); }
+
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, rgba(100,180,255,0.6), rgba(140,100,240,0.4), #d4ff50);
+    opacity: 0.35;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="top-bar">
+    <div class="top-dot"></div>
+    <div class="top-label">Reputable</div>
+    <div class="top-line"></div>
+    <div class="top-right">Evidence Deep Dive</div>
+  </div>
+
+  <div class="section-label">Head to Head</div>
+
+  <div class="headline">
+    <h2><span class="blue">Clinical Trials</span> <span class="dim">vs</span><br><span class="accent">Real-World Data</span></h2>
+  </div>
+
+  <div class="comparison">
+    <div class="comp-col trials">
+      <div class="comp-header">🧪 Clinical Trials</div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Environment</div>
+          <div class="comp-text">Controlled lab setting</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Population</div>
+          <div class="comp-text">Strict inclusion criteria</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Timeline</div>
+          <div class="comp-text">Months to years</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Context</div>
+          <div class="comp-text">Variables isolated</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Best for</div>
+          <div class="comp-text">Pharma &amp; drug approval</div>
+        </div>
+      </div>
+    </div>
+    <div class="comp-col rwd">
+      <div class="comp-header">🌍 Real-World Data</div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Environment</div>
+          <div class="comp-text">Your actual daily life</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Population</div>
+          <div class="comp-text">Broad, diverse demographics</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Timeline</div>
+          <div class="comp-text">Weeks, not years</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Context</div>
+          <div class="comp-text">Real stress, sleep, habits</div>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div>
+          <div class="comp-label">Best for</div>
+          <div class="comp-text">Consumer health products</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <span class="takeaway-icon">💡</span>
+    <div class="takeaway-text"><span class="blue">Clinical trials</span> and <strong>real-world data</strong> aren't rivals — they're complementary. The most actionable insights come from <strong>continuous, real-world observation.</strong></div>
+  </div>
+
+  <div class="footer">
+    <div class="brand">Reputable</div>
+    <div class="slide-num">03 / 04</div>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>
