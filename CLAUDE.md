@@ -123,10 +123,66 @@ Padding:      clamp(1rem, 5vw, 2rem) horizontal
 
 ### Spacing conventions
 
-- Standard card padding: `1.5rem` (24px)
+- Standard card padding: `28px 24px` (vertical × horizontal)
+- Large/featured card padding: `32px 36px`
 - Section padding: `clamp(3rem, 8vw, 5rem)` vertical
 - Grid gap: `1.5rem` between cards
 - Element gap: `0.5rem–1rem` within cards
+- Heading to body text: `14px` margin-bottom after h1; `22px` after h2
+- Card title to description: `5px–8px`
+
+### Social post canvas spacing (1080×1080)
+
+These values are consistent across all square social posts:
+
+| Element | Value | Notes |
+|---------|-------|-------|
+| Corner frames | `36px` from each edge | Signature brand element |
+| Content side margins | `72px` left and right | The de facto content gutter |
+| Top bar position | `top: 62px` | Label/dot row |
+| Label element gap | `12px` | Gap between dot, text, and line in top bar |
+| Footer position | `bottom: 58px–62px` | Brand name + slide number |
+| Bottom accent bar | `4px` tall, `bottom: 0` | Lime-colored accent strip |
+
+### Story/carousel canvas spacing (1080×1920)
+
+Taller format shifts a few values outward:
+
+| Element | Value |
+|---------|-------|
+| Corner frames | `40px` from each edge |
+| Content side margins | `72px` left and right (same) |
+| Top bar position | `top: 72px` |
+| Footer position | `bottom: 72px` |
+| Bottom accent bar | `4px` tall, `bottom: 0` |
+
+### Flex gap scale
+
+| Gap | Context |
+|-----|---------|
+| `8px` | Tight inline elements, poll option margins |
+| `12px` | Label dot-to-text, icon-to-label |
+| `14px` | List items, recap bullet spacing, reward items |
+| `16px` | Card grid gaps, multi-column layouts |
+| `24px` | Metric groups within cards |
+
+### Dividers
+
+- Width: `40px–60px` (never full width)
+- Height: `1px–2px`
+- Centered with `margin: 0 auto`
+- Margin below: `18px–24px`
+
+### Email-specific spacing
+
+| Element | Desktop | Mobile |
+|---------|---------|--------|
+| Outer wrapper padding | `40px 10px` | `20px 8px` |
+| Banner inner padding | `35px 20px` | `28px 16px` |
+| Card padding | `40px 30px` | `25px 20px` |
+| Section-to-section spacer | `20px–30px` | `16px–20px` |
+| Poll option padding | `14px 16px` | `12px 12px` |
+| Poll option gap | `8px` margin-bottom | same |
 
 ### Responsive grid
 
