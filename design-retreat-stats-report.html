@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimize Her Retreat — Personal Stats Report</title>
+<style>
+  :root {
+    --brand-lime: #C8E64A;
+    --brand-lime-light: #D9FF85;
+    --brand-lime-dim: #A3C232;
+    --brand-charcoal: #222220;
+    --bg-body: #0a0a0a;
+    --bg-raised: #141414;
+    --bg-surface: #1a1a1a;
+    --bg-hover: #1f1f1f;
+    --border: #262626;
+    --border-subtle: #1c1c1c;
+    --border-dark: rgba(255,255,255,0.08);
+    --lime-border: rgba(200,230,74,0.2);
+    --text-main: #FFFFFF;
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --text-muted: #999999;
+    --lime-bg: rgba(200,230,74,0.08);
+    --lime-glow: rgba(200,230,74,0.12);
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-pill: 100px;
+    --teal: #00B39F;
+    --indigo: #6C5CE7;
+    --sky: #60A5FA;
+    --rose: #FB7185;
+    --amber: #FBBF24;
+    --emerald: #34D399;
+    --lavender: #A78BFA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-body);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Background treatment */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(200,230,74,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 30%, rgba(0,179,159,0.03) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 80%, rgba(108,92,231,0.025) 0%, transparent 40%),
+      var(--bg-body);
+  }
+  .page-bg::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,230,74,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,230,74,0.015) 1px, transparent 1px);
+    background-size: 54px 54px;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(1rem, 5vw, 2rem);
+    position: relative;
+  }
+
+  /* ── Header ──────────────────────────── */
+  .report-header {
+    padding: clamp(2rem, 6vw, 3.5rem) 0;
+    text-align: center;
+    position: relative;
+  }
+  .top-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-lime);
+    box-shadow: 0 0 10px rgba(200,230,74,0.5);
+  }
+  .label-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--brand-lime);
+    text-transform: uppercase;
+  }
+  .report-header h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text-main);
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  .report-header h1 .accent {
+    color: var(--brand-lime);
+  }
+  .report-header .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Divider ─────────────────────────── */
+  .divider {
+    width: 50px;
+    height: 2px;
+    background: rgba(200,230,74,0.3);
+    margin: 0 auto;
+    margin-bottom: 22px;
+  }
+
+  /* ── Protocol chips ──────────────────── */
+  .protocol-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-pill);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+  }
+  .chip .chip-icon {
+    font-size: 16px;
+  }
+  .chip .chip-value {
+    color: var(--brand-lime);
+    font-weight: 700;
+  }
+
+  /* ── Section titles ──────────────────── */
+  .section {
+    padding: clamp(2rem, 6vw, 3.5rem) 0;
+  }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .section-label .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand-lime);
+    box-shadow: 0 0 8px rgba(200,230,74,0.4);
+  }
+  .section-label span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--brand-lime);
+    text-transform: uppercase;
+  }
+  .section h2 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  .section .section-desc {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-bottom: 32px;
+  }
+
+  /* ── Hero metrics row ────────────────── */
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .hero-card {
+    background: linear-gradient(135deg, rgba(217,255,133,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(217,255,133,0.2);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 100px;
+    background: radial-gradient(ellipse, rgba(200,230,74,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-card .metric-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .hero-card .metric-value {
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    font-weight: 800;
+    color: var(--brand-lime);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(200,230,74,0.15);
+  }
+  .hero-card .metric-context {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .hero-card .metric-raw {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ── Stat cards grid ─────────────────── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    position: relative;
+    transition: border-color 0.2s ease;
+  }
+  .stat-card:hover {
+    border-color: rgba(255,255,255,0.14);
+  }
+  .stat-card .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .stat-card .stat-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .stat-card .stat-raw {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .stat-card .stat-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .stat-card .stat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* Color variants for stat cards */
+  .stat-card.positive .stat-value { color: var(--emerald); }
+  .stat-card.positive .stat-icon { background: rgba(52,211,153,0.1); }
+  .stat-card.positive .stat-bar-fill { background: var(--emerald); }
+
+  .stat-card.lime .stat-value { color: var(--brand-lime); }
+  .stat-card.lime .stat-icon { background: rgba(200,230,74,0.08); }
+  .stat-card.lime .stat-bar-fill { background: var(--brand-lime); }
+
+  .stat-card.neutral .stat-value { color: var(--text-secondary); }
+  .stat-card.neutral .stat-icon { background: rgba(255,255,255,0.06); }
+  .stat-card.neutral .stat-bar-fill { background: var(--text-muted); }
+
+  .stat-card.teal .stat-value { color: var(--teal); }
+  .stat-card.teal .stat-icon { background: rgba(0,179,159,0.1); }
+  .stat-card.teal .stat-bar-fill { background: var(--teal); }
+
+  .stat-card.sky .stat-value { color: var(--sky); }
+  .stat-card.sky .stat-icon { background: rgba(96,165,250,0.1); }
+  .stat-card.sky .stat-bar-fill { background: var(--sky); }
+
+  .stat-card.rose .stat-value { color: var(--rose); }
+  .stat-card.rose .stat-icon { background: rgba(251,113,133,0.1); }
+  .stat-card.rose .stat-bar-fill { background: var(--rose); }
+
+  .stat-card.amber .stat-value { color: var(--amber); }
+  .stat-card.amber .stat-icon { background: rgba(251,191,36,0.1); }
+  .stat-card.amber .stat-bar-fill { background: var(--amber); }
+
+  .stat-card.lavender .stat-value { color: var(--lavender); }
+  .stat-card.lavender .stat-icon { background: rgba(167,139,250,0.1); }
+  .stat-card.lavender .stat-bar-fill { background: var(--lavender); }
+
+  /* Arrow indicators */
+  .arrow-up::before { content: '↑ '; }
+  .arrow-down::before { content: '↓ '; }
+
+  /* ── Detailed table ──────────────────── */
+  .data-table-wrap {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .data-table thead th {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-dark);
+    background: rgba(255,255,255,0.015);
+  }
+  .data-table thead th:last-child,
+  .data-table thead th:nth-child(3),
+  .data-table thead th:nth-child(4) {
+    text-align: right;
+  }
+  .data-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s ease;
+  }
+  .data-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  .data-table tbody tr:hover {
+    background: rgba(255,255,255,0.02);
+  }
+  .data-table td {
+    padding: 16px 20px;
+    font-size: 0.92rem;
+  }
+  .data-table td:first-child {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .data-table td:last-child,
+  .data-table td:nth-child(3),
+  .data-table td:nth-child(4) {
+    text-align: right;
+  }
+  .data-table .change-positive {
+    color: var(--emerald);
+    font-weight: 700;
+  }
+  .data-table .change-negative {
+    color: var(--rose);
+    font-weight: 700;
+  }
+  .data-table .change-neutral {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .data-table .significance-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .significance-badge.not-sig {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+  }
+  .significance-badge.sig {
+    background: rgba(52,211,153,0.12);
+    color: var(--emerald);
+  }
+  .measure-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .measure-icon .icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: rgba(255,255,255,0.04);
+    flex-shrink: 0;
+  }
+  .improved-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .improved-badge.full {
+    color: var(--emerald);
+  }
+  .improved-badge .bar {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    display: inline-block;
+  }
+  .improved-badge .bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--emerald);
+  }
+
+  /* ── Insight callout ─────────────────── */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(217,255,133,0.06) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(217,255,133,0.15);
+    border-radius: var(--radius-xl);
+    padding: 32px 36px;
+    margin-top: 2rem;
+  }
+  .insight-box h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .insight-box p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ── Footer ──────────────────────────── */
+  .report-footer {
+    text-align: center;
+    padding: clamp(2rem, 6vw, 4rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    margin-top: 2rem;
+  }
+  .report-footer .brand {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(200,230,74,0.3);
+    margin-bottom: 8px;
+  }
+  .report-footer .disclaimer {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* ── Responsive ──────────────────────── */
+  @media (max-width: 768px) {
+    .hero-metrics { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .data-table-wrap { overflow-x: auto; }
+    .data-table { min-width: 640px; }
+  }
+
+  /* ── PDF-safe reveals ────────────────── */
+  .reveal { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+<div class="page-bg"></div>
+<div class="container">
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header class="report-header reveal">
+    <div class="top-label">
+      <span class="label-dot"></span>
+      <span class="label-text">Personal Stats Report</span>
+    </div>
+    <h1>Optimize Her <span class="accent">Retreat</span></h1>
+    <div class="divider"></div>
+    <p class="subtitle">A 6-day study exploring how a multi-modal wellness retreat — combining movement, workshops, healing ceremonies, and spa therapies — impacts sleep quality, resting heart rate, and perceived stress among women.</p>
+
+    <div class="protocol-chips">
+      <div class="chip">
+        <span class="chip-icon">&#128100;</span>
+        <span>Participants</span>
+        <span class="chip-value">1 (You)</span>
+      </div>
+      <div class="chip">
+        <span class="chip-icon">&#128197;</span>
+        <span>Duration</span>
+        <span class="chip-value">7 days</span>
+      </div>
+      <div class="chip">
+        <span class="chip-icon">&#9201;</span>
+        <span>Tracking</span>
+        <span class="chip-value">Wearable 24/7</span>
+      </div>
+      <div class="chip">
+        <span class="chip-icon">&#128200;</span>
+        <span>Endpoints</span>
+        <span class="chip-value">Sleep, HR, Stress</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════ TOP MOVERS ═══════════ -->
+  <section class="section reveal">
+    <div class="section-label">
+      <span class="dot"></span>
+      <span>Top movers</span>
+    </div>
+    <h2>Your biggest changes</h2>
+    <p class="section-desc">The metrics that moved the most during the retreat, comparing your baseline period to the intervention period.</p>
+
+    <div class="hero-metrics">
+      <div class="hero-card">
+        <div class="metric-label">REM Sleep</div>
+        <div class="metric-value">+22.53%</div>
+        <div class="metric-context">Average increase in REM sleep duration</div>
+        <div class="metric-raw">+16.64 min per night</div>
+      </div>
+      <div class="hero-card">
+        <div class="metric-label">Average Heart Rate</div>
+        <div class="metric-value">-12.76%</div>
+        <div class="metric-context">Reduction in average heart rate</div>
+        <div class="metric-raw">-12.54 bpm</div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card lime">
+        <div class="stat-icon">&#128164;</div>
+        <div class="stat-label">Light Sleep</div>
+        <div class="stat-value"><span class="arrow-up"></span>5.75%</div>
+        <div class="stat-raw">-15.59 min raw change</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width: 58%;"></div></div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-icon">&#128524;</div>
+        <div class="stat-label">Total Sleep</div>
+        <div class="stat-value"><span class="arrow-up"></span>0.05%</div>
+        <div class="stat-raw">+0.20 min raw change</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width: 5%;"></div></div>
+      </div>
+      <div class="stat-card positive">
+        <div class="stat-icon">&#9201;</div>
+        <div class="stat-label">Time Awake</div>
+        <div class="stat-value"><span class="arrow-down"></span>14.06%</div>
+        <div class="stat-raw">-13.24 min per night</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width: 72%;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SLEEP METRICS ═══════════ -->
+  <section class="section reveal">
+    <div class="section-label">
+      <span class="dot"></span>
+      <span>Sleep data</span>
+    </div>
+    <h2>Full sleep breakdown</h2>
+    <p class="section-desc">All sleep measures tracked during the retreat, comparing your baseline to intervention periods.</p>
+
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Measure</th>
+            <th>% Change</th>
+            <th>Raw Change</th>
+            <th>Improved</th>
+            <th>Significance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#127769;</span>
+                REM Sleep
+              </span>
+            </td>
+            <td><span class="change-positive">&#8599; 22.53%</span></td>
+            <td>+16.64 min</td>
+            <td>
+              <span class="improved-badge full">
+                <span class="bar"><span class="bar-fill" style="width:100%"></span></span>
+                100%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#128164;</span>
+                Light Sleep
+              </span>
+            </td>
+            <td><span class="change-positive">&#8599; 5.75%</span></td>
+            <td>-15.59 min</td>
+            <td>
+              <span class="improved-badge full">
+                <span class="bar"><span class="bar-fill" style="width:100%"></span></span>
+                100%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#128524;</span>
+                Total Sleep
+              </span>
+            </td>
+            <td><span class="change-positive">&#8599; 0.05%</span></td>
+            <td>+0.20 min</td>
+            <td>
+              <span class="improved-badge full">
+                <span class="bar"><span class="bar-fill" style="width:100%"></span></span>
+                100%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#127752;</span>
+                Deep Sleep
+              </span>
+            </td>
+            <td><span class="change-negative">&#8600; 1.15%</span></td>
+            <td>-0.86 min</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#9889;</span>
+                Sleep Efficiency
+              </span>
+            </td>
+            <td><span class="change-negative">&#8600; 1.48%</span></td>
+            <td>-1.21%</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#127744;</span>
+                Sleeping Respiratory Rate
+              </span>
+            </td>
+            <td><span class="change-negative">&#8600; 2.65%</span></td>
+            <td>+0.42 bpm</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#128147;</span>
+                HRV
+              </span>
+            </td>
+            <td><span class="change-negative">&#8600; 3.91%</span></td>
+            <td>-0.57 ms</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#128155;</span>
+                Lowest HR (Sleep)
+              </span>
+            </td>
+            <td><span class="change-negative">&#8600; 6.31%</span></td>
+            <td>+4.57 bpm</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#10084;&#65039;</span>
+                Average HR (Sleep)
+              </span>
+            </td>
+            <td><span class="change-negative">&#8600; 6.32%</span></td>
+            <td>+5.04 bpm</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="measure-icon">
+                <span class="icon">&#9200;</span>
+                Time Awake
+              </span>
+            </td>
+            <td><span class="change-positive">&#8600; 14.06%</span></td>
+            <td>-13.24 min</td>
+            <td>
+              <span class="improved-badge">
+                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
+                0%
+              </span>
+            </td>
+            <td><span class="significance-badge not-sig">Not Significant</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════ HEALTH / RECOVERY ═══════════ -->
+  <section class="section reveal">
+    <div class="section-label">
+      <span class="dot"></span>
+      <span>Health &amp; recovery</span>
+    </div>
+    <h2>Heart rate and recovery</h2>
+    <p class="section-desc">How the retreat impacted your cardiovascular metrics and recovery indicators.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card positive">
+        <div class="stat-icon">&#10084;&#65039;</div>
+        <div class="stat-label">Average Heart Rate</div>
+        <div class="stat-value"><span class="arrow-down"></span>12.76%</div>
+        <div class="stat-raw">-12.54 bpm</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width: 82%;"></div></div>
+      </div>
+      <div class="stat-card rose">
+        <div class="stat-icon">&#128147;</div>
+        <div class="stat-label">HRV</div>
+        <div class="stat-value"><span class="arrow-down"></span>3.91%</div>
+        <div class="stat-raw">-0.57 ms</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width: 25%;"></div></div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon">&#128155;</div>
+        <div class="stat-label">Lowest HR (Sleep)</div>
+        <div class="stat-value"><span class="arrow-up"></span>6.31%</div>
+        <div class="stat-raw">+4.57 bpm</div>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width: 40%;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ INSIGHTS ═══════════ -->
+  <section class="section reveal">
+    <div class="section-label">
+      <span class="dot"></span>
+      <span>Key insights</span>
+    </div>
+    <h2>What the data suggests</h2>
+
+    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.5rem;">
+      <h3>&#127769; REM sleep saw the largest positive shift</h3>
+      <p>Your REM sleep increased by 22.53%, translating to an additional 16.64 minutes per night on average. REM sleep is critical for emotional regulation, memory consolidation, and cognitive recovery — a meaningful improvement during just 7 days of retreat activities.</p>
+    </div>
+
+    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.5rem; border-color: rgba(0,179,159,0.15); background: linear-gradient(135deg, rgba(0,179,159,0.05) 0%, rgba(255,255,255,0.015) 100%);">
+      <h3>&#10084;&#65039; Average heart rate dropped significantly</h3>
+      <p>Your average heart rate decreased by 12.76% (down 12.54 bpm). A lower resting heart rate is generally associated with improved cardiovascular fitness and reduced stress — suggesting the retreat's combination of movement, breathwork, and recovery modalities had a measurable calming effect on your system.</p>
+    </div>
+
+    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.5rem; border-color: rgba(96,165,250,0.15); background: linear-gradient(135deg, rgba(96,165,250,0.04) 0%, rgba(255,255,255,0.015) 100%);">
+      <h3>&#9200; You spent 14% less time awake at night</h3>
+      <p>Time awake during sleep dropped by 14.06% (-13.24 minutes). Combined with the increase in REM sleep, this suggests your sleep architecture shifted toward more restorative patterns. You were spending less time restless and more time in the deep stages that matter most for recovery.</p>
+    </div>
+
+    <div class="insight-box" style="margin-top: 0; border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.02);">
+      <h3>&#128202; A note on statistical significance</h3>
+      <p>None of the metrics reached statistical significance in this report. This is expected with a short 7-day study window and individual-level data. The trends are directionally promising — a longer study period or larger group would provide more statistical power to confirm these patterns.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ STUDY PROTOCOL ═══════════ -->
+  <section class="section reveal">
+    <div class="section-label">
+      <span class="dot"></span>
+      <span>Study protocol</span>
+    </div>
+    <h2>How this was measured</h2>
+    <p class="section-desc">Transparency is a core part of every Reputable study. Here is exactly how we tracked your data.</p>
+
+    <div class="stat-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="stat-card neutral">
+        <div class="stat-icon">&#128197;</div>
+        <div class="stat-label">Study Design</div>
+        <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+          Pre/post observational study comparing a baseline period to the 6-day retreat intervention window. Biometric data collected continuously via wearable device.
+        </div>
+      </div>
+      <div class="stat-card neutral">
+        <div class="stat-icon">&#128203;</div>
+        <div class="stat-label">Activities Tracked</div>
+        <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+          <strong style="color: var(--text-primary);">Daily retreat rhythm:</strong> Morning movement, workshops, healing ceremonies, spa therapies, evening ceremonies, and daily check-ins via the Reputable app.
+        </div>
+      </div>
+      <div class="stat-card neutral">
+        <div class="stat-icon">&#128200;</div>
+        <div class="stat-label">Biometric Endpoints</div>
+        <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+          Sleep quality (REM, deep, light, total), heart rate (average, lowest), HRV, sleep efficiency, respiratory rate, and time awake — tracked 24/7 via wearable.
+        </div>
+      </div>
+      <div class="stat-card neutral">
+        <div class="stat-icon">&#128202;</div>
+        <div class="stat-label">Statistical Method</div>
+        <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+          Statistical significance determined via T-tests between baseline and intervention periods. Sample size calculator: power = 0.8, significance level = 0.05, allocation ratio = 1:1.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="report-footer reveal">
+    <div class="brand">Optimize Her &middot; Powered by Reputable</div>
+    <p class="disclaimer">
+      This report presents individual-level data from a single participant. Results reflect personal biometric changes during the study period and should not be generalized.
+      All findings are stated as averages comparing baseline to intervention. Statistical significance is determined through T-tests between baseline and intervention periods.
+      <br><br>reputable.health
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
