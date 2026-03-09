@@ -22,7 +22,7 @@ html = html.replace(/src="(images\/[^"]+)"/g, (match, imgPath) => {
     const b64 = data.toString('base64');
     return `src="data:image/${ext};base64,${b64}"`;
   }
-  console.warn(`⚠  Image not found: ${fullPath}`);
+  console.warn(`\u26A0  Image not found: ${fullPath}`);
   return match;
 });
 
@@ -56,18 +56,18 @@ const page = await browser.newPage();
 await page.setViewport({ width: 1200, height: 800, deviceScaleFactor: 2 });
 
 await page.setContent(html, { waitUntil: 'domcontentloaded', timeout: 15000 });
-await new Promise(r => setTimeout(r, 1000));
+await new Promise(r => setTimeout(r, 1500));
 
 await page.emulateMediaType('print');
 
-// Make all reveals visible, hide fixed background elements for print
+// Make all reveals visible, adjust background for print
 await page.evaluate(() => {
   document.querySelectorAll('.reveal').forEach(el => {
     el.style.opacity = '1';
     el.style.transform = 'none';
   });
 
-  // Keep the dark background but remove the fixed-position grid overlay
+  // Keep the dark background but convert from fixed to absolute for PDF
   const pageBg = document.querySelector('.page-bg');
   if (pageBg) {
     pageBg.style.position = 'absolute';
@@ -81,13 +81,13 @@ await page.pdf({
   printBackground: true,
   margin: {
     top: '0.4in',
-    right: '0.4in',
-    bottom: '0.4in',
-    left: '0.4in',
+    right: '0.45in',
+    bottom: '0.5in',
+    left: '0.45in',
   },
   displayHeaderFooter: false,
   preferCSSPageSize: false,
 });
 
 await browser.close();
-console.log(`✅ PDF saved to: ${outputPath}`);
+console.log(`\u2705 PDF saved to: ${outputPath}`);
