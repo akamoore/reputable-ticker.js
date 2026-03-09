@@ -25,8 +25,8 @@
     --lime-bg: rgba(200,230,74,0.08);
     --lime-glow: rgba(200,230,74,0.12);
     --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
     --radius-pill: 100px;
     --teal: #00B39F;
     --indigo: #6C5CE7;
@@ -39,7 +39,7 @@
 
   @page {
     size: Letter;
-    margin: 0.5in 0.5in 0.6in 0.5in;
+    margin: 0.35in 0.4in 0.4in 0.4in;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,8 +49,9 @@
     color: var(--text-main);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-    line-height: 1.6;
+    line-height: 1.5;
     min-height: 100vh;
+    font-size: 14px;
   }
 
   /* Background treatment */
@@ -78,62 +79,61 @@
   .container {
     max-width: 1100px;
     margin: 0 auto;
-    padding: clamp(1rem, 5vw, 2rem);
+    padding: 16px 24px;
     position: relative;
   }
 
   /* ── Header ──────────────────────────── */
   .report-header {
-    padding: clamp(2rem, 6vw, 3rem) 0 clamp(1.5rem, 4vw, 2rem);
+    padding: 24px 0 16px;
     text-align: center;
     position: relative;
   }
   .top-label {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 10px;
+    margin-bottom: 16px;
   }
   .label-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--brand-lime);
     box-shadow: 0 0 10px rgba(200,230,74,0.5);
   }
   .label-text {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.18em;
     color: var(--brand-lime);
     text-transform: uppercase;
   }
   .report-header h1 {
-    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-size: 2.4rem;
     font-weight: 800;
-    line-height: 1.2;
+    line-height: 1.15;
     color: var(--text-main);
     letter-spacing: -0.03em;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
   .report-header h1 .accent {
     color: var(--brand-lime);
   }
   .report-header .subtitle {
-    font-size: clamp(0.9rem, 2vw, 1.02rem);
+    font-size: 0.88rem;
     color: var(--text-muted);
-    max-width: 680px;
+    max-width: 640px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.6;
   }
 
   /* ── Divider ─────────────────────────── */
   .divider {
-    width: 50px;
+    width: 40px;
     height: 2px;
     background: rgba(200,230,74,0.3);
-    margin: 0 auto;
-    margin-bottom: 22px;
+    margin: 0 auto 16px;
   }
 
   /* ── Protocol chips ──────────────────── */
@@ -141,97 +141,85 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
-    margin-top: 28px;
+    gap: 8px;
+    margin-top: 18px;
   }
   .chip {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
+    gap: 8px;
+    padding: 7px 16px;
     background: rgba(255,255,255,0.025);
     border: 1px solid var(--border-dark);
     border-radius: var(--radius-pill);
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: 600;
     color: rgba(255,255,255,0.6);
   }
-  .chip .chip-icon {
-    font-size: 15px;
-  }
-  .chip .chip-value {
-    color: var(--brand-lime);
-    font-weight: 700;
-  }
+  .chip .chip-icon { font-size: 13px; }
+  .chip .chip-value { color: var(--brand-lime); font-weight: 700; }
 
   /* ── Narrative text ──────────────────── */
   .narrative {
-    font-size: 0.95rem;
+    font-size: 0.84rem;
     color: var(--text-muted);
-    line-height: 1.75;
+    line-height: 1.65;
     max-width: 780px;
-    margin-bottom: 28px;
+    margin-bottom: 16px;
   }
-  .narrative strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-  .narrative em {
-    color: var(--brand-lime);
-    font-style: normal;
-    font-weight: 600;
-  }
+  .narrative strong { color: var(--text-primary); font-weight: 600; }
+  .narrative em { color: var(--brand-lime); font-style: normal; font-weight: 600; }
 
   /* ── Section titles ──────────────────── */
   .section {
-    padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+    padding: 14px 0;
   }
   .section-label {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 6px;
   }
   .section-label .dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: var(--brand-lime);
-    box-shadow: 0 0 8px rgba(200,230,74,0.4);
+    box-shadow: 0 0 6px rgba(200,230,74,0.4);
   }
   .section-label span {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.18em;
     color: var(--brand-lime);
     text-transform: uppercase;
   }
   .section h2 {
-    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.2;
     color: var(--text-main);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
   .section .section-desc {
-    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-size: 0.84rem;
     color: var(--text-muted);
     max-width: 600px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   /* ── Hero metrics row ────────────────── */
   .hero-metrics {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    gap: 12px;
+    margin-bottom: 12px;
   }
   .hero-card {
     background: linear-gradient(135deg, rgba(217,255,133,0.06) 0%, rgba(255,255,255,0.02) 100%);
     border: 1px solid rgba(217,255,133,0.2);
     border-radius: var(--radius-xl);
-    padding: 32px 28px;
+    padding: 22px 20px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -240,43 +228,43 @@
   .hero-card::before {
     content: '';
     position: absolute;
-    top: -40px;
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
-    height: 100px;
+    width: 160px;
+    height: 80px;
     background: radial-gradient(ellipse, rgba(200,230,74,0.1) 0%, transparent 70%);
     pointer-events: none;
   }
   .hero-card .metric-label {
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
   .hero-card .metric-value {
-    font-size: clamp(2.8rem, 7vw, 4rem);
+    font-size: 2.8rem;
     font-weight: 800;
     color: var(--brand-lime);
     letter-spacing: -0.03em;
     line-height: 1;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     text-shadow: 0 0 40px rgba(200,230,74,0.15);
   }
   .hero-card .metric-context {
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.4;
   }
   .hero-card .metric-raw {
     display: inline-block;
-    margin-top: 10px;
-    padding: 5px 14px;
+    margin-top: 6px;
+    padding: 3px 12px;
     background: rgba(255,255,255,0.04);
     border-radius: var(--radius-pill);
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 600;
     color: rgba(255,255,255,0.5);
   }
@@ -285,92 +273,80 @@
   .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    gap: 12px;
+    margin-bottom: 12px;
   }
   .stat-card {
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border-dark);
     border-radius: var(--radius-lg);
-    padding: 24px 22px;
+    padding: 16px 16px;
     position: relative;
     page-break-inside: avoid;
-    transition: border-color 0.2s ease;
-  }
-  .stat-card:hover {
-    border-color: rgba(255,255,255,0.14);
   }
   .stat-card .stat-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 17px;
-    margin-bottom: 14px;
+    font-size: 15px;
+    margin-bottom: 10px;
   }
   .stat-card .stat-label {
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-  .stat-card .stat-value {
-    font-size: 1.6rem;
-    font-weight: 800;
-    line-height: 1.1;
     margin-bottom: 4px;
   }
+  .stat-card .stat-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
   .stat-card .stat-raw {
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     color: var(--text-muted);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
   .stat-card .stat-bar {
-    height: 4px;
+    height: 3px;
     background: rgba(255,255,255,0.06);
     border-radius: 2px;
-    margin-top: 12px;
+    margin-top: 8px;
     overflow: hidden;
   }
   .stat-card .stat-bar-fill {
     height: 100%;
     border-radius: 2px;
-    transition: width 0.6s ease;
   }
 
-  /* Color variants for stat cards */
+  /* Color variants */
   .stat-card.positive .stat-value { color: var(--emerald); }
   .stat-card.positive .stat-icon { background: rgba(52,211,153,0.1); }
   .stat-card.positive .stat-bar-fill { background: var(--emerald); }
-
   .stat-card.lime .stat-value { color: var(--brand-lime); }
   .stat-card.lime .stat-icon { background: rgba(200,230,74,0.08); }
   .stat-card.lime .stat-bar-fill { background: var(--brand-lime); }
-
   .stat-card.neutral .stat-value { color: var(--text-secondary); }
   .stat-card.neutral .stat-icon { background: rgba(255,255,255,0.06); }
   .stat-card.neutral .stat-bar-fill { background: var(--text-muted); }
-
   .stat-card.teal .stat-value { color: var(--teal); }
   .stat-card.teal .stat-icon { background: rgba(0,179,159,0.1); }
   .stat-card.teal .stat-bar-fill { background: var(--teal); }
-
   .stat-card.sky .stat-value { color: var(--sky); }
   .stat-card.sky .stat-icon { background: rgba(96,165,250,0.1); }
   .stat-card.sky .stat-bar-fill { background: var(--sky); }
-
   .stat-card.rose .stat-value { color: var(--rose); }
   .stat-card.rose .stat-icon { background: rgba(251,113,133,0.1); }
   .stat-card.rose .stat-bar-fill { background: var(--rose); }
-
   .stat-card.amber .stat-value { color: var(--amber); }
   .stat-card.amber .stat-icon { background: rgba(251,191,36,0.1); }
   .stat-card.amber .stat-bar-fill { background: var(--amber); }
-
   .stat-card.lavender .stat-value { color: var(--lavender); }
   .stat-card.lavender .stat-icon { background: rgba(167,139,250,0.1); }
   .stat-card.lavender .stat-bar-fill { background: var(--lavender); }
@@ -392,30 +368,26 @@
     border-collapse: collapse;
   }
   .data-table thead th {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-muted);
-    padding: 14px 16px;
+    padding: 10px 12px;
     text-align: left;
     border-bottom: 1px solid var(--border-dark);
     background: rgba(255,255,255,0.015);
   }
   .data-table thead th:last-child,
   .data-table thead th:nth-child(3),
-  .data-table thead th:nth-child(4) {
-    text-align: right;
-  }
+  .data-table thead th:nth-child(4) { text-align: right; }
   .data-table tbody tr {
     border-bottom: 1px solid rgba(255,255,255,0.04);
   }
-  .data-table tbody tr:last-child {
-    border-bottom: none;
-  }
+  .data-table tbody tr:last-child { border-bottom: none; }
   .data-table td {
-    padding: 12px 16px;
-    font-size: 0.85rem;
+    padding: 8px 12px;
+    font-size: 0.78rem;
   }
   .data-table td:first-child {
     font-weight: 600;
@@ -423,66 +395,47 @@
   }
   .data-table td:last-child,
   .data-table td:nth-child(3),
-  .data-table td:nth-child(4) {
-    text-align: right;
-  }
-  .data-table .change-positive {
-    color: var(--emerald);
-    font-weight: 700;
-  }
-  .data-table .change-negative {
-    color: var(--rose);
-    font-weight: 700;
-  }
-  .data-table .change-neutral {
-    color: var(--text-muted);
-    font-weight: 600;
-  }
+  .data-table td:nth-child(4) { text-align: right; }
+  .data-table .change-positive { color: var(--emerald); font-weight: 700; }
+  .data-table .change-negative { color: var(--rose); font-weight: 700; }
+  .data-table .change-neutral { color: var(--text-muted); font-weight: 600; }
   .data-table .significance-badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 2px 8px;
     border-radius: var(--radius-pill);
-    font-size: 0.7rem;
+    font-size: 0.64rem;
     font-weight: 600;
     letter-spacing: 0.06em;
   }
-  .significance-badge.not-sig {
-    background: rgba(255,255,255,0.05);
-    color: var(--text-muted);
-  }
-  .significance-badge.sig {
-    background: rgba(52,211,153,0.12);
-    color: var(--emerald);
-  }
+  .significance-badge.not-sig { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+  .significance-badge.sig { background: rgba(52,211,153,0.12); color: var(--emerald); }
   .measure-icon {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
   }
   .measure-icon .icon {
-    width: 26px;
-    height: 26px;
-    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 11px;
     background: rgba(255,255,255,0.04);
     flex-shrink: 0;
   }
   .improved-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.78rem;
+    gap: 5px;
+    font-size: 0.72rem;
     color: var(--text-muted);
   }
-  .improved-badge.full {
-    color: var(--emerald);
-  }
+  .improved-badge.full { color: var(--emerald); }
   .improved-badge .bar {
-    width: 36px;
-    height: 4px;
+    width: 30px;
+    height: 3px;
     border-radius: 2px;
     background: rgba(255,255,255,0.08);
     overflow: hidden;
@@ -500,41 +453,41 @@
     background: linear-gradient(135deg, rgba(217,255,133,0.06) 0%, rgba(255,255,255,0.015) 100%);
     border: 1px solid rgba(217,255,133,0.15);
     border-radius: var(--radius-xl);
-    padding: 28px 32px;
-    margin-top: 1.5rem;
+    padding: 14px 18px;
+    margin-bottom: 8px;
     page-break-inside: avoid;
   }
   .insight-box h3 {
-    font-size: 1.05rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--text-main);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .insight-box p {
-    font-size: 0.9rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
-    line-height: 1.7;
+    line-height: 1.55;
   }
 
   /* ── Story arc connector ─────────────── */
   .story-connector {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin: 20px 0;
+    gap: 12px;
+    margin: 12px 0;
     page-break-inside: avoid;
   }
   .story-connector .connector-line {
-    width: 40px;
+    width: 30px;
     height: 1px;
     background: rgba(200,230,74,0.15);
     flex-shrink: 0;
   }
   .story-connector .connector-text {
-    font-size: 0.82rem;
+    font-size: 0.72rem;
     font-weight: 600;
     color: rgba(200,230,74,0.4);
     text-transform: uppercase;
@@ -550,33 +503,28 @@
   /* ── Footer ──────────────────────────── */
   .report-footer {
     text-align: center;
-    padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(1rem, 3vw, 2rem);
+    padding: 12px 0 10px;
     border-top: 1px solid rgba(255,255,255,0.04);
-    margin-top: 1.5rem;
+    margin-top: 8px;
   }
   .report-footer .brand {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(200,230,74,0.3);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .report-footer .disclaimer {
-    font-size: 0.7rem;
+    font-size: 0.64rem;
     color: rgba(255,255,255,0.25);
-    line-height: 1.6;
-    max-width: 700px;
+    line-height: 1.5;
+    max-width: 600px;
     margin: 0 auto;
   }
 
-  /* ── PDF page break helpers ──────────── */
-  .page-break-before {
-    page-break-before: always;
-  }
-  .no-break {
-    page-break-inside: avoid;
-  }
+  /* ── PDF helpers ─────────────────────── */
+  .no-break { page-break-inside: avoid; }
 
   /* ── Responsive ──────────────────────── */
   @media (max-width: 768px) {
@@ -591,8 +539,6 @@
     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .page-bg { position: absolute; height: 100%; }
     .page-bg::after { position: absolute; height: 100%; }
-    .stat-card:hover { border-color: var(--border-dark); }
-    .data-table tbody tr:hover { background: transparent; }
   }
 
   /* ── PDF-safe reveals ────────────────── */
@@ -612,7 +558,6 @@
     <h1>Optimize Her <span class="accent">Retreat</span></h1>
     <div class="divider"></div>
     <p class="subtitle">A 6-day study exploring how a multi-modal wellness retreat — combining movement, workshops, healing ceremonies, and spa therapies — impacts sleep quality, resting heart rate, and perceived stress among women.</p>
-
     <div class="protocol-chips">
       <div class="chip">
         <span class="chip-icon">&#128100;</span>
@@ -645,7 +590,7 @@
     </div>
     <h2>What happened to your body in 7 days</h2>
     <p class="narrative">
-      When you stepped into the retreat, your body was carrying the patterns of everyday life — a baseline heart rate shaped by daily stress, sleep cycles tuned to screens and schedules, and a nervous system running in its usual gear. Over seven days of morning movement, healing ceremonies, breathwork, and deep rest, <strong>your body started to recalibrate</strong>. The data from your wearable tells a clear story: your cardiovascular system downshifted into a calmer state, your sleep architecture reorganized toward more restorative stages, and the time you spent restless at night dropped meaningfully. Here is that story, told through your numbers.
+      When you arrived, your body carried the patterns of everyday life — a heart rate shaped by chronic stress, sleep cycles tuned to screens and schedules, a nervous system stuck in high gear. Over seven days of movement, healing ceremonies, breathwork, and deep rest, <strong>your body started to recalibrate</strong>. Your cardiovascular system downshifted, your sleep architecture reorganized toward more restorative stages, and restless time at night dropped. Here is that story, told through your numbers.
     </p>
   </section>
 
@@ -656,7 +601,7 @@
       <span>Top movers</span>
     </div>
     <h2>Your biggest changes</h2>
-    <p class="section-desc">The metrics that moved the most during the retreat, comparing your baseline period to the intervention period.</p>
+    <p class="section-desc">Comparing your baseline period to the intervention period.</p>
 
     <div class="hero-metrics">
       <div class="hero-card">
@@ -673,11 +618,11 @@
       </div>
     </div>
 
-    <p class="narrative" style="margin-top: 4px;">
-      These two headline numbers paint a picture of a nervous system actively unwinding. <em>REM sleep — the stage most closely linked to emotional processing and memory consolidation — increased by nearly a quarter</em>. At the same time, your overall heart rate dropped by almost 13 bpm, a magnitude of change that typically takes weeks of consistent exercise or meditation to achieve. Together, they suggest the retreat's blend of physical movement, breathwork, and reduced cognitive load gave your autonomic nervous system the signal it needed to shift from sympathetic ("fight or flight") toward parasympathetic ("rest and digest") dominance.
+    <p class="narrative">
+      These two numbers paint a picture of a nervous system unwinding. <em>REM sleep — the stage most tied to emotional processing and memory consolidation — jumped by nearly a quarter</em>. Meanwhile, your heart rate dropped almost 13 bpm, a shift that typically takes weeks of consistent exercise or meditation. Together, they suggest the retreat's blend of movement, breathwork, and reduced cognitive load pushed your autonomic nervous system from sympathetic ("fight or flight") toward parasympathetic ("rest and digest") dominance.
     </p>
 
-    <div class="stat-grid" style="margin-top: 24px;">
+    <div class="stat-grid">
       <div class="stat-card lime no-break">
         <div class="stat-icon">&#128164;</div>
         <div class="stat-label">Light Sleep</div>
@@ -701,19 +646,19 @@
       </div>
     </div>
 
-    <p class="narrative" style="margin-top: 4px;">
-      <strong>Why did total sleep stay flat while the stages shifted?</strong> Your body didn't necessarily sleep longer — it slept <em>smarter</em>. Light sleep minutes decreased while REM minutes climbed, and time spent awake in bed dropped by over 13 minutes per night. This redistribution is a hallmark of improved sleep architecture: the same total time in bed, but more of it spent in the stages that drive cognitive and physical recovery. The retreat activities — particularly evening ceremonies and reduced screen exposure — likely helped your body transition into sleep faster and stay in deeper stages longer.
+    <p class="narrative">
+      <strong>Total sleep stayed flat, but the stages shifted.</strong> Your body didn't sleep longer — it slept <em>smarter</em>. Light sleep decreased while REM climbed, and time awake in bed dropped by 13+ minutes. This redistribution is a hallmark of improved sleep architecture: same time in bed, but more of it spent in the stages that drive recovery. Evening ceremonies and reduced screen exposure likely helped your body transition into sleep faster and sustain deeper stages longer.
     </p>
   </section>
 
   <!-- ═══════════ SLEEP METRICS ═══════════ -->
-  <section class="section reveal page-break-before">
+  <section class="section reveal">
     <div class="section-label">
       <span class="dot"></span>
       <span>Sleep data</span>
     </div>
     <h2>Full sleep breakdown</h2>
-    <p class="section-desc">All sleep measures tracked during the retreat, comparing your baseline to intervention periods.</p>
+    <p class="section-desc">All sleep measures tracked, baseline vs. intervention.</p>
 
     <div class="data-table-wrap">
       <table class="data-table">
@@ -728,192 +673,92 @@
         </thead>
         <tbody>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#127769;</span>
-                REM Sleep
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#127769;</span> REM Sleep</span></td>
             <td><span class="change-positive">&#8599; 22.53%</span></td>
             <td>+16.64 min</td>
-            <td>
-              <span class="improved-badge full">
-                <span class="bar"><span class="bar-fill" style="width:100%"></span></span>
-                100%
-              </span>
-            </td>
+            <td><span class="improved-badge full"><span class="bar"><span class="bar-fill" style="width:100%"></span></span> 100%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#128164;</span>
-                Light Sleep
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#128164;</span> Light Sleep</span></td>
             <td><span class="change-positive">&#8599; 5.75%</span></td>
             <td>-15.59 min</td>
-            <td>
-              <span class="improved-badge full">
-                <span class="bar"><span class="bar-fill" style="width:100%"></span></span>
-                100%
-              </span>
-            </td>
+            <td><span class="improved-badge full"><span class="bar"><span class="bar-fill" style="width:100%"></span></span> 100%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#128524;</span>
-                Total Sleep
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#128524;</span> Total Sleep</span></td>
             <td><span class="change-positive">&#8599; 0.05%</span></td>
             <td>+0.20 min</td>
-            <td>
-              <span class="improved-badge full">
-                <span class="bar"><span class="bar-fill" style="width:100%"></span></span>
-                100%
-              </span>
-            </td>
+            <td><span class="improved-badge full"><span class="bar"><span class="bar-fill" style="width:100%"></span></span> 100%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#127752;</span>
-                Deep Sleep
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#127752;</span> Deep Sleep</span></td>
             <td><span class="change-negative">&#8600; 1.15%</span></td>
             <td>-0.86 min</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#9889;</span>
-                Sleep Efficiency
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#9889;</span> Sleep Efficiency</span></td>
             <td><span class="change-negative">&#8600; 1.48%</span></td>
             <td>-1.21%</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#127744;</span>
-                Sleeping Respiratory Rate
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#127744;</span> Respiratory Rate</span></td>
             <td><span class="change-negative">&#8600; 2.65%</span></td>
             <td>+0.42 bpm</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#128147;</span>
-                HRV
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#128147;</span> HRV</span></td>
             <td><span class="change-negative">&#8600; 3.91%</span></td>
             <td>-0.57 ms</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#128155;</span>
-                Lowest HR (Sleep)
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#128155;</span> Lowest HR (Sleep)</span></td>
             <td><span class="change-negative">&#8600; 6.31%</span></td>
             <td>+4.57 bpm</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#10084;&#65039;</span>
-                Average HR (Sleep)
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#10084;&#65039;</span> Avg HR (Sleep)</span></td>
             <td><span class="change-negative">&#8600; 6.32%</span></td>
             <td>+5.04 bpm</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
           <tr>
-            <td>
-              <span class="measure-icon">
-                <span class="icon">&#9200;</span>
-                Time Awake
-              </span>
-            </td>
+            <td><span class="measure-icon"><span class="icon">&#9200;</span> Time Awake</span></td>
             <td><span class="change-positive">&#8600; 14.06%</span></td>
             <td>-13.24 min</td>
-            <td>
-              <span class="improved-badge">
-                <span class="bar"><span class="bar-fill" style="width:0%"></span></span>
-                0%
-              </span>
-            </td>
+            <td><span class="improved-badge"><span class="bar"><span class="bar-fill" style="width:0%"></span></span> 0%</span></td>
             <td><span class="significance-badge not-sig">Not Significant</span></td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p class="narrative" style="margin-top: 20px;">
-      <strong>Reading between the rows.</strong> The table above reveals an interesting pattern: the metrics most tied to <em>sleep architecture</em> (REM, light sleep distribution, time awake) improved, while metrics tied to <em>nighttime cardiovascular load</em> (sleeping heart rate, lowest HR, HRV) showed slight unfavorable shifts. This is not contradictory — it is a common signature of what researchers call the <strong>"adaptation phase."</strong> When the body is actively recalibrating to a new environment, altitude, diet, and physical demands, the cardiovascular system may work slightly harder at night even as sleep quality improves. Think of it as your body doing maintenance work — rewiring its stress response takes energy, and the heart reflects that temporary cost. A longer retreat window would likely show these cardiovascular markers catching up as the nervous system fully settles into its new baseline.
+    <p class="narrative" style="margin-top: 14px;">
+      <strong>The pattern in the data:</strong> metrics tied to <em>sleep architecture</em> (REM, light sleep, time awake) improved, while <em>nighttime cardiovascular</em> markers (sleeping HR, lowest HR, HRV) shifted slightly unfavorably. This is consistent with what researchers call the <strong>"adaptation phase"</strong> — when the body recalibrates to a new environment, altitude, diet, and physical demands, the cardiovascular system works slightly harder at night even as sleep quality improves. Think of it as maintenance work: rewiring the stress response takes energy. A longer retreat would likely show these cardiovascular markers catching up.
     </p>
   </section>
 
   <!-- ═══════════ HEALTH / RECOVERY ═══════════ -->
-  <section class="section reveal page-break-before">
+  <section class="section reveal">
     <div class="section-label">
       <span class="dot"></span>
       <span>Health &amp; recovery</span>
     </div>
     <h2>Heart rate and recovery</h2>
-    <p class="section-desc">How the retreat impacted your cardiovascular metrics and recovery indicators.</p>
+    <p class="section-desc">Cardiovascular metrics and recovery indicators.</p>
 
     <div class="stat-grid">
       <div class="stat-card positive no-break">
@@ -946,10 +791,7 @@
     </div>
 
     <p class="narrative">
-      <strong>The headline number is encouraging:</strong> your average heart rate dropped by nearly 13 bpm across the study period. This is a substantial shift that suggests your overall autonomic tone moved toward a calmer state — likely driven by the retreat's combination of breathwork, reduced caffeine and stimulant intake, physical movement, and removal from daily stressors.
-    </p>
-    <p class="narrative" style="margin-top: 12px;">
-      <strong>The nuance is in the nighttime metrics.</strong> Your sleeping heart rate and lowest HR during sleep both ticked upward, and HRV dipped slightly. This may seem contradictory, but it is consistent with a body in active recovery. Intensive retreat activities — healing ceremonies, emotional processing workshops, spa therapies, and physical movement — can temporarily elevate nighttime cardiovascular activity as the body processes the day's stimuli. <em>This is your body healing, not struggling.</em> Research on meditation retreats shows a similar pattern: HRV often dips in the first week before rebounding higher than baseline in weeks two and three, as the nervous system completes its recalibration.
+      <strong>The headline is encouraging:</strong> your average heart rate dropped nearly 13 bpm — likely driven by breathwork, reduced caffeine, movement, and removal from daily stressors. <strong>The nuance is in nighttime metrics.</strong> Sleeping HR and lowest HR ticked upward while HRV dipped slightly. This is consistent with a body in active recovery — intensive retreat activities (healing ceremonies, emotional workshops, spa therapies) can temporarily elevate nighttime cardiovascular activity as the body processes stimuli. <em>This is your body healing, not struggling.</em> Research on meditation retreats shows HRV often dips in week one before rebounding higher than baseline in weeks two and three.
     </p>
   </section>
 
@@ -961,68 +803,68 @@
     </div>
     <h2>Connecting the dots</h2>
 
-    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.25rem;">
+    <div class="insight-box" style="margin-top: 4px;">
       <h3>&#127769; REM sleep saw the largest positive shift</h3>
-      <p>Your REM sleep increased by 22.53%, translating to an additional 16.64 minutes per night on average. REM sleep is critical for emotional regulation, memory consolidation, and cognitive recovery. <strong>Why it likely happened:</strong> Retreat environments reduce two of the biggest REM suppressors — alcohol consumption and late-night screen exposure. Combined with physically active days and intentional wind-down rituals, your brain had the ideal conditions to prioritize REM cycles. This is often the first sleep metric to respond to lifestyle changes, and the magnitude here suggests your body was especially responsive.</p>
+      <p>+22.53% (+16.64 min/night). REM is critical for emotional regulation and memory consolidation. <strong>Why it likely happened:</strong> retreat environments reduce the two biggest REM suppressors — alcohol and late-night screens. Combined with physically active days and intentional wind-down rituals, your brain had ideal conditions to prioritize REM cycles.</p>
     </div>
 
-    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.25rem; border-color: rgba(0,179,159,0.15); background: linear-gradient(135deg, rgba(0,179,159,0.05) 0%, rgba(255,255,255,0.015) 100%);">
+    <div class="insight-box" style="border-color: rgba(0,179,159,0.15); background: linear-gradient(135deg, rgba(0,179,159,0.05) 0%, rgba(255,255,255,0.015) 100%);">
       <h3>&#10084;&#65039; Average heart rate dropped substantially</h3>
-      <p>Your average heart rate decreased by 12.76% (down 12.54 bpm). <strong>Why it likely happened:</strong> The retreat removed chronic stressors — work deadlines, decision fatigue, commuting, constant connectivity — and replaced them with parasympathetic-activating practices like breathwork, spa therapies, and nature immersion. Your cardiovascular system responded by downregulating. A drop of this magnitude in just 7 days suggests your baseline may have been elevated by cumulative stress, and the retreat provided the "permission" your nervous system needed to stand down.</p>
+      <p>-12.76% (-12.54 bpm). <strong>Why it likely happened:</strong> the retreat removed chronic stressors (work, commuting, connectivity) and replaced them with parasympathetic-activating practices. A drop this large in 7 days suggests your baseline was elevated by cumulative stress, and the retreat gave your nervous system permission to stand down.</p>
     </div>
 
-    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.25rem; border-color: rgba(96,165,250,0.15); background: linear-gradient(135deg, rgba(96,165,250,0.04) 0%, rgba(255,255,255,0.015) 100%);">
+    <div class="insight-box" style="border-color: rgba(96,165,250,0.15); background: linear-gradient(135deg, rgba(96,165,250,0.04) 0%, rgba(255,255,255,0.015) 100%);">
       <h3>&#9200; You spent 14% less time awake at night</h3>
-      <p>Time awake during sleep dropped by 14.06% (-13.24 minutes). <strong>Why it likely happened:</strong> Nighttime wakefulness is strongly correlated with cognitive arousal — the "racing mind" effect. The retreat's combination of physical exhaustion from movement sessions, emotional release from healing ceremonies, and absence of late-night phone scrolling likely allowed your nervous system to settle more fully into sustained sleep. Less fragmented sleep also explains why REM improved — uninterrupted sleep cycles allow the brain to complete full 90-minute cycles and reach later-stage REM more consistently.</p>
+      <p>-14.06% (-13.24 min). <strong>Why it likely happened:</strong> nighttime wakefulness correlates with cognitive arousal — the "racing mind" effect. Physical exhaustion from movement, emotional release from ceremonies, and no late-night scrolling allowed your nervous system to sustain sleep. Less fragmentation also explains the REM gain — uninterrupted cycles let the brain reach later-stage REM more consistently.</p>
     </div>
 
-    <div class="insight-box" style="margin-top: 0; margin-bottom: 1.25rem; border-color: rgba(251,113,133,0.12); background: linear-gradient(135deg, rgba(251,113,133,0.04) 0%, rgba(255,255,255,0.015) 100%);">
+    <div class="insight-box" style="border-color: rgba(251,113,133,0.12); background: linear-gradient(135deg, rgba(251,113,133,0.04) 0%, rgba(255,255,255,0.015) 100%);">
       <h3>&#128147; HRV dipped slightly — and that is okay</h3>
-      <p>Your heart rate variability decreased by 3.91% (-0.57 ms), which may feel counterintuitive alongside other improvements. <strong>Why it likely happened:</strong> HRV is highly sensitive to acute physical and emotional load. Retreat activities — cold plunge, emotional workshops, new movement patterns, altitude changes — all place short-term demands on the autonomic nervous system. HRV typically shows a "dip then rise" pattern during intensive wellness interventions. The small magnitude (-0.57 ms) suggests this is a transient adaptation response, not a concerning trend. A follow-up measurement 1–2 weeks post-retreat would likely show HRV rebounding above baseline.</p>
+      <p>-3.91% (-0.57 ms). <strong>Why it likely happened:</strong> HRV is highly sensitive to acute physical and emotional load. Cold plunge, emotional workshops, new movement patterns, and altitude changes all place short-term demands on the autonomic nervous system. The small magnitude suggests a transient adaptation, not a concern. A follow-up 1–2 weeks post-retreat would likely show HRV rebounding above baseline.</p>
     </div>
 
-    <div class="insight-box" style="margin-top: 0; border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.02);">
+    <div class="insight-box" style="border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.02);">
       <h3>&#128202; A note on statistical significance</h3>
-      <p>None of the metrics reached statistical significance in this report. This is expected with a short 7-day study window and individual-level data — single-participant studies inherently lack the statistical power of group analyses. The trends are directionally promising and internally consistent (sleep architecture improved, cardiovascular markers show an active adaptation pattern). A longer study period or a larger group study would provide the statistical power to confirm these patterns with confidence.</p>
+      <p>None of the metrics reached statistical significance — expected with a 7-day window and individual-level data. The trends are directionally promising and internally consistent. A longer study or larger group would provide the power to confirm these patterns.</p>
     </div>
   </section>
 
   <!-- ═══════════ STUDY PROTOCOL ═══════════ -->
-  <section class="section reveal page-break-before">
+  <section class="section reveal">
     <div class="section-label">
       <span class="dot"></span>
       <span>Study protocol</span>
     </div>
     <h2>How this was measured</h2>
-    <p class="section-desc">Transparency is a core part of every Reputable study. Here is exactly how we tracked your data.</p>
+    <p class="section-desc">Transparency is core to every Reputable study.</p>
 
-    <div class="stat-grid" style="grid-template-columns: repeat(2, 1fr);">
-      <div class="stat-card neutral no-break">
+    <div class="stat-grid" style="grid-template-columns: repeat(2, 1fr); gap: 10px;">
+      <div class="stat-card neutral no-break" style="padding: 14px 14px;">
         <div class="stat-icon">&#128197;</div>
         <div class="stat-label">Study Design</div>
-        <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
-          Pre/post observational study comparing a baseline period to the 6-day retreat intervention window. Biometric data collected continuously via wearable device.
+        <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55;">
+          Pre/post observational study comparing baseline to the 6-day retreat intervention. Biometric data collected continuously via wearable.
         </div>
       </div>
-      <div class="stat-card neutral no-break">
+      <div class="stat-card neutral no-break" style="padding: 14px 14px;">
         <div class="stat-icon">&#128203;</div>
         <div class="stat-label">Activities Tracked</div>
-        <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
-          <strong style="color: var(--text-primary);">Daily retreat rhythm:</strong> Morning movement, workshops, healing ceremonies, spa therapies, evening ceremonies, and daily check-ins via the Reputable app.
+        <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55;">
+          <strong style="color: var(--text-primary);">Daily rhythm:</strong> Morning movement, workshops, healing ceremonies, spa therapies, evening ceremonies, and check-ins via Reputable app.
         </div>
       </div>
-      <div class="stat-card neutral no-break">
+      <div class="stat-card neutral no-break" style="padding: 14px 14px;">
         <div class="stat-icon">&#128200;</div>
         <div class="stat-label">Biometric Endpoints</div>
-        <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
-          Sleep quality (REM, deep, light, total), heart rate (average, lowest), HRV, sleep efficiency, respiratory rate, and time awake — tracked 24/7 via wearable.
+        <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55;">
+          Sleep (REM, deep, light, total), heart rate (avg, lowest), HRV, sleep efficiency, respiratory rate, time awake — 24/7 via wearable.
         </div>
       </div>
-      <div class="stat-card neutral no-break">
+      <div class="stat-card neutral no-break" style="padding: 14px 14px;">
         <div class="stat-icon">&#128202;</div>
         <div class="stat-label">Statistical Method</div>
-        <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
-          Statistical significance determined via T-tests between baseline and intervention periods. Sample size calculator: power = 0.8, significance level = 0.05, allocation ratio = 1:1.
+        <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55;">
+          T-tests between baseline and intervention. Power = 0.8, significance = 0.05, allocation 1:1.
         </div>
       </div>
     </div>
@@ -1033,8 +875,8 @@
     <div class="brand">Optimize Her &middot; Powered by Reputable</div>
     <p class="disclaimer">
       This report presents individual-level data from a single participant. Results reflect personal biometric changes during the study period and should not be generalized.
-      All findings are stated as averages comparing baseline to intervention. Statistical significance is determined through T-tests between baseline and intervention periods.
-      <br><br>reputable.health
+      All findings stated as averages comparing baseline to intervention. Statistical significance determined via T-tests.
+      &nbsp;&middot;&nbsp; reputable.health
     </p>
   </footer>
 
