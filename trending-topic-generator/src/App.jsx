@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import ApprovalQueue from './ApprovalQueue'
 import './App.css'
+import './ApprovalQueue.css'
 
 const PLATFORM_TONE = {
   linkedin: 'professional, data-driven thought leadership for DTC brand founders',
@@ -63,6 +65,9 @@ function App() {
   const [refreshInterval, setRefreshInterval] = useState(30) // minutes
   const [countdown, setCountdown] = useState(0) // seconds remaining
   const [lastUpdated, setLastUpdated] = useState(null)
+  const [currentView, setCurrentView] = useState('generator') // 'generator' | 'queue'
+  const [bufferTokenInput, setBufferTokenInput] = useState(() => getStoredKey('buffer_token', ''))
+  const [githubTokenInput, setGithubTokenInput] = useState(() => getStoredKey('github_token', ''))
   const refreshTimerRef = useRef(null)
   const countdownRef = useRef(null)
 
@@ -73,6 +78,8 @@ function App() {
   const saveKeys = () => {
     localStorage.setItem('anthropic_key', anthropicKeyInput)
     localStorage.setItem('google_key', googleKeyInput)
+    localStorage.setItem('buffer_token', bufferTokenInput)
+    localStorage.setItem('github_token', githubTokenInput)
     setShowSettings(false)
   }
 
@@ -306,6 +313,27 @@ function App() {
           </p>
         </header>
 
+        <div className="nav-bar">
+          <button
+            className={`nav-btn ${currentView === 'generator' ? 'active' : ''}`}
+            onClick={() => setCurrentView('generator')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            Generate
+          </button>
+          <button
+            className={`nav-btn ${currentView === 'queue' ? 'active' : ''}`}
+            onClick={() => setCurrentView('queue')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+            Queue
+          </button>
+        </div>
+
         <button className="settings-toggle" onClick={() => setShowSettings(!showSettings)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="3" />
@@ -336,10 +364,38 @@ function App() {
                 placeholder="AIza..."
               />
             </div>
+            <h3 style={{ marginTop: '20px' }}>Automation</h3>
+            <p className="settings-note">Connect Buffer to auto-schedule approved posts. GitHub token enables queue management.</p>
+            <div className="settings-field">
+              <label>Buffer Access Token <span className="optional">(for auto-scheduling)</span></label>
+              <input
+                type="password"
+                value={bufferTokenInput}
+                onChange={e => setBufferTokenInput(e.target.value)}
+                placeholder="1/abc..."
+              />
+            </div>
+            <div className="settings-field">
+              <label>GitHub Token <span className="optional">(for queue management)</span></label>
+              <input
+                type="password"
+                value={githubTokenInput}
+                onChange={e => setGithubTokenInput(e.target.value)}
+                placeholder="ghp_..."
+              />
+            </div>
             <button className="generate-btn" onClick={saveKeys}>Save keys</button>
           </div>
         )}
 
+        {currentView === 'queue' ? (
+          <ApprovalQueue
+            onBack={() => setCurrentView('generator')}
+            bufferToken={bufferTokenInput}
+            githubToken={githubTokenInput}
+          />
+        ) : (
+        <>
         <div className="controls">
           <div className="toggle-group">
             <button
@@ -715,6 +771,8 @@ function App() {
             </svg>
             Add your Google API key in <strong>Settings</strong> above to enable one-click image generation with Google Imagen (500 free images/day)
           </div>
+        )}
+        </>
         )}
 
         <footer className="footer">
