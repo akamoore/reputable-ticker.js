@@ -66,8 +66,19 @@ async function generateForPlatform(client, platformKey) {
   if (fenceMatch) jsonText = fenceMatch[1].trim()
   // If response still has preamble text, extract the JSON array
   if (!jsonText.startsWith('[')) {
-    const arrayMatch = jsonText.match(/\[[\s\S]*\]/)
-    if (arrayMatch) jsonText = arrayMatch[0]
+    const start = jsonText.indexOf('[')
+    if (start !== -1) {
+      // Find the matching closing bracket by counting nesting depth
+      let depth = 0
+      for (let i = start; i < jsonText.length; i++) {
+        if (jsonText[i] === '[') depth++
+        else if (jsonText[i] === ']') depth--
+        if (depth === 0) {
+          jsonText = jsonText.substring(start, i + 1)
+          break
+        }
+      }
+    }
   }
   return JSON.parse(jsonText)
 }
