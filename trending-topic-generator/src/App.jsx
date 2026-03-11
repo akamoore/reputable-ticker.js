@@ -99,7 +99,8 @@ function App() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 3000,
+        max_tokens: 16000,
+        system: 'You are a JSON API. After performing any research, you MUST respond with ONLY a raw JSON array. No preamble, no explanation, no markdown fences — just the JSON array starting with [ and ending with ].',
         tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 2 }],
         messages: [{ role: 'user', content: prompt }]
       })
@@ -114,28 +115,37 @@ function App() {
     }
 
     const data = await response.json()
-    const textBlock = data.content.find(block => block.type === 'text')
-    if (!textBlock) throw new Error('No text response received from API')
+    // Detect truncated responses — the most common cause of JSON parse errors
+    if (data.stop_reason === 'max_tokens') {
+      throw new Error('Response was cut off (too long). Please try again — if this keeps happening, reduce the number of topics.')
+    }
+    // Collect all text blocks — with web search, Claude may return multiple
+    const textBlocks = data.content.filter(block => block.type === 'text')
+    if (!textBlocks.length) throw new Error('No text response received from API')
 
-    let jsonText = textBlock.text.trim()
+    const fullText = textBlocks.map(b => b.text).join('\n')
+
+    // Try to extract a JSON array from the combined text
+    let jsonText = fullText.trim()
     // Strip markdown code fences if present
     const fenceMatch = jsonText.match(/```(?:json)?\s*([\s\S]*?)```/)
     if (fenceMatch) jsonText = fenceMatch[1].trim()
     // If response still has preamble text, extract the JSON array
     if (!jsonText.startsWith('[')) {
       const start = jsonText.indexOf('[')
-      if (start !== -1) {
-        // Find the matching closing bracket by counting nesting depth
-        let depth = 0
-        for (let i = start; i < jsonText.length; i++) {
-          if (jsonText[i] === '[') depth++
-          else if (jsonText[i] === ']') depth--
-          if (depth === 0) {
-            jsonText = jsonText.substring(start, i + 1)
-            break
-          }
-        }
+      if (start === -1) {
+        throw new Error('No JSON array found in response. Please try again.')
       }
+      // Find the matching closing bracket by counting nesting depth
+      let depth = 0
+      let end = -1
+      for (let i = start; i < jsonText.length; i++) {
+        if (jsonText[i] === '[') depth++
+        else if (jsonText[i] === ']') depth--
+        if (depth === 0) { end = i; break }
+      }
+      if (end === -1) throw new Error('Malformed JSON array in response. Please try again.')
+      jsonText = jsonText.substring(start, end + 1)
     }
     return JSON.parse(jsonText)
   }

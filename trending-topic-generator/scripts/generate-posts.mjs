@@ -52,11 +52,14 @@ Return ONLY a JSON array of 4 objects with keys:
 async function generateForPlatform(client, platformKey) {
   const response = await client.messages.create({
     model: 'claude-sonnet-4-20250514',
-    max_tokens: 3000,
+    max_tokens: 16000,
     tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 2 }],
     messages: [{ role: 'user', content: PLATFORM_PROMPT(platformKey) }]
   })
 
+  if (response.stop_reason === 'max_tokens') {
+    throw new Error(`Response truncated for ${platformKey} — increase max_tokens or reduce prompt complexity`)
+  }
   const textBlock = response.content.find(block => block.type === 'text')
   if (!textBlock) throw new Error(`No text response for ${platformKey}`)
 
