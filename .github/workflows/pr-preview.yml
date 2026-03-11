@@ -1,0 +1,83 @@
+name: PR Preview
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: trending-topic-generator/package-lock.json
+
+      - name: Install and build
+        working-directory: trending-topic-generator
+        env:
+          VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare preview directory
+        run: |
+          mkdir -p _preview/trending-topic-generator
+          cp -r trending-topic-generator/dist/* _preview/trending-topic-generator/
+          cp *.html _preview/
+          cp *.jpg _preview/ 2>/dev/null || true
+          cp *.pdf _preview/ 2>/dev/null || true
+          cp -r images _preview/images 2>/dev/null || true
+          cp -r docs _preview/docs 2>/dev/null || true
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-preview-pr-${{ github.event.pull_request.number }}
+          path: _preview
+          retention-days: 7
+
+      - name: Find existing comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: "Preview Build"
+
+      - name: Post or update PR comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## Preview Build
+
+            Build successful for commit ${{ github.event.pull_request.head.sha }}.
+
+            **Download the preview artifact to review locally:**
+
+            1. Go to the [Actions run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) page
+            2. Download the **site-preview-pr-${{ github.event.pull_request.number }}** artifact
+            3. Unzip and open `index.html` or `trending-topic-generator/index.html`
+
+            Or run this to download via CLI:
+            ```bash
+            gh run download ${{ github.run_id }} -n site-preview-pr-${{ github.event.pull_request.number }}
+            ```
+
+            ---
+            *Updated: ${{ github.event.pull_request.head.sha }}*
