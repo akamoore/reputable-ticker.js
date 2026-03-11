@@ -41,6 +41,7 @@ jobs:
         run: |
           mkdir -p _site/trending-topic-generator
           cp -r trending-topic-generator/dist/* _site/trending-topic-generator/
+          cp index.html _site/
 
       - uses: actions/configure-pages@v4
 
