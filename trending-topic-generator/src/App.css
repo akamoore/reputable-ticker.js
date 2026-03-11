@@ -607,6 +607,57 @@ h1 {
   line-height: 1.4;
 }
 
+.virality-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.virality-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.virality-going_viral {
+  background: rgba(251, 113, 133, 0.15);
+  border: 1px solid rgba(251, 113, 133, 0.4);
+  color: #FB7185;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.virality-recently_viral {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #FBBF24;
+}
+
+.virality-emerging {
+  background: rgba(200, 230, 74, 0.1);
+  border: 1px solid rgba(200, 230, 74, 0.3);
+  color: #C8E64A;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 4px rgba(251, 113, 133, 0.2); }
+  50% { box-shadow: 0 0 12px rgba(251, 113, 133, 0.4); }
+}
+
+.virality-signals {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
 .card-body {
   font-size: 0.88rem;
   color: var(--text-muted);

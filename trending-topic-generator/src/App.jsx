@@ -31,10 +31,12 @@ function buildPrompt(platformKey) {
   const now = new Date()
   const year = now.getFullYear()
   const month = now.toLocaleString('en-US', { month: 'long' })
-  return `Today is ${month} ${year}. Search for trending DTC health/wellness/supplement topics from ${year} only (past 1-2 weeks). IMPORTANT: Only use sources published in ${year} — ignore anything from 2025 or earlier. Then return exactly 4 ready-to-post ${p.label} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${p.tone}.
+  return `Today is ${month} ${year}. Search for DTC health/wellness/supplement topics from ${year} that are currently going viral OR have recently gone viral (past 1-2 weeks). Prioritize topics with high social engagement — look for stories blowing up on social media, news that just broke, controversial studies, viral creator posts, or rapidly spreading health trends. IMPORTANT: Only use sources published in ${year} — ignore anything from 2025 or earlier. Then return exactly 4 ready-to-post ${p.label} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${p.tone}.
 
 Return ONLY a JSON array of 4 objects with keys:
 - "trend": the trending topic (1 sentence)
+- "virality_stage": one of "going_viral" (actively spreading right now, past 24-72 hours), "recently_viral" (peaked in the past 1-2 weeks), or "emerging" (gaining momentum, not yet peaked) — assess how far along the virality curve this topic is
+- "virality_signals": a brief explanation of WHY this is viral — cite specific evidence like: number of social shares, media outlets covering it, celebrity/influencer mentions, Reddit/Twitter threads, Google Trends spike, or controversy driving engagement (1-2 sentences)
 - "post_text": the FULL post text ready to copy-paste (${p.postLength})
 - "source_title": title of the article/source you found
 - "source_url": URL of the source article
@@ -557,6 +559,24 @@ function App() {
                 <div className="card-section">
                   <span className="card-label">TREND</span>
                   <p className="card-trend">{topic.trend}</p>
+                  {topic.virality_stage && (
+                    <div className="virality-row">
+                      <span className={`virality-badge virality-${topic.virality_stage}`}>
+                        {topic.virality_stage === 'going_viral' && (
+                          <><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg> Going viral</>
+                        )}
+                        {topic.virality_stage === 'recently_viral' && (
+                          <><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg> Recently viral</>
+                        )}
+                        {topic.virality_stage === 'emerging' && (
+                          <><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg> Emerging</>
+                        )}
+                      </span>
+                      {topic.virality_signals && (
+                        <span className="virality-signals">{topic.virality_signals}</span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="card-section post-section">
