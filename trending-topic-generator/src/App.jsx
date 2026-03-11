@@ -92,6 +92,43 @@ Return ONLY a JSON array of 4 objects with keys:
     }
   }
 
+  const formatForMunch = (topic) => {
+    let text = topic.post_text
+    if (topic.hashtags && topic.hashtags.length > 0) {
+      text += '\n\n' + topic.hashtags.map(t => `#${t}`).join(' ')
+    }
+    if (topic.suggested_tags && topic.suggested_tags.length > 0) {
+      text += '\n\n' + topic.suggested_tags.join(' ')
+    }
+    return text
+  }
+
+  const exportAllForMunch = () => {
+    if (!results) return
+    const text = results.map((topic, i) => {
+      const divider = `━━━ Post ${i + 1} of ${results.length} ━━━`
+      let block = divider + '\n\n'
+      block += topic.post_text
+      if (topic.hashtags && topic.hashtags.length > 0) {
+        block += '\n\n' + topic.hashtags.map(t => `#${t}`).join(' ')
+      }
+      if (topic.suggested_tags && topic.suggested_tags.length > 0) {
+        block += '\n\n' + topic.suggested_tags.join(' ')
+      }
+      if (topic.best_time) {
+        block += `\n\nBest time: ${topic.best_time}`
+      }
+      if (topic.image_direction) {
+        block += `\n\nImage prompt: ${topic.image_direction}`
+      }
+      return block
+    }).join('\n\n\n')
+    navigator.clipboard.writeText(text)
+    setCopiedIndex(-1)
+    setCopiedField('munch-all')
+    setTimeout(() => { setCopiedIndex(null); setCopiedField(null) }, 2500)
+  }
+
   const copyToClipboard = (text, index, field = 'post') => {
     navigator.clipboard.writeText(text)
     setCopiedIndex(index)
@@ -162,6 +199,18 @@ Return ONLY a JSON array of 4 objects with keys:
         )}
 
         {results && (
+          <>
+          <div className="export-bar">
+            <button className="export-all-btn" onClick={exportAllForMunch}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" />
+                <polyline points="16 6 12 2 8 6" />
+                <line x1="12" y1="2" x2="12" y2="15" />
+              </svg>
+              {copiedIndex === -1 && copiedField === 'munch-all' ? 'Copied all 4 posts!' : 'Export all to Munch Studio'}
+            </button>
+            <span className="export-hint">Copies all posts with hashtags, tags, timing, and image prompts</span>
+          </div>
           <div className="results-grid">
             {results.map((topic, index) => (
               <div key={index} className="topic-card">
@@ -175,27 +224,51 @@ Return ONLY a JSON array of 4 objects with keys:
                 <div className="card-section post-section">
                   <span className="card-label">FULL POST</span>
                   <p className="card-post">{topic.post_text}</p>
-                  <button
-                    className="copy-btn copy-btn-primary"
-                    onClick={() => copyToClipboard(topic.post_text, index, 'post')}
-                  >
-                    {copiedIndex === index && copiedField === 'post' ? (
-                      <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Copied
-                      </>
-                    ) : (
-                      <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                        </svg>
-                        Copy full post
-                      </>
-                    )}
-                  </button>
+                  <div className="post-actions">
+                    <button
+                      className="copy-btn copy-btn-primary"
+                      onClick={() => copyToClipboard(topic.post_text, index, 'post')}
+                    >
+                      {copiedIndex === index && copiedField === 'post' ? (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                          </svg>
+                          Copy post only
+                        </>
+                      )}
+                    </button>
+                    <button
+                      className="copy-btn munch-btn"
+                      onClick={() => copyToClipboard(formatForMunch(topic), index, 'munch')}
+                    >
+                      {copiedIndex === index && copiedField === 'munch' ? (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Copied for Munch
+                        </>
+                      ) : (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" />
+                            <polyline points="16 6 12 2 8 6" />
+                            <line x1="12" y1="2" x2="12" y2="15" />
+                          </svg>
+                          Copy for Munch
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="card-section engagement-section">
@@ -315,6 +388,7 @@ Return ONLY a JSON array of 4 objects with keys:
               </div>
             ))}
           </div>
+          </>
         )}
 
         <footer className="footer">

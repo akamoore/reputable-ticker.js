@@ -226,6 +226,65 @@ h1 {
   font-size: 0.9rem;
 }
 
+/* Export bar */
+.export-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.export-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1.75rem;
+  background: rgba(0,179,159,0.12);
+  border: 1px solid rgba(0,179,159,0.3);
+  border-radius: var(--radius-pill);
+  color: #00B39F;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.export-all-btn:hover {
+  background: rgba(0,179,159,0.2);
+  border-color: #00B39F;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0,179,159,0.2);
+}
+
+.export-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Post actions row */
+.post-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Munch button */
+.munch-btn {
+  background: rgba(0,179,159,0.1);
+  border-color: rgba(0,179,159,0.3);
+  color: #00B39F;
+}
+
+.munch-btn:hover {
+  background: rgba(0,179,159,0.18);
+  border-color: #00B39F;
+}
+
 /* Results grid */
 .results-grid {
   display: grid;
