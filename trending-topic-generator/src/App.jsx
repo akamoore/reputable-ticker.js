@@ -41,6 +41,12 @@ Return ONLY a JSON array of 4 objects with keys:
 - "image_direction": a detailed visual direction for the ${p.imageFormat} — describe the composition, colors, text overlay, format (${p.imageDims}), mood, and any specific elements to include. Be specific enough that a designer or AI image tool could produce it.`
 }
 
+function getStoredKey(name, envFallback) {
+  const stored = localStorage.getItem(name)
+  if (stored) return stored
+  return envFallback || ''
+}
+
 function App() {
   const [platform, setPlatform] = useState('linkedin')
   const [results, setResults] = useState(null)
@@ -50,10 +56,19 @@ function App() {
   const [copiedField, setCopiedField] = useState(null)
   const [viewPlatform, setViewPlatform] = useState('linkedin')
   const [generatingImages, setGeneratingImages] = useState({})
+  const [showSettings, setShowSettings] = useState(false)
+  const [anthropicKeyInput, setAnthropicKeyInput] = useState(() => getStoredKey('anthropic_key', import.meta.env.VITE_ANTHROPIC_API_KEY))
+  const [googleKeyInput, setGoogleKeyInput] = useState(() => getStoredKey('google_key', import.meta.env.VITE_GOOGLE_API_KEY))
 
-  const anthropicKey = import.meta.env.VITE_ANTHROPIC_API_KEY
-  const googleKey = import.meta.env.VITE_GOOGLE_API_KEY
-  const hasImageGen = googleKey && googleKey !== 'your-google-api-key-here'
+  const anthropicKey = anthropicKeyInput
+  const googleKey = googleKeyInput
+  const hasImageGen = googleKey && googleKey !== 'your-google-api-key-here' && googleKey.length > 0
+
+  const saveKeys = () => {
+    localStorage.setItem('anthropic_key', anthropicKeyInput)
+    localStorage.setItem('google_key', googleKeyInput)
+    setShowSettings(false)
+  }
 
   const callClaude = async (prompt) => {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -96,7 +111,7 @@ function App() {
     setResults(null)
 
     if (!anthropicKey || anthropicKey === 'your-api-key-here') {
-      setError('Please set your Anthropic API key in the .env file (VITE_ANTHROPIC_API_KEY)')
+      setError('Please add your Anthropic API key in Settings (gear icon above)')
       setLoading(false)
       return
     }
@@ -241,6 +256,40 @@ function App() {
             Find what's buzzing in DTC health and wellness — get ready-to-post ideas tailored to your platform.
           </p>
         </header>
+
+        <button className="settings-toggle" onClick={() => setShowSettings(!showSettings)}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+          Settings
+        </button>
+
+        {showSettings && (
+          <div className="settings-panel">
+            <h3>API Keys</h3>
+            <p className="settings-note">Keys are stored in your browser only — never sent to any server except the API providers.</p>
+            <div className="settings-field">
+              <label>Anthropic API Key <span className="required">(required)</span></label>
+              <input
+                type="password"
+                value={anthropicKeyInput}
+                onChange={e => setAnthropicKeyInput(e.target.value)}
+                placeholder="sk-ant-..."
+              />
+            </div>
+            <div className="settings-field">
+              <label>Google API Key <span className="optional">(optional — for image generation)</span></label>
+              <input
+                type="password"
+                value={googleKeyInput}
+                onChange={e => setGoogleKeyInput(e.target.value)}
+                placeholder="AIza..."
+              />
+            </div>
+            <button className="generate-btn" onClick={saveKeys}>Save keys</button>
+          </div>
+        )}
 
         <div className="controls">
           <div className="toggle-group">
@@ -576,7 +625,7 @@ function App() {
               <line x1="12" y1="16" x2="12" y2="12" />
               <line x1="12" y1="8" x2="12.01" y2="8" />
             </svg>
-            Add <code>VITE_GOOGLE_API_KEY</code> to your .env file to enable one-click image generation with Google Imagen (500 free images/day)
+            Add your Google API key in <strong>Settings</strong> above to enable one-click image generation with Google Imagen (500 free images/day)
           </div>
         )}
 

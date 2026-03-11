@@ -129,6 +129,100 @@ h1 {
   margin: 0 auto;
 }
 
+/* Settings */
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 auto 1.5rem;
+  padding: 0.4rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-toggle:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text-main);
+}
+
+.settings-panel {
+  max-width: 480px;
+  margin: 0 auto 2rem;
+  padding: 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+}
+
+.settings-panel h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.settings-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.settings-field {
+  margin-bottom: 14px;
+}
+
+.settings-field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.settings-field .required {
+  color: var(--brand-lime);
+  font-weight: 500;
+}
+
+.settings-field .optional {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.settings-field input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-body);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-family: monospace;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.settings-field input:focus {
+  border-color: var(--lime-border);
+}
+
+.settings-field input::placeholder {
+  color: rgba(255,255,255,0.2);
+}
+
+.settings-panel .generate-btn {
+  margin-top: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
 /* Controls */
 .controls {
   display: flex;
