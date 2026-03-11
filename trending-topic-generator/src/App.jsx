@@ -37,7 +37,7 @@ function App() {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 2048,
+          max_tokens: 3000,
           tools: [{
             type: 'web_search_20250305',
             name: 'web_search',
@@ -55,7 +55,9 @@ Return ONLY a JSON array of 4 objects with keys:
 - "hashtags": array of 5-8 relevant trending hashtags (without # prefix)
 - "suggested_tags": array of 2-4 ${platform === 'linkedin' ? 'LinkedIn company/person names' : 'Instagram handles'} to tag — real, relevant accounts (journalists, brands, thought leaders in the space) that could amplify reach
 - "cta_type": one of "question", "poll", "hot_take", "share_request" — the engagement mechanic used in the post
-- "best_time": suggested best day/time to post this for maximum engagement (e.g. "Tuesday 8-9am EST")`
+- "best_time": suggested best day/time to post this for maximum engagement (e.g. "Tuesday 8-9am EST")
+- "viral_strategy": a specific, actionable tip for how THIS particular post could go viral — reference a tactic (duet/stitch potential, controversial take, data that surprises, piggyback a news cycle, comment-bait structure, etc.) and explain WHY it would work for this topic (2-3 sentences)
+- "image_direction": a detailed visual direction for the ${platform === 'linkedin' ? 'LinkedIn image or graphic' : 'Instagram image, carousel, or Reel thumbnail'} — describe the composition, colors, text overlay, format (${platform === 'linkedin' ? 'single image 1200x627, infographic, or chart' : 'square 1080x1080, carousel slides, or Reel'}), mood, and any specific elements to include. Be specific enough that a designer or AI image tool could produce it.`
           }]
         })
       })
@@ -253,6 +255,38 @@ Return ONLY a JSON array of 4 objects with keys:
                     )}
                   </div>
                 </div>
+
+                {topic.viral_strategy && (
+                  <div className="card-section viral-section">
+                    <span className="card-label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                      </svg>
+                      VIRAL STRATEGY
+                    </span>
+                    <p className="card-body">{topic.viral_strategy}</p>
+                  </div>
+                )}
+
+                {topic.image_direction && (
+                  <div className="card-section image-section">
+                    <span className="card-label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                      </svg>
+                      IMAGE DIRECTION
+                    </span>
+                    <p className="card-body">{topic.image_direction}</p>
+                    <button
+                      className="copy-btn"
+                      onClick={() => copyToClipboard(topic.image_direction, index, 'image')}
+                    >
+                      {copiedIndex === index && copiedField === 'image' ? 'Copied' : 'Copy prompt'}
+                    </button>
+                  </div>
+                )}
 
                 {topic.source_url && (
                   <div className="card-section source-section">
