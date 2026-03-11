@@ -41,7 +41,11 @@ jobs:
         run: |
           mkdir -p _site/trending-topic-generator
           cp -r trending-topic-generator/dist/* _site/trending-topic-generator/
-          cp index.html _site/
+          cp *.html _site/
+          cp *.jpg _site/ 2>/dev/null || true
+          cp *.pdf _site/ 2>/dev/null || true
+          cp -r images _site/images 2>/dev/null || true
+          cp -r docs _site/docs 2>/dev/null || true
 
       - uses: actions/configure-pages@v4
 
