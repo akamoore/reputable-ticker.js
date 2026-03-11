@@ -296,7 +296,7 @@ h1 {
   line-height: 1.6;
 }
 
-.hook-section {
+.post-section {
   background: var(--lime-bg);
   border: 1px solid var(--lime-border);
   border-radius: var(--radius-md);
@@ -304,12 +304,57 @@ h1 {
   margin-top: 1rem;
 }
 
-.card-hook {
-  font-size: 0.92rem;
-  font-weight: 500;
+.card-post {
+  font-size: 0.88rem;
+  font-weight: 400;
   color: var(--text-main);
-  line-height: 1.5;
-  margin-bottom: 10px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  white-space: pre-line;
+}
+
+.source-section {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.source-section .card-label {
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #74B9FF;
+  font-size: 0.82rem;
+  text-decoration: none;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-link:hover {
+  color: #60A5FA;
+  text-decoration: underline;
+}
+
+.copy-btn-primary {
+  background: rgba(200,230,74,0.12);
+  border-color: var(--lime-border);
+  color: var(--brand-lime);
+}
+
+.copy-btn-primary:hover {
+  background: rgba(200,230,74,0.2);
+  border-color: var(--brand-lime);
 }
 
 .copy-btn {

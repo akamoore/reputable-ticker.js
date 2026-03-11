@@ -12,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [copiedIndex, setCopiedIndex] = useState(null)
+  const [copiedField, setCopiedField] = useState(null)
 
   const generateTopics = async () => {
     setLoading(true)
@@ -44,9 +45,13 @@ function App() {
           }],
           messages: [{
             role: 'user',
-            content: `Search for trending DTC health/wellness/supplement topics from the past 1-2 weeks. Then return exactly 4 ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'} post ideas for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${PLATFORM_TONE[platform]}.
+            content: `Search for trending DTC health/wellness/supplement topics from the past 1-2 weeks. Then return exactly 4 ready-to-post ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${PLATFORM_TONE[platform]}.
 
-Return ONLY a JSON array of 4 objects with keys: "trend" (1 sentence), "why_it_matters" (2-3 sentences), "post_angle" (1-2 sentences), "hook_line" (punchy opening line).`
+Return ONLY a JSON array of 4 objects with keys:
+- "trend": the trending topic (1 sentence)
+- "post_text": the FULL post text ready to copy-paste into ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'} (${platform === 'linkedin' ? '150-250 words, with line breaks, hashtags at end' : '80-150 words, with emojis, hashtags at end'})
+- "source_title": title of the article/source you found (for citation)
+- "source_url": the URL of the source article`
           }]
         })
       })
@@ -81,10 +86,11 @@ Return ONLY a JSON array of 4 objects with keys: "trend" (1 sentence), "why_it_m
     }
   }
 
-  const copyToClipboard = (text, index) => {
+  const copyToClipboard = (text, index, field = 'post') => {
     navigator.clipboard.writeText(text)
     setCopiedIndex(index)
-    setTimeout(() => setCopiedIndex(null), 2000)
+    setCopiedField(field)
+    setTimeout(() => { setCopiedIndex(null); setCopiedField(null) }, 2000)
   }
 
   return (
@@ -160,24 +166,14 @@ Return ONLY a JSON array of 4 objects with keys: "trend" (1 sentence), "why_it_m
                   <p className="card-trend">{topic.trend}</p>
                 </div>
 
-                <div className="card-section">
-                  <span className="card-label">WHY IT MATTERS</span>
-                  <p className="card-body">{topic.why_it_matters}</p>
-                </div>
-
-                <div className="card-section">
-                  <span className="card-label">POST ANGLE</span>
-                  <p className="card-body">{topic.post_angle}</p>
-                </div>
-
-                <div className="card-section hook-section">
-                  <span className="card-label">HOOK LINE</span>
-                  <p className="card-hook">{topic.hook_line}</p>
+                <div className="card-section post-section">
+                  <span className="card-label">FULL POST</span>
+                  <p className="card-post">{topic.post_text}</p>
                   <button
-                    className="copy-btn"
-                    onClick={() => copyToClipboard(topic.hook_line, index)}
+                    className="copy-btn copy-btn-primary"
+                    onClick={() => copyToClipboard(topic.post_text, index, 'post')}
                   >
-                    {copiedIndex === index ? (
+                    {copiedIndex === index && copiedField === 'post' ? (
                       <>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                           <polyline points="20 6 9 17 4 12" />
@@ -190,11 +186,51 @@ Return ONLY a JSON array of 4 objects with keys: "trend" (1 sentence), "why_it_m
                           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                           <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
                         </svg>
-                        Copy hook
+                        Copy full post
                       </>
                     )}
                   </button>
                 </div>
+
+                {topic.source_url && (
+                  <div className="card-section source-section">
+                    <span className="card-label">SOURCE</span>
+                    <a
+                      href={topic.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="source-link"
+                    >
+                      {topic.source_title || topic.source_url}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                    </a>
+                    <button
+                      className="copy-btn"
+                      onClick={() => copyToClipboard(topic.source_url, index, 'source')}
+                    >
+                      {copiedIndex === index && copiedField === 'source' ? (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                          </svg>
+                          Copy link
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
