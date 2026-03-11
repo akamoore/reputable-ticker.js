@@ -28,7 +28,10 @@ const PLATFORM_PROMPT = (p) => {
 
 function buildPrompt(platformKey) {
   const p = PLATFORM_PROMPT(platformKey)
-  return `Search for trending DTC health/wellness/supplement topics from the past 1-2 weeks. Then return exactly 4 ready-to-post ${p.label} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${p.tone}.
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.toLocaleString('en-US', { month: 'long' })
+  return `Today is ${month} ${year}. Search for trending DTC health/wellness/supplement topics from ${year} only (past 1-2 weeks). IMPORTANT: Only use sources published in ${year} — ignore anything from 2025 or earlier. Then return exactly 4 ready-to-post ${p.label} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${p.tone}.
 
 Return ONLY a JSON array of 4 objects with keys:
 - "trend": the trending topic (1 sentence)
