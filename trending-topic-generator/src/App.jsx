@@ -113,8 +113,14 @@ function App() {
     if (!textBlock) throw new Error('No text response received from API')
 
     let jsonText = textBlock.text.trim()
-    const jsonMatch = jsonText.match(/```(?:json)?\s*([\s\S]*?)```/)
-    if (jsonMatch) jsonText = jsonMatch[1].trim()
+    // Strip markdown code fences if present
+    const fenceMatch = jsonText.match(/```(?:json)?\s*([\s\S]*?)```/)
+    if (fenceMatch) jsonText = fenceMatch[1].trim()
+    // If response still has preamble text, extract the JSON array
+    if (!jsonText.startsWith('[')) {
+      const arrayMatch = jsonText.match(/\[[\s\S]*\]/)
+      if (arrayMatch) jsonText = arrayMatch[0]
+    }
     return JSON.parse(jsonText)
   }
 
