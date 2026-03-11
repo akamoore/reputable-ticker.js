@@ -38,6 +38,9 @@ jobs:
 
       - name: Build
         working-directory: trending-topic-generator
+        env:
+          VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
+          VITE_GOOGLE_API_KEY: ${{ secrets.VITE_GOOGLE_API_KEY }}
         run: npm run build
 
       - uses: actions/configure-pages@v5
