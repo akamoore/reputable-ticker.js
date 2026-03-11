@@ -35,11 +35,16 @@ jobs:
           npm ci
           npm run build
 
+      - name: Prepare deploy directory
+        run: |
+          mkdir -p _site/trending-topic-generator
+          cp -r trending-topic-generator/dist/* _site/trending-topic-generator/
+
       - uses: actions/configure-pages@v4
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: trending-topic-generator/dist
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
