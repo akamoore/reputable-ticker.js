@@ -52,8 +52,8 @@ function App() {
   const [generatingImages, setGeneratingImages] = useState({})
 
   const anthropicKey = import.meta.env.VITE_ANTHROPIC_API_KEY
-  const openaiKey = import.meta.env.VITE_OPENAI_API_KEY
-  const hasOpenAI = openaiKey && openaiKey !== 'your-openai-api-key-here'
+  const googleKey = import.meta.env.VITE_GOOGLE_API_KEY
+  const hasImageGen = googleKey && googleKey !== 'your-google-api-key-here'
 
   const callClaude = async (prompt) => {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -122,26 +122,29 @@ function App() {
   }
 
   const generateImage = async (imageDirection, topicIndex) => {
-    if (!hasOpenAI) return
+    if (!hasImageGen) return
     const key = `${viewPlatform}-${topicIndex}`
     setGeneratingImages(prev => ({ ...prev, [key]: { loading: true } }))
 
     try {
       const isIg = viewPlatform === 'instagram'
-      const response = await fetch('https://api.openai.com/v1/images/generations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${openaiKey}`
-        },
-        body: JSON.stringify({
-          model: 'dall-e-3',
-          prompt: `Professional social media graphic for a health/wellness brand. ${imageDirection}. Clean, modern design. No text overlays unless specified.`,
-          n: 1,
-          size: isIg ? '1024x1024' : '1792x1024',
-          quality: 'standard'
-        })
-      })
+      const aspectRatio = isIg ? '1:1' : '16:9'
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/imagen-4-fast:predict?key=${googleKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            instances: [{
+              prompt: `Professional social media graphic for a health/wellness brand. ${imageDirection}. Clean, modern design. No text overlays unless specified.`
+            }],
+            parameters: {
+              sampleCount: 1,
+              aspectRatio
+            }
+          })
+        }
+      )
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}))
@@ -149,9 +152,13 @@ function App() {
       }
 
       const data = await response.json()
+      const imageBytes = data.predictions?.[0]?.bytesBase64Encoded
+      if (!imageBytes) throw new Error('No image returned from API')
+
+      const imageUrl = `data:image/png;base64,${imageBytes}`
       setGeneratingImages(prev => ({
         ...prev,
-        [key]: { loading: false, url: data.data[0].url }
+        [key]: { loading: false, url: imageUrl }
       }))
     } catch (err) {
       setGeneratingImages(prev => ({
@@ -488,7 +495,7 @@ function App() {
                       >
                         {copiedIndex === index && copiedField === 'image' ? 'Copied' : 'Copy prompt'}
                       </button>
-                      {hasOpenAI && !imgState?.url && (
+                      {hasImageGen && !imgState?.url && (
                         <button
                           className="copy-btn generate-img-btn"
                           onClick={() => generateImage(topic.image_direction, index)}
@@ -504,7 +511,7 @@ function App() {
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M12 3v18M3 12h18" />
                               </svg>
-                              Generate with DALL-E
+                              Generate with Imagen
                             </>
                           )}
                         </button>
@@ -562,14 +569,14 @@ function App() {
           </>
         )}
 
-        {!hasOpenAI && results && (
+        {!hasImageGen && results && (
           <div className="api-hint">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="16" x2="12" y2="12" />
               <line x1="12" y1="8" x2="12.01" y2="8" />
             </svg>
-            Add <code>VITE_OPENAI_API_KEY</code> to your .env file to enable one-click image generation with DALL-E 3
+            Add <code>VITE_GOOGLE_API_KEY</code> to your .env file to enable one-click image generation with Google Imagen (500 free images/day)
           </div>
         )}
 
