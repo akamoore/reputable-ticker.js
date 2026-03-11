@@ -99,7 +99,7 @@ function App() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 3000,
+        max_tokens: 16000,
         system: 'You are a JSON API. After performing any research, you MUST respond with ONLY a raw JSON array. No preamble, no explanation, no markdown fences — just the JSON array starting with [ and ending with ].',
         tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 2 }],
         messages: [{ role: 'user', content: prompt }]
@@ -115,6 +115,10 @@ function App() {
     }
 
     const data = await response.json()
+    // Detect truncated responses — the most common cause of JSON parse errors
+    if (data.stop_reason === 'max_tokens') {
+      throw new Error('Response was cut off (too long). Please try again — if this keeps happening, reduce the number of topics.')
+    }
     // Collect all text blocks — with web search, Claude may return multiple
     const textBlocks = data.content.filter(block => block.type === 'text')
     if (!textBlocks.length) throw new Error('No text response received from API')
