@@ -31,6 +31,8 @@ jobs:
 
       - name: Install and build
         working-directory: trending-topic-generator
+        env:
+          VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
         run: |
           npm ci
           npm run build
