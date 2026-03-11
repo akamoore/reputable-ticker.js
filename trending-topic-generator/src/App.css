@@ -291,6 +291,106 @@ h1 {
   cursor: not-allowed;
 }
 
+/* Auto-refresh controls */
+.auto-refresh-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.auto-refresh-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.45rem 1.1rem;
+  background: transparent;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auto-refresh-toggle:hover {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--text-main);
+}
+
+.auto-refresh-toggle.active {
+  background: rgba(52,211,153,0.1);
+  border-color: rgba(52,211,153,0.3);
+  color: #34D399;
+}
+
+.auto-refresh-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.auto-refresh-dot.active {
+  background: #34D399;
+  box-shadow: 0 0 8px rgba(52,211,153,0.6);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.interval-selector {
+  display: flex;
+  gap: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+}
+
+.interval-btn {
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.interval-btn.active {
+  background: rgba(52,211,153,0.15);
+  color: #34D399;
+}
+
+.interval-btn:hover:not(.active) {
+  color: var(--text-main);
+}
+
+.countdown-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #34D399;
+  font-variant-numeric: tabular-nums;
+}
+
+.last-updated {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
 /* Spinner */
 .spinner {
   width: 18px;

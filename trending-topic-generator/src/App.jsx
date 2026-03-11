@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 
 const PLATFORM_TONE = {
@@ -59,6 +59,12 @@ function App() {
   const [showSettings, setShowSettings] = useState(false)
   const [anthropicKeyInput, setAnthropicKeyInput] = useState(() => getStoredKey('anthropic_key', import.meta.env.VITE_ANTHROPIC_API_KEY))
   const [googleKeyInput, setGoogleKeyInput] = useState(() => getStoredKey('google_key', import.meta.env.VITE_GOOGLE_API_KEY))
+  const [autoRefresh, setAutoRefresh] = useState(false)
+  const [refreshInterval, setRefreshInterval] = useState(30) // minutes
+  const [countdown, setCountdown] = useState(0) // seconds remaining
+  const [lastUpdated, setLastUpdated] = useState(null)
+  const refreshTimerRef = useRef(null)
+  const countdownRef = useRef(null)
 
   const anthropicKey = anthropicKeyInput
   const googleKey = googleKeyInput
@@ -129,11 +135,54 @@ function App() {
         setResults({ [platform]: topics })
         setViewPlatform(platform)
       }
+      setLastUpdated(new Date())
     } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
     }
+  }
+
+  const toggleAutoRefresh = useCallback(() => {
+    setAutoRefresh(prev => !prev)
+  }, [])
+
+  // Auto-refresh interval effect
+  useEffect(() => {
+    if (refreshTimerRef.current) clearInterval(refreshTimerRef.current)
+    if (countdownRef.current) clearInterval(countdownRef.current)
+
+    if (!autoRefresh) {
+      setCountdown(0)
+      return
+    }
+
+    const intervalMs = refreshInterval * 60 * 1000
+    setCountdown(refreshInterval * 60)
+
+    // Countdown ticker (every second)
+    countdownRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) return refreshInterval * 60
+        return prev - 1
+      })
+    }, 1000)
+
+    // Actual refresh
+    refreshTimerRef.current = setInterval(() => {
+      generateTopics()
+    }, intervalMs)
+
+    return () => {
+      clearInterval(refreshTimerRef.current)
+      clearInterval(countdownRef.current)
+    }
+  }, [autoRefresh, refreshInterval]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const formatCountdown = (seconds) => {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
   }
 
   const generateImage = async (imageDirection, topicIndex) => {
@@ -337,6 +386,45 @@ function App() {
               platform === 'both' ? 'Generate for LinkedIn + Instagram' : 'Generate trending topics'
             )}
           </button>
+
+          <div className="auto-refresh-controls">
+            <button
+              className={`auto-refresh-toggle ${autoRefresh ? 'active' : ''}`}
+              onClick={toggleAutoRefresh}
+            >
+              <span className={`auto-refresh-dot ${autoRefresh ? 'active' : ''}`} />
+              {autoRefresh ? 'Auto-refresh ON' : 'Auto-refresh'}
+            </button>
+
+            {autoRefresh && (
+              <>
+                <div className="interval-selector">
+                  {[15, 30, 60, 120].map(mins => (
+                    <button
+                      key={mins}
+                      className={`interval-btn ${refreshInterval === mins ? 'active' : ''}`}
+                      onClick={() => setRefreshInterval(mins)}
+                    >
+                      {mins < 60 ? `${mins}m` : `${mins / 60}h`}
+                    </button>
+                  ))}
+                </div>
+                <div className="countdown-display">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  Next refresh in {formatCountdown(countdown)}
+                </div>
+              </>
+            )}
+          </div>
+
+          {lastUpdated && (
+            <span className="last-updated">
+              Last updated: {lastUpdated.toLocaleTimeString()}
+            </span>
+          )}
         </div>
 
         {error && (
