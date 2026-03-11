@@ -49,9 +49,13 @@ function App() {
 
 Return ONLY a JSON array of 4 objects with keys:
 - "trend": the trending topic (1 sentence)
-- "post_text": the FULL post text ready to copy-paste into ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'} (${platform === 'linkedin' ? '150-250 words, with line breaks, hashtags at end' : '80-150 words, with emojis, hashtags at end'})
-- "source_title": title of the article/source you found (for citation)
-- "source_url": the URL of the source article`
+- "post_text": the FULL post text ready to copy-paste (${platform === 'linkedin' ? '150-250 words, line breaks between paragraphs, DO NOT include hashtags in the post body' : '80-150 words, with emojis, DO NOT include hashtags in the post body'})
+- "source_title": title of the article/source you found
+- "source_url": URL of the source article
+- "hashtags": array of 5-8 relevant trending hashtags (without # prefix)
+- "suggested_tags": array of 2-4 ${platform === 'linkedin' ? 'LinkedIn company/person names' : 'Instagram handles'} to tag — real, relevant accounts (journalists, brands, thought leaders in the space) that could amplify reach
+- "cta_type": one of "question", "poll", "hot_take", "share_request" — the engagement mechanic used in the post
+- "best_time": suggested best day/time to post this for maximum engagement (e.g. "Tuesday 8-9am EST")`
           }]
         })
       })
@@ -192,6 +196,64 @@ Return ONLY a JSON array of 4 objects with keys:
                   </button>
                 </div>
 
+                <div className="card-section engagement-section">
+                  <span className="card-label">ENGAGEMENT TOOLKIT</span>
+
+                  {topic.hashtags && topic.hashtags.length > 0 && (
+                    <div className="engagement-row">
+                      <span className="engagement-icon">#</span>
+                      <div className="hashtag-list">
+                        {topic.hashtags.map((tag, i) => (
+                          <span key={i} className="hashtag-chip" onClick={() => copyToClipboard(`#${tag}`, index, `tag-${i}`)}>
+                            #{tag}
+                            {copiedIndex === index && copiedField === `tag-${i}` && <span className="chip-copied">Copied</span>}
+                          </span>
+                        ))}
+                      </div>
+                      <button
+                        className="copy-btn"
+                        onClick={() => copyToClipboard(topic.hashtags.map(t => `#${t}`).join(' '), index, 'hashtags')}
+                      >
+                        {copiedIndex === index && copiedField === 'hashtags' ? 'Copied' : 'Copy all'}
+                      </button>
+                    </div>
+                  )}
+
+                  {topic.suggested_tags && topic.suggested_tags.length > 0 && (
+                    <div className="engagement-row">
+                      <span className="engagement-icon">@</span>
+                      <div className="tag-list">
+                        {topic.suggested_tags.map((tag, i) => (
+                          <span key={i} className="mention-chip" onClick={() => copyToClipboard(tag, index, `mention-${i}`)}>
+                            {tag}
+                            {copiedIndex === index && copiedField === `mention-${i}` && <span className="chip-copied">Copied</span>}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="engagement-meta">
+                    {topic.cta_type && (
+                      <span className="meta-badge cta-badge">
+                        {topic.cta_type === 'question' && 'Ask a question'}
+                        {topic.cta_type === 'poll' && 'Run a poll'}
+                        {topic.cta_type === 'hot_take' && 'Hot take'}
+                        {topic.cta_type === 'share_request' && 'Share request'}
+                      </span>
+                    )}
+                    {topic.best_time && (
+                      <span className="meta-badge time-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        {topic.best_time}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
                 {topic.source_url && (
                   <div className="card-section source-section">
                     <span className="card-label">SOURCE</span>
@@ -212,22 +274,7 @@ Return ONLY a JSON array of 4 objects with keys:
                       className="copy-btn"
                       onClick={() => copyToClipboard(topic.source_url, index, 'source')}
                     >
-                      {copiedIndex === index && copiedField === 'source' ? (
-                        <>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Copied
-                        </>
-                      ) : (
-                        <>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-                          </svg>
-                          Copy link
-                        </>
-                      )}
+                      {copiedIndex === index && copiedField === 'source' ? 'Copied' : 'Copy link'}
                     </button>
                   </div>
                 )}
