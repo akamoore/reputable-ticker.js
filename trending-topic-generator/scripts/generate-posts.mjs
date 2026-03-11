@@ -28,10 +28,16 @@ const PLATFORM_PROMPT = (platformKey) => {
     ? 'single image 1200x627, infographic, or chart'
     : 'square 1080x1080, carousel slides, or Reel'
 
-  return `Search for trending DTC health/wellness/supplement topics from the past 1-2 weeks. Then return exactly 4 ready-to-post ${label} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${tone}.
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.toLocaleString('en-US', { month: 'long' })
+
+  return `Today is ${month} ${year}. Search for DTC health/wellness/supplement topics from ${year} that are currently going viral OR have recently gone viral (past 1-2 weeks). Prioritize topics with high social engagement — look for stories blowing up on social media, news that just broke, controversial studies, viral creator posts, or rapidly spreading health trends. IMPORTANT: Only use sources published in ${year} — ignore anything from 2025 or earlier. Then return exactly 4 ready-to-post ${label} drafts for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${tone}.
 
 Return ONLY a JSON array of 4 objects with keys:
 - "trend": the trending topic (1 sentence)
+- "virality_stage": one of "going_viral" (actively spreading right now, past 24-72 hours), "recently_viral" (peaked in the past 1-2 weeks), or "emerging" (gaining momentum, not yet peaked) — assess how far along the virality curve this topic is
+- "virality_signals": a brief explanation of WHY this is viral — cite specific evidence like: number of social shares, media outlets covering it, celebrity/influencer mentions, Reddit/Twitter threads, Google Trends spike, or controversy driving engagement (1-2 sentences)
 - "post_text": the FULL post text ready to copy-paste (${postLength})
 - "source_title": title of the article/source you found
 - "source_url": URL of the source article
