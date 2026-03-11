@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import './App.css'
 
-const BRAND_CONTEXT = `Reputable Research Inc. runs real-world evidence studies for DTC health, wellness, and supplement brands. The product sits between research and marketing — it generates credible, evidence-backed claims brands can use. Key angles: low-cost research with zero risk, marketing asset backed by real evidence.`
-
-const PLATFORM_CONTEXT = {
-  linkedin: `Target audience: Marketing directors and brand founders at DTC supplement/wellness brands. Tone: professional, data-driven, strategic. Content style: thought leadership, industry insights, case-study teasers, provocative questions about evidence in marketing.`,
-  instagram: `Target audience: Health-conscious consumers and potential study participants. Tone: approachable, educational, curiosity-driven. Content style: carousel-ready tips, myth-busting, behind-the-scenes of studies, wellness trends explained simply.`
+const PLATFORM_TONE = {
+  linkedin: 'professional, data-driven thought leadership for DTC brand founders',
+  instagram: 'approachable, educational content for health-conscious consumers'
 }
 
 function App() {
@@ -38,36 +36,26 @@ function App() {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 4096,
+          max_tokens: 2048,
           tools: [{
             type: 'web_search_20250305',
             name: 'web_search',
-            max_uses: 5
+            max_uses: 2
           }],
           messages: [{
             role: 'user',
-            content: `You are a social media strategist for Reputable Research Inc.
+            content: `Search for trending DTC health/wellness/supplement topics from the past 1-2 weeks. Then return exactly 4 ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'} post ideas for Reputable Research (runs evidence-based wellness studies for brands). Tone: ${PLATFORM_TONE[platform]}.
 
-${BRAND_CONTEXT}
-
-Platform: ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'}
-${PLATFORM_CONTEXT[platform]}
-
-Search the web for the latest trending topics, news, and conversations in the DTC health, wellness, and supplement space (from the past 1-2 weeks). Look for regulatory changes, viral health claims, new ingredient trends, industry shifts, consumer behavior changes, or buzzy wellness topics.
-
-Based on what you find, return exactly 4 post ideas. For each, provide:
-1. **Trend**: The specific trending topic (1 sentence)
-2. **Why it matters**: Why this is relevant to Reputable's audience (2-3 sentences)
-3. **Post angle**: How to frame this as a ${platform === 'linkedin' ? 'LinkedIn' : 'Instagram'} post for Reputable (1-2 sentences)
-4. **Hook line**: The opening line of the post — punchy, scroll-stopping, ready to copy-paste
-
-Format your response as a JSON array with 4 objects, each having keys: "trend", "why_it_matters", "post_angle", "hook_line". Return ONLY the JSON array, no other text.`
+Return ONLY a JSON array of 4 objects with keys: "trend" (1 sentence), "why_it_matters" (2-3 sentences), "post_angle" (1-2 sentences), "hook_line" (punchy opening line).`
           }]
         })
       })
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}))
+        if (response.status === 429) {
+          throw new Error('Rate limit reached — please wait about a minute and try again.')
+        }
         throw new Error(errData.error?.message || `API error: ${response.status}`)
       }
 
