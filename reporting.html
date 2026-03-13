@@ -118,7 +118,13 @@
       color: var(--text-dim);
       border-bottom: 2px solid var(--border);
       white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
     }
+    th:hover { color: var(--text); }
+    th .sort-arrow { margin-left: 4px; font-size: 10px; opacity: 0.3; }
+    th.sort-active .sort-arrow { opacity: 1; color: var(--accent); }
     td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
     tr.row-outlier { background: var(--yellow-bg); }
@@ -390,6 +396,215 @@
       margin-top: 12px;
     }
     .crossyear-note strong { color: var(--accent); }
+    /* Live Data Sections */
+    .live-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .live-header h2 { margin-bottom: 0; }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: livePulse 2s infinite;
+    }
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .live-status {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+    .live-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .live-metric {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .live-metric .lm-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .live-metric .lm-value {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .live-metric .lm-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .live-metric .lm-breakdown {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .live-metric .lm-breakdown span strong {
+      color: var(--text);
+    }
+    .chart-canvas {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      margin: 12px 0;
+    }
+    .chart-bar-group {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 100%;
+      padding: 0 4px;
+    }
+    .chart-bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+    .chart-bar {
+      width: 100%;
+      border-radius: 3px 3px 0 0;
+      min-height: 2px;
+      transition: height 0.4s ease;
+    }
+    .chart-bar.spend { background: var(--blue); }
+    .chart-bar.clicks { background: var(--accent); opacity: 0.6; }
+    .chart-bar-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      max-height: 50px;
+      overflow: hidden;
+    }
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 8px;
+    }
+    .chart-legend-dot {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .funnel-wrap {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin: 16px 0;
+    }
+    .funnel-step {
+      flex: 1;
+      text-align: center;
+      padding: 16px 8px;
+      position: relative;
+      background: var(--surface2);
+    }
+    .funnel-step:first-child { border-radius: 10px 0 0 10px; }
+    .funnel-step:last-child { border-radius: 0 10px 10px 0; }
+    .funnel-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -1px;
+      top: 20%;
+      bottom: 20%;
+      width: 2px;
+      background: var(--border);
+    }
+    .funnel-step .fs-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .funnel-step .fs-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-top: 4px;
+    }
+    .funnel-step .fs-rate {
+      font-size: 10px;
+      color: var(--green);
+      margin-top: 4px;
+    }
+    .newsletter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .nl-stat {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .nl-stat .nl-value { font-size: 20px; font-weight: 700; }
+    .nl-stat .nl-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 2px; }
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .source-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .source-card .src-name { font-size: 13px; font-weight: 500; }
+    .source-card .src-val { font-size: 18px; font-weight: 700; color: var(--blue); }
+    .api-error-banner {
+      background: var(--red-bg);
+      border: 1px solid var(--red);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--red);
+      margin-bottom: 20px;
+      display: none;
+    }
+    .live-section-loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    .live-section-loading .spinner {
+      display: inline-block;
+      width: 24px; height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 768px) {
       body { padding: 12px; }
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -401,6 +616,11 @@
       .target-row .target-vals { text-align: left; }
       .pace-grid { grid-template-columns: 1fr; }
       .scorecard-grid { grid-template-columns: 1fr; }
+      .live-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .funnel-wrap { flex-direction: column; }
+      .funnel-step:first-child { border-radius: 10px 10px 0 0; }
+      .funnel-step:last-child { border-radius: 0 0 10px 10px; }
+      .funnel-step:not(:last-child)::after { display: none; }
     }
   </style>
 </head>
@@ -419,6 +639,25 @@
     <div><span class="badge badge-green">Live</span></div>
   </div>
 
+  <!-- API Error Banner -->
+  <div class="api-error-banner" id="api-error"></div>
+
+  <!-- Live Data from API -->
+  <div class="section" id="live-section">
+    <div class="live-header">
+      <div class="live-dot"></div>
+      <h2>Live Recruiting Data</h2>
+      <div class="live-status" id="live-status">Loading...</div>
+    </div>
+
+    <div id="live-content">
+      <div class="live-section-loading">
+        <div class="spinner"></div>
+        <div>Connecting to Reputable API...</div>
+      </div>
+    </div>
+  </div>
+
   <div class="metrics-grid" id="metrics-grid"></div>
 
   <div class="section" id="cost-analysis-section">
@@ -432,21 +671,21 @@
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Study Name</th>
-            <th>Type</th>
-            <th>Launch Date</th>
-            <th>End Date</th>
-            <th class="align-right">Ad Spend</th>
-            <th class="align-right">Leads</th>
-            <th class="align-right">Joined</th>
-            <th class="align-right">Onboarded</th>
-            <th class="align-right">Target</th>
-            <th class="align-right">CPO</th>
-            <th>Wearable</th>
-            <th class="align-right">Days</th>
-            <th>Manual Queue</th>
-            <th>Status</th>
+            <th data-sort="id"># <span class="sort-arrow">▲</span></th>
+            <th data-sort="name">Study Name <span class="sort-arrow">▲</span></th>
+            <th data-sort="type">Type <span class="sort-arrow">▲</span></th>
+            <th data-sort="launchDate">Launch Date <span class="sort-arrow">▲</span></th>
+            <th data-sort="endDate">End Date <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="spend">Ad Spend <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="leads">Leads <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="joined">Joined <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="onboarded">Onboarded <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="target">Target <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="cpo">CPO <span class="sort-arrow">▲</span></th>
+            <th data-sort="wearable">Wearable <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="days">Days <span class="sort-arrow">▲</span></th>
+            <th data-sort="manualQueue">Manual Queue <span class="sort-arrow">▲</span></th>
+            <th data-sort="status">Status <span class="sort-arrow">▲</span></th>
             <th>Notes</th>
           </tr>
         </thead>
@@ -937,8 +1176,53 @@
     return map[type] || type;
   }
 
+  // Table sorting state
+  var tableSortKey = null;
+  var tableSortAsc = true;
+
+  function sortStudies(studies) {
+    if (!tableSortKey) return studies;
+    var key = tableSortKey;
+    var asc = tableSortAsc;
+    var sorted = studies.slice().sort(function(a, b) {
+      var va, vb;
+      if (key === 'cpo') {
+        va = (a.spend > 0 && a.onboarded > 0) ? a.spend / a.onboarded : (a.spend === 0 ? 0 : Infinity);
+        vb = (b.spend > 0 && b.onboarded > 0) ? b.spend / b.onboarded : (b.spend === 0 ? 0 : Infinity);
+      } else if (key === 'id') {
+        va = a.id; vb = b.id;
+      } else {
+        va = a[key]; vb = b[key];
+      }
+      if (va == null) va = '';
+      if (vb == null) vb = '';
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      if (typeof va === 'boolean') { va = va ? 1 : 0; vb = vb ? 1 : 0; }
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }
+
+  function updateSortHeaders() {
+    var ths = $$('thead th[data-sort]');
+    for (var i = 0; i < ths.length; i++) {
+      var th = ths[i];
+      var arrow = th.querySelector('.sort-arrow');
+      if (th.getAttribute('data-sort') === tableSortKey) {
+        th.classList.add('sort-active');
+        arrow.textContent = tableSortAsc ? '▲' : '▼';
+      } else {
+        th.classList.remove('sort-active');
+        arrow.textContent = '▲';
+      }
+    }
+  }
+
   function renderCostTable(m, period) {
-    var studies = m.launched;
+    var studies = sortStudies(m.launched);
     $('#cost-analysis-title').textContent = 'Cost Analysis — ' + studies.length + ' Studies' + (period !== 'all' ? ' (' + period + ')' : '');
 
     var html = '';
@@ -978,6 +1262,7 @@
     foot += '<td class="align-right">' + fmtInt(m.totalTarget) + '</td>';
     foot += '<td class="align-right">—</td><td></td><td class="align-right">—</td><td></td><td></td><td></td></tr>';
     $('#cost-table-foot').innerHTML = foot;
+    updateSortHeaders();
 
     // CPO averages
     var avgHtml = '';
@@ -1346,18 +1631,273 @@
     $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Mar 13, 2026 · Year buckets based on launch date';
   }
 
+  // Track current period for re-sorting
+  var currentPeriod = 'all';
+
   // Bind filter buttons
   var btns = $$('.filter-btn');
   for (var i = 0; i < btns.length; i++) {
     btns[i].addEventListener('click', function() {
       for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
       this.classList.add('active');
-      render(this.getAttribute('data-filter'));
+      currentPeriod = this.getAttribute('data-filter');
+      render(currentPeriod);
+    });
+  }
+
+  // Bind sortable column headers
+  var sortThs = $$('thead th[data-sort]');
+  for (var i = 0; i < sortThs.length; i++) {
+    sortThs[i].addEventListener('click', function() {
+      var key = this.getAttribute('data-sort');
+      if (tableSortKey === key) {
+        tableSortAsc = !tableSortAsc;
+      } else {
+        tableSortKey = key;
+        tableSortAsc = true;
+      }
+      updateSortHeaders();
+      var m = computeMetrics(STUDIES, currentPeriod);
+      renderCostTable(m, currentPeriod);
+    });
+  }
+
+  // ============================================================
+  // LIVE API INTEGRATION
+  // ============================================================
+  var API_URL = 'https://operations.reputablehealth.net/api/recruiting';
+  var API_KEY = 'colleague:X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
+
+  function fmtK(n) {
+    if (n == null) return '—';
+    if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return '$' + (n / 1000).toFixed(1) + 'K';
+    return fmt(n);
+  }
+  function fmtN(n) {
+    if (n == null) return '—';
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return fmtInt(n);
+  }
+
+  function renderLiveData(data) {
+    var s = data.summary;
+    var html = '';
+
+    // Summary metric cards
+    html += '<h3>Spend & Performance</h3>';
+    html += '<div class="live-metrics-grid">';
+
+    html += '<div class="live-metric"><div class="lm-label">Ad Spend</div>';
+    html += '<div class="lm-value blue">' + fmt(s.totalSpend.month) + '</div>';
+    html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmt(s.totalSpend.yesterday) + '</strong></span>';
+    html += '<span>7d: <strong>' + fmt(s.totalSpend.week) + '</strong></span></div></div>';
+
+    html += '<div class="live-metric"><div class="lm-label">Ad Clicks</div>';
+    html += '<div class="lm-value">' + fmtN(s.totalClicks.month) + '</div>';
+    html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmtN(s.totalClicks.yesterday) + '</strong></span>';
+    html += '<span>7d: <strong>' + fmtN(s.totalClicks.week) + '</strong></span></div></div>';
+
+    html += '<div class="live-metric"><div class="lm-label">App Installs</div>';
+    html += '<div class="lm-value accent">' + fmtN(s.totalInstalls.month) + '</div>';
+    html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmtN(s.totalInstalls.yesterday) + '</strong></span>';
+    html += '<span>7d: <strong>' + fmtN(s.totalInstalls.week) + '</strong></span></div></div>';
+
+    html += '<div class="live-metric"><div class="lm-label">Cost Per Install</div>';
+    html += '<div class="lm-value">' + fmt(s.costPerInstall.month) + '</div>';
+    html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmt(s.costPerInstall.yesterday) + '</strong></span>';
+    html += '<span>7d: <strong>' + fmt(s.costPerInstall.week) + '</strong></span></div></div>';
+
+    html += '<div class="live-metric"><div class="lm-label">Onboarded</div>';
+    html += '<div class="lm-value green">' + fmtN(s.totalOnboarded.month) + '</div>';
+    html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmtN(s.totalOnboarded.yesterday) + '</strong></span>';
+    html += '<span>7d: <strong>' + fmtN(s.totalOnboarded.week) + '</strong></span></div></div>';
+
+    html += '<div class="live-metric"><div class="lm-label">Cost Per Onboard</div>';
+    html += '<div class="lm-value green">' + fmt(s.costPerOnboard.month) + '</div>';
+    html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmt(s.costPerOnboard.yesterday) + '</strong></span>';
+    html += '<span>7d: <strong>' + fmt(s.costPerOnboard.week) + '</strong></span></div></div>';
+
+    html += '<div class="live-metric"><div class="lm-label">Subscribers</div>';
+    html += '<div class="lm-value accent">' + fmtN(s.subscriberCount) + '</div>';
+    html += '<div class="lm-sub">Manychat messenger</div></div>';
+
+    html += '</div>';
+
+    // Recruiting Funnel
+    html += '<h3>Recruiting Funnel (Last 30 Days)</h3>';
+    var f = data.funnel;
+    var steps = [
+      { label: 'Ad Impressions', value: f.adImpressions },
+      { label: 'Ad Clicks', value: f.adClicks, rate: f.adImpressions > 0 ? ((f.adClicks / f.adImpressions) * 100).toFixed(1) + '% CTR' : null },
+      { label: 'Emails Sent', value: f.emailsSent },
+      { label: 'Email Opens', value: f.emailOpens, rate: f.emailsSent > 0 ? ((f.emailOpens / f.emailsSent) * 100).toFixed(1) + '% open' : null },
+      { label: 'App Installs', value: f.appInstalls, rate: f.adClicks > 0 ? ((f.appInstalls / f.adClicks) * 100).toFixed(1) + '% conv.' : null },
+      { label: 'Onboarded', value: f.onboarded, rate: f.appInstalls > 0 ? ((f.onboarded / f.appInstalls) * 100).toFixed(1) + '% conv.' : null }
+    ];
+
+    html += '<div class="funnel-wrap">';
+    steps.forEach(function(step) {
+      html += '<div class="funnel-step">';
+      html += '<div class="fs-value">' + fmtN(step.value) + '</div>';
+      html += '<div class="fs-label">' + step.label + '</div>';
+      if (step.rate) html += '<div class="fs-rate">' + step.rate + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Meta Ads Daily Chart
+    if (data.metaAds && data.metaAds.daily && data.metaAds.daily.length > 0) {
+      html += '<h3>Daily Ad Spend & Clicks (Last 30 Days)</h3>';
+      var daily = data.metaAds.daily;
+      var maxSpend = Math.max.apply(null, daily.map(function(d) { return d.spend; }));
+      var maxClicks = Math.max.apply(null, daily.map(function(d) { return d.clicks; }));
+
+      html += '<div class="chart-canvas"><div class="chart-bar-group">';
+      daily.forEach(function(d) {
+        var spendH = maxSpend > 0 ? Math.max((d.spend / maxSpend) * 170, 2) : 2;
+        var clickH = maxClicks > 0 ? Math.max((d.clicks / maxClicks) * 170, 2) : 2;
+        var dateLabel = d.date.slice(5); // MM-DD
+        html += '<div class="chart-bar-col">';
+        html += '<div class="chart-bar spend" style="height:' + spendH + 'px" title="' + d.date + ': ' + fmt(d.spend) + ' spend, ' + d.clicks + ' clicks"></div>';
+        html += '<div class="chart-bar clicks" style="height:' + clickH + 'px"></div>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+
+      html += '<div class="chart-legend">';
+      html += '<span><span class="chart-legend-dot" style="background:var(--blue)"></span>Spend</span>';
+      html += '<span><span class="chart-legend-dot" style="background:var(--accent);opacity:0.6"></span>Clicks</span>';
+      html += '<span style="margin-left:auto">Total: ' + fmt(data.metaAds.totals.spend) + ' spend · ' + fmtN(data.metaAds.totals.clicks) + ' clicks · ' + fmtN(data.metaAds.totals.impressions) + ' impressions</span>';
+      html += '</div>';
+    }
+
+    // Top Ads
+    if (data.metaAds && data.metaAds.ads && data.metaAds.ads.length > 0) {
+      html += '<h3>Top Ad Campaigns</h3>';
+      html += '<div class="table-wrap"><table><thead><tr>';
+      html += '<th>Campaign</th><th>Ad Name</th><th class="align-right">Spend</th><th class="align-right">Clicks</th><th class="align-right">CTR</th><th class="align-right">CPC</th><th class="align-right">Reach</th>';
+      html += '</tr></thead><tbody>';
+      data.metaAds.ads.forEach(function(ad) {
+        html += '<tr>';
+        html += '<td>' + esc(ad.campaignName) + '</td>';
+        html += '<td>' + esc(ad.adName) + '</td>';
+        html += '<td class="align-right">' + fmt(ad.spend) + '</td>';
+        html += '<td class="align-right">' + fmtInt(ad.clicks) + '</td>';
+        html += '<td class="align-right">' + ad.ctr.toFixed(2) + '%</td>';
+        html += '<td class="align-right">' + fmt(ad.cpc) + '</td>';
+        html += '<td class="align-right">' + fmtInt(ad.reach) + '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    // Newsletter
+    if (data.newsletter && data.newsletter.totals) {
+      html += '<h3>Newsletter Performance</h3>';
+      var nl = data.newsletter.totals;
+      var openRate = nl.delivered > 0 ? ((nl.opens / nl.delivered) * 100).toFixed(1) : '—';
+      var clickRate = nl.delivered > 0 ? ((nl.clicks / nl.delivered) * 100).toFixed(1) : '—';
+
+      html += '<div class="newsletter-grid">';
+      html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.sent) + '</div><div class="nl-label">Sent</div></div>';
+      html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.delivered) + '</div><div class="nl-label">Delivered</div></div>';
+      html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.opens) + '</div><div class="nl-label">Opens</div></div>';
+      html += '<div class="nl-stat"><div class="nl-value" style="color:var(--green)">' + openRate + '%</div><div class="nl-label">Open Rate</div></div>';
+      html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.clicks) + '</div><div class="nl-label">Clicks</div></div>';
+      html += '<div class="nl-stat"><div class="nl-value" style="color:var(--blue)">' + clickRate + '%</div><div class="nl-label">Click Rate</div></div>';
+      html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.bounces) + '</div><div class="nl-label">Bounces</div></div>';
+      html += '</div>';
+    }
+
+    // Install Sources
+    if (data.appsflyer && data.appsflyer.bySource && data.appsflyer.bySource.length > 0) {
+      html += '<h3>Install Sources</h3>';
+      html += '<div class="source-grid">';
+      data.appsflyer.bySource.forEach(function(src) {
+        html += '<div class="source-card"><span class="src-name">' + esc(src.source) + '</span>';
+        html += '<span class="src-val">' + fmtInt(src.installs) + '</span></div>';
+      });
+      html += '</div>';
+    }
+
+    // Onboarding by Study
+    if (data.onboarding && data.onboarding.byStudy && data.onboarding.byStudy.length > 0) {
+      html += '<h3>Live Onboarding by Study (Last 30 Days)</h3>';
+      html += '<div class="table-wrap"><table><thead><tr>';
+      html += '<th>Study</th><th class="align-right">Onboarded</th>';
+      html += '</tr></thead><tbody>';
+      data.onboarding.byStudy.forEach(function(st) {
+        html += '<tr><td>' + esc(st.studyName) + '</td>';
+        html += '<td class="align-right">' + fmtInt(st.onboarded) + '</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    // Campaign → Study Map
+    if (data.campaignStudyMap && data.campaignStudyMap.length > 0) {
+      html += '<h3>Campaign → Study Attribution</h3>';
+      html += '<div class="table-wrap"><table><thead><tr>';
+      html += '<th>Campaign</th><th>Study</th><th>Type</th><th class="align-right">Joins</th><th class="align-right">Onboarded</th>';
+      html += '</tr></thead><tbody>';
+      data.campaignStudyMap.forEach(function(c) {
+        html += '<tr>';
+        html += '<td>' + esc(c.campaignName) + '</td>';
+        html += '<td>' + esc(c.studyName) + '</td>';
+        html += '<td>' + esc(c.studyType) + '</td>';
+        html += '<td class="align-right">' + fmtInt(c.joins) + '</td>';
+        html += '<td class="align-right">' + fmtInt(c.onboarded) + '</td>';
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+
+    // Data Source Health
+    if (data.status) {
+      html += '<h3>Data Source Status</h3>';
+      html += '<div class="source-grid">';
+      var sourceNames = { metaAds: 'Meta Ads', manychat: 'Manychat', sendgrid: 'SendGrid', appsflyer: 'AppsFlyer', analytics: 'Google Analytics' };
+      Object.keys(data.status).forEach(function(key) {
+        var st = data.status[key];
+        var color = st === 'success' ? 'var(--green)' : st === 'not_configured' ? 'var(--text-dim)' : 'var(--red)';
+        var label = st === 'success' ? 'Connected' : st === 'not_configured' ? 'Not Configured' : st === 'rate_limited' ? 'Rate Limited' : 'Failed';
+        html += '<div class="source-card"><span class="src-name">' + (sourceNames[key] || key) + '</span>';
+        html += '<span style="font-size:12px;font-weight:600;color:' + color + '">' + label + '</span></div>';
+      });
+      html += '</div>';
+    }
+
+    $('#live-content').innerHTML = html;
+    $('#live-status').textContent = 'Updated ' + new Date().toLocaleTimeString();
+  }
+
+  function fetchLiveData() {
+    fetch(API_URL + '?days=30', {
+      headers: { 'x-api-key': API_KEY }
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('API returned ' + res.status);
+      return res.json();
+    })
+    .then(function(data) {
+      renderLiveData(data);
+    })
+    .catch(function(err) {
+      $('#live-content').innerHTML = '<div style="padding:20px;color:var(--text-dim);font-size:13px">' +
+        '<p style="margin-bottom:8px">Could not connect to the Reputable API.</p>' +
+        '<p style="font-size:11px;color:var(--red)">' + esc(err.message) + '</p>' +
+        '<p style="margin-top:12px;font-size:11px">The static dashboard data below is still accurate. Live data will appear once the API is reachable.</p></div>';
+      $('#live-status').textContent = 'Offline';
+      $('#live-status').style.color = 'var(--red)';
     });
   }
 
   // Initial render
   render('all');
+
+  // Fetch live data
+  fetchLiveData();
 })();
 </script>
 </body>
