@@ -118,7 +118,13 @@
       color: var(--text-dim);
       border-bottom: 2px solid var(--border);
       white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
     }
+    th:hover { color: var(--text); }
+    th .sort-arrow { margin-left: 4px; font-size: 10px; opacity: 0.3; }
+    th.sort-active .sort-arrow { opacity: 1; color: var(--accent); }
     td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     tr:last-child td { border-bottom: none; }
     tr.row-outlier { background: var(--yellow-bg); }
@@ -432,21 +438,21 @@
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Study Name</th>
-            <th>Type</th>
-            <th>Launch Date</th>
-            <th>End Date</th>
-            <th class="align-right">Ad Spend</th>
-            <th class="align-right">Leads</th>
-            <th class="align-right">Joined</th>
-            <th class="align-right">Onboarded</th>
-            <th class="align-right">Target</th>
-            <th class="align-right">CPO</th>
-            <th>Wearable</th>
-            <th class="align-right">Days</th>
-            <th>Manual Queue</th>
-            <th>Status</th>
+            <th data-sort="id"># <span class="sort-arrow">▲</span></th>
+            <th data-sort="name">Study Name <span class="sort-arrow">▲</span></th>
+            <th data-sort="type">Type <span class="sort-arrow">▲</span></th>
+            <th data-sort="launchDate">Launch Date <span class="sort-arrow">▲</span></th>
+            <th data-sort="endDate">End Date <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="spend">Ad Spend <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="leads">Leads <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="joined">Joined <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="onboarded">Onboarded <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="target">Target <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="cpo">CPO <span class="sort-arrow">▲</span></th>
+            <th data-sort="wearable">Wearable <span class="sort-arrow">▲</span></th>
+            <th class="align-right" data-sort="days">Days <span class="sort-arrow">▲</span></th>
+            <th data-sort="manualQueue">Manual Queue <span class="sort-arrow">▲</span></th>
+            <th data-sort="status">Status <span class="sort-arrow">▲</span></th>
             <th>Notes</th>
           </tr>
         </thead>
@@ -937,8 +943,53 @@
     return map[type] || type;
   }
 
+  // Table sorting state
+  var tableSortKey = null;
+  var tableSortAsc = true;
+
+  function sortStudies(studies) {
+    if (!tableSortKey) return studies;
+    var key = tableSortKey;
+    var asc = tableSortAsc;
+    var sorted = studies.slice().sort(function(a, b) {
+      var va, vb;
+      if (key === 'cpo') {
+        va = (a.spend > 0 && a.onboarded > 0) ? a.spend / a.onboarded : (a.spend === 0 ? 0 : Infinity);
+        vb = (b.spend > 0 && b.onboarded > 0) ? b.spend / b.onboarded : (b.spend === 0 ? 0 : Infinity);
+      } else if (key === 'id') {
+        va = a.id; vb = b.id;
+      } else {
+        va = a[key]; vb = b[key];
+      }
+      if (va == null) va = '';
+      if (vb == null) vb = '';
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      if (typeof va === 'boolean') { va = va ? 1 : 0; vb = vb ? 1 : 0; }
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }
+
+  function updateSortHeaders() {
+    var ths = $$('thead th[data-sort]');
+    for (var i = 0; i < ths.length; i++) {
+      var th = ths[i];
+      var arrow = th.querySelector('.sort-arrow');
+      if (th.getAttribute('data-sort') === tableSortKey) {
+        th.classList.add('sort-active');
+        arrow.textContent = tableSortAsc ? '▲' : '▼';
+      } else {
+        th.classList.remove('sort-active');
+        arrow.textContent = '▲';
+      }
+    }
+  }
+
   function renderCostTable(m, period) {
-    var studies = m.launched;
+    var studies = sortStudies(m.launched);
     $('#cost-analysis-title').textContent = 'Cost Analysis — ' + studies.length + ' Studies' + (period !== 'all' ? ' (' + period + ')' : '');
 
     var html = '';
@@ -978,6 +1029,7 @@
     foot += '<td class="align-right">' + fmtInt(m.totalTarget) + '</td>';
     foot += '<td class="align-right">—</td><td></td><td class="align-right">—</td><td></td><td></td><td></td></tr>';
     $('#cost-table-foot').innerHTML = foot;
+    updateSortHeaders();
 
     // CPO averages
     var avgHtml = '';
@@ -1346,13 +1398,34 @@
     $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Mar 13, 2026 · Year buckets based on launch date';
   }
 
+  // Track current period for re-sorting
+  var currentPeriod = 'all';
+
   // Bind filter buttons
   var btns = $$('.filter-btn');
   for (var i = 0; i < btns.length; i++) {
     btns[i].addEventListener('click', function() {
       for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
       this.classList.add('active');
-      render(this.getAttribute('data-filter'));
+      currentPeriod = this.getAttribute('data-filter');
+      render(currentPeriod);
+    });
+  }
+
+  // Bind sortable column headers
+  var sortThs = $$('thead th[data-sort]');
+  for (var i = 0; i < sortThs.length; i++) {
+    sortThs[i].addEventListener('click', function() {
+      var key = this.getAttribute('data-sort');
+      if (tableSortKey === key) {
+        tableSortAsc = !tableSortAsc;
+      } else {
+        tableSortKey = key;
+        tableSortAsc = true;
+      }
+      updateSortHeaders();
+      var m = computeMetrics(STUDIES, currentPeriod);
+      renderCostTable(m, currentPeriod);
     });
   }
 
