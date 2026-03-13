@@ -653,19 +653,19 @@
       id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP',
       spend: 0, leads: 150, joined: 57, onboarded: 25, target: 25,
       wearable: 'Oura', days: 5,
-      launchDate: 'Jan 2026', endDate: 'Jan 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
+      launchDate: 'Q4 2025', endDate: 'Q4 2025',
+      launchYear: 2025, crossYear: false, manualQueue: false,
       status: 'complete', outlier: false,
-      notes: ''
+      notes: 'VEP — corrected from 2026 to 2025 by actual launch date'
     },
     {
       id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP',
       spend: 0, leads: 102, joined: 52, onboarded: 25, target: 25,
       wearable: 'Oura', days: 2,
-      launchDate: 'Jan 2026', endDate: 'Jan 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
+      launchDate: 'Q4 2025', endDate: 'Q4 2025',
+      launchYear: 2025, crossYear: false, manualQueue: false,
       status: 'complete', outlier: false,
-      notes: ''
+      notes: 'VEP — corrected from 2026 to 2025 by actual launch date'
     },
     {
       id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP',
@@ -874,7 +874,7 @@
 
   function renderSubtitle(period) {
     var labels = { all: 'All-Time Study Dashboard', '2025': '2025 Studies', '2026': '2026 Year-to-Date' };
-    $('#dashboard-subtitle').textContent = 'Reputable — ' + labels[period] + ' · Updated Feb 18, 2026';
+    $('#dashboard-subtitle').textContent = 'Reputable — ' + labels[period] + ' · Updated Mar 13, 2026';
   }
 
   function renderMetrics(m, period) {
@@ -1174,7 +1174,7 @@
     var m26 = computeMetrics(STUDIES, '2026');
     var ytdOnboarded = m26.totalOnboarded;
     var annualTarget = 4000;
-    var weeksElapsed = 7;
+    var weeksElapsed = 10;
     var weeklyRate = Math.round(ytdOnboarded / weeksElapsed);
     var requiredRate = Math.round(annualTarget / 52);
     var pacePct = Math.round((weeklyRate / requiredRate) * 100);
@@ -1343,7 +1343,7 @@
     var yoy = $('#yoy-section');
     yoy.classList.toggle('section-hidden', period !== 'all');
 
-    $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Feb 18, 2026 · Year buckets based on launch date';
+    $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Mar 13, 2026 · Year buckets based on launch date';
   }
 
   // Bind filter buttons
