@@ -376,11 +376,11 @@
   <!-- Charts -->
   <div class="charts-grid" id="charts-grid">
     <div class="chart-card">
-      <h3>Ad Spend &amp; Clicks (Daily)</h3>
+      <h3 id="chart-spend-title">Ad Spend &amp; Clicks (Daily)</h3>
       <canvas id="chart-spend"></canvas>
     </div>
     <div class="chart-card">
-      <h3>App Installs (Daily)</h3>
+      <h3 id="chart-installs-title">App Installs (Daily)</h3>
       <canvas id="chart-installs"></canvas>
     </div>
     <div class="chart-card">
@@ -976,14 +976,11 @@
     const installsDaily = dataService.getAppsflyerDaily();
     const emailDaily = dataService.getNewsletterDaily();
 
-    if (!adsDaily.length && !installsDaily.length && !emailDaily.length) {
-      // Hide charts if no API data
-      $('#charts-grid').style.display = 'none';
-      return;
-    }
     $('#charts-grid').style.display = '';
 
     // Ad Spend & Clicks
+    $('#chart-spend-title').textContent = adsDaily.length ? 'Ad Spend & Clicks (Daily)' : 'Ad Spend by Study';
+    $('#chart-installs-title').textContent = installsDaily.length ? 'App Installs (Daily)' : 'Joined & Onboarded by Study';
     if (adsDaily.length) {
       const labels = adsDaily.map(d => d.date?.slice(5) || '');
       chartSpend = new Chart($('#chart-spend'), {
@@ -1004,6 +1001,29 @@
           },
         },
       });
+    } else {
+      // Local fallback: show spend per study as a bar chart
+      const studies = getStudiesForCharts();
+      if (studies.length) {
+        const labels = studies.map(s => s.name.length > 15 ? s.name.slice(0, 14) + '…' : s.name);
+        chartSpend = new Chart($('#chart-spend'), {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [
+              { label: 'Ad Spend ($)', data: studies.map(s => s.spend), backgroundColor: 'rgba(200,230,74,0.5)', borderColor: '#C8E64A', borderWidth: 1 },
+            ],
+          },
+          options: {
+            ...chartDefaults,
+            plugins: { ...chartDefaults.plugins, legend: { display: false } },
+            scales: {
+              ...chartDefaults.scales,
+              y: { ...chartDefaults.scales.y, title: { display: true, text: 'Spend ($)', color: '#666' } },
+            },
+          },
+        });
+      }
     }
 
     // Installs
@@ -1019,6 +1039,23 @@
         },
         options: chartDefaults,
       });
+    } else {
+      // Local fallback: show joined vs onboarded per study
+      const studies = getStudiesForCharts();
+      if (studies.length) {
+        const labels = studies.map(s => s.name.length > 15 ? s.name.slice(0, 14) + '…' : s.name);
+        chartInstalls = new Chart($('#chart-installs'), {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [
+              { label: 'Joined', data: studies.map(s => s.joined || 0), backgroundColor: 'rgba(0,179,159,0.4)', borderColor: '#00B39F', borderWidth: 1 },
+              { label: 'Onboarded', data: studies.map(s => s.onboarded || 0), backgroundColor: 'rgba(52,211,153,0.5)', borderColor: '#34D399', borderWidth: 1 },
+            ],
+          },
+          options: chartDefaults,
+        });
+      }
     }
 
     // Email
@@ -1036,6 +1073,16 @@
         options: chartDefaults,
       });
     }
+  }
+
+  // Helper: get studies for chart fallbacks (year-filtered, launched only, sorted by ID)
+  function getStudiesForCharts() {
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      if (s.launchYear === yr || s.crossYear) return true;
+      return false;
+    });
+    return yearFiltered.filter(s => s.status !== 'coming').sort((a, b) => a.id - b.id);
   }
 
   // ============================================================
