@@ -609,13 +609,32 @@
     },
 
     getNewsletterDaily() {
-      if (sendgridData?.daily?.length) return sendgridData.daily;
-      return apiData?.newsletter?.daily || [];
+      const allDaily = sendgridData?.daily?.length ? sendgridData.daily : (apiData?.newsletter?.daily || []);
+      if (!allDaily.length) return [];
+      // Filter to selectedDays window
+      const cutoff = new Date(Date.now() - selectedDays * 86400000);
+      return allDaily.filter(d => new Date(d.date) >= cutoff);
     },
 
     getNewsletterTotals() {
-      if (sendgridData?.totals) return sendgridData.totals;
-      return apiData?.newsletter?.totals || null;
+      const daily = this.getNewsletterDaily();
+      if (!daily.length) {
+        // Fall back to pre-computed totals if no daily data
+        if (sendgridData?.totals) return sendgridData.totals;
+        return apiData?.newsletter?.totals || null;
+      }
+      // Compute totals from windowed daily data
+      const totals = daily.reduce((acc, d) => ({
+        sent: acc.sent + (d.requests || d.sent || 0),
+        delivered: acc.delivered + (d.delivered || 0),
+        opens: acc.opens + (d.opens || 0),
+        unique_opens: acc.unique_opens + (d.unique_opens || 0),
+        clicks: acc.clicks + (d.clicks || 0),
+        unique_clicks: acc.unique_clicks + (d.unique_clicks || 0),
+        bounces: acc.bounces + (d.bounces || 0),
+      }), { sent: 0, delivered: 0, opens: 0, unique_opens: 0, clicks: 0, unique_clicks: 0, bounces: 0 });
+      totals.open_rate = totals.delivered > 0 ? ((totals.unique_opens / totals.delivered) * 100).toFixed(1) + '%' : '0%';
+      return totals;
     },
 
     getAppsflyerDaily() {
@@ -764,9 +783,16 @@
         if (!s.launchYear) return false;
       }
       if (!s.launchDate) return true;
-      const d = new Date(s.launchDate);
-      if (isNaN(d)) return true;
-      return d >= cutoff;
+      const launch = new Date(s.launchDate);
+      if (isNaN(launch)) return true;
+      // Study is "in window" if it was active during the period:
+      // launched before now AND (no end date OR ended after the cutoff)
+      if (launch > now) return false;
+      if (s.endDate) {
+        const end = new Date(s.endDate);
+        if (!isNaN(end) && end < cutoff) return false;
+      }
+      return true;
     });
   }
 
@@ -839,8 +865,8 @@
     const funnel = dataService.getFunnel();
 
     if (!funnel) {
-      // Fallback funnel from local data
-      const launched = STUDIES.filter(s => s.status !== 'coming');
+      // Fallback funnel from local data, scoped to window + year
+      const launched = getStudiesInWindow(selectedDays);
       const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
       const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
       const totalOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
