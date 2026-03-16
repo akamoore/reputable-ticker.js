@@ -1,0 +1,94 @@
+name: Fetch SendGrid Stats
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8am UTC
+  workflow_dispatch:       # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch SendGrid stats
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        run: |
+          mkdir -p data
+
+          # Fetch last 30 days of global stats
+          START_DATE=$(date -d '30 days ago' +%Y-%m-%d)
+          END_DATE=$(date +%Y-%m-%d)
+
+          echo "Fetching SendGrid stats from $START_DATE to $END_DATE"
+
+          HTTP_CODE=$(curl -s -o /tmp/sendgrid-response.json -w "%{http_code}" \
+            "https://api.sendgrid.com/v3/stats?start_date=${START_DATE}&end_date=${END_DATE}&aggregated_by=day" \
+            -H "Authorization: Bearer ${SENDGRID_API_KEY}" \
+            -H "Content-Type: application/json")
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "SendGrid API returned HTTP $HTTP_CODE"
+            cat /tmp/sendgrid-response.json
+            exit 1
+          fi
+
+          # Process into dashboard-friendly format
+          node -e "
+          const raw = JSON.parse(require('fs').readFileSync('/tmp/sendgrid-response.json', 'utf8'));
+
+          // Daily breakdown
+          const daily = raw.map(d => ({
+            date: d.date,
+            requests: d.stats[0]?.metrics?.requests || 0,
+            delivered: d.stats[0]?.metrics?.delivered || 0,
+            opens: d.stats[0]?.metrics?.opens || 0,
+            unique_opens: d.stats[0]?.metrics?.unique_opens || 0,
+            clicks: d.stats[0]?.metrics?.clicks || 0,
+            unique_clicks: d.stats[0]?.metrics?.unique_clicks || 0,
+            bounces: d.stats[0]?.metrics?.bounces || 0,
+            spam_reports: d.stats[0]?.metrics?.spam_reports || 0,
+            unsubscribes: d.stats[0]?.metrics?.unsubscribes || 0,
+          }));
+
+          // Aggregate totals
+          const totals = daily.reduce((acc, d) => ({
+            sent: acc.sent + d.requests,
+            delivered: acc.delivered + d.delivered,
+            opens: acc.opens + d.opens,
+            unique_opens: acc.unique_opens + d.unique_opens,
+            clicks: acc.clicks + d.clicks,
+            unique_clicks: acc.unique_clicks + d.unique_clicks,
+            bounces: acc.bounces + d.bounces,
+            spam_reports: acc.spam_reports + d.spam_reports,
+            unsubscribes: acc.unsubscribes + d.unsubscribes,
+          }), { sent: 0, delivered: 0, opens: 0, unique_opens: 0, clicks: 0, unique_clicks: 0, bounces: 0, spam_reports: 0, unsubscribes: 0 });
+
+          totals.open_rate = totals.delivered > 0 ? ((totals.unique_opens / totals.delivered) * 100).toFixed(1) + '%' : '0%';
+
+          const output = {
+            updated_at: new Date().toISOString(),
+            period: { start: '${START_DATE}', end: '${END_DATE}' },
+            totals,
+            daily,
+          };
+
+          require('fs').writeFileSync('data/sendgrid-stats.json', JSON.stringify(output, null, 2));
+          console.log('Stats written. Totals:', JSON.stringify(totals, null, 2));
+          "
+
+      - name: Commit and push stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/sendgrid-stats.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update SendGrid stats [automated]"
+            git push
+          fi

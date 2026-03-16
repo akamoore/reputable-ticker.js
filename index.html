@@ -557,6 +557,7 @@
   // ============================================================
   let apiData = null;
   let apiError = null;
+  let sendgridData = null;
   let selectedDays = 30;
 
   const dataService = {
@@ -590,11 +591,24 @@
       return apiData?.metaAds?.ads || [];
     },
 
+    async fetchSendGridStats() {
+      try {
+        const resp = await fetch('./data/sendgrid-stats.json');
+        if (!resp.ok) throw new Error(`SendGrid stats ${resp.status}`);
+        return await resp.json();
+      } catch (err) {
+        console.warn('SendGrid stats not available:', err.message);
+        return null;
+      }
+    },
+
     getNewsletterDaily() {
+      if (sendgridData?.daily?.length) return sendgridData.daily;
       return apiData?.newsletter?.daily || [];
     },
 
     getNewsletterTotals() {
+      if (sendgridData?.totals) return sendgridData.totals;
       return apiData?.newsletter?.totals || null;
     },
 
@@ -1251,8 +1265,13 @@
   // ============================================================
   async function loadAndRender() {
     try {
-      apiData = await dataService.fetchRecruitingData(selectedDays);
-      apiError = null;
+      const [recruitData, sgData] = await Promise.allSettled([
+        dataService.fetchRecruitingData(selectedDays),
+        dataService.fetchSendGridStats(),
+      ]);
+      apiData = recruitData.status === 'fulfilled' ? recruitData.value : null;
+      sendgridData = sgData.status === 'fulfilled' ? sgData.value : null;
+      apiError = recruitData.status === 'rejected' ? recruitData.reason.message : null;
     } catch (err) {
       apiError = err.message;
       apiData = null;
