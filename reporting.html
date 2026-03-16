@@ -1674,7 +1674,8 @@
   // ============================================================
   // LIVE API INTEGRATION
   // ============================================================
-  var API_URL = 'https://operations.reputablehealth.net/api/recruiting';
+  var PROXY_BASE = new URLSearchParams(window.location.search).get('proxy');
+  var API_URL = PROXY_BASE ? PROXY_BASE + '/api/recruiting' : 'https://operations.reputablehealth.net/api/recruiting';
   var API_KEY = 'colleague:X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   function fmtK(n) {
@@ -1882,9 +1883,8 @@
   }
 
   function fetchLiveData() {
-    fetch(API_URL + '?days=30', {
-      headers: { 'x-api-key': API_KEY }
-    })
+    var opts = PROXY_BASE ? {} : { headers: { 'x-api-key': API_KEY } };
+    fetch(API_URL + '?days=30', opts)
     .then(function(res) {
       if (!res.ok) throw new Error('API returned ' + res.status);
       return res.json();
