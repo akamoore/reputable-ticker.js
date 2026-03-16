@@ -1,0 +1,13 @@
+{
+  "name": "reputable-api-proxy",
+  "version": "1.0.0",
+  "description": "CORS proxy for Reputable Health operations API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
