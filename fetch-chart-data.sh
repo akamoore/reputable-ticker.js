@@ -64,11 +64,11 @@ fi
 echo ""
 echo "Fetching AppsFlyer installs..."
 
-# Fetch AppsFlyer — aggregate daily installs (Pull API V2)
+# Fetch AppsFlyer — aggregate daily installs
 # Docs: https://dev.appsflyer.com/hc/reference/get_app-id-partners-by-date-report-v5-1
 AF_RAW=$(curl -s "https://hq1.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?\
-from=${FROM_DATE}&to=${TO_DATE}" \
-  -H "Authorization: Bearer ${APPSFLYER_API_TOKEN}" \
+from=${FROM_DATE}&to=${TO_DATE}&\
+api_token=${APPSFLYER_API_TOKEN}" \
   -H "Accept: text/csv")
 
 if echo "$AF_RAW" | head -1 | grep -qi "date"; then

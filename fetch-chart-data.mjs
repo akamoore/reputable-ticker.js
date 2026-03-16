@@ -59,9 +59,9 @@ async function fetchMetaAds() {
 async function fetchAppsFlyer() {
   console.log('Fetching AppsFlyer installs...');
 
-  // AppsFlyer Pull API V2 — aggregate data endpoint
+  // AppsFlyer Pull API — aggregate data endpoint
   // Docs: https://dev.appsflyer.com/hc/reference/get_app-id-partners-by-date-report-v5-1
-  const url = `https://hq1.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?from=${FROM_DATE}&to=${TO_DATE}`;
+  const url = `https://hq1.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?from=${FROM_DATE}&to=${TO_DATE}&api_token=${APPSFLYER_API_TOKEN}`;
 
   let text = null;
   let succeeded = false;
@@ -69,7 +69,6 @@ async function fetchAppsFlyer() {
     console.log(`  Fetching from hq1.appsflyer.com...`);
     const resp = await fetch(url, {
       headers: {
-        'Authorization': `Bearer ${APPSFLYER_API_TOKEN}`,
         'Accept': 'text/csv',
       },
       signal: AbortSignal.timeout(15000),
