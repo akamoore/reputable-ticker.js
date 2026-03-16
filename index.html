@@ -846,7 +846,7 @@
     const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
     const isAllTime = selectedYear === 'all';
-    const periodLabel = isAllTime ? 'All' : (selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d');
+    const periodLabel = isAllTime ? 'Total' : (selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d');
     // Map selectedDays to the API summary period keys
     const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
 
