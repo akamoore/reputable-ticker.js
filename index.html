@@ -4,1360 +4,1193 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recruitment Command Center</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #232733;
-      --border: #2e3345;
-      --text: #e4e6ef;
-      --text-dim: #8b8fa3;
-      --accent: #6c5ce7;
-      --green: #00b894;
-      --green-bg: rgba(0,184,148,0.12);
-      --yellow: #fdcb6e;
-      --yellow-bg: rgba(253,203,110,0.12);
+      --bg: #0a0a0a;
+      --surface: #1a1a1a;
+      --surface2: #141414;
+      --border: rgba(255,255,255,0.08);
+      --border-lime: rgba(200,230,74,0.2);
+      --text: #ffffff;
+      --text-dim: #999999;
+      --text-secondary: #a0a0a0;
+      --lime: #C8E64A;
+      --lime-light: #D9FF85;
+      --lime-dim: #A3C232;
+      --lime-bg: rgba(200,230,74,0.08);
+      --lime-glow: rgba(200,230,74,0.12);
+      --green: #34D399;
+      --green-bg: rgba(52,211,153,0.12);
+      --teal: #00B39F;
+      --teal-bg: rgba(0,179,159,0.12);
+      --blue: #60A5FA;
+      --blue-bg: rgba(96,165,250,0.12);
+      --indigo: #6C5CE7;
+      --indigo-bg: rgba(108,92,231,0.12);
+      --yellow: #FBBF24;
+      --yellow-bg: rgba(251,191,36,0.12);
+      --rose: #FB7185;
+      --rose-bg: rgba(251,113,133,0.12);
       --red: #e17055;
       --red-bg: rgba(225,112,85,0.12);
-      --blue: #74b9ff;
-      --blue-bg: rgba(116,185,255,0.12);
+      --lavender: #A78BFA;
+      --lavender-bg: rgba(167,139,250,0.12);
       --gray: #636e80;
       --gray-bg: rgba(99,110,128,0.12);
-      --card-bg: var(--surface);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-pill: 100px;
+      --charcoal: #222220;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
       padding: 24px;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Gradient orbs */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(200,230,74,0.06) 0%, transparent 70%);
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* Header */
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-      gap: 12px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
     }
-    .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
-    .header .subtitle { color: var(--text-dim); font-size: 13px; }
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .header-left h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 700; line-height: 1.2; }
+    .header-left .subtitle { color: var(--text-dim); font-size: 13px; margin-top: 4px; }
+    .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: var(--radius-pill);
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em;
     }
-    .badge-green { background: var(--green-bg); color: var(--green); }
-    .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
-    .badge-red { background: var(--red-bg); color: var(--red); }
-    .badge-blue { background: var(--blue-bg); color: var(--blue); }
-    .badge-gray { background: var(--gray-bg); color: var(--gray); }
-    .badge-accent { background: rgba(108,92,231,0.12); color: var(--accent); }
-    .metrics-grid {
+    .status-badge.live { background: var(--lime-bg); color: var(--lime); border: 1px solid var(--border-lime); }
+    .status-badge.offline { background: var(--rose-bg); color: var(--rose); border: 1px solid rgba(251,113,133,0.3); }
+    .status-badge .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor; box-shadow: 0 0 10px currentColor;
+    }
+
+    /* Filter controls */
+    .filter-bar {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 16px; border-radius: var(--radius-pill);
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-dim); font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s ease;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .filter-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); background: rgba(255,255,255,0.03); }
+    .filter-btn.active { border-color: var(--border-lime); color: var(--lime); background: var(--lime-bg); }
+
+    /* KPI Grid */
+    .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px; margin-bottom: 24px;
     }
-    .metric-card {
+    .kpi-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 20px;
     }
-    .metric-card .label {
-      font-size: 12px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+    .kpi-card .kpi-label {
+      font-size: 11px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      font-weight: 600; margin-bottom: 8px;
     }
-    .metric-card .value { font-size: 28px; font-weight: 700; }
-    .metric-card .sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
-    .metric-card .value.green { color: var(--green); }
-    .metric-card .value.blue { color: var(--blue); }
-    .metric-card .value.yellow { color: var(--yellow); }
-    .metric-card .value.accent { color: var(--accent); }
+    .kpi-card .kpi-value { font-size: 28px; font-weight: 700; line-height: 1.2; }
+    .kpi-card .kpi-sub { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+    .kpi-card .kpi-value.lime { color: var(--lime); }
+    .kpi-card .kpi-value.teal { color: var(--teal); }
+    .kpi-card .kpi-value.blue { color: var(--blue); }
+    .kpi-card .kpi-value.green { color: var(--green); }
+    .kpi-card .kpi-value.yellow { color: var(--yellow); }
+    .kpi-card .kpi-value.indigo { color: var(--indigo); }
+    .kpi-card .kpi-value.rose { color: var(--rose); }
+
+    /* Sections */
     .section {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
+      border-radius: var(--radius-md);
+      padding: 24px; margin-bottom: 24px;
     }
     .section h2 {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 16px; font-weight: 600; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
     }
-    .section h3 {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 20px 0 10px;
+    .section h2 .section-icon { color: var(--lime); font-size: 14px; }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
     }
-    .table-wrap { overflow-x: auto; margin: 0 -8px; padding: 0 8px; }
+
+    /* Funnel */
+    .funnel-row {
+      display: flex; align-items: stretch; gap: 2px; margin-bottom: 8px;
+    }
+    .funnel-step {
+      flex: 1; text-align: center; padding: 16px 8px;
+      border-radius: var(--radius-md); position: relative;
+      min-width: 0;
+    }
+    .funnel-step .funnel-val { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+    .funnel-step .funnel-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; opacity: 0.8; }
+    .funnel-step .funnel-rate { font-size: 10px; margin-top: 4px; opacity: 0.6; }
+    .funnel-step:nth-child(1) { background: rgba(108,92,231,0.15); color: #a78bfa; }
+    .funnel-step:nth-child(2) { background: rgba(96,165,250,0.15); color: #93c5fd; }
+    .funnel-step:nth-child(3) { background: rgba(0,179,159,0.15); color: #5eead4; }
+    .funnel-step:nth-child(4) { background: rgba(251,191,36,0.15); color: #fcd34d; }
+    .funnel-step:nth-child(5) { background: rgba(200,230,74,0.15); color: var(--lime); }
+    .funnel-step:nth-child(6) { background: rgba(52,211,153,0.15); color: var(--green); }
+
+    /* Charts */
+    .charts-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .chart-card h3 {
+      font-size: 13px; font-weight: 600; margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+    .chart-card canvas { width: 100% !important; height: 200px !important; }
+
+    /* Table */
+    .table-controls {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .table-controls select {
+      padding: 6px 12px; border-radius: var(--radius-pill);
+      border: 1px solid var(--border); background: var(--surface2);
+      color: var(--text); font-size: 12px; cursor: pointer;
+    }
+    .table-controls select:focus { outline: none; border-color: var(--border-lime); }
+    .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th {
-      text-align: left;
-      padding: 10px 12px;
-      font-weight: 600;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-dim);
-      border-bottom: 2px solid var(--border);
+      text-align: left; padding: 10px 12px;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-dim); font-weight: 600; white-space: nowrap;
+      cursor: pointer; user-select: none; position: relative;
+    }
+    th:hover { color: var(--lime); }
+    th.sorted { color: var(--lime); }
+    th .sort-arrow { font-size: 10px; margin-left: 4px; }
+    td {
+      padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04);
       white-space: nowrap;
     }
-    td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
-    tr:last-child td { border-bottom: none; }
-    tr.row-outlier { background: var(--yellow-bg); }
-    tr.row-free { background: var(--green-bg); }
-    tr.row-crossyear { background: rgba(108,92,231,0.08); }
-    .totals-row td { font-weight: 700; border-top: 2px solid var(--border); padding-top: 14px; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
     .align-right { text-align: right; }
+    tfoot td { font-weight: 700; border-top: 2px solid rgba(255,255,255,0.1); }
+
+    /* Badges */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill);
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+    .badge-rose { background: var(--rose-bg); color: var(--rose); }
+    .badge-gray { background: var(--gray-bg); color: var(--gray); }
+    .badge-lime { background: var(--lime-bg); color: var(--lime); border: 1px solid var(--border-lime); }
+    .badge-indigo { background: var(--indigo-bg); color: var(--indigo); }
+    .badge-teal { background: var(--teal-bg); color: var(--teal); }
+    .badge-lavender { background: var(--lavender-bg); color: var(--lavender); }
+
+    /* Progress bars */
+    .progress-bar {
+      width: 100%; height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,0.06); overflow: hidden;
+    }
+    .progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
+    .progress-fill.lime { background: var(--lime); }
+    .progress-fill.green { background: var(--green); }
+    .progress-fill.blue { background: var(--blue); }
+    .progress-fill.yellow { background: var(--yellow); }
+
+    /* Scorecard grid */
     .scorecard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
     }
     .score-card {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 16px;
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px;
     }
-    .score-card .study-name { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 8px 0;
+    .score-card .sc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .score-card .sc-name { font-size: 13px; font-weight: 600; }
+    .score-card .sc-meta { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; }
+    .score-card .sc-stats { display: flex; gap: 16px; margin-top: 8px; }
+    .score-card .sc-stat { font-size: 11px; color: var(--text-dim); }
+    .score-card .sc-stat strong { color: var(--text); font-weight: 600; }
+
+    /* Newsletter metrics */
+    .email-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
     }
-    .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
-    .progress-fill.green { background: var(--green); }
-    .progress-fill.yellow { background: var(--yellow); }
-    .progress-fill.red { background: var(--red); }
-    .progress-fill.blue { background: var(--blue); }
-    .progress-fill.accent { background: var(--accent); }
-    .score-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-dim);
+    .email-metric {
+      text-align: center; padding: 16px; border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.02);
     }
-    .score-date {
-      display: flex;
-      gap: 16px;
-      font-size: 11px;
-      color: var(--text-dim);
-      margin-top: 6px;
-      padding-top: 6px;
-      border-top: 1px solid var(--border);
+    .email-metric .em-val { font-size: 22px; font-weight: 700; }
+    .email-metric .em-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px; }
+
+    /* Data source status */
+    .status-grid {
+      display: flex; gap: 12px; flex-wrap: wrap;
     }
-    .score-date span { display: flex; align-items: center; gap: 4px; }
-    .score-date .date-label { font-weight: 600; color: var(--text-dim); text-transform: uppercase; font-size: 9px; letter-spacing: 0.5px; }
-    .avg-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
+    .ds-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      border: 1px solid var(--border); font-size: 11px; font-weight: 600;
     }
-    .avg-card { background: var(--surface2); border-radius: 10px; padding: 16px; text-align: center; }
-    .avg-card .avg-label { font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
-    .avg-card .avg-value { font-size: 24px; font-weight: 700; }
-    .avg-card .avg-detail { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
-    .proj-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
+    .ds-pill .ds-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .ds-pill .ds-dot.ok { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .ds-pill .ds-dot.fail { background: var(--rose); box-shadow: 0 0 6px var(--rose); }
+    .ds-pill .ds-dot.warn { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+    .ds-pill .ds-dot.na { background: var(--gray); }
+
+    /* Benchmarks */
+    .bench-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .bench-pill {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 14px; text-align: center;
     }
-    .proj-card { background: var(--surface2); border-radius: 10px; padding: 16px; }
-    .proj-card .proj-name { font-weight: 600; margin-bottom: 8px; }
-    .proj-card .proj-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      padding: 4px 0;
-      color: var(--text-dim);
+    .bench-size { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+    .bench-detail { font-size: 11px; color: var(--text-dim); }
+    .bench-days { font-size: 18px; font-weight: 700; margin: 6px 0 2px; }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed; inset: 0; background: rgba(10,10,10,0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; transition: opacity 0.3s ease;
     }
-    .proj-card .proj-row span:last-child { color: var(--text); font-weight: 500; }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 40px; height: 40px; border: 3px solid rgba(200,230,74,0.2);
+      border-top-color: var(--lime); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Footer */
     .footer {
-      text-align: center;
-      color: var(--text-dim);
-      font-size: 12px;
-      margin-top: 32px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+      text-align: center; color: var(--text-dim); font-size: 11px;
+      padding: 24px 0 8px; border-top: 1px solid var(--border); margin-top: 8px;
     }
-    .legend {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
-    .swatch-outlier { background: var(--yellow-bg); border: 1px solid var(--yellow); }
-    .swatch-free { background: var(--green-bg); border: 1px solid var(--green); }
-    .swatch-crossyear { background: rgba(108,92,231,0.08); border: 1px solid var(--accent); }
-    .kpi-section {
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(108,92,231,0.06) 100%);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    .kpi-section::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--blue), var(--green));
-    }
-    .kpi-section h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-    .kpi-section h3 { font-size: 13px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 24px 0 12px; }
-    .kpi-section h3:first-of-type { margin-top: 0; }
-    .target-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
-      background: var(--surface2);
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
-    .target-row .target-label { min-width: 140px; font-size: 13px; font-weight: 500; }
-    .target-row .target-bar-wrap {
-      flex: 1;
-      position: relative;
-      height: 24px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .target-row .target-bar-fill {
-      height: 100%;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #fff;
-      transition: width 0.6s ease;
-    }
-    .target-row .target-bar-fill.green { background: linear-gradient(90deg, rgba(0,184,148,0.4), var(--green)); }
-    .target-row .target-bar-fill.blue { background: linear-gradient(90deg, rgba(116,185,255,0.4), var(--blue)); }
-    .target-row .target-bar-fill.yellow { background: linear-gradient(90deg, rgba(253,203,110,0.4), var(--yellow)); color: var(--bg); }
-    .target-row .target-bar-fill.accent { background: linear-gradient(90deg, rgba(108,92,231,0.4), var(--accent)); }
-    .target-row .target-marker {
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 2px;
-      background: var(--text);
-      opacity: 0.6;
-    }
-    .target-row .target-marker::after {
-      content: attr(data-label);
-      position: absolute;
-      top: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 9px;
-      color: var(--text-dim);
-      white-space: nowrap;
-    }
-    .target-row .target-vals { min-width: 110px; text-align: right; font-size: 12px; color: var(--text-dim); }
-    .target-row .target-vals strong { color: var(--text); }
-    .pace-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
-    .pace-card {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .pace-card .pace-title { font-weight: 600; font-size: 14px; margin-bottom: 16px; text-align: center; }
-    .ring-wrap { position: relative; width: 140px; height: 140px; margin-bottom: 12px; }
-    .ring-wrap svg { transform: rotate(-90deg); }
-    .ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
-    .ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
-    .ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-    .ring-center .ring-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
-    .ring-center .ring-label { font-size: 11px; color: var(--text-dim); }
-    .pace-stats { width: 100%; margin-top: 4px; }
-    .pace-stat-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; color: var(--text-dim); }
-    .pace-stat-row span:last-child { color: var(--text); font-weight: 500; }
-    .status-chip { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-    .status-chip.on-track { background: var(--green-bg); color: var(--green); }
-    .status-chip.behind { background: var(--yellow-bg); color: var(--yellow); }
-    .period-filter {
-      display: flex;
-      gap: 4px;
-      background: var(--card-bg);
-      padding: 4px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      width: fit-content;
-      margin: 8px 0 0;
-    }
-    .filter-btn {
-      padding: 6px 16px;
-      border: none;
-      border-radius: 8px;
-      background: transparent;
-      color: var(--text-dim);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .filter-btn:hover { color: var(--text); }
-    .filter-btn.active { background: var(--accent); color: #fff; }
-    .section-hidden { display: none !important; }
-    .bench-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
-    }
-    .bench-pill { background: var(--surface2); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--border); }
-    .bench-pill.blue-accent { border-left-color: var(--blue); }
-    .bench-pill.green-accent { border-left-color: var(--green); }
-    .bench-pill.accent-accent { border-left-color: var(--accent); }
-    .bench-pill.yellow-accent { border-left-color: var(--yellow); }
-    .bench-pill .bench-size { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-    .bench-pill .bench-detail { font-size: 11px; color: var(--text-dim); }
-    .bench-pill .bench-days { font-size: 20px; font-weight: 700; margin: 4px 0; }
-    /* Year breakdown table */
-    .yoy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .yoy-card {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 20px;
-    }
-    .yoy-card h4 {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .yoy-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      padding: 5px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .yoy-row:last-child { border-bottom: none; }
-    .yoy-row .yoy-label { color: var(--text-dim); }
-    .yoy-row .yoy-val { font-weight: 600; }
-    .crossyear-note {
-      font-size: 11px;
-      color: var(--text-dim);
-      background: rgba(108,92,231,0.06);
-      border: 1px solid rgba(108,92,231,0.15);
-      border-radius: 6px;
-      padding: 8px 12px;
-      margin-top: 12px;
-    }
-    .crossyear-note strong { color: var(--accent); }
+
+    /* Responsive */
     @media (max-width: 768px) {
       body { padding: 12px; }
-      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-      .metric-card .value { font-size: 22px; }
-      .section { padding: 16px; }
-      .kpi-section { padding: 16px; }
-      .target-row { flex-direction: column; align-items: stretch; gap: 8px; }
-      .target-row .target-label { min-width: auto; }
-      .target-row .target-vals { text-align: left; }
-      .pace-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .funnel-row { flex-wrap: wrap; }
+      .funnel-step { min-width: calc(33% - 2px); }
+      .charts-grid { grid-template-columns: 1fr; }
       .scorecard-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+</div>
+
+<div class="container">
+  <!-- Header -->
   <div class="header">
-    <div>
+    <div class="header-left">
       <h1>Recruitment Command Center</h1>
-      <div class="subtitle" id="dashboard-subtitle"></div>
-      <div class="period-filter">
-        <button class="filter-btn active" data-filter="all">All Time</button>
-        <button class="filter-btn" data-filter="2025">2025</button>
-        <button class="filter-btn" data-filter="2026">2026 YTD</button>
+      <div class="subtitle" id="subtitle">Reputable Health — Loading...</div>
+    </div>
+    <div class="header-right">
+      <div id="api-status"></div>
+      <div class="filter-bar" id="time-filter">
+        <button class="filter-btn" data-days="7">7 Days</button>
+        <button class="filter-btn active" data-days="30">30 Days</button>
+        <button class="filter-btn" data-days="90">90 Days</button>
       </div>
     </div>
-    <div><span class="badge badge-green">Live</span></div>
   </div>
 
-  <div class="metrics-grid" id="metrics-grid"></div>
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpi-grid"></div>
 
-  <div class="section" id="cost-analysis-section">
-    <h2 id="cost-analysis-title"></h2>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-swatch swatch-outlier"></div> Outlier Study</div>
-      <div class="legend-item"><div class="legend-swatch swatch-free"></div> $0 Ad Spend (Organic)</div>
-      <div class="legend-item"><div class="legend-swatch swatch-crossyear"></div> Cross-Year Study</div>
+  <!-- Funnel -->
+  <div class="section" id="funnel-section">
+    <h2><span class="section-icon">&#9673;</span> Recruiting Funnel</h2>
+    <div class="funnel-row" id="funnel-row"></div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid" id="charts-grid">
+    <div class="chart-card">
+      <h3>Ad Spend &amp; Clicks (Daily)</h3>
+      <canvas id="chart-spend"></canvas>
     </div>
+    <div class="chart-card">
+      <h3>App Installs (Daily)</h3>
+      <canvas id="chart-installs"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Email Opens &amp; Clicks (Daily)</h3>
+      <canvas id="chart-email"></canvas>
+    </div>
+  </div>
+
+  <!-- Studies Table -->
+  <div class="section" id="studies-section">
+    <div class="section-header">
+      <h2><span class="section-icon">&#9673;</span> Studies</h2>
+      <div class="table-controls" id="table-controls">
+        <select id="filter-status">
+          <option value="all">All Statuses</option>
+          <option value="recruiting">Recruiting</option>
+          <option value="active">Active</option>
+          <option value="complete">Completed</option>
+          <option value="coming">Coming Soon</option>
+        </select>
+        <select id="filter-type">
+          <option value="all">All Types</option>
+          <option value="RCT">RCT</option>
+          <option value="RWE">RWE</option>
+          <option value="VEP">VEP</option>
+        </select>
+        <select id="filter-manual">
+          <option value="all">Manual Step: Any</option>
+          <option value="yes">Manual Step: Yes</option>
+          <option value="no">Manual Step: No</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="studies-table">
+        <thead><tr id="studies-thead"></tr></thead>
+        <tbody id="studies-tbody"></tbody>
+        <tfoot id="studies-tfoot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Ad Performance -->
+  <div class="section" id="ads-section">
+    <h2><span class="section-icon">&#9673;</span> Ad Performance (Meta)</h2>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Study Name</th>
-            <th>Type</th>
-            <th>Launch Date</th>
-            <th>End Date</th>
-            <th class="align-right">Ad Spend</th>
-            <th class="align-right">Leads</th>
-            <th class="align-right">Joined</th>
-            <th class="align-right">Onboarded</th>
-            <th class="align-right">Target</th>
-            <th class="align-right">CPO</th>
-            <th>Wearable</th>
-            <th class="align-right">Days</th>
-            <th>Manual Queue</th>
-            <th>Status</th>
-            <th>Notes</th>
+            <th>Campaign</th><th>Ad Name</th>
+            <th class="align-right">Impressions</th><th class="align-right">Clicks</th>
+            <th class="align-right">Spend</th><th class="align-right">CTR</th>
+            <th class="align-right">CPC</th><th class="align-right">CPM</th>
           </tr>
         </thead>
-        <tbody id="cost-table-body"></tbody>
-        <tfoot id="cost-table-foot"></tfoot>
+        <tbody id="ads-tbody"></tbody>
       </table>
     </div>
-    <h3>Cost Per Onboard Averages</h3>
-    <div class="avg-grid" id="avg-grid"></div>
   </div>
 
-  <!-- Manual Queue Comparison -->
-  <div class="section" id="manual-queue-section">
-    <h2>Manual Queue Impact</h2>
-    <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 16px;">
-      Comparing studies with manual steps (e.g., external prescreening, lab requirements) vs. fully automated recruitment flows.
-    </p>
-    <div class="avg-grid" id="manual-queue-grid"></div>
+  <!-- Newsletter / Email -->
+  <div class="section" id="email-section">
+    <h2><span class="section-icon">&#9673;</span> Email &amp; Newsletter</h2>
+    <div class="email-grid" id="email-grid"></div>
   </div>
 
-  <!-- Year-over-Year Breakdown -->
-  <div class="section" id="yoy-section">
-    <h2>Year-over-Year Breakdown</h2>
-    <div class="yoy-grid" id="yoy-grid"></div>
-  </div>
-
+  <!-- Study Scorecard -->
   <div class="section" id="scorecard-section">
-    <h2>Study Health Scorecard</h2>
+    <h2><span class="section-icon">&#9673;</span> Recruitment Progress</h2>
     <div class="scorecard-grid" id="scorecard-grid"></div>
   </div>
 
-  <div class="section" id="projections-section">
-    <h2>Recruitment Projections — Active Studies</h2>
-    <div class="proj-grid" id="proj-grid"></div>
-  </div>
-
-  <div class="kpi-section" id="kpi-section">
-    <h2>Target KPIs &amp; 2026 Outlook</h2>
-    <h3>Cost-per-Participant Targets</h3>
-    <div id="kpi-bars"></div>
-    <p id="kpi-note" style="font-size: 11px; color: var(--text-dim); margin-top: 8px;"></p>
-    <h3>Days-to-Recruit Benchmarks</h3>
+  <!-- Benchmarks -->
+  <div class="section" id="bench-section">
+    <h2><span class="section-icon">&#9673;</span> Recruitment Benchmarks</h2>
     <div class="bench-grid">
-      <div class="bench-pill blue-accent">
+      <div class="bench-pill">
         <div class="bench-size">Small Study</div>
-        <div class="bench-detail">20–40 participants</div>
-        <div class="bench-days" style="color: var(--blue);">21 days</div>
-        <div class="bench-detail">1–2 / day with ads; organic may take longer</div>
+        <div class="bench-detail">10–50 participants</div>
+        <div class="bench-days" style="color:var(--lime)">21 days</div>
+        <div class="bench-detail">~2–3 / day with focused spend</div>
       </div>
-      <div class="bench-pill green-accent">
+      <div class="bench-pill">
         <div class="bench-size">Medium Study</div>
         <div class="bench-detail">50–150 participants</div>
-        <div class="bench-days" style="color: var(--green);">45 days</div>
-        <div class="bench-detail">~3 / day sustained; scale spend proportionally</div>
+        <div class="bench-days" style="color:var(--teal)">45 days</div>
+        <div class="bench-detail">~3 / day sustained; scale spend</div>
       </div>
-      <div class="bench-pill accent-accent">
+      <div class="bench-pill">
         <div class="bench-size">Large Study</div>
         <div class="bench-detail">200+ participants</div>
-        <div class="bench-days" style="color: var(--accent);">75 days</div>
-        <div class="bench-detail">Multi-channel strategy; budget for drop-off</div>
+        <div class="bench-days" style="color:var(--indigo)">75 days</div>
+        <div class="bench-detail">Multi-channel; budget for drop-off</div>
       </div>
-      <div class="bench-pill yellow-accent">
+      <div class="bench-pill">
         <div class="bench-size">Organic / VEP</div>
         <div class="bench-detail">Any size</div>
-        <div class="bench-days" style="color: var(--yellow);">30–60 days</div>
-        <div class="bench-detail">Partner-dependent; no ad lever to pull</div>
+        <div class="bench-days" style="color:var(--yellow)">30–60 days</div>
+        <div class="bench-detail">Partner-dependent; no ad lever</div>
       </div>
     </div>
-    <h3 id="pace-heading">2026 Annual Recruitment Goal</h3>
-    <div class="pace-grid" id="pace-grid"></div>
   </div>
 
-  <div class="section" id="type-breakdown-section">
-    <h2>Study Type Breakdown</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Study Type</th>
-            <th class="align-right">Count</th>
-            <th class="align-right">Total Spend</th>
-            <th class="align-right">Total Onboarded</th>
-            <th class="align-right">Avg CPO</th>
-            <th class="align-right">Avg Days to Recruit</th>
-          </tr>
-        </thead>
-        <tbody id="type-table-body"></tbody>
-        <tfoot id="type-table-foot"></tfoot>
-      </table>
-    </div>
+  <!-- Data Source Status -->
+  <div class="section" id="status-section">
+    <h2><span class="section-icon">&#9673;</span> Data Source Health</h2>
+    <div class="status-grid" id="status-grid"></div>
   </div>
 
   <div class="footer" id="footer"></div>
+</div>
 
 <script>
 (function() {
+  'use strict';
+
   // ============================================================
-  // SINGLE DATA SOURCE — all studies defined here
+  // CONFIG & API
   // ============================================================
-  // launchYear: year the study LAUNCHED (drives filtering)
-  // crossYear: true if study spans 2025→2026
-  // Dates: use real launch/start and end dates
-  var STUDIES = [
-    {
-      id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT',
-      spend: 6469.62, leads: 1240, joined: 312, onboarded: 90, target: 240,
-      wearable: 'Oura', days: null,
-      launchDate: 'Jan 13, 2026', endDate: null,
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'recruiting', outlier: true,
-      notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question'
-    },
-    {
-      id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE',
-      spend: 5686.18, leads: 719, joined: 102, onboarded: 29, target: 35,
-      wearable: 'WHOOP', days: null,
-      launchDate: 'Jan 5, 2026', endDate: null,
-      launchYear: 2026, crossYear: false, manualQueue: true,
-      status: 'recruiting', outlier: true,
-      notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)'
-    },
-    {
-      id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT',
-      spend: 3184.93, leads: 1932, joined: 520, onboarded: 192, target: 192,
-      wearable: 'Oura', days: 23,
-      launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025',
-      launchYear: 2025, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 4, name: 'Berkeley Life (Nitrate Supp.)', type: 'RCT',
-      spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70,
-      wearable: 'Oura', days: null,
-      launchDate: '2025', endDate: '2025',
-      launchYear: 2025, crossYear: false, manualQueue: true,
-      status: 'complete', outlier: false,
-      notes: 'Prescreening happened outside of the app (manual step)'
-    },
-    {
-      id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT',
-      spend: 2464.11, leads: 1135, joined: 338, onboarded: 120, target: 120,
-      wearable: 'Oura', days: 17,
-      launchDate: 'Dec 23, 2025', endDate: 'Jan 9, 2026',
-      launchYear: 2025, crossYear: true, manualQueue: false,
-      status: 'active', outlier: false,
-      notes: 'Cross-year: launched 2025, completed 2026'
-    },
-    {
-      id: 6, name: 'Enhanced Brew Formula (RCT)', type: 'RCT',
-      spend: 1046.99, leads: 310, joined: 82, onboarded: 80, target: 80,
-      wearable: 'Oura', days: 49,
-      launchDate: 'Jun 4, 2025', endDate: 'Jul 23, 2025',
-      launchYear: 2025, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 7, name: 'Rootless & Women\'s Health', type: 'RWE',
-      spend: 582.58, leads: 165, joined: 92, onboarded: 50, target: 50,
-      wearable: 'Oura', days: 19,
-      launchDate: 'Nov 26, 2025', endDate: 'Dec 15, 2025',
-      launchYear: 2025, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 8, name: 'Quantum Upgrade', type: 'RCT',
-      spend: 266.14, leads: null, joined: 70, onboarded: 70, target: 70,
-      wearable: 'Oura', days: null,
-      launchDate: '2025', endDate: '2025',
-      launchYear: 2025, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 9, name: 'Sleep Mushrooms+', type: 'VEP',
-      spend: 0, leads: null, joined: 67, onboarded: 50, target: 50,
-      wearable: 'Oura / Fitbit / WHOOP', days: 15,
-      launchDate: 'Jan 2026', endDate: 'Jan 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'active', outlier: false,
-      notes: ''
-    },
-    {
-      id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP',
-      spend: 0, leads: null, joined: 60, onboarded: 16, target: 20,
-      wearable: 'Oura / Fitbit / WHOOP', days: null,
-      launchDate: 'Jan 2026', endDate: null,
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'recruiting', outlier: false,
-      notes: '80% to target'
-    },
-    {
-      id: 11, name: 'Better Sleep with NatPat', type: 'VEP',
-      spend: 0, leads: null, joined: 38, onboarded: 25, target: 25,
-      wearable: 'Oura', days: 29,
-      launchDate: 'Jan 2026', endDate: 'Feb 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP',
-      spend: 0, leads: 150, joined: 57, onboarded: 25, target: 25,
-      wearable: 'Oura', days: 5,
-      launchDate: 'Jan 2026', endDate: 'Jan 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP',
-      spend: 0, leads: 102, joined: 52, onboarded: 25, target: 25,
-      wearable: 'Oura', days: 2,
-      launchDate: 'Jan 2026', endDate: 'Jan 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP',
-      spend: 0, leads: null, joined: 15, onboarded: 10, target: 10,
-      wearable: 'Oura', days: 22,
-      launchDate: 'Jan 2026', endDate: 'Jan 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'complete', outlier: false,
-      notes: ''
-    },
-    {
-      id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP',
-      spend: 0, leads: null, joined: 30, onboarded: 12, target: 12,
-      wearable: 'Oura / Fitbit / WHOOP', days: 17,
-      launchDate: 'Jan 12, 2026', endDate: 'Jan 29, 2026',
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'active', outlier: false,
-      notes: ''
-    },
-    {
-      id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE',
-      spend: 0, leads: 30, joined: 40, onboarded: 20, target: 20,
-      wearable: 'Oura', days: 64,
-      launchDate: 'Dec 2025', endDate: 'Feb 2026',
-      launchYear: 2025, crossYear: true, manualQueue: true,
-      status: 'active', outlier: false,
-      notes: 'Cross-year: launched Dec 2025 (manual step)'
-    },
-    {
-      id: 17, name: 'HOP Box', type: 'RWE',
-      spend: 0, leads: 192, joined: 42, onboarded: 18, target: 35,
-      wearable: 'Oura', days: null,
-      launchDate: 'Feb 12, 2026', endDate: null,
-      launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'recruiting', outlier: false,
-      notes: 'Opened Friday — monitoring through Thursday before escalating'
-    },
-    // Coming soon studies (not yet launched)
-    {
-      id: 18, name: 'Leela Quantum', type: 'RWE',
-      spend: 0, leads: null, joined: null, onboarded: 0, target: 35,
-      wearable: 'Oura', days: null,
-      launchDate: null, endDate: null,
-      launchYear: null, crossYear: false, manualQueue: false,
-      status: 'coming', outlier: false,
-      notes: ''
-    },
-    {
-      id: 19, name: 'Neuvana', type: 'VEP',
-      spend: 0, leads: null, joined: null, onboarded: 0, target: 40,
-      wearable: 'Oura', days: null,
-      launchDate: null, endDate: null,
-      launchYear: null, crossYear: false, manualQueue: false,
-      status: 'coming', outlier: false,
-      notes: ''
-    },
-    {
-      id: 20, name: 'Percepta', type: 'RWE',
-      spend: 0, leads: null, joined: null, onboarded: 0, target: 154,
-      wearable: 'Oura', days: null,
-      launchDate: null, endDate: null,
-      launchYear: null, crossYear: false, manualQueue: false,
-      status: 'coming', outlier: false,
-      notes: ''
-    },
-    {
-      id: 21, name: 'Young Goose', type: 'VEP',
-      spend: 0, leads: null, joined: null, onboarded: 0, target: 35,
-      wearable: 'Oura', days: null,
-      launchDate: null, endDate: null,
-      launchYear: null, crossYear: false, manualQueue: false,
-      status: 'coming', outlier: false,
-      notes: ''
-    },
-    {
-      id: 22, name: 'Cure Hydration', type: 'VEP',
-      spend: 0, leads: null, joined: null, onboarded: 0, target: 70,
-      wearable: 'Oura', days: null,
-      launchDate: null, endDate: null,
-      launchYear: null, crossYear: false, manualQueue: false,
-      status: 'coming', outlier: false,
-      notes: ''
-    }
+  const API_BASE = 'https://operations.reputablehealth.net/api/recruiting';
+  const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
+
+  // ============================================================
+  // STUDY OVERRIDES — manual fields not in the API
+  // ============================================================
+  const STUDY_OVERRIDES = {
+    'ProleevaMax':    { manualStep: true, category: 'RWE' },
+    'Berkeley Life':  { manualStep: true, category: 'RCT' },
+    'Clearlight':     { manualStep: true, category: 'RWE' },
+  };
+
+  // ============================================================
+  // LOCAL STUDY DATA — canonical per-study detail
+  // ============================================================
+  const STUDIES = [
+    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 6469.62, leads: 1240, joined: 312, onboarded: 90, target: 240, wearable: 'Oura', days: null, launchDate: 'Jan 13, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
+    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 5686.18, leads: 719, joined: 102, onboarded: 29, target: 35, wearable: 'WHOOP', days: null, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)' },
+    { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 1932, joined: 520, onboarded: 192, target: 192, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 4, name: 'Berkeley Life (Nitrate Supp.)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, notes: 'Prescreening outside of app (manual step)' },
+    { id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT', spend: 2464.11, leads: 1135, joined: 338, onboarded: 120, target: 120, wearable: 'Oura', days: 17, launchDate: 'Dec 23, 2025', endDate: 'Jan 9, 2026', launchYear: 2025, crossYear: true, manualQueue: false, status: 'active', outlier: false, notes: 'Cross-year: launched 2025, completed 2026' },
+    { id: 6, name: 'Enhanced Brew Formula (RCT)', type: 'RCT', spend: 1046.99, leads: 310, joined: 82, onboarded: 80, target: 80, wearable: 'Oura', days: 49, launchDate: 'Jun 4, 2025', endDate: 'Jul 23, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 7, name: 'Rootless & Women\'s Health', type: 'RWE', spend: 582.58, leads: 165, joined: 92, onboarded: 50, target: 50, wearable: 'Oura', days: 19, launchDate: 'Nov 26, 2025', endDate: 'Dec 15, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 8, name: 'Quantum Upgrade', type: 'RCT', spend: 266.14, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 9, name: 'Sleep Mushrooms+', type: 'VEP', spend: 0, leads: null, joined: 67, onboarded: 50, target: 50, wearable: 'Oura / Fitbit / WHOOP', days: 15, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: '' },
+    { id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP', spend: 0, leads: null, joined: 60, onboarded: 16, target: 20, wearable: 'Oura / Fitbit / WHOOP', days: null, launchDate: 'Jan 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: false, notes: '80% to target' },
+    { id: 11, name: 'Better Sleep with NatPat', type: 'VEP', spend: 0, leads: null, joined: 38, onboarded: 25, target: 25, wearable: 'Oura', days: 29, launchDate: 'Jan 2026', endDate: 'Feb 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP', spend: 0, leads: 150, joined: 57, onboarded: 25, target: 25, wearable: 'Oura', days: 5, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP', spend: 0, leads: 102, joined: 52, onboarded: 25, target: 25, wearable: 'Oura', days: 2, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP', spend: 0, leads: null, joined: 15, onboarded: 10, target: 10, wearable: 'Oura', days: 22, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP', spend: 0, leads: null, joined: 30, onboarded: 12, target: 12, wearable: 'Oura / Fitbit / WHOOP', days: 17, launchDate: 'Jan 12, 2026', endDate: 'Jan 29, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: '' },
+    { id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE', spend: 0, leads: 30, joined: 40, onboarded: 20, target: 20, wearable: 'Oura', days: 64, launchDate: 'Dec 2025', endDate: 'Feb 2026', launchYear: 2025, crossYear: true, manualQueue: true, status: 'active', outlier: false, notes: 'Cross-year: launched Dec 2025 (manual step)' },
+    { id: 17, name: 'HOP Box', type: 'RWE', spend: 0, leads: 192, joined: 42, onboarded: 18, target: 35, wearable: 'Oura', days: null, launchDate: 'Feb 12, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: false, notes: 'Opened Friday — monitoring' },
+    { id: 18, name: 'Leela Quantum', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 35, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
+    { id: 19, name: 'Neuvana', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 40, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
+    { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
+    { id: 21, name: 'Young Goose', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 35, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
+    { id: 22, name: 'Cure Hydration', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 70, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
   ];
+
+  // Apply overrides
+  STUDIES.forEach(s => {
+    for (const [key, overrides] of Object.entries(STUDY_OVERRIDES)) {
+      if (s.name.includes(key)) {
+        if (overrides.manualStep !== undefined) s.manualQueue = overrides.manualStep;
+        if (overrides.category) s.overrideCategory = overrides.category;
+      }
+    }
+  });
+
+  // ============================================================
+  // DATA SERVICE
+  // ============================================================
+  let apiData = null;
+  let apiError = null;
+  let selectedDays = 30;
+
+  const dataService = {
+    async fetchRecruitingData(days) {
+      try {
+        const resp = await fetch(`${API_BASE}?days=${days}`, {
+          headers: { 'x-api-key': API_KEY }
+        });
+        if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
+        return await resp.json();
+      } catch (err) {
+        console.warn('API fetch failed:', err.message);
+        throw err;
+      }
+    },
+
+    getSummary() {
+      if (!apiData) return null;
+      return apiData.summary;
+    },
+
+    getFunnel() {
+      if (!apiData) return null;
+      return apiData.funnel;
+    },
+
+    getMetaAdsDaily() {
+      return apiData?.metaAds?.daily || [];
+    },
+
+    getMetaAdsBreakdown() {
+      return apiData?.metaAds?.ads || [];
+    },
+
+    getNewsletterDaily() {
+      return apiData?.newsletter?.daily || [];
+    },
+
+    getNewsletterTotals() {
+      return apiData?.newsletter?.totals || null;
+    },
+
+    getAppsflyerDaily() {
+      return apiData?.appsflyer?.daily || [];
+    },
+
+    getAppsflyerBySource() {
+      return apiData?.appsflyer?.bySource || [];
+    },
+
+    getOnboardingByStudy() {
+      return apiData?.onboarding?.byStudy || [];
+    },
+
+    getCampaignStudyMap() {
+      return apiData?.campaignStudyMap || [];
+    },
+
+    getSourceStatus() {
+      return apiData?.status || {};
+    },
+
+    // Merge API onboarding data with local STUDIES
+    getEnrichedStudies() {
+      const byStudy = this.getOnboardingByStudy();
+      const campaignMap = this.getCampaignStudyMap();
+      return STUDIES.map(s => {
+        const enriched = { ...s };
+        // Try to match by name in campaignStudyMap
+        const mapped = campaignMap.find(c =>
+          s.name.toLowerCase().includes(c.studyName?.toLowerCase()) ||
+          c.campaignName?.toLowerCase().includes(s.name.split(':')[0].trim().toLowerCase())
+        );
+        if (mapped) {
+          enriched.apiJoins = mapped.joins;
+          enriched.apiOnboarded = mapped.onboarded;
+          enriched.experimentId = mapped.experimentId;
+        }
+        // Also check onboarding.byStudy
+        const obMatch = byStudy.find(o =>
+          s.name.toLowerCase().includes(o.studyName?.toLowerCase())
+        );
+        if (obMatch) {
+          enriched.apiOnboarded = obMatch.onboarded;
+          enriched.experimentId = obMatch.experimentId;
+        }
+        return enriched;
+      });
+    }
+  };
 
   // ============================================================
   // HELPERS
   // ============================================================
-  function $(sel) { return document.querySelector(sel); }
-  function $$(sel) { return document.querySelectorAll(sel); }
-  function fmt(n) { return n == null ? '—' : '$' + n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
-  function fmtInt(n) { return n == null ? '—' : n.toLocaleString('en-US'); }
-  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-  function isLaunched(s) { return s.status !== 'coming'; }
-  function isPaid(s) { return s.spend > 0; }
-  function isOrganic(s) { return s.spend === 0 && isLaunched(s); }
-  function isComplete(s) { return s.status === 'complete'; }
-  function isRecruiting(s) { return s.status === 'recruiting'; }
-
-  // Filter studies by period using launchYear
-  function filterByPeriod(studies, period) {
-    if (period === 'all') return studies;
-    var year = parseInt(period);
-    return studies.filter(function(s) {
-      if (s.status === 'coming') return period === '2026'; // show coming soon in 2026 view
-      if (s.crossYear) return true; // cross-year studies show in both
-      return s.launchYear === year;
-    });
-  }
-
-  // Get launched-only studies for a period
-  function launchedForPeriod(studies, period) {
-    return filterByPeriod(studies, period).filter(isLaunched);
-  }
-
-  // ============================================================
-  // COMPUTE METRICS from data
-  // ============================================================
-  function computeMetrics(studies, period) {
-    var all = filterByPeriod(studies, period);
-    var launched = all.filter(isLaunched);
-    var coming = all.filter(function(s) { return s.status === 'coming'; });
-    var paid = launched.filter(isPaid);
-    var organic = launched.filter(isOrganic);
-    var paidNonOutlier = paid.filter(function(s) { return !s.outlier; });
-    var completed = launched.filter(isComplete);
-    var recruiting = launched.filter(isRecruiting);
-    var crossYear = launched.filter(function(s) { return s.crossYear; });
-
-    var totalSpend = launched.reduce(function(a, s) { return a + s.spend; }, 0);
-    var totalLeads = 0; var leadsCount = 0;
-    launched.forEach(function(s) { if (s.leads != null) { totalLeads += s.leads; leadsCount++; } });
-    var totalJoined = launched.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
-    var totalOnboarded = launched.reduce(function(a, s) { return a + s.onboarded; }, 0);
-    var totalTarget = launched.reduce(function(a, s) { return a + s.target; }, 0);
-
-    var daysStudies = launched.filter(function(s) { return s.days != null; });
-    var avgDays = daysStudies.length > 0
-      ? (daysStudies.reduce(function(a, s) { return a + s.days; }, 0) / daysStudies.length).toFixed(1)
-      : '—';
-
-    var blendedCPO = totalOnboarded > 0 ? totalSpend / totalOnboarded : 0;
-
-    var paidNOSpend = paidNonOutlier.reduce(function(a, s) { return a + s.spend; }, 0);
-    var paidNOOnb = paidNonOutlier.reduce(function(a, s) { return a + s.onboarded; }, 0);
-    var paidExclCPO = paidNOOnb > 0 ? paidNOSpend / paidNOOnb : 0;
-
-    var paidAllSpend = paid.reduce(function(a, s) { return a + s.spend; }, 0);
-    var paidAllOnb = paid.reduce(function(a, s) { return a + s.onboarded; }, 0);
-    var paidInclCPO = paidAllOnb > 0 ? paidAllSpend / paidAllOnb : 0;
-
-    // Type breakdown
-    var types = {};
-    launched.forEach(function(s) {
-      var key = s.type + (s.spend === 0 && (s.type === 'RWE') ? '_free' : (s.spend > 0 ? '_paid' : ''));
-      if (s.type === 'VEP') key = 'VEP';
-      else if (s.type === 'RCT' && s.spend > 0) key = 'RCT_paid';
-      else if (s.type === 'RCT' && s.spend === 0) key = 'RCT_free';
-      else if (s.type === 'RWE' && s.spend > 0) key = 'RWE_paid';
-      else key = 'RWE_free';
-
-      if (!types[key]) types[key] = { count: 0, spend: 0, onboarded: 0, totalDays: 0, daysCount: 0 };
-      types[key].count++;
-      types[key].spend += s.spend;
-      types[key].onboarded += s.onboarded;
-      if (s.days != null) { types[key].totalDays += s.days; types[key].daysCount++; }
-    });
-
-    // Manual queue comparison
-    var manualStudies = launched.filter(function(s) { return s.manualQueue; });
-    var autoStudies = launched.filter(function(s) { return !s.manualQueue; });
-
-    function manualMetrics(arr) {
-      var spend = arr.reduce(function(a, s) { return a + s.spend; }, 0);
-      var onb = arr.reduce(function(a, s) { return a + s.onboarded; }, 0);
-      var joined = arr.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
-      var daysArr = arr.filter(function(s) { return s.days != null; });
-      var avgD = daysArr.length > 0 ? (daysArr.reduce(function(a, s) { return a + s.days; }, 0) / daysArr.length).toFixed(1) : '—';
-      var convRate = joined > 0 ? ((onb / joined) * 100).toFixed(1) : '—';
-      return { count: arr.length, spend: spend, onboarded: onb, joined: joined, cpo: onb > 0 && spend > 0 ? spend / onb : 0, avgDays: avgD, convRate: convRate };
-    }
-
-    var manualM = manualMetrics(manualStudies);
-    var autoM = manualMetrics(autoStudies);
-
-    return {
-      all: all, launched: launched, coming: coming, paid: paid, organic: organic,
-      paidNonOutlier: paidNonOutlier, completed: completed, recruiting: recruiting,
-      crossYear: crossYear,
-      totalSpend: totalSpend, totalLeads: totalLeads, leadsCount: leadsCount,
-      totalJoined: totalJoined, totalOnboarded: totalOnboarded, totalTarget: totalTarget,
-      avgDays: avgDays, daysCount: daysStudies.length,
-      blendedCPO: blendedCPO, paidExclCPO: paidExclCPO, paidInclCPO: paidInclCPO,
-      paidNOSpend: paidNOSpend, paidNOOnb: paidNOOnb,
-      paidAllSpend: paidAllSpend, paidAllOnb: paidAllOnb,
-      types: types,
-      manualM: manualM, autoM: autoM,
-      manualStudies: manualStudies, autoStudies: autoStudies
-    };
-  }
-
-  // ============================================================
-  // RENDER FUNCTIONS
-  // ============================================================
-
-  function renderSubtitle(period) {
-    var labels = { all: 'All-Time Study Dashboard', '2025': '2025 Studies', '2026': '2026 Year-to-Date' };
-    $('#dashboard-subtitle').textContent = 'Reputable — ' + labels[period] + ' · Updated Feb 18, 2026';
-  }
-
-  function renderMetrics(m, period) {
-    var labels = { all: 'All-Time Ad Spend', '2025': '2025 Ad Spend', '2026': '2026 YTD Ad Spend' };
-    var cpoLabels = { all: 'Blended CPO (All Studies)', '2025': 'Blended CPO (2025)', '2026': 'Blended CPO (2026 YTD)' };
-    var comingText = m.coming.length > 0 ? ' · ' + m.coming.length + ' coming soon' : '';
-
-    var html = '';
-    html += '<div class="metric-card"><div class="label">Total Studies</div><div class="value accent">' + m.all.length + '</div>';
-    html += '<div class="sub">' + m.paid.length + ' paid · ' + m.organic.length + ' $0 spend' + comingText + '</div></div>';
-
-    html += '<div class="metric-card"><div class="label">Completed Recruitment</div><div class="value">' + m.completed.length + '</div>';
-    html += '<div class="sub">' + m.recruiting.length + ' recruiting' + (m.coming.length > 0 ? ' · ' + m.coming.length + ' coming soon' : '') + '</div></div>';
-
-    html += '<div class="metric-card"><div class="label">Avg Days to Recruit</div><div class="value">' + m.avgDays + '</div>';
-    html += '<div class="sub">Across ' + m.daysCount + ' studies with duration data</div></div>';
-
-    html += '<div class="metric-card"><div class="label">Total Leads</div><div class="value">' + fmtInt(m.totalLeads) + '</div>';
-    html += '<div class="sub">Across ' + m.leadsCount + ' studies with lead data</div></div>';
-
-    html += '<div class="metric-card"><div class="label">Total Joined</div><div class="value">' + fmtInt(m.totalJoined) + '</div>';
-    html += '<div class="sub">Across ' + m.launched.length + ' studies</div></div>';
-
-    html += '<div class="metric-card"><div class="label">Total Onboarded</div><div class="value green">' + fmtInt(m.totalOnboarded) + '</div>';
-    html += '<div class="sub">Across ' + m.launched.length + ' studies</div></div>';
-
-    html += '<div class="metric-card"><div class="label">' + esc(labels[period]) + '</div><div class="value blue">' + fmt(m.totalSpend) + '</div>';
-    html += '<div class="sub">Across ' + m.paid.length + ' paid studies</div></div>';
-
-    html += '<div class="metric-card"><div class="label">' + esc(cpoLabels[period]) + '</div><div class="value green">' + fmt(m.blendedCPO) + '</div>';
-    html += '<div class="sub">' + fmt(m.totalSpend) + ' / ' + fmtInt(m.totalOnboarded) + ' onboarded</div></div>';
-
-    html += '<div class="metric-card"><div class="label">Paid CPO (Excl. Outliers)</div><div class="value green">' + fmt(m.paidExclCPO) + '</div>';
-    html += '<div class="sub">' + (m.paidNonOutlier.length > 0 ? 'Standard paid studies only' : 'No non-outlier paid studies') + '</div></div>';
-
-    if (m.crossYear.length > 0 && period !== 'all') {
-      html += '<div class="metric-card"><div class="label">Cross-Year Studies</div><div class="value accent">' + m.crossYear.length + '</div>';
-      html += '<div class="sub">' + m.crossYear.map(function(s) { return s.name.split(':')[0].split('—')[0].trim(); }).join(', ') + '</div></div>';
-    }
-
-    $('#metrics-grid').innerHTML = html;
-  }
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => document.querySelectorAll(sel);
+  const fmt = n => n == null ? '—' : '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtInt = n => n == null ? '—' : n.toLocaleString('en-US');
+  const fmtPct = n => n == null ? '—' : n.toFixed(1) + '%';
+  const esc = s => { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
 
   function statusBadge(status) {
-    var map = {
-      complete: '<span class="badge badge-green">Complete</span>',
-      active: '<span class="badge badge-blue">Active</span>',
-      recruiting: '<span class="badge badge-yellow">Recruiting</span>',
-      coming: '<span class="badge badge-accent">Coming Soon</span>'
+    const map = {
+      recruiting: ['badge-lime', 'Recruiting'],
+      active: ['badge-green', 'Active'],
+      complete: ['badge-blue', 'Completed'],
+      coming: ['badge-gray', 'Coming Soon'],
     };
-    return map[status] || '';
+    const [cls, label] = map[status] || ['badge-gray', status];
+    return `<span class="badge ${cls}">${label}</span>`;
   }
 
   function typeBadge(type) {
-    var map = {
-      RCT: '<span class="badge badge-blue">RCT</span>',
-      RWE: '<span class="badge badge-green">RWE</span>',
-      VEP: '<span class="badge badge-yellow">VEP</span>'
-    };
-    return map[type] || type;
+    const map = { RCT: 'badge-indigo', RWE: 'badge-teal', VEP: 'badge-lavender' };
+    return `<span class="badge ${map[type] || 'badge-gray'}">${type}</span>`;
   }
 
-  function renderCostTable(m, period) {
-    var studies = m.launched;
-    $('#cost-analysis-title').textContent = 'Cost Analysis — ' + studies.length + ' Studies' + (period !== 'all' ? ' (' + period + ')' : '');
+  // ============================================================
+  // STATE
+  // ============================================================
+  let sortCol = 'status';
+  let sortDir = 'asc';
+  let filterStatus = 'all';
+  let filterType = 'all';
+  let filterManual = 'all';
 
-    var html = '';
-    studies.forEach(function(s, i) {
-      var cls = '';
-      if (s.outlier) cls = 'row-outlier';
-      else if (s.spend === 0) cls = 'row-free';
-      if (s.crossYear && period !== 'all') cls += ' row-crossyear';
-
-      html += '<tr class="' + cls + '">';
-      html += '<td>' + (i + 1) + '</td>';
-      html += '<td>' + esc(s.name) + '</td>';
-      html += '<td>' + typeBadge(s.type) + '</td>';
-      html += '<td>' + (s.launchDate || '—') + '</td>';
-      html += '<td>' + (s.endDate || '—') + '</td>';
-      html += '<td class="align-right">' + fmt(s.spend) + '</td>';
-      html += '<td class="align-right">' + fmtInt(s.leads) + '</td>';
-      html += '<td class="align-right">' + fmtInt(s.joined) + '</td>';
-      html += '<td class="align-right">' + fmtInt(s.onboarded) + '</td>';
-      html += '<td class="align-right">' + fmtInt(s.target) + '</td>';
-      html += '<td class="align-right">' + (s.onboarded > 0 && s.spend > 0 ? fmt(s.spend / s.onboarded) : s.spend === 0 ? '$0' : '—') + '</td>';
-      html += '<td>' + esc(s.wearable) + '</td>';
-      html += '<td class="align-right">' + (s.days != null ? s.days : '—') + '</td>';
-      html += '<td>' + (s.manualQueue ? '<span class="badge badge-red">Yes</span>' : '<span class="badge badge-gray">No</span>') + '</td>';
-      html += '<td>' + statusBadge(s.status) + '</td>';
-      html += '<td>' + esc(s.notes) + '</td>';
-      html += '</tr>';
-    });
-    $('#cost-table-body').innerHTML = html;
-
-    // Footer
-    var foot = '<tr class="totals-row"><td></td><td><strong>TOTALS</strong></td><td></td><td></td><td></td>';
-    foot += '<td class="align-right">' + fmt(m.totalSpend) + '</td>';
-    foot += '<td class="align-right">' + fmtInt(m.totalLeads) + '</td>';
-    foot += '<td class="align-right">' + fmtInt(m.totalJoined) + '</td>';
-    foot += '<td class="align-right">' + fmtInt(m.totalOnboarded) + '</td>';
-    foot += '<td class="align-right">' + fmtInt(m.totalTarget) + '</td>';
-    foot += '<td class="align-right">—</td><td></td><td class="align-right">—</td><td></td><td></td><td></td></tr>';
-    $('#cost-table-foot').innerHTML = foot;
-
-    // CPO averages
-    var avgHtml = '';
-    avgHtml += '<div class="avg-card"><div class="avg-label">Blended CPO (All Studies incl. $0)</div>';
-    avgHtml += '<div class="avg-value" style="color:var(--green)">' + fmt(m.blendedCPO) + '</div>';
-    avgHtml += '<div class="avg-detail">' + fmt(m.totalSpend) + ' spend ÷ ' + fmtInt(m.totalOnboarded) + ' onboarded</div></div>';
-
-    avgHtml += '<div class="avg-card"><div class="avg-label">Paid Studies CPO (Excl. Outliers)</div>';
-    avgHtml += '<div class="avg-value" style="color:var(--blue)">' + fmt(m.paidExclCPO) + '</div>';
-    avgHtml += '<div class="avg-detail">' + fmt(m.paidNOSpend) + ' spend ÷ ' + fmtInt(m.paidNOOnb) + ' onboarded</div></div>';
-
-    avgHtml += '<div class="avg-card"><div class="avg-label">Paid Studies CPO (Incl. Outliers)</div>';
-    avgHtml += '<div class="avg-value" style="color:var(--yellow)">' + fmt(m.paidInclCPO) + '</div>';
-    avgHtml += '<div class="avg-detail">' + fmt(m.paidAllSpend) + ' spend ÷ ' + fmtInt(m.paidAllOnb) + ' onboarded</div></div>';
-
-    $('#avg-grid').innerHTML = avgHtml;
+  // ============================================================
+  // RENDER: API Status
+  // ============================================================
+  function renderApiStatus() {
+    const el = $('#api-status');
+    if (apiData) {
+      el.innerHTML = '<span class="status-badge live"><span class="dot"></span>Live</span>';
+    } else {
+      el.innerHTML = '<span class="status-badge offline"><span class="dot"></span>Offline</span>';
+    }
   }
 
-  function renderYoY() {
-    var m25 = computeMetrics(STUDIES, '2025');
-    var m26 = computeMetrics(STUDIES, '2026');
+  // ============================================================
+  // RENDER: KPI Cards
+  // ============================================================
+  function renderKPIs() {
+    const grid = $('#kpi-grid');
+    const summary = dataService.getSummary();
+    const launched = STUDIES.filter(s => s.status !== 'coming');
+    const totalStudies = STUDIES.length;
+    const recruiting = STUDIES.filter(s => s.status === 'recruiting').length;
+    const completed = STUDIES.filter(s => s.status === 'complete').length;
+    const coming = STUDIES.filter(s => s.status === 'coming').length;
+    const localOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const localSpend = launched.reduce((a, s) => a + s.spend, 0);
 
-    // Identify cross-year studies
-    var crossYear = STUDIES.filter(function(s) { return s.crossYear; });
+    const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
+    const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
 
-    function yoyCard(title, color, m) {
-      var html = '<div class="yoy-card"><h4><span style="color:' + color + '">●</span> ' + title + '</h4>';
-      html += '<div class="yoy-row"><span class="yoy-label">Launched studies</span><span class="yoy-val">' + m.launched.length + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Completed</span><span class="yoy-val">' + m.completed.length + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Total ad spend</span><span class="yoy-val">' + fmt(m.totalSpend) + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Total leads</span><span class="yoy-val">' + fmtInt(m.totalLeads) + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Total onboarded</span><span class="yoy-val">' + fmtInt(m.totalOnboarded) + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Blended CPO</span><span class="yoy-val">' + fmt(m.blendedCPO) + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Paid CPO (excl. outliers)</span><span class="yoy-val">' + fmt(m.paidExclCPO) + '</span></div>';
-      html += '<div class="yoy-row"><span class="yoy-label">Avg days to recruit</span><span class="yoy-val">' + m.avgDays + ' days</span></div>';
-      html += '</div>';
-      return html;
+    let cards = '';
+
+    // Total Studies
+    cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${recruiting} recruiting · ${completed} completed · ${coming} coming</div></div>`;
+
+    if (summary) {
+      const spend = summary.totalSpend?.month ?? 0;
+      const clicks = summary.totalClicks?.month ?? 0;
+      const installs = summary.totalInstalls?.month ?? 0;
+      const cpi = summary.costPerInstall?.month ?? 0;
+      const onboarded = summary.totalOnboarded?.month ?? 0;
+      const cpo = summary.costPerOnboard?.month ?? 0;
+      const subs = summary.subscriberCount ?? 0;
+
+      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">App Installs (${periodLabel})</div><div class="kpi-value teal">${fmtInt(installs)}</div><div class="kpi-sub">CPI: ${fmt(cpi)}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">ManyChat Subscribers</div><div class="kpi-value blue">${fmtInt(subs)}</div><div class="kpi-sub">Messenger bot audience</div></div>`;
+    } else {
+      // Fallback to local data
+      const blendedCPO = localOnboarded > 0 ? localSpend / localOnboarded : 0;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend</div><div class="kpi-value lime">${fmt(localSpend)}</div><div class="kpi-sub">Across ${launched.filter(s => s.spend > 0).length} paid studies</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Onboarded</div><div class="kpi-value green">${fmtInt(localOnboarded)}</div><div class="kpi-sub">Blended CPO: ${fmt(blendedCPO)}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Joined</div><div class="kpi-value teal">${fmtInt(launched.reduce((a, s) => a + (s.joined || 0), 0))}</div><div class="kpi-sub">Across all launched studies</div></div>`;
     }
 
-    var html = yoyCard('2025 Studies (by launch date)', 'var(--blue)', m25);
-    html += yoyCard('2026 YTD Studies (by launch date)', 'var(--green)', m26);
+    // Always show local totals
+    const totalTarget = launched.reduce((a, s) => a + s.target, 0);
+    const pctComplete = totalTarget > 0 ? ((localOnboarded / totalTarget) * 100).toFixed(1) : 0;
+    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(localOnboarded)} / ${fmtInt(totalTarget)} target</div></div>`;
 
-    // Cross-year detail
-    if (crossYear.length > 0) {
-      html += '<div class="yoy-card"><h4><span style="color:var(--accent)">●</span> Cross-Year Studies</h4>';
-      crossYear.forEach(function(s) {
-        html += '<div class="yoy-row"><span class="yoy-label">' + esc(s.name) + '</span><span class="yoy-val">' + (s.launchDate || '—') + ' → ' + (s.endDate || 'ongoing') + '</span></div>';
-        html += '<div class="yoy-row"><span class="yoy-label" style="padding-left:12px">Spend / Onboarded</span><span class="yoy-val">' + fmt(s.spend) + ' / ' + s.onboarded + '</span></div>';
-      });
-      html += '<div class="crossyear-note"><strong>Note:</strong> Cross-year studies are bucketed by launch date but appear in both year views. Their spend and onboarded counts are not split between years — the full amount is attributed to the launch year. Future improvement: split spend and onboarded proportionally by date range.</div>';
-      html += '</div>';
+    grid.innerHTML = cards;
+  }
+
+  // ============================================================
+  // RENDER: Funnel
+  // ============================================================
+  function renderFunnel() {
+    const row = $('#funnel-row');
+    const funnel = dataService.getFunnel();
+
+    if (!funnel) {
+      // Fallback funnel from local data
+      const launched = STUDIES.filter(s => s.status !== 'coming');
+      const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
+      const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
+      const totalOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
+
+      row.innerHTML = `
+        <div class="funnel-step"><div class="funnel-val">${fmtInt(totalLeads)}</div><div class="funnel-label">Leads</div></div>
+        <div class="funnel-step"><div class="funnel-val">${fmtInt(totalJoined)}</div><div class="funnel-label">Joined</div><div class="funnel-rate">${totalLeads > 0 ? fmtPct(totalJoined / totalLeads * 100) : '—'}</div></div>
+        <div class="funnel-step"><div class="funnel-val">${fmtInt(totalOnboarded)}</div><div class="funnel-label">Onboarded</div><div class="funnel-rate">${totalJoined > 0 ? fmtPct(totalOnboarded / totalJoined * 100) : '—'}</div></div>
+      `;
+      return;
     }
 
-    $('#yoy-grid').innerHTML = html;
-  }
-
-  function renderScorecard(m, period) {
-    var all = filterByPeriod(STUDIES, period);
-
-    // Sort: recruiting first, then active, then complete, then coming
-    var order = { recruiting: 0, active: 1, complete: 2, coming: 3 };
-    var sorted = all.slice().sort(function(a, b) {
-      return (order[a.status] || 9) - (order[b.status] || 9);
-    });
-
-    var html = '';
-    sorted.forEach(function(s) {
-      var pct = s.target > 0 ? Math.round((s.onboarded / s.target) * 1000) / 10 : 0;
-      var barColor = 'green';
-      if (s.status === 'coming') barColor = 'accent';
-      else if (pct < 50) barColor = 'red';
-      else if (pct < 90) barColor = 'yellow';
-
-      var cpoText = s.spend > 0 && s.onboarded > 0
-        ? 'CPO: ' + fmt(s.spend / s.onboarded)
-        : '$0 spend (organic)';
-
-      html += '<div class="score-card">';
-      html += '<div class="study-name">' + esc(s.name) + ' ' + statusBadge(s.status) + (s.manualQueue ? ' <span class="badge badge-red">Manual Queue</span>' : '') + '</div>';
-      html += '<div class="score-meta"><span>' + s.onboarded + ' / ' + s.target + ' onboarded</span><span>' + pct + '%</span></div>';
-      html += '<div class="progress-bar"><div class="progress-fill ' + barColor + '" style="width:' + Math.min(pct, 100) + '%"></div></div>';
-      html += '<div class="score-meta"><span>' + cpoText + '</span><span>' + (s.days != null ? s.days + ' days' : '') + (s.notes ? (s.days ? ' · ' : '') + esc(s.notes) : '') + '</span></div>';
-
-      // Launch / End date row
-      html += '<div class="score-date">';
-      html += '<span><span class="date-label">Launch:</span> ' + (s.launchDate || 'TBD') + '</span>';
-      html += '<span><span class="date-label">End:</span> ' + (s.endDate || (s.status === 'coming' ? 'TBD' : 'Ongoing')) + '</span>';
-      if (s.crossYear) html += '<span class="badge badge-accent" style="font-size:9px;padding:1px 6px;">Cross-Year</span>';
-      html += '</div>';
-
-      html += '</div>';
-    });
-    $('#scorecard-grid').innerHTML = html;
-  }
-
-  function renderProjections(m, period) {
-    var section = $('#projections-section');
-    if (period === '2025') { section.classList.add('section-hidden'); return; }
-    section.classList.remove('section-hidden');
-
-    var recruiting = STUDIES.filter(function(s) { return s.status === 'recruiting'; });
-    var totalRemaining = 0;
-    var estCostCurrent = 0;
-
-    var html = '';
-    recruiting.forEach(function(s) {
-      var remaining = s.target - s.onboarded;
-      totalRemaining += remaining;
-      var currentCPO = s.onboarded > 0 && s.spend > 0 ? s.spend / s.onboarded : 0;
-      var estCurrent = remaining * currentCPO;
-      estCostCurrent += estCurrent;
-
-      html += '<div class="proj-card">';
-      html += '<div class="proj-name">' + esc(s.name) + '</div>';
-      html += '<div class="proj-row"><span>Current onboarded</span><span>' + s.onboarded + ' / ' + s.target + '</span></div>';
-      html += '<div class="proj-row"><span>Remaining to recruit</span><span>' + remaining + ' participants</span></div>';
-      if (s.spend > 0) {
-        html += '<div class="proj-row"><span>Current CPO</span><span>' + fmt(currentCPO) + (s.outlier ? ' (outlier)' : '') + '</span></div>';
-        html += '<div class="proj-row"><span>Est. remaining cost at current CPO</span><span>' + fmt(estCurrent) + '</span></div>';
-      } else {
-        html += '<div class="proj-row"><span>Ad spend</span><span>$0 (organic)</span></div>';
-      }
-      html += '<div class="proj-row"><span>Launch date</span><span>' + (s.launchDate || 'TBD') + '</span></div>';
-      if (s.notes) html += '<div class="proj-row"><span>Note</span><span>' + esc(s.notes) + '</span></div>';
-      html += '</div>';
-    });
-
-    // Summary card
-    html += '<div class="proj-card">';
-    html += '<div class="proj-name">Projection Summary</div>';
-    html += '<div class="proj-row"><span>Total remaining participants</span><span>' + totalRemaining + '</span></div>';
-    html += '<div class="proj-row"><span>Est. cost at current CPO rates</span><span>~' + fmt(estCostCurrent) + '</span></div>';
-    html += '<div class="proj-row"><span>Best-case total spend at completion</span><span>~' + fmt(m.totalSpend + estCostCurrent * 0.25) + '</span></div>';
-    html += '<div class="proj-row"><span>Worst-case total spend at completion</span><span>~' + fmt(m.totalSpend + estCostCurrent) + '</span></div>';
-    html += '</div>';
-
-    $('#proj-grid').innerHTML = html;
-  }
-
-  function renderKPIs(m, period) {
-    var section = $('#kpi-section');
-    if (period === '2025') { section.classList.add('section-hidden'); return; }
-    section.classList.remove('section-hidden');
-
-    // Compute type-specific CPOs for paid studies only
-    var rctPaid = m.launched.filter(function(s) { return s.type === 'RCT' && s.spend > 0; });
-    var rwePaid = m.launched.filter(function(s) { return s.type === 'RWE' && s.spend > 0; });
-
-    var rctSpend = rctPaid.reduce(function(a, s) { return a + s.spend; }, 0);
-    var rctOnb = rctPaid.reduce(function(a, s) { return a + s.onboarded; }, 0);
-    var rctCPO = rctOnb > 0 ? rctSpend / rctOnb : 0;
-
-    var rweSpend = rwePaid.reduce(function(a, s) { return a + s.spend; }, 0);
-    var rweOnb = rwePaid.reduce(function(a, s) { return a + s.onboarded; }, 0);
-    var rweCPO = rweOnb > 0 ? rweSpend / rweOnb : 0;
-
-    var barsHtml = '';
-
-    // RCT bar
-    var rctPct = Math.min((rctCPO / 40) * 100, 100);
-    var rctColor = rctCPO <= 35 ? 'green' : 'yellow';
-    barsHtml += '<div class="target-row"><div class="target-label">' + typeBadge('RCT') + ' Paid</div>';
-    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill ' + rctColor + '" style="width:' + rctPct + '%">' + fmt(rctCPO) + '</div>';
-    barsHtml += '<div class="target-marker" style="left:87.5%" data-label="Target $35"></div></div>';
-    barsHtml += '<div class="target-vals"><strong>' + fmt(rctCPO) + '</strong> / $35.00</div></div>';
-
-    // RWE bar
-    var rwePct = Math.min((rweCPO / 80) * 100, 100);
-    var rweColor = rweCPO <= 25 ? 'green' : 'yellow';
-    barsHtml += '<div class="target-row"><div class="target-label">' + typeBadge('RWE') + ' Paid</div>';
-    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill ' + rweColor + '" style="width:' + rwePct + '%">' + fmt(rweCPO) + '</div>';
-    barsHtml += '<div class="target-marker" style="left:31.3%" data-label="Target $25"></div></div>';
-    barsHtml += '<div class="target-vals"><strong>' + fmt(rweCPO) + '</strong> / $25.00</div></div>';
-
-    // VEP bar
-    barsHtml += '<div class="target-row"><div class="target-label">' + typeBadge('VEP') + ' Organic</div>';
-    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill green" style="width:100%">$0 — on target</div></div>';
-    barsHtml += '<div class="target-vals"><strong>$0</strong> / $0</div></div>';
-
-    // Blended bar
-    var blendPct = Math.min((m.blendedCPO / 30) * 100, 100);
-    var blendColor = m.blendedCPO <= 25 ? 'green' : 'accent';
-    barsHtml += '<div class="target-row" style="background:rgba(108,92,231,0.08);border:1px solid rgba(108,92,231,0.2)">';
-    barsHtml += '<div class="target-label" style="font-weight:700">Blended</div>';
-    barsHtml += '<div class="target-bar-wrap"><div class="target-bar-fill ' + blendColor + '" style="width:' + blendPct + '%">' + fmt(m.blendedCPO) + '</div>';
-    barsHtml += '<div class="target-marker" style="left:83.3%" data-label="Target ≤$25"></div></div>';
-    barsHtml += '<div class="target-vals"><strong>' + fmt(m.blendedCPO) + '</strong> / ≤$25.00</div></div>';
-
-    $('#kpi-bars').innerHTML = barsHtml;
-    $('#kpi-note').textContent = 'RWE paid CPO skewed by outliers (ProleevaMax ' + fmt(5686.18/29) + '). Excluding outliers: ' + fmt(m.paidExclCPO) + '. Blended target of $25 ' + (m.blendedCPO <= 25 ? 'achieved' : 'achievable as organic share grows') + '.';
-
-    // Pace section
-    // Only 2026-launched studies count toward 2026 goal
-    var m26 = computeMetrics(STUDIES, '2026');
-    var ytdOnboarded = m26.totalOnboarded;
-    var annualTarget = 4000;
-    var weeksElapsed = 7;
-    var weeklyRate = Math.round(ytdOnboarded / weeksElapsed);
-    var requiredRate = Math.round(annualTarget / 52);
-    var pacePct = Math.round((weeklyRate / requiredRate) * 100);
-    var onTrack = pacePct >= 100;
-
-    // Pre-2026 studies
-    var pre2026 = STUDIES.filter(function(s) { return s.launchYear === 2025 && !s.crossYear && isLaunched(s); });
-    var pre2026Onb = pre2026.reduce(function(a, s) { return a + s.onboarded; }, 0);
-
-    var circumference = 364.4;
-
-    var paceHtml = '';
-
-    // YTD Progress ring
-    var ytdPct = ytdOnboarded / annualTarget;
-    var ytdOffset = circumference * (1 - ytdPct);
-    paceHtml += '<div class="pace-card"><div class="pace-title">2026 Year-to-Date Progress</div>';
-    paceHtml += '<div class="ring-wrap"><svg width="140" height="140" viewBox="0 0 140 140">';
-    paceHtml += '<circle class="ring-bg" cx="70" cy="70" r="58"></circle>';
-    paceHtml += '<circle class="ring-fill" cx="70" cy="70" r="58" stroke="url(#grad-ring)" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + ytdOffset.toFixed(1) + '"></circle>';
-    paceHtml += '<defs><linearGradient id="grad-ring" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--green)"/></linearGradient></defs>';
-    paceHtml += '</svg><div class="ring-center"><div class="ring-value" style="color:var(--green)">' + fmtInt(ytdOnboarded) + '</div><div class="ring-label">of ' + fmtInt(annualTarget) + '</div></div></div>';
-    paceHtml += '<div class="pace-stats">';
-    paceHtml += '<div class="pace-stat-row"><span>Weeks elapsed (2026)</span><span>~' + weeksElapsed + '</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>2026 weekly rate</span><span>~' + weeklyRate + ' / wk</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>All-time onboarded</span><span>' + fmtInt(m.totalOnboarded) + '</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>Pre-2026 onboarded</span><span>' + fmtInt(pre2026Onb) + '</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>Active + coming studies</span><span>' + m.all.length + '</span></div>';
-    paceHtml += '</div>';
-    paceHtml += '<p style="font-size:10px;color:var(--text-dim);margin-top:8px">Year bucketing based on launch date. Cross-year studies included in both views.</p>';
-    paceHtml += '</div>';
-
-    // Pace check ring
-    var paceOffset = circumference * (1 - Math.min(pacePct / 100, 1));
-    var paceColor = onTrack ? 'var(--green)' : 'var(--yellow)';
-    paceHtml += '<div class="pace-card"><div class="pace-title">Pace Check (2026 Target: ' + fmtInt(annualTarget) + ')</div>';
-    paceHtml += '<div class="ring-wrap"><svg width="140" height="140" viewBox="0 0 140 140">';
-    paceHtml += '<circle class="ring-bg" cx="70" cy="70" r="58"></circle>';
-    paceHtml += '<circle class="ring-fill" cx="70" cy="70" r="58" stroke="' + paceColor + '" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + paceOffset.toFixed(1) + '"></circle>';
-    paceHtml += '</svg><div class="ring-center"><div class="ring-value" style="color:' + paceColor + '">' + pacePct + '%</div><div class="ring-label">of required pace</div></div></div>';
-    paceHtml += '<div class="pace-stats">';
-    paceHtml += '<div class="pace-stat-row"><span>Required rate (' + fmtInt(annualTarget) + ' / yr)</span><span>~' + requiredRate + ' / wk</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>2026 YTD rate</span><span style="color:' + paceColor + ';font-weight:600">~' + weeklyRate + ' / wk</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>Status</span><span><span class="status-chip ' + (onTrack ? 'on-track' : 'behind') + '">' + (onTrack ? 'On Track' : 'Behind Pace') + '</span></span></div>';
-    paceHtml += '</div></div>';
-
-    // Budget projection
-    paceHtml += '<div class="pace-card"><div class="pace-title">Budget Projection</div>';
-    paceHtml += '<div style="text-align:center;margin:12px 0 16px"><div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px">Spend to date</div>';
-    paceHtml += '<div style="font-size:32px;font-weight:700;color:var(--blue)">' + fmt(m.totalSpend) + '</div></div>';
-    paceHtml += '<div class="pace-stats">';
-    paceHtml += '<div class="pace-stat-row"><span>Remaining (target CPO $20)</span><span>$63K–$83K</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>Remaining (current CPO ' + fmt(m.blendedCPO) + ')</span><span>$81K–$106K</span></div>';
-    paceHtml += '<div class="pace-stat-row"><span>If organic share grows to ~40%</span><span style="color:var(--green)">~40% savings</span></div>';
-    paceHtml += '</div>';
-    paceHtml += '<p style="font-size:11px;color:var(--text-dim);margin-top:10px;text-align:center">Growing the VEP / organic pipeline is the biggest lever for cost control</p>';
-    paceHtml += '</div>';
-
-    $('#pace-grid').innerHTML = paceHtml;
-    $('#pace-heading').style.display = '';
-    $('#pace-grid').style.display = '';
-  }
-
-  function renderTypeBreakdown(m) {
-    var types = m.types;
-    var rows = [
-      { label: '<span class="badge badge-blue">RCT</span> Randomized Controlled Trial (paid)', key: 'RCT_paid' },
-      { label: '<span class="badge badge-blue">RCT</span> Randomized Controlled Trial ($0)', key: 'RCT_free' },
-      { label: '<span class="badge badge-green">RWE</span> Real World Evidence (paid)', key: 'RWE_paid' },
-      { label: '<span class="badge badge-green">RWE</span> Real World Evidence ($0)', key: 'RWE_free' },
-      { label: '<span class="badge badge-yellow">VEP</span> Verified Evidence Program', key: 'VEP' }
+    const steps = [
+      { val: funnel.adImpressions, label: 'Impressions', prev: null },
+      { val: funnel.adClicks, label: 'Ad Clicks', prev: funnel.adImpressions },
+      { val: funnel.emailsSent, label: 'Emails Sent', prev: null },
+      { val: funnel.emailOpens, label: 'Email Opens', prev: funnel.emailsSent },
+      { val: funnel.appInstalls, label: 'App Installs', prev: funnel.adClicks },
+      { val: funnel.onboarded, label: 'Onboarded', prev: funnel.appInstalls },
     ];
 
-    var html = '';
-    var tCount = 0, tSpend = 0, tOnb = 0, tDays = 0, tDaysCount = 0;
-    rows.forEach(function(r) {
-      var t = types[r.key];
-      if (!t || t.count === 0) return;
-      tCount += t.count; tSpend += t.spend; tOnb += t.onboarded;
-      tDays += t.totalDays; tDaysCount += t.daysCount;
-      var avgCpo = t.onboarded > 0 && t.spend > 0 ? fmt(t.spend / t.onboarded) : (t.spend === 0 ? '$0' : '—');
-      var avgDays = t.daysCount > 0 ? (t.totalDays / t.daysCount).toFixed(1) + ' days' : '—';
-      html += '<tr><td>' + r.label + '</td>';
-      html += '<td class="align-right">' + t.count + '</td>';
-      html += '<td class="align-right">' + fmt(t.spend) + '</td>';
-      html += '<td class="align-right">' + t.onboarded + '</td>';
-      html += '<td class="align-right">' + avgCpo + '</td>';
-      html += '<td class="align-right">' + avgDays + '</td></tr>';
-    });
-    $('#type-table-body').innerHTML = html;
-
-    var totalCpo = tOnb > 0 ? fmt(tSpend / tOnb) : '—';
-    var totalAvgDays = tDaysCount > 0 ? (tDays / tDaysCount).toFixed(1) + ' days' : '—';
-    $('#type-table-foot').innerHTML = '<tr class="totals-row"><td><strong>Total</strong></td><td class="align-right"><strong>' + tCount + '</strong></td><td class="align-right"><strong>' + fmt(tSpend) + '</strong></td><td class="align-right"><strong>' + tOnb + '</strong></td><td class="align-right"><strong>' + totalCpo + '</strong></td><td class="align-right"><strong>' + totalAvgDays + '</strong></td></tr>';
+    row.innerHTML = steps.map(s => `
+      <div class="funnel-step">
+        <div class="funnel-val">${fmtInt(s.val)}</div>
+        <div class="funnel-label">${s.label}</div>
+        ${s.prev ? `<div class="funnel-rate">${fmtPct(s.val / s.prev * 100)} conv</div>` : ''}
+      </div>
+    `).join('');
   }
 
-  function renderManualQueue(m) {
-    var manual = m.manualM;
-    var auto = m.autoM;
+  // ============================================================
+  // RENDER: Charts
+  // ============================================================
+  let chartSpend, chartInstalls, chartEmail;
 
-    function mqCard(title, color, icon, data, studies) {
-      var h = '<div class="avg-card" style="text-align:left;border-left:3px solid ' + color + '">';
-      h += '<div class="avg-label" style="font-weight:600;color:var(--text);font-size:13px;margin-bottom:10px">' + icon + ' ' + title + '</div>';
-      h += '<div class="yoy-row"><span class="yoy-label">Studies</span><span class="yoy-val">' + data.count + '</span></div>';
-      h += '<div class="yoy-row"><span class="yoy-label">Total onboarded</span><span class="yoy-val">' + fmtInt(data.onboarded) + '</span></div>';
-      h += '<div class="yoy-row"><span class="yoy-label">Total ad spend</span><span class="yoy-val">' + fmt(data.spend) + '</span></div>';
-      if (data.spend > 0 && data.onboarded > 0) {
-        h += '<div class="yoy-row"><span class="yoy-label">CPO</span><span class="yoy-val">' + fmt(data.cpo) + '</span></div>';
-      }
-      h += '<div class="yoy-row"><span class="yoy-label">Avg days to recruit</span><span class="yoy-val">' + data.avgDays + (data.avgDays !== '—' ? ' days' : '') + '</span></div>';
-      h += '<div class="yoy-row"><span class="yoy-label">Joined → Onboarded rate</span><span class="yoy-val">' + data.convRate + (data.convRate !== '—' ? '%' : '') + '</span></div>';
-      // List the studies
-      h += '<div style="margin-top:8px;font-size:11px;color:var(--text-dim)">';
-      studies.forEach(function(s) {
-        h += '<div style="padding:2px 0">' + esc(s.name) + ' ' + typeBadge(s.type) + '</div>';
+  function destroyCharts() {
+    if (chartSpend) { chartSpend.destroy(); chartSpend = null; }
+    if (chartInstalls) { chartInstalls.destroy(); chartInstalls = null; }
+    if (chartEmail) { chartEmail.destroy(); chartEmail = null; }
+  }
+
+  const chartDefaults = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, labels: { color: '#999', font: { size: 11 } } },
+    },
+    scales: {
+      x: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    },
+  };
+
+  function renderCharts() {
+    destroyCharts();
+
+    const adsDaily = dataService.getMetaAdsDaily();
+    const installsDaily = dataService.getAppsflyerDaily();
+    const emailDaily = dataService.getNewsletterDaily();
+
+    if (!adsDaily.length && !installsDaily.length && !emailDaily.length) {
+      // Hide charts if no API data
+      $('#charts-grid').style.display = 'none';
+      return;
+    }
+    $('#charts-grid').style.display = '';
+
+    // Ad Spend & Clicks
+    if (adsDaily.length) {
+      const labels = adsDaily.map(d => d.date?.slice(5) || '');
+      chartSpend = new Chart($('#chart-spend'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Spend ($)', data: adsDaily.map(d => d.spend), backgroundColor: 'rgba(200,230,74,0.5)', borderColor: '#C8E64A', borderWidth: 1, yAxisID: 'y', order: 2 },
+            { label: 'Clicks', data: adsDaily.map(d => d.clicks), type: 'line', borderColor: '#60A5FA', backgroundColor: 'rgba(96,165,250,0.1)', pointRadius: 2, borderWidth: 2, yAxisID: 'y1', order: 1 },
+          ],
+        },
+        options: {
+          ...chartDefaults,
+          scales: {
+            ...chartDefaults.scales,
+            y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'Spend ($)', color: '#666' } },
+            y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Clicks', color: '#666' } },
+          },
+        },
       });
-      h += '</div></div>';
-      return h;
     }
 
-    var html = mqCard('Manual Queue Studies', 'var(--red)', '⚠', manual, m.manualStudies);
-    html += mqCard('Automated Flow Studies', 'var(--green)', '✓', auto, m.autoStudies);
-
-    // Delta card
-    html += '<div class="avg-card" style="text-align:left;border-left:3px solid var(--accent)">';
-    html += '<div class="avg-label" style="font-weight:600;color:var(--text);font-size:13px;margin-bottom:10px">Δ Impact Summary</div>';
-
-    if (manual.avgDays !== '—' && auto.avgDays !== '—') {
-      var daysDiff = parseFloat(manual.avgDays) - parseFloat(auto.avgDays);
-      html += '<div class="yoy-row"><span class="yoy-label">Avg days difference</span><span class="yoy-val" style="color:' + (daysDiff > 0 ? 'var(--red)' : 'var(--green)') + '">' + (daysDiff > 0 ? '+' : '') + daysDiff.toFixed(1) + ' days</span></div>';
+    // Installs
+    if (installsDaily.length) {
+      const labels = installsDaily.map(d => d.date?.slice(5) || '');
+      chartInstalls = new Chart($('#chart-installs'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Installs', data: installsDaily.map(d => d.installs), backgroundColor: 'rgba(0,179,159,0.5)', borderColor: '#00B39F', borderWidth: 1 },
+          ],
+        },
+        options: chartDefaults,
+      });
     }
 
-    if (manual.convRate !== '—' && auto.convRate !== '—') {
-      var convDiff = parseFloat(auto.convRate) - parseFloat(manual.convRate);
-      html += '<div class="yoy-row"><span class="yoy-label">Conversion rate gap</span><span class="yoy-val" style="color:' + (convDiff > 0 ? 'var(--green)' : 'var(--red)') + '">' + (convDiff > 0 ? '+' : '') + convDiff.toFixed(1) + 'pp for automated</span></div>';
+    // Email
+    if (emailDaily.length) {
+      const labels = emailDaily.map(d => d.date?.slice(5) || '');
+      chartEmail = new Chart($('#chart-email'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Opens', data: emailDaily.map(d => d.opens), borderColor: '#FBBF24', backgroundColor: 'rgba(251,191,36,0.1)', pointRadius: 2, borderWidth: 2, fill: true },
+            { label: 'Clicks', data: emailDaily.map(d => d.clicks), borderColor: '#A78BFA', backgroundColor: 'rgba(167,139,250,0.1)', pointRadius: 2, borderWidth: 2, fill: true },
+          ],
+        },
+        options: chartDefaults,
+      });
     }
-
-    if (manual.spend > 0 && manual.onboarded > 0 && auto.spend > 0 && auto.onboarded > 0) {
-      var cpoDiff = manual.cpo - auto.cpo;
-      html += '<div class="yoy-row"><span class="yoy-label">CPO difference</span><span class="yoy-val" style="color:' + (cpoDiff > 0 ? 'var(--red)' : 'var(--green)') + '">' + (cpoDiff > 0 ? '+' : '') + fmt(cpoDiff) + ' for manual</span></div>';
-    }
-
-    html += '<div style="margin-top:10px;font-size:11px;color:var(--text-dim)">Manual steps include: external prescreening, lab requirements, manual data collection. These add friction and reduce conversion rates.</div>';
-    html += '</div>';
-
-    $('#manual-queue-grid').innerHTML = html;
   }
 
   // ============================================================
-  // MAIN RENDER
+  // RENDER: Studies Table
   // ============================================================
-  function render(period) {
-    var m = computeMetrics(STUDIES, period);
+  const COLUMNS = [
+    { key: 'id', label: '#', align: 'right', sortable: true },
+    { key: 'name', label: 'Study Name', align: 'left', sortable: true },
+    { key: 'type', label: 'Type', align: 'left', sortable: true },
+    { key: 'status', label: 'Status', align: 'left', sortable: true },
+    { key: 'launchDate', label: 'Launch', align: 'left', sortable: true },
+    { key: 'endDate', label: 'End', align: 'left', sortable: false },
+    { key: 'spend', label: 'Ad Spend', align: 'right', sortable: true },
+    { key: 'leads', label: 'Leads', align: 'right', sortable: true },
+    { key: 'joined', label: 'Joins', align: 'right', sortable: true },
+    { key: 'onboarded', label: 'Onboarded', align: 'right', sortable: true },
+    { key: 'target', label: 'Target', align: 'right', sortable: true },
+    { key: 'cpo', label: 'CPO', align: 'right', sortable: true },
+    { key: 'wearable', label: 'Wearable', align: 'left', sortable: false },
+    { key: 'days', label: 'Days', align: 'right', sortable: true },
+    { key: 'manualQueue', label: 'Manual?', align: 'center', sortable: true },
+  ];
 
-    renderSubtitle(period);
-    renderMetrics(m, period);
-    renderCostTable(m, period);
-    renderManualQueue(m);
-    renderScorecard(m, period);
-    renderProjections(m, period);
-    renderKPIs(m, period);
-    renderTypeBreakdown(m);
-    renderYoY();
-
-    // Show/hide sections by period
-    var yoy = $('#yoy-section');
-    yoy.classList.toggle('section-hidden', period !== 'all');
-
-    $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Feb 18, 2026 · Year buckets based on launch date';
+  function getCPO(s) {
+    return (s.spend > 0 && s.onboarded > 0) ? s.spend / s.onboarded : null;
   }
 
-  // Bind filter buttons
-  var btns = $$('.filter-btn');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener('click', function() {
-      for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
-      this.classList.add('active');
-      render(this.getAttribute('data-filter'));
+  function getSortValue(s, col) {
+    if (col === 'cpo') return getCPO(s) ?? 999999;
+    if (col === 'status') {
+      const order = { recruiting: 0, active: 1, complete: 2, coming: 3 };
+      return order[s.status] ?? 4;
+    }
+    if (col === 'launchDate') {
+      if (!s.launchDate) return '9999';
+      const d = new Date(s.launchDate);
+      return isNaN(d) ? s.launchDate : d.toISOString();
+    }
+    if (col === 'manualQueue') return s.manualQueue ? 0 : 1;
+    const val = s[col];
+    return val == null ? -Infinity : val;
+  }
+
+  function renderStudiesTable() {
+    // Thead
+    const thead = $('#studies-thead');
+    thead.innerHTML = COLUMNS.map(c => {
+      const sorted = sortCol === c.key;
+      const arrow = sorted ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '';
+      const cls = [c.align === 'right' ? 'align-right' : '', sorted ? 'sorted' : ''].filter(Boolean).join(' ');
+      return `<th class="${cls}" data-col="${c.key}" ${c.sortable ? '' : 'style="cursor:default"'}>${c.label}${c.sortable ? `<span class="sort-arrow">${arrow}</span>` : ''}</th>`;
+    }).join('');
+
+    // Filter studies
+    let studies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
+
+    if (filterStatus !== 'all') studies = studies.filter(s => s.status === filterStatus);
+    if (filterType !== 'all') studies = studies.filter(s => s.type === filterType);
+    if (filterManual !== 'all') {
+      studies = studies.filter(s => filterManual === 'yes' ? s.manualQueue : !s.manualQueue);
+    }
+
+    // Sort
+    studies.sort((a, b) => {
+      let av = getSortValue(a, sortCol);
+      let bv = getSortValue(b, sortCol);
+      if (typeof av === 'string') av = av.toLowerCase();
+      if (typeof bv === 'string') bv = bv.toLowerCase();
+      if (av < bv) return sortDir === 'asc' ? -1 : 1;
+      if (av > bv) return sortDir === 'asc' ? 1 : -1;
+      return 0;
     });
+
+    // Tbody
+    const tbody = $('#studies-tbody');
+    tbody.innerHTML = studies.map(s => {
+      const cpo = getCPO(s);
+      return `<tr>
+        <td class="align-right">${s.id}</td>
+        <td>${esc(s.name)}${s.outlier ? ' <span class="badge badge-rose" style="font-size:9px">Outlier</span>' : ''}</td>
+        <td>${typeBadge(s.type)}</td>
+        <td>${statusBadge(s.status)}</td>
+        <td>${s.launchDate || '—'}</td>
+        <td>${s.endDate || '—'}</td>
+        <td class="align-right">${s.spend > 0 ? fmt(s.spend) : '—'}</td>
+        <td class="align-right">${fmtInt(s.leads)}</td>
+        <td class="align-right">${fmtInt(s.joined)}</td>
+        <td class="align-right">${fmtInt(s.onboarded)}</td>
+        <td class="align-right">${fmtInt(s.target)}</td>
+        <td class="align-right">${cpo != null ? fmt(cpo) : '—'}</td>
+        <td>${s.wearable || '—'}</td>
+        <td class="align-right">${s.days != null ? s.days : '—'}</td>
+        <td style="text-align:center">${s.manualQueue ? '<span style="color:var(--yellow)">Yes</span>' : '<span style="color:var(--text-dim)">No</span>'}</td>
+      </tr>`;
+    }).join('');
+
+    // Tfoot
+    const tfoot = $('#studies-tfoot');
+    const totSpend = studies.reduce((a, s) => a + s.spend, 0);
+    const totLeads = studies.reduce((a, s) => a + (s.leads || 0), 0);
+    const totJoined = studies.reduce((a, s) => a + (s.joined || 0), 0);
+    const totOnboarded = studies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totTarget = studies.reduce((a, s) => a + s.target, 0);
+    const totCPO = totOnboarded > 0 && totSpend > 0 ? totSpend / totOnboarded : null;
+
+    tfoot.innerHTML = `<tr>
+      <td class="align-right"></td><td><strong>${studies.length} studies</strong></td>
+      <td></td><td></td><td></td><td></td>
+      <td class="align-right"><strong>${fmt(totSpend)}</strong></td>
+      <td class="align-right"><strong>${fmtInt(totLeads)}</strong></td>
+      <td class="align-right"><strong>${fmtInt(totJoined)}</strong></td>
+      <td class="align-right"><strong>${fmtInt(totOnboarded)}</strong></td>
+      <td class="align-right"><strong>${fmtInt(totTarget)}</strong></td>
+      <td class="align-right"><strong>${totCPO != null ? fmt(totCPO) : '—'}</strong></td>
+      <td></td><td></td><td></td>
+    </tr>`;
   }
 
-  // Initial render
-  render('all');
+  // ============================================================
+  // RENDER: Ad Performance
+  // ============================================================
+  function renderAds() {
+    const ads = dataService.getMetaAdsBreakdown();
+    const section = $('#ads-section');
+    if (!ads.length) {
+      section.style.display = 'none';
+      return;
+    }
+    section.style.display = '';
+    const tbody = $('#ads-tbody');
+    tbody.innerHTML = ads.map(a => `<tr>
+      <td>${esc(a.campaignName || '—')}</td>
+      <td>${esc(a.adName || '—')}</td>
+      <td class="align-right">${fmtInt(a.impressions)}</td>
+      <td class="align-right">${fmtInt(a.clicks)}</td>
+      <td class="align-right">${fmt(a.spend)}</td>
+      <td class="align-right">${fmtPct(a.ctr)}</td>
+      <td class="align-right">${fmt(a.cpc)}</td>
+      <td class="align-right">${fmt(a.cpm)}</td>
+    </tr>`).join('');
+  }
+
+  // ============================================================
+  // RENDER: Email / Newsletter
+  // ============================================================
+  function renderEmail() {
+    const totals = dataService.getNewsletterTotals();
+    const grid = $('#email-grid');
+
+    if (!totals) {
+      // Placeholder
+      grid.innerHTML = `
+        <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Sent</div></div>
+        <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Delivered</div></div>
+        <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Opens</div></div>
+        <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Clicks</div></div>
+        <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Bounces</div></div>
+        <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Open Rate</div></div>
+      `;
+      return;
+    }
+
+    const openRate = totals.delivered > 0 ? (totals.opens / totals.delivered * 100) : 0;
+    const clickRate = totals.delivered > 0 ? (totals.clicks / totals.delivered * 100) : 0;
+
+    grid.innerHTML = `
+      <div class="email-metric"><div class="em-val" style="color:var(--blue)">${fmtInt(totals.sent)}</div><div class="em-label">Sent</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--teal)">${fmtInt(totals.delivered)}</div><div class="em-label">Delivered</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--yellow)">${fmtInt(totals.opens)}</div><div class="em-label">Opens</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--lavender)">${fmtInt(totals.clicks)}</div><div class="em-label">Clicks</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--rose)">${fmtInt(totals.bounces)}</div><div class="em-label">Bounces</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--green)">${fmtPct(openRate)}</div><div class="em-label">Open Rate</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--lime)">${fmtPct(clickRate)}</div><div class="em-label">Click Rate</div></div>
+    `;
+  }
+
+  // ============================================================
+  // RENDER: Study Scorecard (recruitment progress)
+  // ============================================================
+  function renderScorecard() {
+    const grid = $('#scorecard-grid');
+    const launched = STUDIES.filter(s => s.status !== 'coming');
+
+    grid.innerHTML = launched.map(s => {
+      const pct = s.target > 0 ? Math.min(100, (s.onboarded / s.target) * 100) : 0;
+      const cpo = getCPO(s);
+      let barClass = 'lime';
+      if (pct >= 100) barClass = 'green';
+      else if (pct < 50) barClass = 'yellow';
+
+      return `<div class="score-card">
+        <div class="sc-header">
+          <div>
+            <div class="sc-name">${esc(s.name)}</div>
+            <div class="sc-meta">${typeBadge(s.type)} ${statusBadge(s.status)}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:18px;font-weight:700;color:${pct >= 100 ? 'var(--green)' : 'var(--lime)'}">${s.onboarded}/${s.target}</div>
+            <div style="font-size:10px;color:var(--text-dim)">${pct.toFixed(0)}%</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
+        <div class="sc-stats">
+          ${s.spend > 0 ? `<div class="sc-stat">Spend: <strong>${fmt(s.spend)}</strong></div>` : ''}
+          ${cpo != null ? `<div class="sc-stat">CPO: <strong>${fmt(cpo)}</strong></div>` : ''}
+          ${s.days != null ? `<div class="sc-stat">Days: <strong>${s.days}</strong></div>` : ''}
+          ${s.manualQueue ? '<div class="sc-stat" style="color:var(--yellow)">Manual step</div>' : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ============================================================
+  // RENDER: Data Source Status
+  // ============================================================
+  function renderSourceStatus() {
+    const status = dataService.getSourceStatus();
+    const grid = $('#status-grid');
+
+    const sources = [
+      { key: 'metaAds', label: 'Meta Ads' },
+      { key: 'sendgrid', label: 'SendGrid' },
+      { key: 'appsflyer', label: 'AppsFlyer' },
+      { key: 'manychat', label: 'ManyChat' },
+      { key: 'analytics', label: 'Google Analytics' },
+    ];
+
+    if (!Object.keys(status).length) {
+      grid.innerHTML = sources.map(s =>
+        `<div class="ds-pill"><span class="ds-dot na"></span>${s.label}<span style="color:var(--text-dim);font-size:10px;margin-left:4px">No data</span></div>`
+      ).join('');
+      return;
+    }
+
+    grid.innerHTML = sources.map(s => {
+      const st = status[s.key] || 'unknown';
+      let dotClass = 'na';
+      let label = st;
+      if (st === 'success') { dotClass = 'ok'; label = 'OK'; }
+      else if (st === 'failed') { dotClass = 'fail'; label = 'Failed'; }
+      else if (st === 'rate_limited') { dotClass = 'warn'; label = 'Rate Limited'; }
+      else if (st === 'not_configured') { dotClass = 'na'; label = 'Not Configured'; }
+      return `<div class="ds-pill"><span class="ds-dot ${dotClass}"></span>${s.label}<span style="color:var(--text-dim);font-size:10px;margin-left:4px">${label}</span></div>`;
+    }).join('');
+  }
+
+  // ============================================================
+  // RENDER ALL
+  // ============================================================
+  function renderAll() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    $('#subtitle').textContent = `Reputable Health — ${selectedDays}-day window · Updated ${dateStr} ${timeStr}`;
+
+    renderApiStatus();
+    renderKPIs();
+    renderFunnel();
+    renderCharts();
+    renderStudiesTable();
+    renderAds();
+    renderEmail();
+    renderScorecard();
+    renderSourceStatus();
+
+    $('#footer').textContent = `Recruitment Command Center · Reputable Health · Last refreshed ${dateStr} ${timeStr}`;
+  }
+
+  // ============================================================
+  // EVENT HANDLERS
+  // ============================================================
+
+  // Time filter
+  document.addEventListener('click', e => {
+    if (e.target.matches('#time-filter .filter-btn')) {
+      $$('#time-filter .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      selectedDays = parseInt(e.target.dataset.days);
+      loadAndRender();
+    }
+  });
+
+  // Table column sort
+  document.addEventListener('click', e => {
+    const th = e.target.closest('#studies-thead th');
+    if (!th) return;
+    const col = th.dataset.col;
+    const colDef = COLUMNS.find(c => c.key === col);
+    if (!colDef?.sortable) return;
+    if (sortCol === col) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortCol = col;
+      sortDir = 'asc';
+    }
+    renderStudiesTable();
+  });
+
+  // Table filters
+  $('#filter-status').addEventListener('change', e => { filterStatus = e.target.value; renderStudiesTable(); });
+  $('#filter-type').addEventListener('change', e => { filterType = e.target.value; renderStudiesTable(); });
+  $('#filter-manual').addEventListener('change', e => { filterManual = e.target.value; renderStudiesTable(); });
+
+  // ============================================================
+  // LOAD DATA & RENDER
+  // ============================================================
+  async function loadAndRender() {
+    try {
+      apiData = await dataService.fetchRecruitingData(selectedDays);
+      apiError = null;
+    } catch (err) {
+      apiError = err.message;
+      apiData = null;
+    }
+    renderAll();
+    $('#loading').classList.add('hidden');
+  }
+
+  // Initial load
+  loadAndRender();
+
 })();
 </script>
 </body>
