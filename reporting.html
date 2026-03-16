@@ -791,8 +791,8 @@
   var STUDIES = [
     {
       id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT',
-      spend: 4487.22, leads: 848, joined: 312, onboarded: 239, target: 240,
-      wearable: 'Oura', days: 57,
+      spend: 4487.22, leads: 848, joined: 312, onboarded: 241, target: 240,
+      wearable: 'Oura', days: 63,
       launchDate: 'Jan 13, 2026', endDate: null,
       launchYear: 2026, crossYear: false, manualQueue: false,
       status: 'recruiting', outlier: true,
@@ -800,12 +800,12 @@
     },
     {
       id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE',
-      spend: 6461.48, leads: 218, joined: 102, onboarded: 43, target: 35,
-      wearable: 'WHOOP', days: 52,
-      launchDate: 'Jan 5, 2026', endDate: 'Feb 26, 2026',
+      spend: 6668.88, leads: 218, joined: 102, onboarded: 43, target: 35,
+      wearable: 'WHOOP', days: 71,
+      launchDate: 'Jan 5, 2026', endDate: null,
       launchYear: 2026, crossYear: false, manualQueue: true,
-      status: 'complete', outlier: true,
-      notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)'
+      status: 'recruiting', outlier: true,
+      notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step). Ads still running ($207 this week).'
     },
     {
       id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT',
@@ -935,9 +935,9 @@
     },
     {
       id: 17, name: 'HOP Box: Women\'s Longevity', type: 'RWE',
-      spend: 0, leads: 189, joined: 42, onboarded: 41, target: 35,
-      wearable: 'Oura', days: 29,
-      launchDate: 'Feb 11, 2026', endDate: 'Mar 12, 2026',
+      spend: 0, leads: 189, joined: 42, onboarded: 49, target: 35,
+      wearable: 'Oura', days: 33,
+      launchDate: 'Feb 11, 2026', endDate: 'Mar 16, 2026',
       launchYear: 2026, crossYear: false, manualQueue: false,
       status: 'complete', outlier: false,
       notes: ''
@@ -1468,7 +1468,9 @@
     var m26 = computeMetrics(STUDIES, '2026');
     var ytdOnboarded = m26.totalOnboarded;
     var annualTarget = 4000;
-    var weeksElapsed = 10;
+    var now = new Date();
+    var startOf2026 = new Date(2026, 0, 1);
+    var weeksElapsed = Math.max(1, Math.round((now - startOf2026) / (7 * 24 * 60 * 60 * 1000)));
     var weeklyRate = Math.round(ytdOnboarded / weeksElapsed);
     var requiredRate = Math.round(annualTarget / 52);
     var pacePct = Math.round((weeklyRate / requiredRate) * 100);
@@ -1637,7 +1639,8 @@
     var yoy = $('#yoy-section');
     yoy.classList.toggle('section-hidden', period !== 'all');
 
-    $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated Mar 13, 2026 · Year buckets based on launch date';
+    var nowStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    $('#footer').textContent = 'Recruitment Command Center · Reputable · Last updated ' + nowStr + ' · Year buckets based on launch date';
   }
 
   // Track current period for re-sorting
@@ -1818,6 +1821,9 @@
       html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.clicks) + '</div><div class="nl-label">Clicks</div></div>';
       html += '<div class="nl-stat"><div class="nl-value" style="color:var(--blue)">' + clickRate + '%</div><div class="nl-label">Click Rate</div></div>';
       html += '<div class="nl-stat"><div class="nl-value">' + fmtN(nl.bounces) + '</div><div class="nl-label">Bounces</div></div>';
+      if (nl.unsubscribes != null) {
+        html += '<div class="nl-stat"><div class="nl-value" style="color:var(--rose)">' + fmtN(nl.unsubscribes) + '</div><div class="nl-label">Unsubscribes</div></div>';
+      }
       html += '</div>';
     }
 
@@ -1832,51 +1838,89 @@
       html += '</div>';
     }
 
-    // Onboarding by Study
-    if (data.onboarding && data.onboarding.byStudy && data.onboarding.byStudy.length > 0) {
-      html += '<h3>Live Onboarding by Study (Last 30 Days)</h3>';
-      html += '<div class="table-wrap"><table><thead><tr>';
-      html += '<th>Study</th><th class="align-right">Onboarded</th>';
-      html += '</tr></thead><tbody>';
-      data.onboarding.byStudy.forEach(function(st) {
-        html += '<tr><td>' + esc(st.studyName) + '</td>';
-        html += '<td class="align-right">' + fmtInt(st.onboarded) + '</td></tr>';
-      });
-      html += '</tbody></table></div>';
+    // Onboarding Summary
+    if (data.onboarding) {
+      var ob = data.onboarding;
+      html += '<h3>Onboarding Pipeline</h3>';
+      html += '<div class="live-metrics-grid">';
+      html += '<div class="live-metric"><div class="lm-label">Signups</div>';
+      html += '<div class="lm-value" style="color:var(--blue)">' + fmtN(ob.newSignups) + '</div>';
+      html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmtN(ob.signupsYesterday) + '</strong></span>';
+      html += '<span>7d: <strong>' + fmtN(ob.signupsWeek) + '</strong></span></div></div>';
+
+      html += '<div class="live-metric"><div class="lm-label">Joined Study</div>';
+      html += '<div class="lm-value" style="color:var(--lavender)">' + fmtN(ob.joinedTotal) + '</div>';
+      html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmtN(ob.joinedYesterday) + '</strong></span>';
+      html += '<span>7d: <strong>' + fmtN(ob.joinedWeek) + '</strong></span></div></div>';
+
+      html += '<div class="live-metric"><div class="lm-label">Onboarded</div>';
+      html += '<div class="lm-value green">' + fmtN(ob.total) + '</div>';
+      html += '<div class="lm-breakdown"><span>Yesterday: <strong>' + fmtN(ob.yesterday) + '</strong></span>';
+      html += '<span>7d: <strong>' + fmtN(ob.week) + '</strong></span></div></div>';
+      html += '</div>';
+
+      // Onboarding by Study
+      if (ob.byStudy && ob.byStudy.length > 0) {
+        html += '<h3>Onboarding by Study (Last 30 Days)</h3>';
+        html += '<div class="table-wrap"><table><thead><tr>';
+        html += '<th>Study</th><th class="align-right">Onboarded</th>';
+        html += '</tr></thead><tbody>';
+        ob.byStudy.forEach(function(st) {
+          html += '<tr><td>' + esc(st.experimentTitle || st.studyName || ('Study #' + st.experimentId)) + '</td>';
+          html += '<td class="align-right">' + fmtInt(st.count != null ? st.count : st.onboarded) + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+      }
+
+      // Daily onboarding trend
+      if (ob.daily && ob.daily.length > 0) {
+        html += '<h3>Daily Onboarding</h3>';
+        html += '<div class="table-wrap"><table><thead><tr>';
+        html += '<th>Date</th><th class="align-right">Onboarded</th>';
+        html += '</tr></thead><tbody>';
+        ob.daily.forEach(function(d) {
+          html += '<tr><td>' + d.date + '</td>';
+          html += '<td class="align-right">' + fmtInt(d.count) + '</td></tr>';
+        });
+        html += '</tbody></table></div>';
+      }
     }
 
-    // Campaign → Study Map
-    if (data.campaignStudyMap && data.campaignStudyMap.length > 0) {
-      html += '<h3>Campaign → Study Attribution</h3>';
+    // Newsletter Daily Breakdown
+    if (data.newsletter && data.newsletter.daily && data.newsletter.daily.length > 0) {
+      html += '<h3>Newsletter Daily Activity</h3>';
       html += '<div class="table-wrap"><table><thead><tr>';
-      html += '<th>Campaign</th><th>Study</th><th>Type</th><th class="align-right">Joins</th><th class="align-right">Onboarded</th>';
+      html += '<th>Date</th><th class="align-right">Sent</th><th class="align-right">Delivered</th><th class="align-right">Opens</th><th class="align-right">Clicks</th><th class="align-right">Bounces</th><th class="align-right">Unsubs</th>';
       html += '</tr></thead><tbody>';
-      data.campaignStudyMap.forEach(function(c) {
+      data.newsletter.daily.forEach(function(d) {
         html += '<tr>';
-        html += '<td>' + esc(c.campaignName) + '</td>';
-        html += '<td>' + esc(c.studyName) + '</td>';
-        html += '<td>' + esc(c.studyType) + '</td>';
-        html += '<td class="align-right">' + fmtInt(c.joins) + '</td>';
-        html += '<td class="align-right">' + fmtInt(c.onboarded) + '</td>';
+        html += '<td>' + d.date + '</td>';
+        html += '<td class="align-right">' + fmtInt(d.sent) + '</td>';
+        html += '<td class="align-right">' + fmtInt(d.delivered) + '</td>';
+        html += '<td class="align-right">' + fmtInt(d.opens) + '</td>';
+        html += '<td class="align-right">' + fmtInt(d.clicks) + '</td>';
+        html += '<td class="align-right">' + fmtInt(d.bounces) + '</td>';
+        html += '<td class="align-right">' + fmtInt(d.unsubscribes) + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table></div>';
     }
 
     // Data Source Health
-    if (data.status) {
-      html += '<h3>Data Source Status</h3>';
-      html += '<div class="source-grid">';
-      var sourceNames = { metaAds: 'Meta Ads', manychat: 'Manychat', sendgrid: 'SendGrid', appsflyer: 'AppsFlyer', analytics: 'Google Analytics' };
-      Object.keys(data.status).forEach(function(key) {
-        var st = data.status[key];
-        var color = st === 'success' ? 'var(--green)' : st === 'not_configured' ? 'var(--text-dim)' : 'var(--red)';
-        var label = st === 'success' ? 'Connected' : st === 'not_configured' ? 'Not Configured' : st === 'rate_limited' ? 'Rate Limited' : 'Failed';
-        html += '<div class="source-card"><span class="src-name">' + (sourceNames[key] || key) + '</span>';
-        html += '<span style="font-size:12px;font-weight:600;color:' + color + '">' + label + '</span></div>';
-      });
-      html += '</div>';
-    }
+    var sourceNames = { metaAds: 'Meta Ads', manychat: 'ManyChat', appsflyer: 'AppsFlyer', analytics: 'Google Analytics' };
+    var sourceChecks = ['metaAds', 'newsletter', 'manychat', 'appsflyer', 'analytics'];
+    html += '<h3>Data Source Status</h3>';
+    html += '<div class="source-grid">';
+    sourceChecks.forEach(function(key) {
+      var raw = data[key];
+      var hasData = raw != null && (typeof raw === 'object' && Object.keys(raw).length > 0);
+      var color = hasData ? 'var(--green)' : 'var(--text-dim)';
+      var label = hasData ? 'Connected' : 'No Data';
+      var displayName = sourceNames[key] || (key.charAt(0).toUpperCase() + key.slice(1));
+      html += '<div class="source-card"><span class="src-name">' + displayName + '</span>';
+      html += '<span style="font-size:12px;font-weight:600;color:' + color + '">' + label + '</span></div>';
+    });
+    html += '</div>';
 
     $('#live-content').innerHTML = html;
     $('#live-status').textContent = 'Updated ' + new Date().toLocaleTimeString();
