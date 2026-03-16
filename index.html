@@ -845,22 +845,25 @@
     const completed = yearFiltered.filter(s => s.status === 'complete').length;
     const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
-    const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
+    const isAllTime = selectedYear === 'all';
+    const periodLabel = isAllTime ? 'Total' : (selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d');
     // Map selectedDays to the API summary period keys
     const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
 
-    // Local stats scoped to the window
-    const winSpend = windowStudies.reduce((a, s) => a + s.spend, 0);
-    const winOnboarded = windowStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const winJoined = windowStudies.reduce((a, s) => a + (s.joined || 0), 0);
-    const winBlendedCPO = winOnboarded > 0 ? winSpend / winOnboarded : 0;
+    // Local stats: all-time when year=all, otherwise scoped to time window
+    const kpiStudies = isAllTime ? allLaunched : windowStudies;
+    const kpiSpend = kpiStudies.reduce((a, s) => a + s.spend, 0);
+    const kpiOnboarded = kpiStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const kpiJoined = kpiStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const kpiBlendedCPO = kpiOnboarded > 0 ? kpiSpend / kpiOnboarded : 0;
+    const kpiPaidCount = kpiStudies.filter(s => s.spend > 0).length;
 
     let cards = '';
 
     // Total Studies (always all)
     cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming</div></div>`;
 
-    if (summary) {
+    if (summary && !isAllTime) {
       const spend = summary.totalSpend?.[periodKey] ?? 0;
       const clicks = summary.totalClicks?.[periodKey] ?? 0;
       const installs = summary.totalInstalls?.[periodKey] ?? 0;
@@ -874,10 +877,11 @@
       cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">ManyChat Subscribers</div><div class="kpi-value blue">${fmtInt(subs)}</div><div class="kpi-sub">Messenger bot audience</div></div>`;
     } else {
-      // Fallback: use local data scoped to window
-      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(winSpend)}</div><div class="kpi-sub">${windowStudies.filter(s => s.spend > 0).length} paid studies in window</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(winOnboarded)}</div><div class="kpi-sub">CPO: ${winBlendedCPO > 0 ? fmt(winBlendedCPO) : '—'}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${periodLabel})</div><div class="kpi-value teal">${fmtInt(winJoined)}</div><div class="kpi-sub">${windowStudies.length} studies in window</div></div>`;
+      // All-time view or fallback: use local study data
+      const subLabel = isAllTime ? `${kpiPaidCount} paid studies` : `${kpiPaidCount} paid studies in window`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(kpiSpend)}</div><div class="kpi-sub">${subLabel}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(kpiOnboarded)}</div><div class="kpi-sub">CPO: ${kpiBlendedCPO > 0 ? fmt(kpiBlendedCPO) : '—'}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${periodLabel})</div><div class="kpi-value teal">${fmtInt(kpiJoined)}</div><div class="kpi-sub">${kpiStudies.length} studies</div></div>`;
     }
 
     // Recruitment progress (always all-time)
@@ -897,8 +901,10 @@
     const funnel = dataService.getFunnel();
 
     if (!funnel) {
-      // Fallback funnel from local data, scoped to window + year
-      const launched = getStudiesInWindow(selectedDays);
+      // Fallback funnel from local data; all-time when year=all, otherwise scoped to window
+      const launched = selectedYear === 'all'
+        ? STUDIES.filter(s => s.status !== 'coming')
+        : getStudiesInWindow(selectedDays);
       const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
       const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
       const totalOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
@@ -1290,8 +1296,8 @@
     const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    const yearLabel = selectedYear === 'all' ? '' : ` · ${selectedYear}`;
-    $('#subtitle').textContent = `Reputable Health — ${selectedDays}-day window${yearLabel} · Updated ${dateStr} ${timeStr}`;
+    const windowLabel = selectedYear === 'all' ? 'All-Time' : `${selectedDays}-day window · ${selectedYear}`;
+    $('#subtitle').textContent = `Reputable Health — ${windowLabel} · Updated ${dateStr} ${timeStr}`;
 
     renderApiStatus();
     renderKPIs();
