@@ -505,13 +505,14 @@
     'ProleevaMax':    { manualStep: true, category: 'RWE' },
     'Berkeley Life':  { manualStep: true, category: 'RCT' },
     'Clearlight':     { manualStep: true, category: 'RWE' },
+    'HOP Box':        { manualStep: true, category: 'RWE' },
   };
 
   // ============================================================
   // LOCAL STUDY DATA — canonical per-study detail
   // ============================================================
   const STUDIES = [
-    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 6469.62, leads: 1240, joined: 312, onboarded: 90, target: 240, wearable: 'Oura', days: null, launchDate: 'Jan 13, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
+    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 6469.62, leads: 1240, joined: 312, onboarded: 90, target: 240, wearable: 'Oura', days: null, launchDate: 'Jan 13, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
     { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 5686.18, leads: 719, joined: 102, onboarded: 29, target: 35, wearable: 'WHOOP', days: null, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)' },
     { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 1932, joined: 520, onboarded: 192, target: 192, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 4, name: 'Berkeley Life (Nitrate Supp.)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, notes: 'Prescreening outside of app (manual step)' },
@@ -520,14 +521,14 @@
     { id: 7, name: 'Rootless & Women\'s Health', type: 'RWE', spend: 582.58, leads: 165, joined: 92, onboarded: 50, target: 50, wearable: 'Oura', days: 19, launchDate: 'Nov 26, 2025', endDate: 'Dec 15, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 8, name: 'Quantum Upgrade', type: 'RCT', spend: 266.14, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 9, name: 'Sleep Mushrooms+', type: 'VEP', spend: 0, leads: null, joined: 67, onboarded: 50, target: 50, wearable: 'Oura / Fitbit / WHOOP', days: 15, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: '' },
-    { id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP', spend: 0, leads: null, joined: 60, onboarded: 16, target: 20, wearable: 'Oura / Fitbit / WHOOP', days: null, launchDate: 'Jan 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: false, notes: '80% to target' },
+    { id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP', spend: 0, leads: null, joined: 60, onboarded: 16, target: 20, wearable: 'Oura / Fitbit / WHOOP', days: null, launchDate: 'Jan 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: '80% to target' },
     { id: 11, name: 'Better Sleep with NatPat', type: 'VEP', spend: 0, leads: null, joined: 38, onboarded: 25, target: 25, wearable: 'Oura', days: 29, launchDate: 'Jan 2026', endDate: 'Feb 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP', spend: 0, leads: 150, joined: 57, onboarded: 25, target: 25, wearable: 'Oura', days: 5, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP', spend: 0, leads: 102, joined: 52, onboarded: 25, target: 25, wearable: 'Oura', days: 2, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP', spend: 0, leads: null, joined: 15, onboarded: 10, target: 10, wearable: 'Oura', days: 22, launchDate: 'Jan 2026', endDate: 'Jan 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP', spend: 0, leads: null, joined: 30, onboarded: 12, target: 12, wearable: 'Oura / Fitbit / WHOOP', days: 17, launchDate: 'Jan 12, 2026', endDate: 'Jan 29, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: '' },
     { id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE', spend: 0, leads: 30, joined: 40, onboarded: 20, target: 20, wearable: 'Oura', days: 64, launchDate: 'Dec 2025', endDate: 'Feb 2026', launchYear: 2025, crossYear: true, manualQueue: true, status: 'active', outlier: false, notes: 'Cross-year: launched Dec 2025 (manual step)' },
-    { id: 17, name: 'HOP Box', type: 'RWE', spend: 0, leads: 192, joined: 42, onboarded: 18, target: 35, wearable: 'Oura', days: null, launchDate: 'Feb 12, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: false, notes: 'Opened Friday — monitoring' },
+    { id: 17, name: 'HOP Box', type: 'RWE', spend: 0, leads: 192, joined: 42, onboarded: 18, target: 35, wearable: 'Oura', days: null, launchDate: 'Feb 12, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'active', outlier: false, notes: 'Opened Friday — monitoring' },
     { id: 18, name: 'Leela Quantum', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 35, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
     { id: 19, name: 'Neuvana', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 40, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
     { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
@@ -612,30 +613,64 @@
       return apiData?.status || {};
     },
 
-    // Merge API onboarding data with local STUDIES
+    // Merge API data with local STUDIES — enriches with live
+    // ad spend, joins, and onboarded from the API when available
     getEnrichedStudies() {
       const byStudy = this.getOnboardingByStudy();
       const campaignMap = this.getCampaignStudyMap();
+      const adsBreakdown = this.getMetaAdsBreakdown();
+
+      // Build a spend-by-campaign lookup from metaAds.ads
+      // Each ad has campaignName + spend; aggregate by campaign
+      const spendByCampaign = {};
+      adsBreakdown.forEach(ad => {
+        const key = (ad.campaignName || '').toLowerCase();
+        spendByCampaign[key] = (spendByCampaign[key] || 0) + (ad.spend || 0);
+      });
+
       return STUDIES.map(s => {
         const enriched = { ...s };
-        // Try to match by name in campaignStudyMap
+        const sNameLower = s.name.toLowerCase();
+        const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
+
+        // Match in campaignStudyMap (has studyName, campaignName, joins, onboarded)
         const mapped = campaignMap.find(c =>
-          s.name.toLowerCase().includes(c.studyName?.toLowerCase()) ||
-          c.campaignName?.toLowerCase().includes(s.name.split(':')[0].trim().toLowerCase())
+          sNameLower.includes(c.studyName?.toLowerCase()) ||
+          c.studyName?.toLowerCase().includes(sNamePrefix) ||
+          c.campaignName?.toLowerCase().includes(sNamePrefix)
         );
         if (mapped) {
           enriched.apiJoins = mapped.joins;
           enriched.apiOnboarded = mapped.onboarded;
           enriched.experimentId = mapped.experimentId;
+
+          // Pull ad spend from metaAds.ads via the matched campaignName
+          const campaignKey = (mapped.campaignName || '').toLowerCase();
+          if (spendByCampaign[campaignKey] != null) {
+            enriched.apiSpend = spendByCampaign[campaignKey];
+          }
         }
-        // Also check onboarding.byStudy
+
+        // Also try direct name match against metaAds campaign names
+        if (enriched.apiSpend == null) {
+          for (const [campaignKey, totalSpend] of Object.entries(spendByCampaign)) {
+            if (campaignKey.includes(sNamePrefix) || sNameLower.includes(campaignKey.split(' - ')[0]?.trim())) {
+              enriched.apiSpend = totalSpend;
+              break;
+            }
+          }
+        }
+
+        // Match in onboarding.byStudy
         const obMatch = byStudy.find(o =>
-          s.name.toLowerCase().includes(o.studyName?.toLowerCase())
+          sNameLower.includes(o.studyName?.toLowerCase()) ||
+          o.studyName?.toLowerCase().includes(sNamePrefix)
         );
         if (obMatch) {
           enriched.apiOnboarded = obMatch.onboarded;
           enriched.experimentId = obMatch.experimentId;
         }
+
         return enriched;
       });
     }
@@ -682,41 +717,61 @@
   function renderApiStatus() {
     const el = $('#api-status');
     if (apiData) {
-      el.innerHTML = '<span class="status-badge live"><span class="dot"></span>Live</span>';
+      el.innerHTML = '<span class="status-badge live"><span class="dot"></span>Live API</span>';
     } else {
-      el.innerHTML = '<span class="status-badge offline"><span class="dot"></span>Offline</span>';
+      el.innerHTML = '<span class="status-badge offline"><span class="dot"></span>Local Data</span>';
     }
   }
 
   // ============================================================
   // RENDER: KPI Cards
   // ============================================================
+  // Filter local studies by time window (days since launch)
+  function getStudiesInWindow(days) {
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - days * 86400000);
+    return STUDIES.filter(s => {
+      if (s.status === 'coming') return false;
+      if (!s.launchDate) return true; // no date = include
+      const d = new Date(s.launchDate);
+      if (isNaN(d)) return true; // unparseable like "2025" = include
+      return d >= cutoff;
+    });
+  }
+
   function renderKPIs() {
     const grid = $('#kpi-grid');
     const summary = dataService.getSummary();
-    const launched = STUDIES.filter(s => s.status !== 'coming');
+    const allLaunched = STUDIES.filter(s => s.status !== 'coming');
+    const windowStudies = getStudiesInWindow(selectedDays);
     const totalStudies = STUDIES.length;
+    const active = STUDIES.filter(s => s.status === 'active').length;
     const recruiting = STUDIES.filter(s => s.status === 'recruiting').length;
     const completed = STUDIES.filter(s => s.status === 'complete').length;
     const coming = STUDIES.filter(s => s.status === 'coming').length;
-    const localOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const localSpend = launched.reduce((a, s) => a + s.spend, 0);
 
     const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
+    // Map selectedDays to the API summary period keys
     const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
+
+    // Local stats scoped to the window
+    const winSpend = windowStudies.reduce((a, s) => a + s.spend, 0);
+    const winOnboarded = windowStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const winJoined = windowStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const winBlendedCPO = winOnboarded > 0 ? winSpend / winOnboarded : 0;
 
     let cards = '';
 
-    // Total Studies
-    cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${recruiting} recruiting · ${completed} completed · ${coming} coming</div></div>`;
+    // Total Studies (always all)
+    cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming</div></div>`;
 
     if (summary) {
-      const spend = summary.totalSpend?.month ?? 0;
-      const clicks = summary.totalClicks?.month ?? 0;
-      const installs = summary.totalInstalls?.month ?? 0;
-      const cpi = summary.costPerInstall?.month ?? 0;
-      const onboarded = summary.totalOnboarded?.month ?? 0;
-      const cpo = summary.costPerOnboard?.month ?? 0;
+      const spend = summary.totalSpend?.[periodKey] ?? 0;
+      const clicks = summary.totalClicks?.[periodKey] ?? 0;
+      const installs = summary.totalInstalls?.[periodKey] ?? 0;
+      const cpi = summary.costPerInstall?.[periodKey] ?? 0;
+      const onboarded = summary.totalOnboarded?.[periodKey] ?? 0;
+      const cpo = summary.costPerOnboard?.[periodKey] ?? 0;
       const subs = summary.subscriberCount ?? 0;
 
       cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
@@ -724,17 +779,17 @@
       cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">ManyChat Subscribers</div><div class="kpi-value blue">${fmtInt(subs)}</div><div class="kpi-sub">Messenger bot audience</div></div>`;
     } else {
-      // Fallback to local data
-      const blendedCPO = localOnboarded > 0 ? localSpend / localOnboarded : 0;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend</div><div class="kpi-value lime">${fmt(localSpend)}</div><div class="kpi-sub">Across ${launched.filter(s => s.spend > 0).length} paid studies</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Onboarded</div><div class="kpi-value green">${fmtInt(localOnboarded)}</div><div class="kpi-sub">Blended CPO: ${fmt(blendedCPO)}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Joined</div><div class="kpi-value teal">${fmtInt(launched.reduce((a, s) => a + (s.joined || 0), 0))}</div><div class="kpi-sub">Across all launched studies</div></div>`;
+      // Fallback: use local data scoped to window
+      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(winSpend)}</div><div class="kpi-sub">${windowStudies.filter(s => s.spend > 0).length} paid studies in window</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(winOnboarded)}</div><div class="kpi-sub">CPO: ${winBlendedCPO > 0 ? fmt(winBlendedCPO) : '—'}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${periodLabel})</div><div class="kpi-value teal">${fmtInt(winJoined)}</div><div class="kpi-sub">${windowStudies.length} studies in window</div></div>`;
     }
 
-    // Always show local totals
-    const totalTarget = launched.reduce((a, s) => a + s.target, 0);
-    const pctComplete = totalTarget > 0 ? ((localOnboarded / totalTarget) * 100).toFixed(1) : 0;
-    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(localOnboarded)} / ${fmtInt(totalTarget)} target</div></div>`;
+    // Recruitment progress (always all-time)
+    const totalOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totalTarget = allLaunched.reduce((a, s) => a + s.target, 0);
+    const pctComplete = totalTarget > 0 ? ((totalOnboarded / totalTarget) * 100).toFixed(1) : 0;
+    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target (all-time)</div></div>`;
 
     grid.innerHTML = cards;
   }
@@ -897,6 +952,7 @@
   }
 
   function getSortValue(s, col) {
+    if (col === 'spend') return (s.apiSpend != null ? s.apiSpend : s.spend) || 0;
     if (col === 'cpo') return getCPO(s) ?? 999999;
     if (col === 'status') {
       const order = { recruiting: 0, active: 1, complete: 2, coming: 3 };
@@ -945,7 +1001,19 @@
     // Tbody
     const tbody = $('#studies-tbody');
     tbody.innerHTML = studies.map(s => {
-      const cpo = getCPO(s);
+      // Use API spend if available, fall back to local
+      const displaySpend = s.apiSpend != null ? s.apiSpend : s.spend;
+      const spendIsLive = s.apiSpend != null;
+      const cpo = (displaySpend > 0 && s.onboarded > 0) ? displaySpend / s.onboarded : null;
+
+      // Use API joins/onboarded if available
+      const displayJoins = s.apiJoins != null ? s.apiJoins : s.joined;
+      const displayOnboarded = s.apiOnboarded != null ? s.apiOnboarded : s.onboarded;
+
+      const spendCell = displaySpend > 0
+        ? `${fmt(displaySpend)}${spendIsLive ? ' <span style="color:var(--lime);font-size:9px" title="Live from API">●</span>' : ''}`
+        : '—';
+
       return `<tr>
         <td class="align-right">${s.id}</td>
         <td>${esc(s.name)}${s.outlier ? ' <span class="badge badge-rose" style="font-size:9px">Outlier</span>' : ''}</td>
@@ -953,10 +1021,10 @@
         <td>${statusBadge(s.status)}</td>
         <td>${s.launchDate || '—'}</td>
         <td>${s.endDate || '—'}</td>
-        <td class="align-right">${s.spend > 0 ? fmt(s.spend) : '—'}</td>
+        <td class="align-right">${spendCell}</td>
         <td class="align-right">${fmtInt(s.leads)}</td>
-        <td class="align-right">${fmtInt(s.joined)}</td>
-        <td class="align-right">${fmtInt(s.onboarded)}</td>
+        <td class="align-right">${fmtInt(displayJoins)}</td>
+        <td class="align-right">${fmtInt(displayOnboarded)}</td>
         <td class="align-right">${fmtInt(s.target)}</td>
         <td class="align-right">${cpo != null ? fmt(cpo) : '—'}</td>
         <td>${s.wearable || '—'}</td>
@@ -967,7 +1035,7 @@
 
     // Tfoot
     const tfoot = $('#studies-tfoot');
-    const totSpend = studies.reduce((a, s) => a + s.spend, 0);
+    const totSpend = studies.reduce((a, s) => a + (s.apiSpend != null ? s.apiSpend : s.spend), 0);
     const totLeads = studies.reduce((a, s) => a + (s.leads || 0), 0);
     const totJoined = studies.reduce((a, s) => a + (s.joined || 0), 0);
     const totOnboarded = studies.reduce((a, s) => a + (s.onboarded || 0), 0);
