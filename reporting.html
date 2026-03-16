@@ -1014,6 +1014,14 @@
   function isComplete(s) { return s.status === 'complete'; }
   function isRecruiting(s) { return s.status === 'recruiting'; }
 
+  // Return spend attributed to the current period.
+  // Cross-year studies only count spend in their launch year to avoid double-counting.
+  function spendFor(s, period) {
+    if (period === 'all') return s.spend;
+    if (s.crossYear && s.launchYear !== parseInt(period)) return 0;
+    return s.spend;
+  }
+
   // Filter studies by period using launchYear
   function filterByPeriod(studies, period) {
     if (period === 'all') return studies;
@@ -1044,7 +1052,7 @@
     var recruiting = launched.filter(isRecruiting);
     var crossYear = launched.filter(function(s) { return s.crossYear; });
 
-    var totalSpend = launched.reduce(function(a, s) { return a + s.spend; }, 0);
+    var totalSpend = launched.reduce(function(a, s) { return a + spendFor(s, period); }, 0);
     var totalLeads = 0; var leadsCount = 0;
     launched.forEach(function(s) { if (s.leads != null) { totalLeads += s.leads; leadsCount++; } });
     var totalJoined = launched.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
@@ -1058,11 +1066,11 @@
 
     var blendedCPO = totalOnboarded > 0 ? totalSpend / totalOnboarded : 0;
 
-    var paidNOSpend = paidNonOutlier.reduce(function(a, s) { return a + s.spend; }, 0);
+    var paidNOSpend = paidNonOutlier.reduce(function(a, s) { return a + spendFor(s, period); }, 0);
     var paidNOOnb = paidNonOutlier.reduce(function(a, s) { return a + s.onboarded; }, 0);
     var paidExclCPO = paidNOOnb > 0 ? paidNOSpend / paidNOOnb : 0;
 
-    var paidAllSpend = paid.reduce(function(a, s) { return a + s.spend; }, 0);
+    var paidAllSpend = paid.reduce(function(a, s) { return a + spendFor(s, period); }, 0);
     var paidAllOnb = paid.reduce(function(a, s) { return a + s.onboarded; }, 0);
     var paidInclCPO = paidAllOnb > 0 ? paidAllSpend / paidAllOnb : 0;
 
@@ -1078,7 +1086,7 @@
 
       if (!types[key]) types[key] = { count: 0, spend: 0, onboarded: 0, totalDays: 0, daysCount: 0 };
       types[key].count++;
-      types[key].spend += s.spend;
+      types[key].spend += spendFor(s, period);
       types[key].onboarded += s.onboarded;
       if (s.days != null) { types[key].totalDays += s.days; types[key].daysCount++; }
     });
@@ -1088,7 +1096,7 @@
     var autoStudies = launched.filter(function(s) { return !s.manualQueue; });
 
     function manualMetrics(arr) {
-      var spend = arr.reduce(function(a, s) { return a + s.spend; }, 0);
+      var spend = arr.reduce(function(a, s) { return a + spendFor(s, period); }, 0);
       var onb = arr.reduce(function(a, s) { return a + s.onboarded; }, 0);
       var joined = arr.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
       var daysArr = arr.filter(function(s) { return s.days != null; });
@@ -1321,7 +1329,7 @@
         html += '<div class="yoy-row"><span class="yoy-label">' + esc(s.name) + '</span><span class="yoy-val">' + (s.launchDate || '—') + ' → ' + (s.endDate || 'ongoing') + '</span></div>';
         html += '<div class="yoy-row"><span class="yoy-label" style="padding-left:12px">Spend / Onboarded</span><span class="yoy-val">' + fmt(s.spend) + ' / ' + s.onboarded + '</span></div>';
       });
-      html += '<div class="crossyear-note"><strong>Note:</strong> Cross-year studies are bucketed by launch date but appear in both year views. Their spend and onboarded counts are not split between years — the full amount is attributed to the launch year. Future improvement: split spend and onboarded proportionally by date range.</div>';
+      html += '<div class="crossyear-note"><strong>Note:</strong> Cross-year studies appear in both year views for visibility, but ad spend is attributed only to the launch year to avoid double-counting.</div>';
       html += '</div>';
     }
 
@@ -1420,11 +1428,11 @@
     var rctPaid = m.launched.filter(function(s) { return s.type === 'RCT' && s.spend > 0; });
     var rwePaid = m.launched.filter(function(s) { return s.type === 'RWE' && s.spend > 0; });
 
-    var rctSpend = rctPaid.reduce(function(a, s) { return a + s.spend; }, 0);
+    var rctSpend = rctPaid.reduce(function(a, s) { return a + spendFor(s, period); }, 0);
     var rctOnb = rctPaid.reduce(function(a, s) { return a + s.onboarded; }, 0);
     var rctCPO = rctOnb > 0 ? rctSpend / rctOnb : 0;
 
-    var rweSpend = rwePaid.reduce(function(a, s) { return a + s.spend; }, 0);
+    var rweSpend = rwePaid.reduce(function(a, s) { return a + spendFor(s, period); }, 0);
     var rweOnb = rwePaid.reduce(function(a, s) { return a + s.onboarded; }, 0);
     var rweCPO = rweOnb > 0 ? rweSpend / rweOnb : 0;
 
