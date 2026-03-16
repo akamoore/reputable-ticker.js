@@ -683,41 +683,61 @@
   function renderApiStatus() {
     const el = $('#api-status');
     if (apiData) {
-      el.innerHTML = '<span class="status-badge live"><span class="dot"></span>Live</span>';
+      el.innerHTML = '<span class="status-badge live"><span class="dot"></span>Live API</span>';
     } else {
-      el.innerHTML = '<span class="status-badge offline"><span class="dot"></span>Offline</span>';
+      el.innerHTML = '<span class="status-badge offline"><span class="dot"></span>Local Data</span>';
     }
   }
 
   // ============================================================
   // RENDER: KPI Cards
   // ============================================================
+  // Filter local studies by time window (days since launch)
+  function getStudiesInWindow(days) {
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - days * 86400000);
+    return STUDIES.filter(s => {
+      if (s.status === 'coming') return false;
+      if (!s.launchDate) return true; // no date = include
+      const d = new Date(s.launchDate);
+      if (isNaN(d)) return true; // unparseable like "2025" = include
+      return d >= cutoff;
+    });
+  }
+
   function renderKPIs() {
     const grid = $('#kpi-grid');
     const summary = dataService.getSummary();
-    const launched = STUDIES.filter(s => s.status !== 'coming');
+    const allLaunched = STUDIES.filter(s => s.status !== 'coming');
+    const windowStudies = getStudiesInWindow(selectedDays);
     const totalStudies = STUDIES.length;
+    const active = STUDIES.filter(s => s.status === 'active').length;
     const recruiting = STUDIES.filter(s => s.status === 'recruiting').length;
     const completed = STUDIES.filter(s => s.status === 'complete').length;
     const coming = STUDIES.filter(s => s.status === 'coming').length;
-    const localOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const localSpend = launched.reduce((a, s) => a + s.spend, 0);
 
     const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
+    // Map selectedDays to the API summary period keys
     const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
+
+    // Local stats scoped to the window
+    const winSpend = windowStudies.reduce((a, s) => a + s.spend, 0);
+    const winOnboarded = windowStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const winJoined = windowStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const winBlendedCPO = winOnboarded > 0 ? winSpend / winOnboarded : 0;
 
     let cards = '';
 
-    // Total Studies
-    cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${recruiting} recruiting · ${completed} completed · ${coming} coming</div></div>`;
+    // Total Studies (always all)
+    cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming</div></div>`;
 
     if (summary) {
-      const spend = summary.totalSpend?.month ?? 0;
-      const clicks = summary.totalClicks?.month ?? 0;
-      const installs = summary.totalInstalls?.month ?? 0;
-      const cpi = summary.costPerInstall?.month ?? 0;
-      const onboarded = summary.totalOnboarded?.month ?? 0;
-      const cpo = summary.costPerOnboard?.month ?? 0;
+      const spend = summary.totalSpend?.[periodKey] ?? 0;
+      const clicks = summary.totalClicks?.[periodKey] ?? 0;
+      const installs = summary.totalInstalls?.[periodKey] ?? 0;
+      const cpi = summary.costPerInstall?.[periodKey] ?? 0;
+      const onboarded = summary.totalOnboarded?.[periodKey] ?? 0;
+      const cpo = summary.costPerOnboard?.[periodKey] ?? 0;
       const subs = summary.subscriberCount ?? 0;
 
       cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
@@ -725,17 +745,17 @@
       cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">ManyChat Subscribers</div><div class="kpi-value blue">${fmtInt(subs)}</div><div class="kpi-sub">Messenger bot audience</div></div>`;
     } else {
-      // Fallback to local data
-      const blendedCPO = localOnboarded > 0 ? localSpend / localOnboarded : 0;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend</div><div class="kpi-value lime">${fmt(localSpend)}</div><div class="kpi-sub">Across ${launched.filter(s => s.spend > 0).length} paid studies</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Onboarded</div><div class="kpi-value green">${fmtInt(localOnboarded)}</div><div class="kpi-sub">Blended CPO: ${fmt(blendedCPO)}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Joined</div><div class="kpi-value teal">${fmtInt(launched.reduce((a, s) => a + (s.joined || 0), 0))}</div><div class="kpi-sub">Across all launched studies</div></div>`;
+      // Fallback: use local data scoped to window
+      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(winSpend)}</div><div class="kpi-sub">${windowStudies.filter(s => s.spend > 0).length} paid studies in window</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(winOnboarded)}</div><div class="kpi-sub">CPO: ${winBlendedCPO > 0 ? fmt(winBlendedCPO) : '—'}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${periodLabel})</div><div class="kpi-value teal">${fmtInt(winJoined)}</div><div class="kpi-sub">${windowStudies.length} studies in window</div></div>`;
     }
 
-    // Always show local totals
-    const totalTarget = launched.reduce((a, s) => a + s.target, 0);
-    const pctComplete = totalTarget > 0 ? ((localOnboarded / totalTarget) * 100).toFixed(1) : 0;
-    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(localOnboarded)} / ${fmtInt(totalTarget)} target</div></div>`;
+    // Recruitment progress (always all-time)
+    const totalOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totalTarget = allLaunched.reduce((a, s) => a + s.target, 0);
+    const pctComplete = totalTarget > 0 ? ((totalOnboarded / totalTarget) * 100).toFixed(1) : 0;
+    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target (all-time)</div></div>`;
 
     grid.innerHTML = cards;
   }
