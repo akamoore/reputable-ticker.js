@@ -845,25 +845,28 @@
     const completed = yearFiltered.filter(s => s.status === 'complete').length;
     const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
-    const isAllTime = selectedYear === 'all';
-    const periodLabel = isAllTime ? 'Total' : (selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d');
     // Map selectedDays to the API summary period keys
     const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
+    const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
 
-    // Local stats: all-time when year=all, otherwise scoped to time window
-    const kpiStudies = isAllTime ? allLaunched : windowStudies;
-    const kpiSpend = kpiStudies.reduce((a, s) => a + s.spend, 0);
-    const kpiOnboarded = kpiStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const kpiJoined = kpiStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    // Year-filter label for KPI cards
+    const yearLabel = selectedYear === 'all' ? 'Total' : selectedYear;
+
+    // KPI totals always use cumulative year-filtered data (not time-windowed).
+    // The time window (7/30/90d) only applies to real-time API summary data.
+    const kpiSpend = allLaunched.reduce((a, s) => a + s.spend, 0);
+    const kpiOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const kpiJoined = allLaunched.reduce((a, s) => a + (s.joined || 0), 0);
     const kpiBlendedCPO = kpiOnboarded > 0 ? kpiSpend / kpiOnboarded : 0;
-    const kpiPaidCount = kpiStudies.filter(s => s.spend > 0).length;
+    const kpiPaidCount = allLaunched.filter(s => s.spend > 0).length;
 
     let cards = '';
 
     // Total Studies (always all)
     cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming</div></div>`;
 
-    if (summary && !isAllTime) {
+    if (summary && selectedYear !== 'all') {
+      // Real-time API data available — show time-windowed metrics alongside cumulative
       const spend = summary.totalSpend?.[periodKey] ?? 0;
       const clicks = summary.totalClicks?.[periodKey] ?? 0;
       const installs = summary.totalInstalls?.[periodKey] ?? 0;
@@ -877,11 +880,10 @@
       cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">ManyChat Subscribers</div><div class="kpi-value blue">${fmtInt(subs)}</div><div class="kpi-sub">Messenger bot audience</div></div>`;
     } else {
-      // All-time view or fallback: use local study data
-      const subLabel = isAllTime ? `${kpiPaidCount} paid studies` : `${kpiPaidCount} paid studies in window`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(kpiSpend)}</div><div class="kpi-sub">${subLabel}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(kpiOnboarded)}</div><div class="kpi-sub">CPO: ${kpiBlendedCPO > 0 ? fmt(kpiBlendedCPO) : '—'}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${periodLabel})</div><div class="kpi-value teal">${fmtInt(kpiJoined)}</div><div class="kpi-sub">${kpiStudies.length} studies</div></div>`;
+      // Cumulative view: show year-filtered totals from local study data
+      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${yearLabel})</div><div class="kpi-value lime">${fmt(kpiSpend)}</div><div class="kpi-sub">${kpiPaidCount} paid studies</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${yearLabel})</div><div class="kpi-value green">${fmtInt(kpiOnboarded)}</div><div class="kpi-sub">CPO: ${kpiBlendedCPO > 0 ? fmt(kpiBlendedCPO) : '—'}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${yearLabel})</div><div class="kpi-value teal">${fmtInt(kpiJoined)}</div><div class="kpi-sub">${allLaunched.length} studies</div></div>`;
     }
 
     // Recruitment progress (always all-time)
@@ -901,10 +903,14 @@
     const funnel = dataService.getFunnel();
 
     if (!funnel) {
-      // Fallback funnel from local data; all-time when year=all, otherwise scoped to window
-      const launched = selectedYear === 'all'
-        ? STUDIES.filter(s => s.status !== 'coming')
-        : getStudiesInWindow(selectedDays);
+      // Fallback funnel from local data — cumulative year-filtered totals
+      const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+        const yr = parseInt(selectedYear);
+        if (s.launchYear === yr || s.crossYear) return true;
+        if (!s.launchYear && s.status === 'coming') return true;
+        return false;
+      });
+      const launched = yearFiltered.filter(s => s.status !== 'coming');
       const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
       const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
       const totalOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
@@ -1296,7 +1302,7 @@
     const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    const windowLabel = selectedYear === 'all' ? 'All-Time' : `${selectedDays}-day window · ${selectedYear}`;
+    const windowLabel = selectedYear === 'all' ? 'All-Time' : `${selectedYear} Studies`;
     $('#subtitle').textContent = `Reputable Health — ${windowLabel} · Updated ${dateStr} ${timeStr}`;
 
     renderApiStatus();
