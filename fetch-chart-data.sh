@@ -64,14 +64,12 @@ fi
 echo ""
 echo "Fetching AppsFlyer installs..."
 
-# Fetch AppsFlyer — aggregate daily installs
-AF_RAW=$(curl -s "https://hq.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/installs_report/v5?\
-from=${FROM_DATE}&to=${TO_DATE}&\
-timezone=America/New_York&\
-groupings=date&\
-kpis=installs,loyal_users" \
+# Fetch AppsFlyer — aggregate daily installs (Pull API V2)
+# Docs: https://dev.appsflyer.com/hc/reference/get_app-id-partners-by-date-report-v5-1
+AF_RAW=$(curl -s "https://hq1.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?\
+from=${FROM_DATE}&to=${TO_DATE}" \
   -H "Authorization: Bearer ${APPSFLYER_API_TOKEN}" \
-  -H "accept: text/csv")
+  -H "Accept: text/csv")
 
 if echo "$AF_RAW" | head -1 | grep -qi "date"; then
   python3 -c "
