@@ -59,22 +59,42 @@ async function fetchMetaAds() {
 async function fetchAppsFlyer() {
   console.log('Fetching AppsFlyer installs...');
 
-  // Use the Pull API v5 export endpoint (same as the GitHub Actions workflow)
-  const url = `https://hq.appsflyer.com/export/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${FROM_DATE}&to=${TO_DATE}&groupings=date&currency=USD`;
+  // Try multiple AppsFlyer API hosts (they vary by region/account)
+  const hosts = ['hq.appsflyer.com', 'api2.appsflyer.com', 'api3.appsflyer.com'];
+  const path = `/export/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${FROM_DATE}&to=${TO_DATE}&groupings=date&currency=USD`;
 
   let text = null;
+  let succeeded = false;
+  for (const host of hosts) {
+    try {
+      console.log(`  Trying ${host}...`);
+      const resp = await fetch(`https://${host}${path}`, {
+        headers: { 'Accept': 'text/csv' },
+        signal: AbortSignal.timeout(15000),
+      });
+      text = await resp.text();
+      if (!resp.ok) {
+        console.error(`  ✗ ${host} returned HTTP ${resp.status}: ${text.slice(0, 200)}`);
+        continue;
+      }
+      if (!text || !text.toLowerCase().includes('date')) {
+        console.error(`  ✗ ${host}: unexpected response:`, text.slice(0, 200));
+        continue;
+      }
+      console.log(`  ✓ Success from ${host}`);
+      succeeded = true;
+      break;
+    } catch (err) {
+      console.error(`  ✗ ${host} fetch failed:`, err.message);
+    }
+  }
+
+  if (!succeeded) {
+    console.error('✗ AppsFlyer: all API hosts failed');
+    return;
+  }
+
   try {
-    console.log('  Calling hq.appsflyer.com/export/...');
-    const resp = await fetch(url, { headers: { 'Accept': 'text/csv' } });
-    text = await resp.text();
-    if (!resp.ok) {
-      console.error(`✗ AppsFlyer returned HTTP ${resp.status}: ${text.slice(0, 200)}`);
-      return;
-    }
-    if (!text || !text.toLowerCase().includes('date')) {
-      console.error('✗ AppsFlyer: unexpected response:', text.slice(0, 200));
-      return;
-    }
 
     // Parse CSV
     const lines = text.trim().split('\n');
