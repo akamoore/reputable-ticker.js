@@ -564,6 +564,7 @@
   let apiError = null;
   let sendgridData = null;
   let appsflyerData = null;
+  let metaAdsData = null;
   let selectedDays = 30;
   let selectedYear = 'all';
 
@@ -590,11 +591,26 @@
       return apiData.funnel;
     },
 
+    async fetchMetaAdsStats() {
+      try {
+        const resp = await fetch('./data/meta-ads-stats.json');
+        if (!resp.ok) throw new Error(`Meta Ads stats ${resp.status}`);
+        return await resp.json();
+      } catch (err) {
+        console.warn('Meta Ads stats not available:', err.message);
+        return null;
+      }
+    },
+
     getMetaAdsDaily() {
-      return apiData?.metaAds?.daily || [];
+      const allDaily = metaAdsData?.daily?.length ? metaAdsData.daily : (apiData?.metaAds?.daily || []);
+      if (!allDaily.length) return [];
+      const cutoff = new Date(Date.now() - selectedDays * 86400000);
+      return allDaily.filter(d => new Date(d.date) >= cutoff);
     },
 
     getMetaAdsBreakdown() {
+      if (metaAdsData?.ads?.length) return metaAdsData.ads;
       return apiData?.metaAds?.ads || [];
     },
 
@@ -1340,14 +1356,16 @@
   // ============================================================
   async function loadAndRender() {
     try {
-      const [recruitData, sgData, afData] = await Promise.allSettled([
+      const [recruitData, sgData, afData, maData] = await Promise.allSettled([
         dataService.fetchRecruitingData(selectedDays),
         dataService.fetchSendGridStats(),
         dataService.fetchAppsflyerStats(),
+        dataService.fetchMetaAdsStats(),
       ]);
       apiData = recruitData.status === 'fulfilled' ? recruitData.value : null;
       sendgridData = sgData.status === 'fulfilled' ? sgData.value : null;
       appsflyerData = afData.status === 'fulfilled' ? afData.value : null;
+      metaAdsData = maData.status === 'fulfilled' ? maData.value : null;
       apiError = recruitData.status === 'rejected' ? recruitData.reason.message : null;
     } catch (err) {
       apiError = err.message;
