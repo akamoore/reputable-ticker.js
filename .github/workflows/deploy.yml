@@ -46,6 +46,7 @@ jobs:
           cp *.pdf _site/ 2>/dev/null || true
           cp -r images _site/images 2>/dev/null || true
           cp -r docs _site/docs 2>/dev/null || true
+          cp -r data _site/data 2>/dev/null || true
 
       - uses: actions/configure-pages@v4
 
