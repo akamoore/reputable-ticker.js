@@ -12,13 +12,18 @@ jobs:
   fetch-stats:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Fetch AppsFlyer stats
         env:
           APPSFLYER_API_TOKEN: ${{ secrets.APPSFLYER_API_TOKEN }}
           APPSFLYER_APP_ID: ${{ secrets.APPSFLYER_APP_ID }}
         run: |
+          if [ -z "$APPSFLYER_API_TOKEN" ] || [ -z "$APPSFLYER_APP_ID" ]; then
+            echo "::error::APPSFLYER_API_TOKEN and APPSFLYER_APP_ID secrets must be configured"
+            exit 1
+          fi
+
           mkdir -p data
 
           # Fetch last 90 days of aggregate performance data

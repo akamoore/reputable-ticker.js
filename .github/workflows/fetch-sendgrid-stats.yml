@@ -12,12 +12,17 @@ jobs:
   fetch-stats:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Fetch SendGrid stats
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         run: |
+          if [ -z "$SENDGRID_API_KEY" ]; then
+            echo "::error::SENDGRID_API_KEY secret must be configured"
+            exit 1
+          fi
+
           mkdir -p data
 
           # Fetch last 30 days of global stats
