@@ -563,6 +563,7 @@
   let apiData = null;
   let apiError = null;
   let sendgridData = null;
+  let appsflyerData = null;
   let selectedDays = 30;
   let selectedYear = 'all';
 
@@ -637,11 +638,26 @@
       return totals;
     },
 
+    async fetchAppsflyerStats() {
+      try {
+        const resp = await fetch('./data/appsflyer-stats.json');
+        if (!resp.ok) throw new Error(`AppsFlyer stats ${resp.status}`);
+        return await resp.json();
+      } catch (err) {
+        console.warn('AppsFlyer stats not available:', err.message);
+        return null;
+      }
+    },
+
     getAppsflyerDaily() {
-      return apiData?.appsflyer?.daily || [];
+      const allDaily = appsflyerData?.daily?.length ? appsflyerData.daily : (apiData?.appsflyer?.daily || []);
+      if (!allDaily.length) return [];
+      const cutoff = new Date(Date.now() - selectedDays * 86400000);
+      return allDaily.filter(d => new Date(d.date) >= cutoff);
     },
 
     getAppsflyerBySource() {
+      if (appsflyerData?.bySource?.length) return appsflyerData.bySource;
       return apiData?.appsflyer?.bySource || [];
     },
 
@@ -1324,12 +1340,14 @@
   // ============================================================
   async function loadAndRender() {
     try {
-      const [recruitData, sgData] = await Promise.allSettled([
+      const [recruitData, sgData, afData] = await Promise.allSettled([
         dataService.fetchRecruitingData(selectedDays),
         dataService.fetchSendGridStats(),
+        dataService.fetchAppsflyerStats(),
       ]);
       apiData = recruitData.status === 'fulfilled' ? recruitData.value : null;
       sendgridData = sgData.status === 'fulfilled' ? sgData.value : null;
+      appsflyerData = afData.status === 'fulfilled' ? afData.value : null;
       apiError = recruitData.status === 'rejected' ? recruitData.reason.message : null;
     } catch (err) {
       apiError = err.message;
