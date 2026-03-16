@@ -58,19 +58,43 @@ async function fetchMetaAds() {
 
 async function fetchAppsFlyer() {
   console.log('Fetching AppsFlyer installs...');
-  const url = `https://hq.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/installs_report/v5?from=${FROM_DATE}&to=${TO_DATE}&timezone=America/New_York&groupings=date&kpis=installs,loyal_users`;
+
+  // Try multiple API base URLs (AppsFlyer uses different hosts)
+  const baseUrls = [
+    'https://hq.appsflyer.com',
+    'https://api3.appsflyer.com',
+    'https://api2.appsflyer.com',
+  ];
+  const path = `/api/agg-data/export/app/${APPSFLYER_APP_ID}/installs_report/v5?from=${FROM_DATE}&to=${TO_DATE}&timezone=America/New_York&groupings=date&kpis=installs,loyal_users`;
+
+  let text = null;
+  for (const base of baseUrls) {
+    const url = base + path;
+    console.log(`  Trying ${base}...`);
+    try {
+      const resp = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${APPSFLYER_API_TOKEN}`,
+          'accept': 'text/csv',
+        },
+      });
+      text = await resp.text();
+      if (resp.ok && text && text.toLowerCase().includes('date')) {
+        console.log(`  ✓ Got response from ${base}`);
+        break;
+      }
+      console.log(`  ✗ ${base} returned ${resp.status}: ${text.slice(0, 100)}`);
+      text = null;
+    } catch (err) {
+      console.log(`  ✗ ${base} failed: ${err.message}`);
+    }
+  }
 
   try {
-    const resp = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${APPSFLYER_API_TOKEN}`,
-        'accept': 'text/csv',
-      },
-    });
-
-    const text = await resp.text();
     if (!text || !text.toLowerCase().includes('date')) {
-      console.error('✗ AppsFlyer API error:', text.slice(0, 200));
+      console.error('✗ AppsFlyer: no valid response from any endpoint');
+      console.error('  You can manually export a CSV from the AppsFlyer dashboard');
+      console.error('  and save it as data/appsflyer-stats.json (see README for format)');
       return;
     }
 
