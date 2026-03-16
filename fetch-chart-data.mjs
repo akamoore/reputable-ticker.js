@@ -59,42 +59,20 @@ async function fetchMetaAds() {
 async function fetchAppsFlyer() {
   console.log('Fetching AppsFlyer installs...');
 
-  // Try multiple API base URLs (AppsFlyer uses different hosts)
-  const baseUrls = [
-    'https://hq.appsflyer.com',
-    'https://api3.appsflyer.com',
-    'https://api2.appsflyer.com',
-  ];
-  const path = `/api/agg-data/export/app/${APPSFLYER_APP_ID}/installs_report/v5?from=${FROM_DATE}&to=${TO_DATE}&timezone=America/New_York&groupings=date&kpis=installs,loyal_users`;
+  // Use the Pull API v5 export endpoint (same as the GitHub Actions workflow)
+  const url = `https://hq.appsflyer.com/export/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${FROM_DATE}&to=${TO_DATE}&groupings=date&currency=USD`;
 
   let text = null;
-  for (const base of baseUrls) {
-    const url = base + path;
-    console.log(`  Trying ${base}...`);
-    try {
-      const resp = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${APPSFLYER_API_TOKEN}`,
-          'accept': 'text/csv',
-        },
-      });
-      text = await resp.text();
-      if (resp.ok && text && text.toLowerCase().includes('date')) {
-        console.log(`  ✓ Got response from ${base}`);
-        break;
-      }
-      console.log(`  ✗ ${base} returned ${resp.status}: ${text.slice(0, 100)}`);
-      text = null;
-    } catch (err) {
-      console.log(`  ✗ ${base} failed: ${err.message}`);
-    }
-  }
-
   try {
+    console.log('  Calling hq.appsflyer.com/export/...');
+    const resp = await fetch(url, { headers: { 'Accept': 'text/csv' } });
+    text = await resp.text();
+    if (!resp.ok) {
+      console.error(`✗ AppsFlyer returned HTTP ${resp.status}: ${text.slice(0, 200)}`);
+      return;
+    }
     if (!text || !text.toLowerCase().includes('date')) {
-      console.error('✗ AppsFlyer: no valid response from any endpoint');
-      console.error('  You can manually export a CSV from the AppsFlyer dashboard');
-      console.error('  and save it as data/appsflyer-stats.json (see README for format)');
+      console.error('✗ AppsFlyer: unexpected response:', text.slice(0, 200));
       return;
     }
 
