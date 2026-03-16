@@ -351,6 +351,11 @@
     </div>
     <div class="header-right">
       <div id="api-status"></div>
+      <div class="filter-bar" id="year-filter">
+        <button class="filter-btn active" data-year="all">All</button>
+        <button class="filter-btn" data-year="2025">2025</button>
+        <button class="filter-btn" data-year="2026">2026</button>
+      </div>
       <div class="filter-bar" id="time-filter">
         <button class="filter-btn" data-days="7">7 Days</button>
         <button class="filter-btn active" data-days="30">30 Days</button>
@@ -559,6 +564,7 @@
   let apiError = null;
   let sendgridData = null;
   let selectedDays = 30;
+  let selectedYear = 'all';
 
   const dataService = {
     async fetchRecruitingData(days) {
@@ -751,9 +757,15 @@
     const cutoff = new Date(now.getTime() - days * 86400000);
     return STUDIES.filter(s => {
       if (s.status === 'coming') return false;
-      if (!s.launchDate) return true; // no date = include
+      // Year filter
+      if (selectedYear !== 'all') {
+        const yr = parseInt(selectedYear);
+        if (s.launchYear && s.launchYear !== yr && !s.crossYear) return false;
+        if (!s.launchYear) return false;
+      }
+      if (!s.launchDate) return true;
       const d = new Date(s.launchDate);
-      if (isNaN(d)) return true; // unparseable like "2025" = include
+      if (isNaN(d)) return true;
       return d >= cutoff;
     });
   }
@@ -761,13 +773,19 @@
   function renderKPIs() {
     const grid = $('#kpi-grid');
     const summary = dataService.getSummary();
-    const allLaunched = STUDIES.filter(s => s.status !== 'coming');
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      if (s.launchYear === yr || s.crossYear) return true;
+      if (!s.launchYear && s.status === 'coming') return true;
+      return false;
+    });
+    const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
     const windowStudies = getStudiesInWindow(selectedDays);
-    const totalStudies = STUDIES.length;
-    const active = STUDIES.filter(s => s.status === 'active').length;
-    const recruiting = STUDIES.filter(s => s.status === 'recruiting').length;
-    const completed = STUDIES.filter(s => s.status === 'complete').length;
-    const coming = STUDIES.filter(s => s.status === 'coming').length;
+    const totalStudies = yearFiltered.length;
+    const active = yearFiltered.filter(s => s.status === 'active').length;
+    const recruiting = yearFiltered.filter(s => s.status === 'recruiting').length;
+    const completed = yearFiltered.filter(s => s.status === 'complete').length;
+    const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
     const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
     // Map selectedDays to the API summary period keys
@@ -1000,6 +1018,10 @@
     // Filter studies
     let studies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
 
+    if (selectedYear !== 'all') {
+      const yr = parseInt(selectedYear);
+      studies = studies.filter(s => s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming'));
+    }
     if (filterStatus !== 'all') studies = studies.filter(s => s.status === filterStatus);
     if (filterType !== 'all') studies = studies.filter(s => s.type === filterType);
     if (filterManual !== 'all') {
@@ -1210,7 +1232,8 @@
     const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    $('#subtitle').textContent = `Reputable Health — ${selectedDays}-day window · Updated ${dateStr} ${timeStr}`;
+    const yearLabel = selectedYear === 'all' ? '' : ` · ${selectedYear}`;
+    $('#subtitle').textContent = `Reputable Health — ${selectedDays}-day window${yearLabel} · Updated ${dateStr} ${timeStr}`;
 
     renderApiStatus();
     renderKPIs();
@@ -1228,6 +1251,16 @@
   // ============================================================
   // EVENT HANDLERS
   // ============================================================
+
+  // Year filter
+  document.addEventListener('click', e => {
+    if (e.target.matches('#year-filter .filter-btn')) {
+      $$('#year-filter .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      selectedYear = e.target.dataset.year;
+      renderAll();
+    }
+  });
 
   // Time filter
   document.addEventListener('click', e => {
