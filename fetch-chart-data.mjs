@@ -59,38 +59,36 @@ async function fetchMetaAds() {
 async function fetchAppsFlyer() {
   console.log('Fetching AppsFlyer installs...');
 
-  // Try multiple AppsFlyer API hosts (they vary by region/account)
-  const hosts = ['hq.appsflyer.com', 'api2.appsflyer.com', 'api3.appsflyer.com'];
-  const path = `/export/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${FROM_DATE}&to=${TO_DATE}&groupings=date&currency=USD`;
+  // AppsFlyer Pull API V2 — aggregate data endpoint
+  // Docs: https://dev.appsflyer.com/hc/reference/get_app-id-partners-by-date-report-v5-1
+  const url = `https://hq1.appsflyer.com/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?from=${FROM_DATE}&to=${TO_DATE}`;
 
   let text = null;
   let succeeded = false;
-  for (const host of hosts) {
-    try {
-      console.log(`  Trying ${host}...`);
-      const resp = await fetch(`https://${host}${path}`, {
-        headers: { 'Accept': 'text/csv' },
-        signal: AbortSignal.timeout(15000),
-      });
-      text = await resp.text();
-      if (!resp.ok) {
-        console.error(`  ✗ ${host} returned HTTP ${resp.status}: ${text.slice(0, 200)}`);
-        continue;
-      }
-      if (!text || !text.toLowerCase().includes('date')) {
-        console.error(`  ✗ ${host}: unexpected response:`, text.slice(0, 200));
-        continue;
-      }
-      console.log(`  ✓ Success from ${host}`);
+  try {
+    console.log(`  Fetching from hq1.appsflyer.com...`);
+    const resp = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${APPSFLYER_API_TOKEN}`,
+        'Accept': 'text/csv',
+      },
+      signal: AbortSignal.timeout(15000),
+    });
+    text = await resp.text();
+    if (!resp.ok) {
+      console.error(`  ✗ HTTP ${resp.status}: ${text.slice(0, 200)}`);
+    } else if (!text || !text.toLowerCase().includes('date')) {
+      console.error(`  ✗ Unexpected response:`, text.slice(0, 200));
+    } else {
+      console.log(`  ✓ Success`);
       succeeded = true;
-      break;
-    } catch (err) {
-      console.error(`  ✗ ${host} fetch failed:`, err.message);
     }
+  } catch (err) {
+    console.error(`  ✗ Fetch failed:`, err.message);
   }
 
   if (!succeeded) {
-    console.error('✗ AppsFlyer: all API hosts failed');
+    console.error('✗ AppsFlyer API request failed');
     return;
   }
 
