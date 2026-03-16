@@ -1,0 +1,140 @@
+name: Fetch AppsFlyer Stats
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8am UTC
+  workflow_dispatch:       # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch AppsFlyer stats
+        env:
+          APPSFLYER_API_TOKEN: ${{ secrets.APPSFLYER_API_TOKEN }}
+          APPSFLYER_APP_ID: ${{ secrets.APPSFLYER_APP_ID }}
+        run: |
+          mkdir -p data
+
+          # Fetch last 90 days of aggregate performance data
+          START_DATE=$(date -d '90 days ago' +%Y-%m-%d)
+          END_DATE=$(date +%Y-%m-%d)
+
+          echo "Fetching AppsFlyer stats from $START_DATE to $END_DATE"
+
+          # Pull API aggregate performance report (daily)
+          HTTP_CODE=$(curl -s -o /tmp/appsflyer-response.csv -w "%{http_code}" \
+            "https://hq.appsflyer.com/export/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${START_DATE}&to=${END_DATE}&groupings=date&currency=USD" \
+            -H "Accept: text/csv")
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "AppsFlyer API returned HTTP $HTTP_CODE"
+            cat /tmp/appsflyer-response.csv
+            exit 1
+          fi
+
+          echo "Raw CSV preview:"
+          head -5 /tmp/appsflyer-response.csv
+
+          # Process CSV into dashboard-friendly JSON
+          node -e "
+          const fs = require('fs');
+          const csv = fs.readFileSync('/tmp/appsflyer-response.csv', 'utf8').trim();
+          const lines = csv.split('\n');
+          if (lines.length < 2) {
+            console.log('No data rows in CSV');
+            const output = { updated_at: new Date().toISOString(), period: { start: '${START_DATE}', end: '${END_DATE}' }, totals: { installs: 0, sessions: 0, uninstalls: 0 }, daily: [], bySource: [] };
+            fs.writeFileSync('data/appsflyer-stats.json', JSON.stringify(output, null, 2));
+            process.exit(0);
+          }
+
+          const headers = lines[0].split(',').map(h => h.trim().replace(/^\"|\"$/g, ''));
+          console.log('Headers:', headers.join(', '));
+
+          const rows = lines.slice(1).map(line => {
+            // Handle CSV with quoted fields
+            const vals = [];
+            let current = '';
+            let inQuotes = false;
+            for (const ch of line) {
+              if (ch === '\"') { inQuotes = !inQuotes; }
+              else if (ch === ',' && !inQuotes) { vals.push(current.trim()); current = ''; }
+              else { current += ch; }
+            }
+            vals.push(current.trim());
+            const obj = {};
+            headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
+            return obj;
+          });
+
+          // Find relevant column names (AppsFlyer headers vary)
+          const findCol = (patterns) => headers.find(h => patterns.some(p => h.toLowerCase().includes(p.toLowerCase()))) || null;
+          const dateCol = findCol(['date']) || 'Date';
+          const installsCol = findCol(['installs', 'Installs']) || 'Installs';
+          const sessionsCol = findCol(['sessions', 'Sessions']) || 'Sessions';
+          const uninstallsCol = findCol(['uninstalls', 'Uninstalls']) || 'Uninstalls';
+          const sourceCol = findCol(['media source', 'Media Source', 'partner']) || 'Media Source';
+
+          console.log('Using columns - date:', dateCol, 'installs:', installsCol, 'sessions:', sessionsCol, 'source:', sourceCol);
+
+          // Aggregate by date
+          const byDate = {};
+          const bySource = {};
+
+          rows.forEach(r => {
+            const date = r[dateCol] || '';
+            const installs = parseInt(r[installsCol]) || 0;
+            const sessions = parseInt(r[sessionsCol]) || 0;
+            const uninstalls = parseInt(r[uninstallsCol]) || 0;
+            const source = r[sourceCol] || 'Unknown';
+
+            if (date) {
+              if (!byDate[date]) byDate[date] = { date, installs: 0, sessions: 0, uninstalls: 0 };
+              byDate[date].installs += installs;
+              byDate[date].sessions += sessions;
+              byDate[date].uninstalls += uninstalls;
+            }
+
+            if (!bySource[source]) bySource[source] = { source, installs: 0, sessions: 0 };
+            bySource[source].installs += installs;
+            bySource[source].sessions += sessions;
+          });
+
+          const daily = Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date));
+          const sourceList = Object.values(bySource).sort((a, b) => b.installs - a.installs);
+
+          const totals = daily.reduce((acc, d) => ({
+            installs: acc.installs + d.installs,
+            sessions: acc.sessions + d.sessions,
+            uninstalls: acc.uninstalls + d.uninstalls,
+          }), { installs: 0, sessions: 0, uninstalls: 0 });
+
+          const output = {
+            updated_at: new Date().toISOString(),
+            period: { start: '${START_DATE}', end: '${END_DATE}' },
+            totals,
+            daily,
+            bySource: sourceList,
+          };
+
+          fs.writeFileSync('data/appsflyer-stats.json', JSON.stringify(output, null, 2));
+          console.log('Stats written. Totals:', JSON.stringify(totals));
+          console.log('Sources:', sourceList.length, 'Daily entries:', daily.length);
+          "
+
+      - name: Commit and push stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/appsflyer-stats.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update AppsFlyer stats [automated]"
+            git push
+          fi

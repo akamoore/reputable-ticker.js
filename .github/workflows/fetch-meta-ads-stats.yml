@@ -1,0 +1,140 @@
+name: Fetch Meta Ads Stats
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8am UTC
+  workflow_dispatch:       # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Meta Ads stats
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+        run: |
+          mkdir -p data
+
+          START_DATE=$(date -d '90 days ago' +%Y-%m-%d)
+          END_DATE=$(date +%Y-%m-%d)
+
+          echo "Fetching Meta Ads stats from $START_DATE to $END_DATE"
+
+          # Fetch daily account-level insights
+          HTTP_CODE=$(curl -s -o /tmp/meta-response.json -w "%{http_code}" \
+            "https://graph.facebook.com/v21.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&time_increment=1&fields=date_start,impressions,clicks,spend,cpc,cpm,ctr,actions&limit=100")
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Meta API returned HTTP $HTTP_CODE"
+            cat /tmp/meta-response.json
+            exit 1
+          fi
+
+          # Fetch all pages (Meta paginates results)
+          node -e "
+          const https = require('https');
+          const fs = require('fs');
+
+          async function fetchUrl(url) {
+            return new Promise((resolve, reject) => {
+              https.get(url, res => {
+                let body = '';
+                res.on('data', chunk => body += chunk);
+                res.on('end', () => {
+                  if (res.statusCode !== 200) reject(new Error('HTTP ' + res.statusCode + ': ' + body));
+                  else resolve(JSON.parse(body));
+                });
+              }).on('error', reject);
+            });
+          }
+
+          async function main() {
+            const firstPage = JSON.parse(fs.readFileSync('/tmp/meta-response.json', 'utf8'));
+            let allData = firstPage.data || [];
+            let nextUrl = firstPage.paging?.next;
+
+            // Paginate
+            let page = 1;
+            while (nextUrl && page < 10) {
+              console.log('Fetching page', ++page);
+              const resp = await fetchUrl(nextUrl);
+              allData = allData.concat(resp.data || []);
+              nextUrl = resp.paging?.next;
+            }
+
+            console.log('Total daily entries:', allData.length);
+
+            // Process into dashboard format
+            const daily = allData.map(d => ({
+              date: d.date_start,
+              impressions: parseInt(d.impressions) || 0,
+              clicks: parseInt(d.clicks) || 0,
+              spend: parseFloat(d.spend) || 0,
+              cpc: parseFloat(d.cpc) || 0,
+              cpm: parseFloat(d.cpm) || 0,
+              ctr: parseFloat(d.ctr) || 0,
+            })).sort((a, b) => a.date.localeCompare(b.date));
+
+            const totals = daily.reduce((acc, d) => ({
+              impressions: acc.impressions + d.impressions,
+              clicks: acc.clicks + d.clicks,
+              spend: acc.spend + d.spend,
+            }), { impressions: 0, clicks: 0, spend: 0 });
+
+            totals.cpc = totals.clicks > 0 ? (totals.spend / totals.clicks) : 0;
+            totals.cpm = totals.impressions > 0 ? (totals.spend / totals.impressions * 1000) : 0;
+            totals.ctr = totals.impressions > 0 ? (totals.clicks / totals.impressions * 100) : 0;
+
+            // Also fetch ad-level breakdown for the ads table
+            let adsData = [];
+            try {
+              const adsResp = await fetchUrl(
+                'https://graph.facebook.com/v21.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&level=ad&fields=ad_name,campaign_name,impressions,clicks,spend,cpc,cpm,ctr&limit=100'
+              );
+              adsData = (adsResp.data || []).map(a => ({
+                adName: a.ad_name,
+                campaignName: a.campaign_name,
+                impressions: parseInt(a.impressions) || 0,
+                clicks: parseInt(a.clicks) || 0,
+                spend: parseFloat(a.spend) || 0,
+                cpc: parseFloat(a.cpc) || 0,
+                cpm: parseFloat(a.cpm) || 0,
+                ctr: parseFloat(a.ctr) || 0,
+              })).sort((a, b) => b.spend - a.spend);
+            } catch (err) {
+              console.warn('Ad-level fetch failed:', err.message);
+            }
+
+            const output = {
+              updated_at: new Date().toISOString(),
+              period: { start: '${START_DATE}', end: '${END_DATE}' },
+              totals,
+              daily,
+              ads: adsData,
+            };
+
+            fs.writeFileSync('data/meta-ads-stats.json', JSON.stringify(output, null, 2));
+            console.log('Stats written. Totals:', JSON.stringify(totals));
+            console.log('Ads:', adsData.length);
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          "
+
+      - name: Commit and push stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/meta-ads-stats.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Meta Ads stats [automated]"
+            git push
+          fi
