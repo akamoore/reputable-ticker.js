@@ -791,7 +791,7 @@
   var STUDIES = [
     {
       id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT',
-      spend: 4487.22, leads: 848, joined: 312, onboarded: 241, target: 240,
+      spend: 8050.39, leads: 848, joined: 312, onboarded: 241, target: 240,
       wearable: 'Oura', days: 63,
       launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026',
       launchYear: 2026, crossYear: false, manualQueue: false,
@@ -800,7 +800,7 @@
     },
     {
       id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE',
-      spend: 6668.88, leads: 218, joined: 102, onboarded: 30, target: 35,
+      spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35,
       wearable: 'WHOOP', days: 71,
       launchDate: 'Jan 5, 2026', endDate: null,
       launchYear: 2026, crossYear: false, manualQueue: true,
@@ -827,7 +827,7 @@
     },
     {
       id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT',
-      spend: 2464.11, leads: 575, joined: 338, onboarded: 120, target: 120,
+      spend: 918.06, leads: 575, joined: 338, onboarded: 120, target: 120,
       wearable: 'Oura', days: 30,
       launchDate: 'Dec 23, 2025', endDate: 'Jan 22, 2026',
       launchYear: 2025, crossYear: true, manualQueue: false,
@@ -1469,7 +1469,7 @@
     barsHtml += '<div class="target-vals"><strong>' + fmt(m.blendedCPO) + '</strong> / ≤$25.00</div></div>';
 
     $('#kpi-bars').innerHTML = barsHtml;
-    $('#kpi-note').textContent = 'RWE paid CPO skewed by outliers (ProleevaMax ' + fmt(6668.88/30) + '). Excluding outliers: ' + fmt(m.paidExclCPO) + '. Blended target of $25 ' + (m.blendedCPO <= 25 ? 'achieved' : 'achievable as organic share grows') + '.';
+    $('#kpi-note').textContent = 'RWE paid CPO skewed by outliers (ProleevaMax ' + fmt(6461.48/30) + '). Excluding outliers: ' + fmt(m.paidExclCPO) + '. Blended target of $25 ' + (m.blendedCPO <= 25 ? 'achieved' : 'achievable as organic share grows') + '.';
 
     // Pace section
     // Only 2026-launched studies count toward 2026 goal
