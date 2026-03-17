@@ -182,20 +182,20 @@
 
     /* Charts */
     .charts-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-      gap: 20px; margin-bottom: 24px;
+      display: flex; flex-direction: column;
+      gap: 24px; margin-bottom: 24px;
     }
     .chart-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 24px;
+      padding: 28px;
     }
     .chart-card h3 {
       font-size: 14px; font-weight: 600; margin-bottom: 14px;
       color: var(--text-secondary);
     }
-    .chart-card canvas { width: 100% !important; height: 340px !important; }
+    .chart-card canvas { width: 100% !important; height: 400px !important; }
 
     /* Table */
     .table-controls {
