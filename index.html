@@ -195,7 +195,7 @@
       font-size: 14px; font-weight: 600; margin-bottom: 14px;
       color: var(--text-secondary);
     }
-    .chart-card canvas { width: 100% !important; height: 400px !important; }
+    .chart-card canvas { width: 100% !important; height: 280px !important; }
 
     /* Table */
     .table-controls {
@@ -1142,6 +1142,7 @@
         onboarded: getWindowedMetric(s, 'onboarded', selectedDays),
         leads: getWindowedMetric(s, 'leads', selectedDays),
       }))
+      .filter(s => s.spend > 0.01 || s.joined > 0 || s.onboarded > 0)
       .sort((a, b) => b.spend - a.spend);
   }
 
