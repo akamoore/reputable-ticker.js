@@ -182,20 +182,20 @@
 
     /* Charts */
     .charts-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px; margin-bottom: 24px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 20px; margin-bottom: 24px;
     }
     .chart-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 20px;
+      padding: 24px;
     }
     .chart-card h3 {
-      font-size: 13px; font-weight: 600; margin-bottom: 12px;
+      font-size: 14px; font-weight: 600; margin-bottom: 14px;
       color: var(--text-secondary);
     }
-    .chart-card canvas { width: 100% !important; height: 200px !important; }
+    .chart-card canvas { width: 100% !important; height: 340px !important; }
 
     /* Table */
     .table-controls {
@@ -332,6 +332,7 @@
       .funnel-row { flex-wrap: wrap; }
       .funnel-step { min-width: calc(33% - 2px); }
       .charts-grid { grid-template-columns: 1fr; }
+      .chart-card canvas { height: 280px !important; }
       .scorecard-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -1014,11 +1015,12 @@
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: true, labels: { color: '#999', font: { size: 11 } } },
+      legend: { display: true, labels: { color: '#999', font: { size: 13 }, padding: 16 } },
+      tooltip: { titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10 },
     },
     scales: {
-      x: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      x: { ticks: { color: '#888', font: { size: 12 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+      y: { ticks: { color: '#888', font: { size: 12 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
     },
   };
 
@@ -1049,8 +1051,8 @@
           ...chartDefaults,
           scales: {
             ...chartDefaults.scales,
-            y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'Spend ($)', color: '#666' } },
-            y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Clicks', color: '#666' } },
+            y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'Spend ($)', color: '#888', font: { size: 13 } } },
+            y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Clicks', color: '#888', font: { size: 13 } } },
           },
         },
       });
@@ -1072,7 +1074,7 @@
             plugins: { ...chartDefaults.plugins, legend: { display: false } },
             scales: {
               ...chartDefaults.scales,
-              y: { ...chartDefaults.scales.y, title: { display: true, text: 'Spend ($)', color: '#666' } },
+              y: { ...chartDefaults.scales.y, title: { display: true, text: 'Spend ($)', color: '#888', font: { size: 13 } } },
             },
           },
         });
