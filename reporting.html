@@ -791,16 +791,16 @@
   var STUDIES = [
     {
       id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT',
-      spend: 4487.22, leads: 848, joined: 312, onboarded: 241, target: 240,
+      spend: 8807.67, leads: 848, joined: 312, onboarded: 241, target: 240,
       wearable: 'Oura', days: 63,
-      launchDate: 'Jan 13, 2026', endDate: null,
+      launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026',
       launchYear: 2026, crossYear: false, manualQueue: false,
-      status: 'recruiting', outlier: true,
+      status: 'complete', outlier: true,
       notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question'
     },
     {
       id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE',
-      spend: 6668.88, leads: 218, joined: 102, onboarded: 43, target: 35,
+      spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35,
       wearable: 'WHOOP', days: 71,
       launchDate: 'Jan 5, 2026', endDate: null,
       launchYear: 2026, crossYear: false, manualQueue: true,
@@ -836,7 +836,7 @@
     },
     {
       id: 6, name: 'Enhanced Brew Formula (RCT)', type: 'RCT',
-      spend: 593.84, leads: 168, joined: 82, onboarded: 79, target: 70,
+      spend: 1046.99, leads: 168, joined: 82, onboarded: 79, target: 70,
       wearable: 'Oura', days: 49,
       launchDate: 'Jun 4, 2025', endDate: 'Jul 23, 2025',
       launchYear: 2025, crossYear: false, manualQueue: false,
@@ -854,7 +854,7 @@
     },
     {
       id: 8, name: 'Quantum Upgrade & Women\'s Health', type: 'RCT',
-      spend: 173.07, leads: 67, joined: 70, onboarded: 12, target: 70,
+      spend: 266.14, leads: 67, joined: 70, onboarded: 12, target: 70,
       wearable: 'Oura', days: 75,
       launchDate: 'Mar 2, 2025', endDate: 'May 16, 2025',
       launchYear: 2025, crossYear: false, manualQueue: false,
@@ -956,7 +956,7 @@
       id: 19, name: 'Deep Sleep: Neuvana Xen', type: 'RCT',
       spend: 0, leads: 58, joined: null, onboarded: 40, target: 40,
       wearable: 'Oura', days: 1,
-      launchDate: 'Feb 26, 2026', endDate: 'Feb 27, 2026',
+      launchDate: 'Feb 27, 2026', endDate: 'Feb 27, 2026',
       launchYear: 2026, crossYear: false, manualQueue: false,
       status: 'complete', outlier: false,
       notes: ''
@@ -965,7 +965,7 @@
       id: 23, name: 'Vampire Serum: Skin Renewal', type: 'RCT',
       spend: 0, leads: 53, joined: null, onboarded: 35, target: 35,
       wearable: 'Oura', days: 2,
-      launchDate: 'Mar 4, 2026', endDate: 'Mar 6, 2026',
+      launchDate: 'Mar 5, 2026', endDate: 'Mar 6, 2026',
       launchYear: 2026, crossYear: false, manualQueue: false,
       status: 'complete', outlier: false,
       notes: ''
@@ -1469,7 +1469,7 @@
     barsHtml += '<div class="target-vals"><strong>' + fmt(m.blendedCPO) + '</strong> / ≤$25.00</div></div>';
 
     $('#kpi-bars').innerHTML = barsHtml;
-    $('#kpi-note').textContent = 'RWE paid CPO skewed by outliers (ProleevaMax ' + fmt(5686.18/29) + '). Excluding outliers: ' + fmt(m.paidExclCPO) + '. Blended target of $25 ' + (m.blendedCPO <= 25 ? 'achieved' : 'achievable as organic share grows') + '.';
+    $('#kpi-note').textContent = 'RWE paid CPO skewed by outliers (ProleevaMax ' + fmt(6461.48/30) + '). Excluding outliers: ' + fmt(m.paidExclCPO) + '. Blended target of $25 ' + (m.blendedCPO <= 25 ? 'achieved' : 'achievable as organic share grows') + '.';
 
     // Pace section
     // Only 2026-launched studies count toward 2026 goal
