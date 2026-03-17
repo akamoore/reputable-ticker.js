@@ -1130,14 +1130,19 @@
     }
   }
 
-  // Helper: get studies for chart fallbacks (year-filtered, launched only, sorted by ID)
+  // Helper: get studies for chart fallbacks (windowed, year-filtered, launched only, sorted by spend)
   function getStudiesForCharts() {
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
-      const yr = parseInt(selectedYear);
-      if (s.launchYear === yr || s.crossYear) return true;
-      return false;
-    });
-    return yearFiltered.filter(s => s.status !== 'coming' && s.spend > 0).sort((a, b) => b.spend - a.spend);
+    const windowStudies = getStudiesInWindow(selectedDays);
+    return windowStudies
+      .filter(s => s.status !== 'coming' && s.spend > 0)
+      .map(s => ({
+        ...s,
+        spend: getWindowedSpend(s, selectedDays),
+        joined: getWindowedMetric(s, 'joined', selectedDays),
+        onboarded: getWindowedMetric(s, 'onboarded', selectedDays),
+        leads: getWindowedMetric(s, 'leads', selectedDays),
+      }))
+      .sort((a, b) => b.spend - a.spend);
   }
 
   // ============================================================
