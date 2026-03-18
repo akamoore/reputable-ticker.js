@@ -13,6 +13,26 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const QUEUE_DIR = join(__dirname, '..', 'queue', 'pending')
 
+/** Strip <cite index="...">...</cite> tags that leak from web search results */
+function stripCitations(text) {
+  if (typeof text !== 'string') return text
+  return text.replace(/<cite\s+index="[^"]*">/g, '').replace(/<\/cite>/g, '')
+}
+
+/** Recursively strip citations from all string values in an object/array */
+function cleanCitations(obj) {
+  if (typeof obj === 'string') return stripCitations(obj)
+  if (Array.isArray(obj)) return obj.map(cleanCitations)
+  if (obj && typeof obj === 'object') {
+    const cleaned = {}
+    for (const [key, value] of Object.entries(obj)) {
+      cleaned[key] = cleanCitations(value)
+    }
+    return cleaned
+  }
+  return obj
+}
+
 const PLATFORM_PROMPT = (platformKey) => {
   const isLi = platformKey === 'linkedin'
   const label = isLi ? 'LinkedIn' : 'Instagram'
@@ -83,7 +103,7 @@ async function generateForPlatform(client, platformKey) {
       }
     }
   }
-  return JSON.parse(jsonText)
+  return cleanCitations(JSON.parse(jsonText))
 }
 
 async function main() {

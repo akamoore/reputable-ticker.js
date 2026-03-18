@@ -1,5 +1,30 @@
 import { useState, useEffect } from 'react'
 
+/** Strip <cite index="...">...</cite> tags from web search responses */
+function stripCitations(text) {
+  if (typeof text !== 'string') return text
+  return text.replace(/<cite\s+index="[^"]*">/g, '').replace(/<\/cite>/g, '')
+}
+
+function cleanBatchCitations(batch) {
+  if (!batch?.platforms) return batch
+  const cleaned = { ...batch, platforms: {} }
+  for (const [platform, posts] of Object.entries(batch.platforms)) {
+    cleaned.platforms[platform] = posts.map(post => {
+      const cleanedPost = { ...post }
+      for (const key of Object.keys(cleanedPost)) {
+        if (typeof cleanedPost[key] === 'string') {
+          cleanedPost[key] = stripCitations(cleanedPost[key])
+        } else if (Array.isArray(cleanedPost[key])) {
+          cleanedPost[key] = cleanedPost[key].map(v => typeof v === 'string' ? stripCitations(v) : v)
+        }
+      }
+      return cleanedPost
+    })
+  }
+  return cleaned
+}
+
 const GITHUB_REPO = 'akamoore/reputable-ticker.js'
 const QUEUE_PATH = 'trending-topic-generator/queue'
 
@@ -48,7 +73,7 @@ function ApprovalQueue({ onBack, bufferToken, githubToken }) {
         return data
       })
 
-      const loaded = await Promise.all(batchPromises)
+      const loaded = (await Promise.all(batchPromises)).map(cleanBatchCitations)
       loaded.sort((a, b) => new Date(b.generated_at) - new Date(a.generated_at))
       setBatches(loaded)
 
