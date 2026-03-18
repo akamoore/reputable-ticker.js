@@ -13,6 +13,26 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const QUEUE_DIR = join(__dirname, '..', 'queue', 'pending')
 
+/** Strip <cite index="...">...</cite> tags that leak from web search results */
+function stripCitations(text) {
+  if (typeof text !== 'string') return text
+  return text.replace(/<cite\s+index="[^"]*">/g, '').replace(/<\/cite>/g, '')
+}
+
+/** Recursively strip citations from all string values in an object/array */
+function cleanCitations(obj) {
+  if (typeof obj === 'string') return stripCitations(obj)
+  if (Array.isArray(obj)) return obj.map(cleanCitations)
+  if (obj && typeof obj === 'object') {
+    const cleaned = {}
+    for (const [key, value] of Object.entries(obj)) {
+      cleaned[key] = cleanCitations(value)
+    }
+    return cleaned
+  }
+  return obj
+}
+
 const PLATFORM_PROMPT = (platformKey) => {
   const isLi = platformKey === 'linkedin'
   const label = isLi ? 'LinkedIn' : 'Instagram'
@@ -20,8 +40,8 @@ const PLATFORM_PROMPT = (platformKey) => {
     ? 'professional, data-driven thought leadership for DTC brand founders'
     : 'approachable, educational content for health-conscious consumers'
   const postLength = isLi
-    ? '150-250 words, line breaks between paragraphs, DO NOT include hashtags in the post body'
-    : '80-150 words, with emojis, DO NOT include hashtags in the post body'
+    ? '100-150 words, line breaks between paragraphs, DO NOT include hashtags in the post body'
+    : '60-100 words, with emojis, DO NOT include hashtags in the post body'
   const tagType = isLi ? 'LinkedIn company/person names' : 'Instagram handles'
   const imageFormat = isLi ? 'LinkedIn image or graphic' : 'Instagram image, carousel, or Reel thumbnail'
   const imageDims = isLi
@@ -83,7 +103,7 @@ async function generateForPlatform(client, platformKey) {
       }
     }
   }
-  return JSON.parse(jsonText)
+  return cleanCitations(JSON.parse(jsonText))
 }
 
 async function main() {

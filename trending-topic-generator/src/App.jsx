@@ -3,6 +3,25 @@ import ApprovalQueue from './ApprovalQueue'
 import './App.css'
 import './ApprovalQueue.css'
 
+/** Strip <cite index="...">...</cite> tags from web search responses */
+function stripCitations(text) {
+  if (typeof text !== 'string') return text
+  return text.replace(/<cite\s+index="[^"]*">/g, '').replace(/<\/cite>/g, '')
+}
+
+function cleanCitations(obj) {
+  if (typeof obj === 'string') return stripCitations(obj)
+  if (Array.isArray(obj)) return obj.map(cleanCitations)
+  if (obj && typeof obj === 'object') {
+    const cleaned = {}
+    for (const [key, value] of Object.entries(obj)) {
+      cleaned[key] = cleanCitations(value)
+    }
+    return cleaned
+  }
+  return obj
+}
+
 const PLATFORM_TONE = {
   linkedin: 'professional, data-driven thought leadership for DTC brand founders',
   instagram: 'approachable, educational content for health-conscious consumers'
@@ -14,8 +33,8 @@ const PLATFORM_PROMPT = (p) => {
     label: isLi ? 'LinkedIn' : 'Instagram',
     tone: PLATFORM_TONE[p],
     postLength: isLi
-      ? '150-250 words, line breaks between paragraphs, DO NOT include hashtags in the post body'
-      : '80-150 words, with emojis, DO NOT include hashtags in the post body',
+      ? '100-150 words, line breaks between paragraphs, DO NOT include hashtags in the post body'
+      : '60-100 words, with emojis, DO NOT include hashtags in the post body',
     tagType: isLi ? 'LinkedIn company/person names' : 'Instagram handles',
     imageFormat: isLi
       ? 'LinkedIn image or graphic'
@@ -147,7 +166,7 @@ function App() {
       if (end === -1) throw new Error('Malformed JSON array in response. Please try again.')
       jsonText = jsonText.substring(start, end + 1)
     }
-    return JSON.parse(jsonText)
+    return cleanCitations(JSON.parse(jsonText))
   }
 
   const generateTopics = async () => {
