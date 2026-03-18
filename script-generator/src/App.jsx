@@ -24,6 +24,30 @@ const TONES = [
   'Professional and data-driven',
 ]
 
+const SYSTEM_PROMPT = `You are a video script writer for Reputable Health (reputable.health), a company that connects research sponsors with health-conscious participants to run evidence-based wellness studies.
+
+Follow these voice guidelines:
+- Approachable, not corporate. "Here's what we found" not "Data indicates."
+- Evidence-based — always cite the study, the protocol, the data.
+- Participant-first — center the human experience.
+- Trustworthy — lead with transparency.
+- Educational — explain complex science simply.
+
+Terminology rules:
+- Say "participants" not "subjects" or "users"
+- Say "studies" not "trials" (unless actual clinical trial)
+- Say "sponsors" not "clients"
+- Say "verified evidence" not "proof"
+- Say "aggregate results" not "individual results"
+
+Write scripts that are punchy, clear, and built for the specified video format.`
+
+function getStoredKey() {
+  const stored = localStorage.getItem('anthropic_key')
+  if (stored) return stored
+  return import.meta.env.VITE_ANTHROPIC_API_KEY || ''
+}
+
 export default function App() {
   const [topic, setTopic] = useState('')
   const [format, setFormat] = useState(FORMATS[0].value)
@@ -34,29 +58,90 @@ export default function App() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showSettings, setShowSettings] = useState(false)
+  const [apiKeyInput, setApiKeyInput] = useState(getStoredKey)
+
+  function saveKey() {
+    localStorage.setItem('anthropic_key', apiKeyInput)
+    setShowSettings(false)
+  }
 
   async function handleGenerate(e) {
     e.preventDefault()
     if (!topic.trim()) return
 
+    const apiKey = apiKeyInput
+    if (!apiKey) {
+      setError('No API key set. Click the settings button to add your Anthropic API key.')
+      return
+    }
+
     setLoading(true)
     setError(null)
     setResult(null)
 
+    const userPrompt = `Write a ${format} video script about: ${topic}
+
+Target duration: ${duration}
+Target audience: ${audience}
+Tone: ${tone}
+${notes ? `Additional notes: ${notes}` : ''}
+
+Return the script as a JSON object with these keys:
+- "title": a short, punchy title (8 words or fewer, sentence case)
+- "hook": the opening hook line (first 3 seconds — must stop the scroll)
+- "sections": an array of script sections, each with:
+  - "label": section name (e.g. "Hook", "Problem", "Solution", "Evidence", "CTA")
+  - "visual": brief visual direction for this section
+  - "voiceover": the exact spoken words
+  - "duration_seconds": estimated seconds for this section
+- "cta": the closing call-to-action line
+- "total_duration_seconds": total estimated duration
+- "hashtags": array of 5-8 relevant hashtags (without # prefix)
+- "platform_notes": brief tips for adapting this script across platforms (Instagram Reels, TikTok, YouTube Shorts, LinkedIn)
+
+Return ONLY valid JSON, no markdown fences or extra text.`
+
     try {
-      const res = await fetch('/api/generate', {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, format, duration, audience, tone, notes }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 2048,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: userPrompt }],
+        }),
       })
 
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        throw new Error(body.error || `Server returned ${res.status}`)
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}))
+        if (response.status === 429) {
+          throw new Error('Rate limit reached — please wait about a minute and try again.')
+        }
+        throw new Error(errData.error?.message || `API error: ${response.status}`)
       }
 
-      const data = await res.json()
-      setResult(data.script)
+      const data = await response.json()
+      const textBlocks = data.content.filter((b) => b.type === 'text')
+      if (!textBlocks.length) throw new Error('No text response received from API')
+
+      let jsonText = textBlocks.map((b) => b.text).join('\n').trim()
+      // Strip markdown code fences if present
+      jsonText = jsonText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '')
+
+      let script
+      try {
+        script = JSON.parse(jsonText)
+      } catch {
+        script = { raw: jsonText }
+      }
+      setResult(script)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -80,12 +165,37 @@ export default function App() {
         <header style={styles.header}>
           <div style={styles.dot} />
           <span style={styles.label}>REPUTABLE HEALTH</span>
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            style={styles.settingsBtn}
+            title="API key settings"
+          >
+            {apiKeyInput ? 'Key set' : 'Set API key'}
+          </button>
           <div style={styles.divider} />
           <h1 style={styles.h1}>Script generator</h1>
           <p style={styles.subtitle}>
             AI-powered video scripts for evidence-based wellness content.
           </p>
         </header>
+
+        {showSettings && (
+          <div style={styles.settingsPanel}>
+            <div style={styles.field}>
+              <label style={styles.fieldLabel}>Anthropic API key</label>
+              <input
+                style={styles.input}
+                type="password"
+                placeholder="sk-ant-..."
+                value={apiKeyInput}
+                onChange={(e) => setApiKeyInput(e.target.value)}
+              />
+            </div>
+            <button onClick={saveKey} style={{ ...styles.btn, marginTop: 8, padding: '10px 24px', fontSize: '0.85rem' }}>
+              Save
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleGenerate} style={styles.form}>
           <div style={styles.field}>
@@ -266,6 +376,25 @@ const styles = {
     letterSpacing: '0.18em',
     color: '#c8e64a',
     textTransform: 'uppercase',
+  },
+  settingsBtn: {
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: 100,
+    padding: '4px 14px',
+    color: '#999',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    marginLeft: 12,
+    verticalAlign: 'middle',
+  },
+  settingsPanel: {
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: 12,
+    padding: '20px',
+    marginBottom: 24,
   },
   divider: {
     width: 40,

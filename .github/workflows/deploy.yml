@@ -29,8 +29,16 @@ jobs:
           cache: npm
           cache-dependency-path: trending-topic-generator/package-lock.json
 
-      - name: Install and build
+      - name: Install and build trending-topic-generator
         working-directory: trending-topic-generator
+        env:
+          VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install and build script-generator
+        working-directory: script-generator
         env:
           VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
         run: |
@@ -40,7 +48,9 @@ jobs:
       - name: Prepare deploy directory
         run: |
           mkdir -p _site/trending-topic-generator
+          mkdir -p _site/script-generator
           cp -r trending-topic-generator/dist/* _site/trending-topic-generator/
+          cp -r script-generator/dist/* _site/script-generator/
           cp *.html _site/
           cp *.jpg _site/ 2>/dev/null || true
           cp *.pdf _site/ 2>/dev/null || true
