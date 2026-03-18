@@ -33,8 +33,8 @@ const PLATFORM_PROMPT = (p) => {
     label: isLi ? 'LinkedIn' : 'Instagram',
     tone: PLATFORM_TONE[p],
     postLength: isLi
-      ? '150-250 words, line breaks between paragraphs, DO NOT include hashtags in the post body'
-      : '80-150 words, with emojis, DO NOT include hashtags in the post body',
+      ? '100-150 words, line breaks between paragraphs, DO NOT include hashtags in the post body'
+      : '60-100 words, with emojis, DO NOT include hashtags in the post body',
     tagType: isLi ? 'LinkedIn company/person names' : 'Instagram handles',
     imageFormat: isLi
       ? 'LinkedIn image or graphic'
