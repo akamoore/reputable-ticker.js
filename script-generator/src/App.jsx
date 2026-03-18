@@ -24,6 +24,69 @@ const TONES = [
   'Professional and data-driven',
 ]
 
+const TOPIC_PRESETS = [
+  {
+    label: 'Study explainer',
+    topic: 'How Reputable runs a verified wellness study from enrollment to results',
+    audience: 'health-conscious consumers',
+    tone: 'Approachable and evidence-based',
+  },
+  {
+    label: 'Wearable data',
+    topic: 'How wearable data (Oura, Apple Watch, Whoop) creates verified evidence for supplement brands',
+    audience: 'DTC brand founders',
+    tone: 'Professional and data-driven',
+  },
+  {
+    label: 'Sponsor pitch',
+    topic: 'Why wellness brands need verified evidence instead of just testimonials',
+    audience: 'DTC brand founders and marketing leads',
+    tone: 'Bold and provocative',
+  },
+  {
+    label: 'Participant recruitment',
+    topic: 'What it is like to join a Reputable study and get paid to improve your health',
+    audience: 'health-conscious consumers aged 25-45',
+    tone: 'Energetic and motivational',
+  },
+  {
+    label: 'Case study results',
+    topic: 'Breaking down real aggregate results from a completed Reputable wellness study',
+    audience: 'health-conscious consumers',
+    tone: 'Approachable and evidence-based',
+  },
+  {
+    label: 'Science myth-bust',
+    topic: 'Common wellness claims that fail when put through a real study protocol',
+    audience: 'health-curious skeptics',
+    tone: 'Bold and provocative',
+  },
+  {
+    label: 'Sleep study',
+    topic: 'What happens to your sleep data when you follow a structured supplement protocol for 30 days',
+    audience: 'biohackers and sleep optimizers',
+    tone: 'Calm and educational',
+  },
+  {
+    label: 'HRV deep dive',
+    topic: 'Heart rate variability as a biomarker — what your HRV actually tells you about recovery',
+    audience: 'fitness enthusiasts and biohackers',
+    tone: 'Calm and educational',
+  },
+  {
+    label: 'Brand trust',
+    topic: 'How verified evidence widgets on product pages increase consumer trust and conversion',
+    audience: 'e-commerce brand operators',
+    tone: 'Professional and data-driven',
+  },
+  {
+    label: 'Behind the protocol',
+    topic: 'A day-in-the-life look at how Reputable designs study protocols with washout periods, blinding, and compliance tracking',
+    audience: 'health-conscious consumers and potential sponsors',
+    tone: 'Approachable and evidence-based',
+  },
+]
+
 const SYSTEM_PROMPT = `You are a video script writer for Reputable Health (reputable.health), a company that connects research sponsors with health-conscious participants to run evidence-based wellness studies.
 
 Follow these voice guidelines:
@@ -198,6 +261,29 @@ Return ONLY valid JSON, no markdown fences or extra text.`
         )}
 
         <form onSubmit={handleGenerate} style={styles.form}>
+          <div style={styles.field}>
+            <label style={styles.fieldLabel}>Quick prompts</label>
+            <div style={styles.presetGrid}>
+              {TOPIC_PRESETS.map((preset) => (
+                <button
+                  key={preset.label}
+                  type="button"
+                  onClick={() => {
+                    setTopic(preset.topic)
+                    setAudience(preset.audience)
+                    setTone(preset.tone)
+                  }}
+                  style={{
+                    ...styles.presetChip,
+                    ...(topic === preset.topic ? styles.presetChipActive : {}),
+                  }}
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div style={styles.field}>
             <label style={styles.fieldLabel}>Topic *</label>
             <input
@@ -395,6 +481,28 @@ const styles = {
     borderRadius: 12,
     padding: '20px',
     marginBottom: 24,
+  },
+  presetGrid: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  presetChip: {
+    background: 'rgba(255,255,255,0.04)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: 100,
+    padding: '6px 14px',
+    color: '#a0a0a0',
+    fontSize: '0.8rem',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    fontFamily: 'inherit',
+  },
+  presetChipActive: {
+    background: 'rgba(200,230,74,0.1)',
+    borderColor: 'rgba(200,230,74,0.3)',
+    color: '#c8e64a',
   },
   divider: {
     width: 40,
