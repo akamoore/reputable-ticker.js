@@ -17,93 +17,127 @@ const DURATIONS = [
 ]
 
 const TONES = [
-  'Approachable and evidence-based',
-  'Bold and provocative',
-  'Calm and educational',
-  'Energetic and motivational',
-  'Professional and data-driven',
+  'Credible and warm — calm authority, real talk',
+  'Sharp and contrarian — challenge lazy assumptions',
+  'Clear and educational — make the audience smarter',
+  'Founder POV — insight-led, first-person commentary',
+  'Strategic and direct — outcome-oriented, no fluff',
 ]
 
 const TOPIC_PRESETS = [
   {
-    label: 'Study explainer',
-    topic: 'How Reputable runs a verified wellness study from enrollment to results',
-    audience: 'health-conscious consumers',
-    tone: 'Approachable and evidence-based',
+    label: 'Myth vs reality',
+    topic: 'Why most wellness brands struggle to prove their claims — and what actually works',
+    audience: 'DTC brand founders and marketing leads',
+    tone: 'Sharp and contrarian — challenge lazy assumptions',
+  },
+  {
+    label: 'Proof problem',
+    topic: 'Most brands don\'t have a product problem — they have a proof problem',
+    audience: 'DTC brand founders and marketing leads',
+    tone: 'Founder POV — insight-led, first-person commentary',
   },
   {
     label: 'Wearable data',
-    topic: 'How wearable data (Oura, Apple Watch, Whoop) creates verified evidence for supplement brands',
+    topic: 'How wearable data from Oura, Apple Watch, and Whoop creates verified evidence that brands can actually use',
     audience: 'DTC brand founders',
-    tone: 'Professional and data-driven',
+    tone: 'Clear and educational — make the audience smarter',
   },
   {
-    label: 'Sponsor pitch',
-    topic: 'Why wellness brands need verified evidence instead of just testimonials',
+    label: 'What brands get wrong',
+    topic: 'Three mistakes wellness brands make when trying to validate a product claim',
     audience: 'DTC brand founders and marketing leads',
-    tone: 'Bold and provocative',
+    tone: 'Sharp and contrarian — challenge lazy assumptions',
   },
   {
-    label: 'Participant recruitment',
-    topic: 'What it is like to join a Reputable study and get paid to improve your health',
-    audience: 'health-conscious consumers aged 25-45',
-    tone: 'Energetic and motivational',
-  },
-  {
-    label: 'Case study results',
+    label: 'What the data shows',
     topic: 'Breaking down real aggregate results from a completed Reputable wellness study',
-    audience: 'health-conscious consumers',
-    tone: 'Approachable and evidence-based',
+    audience: 'health-conscious consumers and brand operators',
+    tone: 'Credible and warm — calm authority, real talk',
   },
   {
-    label: 'Science myth-bust',
-    topic: 'Common wellness claims that fail when put through a real study protocol',
-    audience: 'health-curious skeptics',
-    tone: 'Bold and provocative',
+    label: 'Participant experience',
+    topic: 'What it actually looks like to join a Reputable study — the real experience, not just the sign-up',
+    audience: 'health-conscious consumers aged 25-45',
+    tone: 'Credible and warm — calm authority, real talk',
   },
   {
-    label: 'Sleep study',
+    label: 'Sleep deep dive',
     topic: 'What happens to your sleep data when you follow a structured supplement protocol for 30 days',
     audience: 'biohackers and sleep optimizers',
-    tone: 'Calm and educational',
+    tone: 'Clear and educational — make the audience smarter',
   },
   {
-    label: 'HRV deep dive',
-    topic: 'Heart rate variability as a biomarker — what your HRV actually tells you about recovery',
-    audience: 'fitness enthusiasts and biohackers',
-    tone: 'Calm and educational',
+    label: 'Black box problem',
+    topic: 'If your research process is a black box, that is a problem — why transparency changes everything in wellness validation',
+    audience: 'brand operators and wellness founders',
+    tone: 'Founder POV — insight-led, first-person commentary',
   },
   {
-    label: 'Brand trust',
-    topic: 'How verified evidence widgets on product pages increase consumer trust and conversion',
+    label: 'Claims need evidence',
+    topic: 'The wellness market has changed — consumers are more skeptical and claims need to hold up',
     audience: 'e-commerce brand operators',
-    tone: 'Professional and data-driven',
+    tone: 'Strategic and direct — outcome-oriented, no fluff',
   },
   {
     label: 'Behind the protocol',
-    topic: 'A day-in-the-life look at how Reputable designs study protocols with washout periods, blinding, and compliance tracking',
+    topic: 'How Reputable designs study protocols — washout periods, compliance tracking, and why the details matter',
     audience: 'health-conscious consumers and potential sponsors',
-    tone: 'Approachable and evidence-based',
+    tone: 'Clear and educational — make the audience smarter',
   },
 ]
 
-const SYSTEM_PROMPT = `You are a video script writer for Reputable Health (reputable.health), a company that connects research sponsors with health-conscious participants to run evidence-based wellness studies.
+const SYSTEM_PROMPT = `You write video scripts for Reputable Health (reputable.health). Reputable connects research sponsors with health-conscious participants to run evidence-based wellness studies.
 
-Follow these voice guidelines:
-- Approachable, not corporate. "Here's what we found" not "Data indicates."
-- Evidence-based — always cite the study, the protocol, the data.
-- Participant-first — center the human experience.
-- Trustworthy — lead with transparency.
-- Educational — explain complex science simply.
+BRAND VOICE — "Trusted science, spoken like a real person."
 
-Terminology rules:
+Reputable sounds like the smart, credible partner in the room who can actually explain what's happening. You don't overpromise. You don't posture. You make health validation feel modern, real, and useful.
+
+Voice traits:
+- Credible, not clinical. Sound evidence-based without sounding academic or cold. The audience should feel "these people know what they're doing," not "I need a PhD to understand this."
+- Clear, not jargon-heavy. Concise and outcome-oriented. People should get it in one scroll.
+- Confident, not chest-thumping. Real authority, calm and self-assured, never aggressive.
+- Human, not robotic. Unique, friendly, relatable. This should feel like a conversation, not a lecture.
+- Strategic, not trendy-for-trendy's-sake. The audience is companies, decision-makers, and brands evaluating credibility.
+
+In five words: Credible. Warm. Clear. Modern. Understated.
+
+SCRIPT STRUCTURE — Use this 5-part rhythm:
+1. Hook — Say the painful truth fast. Start with tension.
+2. Problem — Name what brands or people are struggling with.
+3. Reframe — Show why the old way is broken or incomplete.
+4. Proof / perspective — Use one data point, example, or concrete observation.
+5. Close — End with one sharp takeaway or CTA. Calm authority.
+
+WRITING STYLE:
+- Lead with the real problem. Sound like you've seen this before.
+- Be specific. Make the audience feel smarter, not sold to.
+- Use plain English. Short sentences. Direct observations.
+- Never sound like a supplement ad or a generic SaaS company.
+- No "game-changing," "revolutionary," "biohacking secret," or "you won't believe."
+- More like: "Here's what brands miss." "This is where validation breaks down." "The problem isn't interest. It's evidence."
+
+GOOD EXAMPLE LINES:
+- "Trust is not a branding exercise. It's an evidence problem."
+- "The wellness market has changed. Claims need to hold up."
+- "If your research process is a black box, that's a problem."
+- "You shouldn't have to wait until the end of a study to know what's happening."
+- "Most brands don't have a product problem. They have a proof problem."
+
+TERMINOLOGY:
 - Say "participants" not "subjects" or "users"
 - Say "studies" not "trials" (unless actual clinical trial)
 - Say "sponsors" not "clients"
-- Say "verified evidence" not "proof"
+- Say "verified evidence" not "proof" (science supports — it doesn't prove)
 - Say "aggregate results" not "individual results"
 
-Write scripts that are punchy, clear, and built for the specified video format.`
+PLATFORM CONTEXT:
+- LinkedIn is the primary channel — founder POV, industry observations, sharp opening lines.
+- YouTube is the second pillar — explainers, founder commentary, deep dives.
+- Instagram supports — carousels, study snapshots, light BTS moments.
+- Short-form should feel like smart takes and sharp observations, not influencer content pretending to be science.
+
+The goal is never "go viral at any cost." The goal is: make the right people immediately trust you.`
 
 function getStoredKey() {
   const stored = localStorage.getItem('anthropic_key')
@@ -116,7 +150,7 @@ export default function App() {
   const [format, setFormat] = useState(FORMATS[0].value)
   const [duration, setDuration] = useState(DURATIONS[1].value)
   const [audience, setAudience] = useState('health-conscious consumers')
-  const [tone, setTone] = useState(TONES[0])
+  const [tone, setTone] = useState(TONES[0]) // 'Credible and warm'
   const [notes, setNotes] = useState('')
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
