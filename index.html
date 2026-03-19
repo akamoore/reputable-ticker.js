@@ -377,6 +377,19 @@
   <!-- Charts -->
   <div class="charts-grid" id="charts-grid">
     <div class="chart-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+        <div>
+          <h3 id="chart-recruiting-title" style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled (<span id="recruiting-window">30d</span>)</h3>
+          <p style="font-size:12px; color:#888; margin:0;">See whether spend changes drive joins and enrollment spikes</p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em;">Enrolled (<span id="recruiting-window2">30d</span>)</div>
+          <div id="recruiting-enrolled-total" style="font-size:28px; font-weight:700; color:#34D399; line-height:1.1;">—</div>
+        </div>
+      </div>
+      <canvas id="chart-recruiting"></canvas>
+    </div>
+    <div class="chart-card">
       <h3 id="chart-spend-title">Ad Spend &amp; Clicks (Daily)</h3>
       <canvas id="chart-spend"></canvas>
     </div>
@@ -1003,12 +1016,55 @@
   // ============================================================
   // RENDER: Charts
   // ============================================================
-  let chartSpend, chartInstalls, chartEmail;
+  let chartSpend, chartInstalls, chartEmail, chartRecruiting;
 
   function destroyCharts() {
+    if (chartRecruiting) { chartRecruiting.destroy(); chartRecruiting = null; }
     if (chartSpend) { chartSpend.destroy(); chartSpend = null; }
     if (chartInstalls) { chartInstalls.destroy(); chartInstalls = null; }
     if (chartEmail) { chartEmail.destroy(); chartEmail = null; }
+  }
+
+  // Build daily time-series for spend, joined, and enrolled (onboarded)
+  // by distributing each study's totals evenly across its active days.
+  function getDailyRecruitingData(days) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const windowStart = new Date(today.getTime() - days * 86400000);
+
+    // Build a map of date → { spend, joined, enrolled }
+    const dailyMap = {};
+    for (let i = 0; i < days; i++) {
+      const d = new Date(windowStart.getTime() + (i + 1) * 86400000);
+      const key = d.toISOString().slice(0, 10);
+      dailyMap[key] = { date: key, spend: 0, joined: 0, enrolled: 0 };
+    }
+
+    const windowStudies = getStudiesInWindow(days);
+    for (const s of windowStudies) {
+      if (s.status === 'coming' || (!s.spend && !s.joined && !s.onboarded)) continue;
+      const launch = new Date(s.launchDate);
+      if (isNaN(launch)) continue;
+      const end = s.endDate ? new Date(s.endDate) : now;
+      const studyEnd = isNaN(end) ? now : end;
+      const totalDays = Math.max(1, Math.round((studyEnd - launch) / 86400000));
+
+      const dailySpend = (s.spend || 0) / totalDays;
+      const dailyJoined = (s.joined || 0) / totalDays;
+      const dailyEnrolled = (s.onboarded || 0) / totalDays;
+
+      // Distribute across each day the study was active within the window
+      for (const key of Object.keys(dailyMap)) {
+        const d = new Date(key);
+        if (d >= launch && d <= studyEnd) {
+          dailyMap[key].spend += dailySpend;
+          dailyMap[key].joined += dailyJoined;
+          dailyMap[key].enrolled += dailyEnrolled;
+        }
+      }
+    }
+
+    return Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
   }
 
   const chartDefaults = {
@@ -1032,6 +1088,80 @@
     const emailDaily = dataService.getNewsletterDaily();
 
     $('#charts-grid').style.display = '';
+
+    // --- Daily Spend, Joined & Enrolled chart ---
+    const windowLabel = selectedDays + 'd';
+    $('#recruiting-window').textContent = windowLabel;
+    $('#recruiting-window2').textContent = windowLabel;
+    const dailyRecruiting = getDailyRecruitingData(selectedDays);
+    const totalEnrolled = Math.round(dailyRecruiting.reduce((a, d) => a + d.enrolled, 0));
+    $('#recruiting-enrolled-total').textContent = totalEnrolled.toLocaleString();
+
+    if (dailyRecruiting.length) {
+      const labels = dailyRecruiting.map(d => {
+        const dt = new Date(d.date);
+        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      });
+      chartRecruiting = new Chart($('#chart-recruiting'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Spend ($)',
+              data: dailyRecruiting.map(d => Math.round(d.spend * 100) / 100),
+              borderColor: '#60A5FA',
+              backgroundColor: 'rgba(96,165,250,0.08)',
+              pointRadius: 1.5,
+              borderWidth: 2.5,
+              tension: 0.3,
+              yAxisID: 'y',
+              order: 1,
+            },
+            {
+              label: 'Joined Study',
+              data: dailyRecruiting.map(d => Math.round(d.joined * 10) / 10),
+              borderColor: '#6C5CE7',
+              backgroundColor: 'rgba(108,92,231,0.08)',
+              pointRadius: 1.5,
+              borderWidth: 2.5,
+              tension: 0.3,
+              yAxisID: 'y1',
+              order: 2,
+            },
+            {
+              label: 'Enrolled',
+              data: dailyRecruiting.map(d => Math.round(d.enrolled * 10) / 10),
+              borderColor: '#34D399',
+              backgroundColor: 'rgba(52,211,153,0.08)',
+              pointRadius: 1.5,
+              borderWidth: 2.5,
+              tension: 0.3,
+              yAxisID: 'y1',
+              order: 3,
+            },
+          ],
+        },
+        options: {
+          ...chartDefaults,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            x: { ...chartDefaults.scales.x },
+            y: {
+              ...chartDefaults.scales.y,
+              position: 'left',
+              title: { display: true, text: 'Spend ($)', color: '#888', font: { size: 12 } },
+            },
+            y1: {
+              ...chartDefaults.scales.y,
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              title: { display: true, text: 'Participants', color: '#888', font: { size: 12 } },
+            },
+          },
+        },
+      });
+    }
 
     // Ad Spend & Clicks
     $('#chart-spend-title').textContent = adsDaily.length ? 'Ad Spend & Clicks (Daily)' : 'Ad Spend by Study';
