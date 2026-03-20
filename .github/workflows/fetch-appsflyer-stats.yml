@@ -14,6 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Fetch AppsFlyer stats
         env:
           APPSFLYER_API_TOKEN: ${{ secrets.APPSFLYER_API_TOKEN }}
@@ -33,14 +37,14 @@ jobs:
           echo "Fetching AppsFlyer stats from $START_DATE to $END_DATE"
 
           # Try multiple AppsFlyer API hosts (they vary by region/account)
-          HOSTS=("hq.appsflyer.com" "api2.appsflyer.com" "api3.appsflyer.com")
+          HOSTS=("hq1.appsflyer.com" "hq.appsflyer.com" "api2.appsflyer.com" "api3.appsflyer.com")
           SUCCESS=false
 
           for HOST in "${HOSTS[@]}"; do
             echo "Trying $HOST..."
             HTTP_CODE=$(curl -s -o /tmp/appsflyer-response.csv -w "%{http_code}" \
               --connect-timeout 10 --max-time 30 \
-              "https://${HOST}/export/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${START_DATE}&to=${END_DATE}&groupings=date&currency=USD" \
+              "https://${HOST}/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${START_DATE}&to=${END_DATE}&groupings=date&currency=USD" \
               -H "Accept: text/csv" 2>/dev/null) || true
 
             if [ "$HTTP_CODE" = "200" ]; then
