@@ -536,7 +536,7 @@
   // LOCAL STUDY DATA — canonical per-study detail
   // ============================================================
   const STUDIES = [
-    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8807.67, leads: 848, joined: 312, onboarded: 239, target: 240, wearable: 'Oura', days: 57, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
+    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8807.67, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
     { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)' },
     { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 771, joined: 520, onboarded: 192, target: 189, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 4, name: 'Nitrate Supplementation (Berkeley Life)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, notes: 'Prescreening outside of app (manual step)' },
@@ -552,7 +552,7 @@
     { id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP', spend: 0, leads: 19, joined: 15, onboarded: 10, target: 10, wearable: 'Oura', days: 22, launchDate: 'Nov 12, 2025', endDate: 'Dec 4, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP', spend: 0, leads: 66, joined: 30, onboarded: 13, target: 12, wearable: 'WHOOP / Oura / Fitbit', days: 26, launchDate: 'Jan 8, 2026', endDate: 'Feb 3, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE', spend: 0, leads: 54, joined: 40, onboarded: 20, target: 20, wearable: 'Oura', days: 79, launchDate: 'Nov 3, 2025', endDate: 'Jan 21, 2026', launchYear: 2025, crossYear: true, manualQueue: true, status: 'complete', outlier: false, notes: 'Cross-year: launched 2025, completed 2026' },
-    { id: 17, name: 'HOP Box: Women\'s Longevity', type: 'RWE', spend: 0, leads: 189, joined: 42, onboarded: 41, target: 35, wearable: 'Oura', days: 29, launchDate: 'Feb 11, 2026', endDate: 'Mar 12, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
+    { id: 17, name: 'HOP Box: Women\'s Longevity', type: 'RWE', spend: 0, leads: 189, joined: 42, onboarded: 49, target: 35, wearable: 'Oura', days: 33, launchDate: 'Feb 11, 2026', endDate: 'Mar 16, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 18, name: 'Leela Quantum', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 35, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
     { id: 19, name: 'Deep Sleep: Neuvana Xen', type: 'RWE', spend: 0, leads: 58, joined: null, onboarded: 40, target: 40, wearable: 'Oura', days: 1, launchDate: 'Feb 27, 2026', endDate: 'Feb 27, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 23, name: 'Vampire Serum: Skin Renewal', type: 'RWE', spend: 0, leads: 53, joined: null, onboarded: 35, target: 35, wearable: 'Oura', days: 2, launchDate: 'Mar 5, 2026', endDate: 'Mar 6, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
@@ -1061,7 +1061,7 @@
       for (const ob of onboardingDaily) {
         const key = ob.date?.slice(0, 10);
         if (key && dailyMap[key]) {
-          dailyMap[key].enrolled += (ob.count || ob.onboarded || 0);
+          dailyMap[key].enrolled += (ob.enrolled || ob.count || ob.onboarded || 0);
           dailyMap[key].joined += (ob.joined || 0);
         }
       }
@@ -1088,6 +1088,8 @@
 
     // Fallback: distribute study totals evenly across active days
     // (only used when API data is unavailable)
+    // Use enriched studies so API-overridden onboarded/joined values are picked up
+    const enrichedStudies = apiData ? dataService.getEnrichedStudies() : null;
     const windowStudies = getStudiesInWindow(days);
     for (const s of windowStudies) {
       if (s.status === 'coming' || (!s.spend && !s.joined && !s.onboarded)) continue;
@@ -1097,9 +1099,15 @@
       const studyEnd = isNaN(end) ? now : end;
       const totalDays = Math.max(1, Math.round((studyEnd - launch) / 86400000));
 
-      const dailySpend = (s.spend || 0) / totalDays;
-      const dailyJoined = (s.joined || 0) / totalDays;
-      const dailyEnrolled = (s.onboarded || 0) / totalDays;
+      // Prefer API-enriched values when available
+      const enriched = enrichedStudies?.find(e => e.id === s.id);
+      const onboarded = enriched?.apiOnboarded ?? s.onboarded ?? 0;
+      const joined = enriched?.apiJoins ?? s.joined ?? 0;
+      const spend = enriched?.apiSpend ?? s.spend ?? 0;
+
+      const dailySpend = spend / totalDays;
+      const dailyJoined = joined / totalDays;
+      const dailyEnrolled = onboarded / totalDays;
 
       // Distribute across each day the study was active within the window
       for (const key of Object.keys(dailyMap)) {
