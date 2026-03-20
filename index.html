@@ -1042,22 +1042,25 @@
       dailyMap[key] = { date: key, spend: 0, joined: 0, enrolled: 0 };
     }
 
-    // Prefer real daily data from the API when available
+    // Populate daily data from real API sources when available,
+    // falling back to even distribution from study totals per metric.
     const adsDaily = dataService.getMetaAdsDaily();
     const onboardingDaily = apiData?.onboarding?.daily || [];
     const hasRealSpend = adsDaily.length > 0;
     const hasRealOnboarding = onboardingDaily.length > 0;
 
-    if (hasRealSpend || hasRealOnboarding) {
-      // Populate spend from Meta Ads daily data
+    // Populate spend from Meta Ads daily data when available
+    if (hasRealSpend) {
       for (const ad of adsDaily) {
         const key = ad.date?.slice(0, 10);
         if (key && dailyMap[key]) {
           dailyMap[key].spend += (ad.spend || 0);
         }
       }
+    }
 
-      // Populate enrolled from onboarding daily data
+    // Populate enrolled/joined from onboarding daily data when available
+    if (hasRealOnboarding) {
       for (const ob of onboardingDaily) {
         const key = ob.date?.slice(0, 10);
         if (key && dailyMap[key]) {
@@ -1073,7 +1076,6 @@
         const totalJoined = campaignMap.reduce((sum, c) => sum + (c.joins || 0), 0);
         const totalOnboarded = campaignMap.reduce((sum, c) => sum + (c.onboarded || 0), 0);
         if (totalJoined > 0 && totalOnboarded > 0) {
-          // Scale joined proportionally to enrolled daily actuals
           const joinRatio = totalJoined / totalOnboarded;
           for (const key of Object.keys(dailyMap)) {
             if (dailyMap[key].enrolled > 0) {
@@ -1082,40 +1084,36 @@
           }
         }
       }
-
-      return Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
     }
 
-    // Fallback: distribute study totals evenly across active days
-    // (only used when API data is unavailable)
-    // Use enriched studies so API-overridden onboarded/joined values are picked up
-    const enrichedStudies = apiData ? dataService.getEnrichedStudies() : null;
-    const windowStudies = getStudiesInWindow(days);
-    for (const s of windowStudies) {
-      if (s.status === 'coming' || (!s.spend && !s.joined && !s.onboarded)) continue;
-      const launch = new Date(s.launchDate);
-      if (isNaN(launch)) continue;
-      const end = s.endDate ? new Date(s.endDate) : now;
-      const studyEnd = isNaN(end) ? now : end;
-      const totalDays = Math.max(1, Math.round((studyEnd - launch) / 86400000));
+    // For any metric without real daily data, distribute study totals
+    // evenly across each study's active days within the window
+    if (!hasRealSpend || !hasRealOnboarding) {
+      const enrichedStudies = apiData ? dataService.getEnrichedStudies() : null;
+      const windowStudies = getStudiesInWindow(days);
+      for (const s of windowStudies) {
+        if (s.status === 'coming' || (!s.spend && !s.joined && !s.onboarded)) continue;
+        const launch = new Date(s.launchDate);
+        if (isNaN(launch)) continue;
+        const end = s.endDate ? new Date(s.endDate) : now;
+        const studyEnd = isNaN(end) ? now : end;
+        // +1 for inclusive day count (Mar 5–Mar 6 = 2 days, not 1)
+        const totalDays = Math.max(1, Math.round((studyEnd - launch) / 86400000) + 1);
 
-      // Prefer API-enriched values when available
-      const enriched = enrichedStudies?.find(e => e.id === s.id);
-      const onboarded = enriched?.apiOnboarded ?? s.onboarded ?? 0;
-      const joined = enriched?.apiJoins ?? s.joined ?? 0;
-      const spend = enriched?.apiSpend ?? s.spend ?? 0;
+        const enriched = enrichedStudies?.find(e => e.id === s.id);
+        const onboarded = enriched?.apiOnboarded ?? s.onboarded ?? 0;
+        const joined = enriched?.apiJoins ?? s.joined ?? 0;
+        const spend = enriched?.apiSpend ?? s.spend ?? 0;
 
-      const dailySpend = spend / totalDays;
-      const dailyJoined = joined / totalDays;
-      const dailyEnrolled = onboarded / totalDays;
-
-      // Distribute across each day the study was active within the window
-      for (const key of Object.keys(dailyMap)) {
-        const d = new Date(key);
-        if (d >= launch && d <= studyEnd) {
-          dailyMap[key].spend += dailySpend;
-          dailyMap[key].joined += dailyJoined;
-          dailyMap[key].enrolled += dailyEnrolled;
+        for (const key of Object.keys(dailyMap)) {
+          const d = new Date(key);
+          if (d >= launch && d <= studyEnd) {
+            if (!hasRealSpend) dailyMap[key].spend += spend / totalDays;
+            if (!hasRealOnboarding) {
+              dailyMap[key].joined += joined / totalDays;
+              dailyMap[key].enrolled += onboarded / totalDays;
+            }
+          }
         }
       }
     }
