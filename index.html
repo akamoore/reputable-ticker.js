@@ -376,18 +376,22 @@
 
   <!-- Charts -->
   <div class="charts-grid" id="charts-grid">
-    <div class="chart-card">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+    <div class="chart-card" id="signups-card" style="display:none;">
+      <h3 style="margin-bottom:14px;">New Signups</h3>
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:16px;">
+        <div id="signups-total" style="font-size:42px; font-weight:700; color:#60A5FA; line-height:1;">—</div>
+        <div style="font-size:13px; color:#888;">total</div>
+      </div>
+      <div style="display:flex; gap:24px;">
         <div>
-          <h3 id="chart-recruiting-title" style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled (<span id="recruiting-window">30d</span>)</h3>
-          <p style="font-size:12px; color:#888; margin:0;">See whether spend changes drive joins and enrollment spikes</p>
+          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Yesterday</div>
+          <div id="signups-yesterday" style="font-size:22px; font-weight:600; color:#e4e6ef;">—</div>
         </div>
-        <div style="text-align:right;">
-          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em;">Enrolled (<span id="recruiting-window2">30d</span>)</div>
-          <div id="recruiting-enrolled-total" style="font-size:28px; font-weight:700; color:#34D399; line-height:1.1;">—</div>
+        <div>
+          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Last 7 days</div>
+          <div id="signups-week" style="font-size:22px; font-weight:600; color:#e4e6ef;">—</div>
         </div>
       </div>
-      <canvas id="chart-recruiting"></canvas>
     </div>
     <div class="chart-card">
       <h3 id="chart-spend-title">Ad Spend &amp; Clicks (Daily)</h3>
@@ -1016,109 +1020,12 @@
   // ============================================================
   // RENDER: Charts
   // ============================================================
-  let chartSpend, chartInstalls, chartEmail, chartRecruiting;
+  let chartSpend, chartInstalls, chartEmail;
 
   function destroyCharts() {
-    if (chartRecruiting) { chartRecruiting.destroy(); chartRecruiting = null; }
     if (chartSpend) { chartSpend.destroy(); chartSpend = null; }
     if (chartInstalls) { chartInstalls.destroy(); chartInstalls = null; }
     if (chartEmail) { chartEmail.destroy(); chartEmail = null; }
-  }
-
-  // Build daily time-series for spend, joined, and enrolled (onboarded).
-  // Uses real API daily data (metaAds.daily for spend, onboarding.daily
-  // for enrolled/joined) when available; falls back to distributing
-  // study totals evenly only when the API is not connected.
-  function getDailyRecruitingData(days) {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const windowStart = new Date(today.getTime() - days * 86400000);
-
-    // Build a map of date → { spend, joined, enrolled }
-    const dailyMap = {};
-    for (let i = 0; i < days; i++) {
-      const d = new Date(windowStart.getTime() + (i + 1) * 86400000);
-      const key = d.toISOString().slice(0, 10);
-      dailyMap[key] = { date: key, spend: 0, joined: 0, enrolled: 0 };
-    }
-
-    // Populate daily data from real API sources when available,
-    // falling back to even distribution from study totals per metric.
-    const adsDaily = dataService.getMetaAdsDaily();
-    const onboardingDaily = apiData?.onboarding?.daily || [];
-    const hasRealSpend = adsDaily.length > 0;
-    const hasRealOnboarding = onboardingDaily.length > 0;
-
-    // Populate spend from Meta Ads daily data when available
-    if (hasRealSpend) {
-      for (const ad of adsDaily) {
-        const key = ad.date?.slice(0, 10);
-        if (key && dailyMap[key]) {
-          dailyMap[key].spend += (ad.spend || 0);
-        }
-      }
-    }
-
-    // Populate enrolled/joined from onboarding daily data when available
-    if (hasRealOnboarding) {
-      for (const ob of onboardingDaily) {
-        const key = ob.date?.slice(0, 10);
-        if (key && dailyMap[key]) {
-          dailyMap[key].enrolled += (ob.enrolled || ob.count || ob.onboarded || 0);
-          dailyMap[key].joined += (ob.joined || 0);
-        }
-      }
-
-      // If we have campaign-study mapping with joins but no daily joined
-      // data, use it as a supplementary source
-      if (!onboardingDaily.some(d => d.joined)) {
-        const campaignMap = apiData?.campaignStudyMap || [];
-        const totalJoined = campaignMap.reduce((sum, c) => sum + (c.joins || 0), 0);
-        const totalOnboarded = campaignMap.reduce((sum, c) => sum + (c.onboarded || 0), 0);
-        if (totalJoined > 0 && totalOnboarded > 0) {
-          const joinRatio = totalJoined / totalOnboarded;
-          for (const key of Object.keys(dailyMap)) {
-            if (dailyMap[key].enrolled > 0) {
-              dailyMap[key].joined = Math.round(dailyMap[key].enrolled * joinRatio * 10) / 10;
-            }
-          }
-        }
-      }
-    }
-
-    // For any metric without real daily data, distribute study totals
-    // evenly across each study's active days within the window
-    if (!hasRealSpend || !hasRealOnboarding) {
-      const enrichedStudies = apiData ? dataService.getEnrichedStudies() : null;
-      const windowStudies = getStudiesInWindow(days);
-      for (const s of windowStudies) {
-        if (s.status === 'coming' || (!s.spend && !s.joined && !s.onboarded)) continue;
-        const launch = new Date(s.launchDate);
-        if (isNaN(launch)) continue;
-        const end = s.endDate ? new Date(s.endDate) : now;
-        const studyEnd = isNaN(end) ? now : end;
-        // +1 for inclusive day count (Mar 5–Mar 6 = 2 days, not 1)
-        const totalDays = Math.max(1, Math.round((studyEnd - launch) / 86400000) + 1);
-
-        const enriched = enrichedStudies?.find(e => e.id === s.id);
-        const onboarded = enriched?.apiOnboarded ?? s.onboarded ?? 0;
-        const joined = enriched?.apiJoins ?? s.joined ?? 0;
-        const spend = enriched?.apiSpend ?? s.spend ?? 0;
-
-        for (const key of Object.keys(dailyMap)) {
-          const d = new Date(key);
-          if (d >= launch && d <= studyEnd) {
-            if (!hasRealSpend) dailyMap[key].spend += spend / totalDays;
-            if (!hasRealOnboarding) {
-              dailyMap[key].joined += joined / totalDays;
-              dailyMap[key].enrolled += onboarded / totalDays;
-            }
-          }
-        }
-      }
-    }
-
-    return Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
   }
 
   const chartDefaults = {
@@ -1143,78 +1050,16 @@
 
     $('#charts-grid').style.display = '';
 
-    // --- Daily Spend, Joined & Enrolled chart ---
-    const windowLabel = selectedDays + 'd';
-    $('#recruiting-window').textContent = windowLabel;
-    $('#recruiting-window2').textContent = windowLabel;
-    const dailyRecruiting = getDailyRecruitingData(selectedDays);
-    const totalEnrolled = Math.round(dailyRecruiting.reduce((a, d) => a + d.enrolled, 0));
-    $('#recruiting-enrolled-total').textContent = totalEnrolled.toLocaleString();
-
-    if (dailyRecruiting.length) {
-      const labels = dailyRecruiting.map(d => {
-        const dt = new Date(d.date);
-        return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      });
-      chartRecruiting = new Chart($('#chart-recruiting'), {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: 'Spend ($)',
-              data: dailyRecruiting.map(d => Math.round(d.spend * 100) / 100),
-              borderColor: '#60A5FA',
-              backgroundColor: 'rgba(96,165,250,0.08)',
-              pointRadius: 1.5,
-              borderWidth: 2.5,
-              tension: 0.3,
-              yAxisID: 'y',
-              order: 1,
-            },
-            {
-              label: 'Joined Study',
-              data: dailyRecruiting.map(d => Math.round(d.joined * 10) / 10),
-              borderColor: '#6C5CE7',
-              backgroundColor: 'rgba(108,92,231,0.08)',
-              pointRadius: 1.5,
-              borderWidth: 2.5,
-              tension: 0.3,
-              yAxisID: 'y1',
-              order: 2,
-            },
-            {
-              label: 'Enrolled',
-              data: dailyRecruiting.map(d => Math.round(d.enrolled * 10) / 10),
-              borderColor: '#34D399',
-              backgroundColor: 'rgba(52,211,153,0.08)',
-              pointRadius: 1.5,
-              borderWidth: 2.5,
-              tension: 0.3,
-              yAxisID: 'y1',
-              order: 3,
-            },
-          ],
-        },
-        options: {
-          ...chartDefaults,
-          interaction: { mode: 'index', intersect: false },
-          scales: {
-            x: { ...chartDefaults.scales.x },
-            y: {
-              ...chartDefaults.scales.y,
-              position: 'left',
-              title: { display: true, text: 'Spend ($)', color: '#888', font: { size: 12 } },
-            },
-            y1: {
-              ...chartDefaults.scales.y,
-              position: 'right',
-              grid: { drawOnChartArea: false },
-              title: { display: true, text: 'Participants', color: '#888', font: { size: 12 } },
-            },
-          },
-        },
-      });
+    // --- New Signups card (from API onboarding data) ---
+    const onboarding = apiData?.onboarding;
+    const signupsCard = $('#signups-card');
+    if (onboarding && onboarding.newSignups != null) {
+      signupsCard.style.display = '';
+      $('#signups-total').textContent = fmtInt(onboarding.newSignups);
+      $('#signups-yesterday').textContent = fmtInt(onboarding.signupsYesterday ?? 0);
+      $('#signups-week').textContent = fmtInt(onboarding.signupsWeek ?? 0);
+    } else {
+      signupsCard.style.display = 'none';
     }
 
     // Ad Spend & Clicks

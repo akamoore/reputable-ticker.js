@@ -511,3 +511,127 @@ When creating any new branded asset, verify:
   --radius-pill: 100px;
 }
 ```
+
+---
+
+## 14. Project Structure & Setup (Duplication Guide)
+
+This section documents everything needed to recreate the project from scratch.
+
+### Repository
+
+- **Repo name:** `reputable-ticker.js`
+- **Hosted on:** GitHub Pages (auto-deploys from `main` via `.github/workflows/deploy.yml`)
+- **Runtime:** Static HTML — no build step for the main site. Sub-apps (trending-topic-generator, script-generator) use Vite.
+- **Node dependency:** `puppeteer-core` (for PDF/screenshot generation only)
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `index.html` | **Recruitment Command Center** — main dashboard with charts (Chart.js), study table, funnel, KPIs. Fetches live data from the operations API and local JSON files. |
+| `reporting.html` | **Reporting dashboard** — cost tracking, study metrics, YoY comparison. Also fetches from the operations API. |
+| `dashboard-guide.html` | Quick-reference guide explaining how to read the dashboard (recruitment, compliance, results tabs). |
+| `CLAUDE.md` | Brand guidelines + this project reference (you are here). |
+
+### Data Sources & APIs
+
+| Source | How it's used | Config |
+|--------|--------------|--------|
+| **Operations API** | Live recruiting funnel, onboarding, spend, subscriber counts | `https://operations.reputablehealth.net/api/recruiting` — API key: set in `index.html` / `reporting.html` as `API_KEY` |
+| **Meta Ads** (Facebook) | Daily ad spend, clicks, impressions, CPC | Fetched by `fetch-chart-data.mjs` or GitHub Action → saved to `data/meta-ads-stats.json` |
+| **AppsFlyer** | Daily app install counts by source | Fetched by `fetch-chart-data.mjs` or GitHub Action → saved to `data/appsflyer-stats.json` |
+| **SendGrid** | Newsletter stats (sends, opens, clicks, bounces) | Fetched by GitHub Action → saved to `data/sendgrid-stats.json` |
+| **ManyChat** | Subscriber count (via operations API) | Comes through the operations API response |
+
+### Local Data Files (`data/`)
+
+| File | Updated by | Contents |
+|------|-----------|----------|
+| `data/meta-ads-stats.json` | `fetch-chart-data.mjs` or `.github/workflows/fetch-meta-ads-stats.yml` | `{ updated_at, period, daily: [{ date, spend, clicks, impressions, cpc }], ads: [] }` |
+| `data/appsflyer-stats.json` | `fetch-chart-data.mjs` or `.github/workflows/fetch-appsflyer-stats.yml` | `{ updated_at, period, daily: [{ date, installs }], bySource: [] }` |
+| `data/sendgrid-stats.json` | `.github/workflows/fetch-sendgrid-stats.yml` | `{ updated_at, daily: [{ date, requests, delivered, opens, clicks, bounces, ... }], totals: {...} }` |
+
+### GitHub Actions (`.github/workflows/`)
+
+| Workflow | Schedule | What it does |
+|----------|----------|-------------|
+| `deploy.yml` | On push to `main` | Builds Vite sub-apps, copies all HTML/images/data to `_site/`, deploys to GitHub Pages, notifies Slack |
+| `fetch-appsflyer-stats.yml` | Daily 8am UTC | Fetches AppsFlyer installs CSV, converts to JSON, commits to `data/` |
+| `fetch-meta-ads-stats.yml` | Daily (cron) | Fetches Meta Ads insights, saves to `data/meta-ads-stats.json` |
+| `fetch-sendgrid-stats.yml` | Daily (cron) | Fetches SendGrid stats, saves to `data/sendgrid-stats.json` |
+| `generate-topics-cron.yml` | Cron | Auto-generates trending topic batches for the topic generator |
+| `pr-preview.yml` | On PR | Preview deployment for pull requests |
+
+### Sub-Applications
+
+| App | Path | Stack | Purpose |
+|-----|------|-------|---------|
+| **Trending Topic Generator** | `trending-topic-generator/` | Vite + React | AI-powered wellness content topic generator using Claude API |
+| **Script Generator** | `script-generator/` | Vite | Generates study scripts/talking points using Claude API |
+| **API Proxy** | `api-proxy/` | Express.js | CORS proxy for the operations API (local dev). Run with `npm start` in that directory. |
+| **Washout App** | `washout-app/` | Static HTML | Washout period calculator/explainer |
+
+### Charts (index.html)
+
+The dashboard uses **Chart.js v4** (loaded via CDN). Four chart canvases:
+
+1. **Daily Spend, Joined & Enrolled** (`#chart-recruiting`) — Line chart with dual Y-axes (spend $ left, participants right). Data from `getDailyRecruitingData()` which merges API daily data with study-level fallbacks.
+2. **Ad Spend & Clicks** (`#chart-spend`) — Bar + line combo. From `data/meta-ads-stats.json` or API `metaAds.daily`.
+3. **App Installs** (`#chart-installs`) — Bar chart. From `data/appsflyer-stats.json` or API `appsflyer.daily`.
+4. **Email Opens & Clicks** (`#chart-email`) — Line chart. From `data/sendgrid-stats.json` or API `newsletter.daily`.
+
+All charts respect the `selectedDays` window (30d, 60d, 90d, all).
+
+### Study Data
+
+Studies are hardcoded in `index.html` as the `STUDIES` array (24 studies). Each has: id, name, type (RCT/RWE/VEP), spend, leads, joined, onboarded, target, wearable, days, launchDate, endDate, status, outlier flag, notes. The API enriches these with live data via `getEnrichedStudies()`.
+
+### Environment Variables / Secrets
+
+| Variable | Where | Purpose |
+|----------|-------|---------|
+| `SENDGRID_API_KEY` | GitHub secret / `.env` | Fetch email stats |
+| `API_KEY` | GitHub secret / `.env` | Operations API auth |
+| `ANTHROPIC_API_KEY` | GitHub secret | Claude API for topic/script generators |
+| `VITE_ANTHROPIC_API_KEY` | GitHub secret | Build-time Claude API key for Vite apps |
+| `SLACK_WEBHOOK_URL` | GitHub secret | Deploy notifications |
+| `META_ACCESS_TOKEN` | Hardcoded in `fetch-chart-data.mjs` | Meta Ads Graph API |
+| `APPSFLYER_API_TOKEN` | Hardcoded in `fetch-chart-data.mjs` | AppsFlyer Pull API |
+
+### Social Post Assets
+
+All social posts are self-contained HTML files with inline styles. Naming convention:
+- `{topic}-post.html` — 1080x1080 square post
+- `{topic}-story.html` — 1080x1920 story
+- `{topic}-1.html` through `{topic}-4.html` — carousel slides
+- Matching `.jpg` screenshots generated by `screenshot.mjs` / `screenshot-png.mjs`
+
+### PDF Generation
+
+- `generate-pdf.mjs` — Generic Puppeteer-based PDF generator
+- `generate-retreat-report-pdf.mjs` — Retreat stats report PDF
+- Requires `puppeteer-core` (`npm install`)
+
+### CORS Proxy (Local Dev)
+
+To use the operations API locally (avoids CORS issues):
+
+```bash
+cd api-proxy
+cp .env.example .env   # fill in API_KEY
+npm install && npm start
+```
+
+Then open `index.html?proxy=http://localhost:3001` to route API calls through the proxy.
+
+### How to Duplicate
+
+1. Clone the repo
+2. `npm install` (root — for puppeteer-core)
+3. Set up GitHub secrets: `SENDGRID_API_KEY`, `API_KEY`, `ANTHROPIC_API_KEY`, `VITE_ANTHROPIC_API_KEY`, `SLACK_WEBHOOK_URL`
+4. Update API tokens in `fetch-chart-data.mjs` if expired (Meta + AppsFlyer)
+5. Run `node fetch-chart-data.mjs` to populate `data/` with fresh stats
+6. For sub-apps: `cd trending-topic-generator && npm install && npm run dev`
+7. Enable GitHub Pages (Settings > Pages > GitHub Actions)
+8. Push to `main` — deploy workflow handles the rest
