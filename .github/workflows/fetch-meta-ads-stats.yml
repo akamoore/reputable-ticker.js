@@ -14,6 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Fetch Meta Ads stats
         env:
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
@@ -36,10 +40,14 @@ jobs:
             "https://graph.facebook.com/v21.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&time_increment=1&fields=date_start,impressions,clicks,spend,cpc,cpm,ctr,actions&limit=100")
 
           if [ "$HTTP_CODE" != "200" ]; then
-            echo "Meta API returned HTTP $HTTP_CODE"
+            echo "::warning::Meta API returned HTTP $HTTP_CODE"
             cat /tmp/meta-response.json
-            exit 1
-          fi
+            echo ""
+            echo "Writing empty stats file so dashboard can show data-unavailable state"
+            cat > data/meta-ads-stats.json <<EOFJ
+          {"updated_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","period":{"start":"${START_DATE}","end":"${END_DATE}"},"_error":"Meta Ads API returned HTTP ${HTTP_CODE}","totals":{"impressions":0,"clicks":0,"spend":0,"cpc":0,"cpm":0,"ctr":0},"daily":[],"ads":[]}
+          EOFJ
+          else
 
           # Fetch all pages (Meta paginates results)
           node -e "
@@ -131,6 +139,8 @@ jobs:
 
           main().catch(err => { console.error(err); process.exit(1); });
           "
+
+          fi
 
       - name: Commit and push stats
         run: |
