@@ -606,54 +606,65 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     /* Daily Spend, Joined & Enrolled chart */
-    .recruiting-chart-wrap {
-      display: flex;
-      gap: 24px;
+    .recruiting-chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
       margin: 16px 0;
-      align-items: stretch;
     }
-    .recruiting-chart-main {
-      flex: 1;
-      min-width: 0;
-      position: relative;
-    }
-    .recruiting-chart-main canvas {
-      width: 100% !important;
-      height: 280px !important;
-    }
-    .recruiting-chart-sidebar {
-      width: 220px;
-      flex-shrink: 0;
+    .recruiting-chart-header {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .recruiting-chart-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .rc-subtitle {
+      font-size: 12px;
+      color: var(--text-dim);
     }
     .rc-enrolled-total {
       text-align: right;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
     .rc-enrolled-total .rc-big {
-      font-size: 36px;
+      font-size: 32px;
       font-weight: 700;
       color: var(--green);
       line-height: 1.1;
     }
+    .recruiting-chart-canvas {
+      width: 100%;
+      position: relative;
+    }
+    .recruiting-chart-canvas canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
     .rc-per-study {
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 14px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 6px 24px;
     }
     .rc-per-study h4 {
+      grid-column: 1 / -1;
       font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin: 0 0 10px 0;
+      margin: 0 0 4px 0;
       color: var(--text);
-      text-align: center;
     }
     .rc-study-row {
       display: flex;
@@ -664,16 +675,6 @@
     }
     .rc-study-row .rc-name { color: var(--text-dim); }
     .rc-study-row .rc-val { font-weight: 700; color: var(--text); }
-    .rc-subtitle {
-      font-size: 13px;
-      color: var(--text-dim);
-      margin: -8px 0 12px 0;
-    }
-    @media (max-width: 768px) {
-      .recruiting-chart-wrap { flex-direction: column; }
-      .recruiting-chart-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; gap: 12px; }
-      .rc-enrolled-total { text-align: center; }
-    }
     @media (max-width: 768px) {
       body { padding: 12px; }
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1830,14 +1831,15 @@
     html += '</div>';
 
     // ── Daily Spend, Joined & Enrolled chart ──
-    html += '<h3>Daily Spend, Joined &amp; Enrolled (30d)</h3>';
-    html += '<div class="rc-subtitle">See whether spend changes drive joins and enrollment spikes</div>';
-    html += '<div class="recruiting-chart-wrap">';
-    html += '<div class="recruiting-chart-main"><canvas id="recruiting-chart-canvas"></canvas></div>';
-    html += '<div class="recruiting-chart-sidebar">';
-    html += '<div class="rc-enrolled-total">Enrolled (30d)<div class="rc-big" id="rc-enrolled-total">—</div></div>';
+    html += '<div class="recruiting-chart-card">';
+    html += '<div class="recruiting-chart-header">';
+    html += '<div><h3>Daily Spend, Joined &amp; Enrolled (30d)</h3>';
+    html += '<div class="rc-subtitle">See whether spend changes drive joins and enrollment spikes</div></div>';
+    html += '<div class="rc-enrolled-total">Enrolled (30d)<div class="rc-big" id="rc-enrolled-total">\u2014</div></div>';
+    html += '</div>';
+    html += '<div class="recruiting-chart-canvas"><canvas id="recruiting-chart-canvas"></canvas></div>';
     html += '<div class="rc-per-study" id="rc-per-study"><h4>Per Study</h4></div>';
-    html += '</div></div>';
+    html += '</div>';
 
     // Meta Ads Daily Chart
     if (data.metaAds && data.metaAds.daily && data.metaAds.daily.length > 0) {
@@ -2131,13 +2133,13 @@
         scales: {
           x: {
             ticks: { color: '#8b8fa3', font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 20 },
-            grid: { color: 'rgba(255,255,255,0.04)' }
+            grid: { color: 'rgba(255,255,255,0.06)', borderDash: [4, 4] }
           },
           y: {
             position: 'left',
             title: { display: false },
             ticks: { color: '#8b8fa3', font: { size: 11 } },
-            grid: { color: 'rgba(255,255,255,0.04)' }
+            grid: { color: 'rgba(255,255,255,0.04)', borderDash: [3, 3] }
           },
           y1: {
             position: 'right',
@@ -2153,11 +2155,12 @@
       }
     });
 
-    // Sidebar: enrolled total + per-study breakdown
+    // Update enrolled total in header
     var enrolledTotal = enrolledArr.reduce(function(a, b) { return a + b; }, 0);
     var totalEl = document.getElementById('rc-enrolled-total');
     if (totalEl) totalEl.textContent = fmtInt(enrolledTotal);
 
+    // Per-study breakdown
     var perStudyEl = document.getElementById('rc-per-study');
     if (perStudyEl && data.onboarding && data.onboarding.byStudy && data.onboarding.byStudy.length > 0) {
       var studyHtml = '<h4>Per Study</h4>';
@@ -2166,8 +2169,7 @@
       });
       sorted.forEach(function(st) {
         var name = st.experimentTitle || st.studyName || ('Study #' + st.experimentId);
-        // Shorten long names
-        if (name.length > 28) name = name.slice(0, 27) + '…';
+        if (name.length > 28) name = name.slice(0, 27) + '\u2026';
         var val = st.count != null ? st.count : st.onboarded || 0;
         studyHtml += '<div class="rc-study-row"><span class="rc-name">' + esc(name) + '</span><span class="rc-val">' + fmtInt(val) + '</span></div>';
       });
