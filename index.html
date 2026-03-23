@@ -295,6 +295,109 @@
     .ds-pill .ds-dot.warn { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
     .ds-pill .ds-dot.na { background: var(--gray); }
 
+    /* Study Type Breakdown */
+    .type-breakdown-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px;
+    }
+    .type-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 20px; text-align: center;
+    }
+    .type-card .tc-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.14em; margin-bottom: 12px;
+    }
+    .type-card .tc-hero { font-size: 32px; font-weight: 700; line-height: 1.1; }
+    .type-card .tc-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    .type-card .tc-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 12px; }
+    .type-card .tc-stat { font-size: 11px; color: var(--text-dim); }
+    .type-card .tc-stat strong { color: var(--text); }
+
+    /* Engagement Breakdown */
+    .engagement-bar-wrap { margin-bottom: 16px; }
+    .engagement-bar {
+      display: flex; height: 32px; border-radius: 6px; overflow: hidden;
+      background: rgba(255,255,255,0.04);
+    }
+    .engagement-bar .eb-seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; min-width: 2%; }
+    .engagement-legend {
+      display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap;
+    }
+    .engagement-legend .el-item {
+      display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-dim);
+    }
+    .engagement-legend .el-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .engagement-detail-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px; margin-top: 16px;
+    }
+    .engagement-detail-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px;
+    }
+    .engagement-detail-card .edc-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 10px;
+    }
+    .engagement-detail-card .edc-hero { font-size: 28px; font-weight: 700; line-height: 1.1; }
+    .engagement-detail-card .edc-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+    .engagement-detail-card .edc-list { margin-top: 10px; }
+    .engagement-detail-card .edc-row {
+      display: flex; justify-content: space-between; padding: 4px 0;
+      font-size: 12px; color: var(--text-dim);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .engagement-detail-card .edc-row:last-child { border-bottom: none; }
+    .engagement-detail-card .edc-row strong { color: var(--text); }
+
+    /* Manual vs Auto comparison */
+    .manual-compare-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;
+    }
+    .manual-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 20px;
+    }
+    .manual-card .mc-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 12px;
+    }
+    .manual-card .mc-row {
+      display: flex; justify-content: space-between; padding: 5px 0;
+      font-size: 12px; color: var(--text-dim);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .manual-card .mc-row:last-child { border-bottom: none; }
+    .manual-card .mc-row strong { color: var(--text); }
+
+    /* Projections */
+    .projections-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;
+    }
+    .proj-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px;
+    }
+    .proj-card .pj-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .proj-card .pj-name { font-size: 13px; font-weight: 600; }
+    .proj-card .pj-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .proj-card .pj-stats { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+    .proj-card .pj-stat { font-size: 11px; color: var(--text-dim); }
+    .proj-card .pj-stat strong { color: var(--text); }
+    .pace-chip {
+      display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill);
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .pace-chip.on-track { background: var(--green-bg); color: var(--green); }
+    .pace-chip.behind { background: var(--yellow-bg); color: var(--yellow); }
+    .pace-chip.at-risk { background: var(--rose-bg); color: var(--rose); }
+
+    @media (max-width: 768px) {
+      .type-breakdown-grid { grid-template-columns: 1fr; }
+      .manual-compare-grid { grid-template-columns: 1fr; }
+      .projections-grid { grid-template-columns: 1fr; }
+    }
+
     /* Benchmarks */
     .bench-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
     .bench-pill {
@@ -488,6 +591,30 @@
   <div class="section" id="scorecard-section">
     <h2><span class="section-icon">&#9673;</span> Recruitment Progress</h2>
     <div class="scorecard-grid" id="scorecard-grid"></div>
+  </div>
+
+  <!-- Study Type Breakdown -->
+  <div class="section" id="type-breakdown-section">
+    <h2><span class="section-icon">&#9673;</span> Study Type Breakdown</h2>
+    <div class="type-breakdown-grid" id="type-breakdown-grid"></div>
+  </div>
+
+  <!-- App Engagement Breakdown -->
+  <div class="section" id="engagement-section">
+    <h2><span class="section-icon">&#9673;</span> App Engagement Breakdown</h2>
+    <div id="engagement-content"></div>
+  </div>
+
+  <!-- Manual Queue Impact -->
+  <div class="section" id="manual-impact-section">
+    <h2><span class="section-icon">&#9673;</span> Manual Queue Impact</h2>
+    <div class="manual-compare-grid" id="manual-compare-grid"></div>
+  </div>
+
+  <!-- Recruitment Projections -->
+  <div class="section" id="projections-section">
+    <h2><span class="section-icon">&#9673;</span> Recruitment Projections</h2>
+    <div class="projections-grid" id="projections-grid"></div>
   </div>
 
   <!-- Benchmarks -->
@@ -1602,6 +1729,257 @@
   }
 
   // ============================================================
+  // RENDER: Study Type Breakdown
+  // ============================================================
+  function renderTypeBreakdown() {
+    const grid = $('#type-breakdown-grid');
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+    const launched = yearFiltered.filter(s => s.status !== 'coming');
+
+    const types = ['RCT', 'RWE', 'VEP'];
+    const colors = { RCT: 'var(--indigo)', RWE: 'var(--teal)', VEP: 'var(--lavender)' };
+
+    grid.innerHTML = types.map(type => {
+      const studies = launched.filter(s => s.type === type);
+      const count = studies.length;
+      const totalSpend = studies.reduce((a, s) => a + s.spend, 0);
+      const totalOnboarded = studies.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const totalTarget = studies.reduce((a, s) => a + s.target, 0);
+      const avgCPO = totalOnboarded > 0 && totalSpend > 0 ? totalSpend / totalOnboarded : null;
+      const daysArr = studies.filter(s => s.days != null).map(s => s.days);
+      const avgDays = daysArr.length > 0 ? Math.round(daysArr.reduce((a, b) => a + b, 0) / daysArr.length) : null;
+      const pctTarget = totalTarget > 0 ? ((totalOnboarded / totalTarget) * 100).toFixed(0) : 0;
+
+      return `<div class="type-card" style="border-top: 3px solid ${colors[type]}">
+        <div class="tc-label" style="color:${colors[type]}">${type}</div>
+        <div class="tc-hero" style="color:${colors[type]}">${count}</div>
+        <div class="tc-sub">studies</div>
+        <div class="tc-stats">
+          <div class="tc-stat">Spend: <strong>${fmt(totalSpend)}</strong></div>
+          <div class="tc-stat">Onboarded: <strong>${fmtInt(totalOnboarded)}</strong></div>
+          <div class="tc-stat">Target: <strong>${pctTarget}%</strong></div>
+          ${avgCPO != null ? `<div class="tc-stat">Avg CPO: <strong>${fmt(avgCPO)}</strong></div>` : ''}
+          ${avgDays != null ? `<div class="tc-stat">Avg Days: <strong>${avgDays}</strong></div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ============================================================
+  // RENDER: App Engagement Breakdown
+  // ============================================================
+  function renderEngagement() {
+    const container = $('#engagement-content');
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+    const launched = yearFiltered.filter(s => s.status !== 'coming' && s.leads != null && s.leads > 0);
+
+    if (!launched.length) {
+      container.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">No lead data available for this filter.</div>';
+      return;
+    }
+
+    const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
+    const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
+
+    // Segment: public (VEP or $0 spend) vs sponsored (paid)
+    const publicStudies = launched.filter(s => s.type === 'VEP' || s.spend === 0);
+    const sponsoredStudies = launched.filter(s => s.type !== 'VEP' && s.spend > 0);
+    const publicJoined = publicStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const sponsoredJoined = sponsoredStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const noStudy = Math.max(0, totalLeads - totalJoined);
+
+    const noStudyPct = totalLeads > 0 ? (noStudy / totalLeads * 100).toFixed(1) : 0;
+    const publicPct = totalLeads > 0 ? (publicJoined / totalLeads * 100).toFixed(1) : 0;
+    const sponsoredPct = totalLeads > 0 ? (sponsoredJoined / totalLeads * 100).toFixed(1) : 0;
+
+    // Conversion rates
+    const publicOnboarded = publicStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const sponsoredOnboarded = sponsoredStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totalOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const publicConv = publicJoined > 0 ? (publicOnboarded / publicJoined * 100).toFixed(1) : 0;
+    const sponsoredConv = sponsoredJoined > 0 ? (sponsoredOnboarded / sponsoredJoined * 100).toFixed(1) : 0;
+    const overallConv = totalJoined > 0 ? (totalOnboarded / totalJoined * 100).toFixed(1) : 0;
+
+    container.innerHTML = `
+      <div class="engagement-bar-wrap">
+        <div class="engagement-bar">
+          <div class="eb-seg" style="width:${noStudyPct}%;background:var(--rose);color:#fff;">${noStudyPct > 5 ? noStudyPct + '%' : ''}</div>
+          <div class="eb-seg" style="width:${publicPct}%;background:var(--indigo);color:#fff;">${publicPct > 5 ? publicPct + '%' : ''}</div>
+          <div class="eb-seg" style="width:${sponsoredPct}%;background:var(--green);color:#fff;">${sponsoredPct > 5 ? sponsoredPct + '%' : ''}</div>
+        </div>
+        <div class="engagement-legend">
+          <div class="el-item"><div class="el-dot" style="background:var(--rose)"></div>No study joined — ${fmtInt(noStudy)} (${noStudyPct}%)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--indigo)"></div>Public study — ${fmtInt(publicJoined)} (${publicPct}%)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--green)"></div>Sponsored study — ${fmtInt(sponsoredJoined)} (${sponsoredPct}%)</div>
+        </div>
+      </div>
+
+      <div class="engagement-detail-grid">
+        <div class="engagement-detail-card" style="border-top:3px solid var(--rose)">
+          <div class="edc-title" style="color:var(--rose)">Downloaded app, no study joined</div>
+          <div class="edc-hero" style="color:var(--rose)">${fmtInt(noStudy)}</div>
+          <div class="edc-sub">${fmtInt(totalLeads)} total leads · ${fmtInt(totalJoined)} joined · ${totalLeads > 0 ? (totalJoined / totalLeads * 100).toFixed(1) : 0}% conversion</div>
+        </div>
+
+        <div class="engagement-detail-card" style="border-top:3px solid var(--indigo)">
+          <div class="edc-title" style="color:var(--indigo)">Joined a public study</div>
+          <div class="edc-hero" style="color:var(--indigo)">${fmtInt(publicJoined)}</div>
+          <div class="edc-list">
+            ${publicStudies.map(s => `<div class="edc-row"><span>${esc(s.name)}</span><strong>${fmtInt(s.joined || 0)} / ${fmtInt(s.onboarded || 0)}</strong></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="engagement-detail-card" style="border-top:3px solid var(--green)">
+          <div class="edc-title" style="color:var(--green)">Join → Onboard conversion</div>
+          <div style="display:flex;gap:16px;margin-top:8px;">
+            <div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:rgba(108,92,231,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--indigo)">${publicConv}%</div>
+              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Public</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:rgba(52,211,153,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--green)">${sponsoredConv}%</div>
+              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Sponsored</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:rgba(200,230,74,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--lime)">${overallConv}%</div>
+              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Overall</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // RENDER: Manual Queue Impact
+  // ============================================================
+  function renderManualImpact() {
+    const grid = $('#manual-compare-grid');
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+    const launched = yearFiltered.filter(s => s.status !== 'coming');
+
+    const manualStudies = launched.filter(s => s.manualQueue);
+    const autoStudies = launched.filter(s => !s.manualQueue);
+
+    function calcMetrics(arr) {
+      const count = arr.length;
+      const spend = arr.reduce((a, s) => a + s.spend, 0);
+      const joined = arr.reduce((a, s) => a + (s.joined || 0), 0);
+      const onboarded = arr.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const cpo = onboarded > 0 && spend > 0 ? spend / onboarded : null;
+      const daysArr = arr.filter(s => s.days != null).map(s => s.days);
+      const avgDays = daysArr.length > 0 ? Math.round(daysArr.reduce((a, b) => a + b, 0) / daysArr.length) : null;
+      const convRate = joined > 0 ? (onboarded / joined * 100).toFixed(1) : 0;
+      return { count, spend, joined, onboarded, cpo, avgDays, convRate };
+    }
+
+    const manual = calcMetrics(manualStudies);
+    const auto = calcMetrics(autoStudies);
+
+    function renderCard(title, color, icon, m) {
+      return `<div class="manual-card" style="border-top:3px solid ${color}">
+        <div class="mc-title" style="color:${color}">${icon} ${title} (${m.count})</div>
+        <div class="mc-row"><span>Total Spend</span><strong>${fmt(m.spend)}</strong></div>
+        <div class="mc-row"><span>Joined</span><strong>${fmtInt(m.joined)}</strong></div>
+        <div class="mc-row"><span>Onboarded</span><strong>${fmtInt(m.onboarded)}</strong></div>
+        <div class="mc-row"><span>Avg CPO</span><strong>${m.cpo != null ? fmt(m.cpo) : '—'}</strong></div>
+        <div class="mc-row"><span>Avg Days to Recruit</span><strong>${m.avgDays != null ? m.avgDays + 'd' : '—'}</strong></div>
+        <div class="mc-row"><span>Join → Onboard Rate</span><strong>${m.convRate}%</strong></div>
+      </div>`;
+    }
+
+    grid.innerHTML =
+      renderCard('Manual Step Studies', 'var(--yellow)', '&#9888;', manual) +
+      renderCard('Fully Automated Studies', 'var(--green)', '&#9889;', auto) +
+      `<div class="manual-card" style="border-top:3px solid var(--blue)">
+        <div class="mc-title" style="color:var(--blue)">&#9878; Key Insight</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.6;">
+          ${manual.convRate > 0 && auto.convRate > 0
+            ? `Automated studies convert at <strong style="color:var(--green)">${auto.convRate}%</strong> join→onboard vs <strong style="color:var(--yellow)">${manual.convRate}%</strong> for manual-step studies.
+               ${parseFloat(auto.convRate) > parseFloat(manual.convRate) ? 'Removing manual steps improves conversion.' : 'Manual prescreening may improve participant quality.'}`
+            : 'Insufficient data for comparison.'}
+          ${auto.avgDays != null && manual.avgDays != null
+            ? `<br><br>Avg recruitment time: <strong>${auto.avgDays}d</strong> (auto) vs <strong>${manual.avgDays}d</strong> (manual).`
+            : ''}
+        </div>
+      </div>`;
+  }
+
+  // ============================================================
+  // RENDER: Recruitment Projections
+  // ============================================================
+  function renderProjections() {
+    const grid = $('#projections-grid');
+    const section = $('#projections-section');
+
+    // Only show for recruiting/active studies
+    const activeStudies = STUDIES.filter(s => s.status === 'recruiting' || s.status === 'active');
+
+    if (!activeStudies.length) {
+      section.style.display = 'none';
+      return;
+    }
+    section.style.display = '';
+
+    const today = new Date();
+
+    grid.innerHTML = activeStudies.map(s => {
+      const launch = new Date(s.launchDate);
+      if (isNaN(launch)) return '';
+
+      const daysElapsed = Math.max(1, Math.floor((today - launch) / 86400000));
+      const onboarded = s.onboarded || 0;
+      const target = s.target || 0;
+      const remaining = Math.max(0, target - onboarded);
+      const pacePerDay = onboarded / daysElapsed;
+      const daysToComplete = pacePerDay > 0 ? Math.ceil(remaining / pacePerDay) : null;
+      const pct = target > 0 ? Math.min(100, (onboarded / target) * 100) : 0;
+
+      // Determine pace status
+      let paceStatus, paceClass;
+      if (pct >= 100) {
+        paceStatus = 'Complete'; paceClass = 'on-track';
+      } else if (pacePerDay >= (target / (s.days || 30))) {
+        paceStatus = 'On Track'; paceClass = 'on-track';
+      } else if (pacePerDay >= (target / (s.days || 30)) * 0.5) {
+        paceStatus = 'Behind'; paceClass = 'behind';
+      } else {
+        paceStatus = 'At Risk'; paceClass = 'at-risk';
+      }
+
+      return `<div class="proj-card">
+        <div class="pj-header">
+          <div>
+            <div class="pj-name">${esc(s.name)}</div>
+            <div class="pj-meta">${typeBadge(s.type)} ${statusBadge(s.status)}</div>
+          </div>
+          <span class="pace-chip ${paceClass}">${paceStatus}</span>
+        </div>
+        <div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill ${pct >= 100 ? 'green' : pct >= 50 ? 'lime' : 'yellow'}" style="width:${pct}%"></div></div>
+        <div class="pj-stats">
+          <div class="pj-stat">Progress: <strong>${onboarded}/${target} (${pct.toFixed(0)}%)</strong></div>
+          <div class="pj-stat">Days Elapsed: <strong>${daysElapsed}</strong></div>
+          <div class="pj-stat">Pace: <strong>${pacePerDay.toFixed(1)}/day</strong></div>
+          ${daysToComplete != null && remaining > 0 ? `<div class="pj-stat">Est. Days Left: <strong>${daysToComplete}</strong></div>` : ''}
+        </div>
+      </div>`;
+    }).filter(Boolean).join('');
+
+    if (!grid.innerHTML.trim()) {
+      section.style.display = 'none';
+    }
+  }
+
+  // ============================================================
   // RENDER ALL
   // ============================================================
   function renderAll() {
@@ -1620,6 +1998,10 @@
     renderAds();
     renderEmail();
     renderScorecard();
+    renderTypeBreakdown();
+    renderEngagement();
+    renderManualImpact();
+    renderProjections();
     renderSourceStatus();
 
     $('#footer').textContent = `Recruitment Command Center · Reputable Health · Last refreshed ${dateStr} ${timeStr}`;
