@@ -398,6 +398,31 @@
       .projections-grid { grid-template-columns: 1fr; }
     }
 
+    /* Public Studies */
+    .ps-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; }
+    .ps-table thead th {
+      text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim);
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .ps-table tbody td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-dim); }
+    .ps-table tbody td:first-child { color: #fff; font-weight: 600; }
+    .ps-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    .ps-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .ps-summary-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 16px; text-align: center;
+    }
+    .ps-summary-card .ps-val { font-size: 28px; font-weight: 700; color: var(--lime); }
+    .ps-summary-card .ps-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px; }
+    .ps-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .ps-bar-fill { height: 100%; border-radius: 3px; }
+    @media (max-width: 768px) {
+      .ps-summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .ps-table { font-size: 11px; }
+      .ps-table thead th, .ps-table tbody td { padding: 6px 6px; }
+    }
+
     /* Benchmarks */
     .bench-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
     .bench-pill {
@@ -617,6 +642,12 @@
     <div class="projections-grid" id="projections-grid"></div>
   </div>
 
+  <!-- Public Studies Overview -->
+  <div class="section" id="public-studies-section">
+    <h2><span class="section-icon">&#9673;</span> Public Studies</h2>
+    <div id="public-studies-content"></div>
+  </div>
+
   <!-- Benchmarks -->
   <div class="section" id="bench-section">
     <h2><span class="section-icon">&#9673;</span> Recruitment Benchmarks</h2>
@@ -708,6 +739,21 @@
     { id: 23, name: 'Vampire Serum: Skin Renewal', type: 'RWE', spend: 0, leads: 53, joined: null, onboarded: 35, target: 35, wearable: 'Oura', days: 2, launchDate: 'Mar 5, 2026', endDate: 'Mar 6, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
     { id: 22, name: 'Cure Hydration', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 70, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
+    // ── Public Studies (free, in-app challenges) ──
+    { id: 24, name: 'The 30-Minute Reset', type: 'VEP', spend: 0, leads: null, joined: 33, onboarded: 24, target: 33, wearable: null, days: null, launchDate: 'Jan 29, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
+    { id: 25, name: 'Track Your Travel', type: 'VEP', spend: 0, leads: null, joined: 7, onboarded: 6, target: 25, wearable: null, days: null, launchDate: 'Jan 31, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
+    { id: 26, name: 'The 10K Steps Challenge', type: 'VEP', spend: 0, leads: null, joined: 44, onboarded: 30, target: 44, wearable: null, days: null, launchDate: 'Feb 7, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
+    { id: 27, name: 'The Dry Week Effect', type: 'VEP', spend: 0, leads: null, joined: 39, onboarded: 32, target: 39, wearable: null, days: null, launchDate: 'Feb 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
+    { id: 28, name: 'The Fasting Reset', type: 'VEP', spend: 0, leads: null, joined: 59, onboarded: 40, target: 60, wearable: null, days: null, launchDate: 'Mar 16, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 100% compliance (7/7)', inStudy: 7, complianceN: 7, complianceD: 7 },
+    { id: 29, name: '7 Day Wim Hof Challenge', type: 'VEP', spend: 0, leads: null, joined: 34, onboarded: 17, target: 34, wearable: null, days: null, launchDate: 'Mar 16, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 100% compliance (7/7)', inStudy: 7, complianceN: 7, complianceD: 7 },
+    { id: 30, name: 'The Reading Ritual', type: 'VEP', spend: 0, leads: null, joined: 54, onboarded: 32, target: 65, wearable: null, days: null, launchDate: 'Mar 19, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 13 in study, 100% compliance (13/13)', inStudy: 13, complianceN: 13, complianceD: 13 },
+    { id: 31, name: '7 Day Yoga Challenge', type: 'VEP', spend: 0, leads: null, joined: 61, onboarded: 29, target: 73, wearable: null, days: null, launchDate: 'Mar 19, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 15 in study, 87% compliance (13/15)', inStudy: 15, complianceN: 13, complianceD: 15 },
+    { id: 32, name: 'The Gratitude Effect', type: 'VEP', spend: 0, leads: null, joined: 44, onboarded: 32, target: 51, wearable: null, days: null, launchDate: 'Mar 20, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 5 in study, 100% compliance (5/5)', inStudy: 5, complianceN: 5, complianceD: 5 },
+    { id: 33, name: 'The Sunrise Effect', type: 'VEP', spend: 0, leads: null, joined: 29, onboarded: 16, target: 40, wearable: null, days: null, launchDate: 'Mar 21, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 11 in study, 82% compliance (9/11)', inStudy: 11, complianceN: 9, complianceD: 11 },
+    { id: 34, name: 'The Nature Dose', type: 'VEP', spend: 0, leads: null, joined: 29, onboarded: 18, target: 40, wearable: null, days: null, launchDate: 'Mar 21, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 86% compliance (6/7)', inStudy: 7, complianceN: 6, complianceD: 7 },
+    { id: 35, name: 'The 4-7-8 Effect', type: 'VEP', spend: 0, leads: null, joined: 79, onboarded: 57, target: 87, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 12 in study, 92% compliance (11/12)', inStudy: 12, complianceN: 11, complianceD: 12 },
+    { id: 36, name: 'The Power Nap Challenge', type: 'VEP', spend: 0, leads: null, joined: 30, onboarded: 17, target: 30, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 6 in study, 100% compliance (6/6)', inStudy: 6, complianceN: 6, complianceD: 6 },
+    { id: 37, name: 'The Hydration Effect', type: 'VEP', spend: 0, leads: null, joined: 50, onboarded: 34, target: 56, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 4 in study, 100% compliance (4/4)', inStudy: 4, complianceN: 4, complianceD: 4 },
   ];
 
   // Apply overrides
@@ -1980,6 +2026,88 @@
   }
 
   // ============================================================
+  // RENDER: Public Studies
+  // ============================================================
+  function renderPublicStudies() {
+    const container = $('#public-studies-content');
+    const publicStudies = STUDIES.filter(s => s.inStudy !== undefined);
+
+    if (!publicStudies.length) {
+      container.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">No public studies data available.</div>';
+      return;
+    }
+
+    // Summary stats
+    const totalRecruited = publicStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const totalTarget = publicStudies.reduce((a, s) => a + (s.target || 0), 0);
+    const totalCompleted = publicStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totalInStudy = publicStudies.reduce((a, s) => a + (s.inStudy || 0), 0);
+    const totalCompN = publicStudies.reduce((a, s) => a + (s.complianceN || 0), 0);
+    const totalCompD = publicStudies.reduce((a, s) => a + (s.complianceD || 0), 0);
+    const recruitPct = totalTarget > 0 ? (totalRecruited / totalTarget * 100).toFixed(0) : 0;
+    const completedPct = totalRecruited > 0 ? (totalCompleted / totalRecruited * 100).toFixed(0) : 0;
+    const compliancePct = totalCompD > 0 ? (totalCompN / totalCompD * 100).toFixed(0) : 0;
+
+    container.innerHTML = `
+      <div class="ps-summary-grid">
+        <div class="ps-summary-card">
+          <div class="ps-val">${publicStudies.length}</div>
+          <div class="ps-label">Active Studies</div>
+        </div>
+        <div class="ps-summary-card">
+          <div class="ps-val">${fmtInt(totalRecruited)}<span style="font-size:14px;color:var(--text-dim)">/${fmtInt(totalTarget)}</span></div>
+          <div class="ps-label">Recruited (${recruitPct}%)</div>
+        </div>
+        <div class="ps-summary-card">
+          <div class="ps-val">${fmtInt(totalCompleted)}</div>
+          <div class="ps-label">Completed (${completedPct}%)</div>
+        </div>
+        <div class="ps-summary-card">
+          <div class="ps-val">${compliancePct}%</div>
+          <div class="ps-label">Compliance</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ps-table">
+          <thead>
+            <tr>
+              <th>Study Name</th>
+              <th>Recruited</th>
+              <th>In Study</th>
+              <th>Completed</th>
+              <th>Compliance</th>
+              <th>Start Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${publicStudies.map(s => {
+              const recPct = s.target > 0 ? (s.joined / s.target * 100) : 0;
+              const compPct = s.joined > 0 ? (s.onboarded / s.joined * 100) : 0;
+              const inPct = s.joined > 0 ? (s.inStudy / s.joined * 100) : 0;
+              const complPct = s.complianceD > 0 ? (s.complianceN / s.complianceD * 100) : 0;
+              const recColor = recPct >= 100 ? 'var(--green)' : recPct >= 80 ? 'var(--lime)' : recPct >= 50 ? 'var(--yellow)' : 'var(--rose)';
+              return `<tr>
+                <td>${esc(s.name)}</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="color:${recColor};font-weight:600;">${recPct.toFixed(0)}%</span>
+                    <span>${s.joined}/${s.target}</span>
+                  </div>
+                  <div class="ps-bar" style="width:80px;margin-top:3px;"><div class="ps-bar-fill" style="width:${Math.min(recPct, 100)}%;background:${recColor};"></div></div>
+                </td>
+                <td><span style="font-weight:600;">${inPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${s.inStudy}/${s.joined}</span></td>
+                <td><span style="font-weight:600;">${compPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${s.onboarded}/${s.joined}</span></td>
+                <td><span style="font-weight:600;color:${complPct >= 90 ? 'var(--green)' : complPct >= 70 ? 'var(--yellow)' : 'var(--rose)'};">${s.complianceD > 0 ? complPct.toFixed(0) + '%' : '—'}</span> <span style="color:var(--text-dim);">${s.complianceD > 0 ? s.complianceN + '/' + s.complianceD : ''}</span></td>
+                <td style="white-space:nowrap;">${s.launchDate || '—'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // ============================================================
   // RENDER ALL
   // ============================================================
   function renderAll() {
@@ -2002,6 +2130,7 @@
     renderEngagement();
     renderManualImpact();
     renderProjections();
+    renderPublicStudies();
     renderSourceStatus();
 
     $('#footer').textContent = `Recruitment Command Center · Reputable Health · Last refreshed ${dateStr} ${timeStr}`;
