@@ -1,0 +1,61 @@
+name: Fetch Recruiting Stats
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:         # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Fetch recruiting data from operations API
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: |
+          if [ -z "$API_KEY" ]; then
+            echo "::error::API_KEY secret must be configured"
+            exit 1
+          fi
+
+          mkdir -p data
+
+          # Fetch all-time data (large window)
+          echo "Fetching recruiting stats from operations API..."
+
+          HTTP_CODE=$(curl -s -o /tmp/recruiting-response.json -w "%{http_code}" \
+            "https://operations.reputablehealth.net/api/recruiting?days=9999" \
+            -H "x-api-key: ${API_KEY}" \
+            -H "Accept: application/json")
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Operations API returned HTTP $HTTP_CODE"
+            cat /tmp/recruiting-response.json
+            exit 1
+          fi
+
+          # Add metadata and save
+          node -e "
+          const data = JSON.parse(require('fs').readFileSync('/tmp/recruiting-response.json', 'utf8'));
+          data._cached_at = new Date().toISOString();
+          data._source = 'github-action';
+          require('fs').writeFileSync('data/recruiting-stats.json', JSON.stringify(data, null, 2));
+          console.log('Recruiting stats cached. Keys:', Object.keys(data).join(', '));
+          "
+
+      - name: Commit and push stats
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/recruiting-stats.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update recruiting stats [automated]"
+            git push
+          fi
