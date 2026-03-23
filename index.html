@@ -782,12 +782,43 @@
 
     getSummary() {
       if (!apiData) return null;
-      return apiData.summary;
+      const summary = { ...(apiData.summary || {}) };
+      // Enrich summary from separate data files when API returned zeros
+      if (summary.totalSpend && metaAdsData?.totals?.spend) {
+        const s = metaAdsData.totals.spend;
+        if (!summary.totalSpend.month && s) summary.totalSpend.month = s;
+      }
+      if (summary.totalClicks && metaAdsData?.totals?.clicks) {
+        const c = metaAdsData.totals.clicks;
+        if (!summary.totalClicks.month && c) summary.totalClicks.month = c;
+      }
+      if (summary.totalInstalls && appsflyerData?.totals?.installs) {
+        const i = appsflyerData.totals.installs;
+        if (!summary.totalInstalls.month && i) summary.totalInstalls.month = i;
+      }
+      return summary;
     },
 
     getFunnel() {
       if (!apiData) return null;
-      return apiData.funnel;
+      const funnel = { ...(apiData.funnel || {}) };
+      // When cached data has zeros, enrich from separate data files
+      if (funnel.adImpressions === 0 && metaAdsData?.totals?.impressions) {
+        funnel.adImpressions = metaAdsData.totals.impressions;
+      }
+      if (funnel.adClicks === 0 && metaAdsData?.totals?.clicks) {
+        funnel.adClicks = metaAdsData.totals.clicks;
+      }
+      if (funnel.emailsSent === 0 && sendgridData?.totals?.sent) {
+        funnel.emailsSent = sendgridData.totals.sent;
+      }
+      if (funnel.emailOpens === 0 && sendgridData?.totals?.unique_opens) {
+        funnel.emailOpens = sendgridData.totals.unique_opens;
+      }
+      if (funnel.appInstalls === 0 && appsflyerData?.totals?.installs) {
+        funnel.appInstalls = appsflyerData.totals.installs;
+      }
+      return funnel;
     },
 
     async fetchMetaAdsStats() {
