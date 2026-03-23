@@ -1827,18 +1827,21 @@
       const yr = parseInt(selectedYear);
       return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
     });
-    const launched = yearFiltered.filter(s => s.status !== 'coming' && s.leads != null && s.leads > 0);
+    // Studies with ad-lead data (VEP, RCT, RWE)
+    const leadStudies = yearFiltered.filter(s => s.status !== 'coming' && s.leads != null && s.leads > 0);
+    // Public studies don't come through ad leads — include if anyone joined
+    const publicStudies = yearFiltered.filter(s => s.type === 'PUBLIC' && (s.joined || 0) > 0);
+    const launched = [...leadStudies, ...publicStudies];
 
     if (!launched.length) {
       container.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">No lead data available for this filter.</div>';
       return;
     }
 
-    const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
-    const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
+    const totalLeads = leadStudies.reduce((a, s) => a + (s.leads || 0), 0);
+    const totalJoined = leadStudies.reduce((a, s) => a + (s.joined || 0), 0);
 
     // Segment: public challenges vs VEP (partner) vs sponsored (paid ads)
-    const publicStudies = launched.filter(s => s.type === 'PUBLIC');
     const vepStudies = launched.filter(s => s.type === 'VEP');
     const sponsoredStudies = launched.filter(s => s.type === 'RCT' || s.type === 'RWE');
     const publicJoined = publicStudies.reduce((a, s) => a + (s.joined || 0), 0);
