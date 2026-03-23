@@ -374,31 +374,10 @@
     .manual-card .mc-row strong { color: var(--text); }
 
     /* Projections */
-    .projections-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;
-    }
-    .proj-card {
-      background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-      border-radius: var(--radius-md); padding: 16px;
-    }
-    .proj-card .pj-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .proj-card .pj-name { font-size: 13px; font-weight: 600; }
-    .proj-card .pj-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-    .proj-card .pj-stats { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
-    .proj-card .pj-stat { font-size: 11px; color: var(--text-dim); }
-    .proj-card .pj-stat strong { color: var(--text); }
-    .pace-chip {
-      display: inline-block; padding: 2px 10px; border-radius: var(--radius-pill);
-      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-    }
-    .pace-chip.on-track { background: var(--green-bg); color: var(--green); }
-    .pace-chip.behind { background: var(--yellow-bg); color: var(--yellow); }
-    .pace-chip.at-risk { background: var(--rose-bg); color: var(--rose); }
 
     @media (max-width: 768px) {
       .type-breakdown-grid { grid-template-columns: 1fr; }
       .manual-compare-grid { grid-template-columns: 1fr; }
-      .projections-grid { grid-template-columns: 1fr; }
     }
 
     /* Public Studies */
@@ -640,11 +619,6 @@
     <div class="manual-compare-grid" id="manual-compare-grid"></div>
   </div>
 
-  <!-- Recruitment Projections -->
-  <div class="section" id="projections-section">
-    <h2><span class="section-icon">&#9673;</span> Recruitment Projections</h2>
-    <div class="projections-grid" id="projections-grid"></div>
-  </div>
 
   <!-- Public Studies Overview -->
   <div class="section" id="public-studies-section">
@@ -1713,7 +1687,7 @@
   // ============================================================
   function renderScorecard() {
     const grid = $('#scorecard-grid');
-    const launched = STUDIES.filter(s => s.status !== 'coming');
+    const launched = STUDIES.filter(s => s.status !== 'coming' && s.type !== 'PUBLIC');
 
     grid.innerHTML = launched.map(s => {
       const pct = s.target > 0 ? Math.min(100, (s.onboarded / s.target) * 100) : 0;
@@ -1988,71 +1962,6 @@
   }
 
   // ============================================================
-  // RENDER: Recruitment Projections
-  // ============================================================
-  function renderProjections() {
-    const grid = $('#projections-grid');
-    const section = $('#projections-section');
-
-    // Only show for recruiting/active studies
-    const activeStudies = STUDIES.filter(s => s.status === 'recruiting' || s.status === 'active');
-
-    if (!activeStudies.length) {
-      section.style.display = 'none';
-      return;
-    }
-    section.style.display = '';
-
-    const today = new Date();
-
-    grid.innerHTML = activeStudies.map(s => {
-      const launch = new Date(s.launchDate);
-      if (isNaN(launch)) return '';
-
-      const daysElapsed = Math.max(1, Math.floor((today - launch) / 86400000));
-      const onboarded = s.onboarded || 0;
-      const target = s.target || 0;
-      const remaining = Math.max(0, target - onboarded);
-      const pacePerDay = onboarded / daysElapsed;
-      const daysToComplete = pacePerDay > 0 ? Math.ceil(remaining / pacePerDay) : null;
-      const pct = target > 0 ? Math.min(100, (onboarded / target) * 100) : 0;
-
-      // Determine pace status
-      let paceStatus, paceClass;
-      if (pct >= 100) {
-        paceStatus = 'Complete'; paceClass = 'on-track';
-      } else if (pacePerDay >= (target / (s.days || 30))) {
-        paceStatus = 'On Track'; paceClass = 'on-track';
-      } else if (pacePerDay >= (target / (s.days || 30)) * 0.5) {
-        paceStatus = 'Behind'; paceClass = 'behind';
-      } else {
-        paceStatus = 'At Risk'; paceClass = 'at-risk';
-      }
-
-      return `<div class="proj-card">
-        <div class="pj-header">
-          <div>
-            <div class="pj-name">${esc(s.name)}</div>
-            <div class="pj-meta">${typeBadge(s.type)} ${statusBadge(s.status)}</div>
-          </div>
-          <span class="pace-chip ${paceClass}">${paceStatus}</span>
-        </div>
-        <div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill ${pct >= 100 ? 'green' : pct >= 50 ? 'lime' : 'yellow'}" style="width:${pct}%"></div></div>
-        <div class="pj-stats">
-          <div class="pj-stat">Progress: <strong>${onboarded}/${target} (${pct.toFixed(0)}%)</strong></div>
-          <div class="pj-stat">Days Elapsed: <strong>${daysElapsed}</strong></div>
-          <div class="pj-stat">Pace: <strong>${pacePerDay.toFixed(1)}/day</strong></div>
-          ${daysToComplete != null && remaining > 0 ? `<div class="pj-stat">Est. Days Left: <strong>${daysToComplete}</strong></div>` : ''}
-        </div>
-      </div>`;
-    }).filter(Boolean).join('');
-
-    if (!grid.innerHTML.trim()) {
-      section.style.display = 'none';
-    }
-  }
-
-  // ============================================================
   // RENDER: Public Studies
   // ============================================================
   function renderPublicStudies() {
@@ -2156,7 +2065,6 @@
     renderTypeBreakdown();
     renderEngagement();
     renderManualImpact();
-    renderProjections();
     renderPublicStudies();
     renderSourceStatus();
 
