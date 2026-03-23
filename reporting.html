@@ -649,6 +649,32 @@
       width: 100% !important;
       height: 300px !important;
     }
+    .rc-per-study {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 6px 24px;
+    }
+    .rc-per-study h4 {
+      grid-column: 1 / -1;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 4px 0;
+      color: var(--text);
+    }
+    .rc-study-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 12px;
+    }
+    .rc-study-row .rc-name { color: var(--text-dim); }
+    .rc-study-row .rc-val { font-weight: 700; color: var(--text); }
     @media (max-width: 768px) {
       body { padding: 12px; }
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1812,6 +1838,7 @@
     html += '<div class="rc-enrolled-total">Enrolled (30d)<div class="rc-big" id="rc-enrolled-total">\u2014</div></div>';
     html += '</div>';
     html += '<div class="recruiting-chart-canvas"><canvas id="recruiting-chart-canvas"></canvas></div>';
+    html += '<div class="rc-per-study" id="rc-per-study"><h4>Per Study</h4></div>';
     html += '</div>';
 
     // Meta Ads Daily Chart
@@ -2132,6 +2159,22 @@
     var enrolledTotal = enrolledArr.reduce(function(a, b) { return a + b; }, 0);
     var totalEl = document.getElementById('rc-enrolled-total');
     if (totalEl) totalEl.textContent = fmtInt(enrolledTotal);
+
+    // Per-study breakdown
+    var perStudyEl = document.getElementById('rc-per-study');
+    if (perStudyEl && data.onboarding && data.onboarding.byStudy && data.onboarding.byStudy.length > 0) {
+      var studyHtml = '<h4>Per Study</h4>';
+      var sorted = data.onboarding.byStudy.slice().sort(function(a, b) {
+        return (b.count != null ? b.count : b.onboarded || 0) - (a.count != null ? a.count : a.onboarded || 0);
+      });
+      sorted.forEach(function(st) {
+        var name = st.experimentTitle || st.studyName || ('Study #' + st.experimentId);
+        if (name.length > 28) name = name.slice(0, 27) + '\u2026';
+        var val = st.count != null ? st.count : st.onboarded || 0;
+        studyHtml += '<div class="rc-study-row"><span class="rc-name">' + esc(name) + '</span><span class="rc-val">' + fmtInt(val) + '</span></div>';
+      });
+      perStudyEl.innerHTML = studyHtml;
+    }
   }
 
   function fetchLiveData() {
