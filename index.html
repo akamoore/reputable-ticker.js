@@ -1906,23 +1906,23 @@
 
         <div class="engagement-detail-card" style="border-top:3px solid var(--green)">
           <div class="edc-title" style="color:var(--green)">Join → Onboard conversion</div>
-          <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(116,185,255,0.08);">
-              <div style="font-size:22px;font-weight:700;color:var(--sky)">${publicConv}%</div>
-              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Public</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;">
+            <div style="text-align:center;padding:10px 6px;border-radius:8px;background:rgba(116,185,255,0.08);">
+              <div style="font-size:20px;font-weight:700;color:var(--sky)">${publicConv}%</div>
+              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Public</div>
             </div>
-            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(108,92,231,0.08);">
-              <div style="font-size:22px;font-weight:700;color:var(--indigo)">${vepConv}%</div>
-              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">VEP</div>
+            <div style="text-align:center;padding:10px 6px;border-radius:8px;background:rgba(108,92,231,0.08);">
+              <div style="font-size:20px;font-weight:700;color:var(--indigo)">${vepConv}%</div>
+              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">VEP</div>
             </div>
-            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(52,211,153,0.08);">
-              <div style="font-size:22px;font-weight:700;color:var(--green)">${sponsoredConv}%</div>
-              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Sponsored</div>
+            <div style="text-align:center;padding:10px 6px;border-radius:8px;background:rgba(52,211,153,0.08);">
+              <div style="font-size:20px;font-weight:700;color:var(--green)">${sponsoredConv}%</div>
+              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Sponsored</div>
             </div>
-            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(200,230,74,0.08);">
-              <div style="font-size:22px;font-weight:700;color:var(--lime)">${overallConv}%</div>
-              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Overall</div>
-            </div>
+          </div>
+          <div style="text-align:center;padding:12px 10px;border-radius:8px;background:rgba(200,230,74,0.06);border:1px solid rgba(200,230,74,0.15);margin-top:8px;">
+            <div style="font-size:26px;font-weight:700;color:var(--lime)">${overallConv}%</div>
+            <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Overall</div>
           </div>
         </div>
       </div>
