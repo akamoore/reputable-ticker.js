@@ -36,6 +36,8 @@
       --red-bg: rgba(225,112,85,0.12);
       --lavender: #A78BFA;
       --lavender-bg: rgba(167,139,250,0.12);
+      --sky: #74B9FF;
+      --sky-bg: rgba(116,185,255,0.12);
       --gray: #636e80;
       --gray-bg: rgba(99,110,128,0.12);
       --radius-md: 12px;
@@ -241,6 +243,7 @@
     .badge-indigo { background: var(--indigo-bg); color: var(--indigo); }
     .badge-teal { background: var(--teal-bg); color: var(--teal); }
     .badge-lavender { background: var(--lavender-bg); color: var(--lavender); }
+    .badge-sky { background: var(--sky-bg); color: var(--sky); }
 
     /* Progress bars */
     .progress-bar {
@@ -571,6 +574,7 @@
           <option value="RCT">RCT</option>
           <option value="RWE">RWE</option>
           <option value="VEP">VEP</option>
+          <option value="PUBLIC">Public</option>
         </select>
         <select id="filter-manual">
           <option value="all">Manual Step: Any</option>
@@ -740,20 +744,20 @@
     { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
     { id: 22, name: 'Cure Hydration', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 70, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
     // ── Public Studies (free, in-app challenges) ──
-    { id: 24, name: 'The 30-Minute Reset', type: 'VEP', spend: 0, leads: null, joined: 33, onboarded: 24, target: 33, wearable: null, days: null, launchDate: 'Jan 29, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
-    { id: 25, name: 'Track Your Travel', type: 'VEP', spend: 0, leads: null, joined: 7, onboarded: 6, target: 25, wearable: null, days: null, launchDate: 'Jan 31, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
-    { id: 26, name: 'The 10K Steps Challenge', type: 'VEP', spend: 0, leads: null, joined: 44, onboarded: 30, target: 44, wearable: null, days: null, launchDate: 'Feb 7, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
-    { id: 27, name: 'The Dry Week Effect', type: 'VEP', spend: 0, leads: null, joined: 39, onboarded: 32, target: 39, wearable: null, days: null, launchDate: 'Feb 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
-    { id: 28, name: 'The Fasting Reset', type: 'VEP', spend: 0, leads: null, joined: 59, onboarded: 40, target: 60, wearable: null, days: null, launchDate: 'Mar 16, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 100% compliance (7/7)', inStudy: 7, complianceN: 7, complianceD: 7 },
-    { id: 29, name: '7 Day Wim Hof Challenge', type: 'VEP', spend: 0, leads: null, joined: 34, onboarded: 17, target: 34, wearable: null, days: null, launchDate: 'Mar 16, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 100% compliance (7/7)', inStudy: 7, complianceN: 7, complianceD: 7 },
-    { id: 30, name: 'The Reading Ritual', type: 'VEP', spend: 0, leads: null, joined: 54, onboarded: 32, target: 65, wearable: null, days: null, launchDate: 'Mar 19, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 13 in study, 100% compliance (13/13)', inStudy: 13, complianceN: 13, complianceD: 13 },
-    { id: 31, name: '7 Day Yoga Challenge', type: 'VEP', spend: 0, leads: null, joined: 61, onboarded: 29, target: 73, wearable: null, days: null, launchDate: 'Mar 19, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 15 in study, 87% compliance (13/15)', inStudy: 15, complianceN: 13, complianceD: 15 },
-    { id: 32, name: 'The Gratitude Effect', type: 'VEP', spend: 0, leads: null, joined: 44, onboarded: 32, target: 51, wearable: null, days: null, launchDate: 'Mar 20, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 5 in study, 100% compliance (5/5)', inStudy: 5, complianceN: 5, complianceD: 5 },
-    { id: 33, name: 'The Sunrise Effect', type: 'VEP', spend: 0, leads: null, joined: 29, onboarded: 16, target: 40, wearable: null, days: null, launchDate: 'Mar 21, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 11 in study, 82% compliance (9/11)', inStudy: 11, complianceN: 9, complianceD: 11 },
-    { id: 34, name: 'The Nature Dose', type: 'VEP', spend: 0, leads: null, joined: 29, onboarded: 18, target: 40, wearable: null, days: null, launchDate: 'Mar 21, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 86% compliance (6/7)', inStudy: 7, complianceN: 6, complianceD: 7 },
-    { id: 35, name: 'The 4-7-8 Effect', type: 'VEP', spend: 0, leads: null, joined: 79, onboarded: 57, target: 87, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 12 in study, 92% compliance (11/12)', inStudy: 12, complianceN: 11, complianceD: 12 },
-    { id: 36, name: 'The Power Nap Challenge', type: 'VEP', spend: 0, leads: null, joined: 30, onboarded: 17, target: 30, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 6 in study, 100% compliance (6/6)', inStudy: 6, complianceN: 6, complianceD: 6 },
-    { id: 37, name: 'The Hydration Effect', type: 'VEP', spend: 0, leads: null, joined: 50, onboarded: 34, target: 56, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 4 in study, 100% compliance (4/4)', inStudy: 4, complianceN: 4, complianceD: 4 },
+    { id: 24, name: 'The 30-Minute Reset', type: 'PUBLIC', spend: 0, leads: null, joined: 33, onboarded: 24, target: 33, wearable: null, days: null, launchDate: 'Jan 29, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
+    { id: 25, name: 'Track Your Travel', type: 'PUBLIC', spend: 0, leads: null, joined: 7, onboarded: 6, target: 25, wearable: null, days: null, launchDate: 'Jan 31, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
+    { id: 26, name: 'The 10K Steps Challenge', type: 'PUBLIC', spend: 0, leads: null, joined: 44, onboarded: 30, target: 44, wearable: null, days: null, launchDate: 'Feb 7, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
+    { id: 27, name: 'The Dry Week Effect', type: 'PUBLIC', spend: 0, leads: null, joined: 39, onboarded: 32, target: 39, wearable: null, days: null, launchDate: 'Feb 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
+    { id: 28, name: 'The Fasting Reset', type: 'PUBLIC', spend: 0, leads: null, joined: 59, onboarded: 40, target: 60, wearable: null, days: null, launchDate: 'Mar 16, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 100% compliance (7/7)', inStudy: 7, complianceN: 7, complianceD: 7 },
+    { id: 29, name: '7 Day Wim Hof Challenge', type: 'PUBLIC', spend: 0, leads: null, joined: 34, onboarded: 17, target: 34, wearable: null, days: null, launchDate: 'Mar 16, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 100% compliance (7/7)', inStudy: 7, complianceN: 7, complianceD: 7 },
+    { id: 30, name: 'The Reading Ritual', type: 'PUBLIC', spend: 0, leads: null, joined: 54, onboarded: 32, target: 65, wearable: null, days: null, launchDate: 'Mar 19, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 13 in study, 100% compliance (13/13)', inStudy: 13, complianceN: 13, complianceD: 13 },
+    { id: 31, name: '7 Day Yoga Challenge', type: 'PUBLIC', spend: 0, leads: null, joined: 61, onboarded: 29, target: 73, wearable: null, days: null, launchDate: 'Mar 19, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 15 in study, 87% compliance (13/15)', inStudy: 15, complianceN: 13, complianceD: 15 },
+    { id: 32, name: 'The Gratitude Effect', type: 'PUBLIC', spend: 0, leads: null, joined: 44, onboarded: 32, target: 51, wearable: null, days: null, launchDate: 'Mar 20, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 5 in study, 100% compliance (5/5)', inStudy: 5, complianceN: 5, complianceD: 5 },
+    { id: 33, name: 'The Sunrise Effect', type: 'PUBLIC', spend: 0, leads: null, joined: 29, onboarded: 16, target: 40, wearable: null, days: null, launchDate: 'Mar 21, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 11 in study, 82% compliance (9/11)', inStudy: 11, complianceN: 9, complianceD: 11 },
+    { id: 34, name: 'The Nature Dose', type: 'PUBLIC', spend: 0, leads: null, joined: 29, onboarded: 18, target: 40, wearable: null, days: null, launchDate: 'Mar 21, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 7 in study, 86% compliance (6/7)', inStudy: 7, complianceN: 6, complianceD: 7 },
+    { id: 35, name: 'The 4-7-8 Effect', type: 'PUBLIC', spend: 0, leads: null, joined: 79, onboarded: 57, target: 87, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 12 in study, 92% compliance (11/12)', inStudy: 12, complianceN: 11, complianceD: 12 },
+    { id: 36, name: 'The Power Nap Challenge', type: 'PUBLIC', spend: 0, leads: null, joined: 30, onboarded: 17, target: 30, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 6 in study, 100% compliance (6/6)', inStudy: 6, complianceN: 6, complianceD: 6 },
+    { id: 37, name: 'The Hydration Effect', type: 'PUBLIC', spend: 0, leads: null, joined: 50, onboarded: 34, target: 56, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 4 in study, 100% compliance (4/4)', inStudy: 4, complianceN: 4, complianceD: 4 },
   ];
 
   // Apply overrides
@@ -983,7 +987,7 @@
   }
 
   function typeBadge(type) {
-    const map = { RCT: 'badge-indigo', RWE: 'badge-teal', VEP: 'badge-lavender' };
+    const map = { RCT: 'badge-indigo', RWE: 'badge-teal', VEP: 'badge-lavender', PUBLIC: 'badge-sky' };
     return `<span class="badge ${map[type] || 'badge-gray'}">${type}</span>`;
   }
 
@@ -1785,8 +1789,8 @@
     });
     const launched = yearFiltered.filter(s => s.status !== 'coming');
 
-    const types = ['RCT', 'RWE', 'VEP'];
-    const colors = { RCT: 'var(--indigo)', RWE: 'var(--teal)', VEP: 'var(--lavender)' };
+    const types = ['RCT', 'RWE', 'VEP', 'PUBLIC'];
+    const colors = { RCT: 'var(--indigo)', RWE: 'var(--teal)', VEP: 'var(--lavender)', PUBLIC: 'var(--sky)' };
 
     grid.innerHTML = types.map(type => {
       const studies = launched.filter(s => s.type === type);
@@ -1833,36 +1837,44 @@
     const totalLeads = launched.reduce((a, s) => a + (s.leads || 0), 0);
     const totalJoined = launched.reduce((a, s) => a + (s.joined || 0), 0);
 
-    // Segment: public (VEP or $0 spend) vs sponsored (paid)
-    const publicStudies = launched.filter(s => s.type === 'VEP' || s.spend === 0);
-    const sponsoredStudies = launched.filter(s => s.type !== 'VEP' && s.spend > 0);
+    // Segment: public challenges vs VEP (partner) vs sponsored (paid ads)
+    const publicStudies = launched.filter(s => s.type === 'PUBLIC');
+    const vepStudies = launched.filter(s => s.type === 'VEP');
+    const sponsoredStudies = launched.filter(s => s.type === 'RCT' || s.type === 'RWE');
     const publicJoined = publicStudies.reduce((a, s) => a + (s.joined || 0), 0);
+    const vepJoined = vepStudies.reduce((a, s) => a + (s.joined || 0), 0);
     const sponsoredJoined = sponsoredStudies.reduce((a, s) => a + (s.joined || 0), 0);
-    const noStudy = Math.max(0, totalLeads - totalJoined);
+    const allJoined = publicJoined + vepJoined + sponsoredJoined;
+    const noStudy = Math.max(0, totalLeads - (vepJoined + sponsoredJoined));
 
     const noStudyPct = totalLeads > 0 ? (noStudy / totalLeads * 100).toFixed(1) : 0;
-    const publicPct = totalLeads > 0 ? (publicJoined / totalLeads * 100).toFixed(1) : 0;
-    const sponsoredPct = totalLeads > 0 ? (sponsoredJoined / totalLeads * 100).toFixed(1) : 0;
+    const publicPct = allJoined > 0 ? (publicJoined / allJoined * 100).toFixed(1) : 0;
+    const vepPct = allJoined > 0 ? (vepJoined / allJoined * 100).toFixed(1) : 0;
+    const sponsoredPct = allJoined > 0 ? (sponsoredJoined / allJoined * 100).toFixed(1) : 0;
 
     // Conversion rates
     const publicOnboarded = publicStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const vepOnboarded = vepStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
     const sponsoredOnboarded = sponsoredStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
     const totalOnboarded = launched.reduce((a, s) => a + (s.onboarded || 0), 0);
     const publicConv = publicJoined > 0 ? (publicOnboarded / publicJoined * 100).toFixed(1) : 0;
+    const vepConv = vepJoined > 0 ? (vepOnboarded / vepJoined * 100).toFixed(1) : 0;
     const sponsoredConv = sponsoredJoined > 0 ? (sponsoredOnboarded / sponsoredJoined * 100).toFixed(1) : 0;
-    const overallConv = totalJoined > 0 ? (totalOnboarded / totalJoined * 100).toFixed(1) : 0;
+    const overallConv = allJoined > 0 ? (totalOnboarded / allJoined * 100).toFixed(1) : 0;
 
     container.innerHTML = `
       <div class="engagement-bar-wrap">
         <div class="engagement-bar">
           <div class="eb-seg" style="width:${noStudyPct}%;background:var(--rose);color:#fff;">${noStudyPct > 5 ? noStudyPct + '%' : ''}</div>
-          <div class="eb-seg" style="width:${publicPct}%;background:var(--indigo);color:#fff;">${publicPct > 5 ? publicPct + '%' : ''}</div>
+          <div class="eb-seg" style="width:${publicPct}%;background:var(--sky);color:#fff;">${publicPct > 5 ? publicPct + '%' : ''}</div>
+          <div class="eb-seg" style="width:${vepPct}%;background:var(--indigo);color:#fff;">${vepPct > 5 ? vepPct + '%' : ''}</div>
           <div class="eb-seg" style="width:${sponsoredPct}%;background:var(--green);color:#fff;">${sponsoredPct > 5 ? sponsoredPct + '%' : ''}</div>
         </div>
         <div class="engagement-legend">
           <div class="el-item"><div class="el-dot" style="background:var(--rose)"></div>No study joined — ${fmtInt(noStudy)} (${noStudyPct}%)</div>
-          <div class="el-item"><div class="el-dot" style="background:var(--indigo)"></div>Public study — ${fmtInt(publicJoined)} (${publicPct}%)</div>
-          <div class="el-item"><div class="el-dot" style="background:var(--green)"></div>Sponsored study — ${fmtInt(sponsoredJoined)} (${sponsoredPct}%)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--sky)"></div>Public study — ${fmtInt(publicJoined)} (${publicPct}%)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--indigo)"></div>VEP — ${fmtInt(vepJoined)} (${vepPct}%)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--green)"></div>Sponsored (RCT/RWE) — ${fmtInt(sponsoredJoined)} (${sponsoredPct}%)</div>
         </div>
       </div>
 
@@ -1870,29 +1882,41 @@
         <div class="engagement-detail-card" style="border-top:3px solid var(--rose)">
           <div class="edc-title" style="color:var(--rose)">Downloaded app, no study joined</div>
           <div class="edc-hero" style="color:var(--rose)">${fmtInt(noStudy)}</div>
-          <div class="edc-sub">${fmtInt(totalLeads)} total leads · ${fmtInt(totalJoined)} joined · ${totalLeads > 0 ? (totalJoined / totalLeads * 100).toFixed(1) : 0}% conversion</div>
+          <div class="edc-sub">${fmtInt(totalLeads)} total leads · ${fmtInt(vepJoined + sponsoredJoined)} joined (VEP + sponsored) · ${totalLeads > 0 ? ((vepJoined + sponsoredJoined) / totalLeads * 100).toFixed(1) : 0}% conversion</div>
         </div>
 
-        <div class="engagement-detail-card" style="border-top:3px solid var(--indigo)">
-          <div class="edc-title" style="color:var(--indigo)">Joined a public study</div>
-          <div class="edc-hero" style="color:var(--indigo)">${fmtInt(publicJoined)}</div>
+        <div class="engagement-detail-card" style="border-top:3px solid var(--sky)">
+          <div class="edc-title" style="color:var(--sky)">Joined a public study</div>
+          <div class="edc-hero" style="color:var(--sky)">${fmtInt(publicJoined)}</div>
           <div class="edc-list">
             ${publicStudies.map(s => `<div class="edc-row"><span>${esc(s.name)}</span><strong>${fmtInt(s.joined || 0)} / ${fmtInt(s.onboarded || 0)}</strong></div>`).join('')}
           </div>
         </div>
 
+        <div class="engagement-detail-card" style="border-top:3px solid var(--indigo)">
+          <div class="edc-title" style="color:var(--indigo)">Joined a VEP study</div>
+          <div class="edc-hero" style="color:var(--indigo)">${fmtInt(vepJoined)}</div>
+          <div class="edc-list">
+            ${vepStudies.map(s => `<div class="edc-row"><span>${esc(s.name)}</span><strong>${fmtInt(s.joined || 0)} / ${fmtInt(s.onboarded || 0)}</strong></div>`).join('')}
+          </div>
+        </div>
+
         <div class="engagement-detail-card" style="border-top:3px solid var(--green)">
           <div class="edc-title" style="color:var(--green)">Join → Onboard conversion</div>
-          <div style="display:flex;gap:16px;margin-top:8px;">
-            <div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:rgba(108,92,231,0.08);">
-              <div style="font-size:22px;font-weight:700;color:var(--indigo)">${publicConv}%</div>
+          <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(116,185,255,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--sky)">${publicConv}%</div>
               <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Public</div>
             </div>
-            <div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:rgba(52,211,153,0.08);">
+            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(108,92,231,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--indigo)">${vepConv}%</div>
+              <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">VEP</div>
+            </div>
+            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(52,211,153,0.08);">
               <div style="font-size:22px;font-weight:700;color:var(--green)">${sponsoredConv}%</div>
               <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Sponsored</div>
             </div>
-            <div style="flex:1;text-align:center;padding:8px;border-radius:8px;background:rgba(200,230,74,0.08);">
+            <div style="flex:1;min-width:60px;text-align:center;padding:8px;border-radius:8px;background:rgba(200,230,74,0.08);">
               <div style="font-size:22px;font-weight:700;color:var(--lime)">${overallConv}%</div>
               <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Overall</div>
             </div>
@@ -2030,7 +2054,7 @@
   // ============================================================
   function renderPublicStudies() {
     const container = $('#public-studies-content');
-    const publicStudies = STUDIES.filter(s => s.inStudy !== undefined);
+    const publicStudies = STUDIES.filter(s => s.type === 'PUBLIC');
 
     if (!publicStudies.length) {
       container.innerHTML = '<div style="color:var(--text-dim);font-size:13px;">No public studies data available.</div>';
