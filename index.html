@@ -393,6 +393,25 @@
         </div>
       </div>
     </div>
+    <div class="chart-card" id="recruiting-chart-card" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+        <div>
+          <h3 style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled (30d)</h3>
+          <div style="font-size:12px; color:#888;">See whether spend changes drive joins and enrollment spikes</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Enrolled (30d)</div>
+          <div id="rc-enrolled-total" style="font-size:32px; font-weight:700; color:#34D399; line-height:1.1;">—</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:20px;">
+        <div style="flex:1; min-width:0;"><canvas id="chart-recruiting"></canvas></div>
+        <div id="rc-per-study" style="width:200px; flex-shrink:0; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; display:none;">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; text-align:center; margin-bottom:10px;">Per Study</div>
+          <div id="rc-study-list"></div>
+        </div>
+      </div>
+    </div>
     <div class="chart-card">
       <h3 id="chart-spend-title">Ad Spend &amp; Clicks (Daily)</h3>
       <canvas id="chart-spend"></canvas>
@@ -1020,12 +1039,13 @@
   // ============================================================
   // RENDER: Charts
   // ============================================================
-  let chartSpend, chartInstalls, chartEmail;
+  let chartSpend, chartInstalls, chartEmail, chartRecruiting;
 
   function destroyCharts() {
     if (chartSpend) { chartSpend.destroy(); chartSpend = null; }
     if (chartInstalls) { chartInstalls.destroy(); chartInstalls = null; }
     if (chartEmail) { chartEmail.destroy(); chartEmail = null; }
+    if (chartRecruiting) { chartRecruiting.destroy(); chartRecruiting = null; }
   }
 
   const chartDefaults = {
@@ -1061,6 +1081,9 @@
     } else {
       signupsCard.style.display = 'none';
     }
+
+    // --- Daily Spend, Joined & Enrolled chart ---
+    renderRecruitingChart();
 
     // Ad Spend & Clicks
     $('#chart-spend-title').textContent = adsDaily.length ? 'Ad Spend & Clicks (Daily)' : 'Ad Spend by Study';
@@ -1104,7 +1127,20 @@
           },
           options: {
             ...chartDefaults,
-            plugins: { ...chartDefaults.plugins, legend: { display: false } },
+            plugins: {
+              ...chartDefaults.plugins,
+              legend: { display: false },
+              tooltip: {
+                ...chartDefaults.plugins.tooltip,
+                callbacks: {
+                  title: (items) => {
+                    const label = items[0]?.label || '';
+                    // Multi-line labels come as "line1,line2" — split back
+                    return label.replace(/,/g, '\n');
+                  },
+                },
+              },
+            },
             scales: {
               ...chartDefaults.scales,
               x: { ...chartDefaults.scales.x, ticks: { ...chartDefaults.scales.x?.ticks, maxRotation: 45, minRotation: 0, font: { size: 10 } } },
@@ -1178,6 +1214,130 @@
       }))
       .filter(s => s.spend > 0.01 || s.joined > 0 || s.onboarded > 0)
       .sort((a, b) => b.spend - a.spend);
+  }
+
+  // ============================================================
+  // RENDER: Daily Spend, Joined & Enrolled Chart
+  // ============================================================
+  function renderRecruitingChart() {
+    const card = $('#recruiting-chart-card');
+    const canvas = $('#chart-recruiting');
+    if (!canvas) return;
+
+    // Gather daily data from API
+    const spendDaily = dataService.getMetaAdsDaily();
+    const onbData = apiData?.onboarding;
+    const onbDaily = onbData?.daily || [];
+    const joinedDaily = onbData?.joinedDaily || [];
+
+    // Need at least spend or onboarding daily data
+    if (!spendDaily.length && !onbDaily.length) {
+      card.style.display = 'none';
+      return;
+    }
+
+    card.style.display = '';
+
+    // Build date-keyed map merging all sources
+    const dateMap = {};
+    spendDaily.forEach(d => {
+      if (!dateMap[d.date]) dateMap[d.date] = { spend: 0, joined: 0, enrolled: 0 };
+      dateMap[d.date].spend = d.spend || 0;
+    });
+    onbDaily.forEach(d => {
+      if (!dateMap[d.date]) dateMap[d.date] = { spend: 0, joined: 0, enrolled: 0 };
+      dateMap[d.date].enrolled = d.count ?? d.onboarded ?? 0;
+    });
+    joinedDaily.forEach(d => {
+      if (!dateMap[d.date]) dateMap[d.date] = { spend: 0, joined: 0, enrolled: 0 };
+      dateMap[d.date].joined = d.count ?? d.joined ?? 0;
+    });
+
+    const dates = Object.keys(dateMap).sort();
+    if (!dates.length) { card.style.display = 'none'; return; }
+
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const labels = dates.map(d => {
+      const dt = new Date(d + 'T00:00:00');
+      return months[dt.getMonth()] + ' ' + dt.getDate();
+    });
+    const spendArr = dates.map(d => dateMap[d].spend);
+    const joinedArr = dates.map(d => dateMap[d].joined);
+    const enrolledArr = dates.map(d => dateMap[d].enrolled);
+
+    const datasets = [
+      {
+        label: 'Enrolled',
+        data: enrolledArr,
+        borderColor: '#34D399',
+        backgroundColor: 'rgba(52,211,153,0.08)',
+        fill: true, tension: 0.3, borderWidth: 2, pointRadius: 2, pointHoverRadius: 4, yAxisID: 'y',
+      },
+      {
+        label: 'Spend ($)',
+        data: spendArr,
+        borderColor: '#6C5CE7',
+        backgroundColor: 'rgba(108,92,231,0.05)',
+        fill: false, tension: 0.3, borderWidth: 2, pointRadius: 2, pointHoverRadius: 4, yAxisID: 'y1',
+      },
+    ];
+
+    // Add Joined line only if there's daily data
+    if (joinedArr.some(v => v > 0)) {
+      datasets.splice(1, 0, {
+        label: 'Joined Study',
+        data: joinedArr,
+        borderColor: '#60A5FA',
+        backgroundColor: 'rgba(96,165,250,0.05)',
+        fill: false, tension: 0.3, borderWidth: 2, pointRadius: 2, pointHoverRadius: 4, yAxisID: 'y',
+      });
+    }
+
+    chartRecruiting = new Chart(canvas, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: true, position: 'bottom', labels: { color: '#999', font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'line' } },
+          tooltip: {
+            titleFont: { size: 12 }, bodyFont: { size: 12 }, padding: 10,
+            callbacks: {
+              label: ctx => {
+                const val = ctx.parsed.y;
+                return ctx.dataset.label === 'Spend ($)' ? `Spend: $${val.toFixed(2)}` : `${ctx.dataset.label}: ${val}`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: { ticks: { color: '#888', font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 20 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { position: 'left', ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y1: { position: 'right', ticks: { color: '#888', font: { size: 11 }, callback: v => '$' + v }, grid: { drawOnChartArea: false } },
+        },
+      },
+    });
+
+    // Sidebar: enrolled total
+    const enrolledTotal = enrolledArr.reduce((a, b) => a + b, 0);
+    $('#rc-enrolled-total').textContent = fmtInt(enrolledTotal);
+
+    // Per-study breakdown
+    const byStudy = dataService.getOnboardingByStudy();
+    const perStudyCard = $('#rc-per-study');
+    const studyList = $('#rc-study-list');
+    if (byStudy.length && studyList) {
+      perStudyCard.style.display = '';
+      const sorted = byStudy.slice().sort((a, b) => (b.count ?? b.onboarded ?? 0) - (a.count ?? a.onboarded ?? 0));
+      studyList.innerHTML = sorted.map(st => {
+        let name = st.experimentTitle || st.studyName || `Study #${st.experimentId}`;
+        if (name.length > 26) name = name.slice(0, 25) + '…';
+        const val = st.count ?? st.onboarded ?? 0;
+        return `<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px;"><span style="color:#999;">${esc(name)}</span><span style="font-weight:700;">${fmtInt(val)}</span></div>`;
+      }).join('');
+    }
   }
 
   // ============================================================
