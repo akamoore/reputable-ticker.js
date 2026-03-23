@@ -1089,7 +1089,11 @@
       // Local fallback: show spend per study as a bar chart
       const studies = getStudiesForCharts();
       if (studies.length) {
-        const labels = studies.map(s => s.name.length > 15 ? s.name.slice(0, 14) + '…' : s.name);
+        const labels = studies.map(s => {
+          const name = s.name.length > 15 ? s.name.slice(0, 14) + '…' : s.name;
+          const dates = s.launchDate ? s.launchDate + (s.endDate ? ' – ' + s.endDate : ' – ongoing') : '';
+          return dates ? [name, dates] : name;
+        });
         chartSpend = new Chart($('#chart-spend'), {
           type: 'bar',
           data: {
@@ -1103,6 +1107,7 @@
             plugins: { ...chartDefaults.plugins, legend: { display: false } },
             scales: {
               ...chartDefaults.scales,
+              x: { ...chartDefaults.scales.x, ticks: { ...chartDefaults.scales.x?.ticks, maxRotation: 45, minRotation: 0, font: { size: 10 } } },
               y: { ...chartDefaults.scales.y, title: { display: true, text: 'Spend ($)', color: '#888', font: { size: 13 } } },
             },
           },
