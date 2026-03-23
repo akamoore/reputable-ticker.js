@@ -911,6 +911,15 @@
     <div class="avg-grid" id="avg-grid"></div>
   </div>
 
+  <!-- App Engagement Breakdown -->
+  <div class="section" id="engagement-section">
+    <h2>App Engagement Breakdown</h2>
+    <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 16px;">
+      Tracking what happens after participants download the app — how many never join a study vs. join a public or sponsored study.
+    </p>
+    <div id="engagement-content"></div>
+  </div>
+
   <!-- Manual Queue Comparison -->
   <div class="section" id="manual-queue-section">
     <h2>Manual Queue Impact</h2>
@@ -1833,6 +1842,124 @@
   }
 
   // ============================================================
+  // APP ENGAGEMENT BREAKDOWN (static, from STUDIES array)
+  // ============================================================
+  function renderEngagement(m, period) {
+    var launched = m.launched;
+    var totalLeads = m.totalLeads;
+    var totalJoined = m.totalJoined;
+    var totalOnboarded = m.totalOnboarded;
+
+    // Categorize studies: public (VEP or $0 spend) vs sponsored (paid)
+    var publicStudies = launched.filter(function(s) { return s.type === 'VEP' || s.spend === 0; });
+    var sponsoredStudies = launched.filter(function(s) { return s.spend > 0; });
+
+    var publicJoined = publicStudies.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
+    var publicOnboarded = publicStudies.reduce(function(a, s) { return a + s.onboarded; }, 0);
+    var sponsoredJoined = sponsoredStudies.reduce(function(a, s) { return a + (s.joined || 0); }, 0);
+    var sponsoredOnboarded = sponsoredStudies.reduce(function(a, s) { return a + s.onboarded; }, 0);
+
+    // "Downloaded but didn't join" = leads that never converted to joined
+    // Best proxy: leads - joined (people who saw/clicked but didn't select a study)
+    var noStudy = Math.max(0, totalLeads - totalJoined);
+
+    // Total base for percentages = leads (all people who entered the top of funnel)
+    var totalBase = totalLeads > 0 ? totalLeads : (totalJoined + noStudy);
+
+    var html = '';
+
+    if (totalBase === 0) {
+      html += '<div style="color:var(--text-dim);font-size:13px">No engagement data available for this period.</div>';
+      $('#engagement-content').innerHTML = html;
+      return;
+    }
+
+    var noStudyPct = totalBase > 0 ? ((noStudy / totalBase) * 100).toFixed(1) : '0.0';
+    var publicJoinedPct = totalBase > 0 ? ((publicJoined / totalBase) * 100).toFixed(1) : '0.0';
+    var sponsoredJoinedPct = totalBase > 0 ? ((sponsoredJoined / totalBase) * 100).toFixed(1) : '0.0';
+
+    // Stacked bar
+    var barNoW = Math.max(noStudy > 0 ? 3 : 0, (noStudy / totalBase) * 100);
+    var barPubW = Math.max(publicJoined > 0 ? 3 : 0, (publicJoined / totalBase) * 100);
+    var barSponW = Math.max(sponsoredJoined > 0 ? 3 : 0, (sponsoredJoined / totalBase) * 100);
+
+    html += '<div class="engagement-bar-wrap">';
+    if (noStudy > 0) html += '<div class="engagement-bar-seg seg-no-study" style="width:' + barNoW + '%">' + (barNoW > 10 ? noStudyPct + '%' : '') + '</div>';
+    if (publicJoined > 0) html += '<div class="engagement-bar-seg seg-public" style="width:' + barPubW + '%">' + (barPubW > 10 ? publicJoinedPct + '%' : '') + '</div>';
+    if (sponsoredJoined > 0) html += '<div class="engagement-bar-seg seg-sponsored" style="width:' + barSponW + '%">' + (barSponW > 10 ? sponsoredJoinedPct + '%' : '') + '</div>';
+    html += '</div>';
+
+    // Legend
+    html += '<div class="engagement-legend">';
+    html += '<div class="engagement-legend-item"><div class="el-dot" style="background:var(--red);opacity:0.8"></div>';
+    html += '<div><span class="el-value">' + fmtInt(noStudy) + '</span> <span class="el-pct">(' + noStudyPct + '%)</span><br>Leads — no study joined</div></div>';
+
+    html += '<div class="engagement-legend-item"><div class="el-dot" style="background:var(--accent)"></div>';
+    html += '<div><span class="el-value">' + fmtInt(publicJoined) + '</span> <span class="el-pct">(' + publicJoinedPct + '%)</span><br>Joined public study</div></div>';
+
+    html += '<div class="engagement-legend-item"><div class="el-dot" style="background:var(--green)"></div>';
+    html += '<div><span class="el-value">' + fmtInt(sponsoredJoined) + '</span> <span class="el-pct">(' + sponsoredJoinedPct + '%)</span><br>Joined sponsored study</div></div>';
+    html += '</div>';
+
+    // Detail cards
+    html += '<div class="engagement-detail-grid">';
+
+    // Card 1: Leads that didn't join
+    html += '<div class="engagement-detail-card" style="border-top: 3px solid var(--red)">';
+    html += '<div class="ed-header"><div class="ed-icon" style="background:var(--red-bg);color:var(--red)">&#x2B07;</div>';
+    html += '<div class="ed-title">Downloaded app, no study joined</div></div>';
+    html += '<div class="ed-big" style="color:var(--red)">' + fmtInt(noStudy) + '</div>';
+    html += '<div class="ed-sub">' + noStudyPct + '% of leads (' + fmtInt(totalLeads) + ' total) did not join any study. ';
+    html += 'These participants downloaded the app but never selected a study to participate in.</div>';
+    html += '<div class="ed-breakdown">';
+    html += '<span>Total leads (top of funnel): <strong>' + fmtInt(totalLeads) + '</strong></span>';
+    html += '<span>Total joined any study: <strong>' + fmtInt(totalJoined) + '</strong></span>';
+    html += '<span>Lead → Join conversion: <strong>' + (totalLeads > 0 ? ((totalJoined / totalLeads) * 100).toFixed(1) : '—') + '%</strong></span>';
+    html += '</div></div>';
+
+    // Card 2: Joined public study
+    html += '<div class="engagement-detail-card" style="border-top: 3px solid var(--accent)">';
+    html += '<div class="ed-header"><div class="ed-icon" style="background:rgba(108,92,231,0.12);color:var(--accent)">&#x1F52C;</div>';
+    html += '<div class="ed-title">Joined a public study</div></div>';
+    html += '<div class="ed-big" style="color:var(--accent)">' + fmtInt(publicJoined) + '</div>';
+    html += '<div class="ed-sub">' + publicJoinedPct + '% of leads joined a public (non-sponsored) study. ';
+    html += 'Public studies include VEP and $0-spend community studies. ' + fmtInt(publicOnboarded) + ' of these went on to complete onboarding.</div>';
+    html += '<div class="ed-breakdown">';
+    publicStudies.forEach(function(s) {
+      html += '<span>' + esc(s.name) + ' <span class="badge badge-' + (s.type === 'VEP' ? 'yellow' : 'green') + '">' + s.type + '</span> — ';
+      html += 'Joined: <strong>' + fmtInt(s.joined) + '</strong>, Onboarded: <strong>' + fmtInt(s.onboarded) + '</strong></span>';
+    });
+    html += '</div></div>';
+
+    html += '</div>'; // engagement-detail-grid
+
+    // Joined → Onboarded conversion comparison
+    var pubConv = publicJoined > 0 ? ((publicOnboarded / publicJoined) * 100).toFixed(1) : '—';
+    var sponConv = sponsoredJoined > 0 ? ((sponsoredOnboarded / sponsoredJoined) * 100).toFixed(1) : '—';
+
+    html += '<div style="margin-top:16px">';
+    html += '<h3 style="font-size:13px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Join → Onboard Conversion</h3>';
+    html += '<div class="avg-grid">';
+
+    html += '<div class="avg-card"><div class="avg-label">Public Studies</div>';
+    html += '<div class="avg-value" style="color:var(--accent)">' + pubConv + (pubConv !== '—' ? '%' : '') + '</div>';
+    html += '<div class="avg-detail">' + fmtInt(publicOnboarded) + ' onboarded of ' + fmtInt(publicJoined) + ' joined · ' + publicStudies.length + ' studies</div></div>';
+
+    html += '<div class="avg-card"><div class="avg-label">Sponsored Studies</div>';
+    html += '<div class="avg-value" style="color:var(--green)">' + sponConv + (sponConv !== '—' ? '%' : '') + '</div>';
+    html += '<div class="avg-detail">' + fmtInt(sponsoredOnboarded) + ' onboarded of ' + fmtInt(sponsoredJoined) + ' joined · ' + sponsoredStudies.length + ' studies</div></div>';
+
+    html += '<div class="avg-card"><div class="avg-label">Overall</div>';
+    var overallConv = totalJoined > 0 ? ((totalOnboarded / totalJoined) * 100).toFixed(1) : '—';
+    html += '<div class="avg-value">' + overallConv + (overallConv !== '—' ? '%' : '') + '</div>';
+    html += '<div class="avg-detail">' + fmtInt(totalOnboarded) + ' onboarded of ' + fmtInt(totalJoined) + ' joined · ' + launched.length + ' studies</div></div>';
+
+    html += '</div></div>';
+
+    $('#engagement-content').innerHTML = html;
+  }
+
+  // ============================================================
   // MAIN RENDER
   // ============================================================
   function render(period) {
@@ -1841,6 +1968,7 @@
     renderSubtitle(period);
     renderMetrics(m, period);
     renderCostTable(m, period);
+    renderEngagement(m, period);
     renderManualQueue(m);
     renderScorecard(m, period);
     renderProjections(m, period);
