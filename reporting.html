@@ -605,6 +605,28 @@
       margin-bottom: 8px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    /* Joined Study (30d) standalone bar chart */
+    .joined-chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 16px 0;
+    }
+    .joined-chart-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .joined-chart-card .jc-subtitle {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+    .joined-chart-card canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
     /* Daily Spend, Joined & Enrolled chart */
     .recruiting-chart-card {
       background: var(--surface);
@@ -1841,6 +1863,13 @@
     html += '<div class="rc-per-study" id="rc-per-study"><h4>Per Study</h4></div>';
     html += '</div>';
 
+    // ── Joined Study (30d) bar chart ──
+    html += '<div class="joined-chart-card">';
+    html += '<h3>Joined Study (30d)</h3>';
+    html += '<div class="jc-subtitle" id="jc-subtitle">Daily joins</div>';
+    html += '<canvas id="joined-study-chart"></canvas>';
+    html += '</div>';
+
     // Meta Ads Daily Chart
     if (data.metaAds && data.metaAds.daily && data.metaAds.daily.length > 0) {
       html += '<h3>Daily Ad Spend & Clicks (Last 30 Days)</h3>';
@@ -2008,6 +2037,86 @@
 
     // ── Render the Daily Spend, Joined & Enrolled Chart.js line chart ──
     renderRecruitingChart(data);
+
+    // ── Render the Joined Study (30d) bar chart ──
+    renderJoinedStudyChart(data);
+  }
+
+  var joinedStudyChartInstance = null;
+
+  function renderJoinedStudyChart(data) {
+    var canvas = document.getElementById('joined-study-chart');
+    if (!canvas) return;
+
+    var joinedDaily = (data.onboarding && data.onboarding.joinedDaily) ? data.onboarding.joinedDaily : [];
+    if (!joinedDaily.length) return;
+
+    // Sort by date and take last 30 days
+    var sorted = joinedDaily.slice().sort(function(a, b) { return a.date < b.date ? -1 : 1; });
+    var last30 = sorted.slice(-30);
+
+    var labels = last30.map(function(d) {
+      var dt = new Date(d.date + 'T00:00:00');
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return months[dt.getMonth()] + ' ' + dt.getDate();
+    });
+    var values = last30.map(function(d) { return d.count || d.joined || 0; });
+    var total = values.reduce(function(a, b) { return a + b; }, 0);
+
+    // Update subtitle with total
+    var subtitleEl = document.getElementById('jc-subtitle');
+    if (subtitleEl) subtitleEl.textContent = 'Daily joins \u2014 ' + fmtInt(total) + ' in 30d';
+
+    if (joinedStudyChartInstance) {
+      joinedStudyChartInstance.destroy();
+      joinedStudyChartInstance = null;
+    }
+
+    joinedStudyChartInstance = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Joined',
+          data: values,
+          backgroundColor: 'rgba(108,92,231,0.75)',
+          borderColor: 'rgba(108,92,231,1)',
+          borderWidth: 1,
+          borderRadius: 2,
+          barPercentage: 0.7,
+          categoryPercentage: 0.85
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1a1d27',
+            borderColor: '#2e3345',
+            borderWidth: 1,
+            titleFont: { size: 12 },
+            bodyFont: { size: 12 },
+            padding: 10,
+            callbacks: {
+              label: function(ctx) { return 'Joined: ' + ctx.parsed.y; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#8b8fa3', font: { size: 10 }, maxRotation: 45, autoSkip: true, maxTicksLimit: 15 },
+            grid: { display: false }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { color: '#8b8fa3', font: { size: 11 }, stepSize: 25 },
+            grid: { color: 'rgba(255,255,255,0.04)', borderDash: [3, 3] }
+          }
+        }
+      }
+    });
   }
 
   var recruitingChartInstance = null;
