@@ -1,9 +1,15 @@
 {
   "builds": [
-    { "src": "api-proxy/server.js", "use": "@vercel/node" }
+    { "src": "api-proxy/server.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.jpg", "use": "@vercel/static" },
+    { "src": "*.json", "use": "@vercel/static" },
+    { "src": "*.pdf", "use": "@vercel/static" },
+    { "src": "data/**", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "api-proxy/server.js" },
-    { "src": "/(.*\\.(html|jpg|jpeg|png|json|js|css|pdf))", "dest": "/$1" }
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
