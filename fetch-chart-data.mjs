@@ -22,7 +22,7 @@ const TO_DATE = new Date().toISOString().slice(0, 10);
 async function fetchMetaAds() {
   console.log('Fetching Meta Ads daily insights...');
   const timeRange = JSON.stringify({ since: FROM_DATE, until: TO_DATE });
-  const url = `https://graph.facebook.com/v21.0/${META_AD_ACCOUNT_ID}/insights?fields=spend,clicks,impressions,cpc&time_increment=1&time_range=${encodeURIComponent(timeRange)}&level=account&limit=500&access_token=${META_ACCESS_TOKEN}`;
+  const url = `https://graph.facebook.com/v22.0/${META_AD_ACCOUNT_ID}/insights?fields=spend,clicks,impressions,cpc&time_increment=1&time_range=${encodeURIComponent(timeRange)}&level=account&limit=500&access_token=${META_ACCESS_TOKEN}`;
 
   try {
     const resp = await fetch(url);
