@@ -57,5 +57,6 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Update recruiting stats [automated]"
+            git pull --rebase
             git push
           fi
