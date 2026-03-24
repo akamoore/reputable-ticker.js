@@ -37,7 +37,7 @@ jobs:
 
           # Fetch daily account-level insights
           HTTP_CODE=$(curl -s -o /tmp/meta-response.json -w "%{http_code}" \
-            "https://graph.facebook.com/v21.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&time_increment=1&fields=date_start,impressions,clicks,spend,cpc,cpm,ctr,actions&limit=100")
+            "https://graph.facebook.com/v22.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&time_increment=1&fields=date_start,impressions,clicks,spend,cpc,cpm,ctr,actions&limit=100")
 
           if [ "$HTTP_CODE" != "200" ]; then
             echo "::warning::Meta API returned HTTP $HTTP_CODE"
@@ -108,7 +108,7 @@ jobs:
             let adsData = [];
             try {
               const adsResp = await fetchUrl(
-                'https://graph.facebook.com/v21.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&level=ad&fields=ad_name,campaign_name,impressions,clicks,spend,cpc,cpm,ctr&limit=100'
+                'https://graph.facebook.com/v22.0/${META_AD_ACCOUNT_ID}/insights?access_token=${META_ACCESS_TOKEN}&time_range=%7B%22since%22%3A%22${START_DATE}%22%2C%22until%22%3A%22${END_DATE}%22%7D&level=ad&fields=ad_name,campaign_name,impressions,clicks,spend,cpc,cpm,ctr&limit=100'
               );
               adsData = (adsResp.data || []).map(a => ({
                 adName: a.ad_name,
