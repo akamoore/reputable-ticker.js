@@ -1,0 +1,9 @@
+{
+  "builds": [
+    { "src": "api-proxy/server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "api-proxy/server.js" },
+    { "src": "/(.*\\.(html|jpg|jpeg|png|json|js|css|pdf))", "dest": "/$1" }
+  ]
+}

@@ -80,3 +80,4 @@ app.listen(PORT, () => {
     console.warn('WARNING: API_KEY not set — requests will fail. Set the API_KEY environment variable.');
   }
 });
+module.exports = app;
