@@ -51,9 +51,9 @@
     "yesterday": 0,
     "week": 4,
     "month": 6,
-    "newSignups": 5608,
+    "newSignups": 5612,
     "signupsYesterday": 4,
-    "signupsWeek": 49,
+    "signupsWeek": 53,
     "joinedTotal": 3547,
     "joinedYesterday": 2,
     "joinedWeek": 14,
@@ -3998,7 +3998,7 @@
       },
       {
         "date": "2026-03-25",
-        "count": 4
+        "count": 8
       }
     ],
     "daily": [
@@ -4281,6 +4281,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-25T12:56:10.890Z",
+  "_cached_at": "2026-03-25T18:49:07.753Z",
   "_source": "github-action"
 }
