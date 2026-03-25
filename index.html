@@ -677,8 +677,8 @@
   // Use CORS proxy when available; falls back to direct API call.
   // To use the proxy, set ?proxy=http://localhost:3001 in the URL
   // or deploy the api-proxy and update PROXY_BASE below.
-  const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || '';
-  const DIRECT_API = 'https://operations.reputablehealth.net/api/recruiting';
+const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || (window.location.hostname !== 'localhost' ? window.location.origin : '');
+x  const DIRECT_API = 'https://operations.reputablehealth.net/api/recruiting';
   const API_BASE = PROXY_BASE ? `${PROXY_BASE}/api/recruiting` : DIRECT_API;
   const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
