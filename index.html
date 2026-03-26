@@ -678,10 +678,10 @@
   // To use the proxy, set ?proxy=http://localhost:3001 in the URL
   // or deploy the api-proxy and update PROXY_BASE below.
 const IS_VERCEL = window.location.hostname.includes('vercel.app');
-  const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || (window.location.hostname !== 'localhost' ? window.location.origin : '');
-x  const DIRECT_API = 'https://operations.reputablehealth.net/api/recruiting';
+const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || '';
+const DIRECT_API = 'https://operations.reputablehealth.net/api/recruiting';
 const API_BASE = IS_VERCEL ? '/api/recruiting' : (PROXY_BASE ? `${PROXY_BASE}/api/recruiting` : DIRECT_API);
-  const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
+const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   // ============================================================
   // STUDY OVERRIDES — manual fields not in the API
@@ -761,7 +761,7 @@ const API_BASE = IS_VERCEL ? '/api/recruiting' : (PROXY_BASE ? `${PROXY_BASE}/ap
     async fetchRecruitingData(days) {
       // Try live API first
       try {
-        const headers const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
+const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
  PROXY_BASE ? {} : { 'x-api-key': API_KEY };
         const resp = await fetch(`${API_BASE}?days=${days}`, { headers });
         if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
