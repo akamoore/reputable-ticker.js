@@ -762,7 +762,6 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       // Try live API first
       try {
 const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
- PROXY_BASE ? {} : { 'x-api-key': API_KEY };
         const resp = await fetch(`${API_BASE}?days=${days}`, { headers });
         if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
         return await resp.json();
