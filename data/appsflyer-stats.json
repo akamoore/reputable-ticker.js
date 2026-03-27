@@ -1,8 +1,13 @@
 {
-  "updated_at": "2026-03-27T19:47:28.562Z",
+  "updated_at": "2026-03-27T19:55:41.162Z",
   "period": {
     "start": "2026-01-01",
     "end": "2026-03-27"
+  },
+  "totals": {
+    "installs": 2004,
+    "sessions": 0,
+    "uninstalls": 0
   },
   "daily": [
     {

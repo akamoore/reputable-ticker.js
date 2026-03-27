@@ -122,9 +122,12 @@ async function fetchAppsFlyer() {
       .map(([date, installs]) => ({ date, installs }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
+    const totalInstalls = daily.reduce((sum, d) => sum + d.installs, 0);
+
     const result = {
       updated_at: new Date().toISOString(),
       period: { start: FROM_DATE, end: TO_DATE },
+      totals: { installs: totalInstalls, sessions: 0, uninstalls: 0 },
       daily,
       bySource: [],
     };
