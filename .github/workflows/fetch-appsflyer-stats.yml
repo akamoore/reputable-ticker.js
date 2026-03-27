@@ -44,8 +44,9 @@ jobs:
             echo "Trying $HOST..."
             HTTP_CODE=$(curl -s -o /tmp/appsflyer-response.csv -w "%{http_code}" \
               --connect-timeout 10 --max-time 30 \
-              "https://${HOST}/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?api_token=${APPSFLYER_API_TOKEN}&from=${START_DATE}&to=${END_DATE}&groupings=date&currency=USD" \
-              -H "Accept: text/csv" 2>/dev/null) || true
+              "https://${HOST}/api/agg-data/export/app/${APPSFLYER_APP_ID}/partners_by_date_report/v5?from=${START_DATE}&to=${END_DATE}&groupings=date&currency=USD" \
+              -H "Accept: text/csv" \
+              -H "Authorization: Bearer ${APPSFLYER_API_TOKEN}" 2>/dev/null) || true
 
             if [ "$HTTP_CODE" = "200" ]; then
               echo "✓ Success from $HOST"
