@@ -822,8 +822,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       if (funnel.emailOpens === 0 && sendgridData?.totals?.unique_opens) {
         funnel.emailOpens = sendgridData.totals.unique_opens;
       }
-      if (funnel.appInstalls === 0 && appsflyerData?.totals?.installs) {
-        funnel.appInstalls = appsflyerData.totals.installs;
+      if (funnel.appInstalls === 0) {
+        const afDaily = dataService.getAppsflyerDaily();
+        funnel.appInstalls = afDaily.reduce((s, d) => s + (d.installs || 0), 0);
       }
       return funnel;
     },
@@ -1157,8 +1158,11 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'm
       // Real-time API data available — show time-windowed metrics
       const spend = summary.totalSpend?.[periodKey] ?? 0;
       const clicks = summary.totalClicks?.[periodKey] ?? 0;
-      const installs = summary.totalInstalls?.[periodKey] ?? 0;
-      const cpi = summary.costPerInstall?.[periodKey] ?? 0;
+      let installs = summary.totalInstalls?.[periodKey] ?? 0;
+      if (installs === 0) {
+        installs = dataService.getAppsflyerDaily().reduce((s, d) => s + (d.installs || 0), 0);
+      }
+      const cpi = installs > 0 ? spend / installs : 0;
       const onboarded = summary.totalOnboarded?.[periodKey] ?? 0;
       const cpo = summary.costPerOnboard?.[periodKey] ?? 0;
 
