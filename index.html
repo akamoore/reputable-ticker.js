@@ -799,9 +799,14 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         const c = metaAdsData.totals.clicks;
         if (!summary.totalClicks.month && c) summary.totalClicks.month = c;
       }
-      if (summary.totalInstalls && appsflyerData?.totals?.installs) {
-        const i = appsflyerData.totals.installs;
-        if (!summary.totalInstalls.month && i) summary.totalInstalls.month = i;
+      if (summary.totalInstalls && appsflyerData?.daily?.length) {
+        const now = Date.now();
+        const sum = (days) => appsflyerData.daily
+          .filter(d => new Date(d.date) >= new Date(now - days * 86400000))
+          .reduce((s, d) => s + (d.installs || 0), 0);
+        if (!summary.totalInstalls.week) summary.totalInstalls.week = sum(7);
+        if (!summary.totalInstalls.month) summary.totalInstalls.month = sum(30);
+        if (!summary.totalInstalls.quarter) summary.totalInstalls.quarter = sum(90);
       }
       return summary;
     },
@@ -1126,7 +1131,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
     // Map selectedDays to the API summary period keys
-const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'month';
+const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'quarter';
     const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
 
     // For local data: use time-windowed studies when available, fall back to cumulative year totals.
