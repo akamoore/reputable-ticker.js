@@ -838,6 +838,14 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         const afDaily = dataService.getAppsflyerDaily();
         funnel.appInstalls = afDaily.reduce((s, d) => s + (d.installs || 0), 0);
       }
+      // Use onboardedByPeriod for correct windowed onboarded count
+      const obp = apiData?.onboarding?.onboardedByPeriod;
+      if (obp) {
+        funnel.onboarded = selectedDays <= 7 ? (obp.seven_days ?? funnel.onboarded)
+          : selectedDays <= 30 ? (obp.thirty_days ?? funnel.onboarded)
+          : selectedDays <= 90 ? (obp.ninety_days ?? funnel.onboarded)
+          : (obp.all ?? funnel.onboarded);
+      }
       return funnel;
     },
 
@@ -1175,7 +1183,10 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
         installs = dataService.getAppsflyerDaily().reduce((s, d) => s + (d.installs || 0), 0);
       }
       const cpi = installs > 0 ? spend / installs : 0;
-      const onboarded = summary.totalOnboarded?.[periodKey] ?? summary.totalOnboarded?.month ?? 0;
+      const obp = apiData?.onboarding?.onboardedByPeriod;
+      const onboarded = selectedDays <= 7 ? (obp?.seven_days ?? summary.totalOnboarded?.week ?? 0)
+        : selectedDays <= 30 ? (obp?.thirty_days ?? summary.totalOnboarded?.month ?? 0)
+        : (obp?.ninety_days ?? summary.totalOnboarded?.month ?? 0);
       const cpo = onboarded > 0 ? spend / onboarded : 0;
 
       cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
