@@ -469,12 +469,10 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     </div>
     <div class="header-right">
       <div id="api-status"></div>
-      <div class="filter-bar" id="year-filter">
-        <button class="filter-btn active" data-year="all">All</button>
+      <div class="filter-bar" id="main-filter">
+        <button class="filter-btn" data-year="all">All</button>
         <button class="filter-btn" data-year="2025">2025</button>
         <button class="filter-btn" data-year="2026">2026</button>
-      </div>
-      <div class="filter-bar" id="time-filter">
         <button class="filter-btn" data-days="7">7 Days</button>
         <button class="filter-btn active" data-days="30">30 Days</button>
         <button class="filter-btn" data-days="90">90 Days</button>
@@ -1146,7 +1144,7 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
     // For local data: use time-windowed studies when available, fall back to cumulative year totals.
     // This handles 2025 (all studies ended months ago → window empty → show cumulative)
     // and 2026 (recent studies → window has results → show windowed).
-    const isAllTime = selectedYear === 'all';
+    const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
     const useWindow = !isAllTime && windowStudies.length > 0;
     const kpiStudies = isAllTime ? allLaunched : (useWindow ? windowStudies : allLaunched);
     const kpiLabel = isAllTime ? 'Total' : (useWindow ? periodLabel : selectedYear);
@@ -1217,7 +1215,7 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
         return false;
       });
       const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
-      const useWindowFunnel = selectedYear !== 'all' && windowStudies.length > 0;
+      const useWindowFunnel = selectedYear !== 'all' && selectedDays !== Infinity && windowStudies.length > 0;
       const launched = useWindowFunnel ? windowStudies : allLaunched;
       const totalLeads = useWindowFunnel
         ? launched.reduce((a, s) => a + getWindowedMetric(s, 'leads', selectedDays), 0)
@@ -2118,7 +2116,9 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
     const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    const windowLabel = selectedYear === 'all' ? 'All-Time' : `${selectedYear} Studies · ${selectedDays}-day window`;
+    const windowLabel = selectedDays === Infinity
+      ? (selectedYear === 'all' ? 'All-Time' : `${selectedYear} Studies`)
+      : `${selectedYear} Studies · ${selectedDays}-day window`;
     $('#subtitle').textContent = `Reputable Health — ${windowLabel} · Updated ${dateStr} ${timeStr}`;
 
     renderApiStatus();
@@ -2142,21 +2142,18 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
   // EVENT HANDLERS
   // ============================================================
 
-  // Year filter
+  // Main filter (year or time — mutually exclusive)
   document.addEventListener('click', e => {
-    if (e.target.matches('#year-filter .filter-btn')) {
-      $$('#year-filter .filter-btn').forEach(b => b.classList.remove('active'));
+    if (e.target.matches('#main-filter .filter-btn')) {
+      $$('#main-filter .filter-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
-      selectedYear = e.target.dataset.year;
-      renderAll();
-    }
-  });
-
-  // Time filter
-  document.addEventListener('click', e => {
-    if (e.target.matches('#time-filter .filter-btn')) {
-      $$('#time-filter .filter-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
+      if (e.target.dataset.year) {
+        selectedYear = e.target.dataset.year;
+        selectedDays = Infinity;
+        renderAll();
+        return;
+      }
+      selectedYear = '2026';
       selectedDays = parseInt(e.target.dataset.days);
       loadAndRender();
     }
