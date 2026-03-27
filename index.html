@@ -791,13 +791,22 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       if (!apiData) return null;
       const summary = { ...(apiData.summary || {}) };
       // Enrich summary from separate data files when API returned zeros
-      if (summary.totalSpend && metaAdsData?.totals?.spend) {
-        const s = metaAdsData.totals.spend;
-        if (!summary.totalSpend.month && s) summary.totalSpend.month = s;
-      }
-      if (summary.totalClicks && metaAdsData?.totals?.clicks) {
-        const c = metaAdsData.totals.clicks;
-        if (!summary.totalClicks.month && c) summary.totalClicks.month = c;
+      if (summary.totalSpend && metaAdsData?.daily?.length) {
+        const now = Date.now();
+        const sumSpend = (days) => metaAdsData.daily
+          .filter(d => new Date(d.date) >= new Date(now - days * 86400000))
+          .reduce((s, d) => s + (d.spend || 0), 0);
+        const sumClicks = (days) => metaAdsData.daily
+          .filter(d => new Date(d.date) >= new Date(now - days * 86400000))
+          .reduce((s, d) => s + (d.clicks || 0), 0);
+        if (!summary.totalSpend.week) summary.totalSpend.week = sumSpend(7);
+        if (!summary.totalSpend.month) summary.totalSpend.month = sumSpend(30);
+        if (!summary.totalSpend.quarter) summary.totalSpend.quarter = sumSpend(90);
+        if (summary.totalClicks) {
+          if (!summary.totalClicks.week) summary.totalClicks.week = sumClicks(7);
+          if (!summary.totalClicks.month) summary.totalClicks.month = sumClicks(30);
+          if (!summary.totalClicks.quarter) summary.totalClicks.quarter = sumClicks(90);
+        }
       }
       if (summary.totalInstalls && appsflyerData?.daily?.length) {
         const now = Date.now();
@@ -1168,8 +1177,8 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
         installs = dataService.getAppsflyerDaily().reduce((s, d) => s + (d.installs || 0), 0);
       }
       const cpi = installs > 0 ? spend / installs : 0;
-      const onboarded = summary.totalOnboarded?.[periodKey] ?? 0;
-      const cpo = summary.costPerOnboard?.[periodKey] ?? 0;
+      const onboarded = summary.totalOnboarded?.[periodKey] ?? summary.totalOnboarded?.month ?? 0;
+      const cpo = onboarded > 0 ? spend / onboarded : 0;
 
       cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">App Installs (${periodLabel})</div><div class="kpi-value teal">${fmtInt(installs)}</div><div class="kpi-sub">CPI: ${fmt(cpi)}</div></div>`;
