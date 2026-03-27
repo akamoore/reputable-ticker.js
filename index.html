@@ -210,23 +210,29 @@
       color: var(--text); font-size: 12px; cursor: pointer;
     }
     .table-controls select:focus { outline: none; border-color: var(--border-lime); }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th {
-      text-align: left; padding: 10px 12px;
-      border-bottom: 2px solid rgba(255,255,255,0.1);
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--text-dim); font-weight: 600; white-space: nowrap;
-      cursor: pointer; user-select: none; position: relative;
-    }
-    th:hover { color: var(--lime); }
-    th.sorted { color: var(--lime); }
-    th .sort-arrow { font-size: 10px; margin-left: 4px; }
-    td {
-      padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04);
-      white-space: nowrap;
-    }
-    tr:hover td { background: rgba(255,255,255,0.02); }
+.table-wrap { overflow-x: auto; max-height: 70vh; overflow-y: auto; position: relative; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+th {
+  text-align: left; padding: 10px 12px;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-dim); font-weight: 600; white-space: nowrap;
+  cursor: pointer; user-select: none; position: sticky; top: 0;
+  background: var(--bg); z-index: 2;
+}
+th:nth-child(1) { position: sticky; left: 0; z-index: 3; background: var(--bg); }
+th:nth-child(2) { position: sticky; left: 52px; z-index: 3; background: var(--bg); border-right: 1px solid rgba(255,255,255,0.08); }
+th:hover { color: var(--lime); }
+th.sorted { color: var(--lime); }
+th .sort-arrow { font-size: 10px; margin-left: 4px; }
+td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04);
+  white-space: nowrap;
+}
+td:nth-child(1) { position: sticky; left: 0; background: var(--bg); z-index: 1; }
+td:nth-child(2) { position: sticky; left: 52px; background: var(--bg); z-index: 1; border-right: 1px solid rgba(255,255,255,0.08); }
+tr:hover td { background: rgba(255,255,255,0.02); }
+tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface); }
     .align-right { text-align: right; }
     tfoot td { font-weight: 700; border-top: 2px solid rgba(255,255,255,0.1); }
 
