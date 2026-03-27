@@ -1,1 +1,994 @@
-{"updated_at":"2026-03-26T23:12:02Z","period":{"start":"2025-12-26","end":"2026-03-26"},"_error":"Meta Ads API returned HTTP 400","totals":{"impressions":0,"clicks":0,"spend":0,"cpc":0,"cpm":0,"ctr":0},"daily":[],"ads":[]}
+{
+  "updated_at": "2026-03-27T13:57:49.726Z",
+  "period": {
+    "start": "2025-12-27",
+    "end": "2026-03-27"
+  },
+  "totals": {
+    "impressions": 1483397,
+    "clicks": 50148,
+    "spend": 17920.62,
+    "cpc": 0.3573546302943288,
+    "cpm": 12.080798329779553,
+    "ctr": 3.3806189442205965
+  },
+  "daily": [
+    {
+      "date": "2025-12-27",
+      "impressions": 20634,
+      "clicks": 1134,
+      "spend": 169.36,
+      "cpc": 0.149347,
+      "cpm": 8.207812,
+      "ctr": 5.495784
+    },
+    {
+      "date": "2025-12-28",
+      "impressions": 57504,
+      "clicks": 2210,
+      "spend": 407.54,
+      "cpc": 0.184407,
+      "cpm": 7.087159,
+      "ctr": 3.843211
+    },
+    {
+      "date": "2025-12-29",
+      "impressions": 32457,
+      "clicks": 1623,
+      "spend": 285.99,
+      "cpc": 0.176211,
+      "cpm": 8.81135,
+      "ctr": 5.000462
+    },
+    {
+      "date": "2025-12-30",
+      "impressions": 20365,
+      "clicks": 898,
+      "spend": 191.01,
+      "cpc": 0.212706,
+      "cpm": 9.379327,
+      "ctr": 4.409526
+    },
+    {
+      "date": "2025-12-31",
+      "impressions": 23157,
+      "clicks": 862,
+      "spend": 191.14,
+      "cpc": 0.22174,
+      "cpm": 8.254092,
+      "ctr": 3.722417
+    },
+    {
+      "date": "2026-01-01",
+      "impressions": 30649,
+      "clicks": 1034,
+      "spend": 192.31,
+      "cpc": 0.185986,
+      "cpm": 6.274593,
+      "ctr": 3.373683
+    },
+    {
+      "date": "2026-01-02",
+      "impressions": 89343,
+      "clicks": 2629,
+      "spend": 531.57,
+      "cpc": 0.202195,
+      "cpm": 5.949767,
+      "ctr": 2.942592
+    },
+    {
+      "date": "2026-01-03",
+      "impressions": 42672,
+      "clicks": 1355,
+      "spend": 285.1,
+      "cpc": 0.210406,
+      "cpm": 6.681196,
+      "ctr": 3.175384
+    },
+    {
+      "date": "2026-01-04",
+      "impressions": 50605,
+      "clicks": 985,
+      "spend": 211.6,
+      "cpc": 0.214822,
+      "cpm": 4.181405,
+      "ctr": 1.946448
+    },
+    {
+      "date": "2026-01-05",
+      "impressions": 66652,
+      "clicks": 1378,
+      "spend": 354.67,
+      "cpc": 0.25738,
+      "cpm": 5.321221,
+      "ctr": 2.067455
+    },
+    {
+      "date": "2026-01-06",
+      "impressions": 52011,
+      "clicks": 1826,
+      "spend": 464.63,
+      "cpc": 0.254452,
+      "cpm": 8.933303,
+      "ctr": 3.510796
+    },
+    {
+      "date": "2026-01-07",
+      "impressions": 51718,
+      "clicks": 1805,
+      "spend": 575.64,
+      "cpc": 0.318914,
+      "cpm": 11.130361,
+      "ctr": 3.490081
+    },
+    {
+      "date": "2026-01-08",
+      "impressions": 90741,
+      "clicks": 3378,
+      "spend": 1046.64,
+      "cpc": 0.30984,
+      "cpm": 11.534367,
+      "ctr": 3.722683
+    },
+    {
+      "date": "2026-01-09",
+      "impressions": 46232,
+      "clicks": 1891,
+      "spend": 584.79,
+      "cpc": 0.309249,
+      "cpm": 12.649031,
+      "ctr": 4.090241
+    },
+    {
+      "date": "2026-01-10",
+      "impressions": 21429,
+      "clicks": 960,
+      "spend": 259.24,
+      "cpc": 0.270042,
+      "cpm": 12.097625,
+      "ctr": 4.47991
+    },
+    {
+      "date": "2026-01-11",
+      "impressions": 49271,
+      "clicks": 1238,
+      "spend": 334.53,
+      "cpc": 0.270218,
+      "cpm": 6.789592,
+      "ctr": 2.512634
+    },
+    {
+      "date": "2026-01-12",
+      "impressions": 39534,
+      "clicks": 1386,
+      "spend": 366.95,
+      "cpc": 0.264755,
+      "cpm": 9.281884,
+      "ctr": 3.505843
+    },
+    {
+      "date": "2026-01-13",
+      "impressions": 39223,
+      "clicks": 1578,
+      "spend": 432.55,
+      "cpc": 0.274113,
+      "cpm": 11.027968,
+      "ctr": 4.02315
+    },
+    {
+      "date": "2026-01-14",
+      "impressions": 22866,
+      "clicks": 880,
+      "spend": 210.53,
+      "cpc": 0.239239,
+      "cpm": 9.20712,
+      "ctr": 3.848509
+    },
+    {
+      "date": "2026-01-15",
+      "impressions": 26189,
+      "clicks": 975,
+      "spend": 343.42,
+      "cpc": 0.352226,
+      "cpm": 13.113139,
+      "ctr": 3.722937
+    },
+    {
+      "date": "2026-01-16",
+      "impressions": 24518,
+      "clicks": 1199,
+      "spend": 342.81,
+      "cpc": 0.285913,
+      "cpm": 13.981972,
+      "ctr": 4.890285
+    },
+    {
+      "date": "2026-01-17",
+      "impressions": 9007,
+      "clicks": 439,
+      "spend": 119.82,
+      "cpc": 0.272939,
+      "cpm": 13.302987,
+      "ctr": 4.873987
+    },
+    {
+      "date": "2026-01-18",
+      "impressions": 3369,
+      "clicks": 50,
+      "spend": 26.72,
+      "cpc": 0.5344,
+      "cpm": 7.931137,
+      "ctr": 1.48412
+    },
+    {
+      "date": "2026-01-19",
+      "impressions": 17543,
+      "clicks": 690,
+      "spend": 173.04,
+      "cpc": 0.250783,
+      "cpm": 9.863763,
+      "ctr": 3.933193
+    },
+    {
+      "date": "2026-01-20",
+      "impressions": 71719,
+      "clicks": 1784,
+      "spend": 514.58,
+      "cpc": 0.288442,
+      "cpm": 7.174947,
+      "ctr": 2.487486
+    },
+    {
+      "date": "2026-01-21",
+      "impressions": 47599,
+      "clicks": 1709,
+      "spend": 430.56,
+      "cpc": 0.251937,
+      "cpm": 9.045568,
+      "ctr": 3.590412
+    },
+    {
+      "date": "2026-01-22",
+      "impressions": 28816,
+      "clicks": 1140,
+      "spend": 317.8,
+      "cpc": 0.278772,
+      "cpm": 11.028595,
+      "ctr": 3.956135
+    },
+    {
+      "date": "2026-01-23",
+      "impressions": 15196,
+      "clicks": 547,
+      "spend": 173.92,
+      "cpc": 0.317952,
+      "cpm": 11.445117,
+      "ctr": 3.599631
+    },
+    {
+      "date": "2026-01-24",
+      "impressions": 12592,
+      "clicks": 163,
+      "spend": 63.13,
+      "cpc": 0.387301,
+      "cpm": 5.013501,
+      "ctr": 1.294473
+    },
+    {
+      "date": "2026-01-25",
+      "impressions": 13129,
+      "clicks": 352,
+      "spend": 105.31,
+      "cpc": 0.299176,
+      "cpm": 8.021175,
+      "ctr": 2.681088
+    },
+    {
+      "date": "2026-01-26",
+      "impressions": 8804,
+      "clicks": 374,
+      "spend": 188.3,
+      "cpc": 0.503476,
+      "cpm": 21.388005,
+      "ctr": 4.248069
+    },
+    {
+      "date": "2026-01-27",
+      "impressions": 4485,
+      "clicks": 276,
+      "spend": 137.85,
+      "cpc": 0.499457,
+      "cpm": 30.735786,
+      "ctr": 6.153846
+    },
+    {
+      "date": "2026-01-28",
+      "impressions": 3180,
+      "clicks": 194,
+      "spend": 95.89,
+      "cpc": 0.494278,
+      "cpm": 30.154088,
+      "ctr": 6.100629
+    },
+    {
+      "date": "2026-01-29",
+      "impressions": 5143,
+      "clicks": 316,
+      "spend": 157.57,
+      "cpc": 0.498639,
+      "cpm": 30.63776,
+      "ctr": 6.144274
+    },
+    {
+      "date": "2026-01-30",
+      "impressions": 6606,
+      "clicks": 304,
+      "spend": 162.31,
+      "cpc": 0.533914,
+      "cpm": 24.570088,
+      "ctr": 4.601877
+    },
+    {
+      "date": "2026-01-31",
+      "impressions": 7929,
+      "clicks": 197,
+      "spend": 154.58,
+      "cpc": 0.78467,
+      "cpm": 19.495523,
+      "ctr": 2.48455
+    },
+    {
+      "date": "2026-02-01",
+      "impressions": 7725,
+      "clicks": 260,
+      "spend": 170.89,
+      "cpc": 0.657269,
+      "cpm": 22.121683,
+      "ctr": 3.365696
+    },
+    {
+      "date": "2026-02-02",
+      "impressions": 2925,
+      "clicks": 86,
+      "spend": 67.6,
+      "cpc": 0.786047,
+      "cpm": 23.111111,
+      "ctr": 2.940171
+    },
+    {
+      "date": "2026-02-03",
+      "impressions": 7633,
+      "clicks": 229,
+      "spend": 202.56,
+      "cpc": 0.884541,
+      "cpm": 26.537403,
+      "ctr": 3.000131
+    },
+    {
+      "date": "2026-02-04",
+      "impressions": 8586,
+      "clicks": 273,
+      "spend": 223.15,
+      "cpc": 0.817399,
+      "cpm": 25.989984,
+      "ctr": 3.179595
+    },
+    {
+      "date": "2026-02-05",
+      "impressions": 9327,
+      "clicks": 223,
+      "spend": 225.05,
+      "cpc": 1.009193,
+      "cpm": 24.128873,
+      "ctr": 2.390908
+    },
+    {
+      "date": "2026-02-06",
+      "impressions": 9185,
+      "clicks": 249,
+      "spend": 224.27,
+      "cpc": 0.900683,
+      "cpm": 24.416984,
+      "ctr": 2.710942
+    },
+    {
+      "date": "2026-02-07",
+      "impressions": 9505,
+      "clicks": 215,
+      "spend": 211.17,
+      "cpc": 0.982186,
+      "cpm": 22.216728,
+      "ctr": 2.261967
+    },
+    {
+      "date": "2026-02-08",
+      "impressions": 10560,
+      "clicks": 287,
+      "spend": 250.39,
+      "cpc": 0.872439,
+      "cpm": 23.711174,
+      "ctr": 2.717803
+    },
+    {
+      "date": "2026-02-09",
+      "impressions": 10153,
+      "clicks": 308,
+      "spend": 247.48,
+      "cpc": 0.803506,
+      "cpm": 24.375062,
+      "ctr": 3.033586
+    },
+    {
+      "date": "2026-02-10",
+      "impressions": 8907,
+      "clicks": 268,
+      "spend": 206.39,
+      "cpc": 0.770112,
+      "cpm": 23.171663,
+      "ctr": 3.008869
+    },
+    {
+      "date": "2026-02-11",
+      "impressions": 9746,
+      "clicks": 354,
+      "spend": 201.18,
+      "cpc": 0.568305,
+      "cpm": 20.642315,
+      "ctr": 3.632259
+    },
+    {
+      "date": "2026-02-12",
+      "impressions": 7845,
+      "clicks": 321,
+      "spend": 188.24,
+      "cpc": 0.586417,
+      "cpm": 23.994901,
+      "ctr": 4.091778
+    },
+    {
+      "date": "2026-02-13",
+      "impressions": 6692,
+      "clicks": 268,
+      "spend": 184.1,
+      "cpc": 0.68694,
+      "cpm": 27.51046,
+      "ctr": 4.004782
+    },
+    {
+      "date": "2026-02-14",
+      "impressions": 7545,
+      "clicks": 268,
+      "spend": 202.91,
+      "cpc": 0.757127,
+      "cpm": 26.893307,
+      "ctr": 3.552021
+    },
+    {
+      "date": "2026-02-15",
+      "impressions": 8428,
+      "clicks": 252,
+      "spend": 211.33,
+      "cpc": 0.838611,
+      "cpm": 25.074751,
+      "ctr": 2.990033
+    },
+    {
+      "date": "2026-02-16",
+      "impressions": 9726,
+      "clicks": 361,
+      "spend": 224.5,
+      "cpc": 0.621884,
+      "cpm": 23.082459,
+      "ctr": 3.711701
+    },
+    {
+      "date": "2026-02-17",
+      "impressions": 7583,
+      "clicks": 279,
+      "spend": 152.82,
+      "cpc": 0.547742,
+      "cpm": 20.152974,
+      "ctr": 3.679283
+    },
+    {
+      "date": "2026-02-18",
+      "impressions": 5970,
+      "clicks": 279,
+      "spend": 120.73,
+      "cpc": 0.432724,
+      "cpm": 20.222781,
+      "ctr": 4.673367
+    },
+    {
+      "date": "2026-02-19",
+      "impressions": 5620,
+      "clicks": 227,
+      "spend": 122.83,
+      "cpc": 0.541101,
+      "cpm": 21.855872,
+      "ctr": 4.039146
+    },
+    {
+      "date": "2026-02-20",
+      "impressions": 4381,
+      "clicks": 177,
+      "spend": 103.05,
+      "cpc": 0.582203,
+      "cpm": 23.522027,
+      "ctr": 4.040173
+    },
+    {
+      "date": "2026-02-21",
+      "impressions": 5702,
+      "clicks": 213,
+      "spend": 129.7,
+      "cpc": 0.60892,
+      "cpm": 22.746405,
+      "ctr": 3.735531
+    },
+    {
+      "date": "2026-02-22",
+      "impressions": 5717,
+      "clicks": 216,
+      "spend": 131.41,
+      "cpc": 0.60838,
+      "cpm": 22.985832,
+      "ctr": 3.778205
+    },
+    {
+      "date": "2026-02-23",
+      "impressions": 6314,
+      "clicks": 258,
+      "spend": 133.02,
+      "cpc": 0.515581,
+      "cpm": 21.067469,
+      "ctr": 4.086158
+    },
+    {
+      "date": "2026-02-24",
+      "impressions": 9859,
+      "clicks": 358,
+      "spend": 213.69,
+      "cpc": 0.596899,
+      "cpm": 21.674612,
+      "ctr": 3.6312
+    },
+    {
+      "date": "2026-02-25",
+      "impressions": 10526,
+      "clicks": 296,
+      "spend": 222.31,
+      "cpc": 0.751047,
+      "cpm": 21.120084,
+      "ctr": 2.812084
+    },
+    {
+      "date": "2026-02-26",
+      "impressions": 11282,
+      "clicks": 345,
+      "spend": 222.49,
+      "cpc": 0.644899,
+      "cpm": 19.720794,
+      "ctr": 3.057968
+    },
+    {
+      "date": "2026-02-27",
+      "impressions": 11052,
+      "clicks": 341,
+      "spend": 225.53,
+      "cpc": 0.661378,
+      "cpm": 20.406261,
+      "ctr": 3.085414
+    },
+    {
+      "date": "2026-02-28",
+      "impressions": 8691,
+      "clicks": 282,
+      "spend": 160,
+      "cpc": 0.567376,
+      "cpm": 18.409849,
+      "ctr": 3.244736
+    },
+    {
+      "date": "2026-03-01",
+      "impressions": 8187,
+      "clicks": 288,
+      "spend": 144.19,
+      "cpc": 0.50066,
+      "cpm": 17.612068,
+      "ctr": 3.517772
+    },
+    {
+      "date": "2026-03-02",
+      "impressions": 7154,
+      "clicks": 235,
+      "spend": 130.41,
+      "cpc": 0.554936,
+      "cpm": 18.228963,
+      "ctr": 3.284876
+    },
+    {
+      "date": "2026-03-03",
+      "impressions": 5878,
+      "clicks": 206,
+      "spend": 114.43,
+      "cpc": 0.555485,
+      "cpm": 19.467506,
+      "ctr": 3.504593
+    },
+    {
+      "date": "2026-03-04",
+      "impressions": 6054,
+      "clicks": 211,
+      "spend": 120.28,
+      "cpc": 0.570047,
+      "cpm": 19.867856,
+      "ctr": 3.485299
+    },
+    {
+      "date": "2026-03-05",
+      "impressions": 6459,
+      "clicks": 170,
+      "spend": 120.05,
+      "cpc": 0.706176,
+      "cpm": 18.586468,
+      "ctr": 2.631986
+    },
+    {
+      "date": "2026-03-06",
+      "impressions": 2646,
+      "clicks": 96,
+      "spend": 56.02,
+      "cpc": 0.583542,
+      "cpm": 21.17158,
+      "ctr": 3.628118
+    },
+    {
+      "date": "2026-03-07",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-08",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-09",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-10",
+      "impressions": 7808,
+      "clicks": 135,
+      "spend": 123.88,
+      "cpc": 0.91763,
+      "cpm": 15.865779,
+      "ctr": 1.728996
+    },
+    {
+      "date": "2026-03-11",
+      "impressions": 4277,
+      "clicks": 123,
+      "spend": 83.52,
+      "cpc": 0.679024,
+      "cpm": 19.527706,
+      "ctr": 2.875848
+    },
+    {
+      "date": "2026-03-12",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-13",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-20",
+      "impressions": 8581,
+      "clicks": 181,
+      "spend": 208.59,
+      "cpc": 1.152431,
+      "cpm": 24.308356,
+      "ctr": 2.109311
+    },
+    {
+      "date": "2026-03-21",
+      "impressions": 11066,
+      "clicks": 315,
+      "spend": 258.2,
+      "cpc": 0.819683,
+      "cpm": 23.332731,
+      "ctr": 2.846557
+    },
+    {
+      "date": "2026-03-22",
+      "impressions": 8439,
+      "clicks": 179,
+      "spend": 164.14,
+      "cpc": 0.916983,
+      "cpm": 19.450172,
+      "ctr": 2.121104
+    },
+    {
+      "date": "2026-03-23",
+      "impressions": 5752,
+      "clicks": 127,
+      "spend": 118.21,
+      "cpc": 0.930787,
+      "cpm": 20.551113,
+      "ctr": 2.207928
+    },
+    {
+      "date": "2026-03-24",
+      "impressions": 7165,
+      "clicks": 194,
+      "spend": 145.83,
+      "cpc": 0.751701,
+      "cpm": 20.353105,
+      "ctr": 2.707606
+    },
+    {
+      "date": "2026-03-25",
+      "impressions": 6962,
+      "clicks": 239,
+      "spend": 173.28,
+      "cpc": 0.725021,
+      "cpm": 24.8894,
+      "ctr": 3.432922
+    },
+    {
+      "date": "2026-03-26",
+      "impressions": 5628,
+      "clicks": 160,
+      "spend": 142.34,
+      "cpc": 0.889625,
+      "cpm": 25.2914,
+      "ctr": 2.842928
+    },
+    {
+      "date": "2026-03-27",
+      "impressions": 1269,
+      "clicks": 37,
+      "spend": 35.06,
+      "cpc": 0.947568,
+      "cpm": 27.628054,
+      "ctr": 2.915682
+    }
+  ],
+  "ads": [
+    {
+      "adName": "Melatonin Sleep Study",
+      "campaignName": "somato sleep study",
+      "impressions": 489937,
+      "clicks": 17102,
+      "spend": 4320.45,
+      "cpc": 0.252628,
+      "cpm": 8.818379,
+      "ctr": 3.490653
+    },
+    {
+      "adName": "Proleeva - Red Morning (Revised)",
+      "campaignName": "Pain Relief: ProleevaMax",
+      "impressions": 121912,
+      "clicks": 3204,
+      "spend": 2849.02,
+      "cpc": 0.889207,
+      "cpm": 23.36948,
+      "ctr": 2.628125
+    },
+    {
+      "adName": "Pain Relief: ProleevaMax",
+      "campaignName": "proleevamax",
+      "impressions": 284844,
+      "clicks": 8979,
+      "spend": 2607.72,
+      "cpc": 0.290424,
+      "cpm": 9.154906,
+      "ctr": 3.152252
+    },
+    {
+      "adName": "Melatonin Sleep Study",
+      "campaignName": "Melatonin Sleep Study",
+      "impressions": 114607,
+      "clicks": 4129,
+      "spend": 2183.51,
+      "cpc": 0.528823,
+      "cpm": 19.052152,
+      "ctr": 3.602747
+    },
+    {
+      "adName": "Peptide Supplement: Sleep and Recovery",
+      "campaignName": "sleep peptide",
+      "impressions": 190253,
+      "clicks": 6979,
+      "spend": 1405.82,
+      "cpc": 0.201436,
+      "cpm": 7.389213,
+      "ctr": 3.668273
+    },
+    {
+      "adName": "Oura - nature",
+      "campaignName": "Melatonin Sleep Study",
+      "impressions": 58091,
+      "clicks": 1797,
+      "spend": 1379.99,
+      "cpc": 0.767941,
+      "cpm": 23.755659,
+      "ctr": 3.093422
+    },
+    {
+      "adName": "Oura - Unlock Deeper Sleep",
+      "campaignName": "Melatonin Sleep Study",
+      "impressions": 20605,
+      "clicks": 896,
+      "spend": 603.98,
+      "cpc": 0.674085,
+      "cpm": 29.312303,
+      "ctr": 4.348459
+    },
+    {
+      "adName": "Pain Relief: ProleevaMax",
+      "campaignName": "proleeva - 2",
+      "impressions": 59246,
+      "clicks": 1766,
+      "spend": 522.18,
+      "cpc": 0.295685,
+      "cpm": 8.81376,
+      "ctr": 2.980792
+    },
+    {
+      "adName": "Proleevamax - video",
+      "campaignName": "proleevamax",
+      "impressions": 31097,
+      "clicks": 1800,
+      "spend": 436.54,
+      "cpc": 0.242522,
+      "cpm": 14.03801,
+      "ctr": 5.78834
+    },
+    {
+      "adName": "Proleeva - Stuck in Recovery (Revised) - Copy",
+      "campaignName": "Pain Relief: ProleevaMax",
+      "impressions": 11920,
+      "clicks": 267,
+      "spend": 298.6,
+      "cpc": 1.118352,
+      "cpm": 25.050336,
+      "ctr": 2.239933
+    },
+    {
+      "adName": "Proleeva - Pain in Data (Revised) - Copy 2",
+      "campaignName": "Pain Relief: ProleevaMax",
+      "impressions": 8389,
+      "clicks": 611,
+      "spend": 290.47,
+      "cpc": 0.475401,
+      "cpm": 34.625104,
+      "ctr": 7.283347
+    },
+    {
+      "adName": "Oura - sleep score",
+      "campaignName": "Melatonin Sleep Study",
+      "impressions": 9770,
+      "clicks": 436,
+      "spend": 239.27,
+      "cpc": 0.548784,
+      "cpm": 24.490276,
+      "ctr": 4.462641
+    },
+    {
+      "adName": "Mimio",
+      "campaignName": "proleevamax",
+      "impressions": 28100,
+      "clicks": 816,
+      "spend": 232.37,
+      "cpc": 0.284767,
+      "cpm": 8.269395,
+      "ctr": 2.903915
+    },
+    {
+      "adName": "Proleeva",
+      "campaignName": "Pain Relief: ProleevaMax",
+      "impressions": 5204,
+      "clicks": 189,
+      "spend": 143.85,
+      "cpc": 0.761111,
+      "cpm": 27.642198,
+      "ctr": 3.631822
+    },
+    {
+      "adName": "New Traffic Ad",
+      "campaignName": "New Proleeva Campaign",
+      "impressions": 33580,
+      "clicks": 549,
+      "spend": 118.85,
+      "cpc": 0.216485,
+      "cpm": 3.539309,
+      "ctr": 1.634902
+    },
+    {
+      "adName": "proleeva - red morning",
+      "campaignName": "proleeva - 2 - LEADS - Instant Forms",
+      "impressions": 4752,
+      "clicks": 193,
+      "spend": 85.35,
+      "cpc": 0.442228,
+      "cpm": 17.960859,
+      "ctr": 4.061448
+    },
+    {
+      "adName": "Pain Relief: ProleevaMax",
+      "campaignName": "proleeva - 2 - LEADS - Instant Forms",
+      "impressions": 3919,
+      "clicks": 162,
+      "spend": 83.2,
+      "cpc": 0.51358,
+      "cpm": 21.229906,
+      "ctr": 4.133708
+    },
+    {
+      "adName": "Oura - 3:14am",
+      "campaignName": "Melatonin Sleep Study",
+      "impressions": 3281,
+      "clicks": 113,
+      "spend": 80.47,
+      "cpc": 0.712124,
+      "cpm": 24.526059,
+      "ctr": 3.444072
+    },
+    {
+      "adName": "New Traffic Ad",
+      "campaignName": "New Proleeva Campaign",
+      "impressions": 3385,
+      "clicks": 131,
+      "spend": 19.97,
+      "cpc": 0.152443,
+      "cpm": 5.899557,
+      "ctr": 3.870015
+    },
+    {
+      "adName": "proleeva",
+      "campaignName": "proleeva - 2 - LEADS - Instant Forms",
+      "impressions": 451,
+      "clicks": 26,
+      "spend": 16.26,
+      "cpc": 0.625385,
+      "cpm": 36.053215,
+      "ctr": 5.764967
+    },
+    {
+      "adName": "proleeva - stuck in recovery",
+      "campaignName": "proleeva - 2 - LEADS - Instant Forms",
+      "impressions": 54,
+      "clicks": 3,
+      "spend": 2.75,
+      "cpc": 0.916667,
+      "cpm": 50.925926,
+      "ctr": 5.555556
+    }
+  ]
+}
