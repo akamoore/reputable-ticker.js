@@ -67,24 +67,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Notify Slack on deploy
-        if: always()
-        continue-on-error: true
-        uses: slackapi/slack-github-action@v2.1.0
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "${{ job.status == 'success' && 'Site deployed successfully' || 'Deploy failed' }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} *Site deploy ${{ job.status }}*\n\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ github.sha }}`\n*By:* ${{ github.actor }}\n\n<${{ steps.deployment.outputs.page_url }}|View site> · <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>"
-                  }
-                }
-              ]
-            }
