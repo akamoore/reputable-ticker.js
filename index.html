@@ -1119,7 +1119,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
     // Map selectedDays to the API summary period keys
-    const periodKey = selectedDays <= 7 ? 'yesterday' : selectedDays <= 30 ? 'week' : 'month';
+const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'month';
     const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
 
     // For local data: use time-windowed studies when available, fall back to cumulative year totals.
