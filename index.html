@@ -675,11 +675,12 @@
   // CONFIG & API
   // ============================================================
   // Use CORS proxy when available; falls back to direct API call.
-  // To use the proxy, set ?proxy=http://localhost:3001 in the URL
-  // or deploy the api-proxy and update PROXY_BASE below.
-  const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || '';
+  // Auto-detect Vercel deployment and use the built-in API proxy to avoid CORS issues.
+  // For local dev, set ?proxy=http://localhost:3001 in the URL.
+  const IS_VERCEL = window.location.hostname.includes('vercel.app');
+  const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || (IS_VERCEL ? '' : '');
   const DIRECT_API = 'https://operations.reputablehealth.net/api/recruiting';
-  const API_BASE = PROXY_BASE ? `${PROXY_BASE}/api/recruiting` : DIRECT_API;
+  const API_BASE = IS_VERCEL ? '/api/recruiting' : (PROXY_BASE ? `${PROXY_BASE}/api/recruiting` : DIRECT_API);
   const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   // ============================================================
@@ -760,7 +761,7 @@
     async fetchRecruitingData(days) {
       // Try live API first
       try {
-        const headers = PROXY_BASE ? {} : { 'x-api-key': API_KEY };
+        const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         const resp = await fetch(`${API_BASE}?days=${days}`, { headers });
         if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
         return await resp.json();
@@ -1154,12 +1155,9 @@
       const cpi = summary.costPerInstall?.[periodKey] ?? 0;
       const onboarded = summary.totalOnboarded?.[periodKey] ?? 0;
       const cpo = summary.costPerOnboard?.[periodKey] ?? 0;
-      const subs = summary.subscriberCount ?? 0;
-
       cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">App Installs (${periodLabel})</div><div class="kpi-value teal">${fmtInt(installs)}</div><div class="kpi-sub">CPI: ${fmt(cpi)}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">ManyChat Subscribers</div><div class="kpi-value blue">${fmtInt(subs)}</div><div class="kpi-sub">Messenger bot audience</div></div>`;
     } else {
       // Local data: windowed when available, cumulative fallback
       const subLabel = useWindow ? `${kpiPaidCount} paid studies in window` : `${kpiPaidCount} paid studies`;
@@ -1774,7 +1772,6 @@
       { key: 'metaAds', label: 'Meta Ads' },
       { key: 'sendgrid', label: 'SendGrid' },
       { key: 'appsflyer', label: 'AppsFlyer' },
-      { key: 'manychat', label: 'ManyChat' },
       { key: 'analytics', label: 'Google Analytics' },
     ];
 
