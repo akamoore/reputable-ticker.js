@@ -22,8 +22,8 @@
     },
     "totalOnboarded": {
       "yesterday": 0,
-      "week": 4,
-      "month": 6
+      "week": 5,
+      "month": 7
     },
     "costPerOnboard": {
       "yesterday": 0,
@@ -44,19 +44,19 @@
     "emailOpens": 0,
     "appInstalls": 0,
     "adInstalls": 0,
-    "onboarded": 6
+    "onboarded": 7
   },
   "onboarding": {
-    "total": 48,
+    "total": 49,
     "yesterday": 0,
-    "week": 4,
-    "month": 6,
+    "week": 5,
+    "month": 7,
     "newSignups": 5625,
     "signupsYesterday": 3,
     "signupsWeek": 57,
-    "joinedTotal": 3548,
+    "joinedTotal": 3549,
     "joinedYesterday": 0,
-    "joinedWeek": 13,
+    "joinedWeek": 14,
     "joinedDaily": [
       {
         "date": "2024-06-13",
@@ -1148,6 +1148,10 @@
       },
       {
         "date": "2026-03-26",
+        "count": 1
+      },
+      {
+        "date": "2026-03-28",
         "count": 1
       }
     ],
@@ -4121,13 +4125,17 @@
       {
         "date": "2026-03-23",
         "count": 1
+      },
+      {
+        "date": "2026-03-28",
+        "count": 1
       }
     ],
     "byStudy": [
       {
         "experimentId": 486,
         "experimentTitle": "Pain Relief: ProleevaMax",
-        "count": 48
+        "count": 49
       }
     ],
     "dailyByStudy": [
@@ -4286,15 +4294,21 @@
         "experimentId": 486,
         "experimentTitle": "Pain Relief: ProleevaMax",
         "count": 1
+      },
+      {
+        "date": "2026-03-28",
+        "experimentId": 486,
+        "experimentTitle": "Pain Relief: ProleevaMax",
+        "count": 1
       }
     ],
     "onboardedByPeriod": {
-      "seven_days": 70,
-      "thirty_days": 414,
-      "ninety_days": 1104,
+      "seven_days": 73,
+      "thirty_days": 417,
+      "ninety_days": 1107,
       "year_2025": 680,
-      "year_2026": 1065,
-      "all": 1745
+      "year_2026": 1068,
+      "all": 1748
     }
   },
   "campaignStudyMap": [],
@@ -4305,6 +4319,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-28T01:11:44.181Z",
+  "_cached_at": "2026-03-28T06:45:16.635Z",
   "_source": "github-action"
 }
