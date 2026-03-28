@@ -511,11 +511,11 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     <div class="chart-card" id="recruiting-chart-card" style="display:none;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
         <div>
-          <h3 style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled (30d)</h3>
+          <h3 style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled</h3>
           <div style="font-size:12px; color:#888;">See whether spend changes drive joins and enrollment spikes</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Enrolled (30d)</div>
+          <div id="rc-enrolled-label" style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Enrolled</div>
           <div id="rc-enrolled-total" style="font-size:32px; font-weight:700; color:#34D399; line-height:1.1;">—</div>
         </div>
       </div>
@@ -863,6 +863,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     getMetaAdsDaily() {
       const allDaily = metaAdsData?.daily?.length ? metaAdsData.daily : (apiData?.metaAds?.daily || []);
       if (!allDaily.length) return [];
+      if (selectedDays === Infinity) {
+        if (selectedYear === 'all') return allDaily;
+        return allDaily.filter(d => d.date >= `${selectedYear}-01-01` && d.date <= `${selectedYear}-12-31`);
+      }
       const cutoff = new Date(Date.now() - selectedDays * 86400000);
       return allDaily.filter(d => new Date(d.date) >= cutoff);
     },
@@ -886,7 +890,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     getNewsletterDaily() {
       const allDaily = sendgridData?.daily?.length ? sendgridData.daily : (apiData?.newsletter?.daily || []);
       if (!allDaily.length) return [];
-      // Filter to selectedDays window
+      if (selectedDays === Infinity) {
+        if (selectedYear === 'all') return allDaily;
+        return allDaily.filter(d => d.date >= `${selectedYear}-01-01` && d.date <= `${selectedYear}-12-31`);
+      }
       const cutoff = new Date(Date.now() - selectedDays * 86400000);
       return allDaily.filter(d => new Date(d.date) >= cutoff);
     },
@@ -926,6 +933,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     getAppsflyerDaily() {
       const allDaily = appsflyerData?.daily?.length ? appsflyerData.daily : (apiData?.appsflyer?.daily || []);
       if (!allDaily.length) return [];
+      if (selectedDays === Infinity) {
+        if (selectedYear === 'all') return allDaily;
+        return allDaily.filter(d => d.date >= `${selectedYear}-01-01` && d.date <= `${selectedYear}-12-31`);
+      }
       const cutoff = new Date(Date.now() - selectedDays * 86400000);
       return allDaily.filter(d => new Date(d.date) >= cutoff);
     },
@@ -1146,16 +1157,16 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const coming = yearFiltered.filter(s => s.status === 'coming').length;
 
     // Map selectedDays to the API summary period keys
-const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'quarter';
+    // API provides 'week' and 'month' summaries — 90d has no dedicated key
+    const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : null;
     const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
 
     // For local data: use time-windowed studies when available, fall back to cumulative year totals.
-    // This handles 2025 (all studies ended months ago → window empty → show cumulative)
-    // and 2026 (recent studies → window has results → show windowed).
+    // Year filters (All, 2025, 2026) show cumulative. Day filters (7d/30d/90d) show windowed.
     const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
     const useWindow = !isAllTime && windowStudies.length > 0;
     const kpiStudies = isAllTime ? allLaunched : (useWindow ? windowStudies : allLaunched);
-    const kpiLabel = isAllTime ? 'Total' : (useWindow ? periodLabel : selectedYear);
+    const kpiLabel = isAllTime ? (selectedYear !== 'all' ? selectedYear : 'Total') : (useWindow ? periodLabel : selectedYear);
     // When using a time window, pro-rate spend/joined/onboarded to the window portion
     const kpiSpend = useWindow
       ? kpiStudies.reduce((a, s) => a + getWindowedSpend(s, selectedDays), 0)
@@ -1174,8 +1185,8 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
     // Total Studies (always all for selected year)
     cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming</div></div>`;
 
-    if (summary && !isAllTime) {
-      // Real-time API data available — show time-windowed metrics
+    if (summary && !isAllTime && periodKey) {
+      // Real-time API data available with a matching period key — show time-windowed metrics
       const spend = summary.totalSpend?.[periodKey] ?? 0;
       const clicks = summary.totalClicks?.[periodKey] ?? 0;
       let installs = summary.totalInstalls?.[periodKey] ?? 0;
@@ -1452,11 +1463,28 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
     const canvas = $('#chart-recruiting');
     if (!canvas) return;
 
-    // Gather daily data from API
+    // Gather daily data from API (already filtered by selectedDays or year)
     const spendDaily = dataService.getMetaAdsDaily();
     const onbData = apiData?.onboarding;
-    const onbDaily = onbData?.daily || [];
-    const joinedDaily = onbData?.joinedDaily || [];
+    const onbDailyRaw = onbData?.daily || [];
+    const joinedDailyRaw = onbData?.joinedDaily || [];
+
+    // Apply date filtering to onboarding/joined daily data
+    let onbDaily, joinedDaily;
+    if (selectedDays === Infinity) {
+      // Year filter (All, 2025, 2026): show all available data, filtered by year in getMetaAdsDaily
+      if (selectedYear !== 'all') {
+        onbDaily = onbDailyRaw.filter(d => d.date >= `${selectedYear}-01-01` && d.date <= `${selectedYear}-12-31`);
+        joinedDaily = joinedDailyRaw.filter(d => d.date >= `${selectedYear}-01-01` && d.date <= `${selectedYear}-12-31`);
+      } else {
+        onbDaily = onbDailyRaw;
+        joinedDaily = joinedDailyRaw;
+      }
+    } else {
+      const cutoff = new Date(Date.now() - selectedDays * 86400000);
+      onbDaily = onbDailyRaw.filter(d => new Date(d.date) >= cutoff);
+      joinedDaily = joinedDailyRaw.filter(d => new Date(d.date) >= cutoff);
+    }
 
     // Need at least spend or onboarding daily data
     if (!spendDaily.length && !onbDaily.length) {
@@ -1548,9 +1576,11 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
       },
     });
 
-    // Sidebar: enrolled total
+    // Sidebar: enrolled total + dynamic label
     const enrolledTotal = enrolledArr.reduce((a, b) => a + b, 0);
     $('#rc-enrolled-total').textContent = fmtInt(enrolledTotal);
+    const enrolledLabel = selectedDays === Infinity ? `Enrolled (${selectedYear === 'all' ? 'All' : selectedYear})` : `Enrolled (${selectedDays}d)`;
+    $('#rc-enrolled-label').textContent = enrolledLabel;
 
     // Per-study breakdown
     const byStudy = dataService.getOnboardingByStudy();
@@ -2128,7 +2158,7 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'q
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
     const windowLabel = selectedDays === Infinity
-      ? (selectedYear === 'all' ? 'All-Time' : `${selectedYear} Studies`)
+      ? (selectedYear === 'all' ? 'All-Time' : `${selectedYear} Full Year`)
       : `${selectedYear} Studies · ${selectedDays}-day window`;
     $('#subtitle').textContent = `Reputable Health — ${windowLabel} · Updated ${dateStr} ${timeStr}`;
 
