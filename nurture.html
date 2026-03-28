@@ -360,14 +360,41 @@ function getStageCounts(){
 // ============================================================
 // SENDGRID CONNECTION
 // ============================================================
-const API_BASE=new URLSearchParams(window.location.search).get('proxy')||'';
+let API_BASE=new URLSearchParams(window.location.search).get('proxy')||'';
+const DEFAULT_PROXY='http://localhost:3001';
 
-function renderConnection(){
+async function renderConnection(){
   const el=$('#connection-status');
-  if(!API_BASE){
-    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;"><span class="badge badge-yellow">Not Connected</span><div style="font-size:12px;color:var(--text-dim);">SendGrid API proxy not configured. Emails will be simulated locally. To connect: start the API proxy and add <code>?proxy=http://localhost:3001</code> to the URL.<br><br>All UI features (composer, sequences, analytics) work with sample data. When the proxy is connected, real emails will be sent via SendGrid.</div></div>`;
+
+  // Auto-detect proxy if not specified in URL
+  const candidates=API_BASE?[API_BASE]:[API_BASE,DEFAULT_PROXY].filter(Boolean);
+  let connected=false,statusData=null,connectedUrl='';
+
+  for(const url of candidates){
+    if(!url)continue;
+    try{
+      const resp=await fetch(url+'/api/email/status',{signal:AbortSignal.timeout(3000)});
+      if(resp.ok){statusData=await resp.json();connected=true;connectedUrl=url;API_BASE=url;break}
+    }catch(e){}
+  }
+
+  if(connected&&statusData){
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-green">Connected</span>
+      <div style="font-size:12px;color:var(--text-dim);">
+        Proxy: <strong>${esc(connectedUrl)}</strong> ·
+        SendGrid: <strong style="color:${statusData.sendgrid_configured?'var(--green)':'var(--rose)'}">${statusData.sendgrid_configured?'Configured':'Not configured'}</strong> ·
+        From: ${esc(statusData.from_name||'')} &lt;${esc(statusData.from_email||'')}&gt; ·
+        Uptime: ${Math.floor(statusData.uptime_seconds/60)}m
+      </div></div>`;
   } else {
-    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;"><span class="badge badge-green">Connected</span><div style="font-size:12px;color:var(--text-dim);">API proxy: ${esc(API_BASE)}. Emails will be sent via SendGrid.</div></div>`;
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-yellow">Not Connected</span>
+      <div style="font-size:12px;color:var(--text-dim);">
+        Could not reach email proxy${API_BASE?' at <code>'+esc(API_BASE)+'</code>':''}. Tried <code>${esc(DEFAULT_PROXY)}</code>.<br>
+        Start the proxy: <code>cd email-proxy && npm start</code><br>
+        All UI features work with sample data. Real emails require the proxy.
+      </div></div>`;
   }
 }
 
@@ -678,10 +705,11 @@ window.exportSegment=function(stageKey){
 // ============================================================
 // RENDER ALL
 // ============================================================
-function renderAll(){
+async function renderAll(){
   const now=new Date(),ds=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),ts=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   $('#subtitle').textContent=`Reputable Health — Email Nurturing · ${ds} ${ts}`;
-  renderConnection();renderKPIs();renderActionFunnel();renderSequences();renderCampaigns();renderTemplates();
+  await renderConnection();
+  renderKPIs();renderActionFunnel();renderSequences();renderCampaigns();renderTemplates();
   $('#footer').textContent=`Email Nurturing — Reputable Health · ${ds} ${ts}`;
 }
 renderAll();
