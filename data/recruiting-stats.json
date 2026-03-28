@@ -47,16 +47,16 @@
     "onboarded": 6
   },
   "onboarding": {
-    "total": 47,
+    "total": 48,
     "yesterday": 0,
     "week": 4,
     "month": 6,
-    "newSignups": 5623,
-    "signupsYesterday": 6,
-    "signupsWeek": 62,
+    "newSignups": 5625,
+    "signupsYesterday": 3,
+    "signupsWeek": 57,
     "joinedTotal": 3548,
-    "joinedYesterday": 1,
-    "joinedWeek": 14,
+    "joinedYesterday": 0,
+    "joinedWeek": 13,
     "joinedDaily": [
       {
         "date": "2024-06-13",
@@ -4010,7 +4010,11 @@
       },
       {
         "date": "2026-03-27",
-        "count": 2
+        "count": 3
+      },
+      {
+        "date": "2026-03-28",
+        "count": 1
       }
     ],
     "daily": [
@@ -4036,7 +4040,7 @@
       },
       {
         "date": "2026-01-14",
-        "count": 3
+        "count": 4
       },
       {
         "date": "2026-01-18",
@@ -4123,7 +4127,7 @@
       {
         "experimentId": 486,
         "experimentTitle": "Pain Relief: ProleevaMax",
-        "count": 47
+        "count": 48
       }
     ],
     "dailyByStudy": [
@@ -4161,7 +4165,7 @@
         "date": "2026-01-14",
         "experimentId": 486,
         "experimentTitle": "Pain Relief: ProleevaMax",
-        "count": 3
+        "count": 4
       },
       {
         "date": "2026-01-18",
@@ -4283,7 +4287,15 @@
         "experimentTitle": "Pain Relief: ProleevaMax",
         "count": 1
       }
-    ]
+    ],
+    "onboardedByPeriod": {
+      "seven_days": 70,
+      "thirty_days": 414,
+      "ninety_days": 1104,
+      "year_2025": 680,
+      "year_2026": 1065,
+      "all": 1745
+    }
   },
   "campaignStudyMap": [],
   "status": {
@@ -4293,6 +4305,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-27T18:48:42.308Z",
+  "_cached_at": "2026-03-28T01:43:54.378Z",
   "_source": "github-action"
 }
