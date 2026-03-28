@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Nurturing — Reputable Health</title>
+  <style>
+    :root{--bg:#0a0a0a;--surface:#1a1a1a;--surface2:#141414;--border:rgba(255,255,255,0.08);--border-lime:rgba(200,230,74,0.2);--text:#fff;--text-dim:#999;--lime:#C8E64A;--lime-bg:rgba(200,230,74,0.08);--green:#34D399;--green-bg:rgba(52,211,153,0.12);--teal:#00B39F;--teal-bg:rgba(0,179,159,0.12);--blue:#60A5FA;--blue-bg:rgba(96,165,250,0.12);--indigo:#6C5CE7;--indigo-bg:rgba(108,92,231,0.12);--yellow:#FBBF24;--yellow-bg:rgba(251,191,36,0.12);--rose:#FB7185;--rose-bg:rgba(251,113,133,0.12);--lavender:#A78BFA;--lavender-bg:rgba(167,139,250,0.12);--charcoal:#222220;--radius-md:12px;--radius-pill:100px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(200,230,74,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,230,74,0.018) 1px,transparent 1px);background-size:52px 52px}
+    .container{max-width:1200px;margin:0 auto}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .header h1{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:700}
+    .subtitle{font-size:13px;color:var(--text-dim);margin-top:4px}
+    .nav-link{font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill)}
+    .nav-link:hover{background:var(--lime-bg)}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px}
+    .section h2{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .section h2 .ic{color:var(--lime);font-size:14px}
+    .badge{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+    .badge-lime{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime)}
+    .badge-green{background:var(--green-bg);color:var(--green)}
+    .badge-blue{background:var(--blue-bg);color:var(--blue)}
+    .badge-yellow{background:var(--yellow-bg);color:var(--yellow)}
+    .badge-rose{background:var(--rose-bg);color:var(--rose)}
+    .badge-gray{background:rgba(99,110,128,0.12);color:#636e80}
+    select,input[type=text],input[type=number],input[type=email],input[type=datetime-local]{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;font-family:inherit}
+    textarea{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5}
+    button{cursor:pointer;font-family:inherit}
+    .btn-primary{background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:8px 20px;font-weight:600;font-size:12px}
+    .btn-primary:hover{opacity:0.9}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:var(--radius-pill);padding:8px 16px;font-size:12px}
+    .btn-outline:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+    .btn-action{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime);border-radius:var(--radius-pill);padding:4px 12px;font-size:11px;font-weight:600}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:rgba(255,255,255,0.03);color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;font-size:10px;text-align:left;padding:10px;border-bottom:1px solid var(--border)}
+    td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .align-right{text-align:right}
+    .table-wrap{overflow-x:auto}
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+    .kpi-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center}
+    .kpi-card .kl{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em}
+    .kpi-card .kv{font-size:24px;font-weight:700;margin:4px 0}
+    .kpi-card .ks{font-size:11px;color:var(--text-dim)}
+    .funnel-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .funnel-row:last-child{border-bottom:none}
+    .fl{width:200px;flex-shrink:0}
+    .fl .fn{font-size:13px;font-weight:600}
+    .fl .fd{font-size:11px;color:var(--text-dim)}
+    .fb-wrap{flex:1}
+    .fb{height:24px;border-radius:3px;min-width:2px;position:relative}
+    .fb span{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:700;color:rgba(0,0,0,0.7)}
+    .fs{width:60px;text-align:right;font-size:14px;font-weight:700;flex-shrink:0}
+    .fa{width:120px;flex-shrink:0;display:flex;gap:4px;justify-content:flex-end}
+    .seq-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:12px}
+    .seq-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .seq-steps{border-left:2px solid rgba(255,255,255,0.1);margin-left:12px;padding-left:16px}
+    .seq-step{position:relative;padding-bottom:14px}
+    .seq-step:last-child{padding-bottom:0}
+    .seq-step::before{content:'';position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;border:2px solid var(--lime);background:var(--bg)}
+    .seq-step .ss-day{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em}
+    .seq-step .ss-subject{font-size:13px;font-weight:600;margin-top:2px}
+    .seq-step .ss-goal{font-size:11px;color:var(--text-dim);margin-top:2px}
+    .composer{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px}
+    .composer-field{margin-bottom:14px}
+    .composer-field label{display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+    .merge-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    .merge-tag{font-size:10px;background:var(--indigo-bg);color:var(--indigo);padding:2px 8px;border-radius:var(--radius-pill);cursor:pointer;border:1px solid transparent}
+    .merge-tag:hover{border-color:var(--indigo)}
+    .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+    .modal-overlay.show{display:flex}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto}
+    .modal h3{font-size:16px;font-weight:600;margin-bottom:16px}
+    .footer{text-align:center;font-size:11px;color:var(--text-dim);padding:24px 0}
+    @media(max-width:768px){.kpi-row{grid-template-columns:1fr 1fr}.fl{width:120px}.fa{width:80px}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>Email Nurturing</h1><div class="subtitle" id="subtitle">Reputable Health — Lifecycle Email Campaigns</div></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <a href="index.html" class="nav-link">Command Center</a>
+      <a href="lifecycle.html" class="nav-link">Lifecycle</a>
+      <a href="attribution.html" class="nav-link">Attribution</a>
+      <a href="reporting.html" class="nav-link">Reporting</a>
+    </div>
+  </div>
+
+  <!-- Connection Status -->
+  <div class="section" id="connection-section">
+    <h2><span class="ic">&#9673;</span> SendGrid Connection</h2>
+    <div id="connection-status"></div>
+  </div>
+
+  <!-- KPI Overview -->
+  <div class="kpi-row" id="email-kpis"></div>
+
+  <!-- Lifecycle Funnel with Actions -->
+  <div class="section">
+    <h2><span class="ic">&#9673;</span> Lifecycle Funnel — Email Actions</h2>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Click any stage's action buttons to compose emails or start nurture sequences for that segment.</div>
+    <div id="action-funnel"></div>
+  </div>
+
+  <!-- Active Sequences -->
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="margin:0;"><span class="ic">&#9673;</span> Nurture Sequences</h2>
+      <button class="btn-primary" onclick="showSequenceBuilder()">+ Create Sequence</button>
+    </div>
+    <div id="sequences-list"></div>
+  </div>
+
+  <!-- Campaign Analytics -->
+  <div class="section">
+    <h2><span class="ic">&#9673;</span> Campaign Analytics</h2>
+    <div class="table-wrap" id="campaigns-table"></div>
+  </div>
+
+  <!-- Email Templates -->
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="margin:0;"><span class="ic">&#9673;</span> Email Templates</h2>
+      <button class="btn-outline" onclick="showTemplateEditor()">+ New Template</button>
+    </div>
+    <div id="templates-list"></div>
+  </div>
+
+  <div class="footer" id="footer"></div>
+</div>
+
+<!-- Email Composer Modal -->
+<div class="modal-overlay" id="composer-modal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;">Compose Email</h3>
+      <button class="btn-outline" onclick="closeComposer()" style="padding:4px 12px;">Close</button>
+    </div>
+    <div id="composer-segment" style="margin-bottom:16px;padding:12px;background:rgba(200,230,74,0.05);border:1px solid var(--border-lime);border-radius:8px;font-size:12px;"></div>
+    <div class="composer" id="composer-form">
+      <div class="composer-field">
+        <label>From</label>
+        <input type="email" id="c-from" value="community@reputable.health" style="width:100%;">
+      </div>
+      <div class="composer-field">
+        <label>Subject</label>
+        <input type="text" id="c-subject" placeholder="e.g., Welcome to Reputable Health!" style="width:100%;">
+      </div>
+      <div class="composer-field">
+        <label>Template</label>
+        <select id="c-template" style="width:100%;" onchange="loadTemplate(this.value)">
+          <option value="">Start from scratch</option>
+        </select>
+      </div>
+      <div class="composer-field">
+        <label>Email Body (HTML supported)</label>
+        <textarea id="c-body" rows="12" style="width:100%;" placeholder="Hi {{first_name}},&#10;&#10;Write your email here..."></textarea>
+      </div>
+      <div class="composer-field">
+        <label>Available Merge Fields</label>
+        <div class="merge-tags">
+          <span class="merge-tag" onclick="insertMerge('{{first_name}}')">{{first_name}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{intended_study}}')">{{intended_study}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{days_since_signup}}')">{{days_since_signup}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{app_download_link}}')">{{app_download_link}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{study_name}}')">{{study_name}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{washout_days_remaining}}')">{{washout_days_remaining}}</span>
+        </div>
+      </div>
+      <div class="composer-field">
+        <label>Schedule</label>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;text-transform:none;letter-spacing:0;"><input type="radio" name="c-schedule" value="now" checked> Send immediately</label>
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;text-transform:none;letter-spacing:0;"><input type="radio" name="c-schedule" value="later"> Schedule for:</label>
+          <input type="datetime-local" id="c-schedule-time">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn-outline" onclick="sendTest()">Send Test to Me</button>
+        <button class="btn-primary" id="btn-send-campaign" onclick="sendCampaign()">Send to <span id="c-count">0</span> Recipients</button>
+      </div>
+      <div id="composer-result" style="margin-top:12px;font-size:12px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Sequence Builder Modal -->
+<div class="modal-overlay" id="sequence-modal">
+  <div class="modal" style="max-width:800px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;">Create Nurture Sequence</h3>
+      <button class="btn-outline" onclick="closeSequenceBuilder()" style="padding:4px 12px;">Close</button>
+    </div>
+    <div class="composer">
+      <div class="composer-field">
+        <label>Sequence Name</label>
+        <input type="text" id="seq-name" placeholder="e.g., Raw Lead → App Download" style="width:100%;">
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div class="composer-field" style="flex:1;min-width:200px;">
+          <label>Trigger Stage (enrolls when participant enters)</label>
+          <select id="seq-trigger" style="width:100%;"></select>
+        </div>
+        <div class="composer-field" style="flex:1;min-width:200px;">
+          <label>Exit Stage (removes when participant reaches)</label>
+          <select id="seq-exit" style="width:100%;"></select>
+        </div>
+      </div>
+      <div class="composer-field">
+        <label>Max Emails Per Week</label>
+        <select id="seq-max-week" style="width:100px;"><option>1</option><option selected>2</option><option>3</option></select>
+      </div>
+      <div style="margin:16px 0 8px;"><label style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">Sequence Steps</label></div>
+      <div id="seq-steps-builder"></div>
+      <button class="btn-outline" onclick="addSequenceStep()" style="margin-top:8px;">+ Add Step</button>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Safety Rules (always active):</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">
+          &#10003; Exit immediately if participant reaches target stage<br>
+          &#10003; Never send if participant has unsubscribed<br>
+          &#10003; Skip step if participant received email in last 48 hours<br>
+          &#10003; Respect max emails per week limit
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn-outline" onclick="saveSequence('draft')">Save as Draft</button>
+        <button class="btn-primary" onclick="saveSequence('active')">Activate Sequence</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Template Editor Modal -->
+<div class="modal-overlay" id="template-modal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;">Email Template</h3>
+      <button class="btn-outline" onclick="$('#template-modal').classList.remove('show')" style="padding:4px 12px;">Close</button>
+    </div>
+    <div class="composer">
+      <div class="composer-field"><label>Template Name</label><input type="text" id="tpl-name" style="width:100%;" placeholder="e.g., Welcome — Download Our App"></div>
+      <div class="composer-field"><label>Category</label><select id="tpl-category" style="width:200px;"><option>welcome</option><option>nurture</option><option>study_launch</option><option>re_engagement</option><option>washout</option><option>post_study</option><option>general</option></select></div>
+      <div class="composer-field"><label>Subject Line</label><input type="text" id="tpl-subject" style="width:100%;" placeholder="Subject with {{merge_fields}}"></div>
+      <div class="composer-field"><label>Body</label><textarea id="tpl-body" rows="10" style="width:100%;" placeholder="Email body with {{merge_fields}}..."></textarea></div>
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button class="btn-primary" onclick="saveTemplate()">Save Template</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
+const fmtInt=n=>n!=null?n.toLocaleString():'—';
+
+// ============================================================
+// LIFECYCLE STAGES (shared with lifecycle.html)
+// ============================================================
+const STAGES=[
+  {key:'RAW_LEAD',label:'Raw Lead',color:'#6C5CE7',desc:'Not yet in app'},
+  {key:'APP_DOWNLOADED',label:'App Downloaded',color:'#74B9FF',desc:'Has app, no study'},
+  {key:'ELIGIBLE_BROWSING',label:'Browsing',color:'#60A5FA',desc:'Browsing studies'},
+  {key:'ELIGIBILITY_IN_PROGRESS',label:'Eligibility In Progress',color:'#A78BFA',desc:'Started questionnaire'},
+  {key:'ELIGIBLE_AWAITING_ONBOARDING',label:'Awaiting Onboarding',color:'#FBBF24',desc:'Pending manual steps'},
+  {key:'ONBOARDED_ACTIVE',label:'Active',color:'#34D399',desc:'In study'},
+  {key:'STUDY_COMPLETE',label:'Study Complete',color:'#00B39F',desc:'Finished'},
+  {key:'IN_WASHOUT',label:'In Washout',color:'#C8E64A',desc:'Between studies'},
+  {key:'DORMANT',label:'Dormant',color:'#FB7185',desc:'30+ days inactive'},
+];
+
+// ============================================================
+// DATA — localStorage
+// ============================================================
+const STORAGE_KEY='reputable_nurture_v1';
+function load(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||null}catch(e){return null}}
+function save(d){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}catch(e){}}
+
+function getDefaultData(){
+  const templates=[
+    {id:'tpl-1',name:'Welcome — Download Our App',category:'welcome',subject:'Welcome to Reputable Health, {{first_name}}!',body:'Hi {{first_name}},\n\nThanks for your interest in health research that actually matters.\n\nWe noticed you signed up to learn more about our {{intended_study}} study. Great news — it\'s live and accepting participants!\n\nDownload the Reputable app to get started:\n{{app_download_link}}\n\nHere\'s what you\'ll get:\n• Access to cutting-edge wellness studies\n• Free products to try\n• Personalized insights from your wearable data\n\nQuestions? Just reply to this email.\n\n— The Reputable Health Team'},
+    {id:'tpl-2',name:'Study Spotlight',category:'nurture',subject:'{{first_name}}, your health study is waiting',body:'Hi {{first_name}},\n\nA few days ago, you signed up for our {{intended_study}} study — and we wanted to make sure you didn\'t miss it.\n\nThis study is designed to generate real, verified evidence about what works for your health. Participants get:\n• Free product access\n• Continuous health tracking via your wearable\n• Personalized results when the study wraps up\n\nIt only takes a few minutes to get started:\n{{app_download_link}}\n\n— The Reputable Health Team'},
+    {id:'tpl-3',name:'Social Proof / FOMO',category:'nurture',subject:'Spots are filling up for {{intended_study}}',body:'Hi {{first_name}},\n\nJust a quick update: our {{intended_study}} study is filling up fast.\n\nHundreds of participants are already tracking their results. Don\'t miss your chance to be part of real health research.\n\n{{app_download_link}}\n\n— The Reputable Health Team'},
+    {id:'tpl-4',name:'Re-engagement — We Miss You',category:'re_engagement',subject:'It\'s been a while, {{first_name}}',body:'Hi {{first_name}},\n\nWe noticed you haven\'t been active in the Reputable app recently.\n\nSince you\'ve been away, we\'ve launched new studies and features that might interest you. Your wearable data is still connected — pick up right where you left off.\n\nOpen the app to see what\'s new:\n{{app_download_link}}\n\n— The Reputable Health Team'},
+    {id:'tpl-5',name:'Washout Check-in',category:'washout',subject:'{{first_name}}, {{washout_days_remaining}} days left in your washout',body:'Hi {{first_name}},\n\nYou\'re almost through your washout period! Just {{washout_days_remaining}} days to go before you\'re eligible for a new study.\n\nIn the meantime, keep tracking your daily health factors in the app — this data is valuable even between studies.\n\nWe\'ll let you know as soon as new studies are available for you.\n\n— The Reputable Health Team'},
+    {id:'tpl-6',name:'Post-Study Thank You',category:'post_study',subject:'Thank you for completing {{study_name}}, {{first_name}}!',body:'Hi {{first_name}},\n\nCongratulations on completing the {{study_name}} study! Your participation helps build real evidence for better health products.\n\nHere\'s what happens next:\n• We\'re analyzing the aggregate results now\n• You\'ll get a summary of findings when the study report is ready\n• New studies are launching soon — we\'ll keep you posted\n\nThank you for being part of the Reputable community.\n\n— The Reputable Health Team'},
+    {id:'tpl-7',name:'Last Chance',category:'nurture',subject:'Last chance — {{intended_study}} closing soon',body:'Hi {{first_name}},\n\nThis is our last reminder: the {{intended_study}} study is almost full.\n\nIf you\'ve been thinking about joining, now is the time. Once all spots are filled, enrollment closes.\n\n{{app_download_link}}\n\n— The Reputable Health Team'},
+  ];
+
+  const sequences=[
+    {id:'seq-1',name:'Raw Lead → App Download',trigger:'RAW_LEAD',exit:'APP_DOWNLOADED',status:'active',max_per_week:2,enrolled:142,converted:38,steps:[
+      {delay_days:0,subject:'Welcome to Reputable Health, {{first_name}}!',template_id:'tpl-1',goal:'Get them to download the app'},
+      {delay_days:3,subject:'{{first_name}}, your health study is waiting',template_id:'tpl-2',goal:'Spotlight the study they showed interest in'},
+      {delay_days:8,subject:'Spots are filling up for {{intended_study}}',template_id:'tpl-3',goal:'Social proof and urgency'},
+      {delay_days:15,subject:'Last chance — {{intended_study}} closing soon',template_id:'tpl-7',goal:'Final conversion push'},
+    ]},
+    {id:'seq-2',name:'App Downloaded → Study Enrollment',trigger:'APP_DOWNLOADED',exit:'ELIGIBILITY_IN_PROGRESS',status:'active',max_per_week:2,enrolled:89,converted:52,steps:[
+      {delay_days:5,subject:'Ready to join a study, {{first_name}}?',template_id:null,goal:'Recommend studies based on wearable type'},
+      {delay_days:10,subject:'See what other participants are discovering',template_id:null,goal:'Community stories and benefits'},
+      {delay_days:15,subject:'New studies just launched — check them out',template_id:null,goal:'Highlight newest studies'},
+    ]},
+    {id:'seq-3',name:'Eligibility Abandoned',trigger:'ELIGIBILITY_IN_PROGRESS',exit:'ELIGIBLE_AWAITING_ONBOARDING',status:'active',max_per_week:2,enrolled:34,converted:18,steps:[
+      {delay_days:3,subject:'Need help finishing your eligibility check?',template_id:null,goal:'Offer support'},
+      {delay_days:8,subject:'Your spot is still waiting, {{first_name}}',template_id:null,goal:'Urgency + FAQ'},
+    ]},
+    {id:'seq-4',name:'Stuck in Onboarding',trigger:'ELIGIBLE_AWAITING_ONBOARDING',exit:'ONBOARDED_ACTIVE',status:'active',max_per_week:2,enrolled:22,converted:14,steps:[
+      {delay_days:5,subject:'Next steps for your study, {{first_name}}',template_id:null,goal:'Clear next-steps checklist'},
+      {delay_days:10,subject:'Schedule your screening — link inside',template_id:null,goal:'Direct scheduling link'},
+      {delay_days:15,subject:'We\'re holding your spot — complete onboarding',template_id:null,goal:'Urgency'},
+    ]},
+    {id:'seq-5',name:'Washout Engagement',trigger:'IN_WASHOUT',exit:'ELIGIBILITY_IN_PROGRESS',status:'active',max_per_week:1,enrolled:45,converted:29,steps:[
+      {delay_days:1,subject:'Your washout has started — here\'s what to expect',template_id:null,goal:'Set expectations'},
+      {delay_days:7,subject:'Health tip of the week + your progress',template_id:null,goal:'Keep engaged'},
+      {delay_days:14,subject:'Almost done! New studies are coming',template_id:null,goal:'Preview upcoming studies'},
+    ]},
+    {id:'seq-6',name:'Dormant Re-engagement',trigger:'DORMANT',exit:'APP_DOWNLOADED',status:'active',max_per_week:1,enrolled:156,converted:17,steps:[
+      {delay_days:0,subject:'We miss you, {{first_name}}',template_id:'tpl-4',goal:'Soft re-engagement'},
+      {delay_days:7,subject:'New studies you might be interested in',template_id:null,goal:'Show what\'s new'},
+      {delay_days:21,subject:'Still interested in health research?',template_id:null,goal:'Final check — stop if no response'},
+    ]},
+    {id:'seq-7',name:'Post-Study → Re-enrollment',trigger:'STUDY_COMPLETE',exit:'ELIGIBILITY_IN_PROGRESS',status:'draft',max_per_week:2,enrolled:0,converted:0,steps:[
+      {delay_days:1,subject:'Thank you for completing {{study_name}}!',template_id:'tpl-6',goal:'Thank + tease results'},
+      {delay_days:7,subject:'Here\'s what\'s coming next',template_id:null,goal:'Preview upcoming studies'},
+    ]},
+  ];
+
+  // Sample campaign analytics
+  const campaigns=[
+    {id:'c-1',name:'Raw Lead Nurture',type:'sequence',sequence_id:'seq-1',sent:412,delivered:403,opened:211,clicked:63,bounced:9,unsubscribed:2,converted:38,sent_at:'2026-03-01'},
+    {id:'c-2',name:'Raw Lead Nurture — Step 2',type:'sequence_step',sequence_id:'seq-1',sent:284,delivered:280,opened:131,clicked:32,bounced:0,unsubscribed:1,converted:0,sent_at:'2026-03-04'},
+    {id:'c-3',name:'HopBox Launch Blast',type:'one_time',sent:231,delivered:228,opened:141,clicked:66,bounced:3,unsubscribed:1,converted:104,sent_at:'2026-02-10'},
+    {id:'c-4',name:'Washout Engagement',type:'sequence',sequence_id:'seq-5',sent:89,delivered:89,opened:49,clicked:20,bounced:0,unsubscribed:0,converted:29,sent_at:'2026-03-10'},
+    {id:'c-5',name:'Dormant Re-engage',type:'sequence',sequence_id:'seq-6',sent:156,delivered:147,opened:35,clicked:7,bounced:9,unsubscribed:5,converted:17,sent_at:'2026-03-05'},
+    {id:'c-6',name:'March Newsletter',type:'one_time',sent:847,delivered:831,opened:349,clicked:112,bounced:16,unsubscribed:3,converted:0,sent_at:'2026-03-15'},
+  ];
+
+  return {templates,sequences,campaigns,version:1};
+}
+
+let data=load()||getDefaultData();
+if(!data.version)data=getDefaultData();
+save(data);
+
+// Stage counts (simulated from lifecycle data)
+function getStageCounts(){
+  try{
+    const ld=JSON.parse(localStorage.getItem('reputable_lifecycle_v2'));
+    if(ld?.participants){
+      const counts={};STAGES.forEach(s=>{counts[s.key]=0});
+      ld.participants.filter(p=>!p.is_test_account).forEach(p=>{if(counts[p.current_stage]!==undefined)counts[p.current_stage]++});
+      return counts;
+    }
+  }catch(e){}
+  return{RAW_LEAD:2400,APP_DOWNLOADED:1200,ELIGIBLE_BROWSING:600,ELIGIBILITY_IN_PROGRESS:350,ELIGIBLE_AWAITING_ONBOARDING:220,ONBOARDED_ACTIVE:407,STUDY_COMPLETE:320,IN_WASHOUT:80,DORMANT:900};
+}
+
+// ============================================================
+// SENDGRID CONNECTION
+// ============================================================
+const API_BASE=new URLSearchParams(window.location.search).get('proxy')||'';
+
+function renderConnection(){
+  const el=$('#connection-status');
+  if(!API_BASE){
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;"><span class="badge badge-yellow">Not Connected</span><div style="font-size:12px;color:var(--text-dim);">SendGrid API proxy not configured. Emails will be simulated locally. To connect: start the API proxy and add <code>?proxy=http://localhost:3001</code> to the URL.<br><br>All UI features (composer, sequences, analytics) work with sample data. When the proxy is connected, real emails will be sent via SendGrid.</div></div>`;
+  } else {
+    el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;"><span class="badge badge-green">Connected</span><div style="font-size:12px;color:var(--text-dim);">API proxy: ${esc(API_BASE)}. Emails will be sent via SendGrid.</div></div>`;
+  }
+}
+
+// ============================================================
+// RENDER: KPIs
+// ============================================================
+function renderKPIs(){
+  const c=data.campaigns;
+  const totalSent=c.reduce((a,x)=>a+x.sent,0);
+  const totalOpened=c.reduce((a,x)=>a+x.opened,0);
+  const totalClicked=c.reduce((a,x)=>a+x.clicked,0);
+  const totalBounced=c.reduce((a,x)=>a+x.bounced,0);
+  const totalConverted=c.reduce((a,x)=>a+x.converted,0);
+  const activeSeqs=data.sequences.filter(s=>s.status==='active').length;
+  const openRate=totalSent>0?(totalOpened/totalSent*100).toFixed(1):'0';
+  const clickRate=totalSent>0?(totalClicked/totalSent*100).toFixed(1):'0';
+
+  $('#email-kpis').innerHTML=`
+    <div class="kpi-card"><div class="kl">Emails Sent (30d)</div><div class="kv" style="color:var(--blue);">${fmtInt(totalSent)}</div><div class="ks">${c.length} campaigns</div></div>
+    <div class="kpi-card"><div class="kl">Open Rate</div><div class="kv" style="color:var(--green);">${openRate}%</div><div class="ks">${fmtInt(totalOpened)} opens</div></div>
+    <div class="kpi-card"><div class="kl">Click Rate</div><div class="kv" style="color:var(--teal);">${clickRate}%</div><div class="ks">${fmtInt(totalClicked)} clicks</div></div>
+    <div class="kpi-card"><div class="kl">Conversions</div><div class="kv" style="color:var(--lime);">${fmtInt(totalConverted)}</div><div class="ks">Stage advances from email</div></div>
+    <div class="kpi-card"><div class="kl">Active Sequences</div><div class="kv" style="color:var(--indigo);">${activeSeqs}</div><div class="ks">${data.sequences.length} total</div></div>
+    <div class="kpi-card"><div class="kl">Bounce Rate</div><div class="kv" style="color:${totalBounced/Math.max(totalSent,1)>0.05?'var(--rose)':'var(--text-dim)'};">${totalSent>0?(totalBounced/totalSent*100).toFixed(1):'0'}%</div><div class="ks">${fmtInt(totalBounced)} bounces</div></div>`;
+}
+
+// ============================================================
+// RENDER: Action Funnel
+// ============================================================
+let composerStage=null;
+
+function renderActionFunnel(){
+  const counts=getStageCounts();
+  const max=Math.max(...Object.values(counts),1);
+
+  $('#action-funnel').innerHTML=STAGES.map(s=>{
+    const c=counts[s.key]||0;
+    const pct=(c/max*100).toFixed(0);
+    const seq=data.sequences.find(sq=>sq.trigger===s.key&&sq.status==='active');
+    const seqInfo=seq?`<span style="font-size:10px;color:var(--text-dim);">&#x1F4E7; ${seq.enrolled} in nurture</span>`:'';
+    return `<div class="funnel-row">
+      <div class="fl"><div class="fn" style="color:${s.color}">${s.label}</div><div class="fd">${s.desc} ${seqInfo}</div></div>
+      <div class="fb-wrap"><div class="fb" style="width:${pct}%;background:${s.color};">${c>50?`<span>${fmtInt(c)}</span>`:''}</div></div>
+      <div class="fs">${fmtInt(c)}</div>
+      <div class="fa">
+        <button class="btn-action" onclick="openComposer('${s.key}')">Email</button>
+        <button class="btn-outline" style="padding:4px 8px;font-size:10px;" onclick="exportSegment('${s.key}')">CSV</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// RENDER: Sequences
+// ============================================================
+function renderSequences(){
+  const el=$('#sequences-list');
+  if(!data.sequences.length){el.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px;">No sequences created yet.</div>';return}
+
+  el.innerHTML=data.sequences.map(seq=>{
+    const statusBadge=seq.status==='active'?'badge-green':seq.status==='paused'?'badge-yellow':'badge-gray';
+    const convRate=seq.enrolled>0?(seq.converted/seq.enrolled*100).toFixed(0):'0';
+    return `<div class="seq-card">
+      <div class="seq-header">
+        <div><strong>${esc(seq.name)}</strong> <span class="badge ${statusBadge}">${seq.status}</span></div>
+        <div style="display:flex;gap:6px;">
+          ${seq.status==='active'?`<button class="btn-outline" style="padding:3px 10px;font-size:10px;" onclick="toggleSequence('${seq.id}','paused')">Pause</button>`:''}
+          ${seq.status==='paused'?`<button class="btn-outline" style="padding:3px 10px;font-size:10px;" onclick="toggleSequence('${seq.id}','active')">Resume</button>`:''}
+          ${seq.status==='draft'?`<button class="btn-primary" style="padding:3px 10px;font-size:10px;" onclick="toggleSequence('${seq.id}','active')">Activate</button>`:''}
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px;color:var(--text-dim);margin-bottom:10px;">
+        <span>Trigger: <strong style="color:var(--text);">${STAGES.find(s=>s.key===seq.trigger)?.label||seq.trigger}</strong></span>
+        <span>Exit: <strong style="color:var(--text);">${STAGES.find(s=>s.key===seq.exit)?.label||seq.exit}</strong></span>
+        <span>Enrolled: <strong style="color:var(--blue);">${seq.enrolled}</strong></span>
+        <span>Converted: <strong style="color:var(--green);">${seq.converted}</strong> (${convRate}%)</span>
+      </div>
+      <div class="seq-steps">${seq.steps.map((step,i)=>`<div class="seq-step"><div class="ss-day">${step.delay_days===0?'Immediately':'Day '+step.delay_days}</div><div class="ss-subject">${esc(step.subject)}</div><div class="ss-goal">${esc(step.goal||'')}</div></div>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// RENDER: Campaign Analytics
+// ============================================================
+function renderCampaigns(){
+  const el=$('#campaigns-table');
+  const c=data.campaigns;
+  if(!c.length){el.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px;">No campaigns sent yet.</div>';return}
+
+  let h='<table><thead><tr><th>Campaign</th><th>Type</th><th class="align-right">Sent</th><th class="align-right">Opened</th><th class="align-right">Clicked</th><th class="align-right">Bounced</th><th class="align-right">Unsub</th><th class="align-right">Conv.</th><th>Date</th></tr></thead><tbody>';
+  c.sort((a,b)=>b.sent_at.localeCompare(a.sent_at)).forEach(camp=>{
+    const openPct=camp.sent>0?(camp.opened/camp.sent*100).toFixed(1):'0';
+    const clickPct=camp.sent>0?(camp.clicked/camp.sent*100).toFixed(1):'0';
+    const convPct=camp.sent>0?(camp.converted/camp.sent*100).toFixed(1):'0';
+    h+=`<tr><td><strong>${esc(camp.name)}</strong></td><td><span class="badge ${camp.type==='one_time'?'badge-blue':'badge-lavender'}" style="background:${camp.type==='one_time'?'var(--blue-bg)':'var(--lavender-bg)'}; color:${camp.type==='one_time'?'var(--blue)':'var(--lavender)'}">${camp.type==='one_time'?'One-time':'Sequence'}</span></td>
+    <td class="align-right">${fmtInt(camp.sent)}</td>
+    <td class="align-right"><span style="color:${parseFloat(openPct)>40?'var(--green)':'var(--yellow)'}">${openPct}%</span> <span style="color:var(--text-dim);">(${camp.opened})</span></td>
+    <td class="align-right"><span style="color:${parseFloat(clickPct)>10?'var(--green)':'var(--text-dim)'}">${clickPct}%</span></td>
+    <td class="align-right" style="color:${camp.bounced>0?'var(--rose)':'var(--text-dim)'};">${camp.bounced}</td>
+    <td class="align-right" style="color:${camp.unsubscribed>0?'var(--rose)':'var(--text-dim)'};">${camp.unsubscribed}</td>
+    <td class="align-right"><strong style="color:${camp.converted>0?'var(--green)':'var(--text-dim)'};">${convPct}%</strong></td>
+    <td style="color:var(--text-dim);">${camp.sent_at}</td></tr>`;
+  });
+  h+='</tbody></table>';
+  h+='<div style="margin-top:8px;font-size:11px;color:var(--text-dim);">Conv. = participant reached the target lifecycle stage within 30 days of email.</div>';
+  el.innerHTML=h;
+}
+
+// ============================================================
+// RENDER: Templates
+// ============================================================
+function renderTemplates(){
+  const el=$('#templates-list');
+  el.innerHTML=data.templates.map(t=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><div><strong style="font-size:13px;">${esc(t.name)}</strong> <span class="badge badge-gray">${t.category}</span><div style="font-size:11px;color:var(--text-dim);margin-top:2px;">Subject: ${esc(t.subject)}</div></div><button class="btn-outline" style="padding:3px 10px;font-size:10px;" onclick="editTemplate('${t.id}')">Edit</button></div>`).join('');
+
+  // Populate composer template dropdown
+  const sel=$('#c-template');
+  sel.innerHTML='<option value="">Start from scratch</option>'+data.templates.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+}
+
+// ============================================================
+// COMPOSER
+// ============================================================
+window.openComposer=function(stageKey){
+  composerStage=stageKey;
+  const stage=STAGES.find(s=>s.key===stageKey);
+  const counts=getStageCounts();
+  const count=counts[stageKey]||0;
+  $('#composer-segment').innerHTML=`<strong>Segment:</strong> ${stage?.label||stageKey} — <strong>${fmtInt(count)}</strong> participants<br><span style="color:var(--text-dim);">Unsubscribed participants will be automatically excluded. Participants emailed in the last 48 hours will be skipped.</span>`;
+  $('#c-count').textContent=fmtInt(count);
+  $('#c-subject').value='';
+  $('#c-body').value='';
+  $('#c-template').value='';
+  $('#composer-result').innerHTML='';
+  $('#composer-modal').classList.add('show');
+};
+
+window.closeComposer=function(){$('#composer-modal').classList.remove('show')};
+
+window.loadTemplate=function(tplId){
+  if(!tplId){$('#c-subject').value='';$('#c-body').value='';return}
+  const t=data.templates.find(x=>x.id===tplId);
+  if(t){$('#c-subject').value=t.subject;$('#c-body').value=t.body}
+};
+
+window.insertMerge=function(tag){
+  const el=$('#c-body');
+  const start=el.selectionStart,end=el.selectionEnd;
+  el.value=el.value.substring(0,start)+tag+el.value.substring(end);
+  el.focus();
+  el.selectionStart=el.selectionEnd=start+tag.length;
+};
+
+window.sendTest=function(){
+  const subject=$('#c-subject').value,body=$('#c-body').value;
+  if(!subject||!body){$('#composer-result').innerHTML='<span style="color:var(--rose);">Subject and body are required.</span>';return}
+  // Simulate sending test with sample merge data
+  const preview=body.replace(/\{\{first_name\}\}/g,'Katie').replace(/\{\{intended_study\}\}/g,'HopBox Study').replace(/\{\{days_since_signup\}\}/g,'5').replace(/\{\{app_download_link\}\}/g,'https://app.reputable.health').replace(/\{\{study_name\}\}/g,'HopBox Study').replace(/\{\{washout_days_remaining\}\}/g,'4');
+  $('#composer-result').innerHTML=`<div style="color:var(--green);margin-bottom:8px;">Test email simulated. Preview:</div><div style="background:var(--bg);padding:12px;border-radius:8px;border:1px solid var(--border);font-size:12px;line-height:1.5;white-space:pre-wrap;max-height:200px;overflow-y:auto;"><strong>Subject:</strong> ${esc(subject.replace(/\{\{first_name\}\}/g,'Katie'))}\n\n${esc(preview)}</div>`;
+};
+
+window.sendCampaign=function(){
+  const subject=$('#c-subject').value,body=$('#c-body').value;
+  if(!subject||!body){$('#composer-result').innerHTML='<span style="color:var(--rose);">Subject and body required.</span>';return}
+  const counts=getStageCounts();
+  const count=counts[composerStage]||0;
+  const scheduleType=document.querySelector('input[name="c-schedule"]:checked')?.value;
+  const scheduleTime=$('#c-schedule-time').value;
+
+  // Add to campaigns
+  const campaign={
+    id:'c-'+Date.now(),
+    name:`${STAGES.find(s=>s.key===composerStage)?.label||composerStage} — ${subject.slice(0,30)}`,
+    type:'one_time',
+    sent:count,
+    delivered:Math.round(count*0.98),
+    opened:0,clicked:0,bounced:Math.round(count*0.02),unsubscribed:0,converted:0,
+    sent_at:scheduleType==='later'&&scheduleTime?scheduleTime.slice(0,10):new Date().toISOString().slice(0,10),
+  };
+  data.campaigns.unshift(campaign);
+  save(data);
+
+  const action=scheduleType==='later'&&scheduleTime?`Scheduled for ${scheduleTime}`:`Sent to ${fmtInt(count)} participants`;
+  $('#composer-result').innerHTML=`<div style="color:var(--green);font-weight:600;">${action}.</div><div style="font-size:11px;color:var(--text-dim);margin-top:4px;">${API_BASE?'Email sent via SendGrid API.':'Simulated locally — connect SendGrid proxy for real delivery.'}</div>`;
+  renderCampaigns();renderKPIs();
+};
+
+// ============================================================
+// SEQUENCE BUILDER
+// ============================================================
+let seqStepCount=1;
+
+window.showSequenceBuilder=function(){
+  const triggerSel=$('#seq-trigger'),exitSel=$('#seq-exit');
+  triggerSel.innerHTML=STAGES.map(s=>`<option value="${s.key}">${s.label}</option>`).join('');
+  exitSel.innerHTML=STAGES.map(s=>`<option value="${s.key}">${s.label}</option>`).join('');
+  exitSel.value='APP_DOWNLOADED';
+  $('#seq-name').value='';
+  seqStepCount=0;
+  $('#seq-steps-builder').innerHTML='';
+  addSequenceStep();
+  $('#sequence-modal').classList.add('show');
+};
+
+window.closeSequenceBuilder=function(){$('#sequence-modal').classList.remove('show')};
+
+window.addSequenceStep=function(){
+  seqStepCount++;
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;flex-wrap:wrap;';
+  div.innerHTML=`<div style="width:80px;"><label style="font-size:10px;color:var(--text-dim);">Day</label><input type="number" class="seq-step-day" value="${seqStepCount===1?0:(seqStepCount-1)*3+2}" min="0" style="width:100%;"></div>
+    <div style="flex:1;min-width:200px;"><label style="font-size:10px;color:var(--text-dim);">Subject</label><input type="text" class="seq-step-subject" placeholder="Step ${seqStepCount} subject..." style="width:100%;"></div>
+    <div style="width:160px;"><label style="font-size:10px;color:var(--text-dim);">Template</label><select class="seq-step-tpl" style="width:100%;"><option value="">None</option>${data.templates.map(t=>`<option value="${t.id}">${esc(t.name.slice(0,20))}</option>`).join('')}</select></div>
+    <div style="flex:1;min-width:150px;"><label style="font-size:10px;color:var(--text-dim);">Goal</label><input type="text" class="seq-step-goal" placeholder="What this step achieves" style="width:100%;"></div>`;
+  $('#seq-steps-builder').appendChild(div);
+};
+
+window.saveSequence=function(status){
+  const name=$('#seq-name').value.trim();
+  if(!name){alert('Sequence name is required.');return}
+  const steps=[];
+  const days=$$('.seq-step-day');
+  const subjects=$$('.seq-step-subject');
+  const tpls=$$('.seq-step-tpl');
+  const goals=$$('.seq-step-goal');
+  for(let i=0;i<days.length;i++){
+    const subject=subjects[i].value.trim();
+    if(!subject)continue;
+    steps.push({delay_days:parseInt(days[i].value)||0,subject,template_id:tpls[i].value||null,goal:goals[i].value.trim()});
+  }
+  if(!steps.length){alert('Add at least one step.');return}
+
+  const seq={
+    id:'seq-'+Date.now(),
+    name,
+    trigger:$('#seq-trigger').value,
+    exit:$('#seq-exit').value,
+    status,
+    max_per_week:parseInt($('#seq-max-week').value)||2,
+    enrolled:0,converted:0,
+    steps,
+  };
+  data.sequences.push(seq);
+  save(data);
+  closeSequenceBuilder();
+  renderSequences();renderActionFunnel();
+};
+
+window.toggleSequence=function(id,newStatus){
+  const seq=data.sequences.find(s=>s.id===id);
+  if(seq){seq.status=newStatus;save(data);renderSequences()}
+};
+
+// ============================================================
+// TEMPLATES
+// ============================================================
+window.showTemplateEditor=function(){
+  $('#tpl-name').value='';$('#tpl-subject').value='';$('#tpl-body').value='';
+  $('#template-modal').classList.add('show');
+};
+
+window.editTemplate=function(id){
+  const t=data.templates.find(x=>x.id===id);
+  if(!t)return;
+  $('#tpl-name').value=t.name;$('#tpl-category').value=t.category;$('#tpl-subject').value=t.subject;$('#tpl-body').value=t.body;
+  $('#template-modal').classList.add('show');
+  // Store editing ID
+  $('#template-modal').dataset.editId=id;
+};
+
+window.saveTemplate=function(){
+  const name=$('#tpl-name').value.trim(),subject=$('#tpl-subject').value.trim(),body=$('#tpl-body').value.trim();
+  if(!name||!subject||!body){alert('All fields required.');return}
+  const editId=$('#template-modal').dataset.editId;
+  if(editId){
+    const t=data.templates.find(x=>x.id===editId);
+    if(t){t.name=name;t.category=$('#tpl-category').value;t.subject=subject;t.body=body}
+    delete $('#template-modal').dataset.editId;
+  } else {
+    data.templates.push({id:'tpl-'+Date.now(),name,category:$('#tpl-category').value,subject,body});
+  }
+  save(data);
+  $('#template-modal').classList.remove('show');
+  renderTemplates();
+};
+
+// ============================================================
+// SEGMENT EXPORT
+// ============================================================
+window.exportSegment=function(stageKey){
+  const stage=STAGES.find(s=>s.key===stageKey);
+  // Try to get data from lifecycle localStorage
+  let participants=[];
+  try{
+    const ld=JSON.parse(localStorage.getItem('reputable_lifecycle_v2'));
+    if(ld?.participants)participants=ld.participants.filter(p=>!p.is_test_account&&p.current_stage===stageKey);
+  }catch(e){}
+  if(!participants.length){alert(`No participant data found for ${stage?.label}. Import data in the Lifecycle dashboard first.`);return}
+  const h=['participant_id','stage','first_seen','lead_channel','lead_campaign'];
+  const rows=participants.map(p=>[p.participant_id,p.current_stage,p.first_seen_at,p.lead_source?.channel||'','"'+(p.lead_source?.campaign||'').replace(/"/g,'""')+'"']);
+  const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download=`reputable-segment-${stageKey.toLowerCase()}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();URL.revokeObjectURL(u);
+};
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function renderAll(){
+  const now=new Date(),ds=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),ts=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  $('#subtitle').textContent=`Reputable Health — Email Nurturing · ${ds} ${ts}`;
+  renderConnection();renderKPIs();renderActionFunnel();renderSequences();renderCampaigns();renderTemplates();
+  $('#footer').textContent=`Email Nurturing — Reputable Health · ${ds} ${ts}`;
+}
+renderAll();
+})();
+</script>
+</body>
+</html>
