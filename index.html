@@ -147,6 +147,38 @@
     .kpi-card .kpi-value.indigo { color: var(--indigo); }
     .kpi-card .kpi-value.rose { color: var(--rose); }
 
+    /* KPI Tracking Grid */
+    .kpi-tracking-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .kpi-track-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      position: relative;
+    }
+    .kpi-track-card .kt-label {
+      font-size: 10px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      font-weight: 700; margin-bottom: 8px;
+    }
+    .kpi-track-card .kt-value { font-size: 32px; font-weight: 700; line-height: 1.1; }
+    .kpi-track-card .kt-target {
+      font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 6px;
+    }
+    .kpi-track-card .kt-target .on-track { color: var(--green); }
+    .kpi-track-card .kt-target .near-target { color: var(--yellow); }
+    .kpi-track-card .kt-target .off-track { color: var(--rose); }
+    .kpi-track-card .kt-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+    .kpi-track-card .kt-bar {
+      margin-top: 10px; height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.06); overflow: hidden;
+    }
+    .kpi-track-card .kt-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
+
     /* Sections */
     .section {
       background: var(--surface);
@@ -446,6 +478,7 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     @media (max-width: 768px) {
       body { padding: 12px; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-tracking-grid { grid-template-columns: repeat(2, 1fr); }
       .funnel-row { flex-wrap: wrap; }
       .funnel-step { min-width: calc(33% - 2px); }
       .charts-grid { grid-template-columns: 1fr; }
@@ -482,6 +515,18 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
 
   <!-- KPI Cards -->
   <div class="kpi-grid" id="kpi-grid"></div>
+
+  <!-- KPI Tracking — CPO, Days, Completion -->
+  <div class="section" id="kpi-tracking-section">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="margin:0;"><span class="section-icon">&#9673;</span> KPI Tracking</h2>
+      <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em;" id="kpi-quarter-label"></div>
+    </div>
+    <div class="kpi-tracking-grid" id="kpi-tracking-grid"></div>
+    <div id="kpi-cpo-caveat" style="margin-top:12px; padding:10px 14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:8px; font-size:11px; color:var(--text-dim); line-height:1.5;">
+      CPO is calculated at the study level (total ad spend for study ÷ total onboarded for study). Per-participant source attribution is not yet available. These numbers reflect the cost to fill a study, not the cost to acquire an individual participant through ads specifically.
+    </div>
+  </div>
 
   <!-- Funnel -->
   <div class="section" id="funnel-section">
@@ -560,11 +605,30 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
           <option value="VEP">VEP</option>
           <option value="PUBLIC">Public</option>
         </select>
+        <select id="filter-size">
+          <option value="all">All Sizes</option>
+          <option value="pilot">Pilot</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+        </select>
+        <select id="filter-source">
+          <option value="all">All Sources</option>
+          <option value="paid">Paid</option>
+          <option value="organic_community">Organic</option>
+          <option value="partner_recruited">Partner</option>
+          <option value="mixed">Mixed</option>
+        </select>
         <select id="filter-manual">
           <option value="all">Manual Step: Any</option>
           <option value="yes">Manual Step: Yes</option>
           <option value="no">Manual Step: No</option>
         </select>
+        <select id="filter-outlier">
+          <option value="all">Outlier: Any</option>
+          <option value="yes">Outlier: Yes</option>
+          <option value="no">Outlier: No</option>
+        </select>
+        <button id="btn-export-csv" class="filter-btn" style="background:var(--lime-bg);color:var(--lime);border-color:var(--border-lime);cursor:pointer;font-size:12px;padding:4px 12px;">Export CSV</button>
       </div>
     </div>
     <div class="table-wrap">
@@ -573,6 +637,16 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
         <tbody id="studies-tbody"></tbody>
         <tfoot id="studies-tfoot"></tfoot>
       </table>
+    </div>
+  </div>
+
+  <!-- KPI Trends -->
+  <div class="section" id="kpi-trends-section">
+    <h2><span class="section-icon">&#9673;</span> KPI Trends &amp; Quarterly Review</h2>
+    <div id="kpi-quarterly-review"></div>
+    <div class="charts-grid" style="grid-template-columns:repeat(2,1fr);margin-top:20px;">
+      <div class="chart-card"><h3>CPO Over Time</h3><div style="height:300px;"><canvas id="chart-cpo-trend"></canvas></div></div>
+      <div class="chart-card"><h3>Cumulative Participants Onboarded</h3><div style="height:300px;"><canvas id="chart-participants-trend"></canvas></div></div>
     </div>
   </div>
 
@@ -668,6 +742,44 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     <div class="status-grid" id="status-grid"></div>
   </div>
 
+  <!-- Admin: Set Quarterly Targets -->
+  <div class="section" id="admin-section" style="border-color:rgba(200,230,74,0.15);">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="document.getElementById('admin-body').style.display = document.getElementById('admin-body').style.display === 'none' ? '' : 'none';">
+      <h2 style="margin:0;"><span class="section-icon">&#9673;</span> Set Quarterly Targets</h2>
+      <span style="color:var(--text-dim);font-size:12px;">Click to expand</span>
+    </div>
+    <div id="admin-body" style="display:none;margin-top:16px;">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;">
+        <label style="font-size:12px;color:var(--text-dim);">Quarter:</label>
+        <select id="admin-quarter" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;">
+          <option value="2026-Q1">2026-Q1</option>
+          <option value="2026-Q2" selected>2026-Q2</option>
+          <option value="2026-Q3">2026-Q3</option>
+          <option value="2026-Q4">2026-Q4</option>
+          <option value="2027-Q1">2027-Q1</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;" id="admin-fields">
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Blended CPO Target ($)</label><input type="number" id="admin-blended-cpo" step="0.01" value="18" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Paid CPO Target ($)</label><input type="number" id="admin-paid-cpo" step="0.01" value="15" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">RCT CPO Target ($)</label><input type="number" id="admin-rct-cpo" step="0.01" value="30" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">RWA CPO Target ($)</label><input type="number" id="admin-rwa-cpo" step="0.01" value="20" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Avg Days to Recruit</label><input type="number" id="admin-days" value="21" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Participants Onboarded</label><input type="number" id="admin-onboarded" value="800" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+        <div><label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Completion Rate (%)</label><input type="number" id="admin-completion" value="90" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:13px;"></div>
+      </div>
+      <div style="margin-top:12px;">
+        <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Notes / Rationale</label>
+        <textarea id="admin-notes" rows="2" style="width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:12px;resize:vertical;font-family:inherit;"></textarea>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:12px;align-items:center;">
+        <button id="admin-generate" style="background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:8px 20px;font-weight:600;font-size:12px;cursor:pointer;">Generate JSON</button>
+        <button id="admin-export-kpi-csv" style="background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime);border-radius:var(--radius-pill);padding:8px 20px;font-weight:600;font-size:12px;cursor:pointer;">Export KPI Summary CSV</button>
+      </div>
+      <pre id="admin-json-output" style="display:none;margin-top:14px;background:var(--bg);padding:16px;border-radius:8px;font-size:11px;overflow-x:auto;color:var(--lime);border:1px solid var(--border-lime);"></pre>
+    </div>
+  </div>
+
   <div class="footer" id="footer"></div>
 </div>
 
@@ -698,31 +810,70 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
   };
 
   // ============================================================
+  // KPI QUARTERLY TARGETS
+  // ============================================================
+  const QUARTERLY_TARGETS = {
+    '2025-Q3': {
+      blended_cpo: 30, paid_cpo_excl_outliers: 25, rct_cpo: 40, rwa_cpo: 30, vep_cpo: 0,
+      avg_days_to_recruit: 35, participants_onboarded: 200, completion_rate: 80,
+      notes: 'Early period — establishing baselines, limited VEP pipeline',
+    },
+    '2025-Q4': {
+      blended_cpo: 25, paid_cpo_excl_outliers: 20, rct_cpo: 35, rwa_cpo: 25, vep_cpo: 0,
+      avg_days_to_recruit: 30, participants_onboarded: 300, completion_rate: 85,
+      notes: 'VEP studies launching, ecosystem growing',
+    },
+    '2026-Q1': {
+      blended_cpo: 20, paid_cpo_excl_outliers: 18, rct_cpo: 35, rwa_cpo: 25, vep_cpo: 0,
+      avg_days_to_recruit: 25, participants_onboarded: 500, completion_rate: 90,
+      notes: 'Scale quarter — public studies + VEP ramping, paid CPO improving',
+    },
+    '2026-Q2': {
+      blended_cpo: 18, paid_cpo_excl_outliers: 15, rct_cpo: 30, rwa_cpo: 20, vep_cpo: 0,
+      avg_days_to_recruit: 21, participants_onboarded: 800, completion_rate: 90,
+      notes: 'Target: continued efficiency gains as community grows',
+    },
+  };
+
+  const TARGET_HISTORY = {
+    '2026-Q1': [
+      { set_date: '2025-12-15', targets: { blended_cpo: 25, paid_cpo_excl_outliers: 20, participants_onboarded: 400 }, notes: 'Initial targets' },
+      { set_date: '2026-01-10', targets: { blended_cpo: 20, paid_cpo_excl_outliers: 18, participants_onboarded: 500 }, notes: 'Revised — VEP pipeline stronger than expected' },
+    ],
+  };
+
+  // Annual targets
+  const ANNUAL_TARGETS = {
+    2025: { participants_onboarded: 425 },
+    2026: { participants_onboarded: 4000 },
+  };
+
+  // ============================================================
   // LOCAL STUDY DATA — canonical per-study detail
   // ============================================================
   const STUDIES = [
-    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8807.67, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
-    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)' },
-    { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 771, joined: 520, onboarded: 192, target: 189, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 4, name: 'Nitrate Supplementation (Berkeley Life)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, notes: 'Prescreening outside of app (manual step)' },
-    { id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT', spend: 2464.11, leads: 575, joined: 338, onboarded: 120, target: 120, wearable: 'Oura', days: 30, launchDate: 'Dec 23, 2025', endDate: 'Jan 22, 2026', launchYear: 2025, crossYear: true, manualQueue: false, status: 'complete', outlier: false, notes: 'Cross-year: launched 2025, completed 2026' },
-    { id: 6, name: 'Enhanced Brew Formula (RCT)', type: 'RCT', spend: 1046.99, leads: 168, joined: 82, onboarded: 79, target: 70, wearable: 'Oura', days: 49, launchDate: 'Jun 4, 2025', endDate: 'Jul 23, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 7, name: 'Rootless & Women\'s Health', type: 'RWE', spend: 582.58, leads: 141, joined: 92, onboarded: 50, target: 50, wearable: 'Oura', days: 18, launchDate: 'Nov 26, 2025', endDate: 'Dec 14, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 8, name: 'Quantum Upgrade & Women\'s Health', type: 'RCT', spend: 266.14, leads: 67, joined: 70, onboarded: 12, target: 70, wearable: 'Oura', days: 75, launchDate: 'Mar 2, 2025', endDate: 'May 16, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 9, name: 'Sleep Mushrooms+', type: 'RWE', spend: 0, leads: 117, joined: 67, onboarded: 50, target: 50, wearable: 'Oura / Fitbit / WHOOP', days: 15, launchDate: 'Jan 29, 2026', endDate: 'Feb 13, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP', spend: 0, leads: 191, joined: 60, onboarded: 20, target: 20, wearable: 'Oura / Fitbit / WHOOP', days: 53, launchDate: 'Jan 5, 2026', endDate: 'Feb 27, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 11, name: 'Better Sleep with NatPat', type: 'VEP', spend: 0, leads: 53, joined: 38, onboarded: 25, target: 25, wearable: 'Oura', days: 30, launchDate: 'Nov 11, 2025', endDate: 'Dec 11, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP', spend: 0, leads: 69, joined: 57, onboarded: 25, target: 24, wearable: 'Oura / Fitbit / WHOOP', days: 5, launchDate: 'Sep 24, 2025', endDate: 'Sep 29, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP', spend: 0, leads: 62, joined: 52, onboarded: 25, target: 23, wearable: 'Oura', days: 2, launchDate: 'Sep 17, 2025', endDate: 'Sep 19, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP', spend: 0, leads: 19, joined: 15, onboarded: 10, target: 10, wearable: 'Oura', days: 22, launchDate: 'Nov 12, 2025', endDate: 'Dec 4, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP', spend: 0, leads: 66, joined: 30, onboarded: 13, target: 12, wearable: 'WHOOP / Oura / Fitbit', days: 26, launchDate: 'Jan 8, 2026', endDate: 'Feb 3, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE', spend: 0, leads: 54, joined: 40, onboarded: 20, target: 20, wearable: 'Oura', days: 79, launchDate: 'Nov 3, 2025', endDate: 'Jan 21, 2026', launchYear: 2025, crossYear: true, manualQueue: true, status: 'complete', outlier: false, notes: 'Cross-year: launched 2025, completed 2026' },
-    { id: 17, name: 'HOP Box: Women\'s Longevity', type: 'RWE', spend: 0, leads: 189, joined: 42, onboarded: 49, target: 35, wearable: 'Oura', days: 33, launchDate: 'Feb 11, 2026', endDate: 'Mar 16, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 18, name: 'Leela Quantum', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 35, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
-    { id: 19, name: 'Deep Sleep: Neuvana Xen', type: 'RWE', spend: 0, leads: 58, joined: null, onboarded: 40, target: 40, wearable: 'Oura', days: 1, launchDate: 'Feb 27, 2026', endDate: 'Feb 27, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 23, name: 'Vampire Serum: Skin Renewal', type: 'RWE', spend: 0, leads: 53, joined: null, onboarded: 35, target: 35, wearable: 'Oura', days: 2, launchDate: 'Mar 5, 2026', endDate: 'Mar 6, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
-    { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
-    { id: 22, name: 'Cure Hydration', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 70, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, notes: '' },
+    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8807.67, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, outlier_reason: 'Baseline bug lost ~150 participants; eligibility question excluded ~48 more', notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, outlier_reason: 'WHOOP small install base; lab bottleneck requires pre-study blood work', notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)', size_category: 'pilot', complexity_factors: ['non_oura_wearable', 'pre_study_lab_work', 'screening_call'], recruitment_source: 'paid' },
+    { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 771, joined: 520, onboarded: 192, target: 189, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 4, name: 'Nitrate Supplementation (Berkeley Life)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, outlier_reason: null, notes: 'Prescreening outside of app (manual step)', size_category: 'medium', complexity_factors: ['screening_call'], recruitment_source: 'paid' },
+    { id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT', spend: 2464.11, leads: 575, joined: 338, onboarded: 120, target: 120, wearable: 'Oura', days: 30, launchDate: 'Dec 23, 2025', endDate: 'Jan 22, 2026', launchYear: 2025, crossYear: true, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: 'Cross-year: launched 2025, completed 2026', size_category: 'medium', complexity_factors: ['external_survey'], recruitment_source: 'paid' },
+    { id: 6, name: 'Enhanced Brew Formula (RCT)', type: 'RCT', spend: 1046.99, leads: 168, joined: 82, onboarded: 79, target: 70, wearable: 'Oura', days: 49, launchDate: 'Jun 4, 2025', endDate: 'Jul 23, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'medium', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 7, name: 'Rootless & Women\'s Health', type: 'RWE', spend: 582.58, leads: 141, joined: 92, onboarded: 50, target: 50, wearable: 'Oura', days: 18, launchDate: 'Nov 26, 2025', endDate: 'Dec 14, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 8, name: 'Quantum Upgrade & Women\'s Health', type: 'RCT', spend: 266.14, leads: 67, joined: 70, onboarded: 12, target: 70, wearable: 'Oura', days: 75, launchDate: 'Mar 2, 2025', endDate: 'May 16, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'medium', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 9, name: 'Sleep Mushrooms+', type: 'RWE', spend: 0, leads: 117, joined: 67, onboarded: 50, target: 50, wearable: 'Oura / Fitbit / WHOOP', days: 15, launchDate: 'Jan 29, 2026', endDate: 'Feb 13, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 10, name: 'Tapping Solutions for Stress Relief', type: 'VEP', spend: 0, leads: 191, joined: 60, onboarded: 20, target: 20, wearable: 'Oura / Fitbit / WHOOP', days: 53, launchDate: 'Jan 5, 2026', endDate: 'Feb 27, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    { id: 11, name: 'Better Sleep with NatPat', type: 'VEP', spend: 0, leads: 53, joined: 38, onboarded: 25, target: 25, wearable: 'Oura', days: 30, launchDate: 'Nov 11, 2025', endDate: 'Dec 11, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    { id: 12, name: 'Sleep Well, Stress Less: Sensate', type: 'VEP', spend: 0, leads: 69, joined: 57, onboarded: 25, target: 24, wearable: 'Oura / Fitbit / WHOOP', days: 5, launchDate: 'Sep 24, 2025', endDate: 'Sep 29, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    { id: 13, name: 'LyfeFuel Daily Essentials Shake', type: 'VEP', spend: 0, leads: 62, joined: 52, onboarded: 25, target: 23, wearable: 'Oura', days: 2, launchDate: 'Sep 17, 2025', endDate: 'Sep 19, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    { id: 14, name: 'Rest & Recharge: Hapbee', type: 'VEP', spend: 0, leads: 19, joined: 15, onboarded: 10, target: 10, wearable: 'Oura', days: 22, launchDate: 'Nov 12, 2025', endDate: 'Dec 4, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    { id: 15, name: 'Mimio: Energy and Metabolic Health', type: 'VEP', spend: 0, leads: 66, joined: 30, onboarded: 13, target: 12, wearable: 'WHOOP / Oura / Fitbit', days: 26, launchDate: 'Jan 8, 2026', endDate: 'Feb 3, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: ['non_oura_wearable'], recruitment_source: 'partner_recruited' },
+    { id: 16, name: 'Vitamin D Boost: Clearlight', type: 'RWE', spend: 0, leads: 54, joined: 40, onboarded: 20, target: 20, wearable: 'Oura', days: 79, launchDate: 'Nov 3, 2025', endDate: 'Jan 21, 2026', launchYear: 2025, crossYear: true, manualQueue: true, status: 'complete', outlier: false, outlier_reason: null, notes: 'Cross-year: launched 2025, completed 2026', size_category: 'pilot', complexity_factors: ['screening_call'], recruitment_source: 'organic_community' },
+    { id: 17, name: 'HOP Box: Women\'s Longevity', type: 'RWE', spend: 0, leads: 189, joined: 42, onboarded: 49, target: 35, wearable: 'Oura', days: 33, launchDate: 'Feb 11, 2026', endDate: 'Mar 16, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 18, name: 'Leela Quantum', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 35, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 19, name: 'Deep Sleep: Neuvana Xen', type: 'RWE', spend: 0, leads: 58, joined: null, onboarded: 40, target: 40, wearable: 'Oura', days: 1, launchDate: 'Feb 27, 2026', endDate: 'Feb 27, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    { id: 23, name: 'Vampire Serum: Skin Renewal', type: 'RWE', spend: 0, leads: 53, joined: null, onboarded: 35, target: 35, wearable: 'Oura', days: 2, launchDate: 'Mar 5, 2026', endDate: 'Mar 6, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 22, name: 'Cure Hydration', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 70, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'medium', complexity_factors: [], recruitment_source: 'partner_recruited' },
     // ── Public Studies (free, in-app challenges) ──
     { id: 24, name: 'The 30-Minute Reset', type: 'PUBLIC', spend: 0, leads: null, joined: 33, onboarded: 24, target: 33, wearable: null, days: null, launchDate: 'Jan 29, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
     { id: 25, name: 'Track Your Travel', type: 'PUBLIC', spend: 0, leads: null, joined: 7, onboarded: 6, target: 25, wearable: null, days: null, launchDate: 'Jan 31, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
@@ -740,7 +891,8 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     { id: 37, name: 'The Hydration Effect', type: 'PUBLIC', spend: 0, leads: null, joined: 50, onboarded: 34, target: 56, wearable: null, days: null, launchDate: 'Mar 22, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 4 in study, 100% compliance (4/4)', inStudy: 4, complianceN: 4, complianceD: 4 },
   ];
 
-  // Apply overrides
+  // Apply overrides and compute derived fields
+  const MANUAL_STEP_FACTORS = ['screening_call', 'pre_study_lab_work', 'external_survey'];
   STUDIES.forEach(s => {
     for (const [key, overrides] of Object.entries(STUDY_OVERRIDES)) {
       if (s.name.includes(key)) {
@@ -748,6 +900,24 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
         if (overrides.category) s.overrideCategory = overrides.category;
       }
     }
+    // Derive has_manual_steps from complexity_factors
+    if (!s.complexity_factors) s.complexity_factors = [];
+    s.has_manual_steps = s.manualQueue || s.complexity_factors.some(f => MANUAL_STEP_FACTORS.includes(f));
+    // Auto-derive size_category if not set
+    if (!s.size_category) {
+      if (s.target <= 35) s.size_category = 'pilot';
+      else if (s.target <= 150) s.size_category = 'medium';
+      else s.size_category = 'large';
+    }
+    // Default recruitment_source if not set
+    if (!s.recruitment_source) {
+      if (s.type === 'VEP') s.recruitment_source = 'partner_recruited';
+      else if (s.type === 'PUBLIC') s.recruitment_source = 'organic_community';
+      else if (s.spend > 0) s.recruitment_source = 'paid';
+      else s.recruitment_source = 'organic_community';
+    }
+    // Default outlier_reason
+    if (s.outlier && !s.outlier_reason) s.outlier_reason = s.notes || 'Flagged as outlier';
   });
 
   // ============================================================
@@ -1048,6 +1218,139 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   }
 
   // ============================================================
+  // KPI CALCULATION ENGINE
+  // ============================================================
+
+  // Quarter helpers
+  function getQuarterKey(date) {
+    if (!date || isNaN(date)) return null;
+    const q = Math.ceil((date.getMonth() + 1) / 3);
+    return `${date.getFullYear()}-Q${q}`;
+  }
+  function getCurrentQuarter() { return getQuarterKey(new Date()); }
+  function getQuarterDates(qKey) {
+    const [y, qStr] = qKey.split('-Q');
+    const q = parseInt(qStr);
+    const start = new Date(parseInt(y), (q - 1) * 3, 1);
+    const end = new Date(parseInt(y), q * 3, 0, 23, 59, 59);
+    return { start, end };
+  }
+  function getStudiesForQuarter(qKey) {
+    const { start, end } = getQuarterDates(qKey);
+    return STUDIES.filter(s => {
+      if (s.type === 'PUBLIC' || s.status === 'coming') return false;
+      if (!s.launchDate) return false;
+      const ld = new Date(s.launchDate);
+      if (isNaN(ld)) return false;
+      // Study overlaps with quarter if launched before quarter end and (no end date or ended after quarter start)
+      if (ld > end) return false;
+      if (s.endDate) {
+        const ed = new Date(s.endDate);
+        if (!isNaN(ed) && ed < start) return false;
+      }
+      return true;
+    });
+  }
+  function getSponsoredStudies(studies) {
+    return (studies || STUDIES).filter(s => s.type !== 'PUBLIC' && s.status !== 'coming');
+  }
+
+  // CPO calculations
+  function calcBlendedCPO(studies) {
+    const s = getSponsoredStudies(studies);
+    const totalSpend = s.reduce((a, st) => a + st.spend, 0);
+    const totalOnboarded = s.reduce((a, st) => a + (st.onboarded || 0), 0);
+    return totalOnboarded > 0 ? totalSpend / totalOnboarded : null;
+  }
+  function calcPaidCPO(studies, excludeOutliers = true) {
+    let s = getSponsoredStudies(studies).filter(st => st.spend > 0);
+    if (excludeOutliers) s = s.filter(st => !st.outlier);
+    const totalSpend = s.reduce((a, st) => a + st.spend, 0);
+    const totalOnboarded = s.reduce((a, st) => a + (st.onboarded || 0), 0);
+    return totalOnboarded > 0 ? totalSpend / totalOnboarded : null;
+  }
+  function calcCPOByType(studies) {
+    const s = getSponsoredStudies(studies);
+    const result = {};
+    for (const type of ['RCT', 'RWE', 'VEP']) {
+      const group = s.filter(st => st.type === type);
+      const spend = group.reduce((a, st) => a + st.spend, 0);
+      const onb = group.reduce((a, st) => a + (st.onboarded || 0), 0);
+      result[type] = onb > 0 ? spend / onb : null;
+    }
+    return result;
+  }
+
+  // Days to recruit
+  function calcAvgDaysToRecruit(studies, splitByComplexity = false) {
+    const s = getSponsoredStudies(studies).filter(st => st.days != null && st.days > 0);
+    if (!s.length) return splitByComplexity ? { digital: null, manual: null, all: null } : null;
+    const avg = arr => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length * 10) / 10 : null;
+    if (!splitByComplexity) return avg(s.map(st => st.days));
+    const digital = s.filter(st => !st.has_manual_steps);
+    const manual = s.filter(st => st.has_manual_steps);
+    return {
+      digital: avg(digital.map(st => st.days)),
+      manual: avg(manual.map(st => st.days)),
+      all: avg(s.map(st => st.days)),
+    };
+  }
+
+  // Participants onboarded
+  function calcParticipantsOnboarded(studies) {
+    return getSponsoredStudies(studies).reduce((a, s) => a + (s.onboarded || 0), 0);
+  }
+
+  // Completion rate
+  function calcCompletionRate(studies) {
+    const s = getSponsoredStudies(studies).filter(st => st.target > 0);
+    const onb = s.reduce((a, st) => a + (st.onboarded || 0), 0);
+    const target = s.reduce((a, st) => a + st.target, 0);
+    return target > 0 ? (onb / target * 100) : null;
+  }
+
+  // Projected cost to complete (for active/recruiting studies)
+  function calcProjectedCost(studies) {
+    const active = getSponsoredStudies(studies).filter(s => s.status === 'recruiting' || s.status === 'active');
+    if (!active.length) return null;
+    const currentCPO = calcPaidCPO(studies, true) || calcBlendedCPO(studies) || 25;
+    return active.map(s => {
+      const remaining = Math.max(0, s.target - (s.onboarded || 0));
+      const studyCPO = (s.spend > 0 && s.onboarded > 0) ? s.spend / s.onboarded : currentCPO;
+      return {
+        name: s.name,
+        remaining,
+        best: remaining * Math.min(studyCPO, currentCPO) * 0.7,
+        expected: remaining * studyCPO,
+        worst: remaining * studyCPO * 1.5,
+        currentSpend: s.spend,
+      };
+    });
+  }
+
+  // Get quarterly KPI targets
+  function getTargetsForQuarter(qKey) {
+    return QUARTERLY_TARGETS[qKey] || null;
+  }
+
+  // Compute all KPIs for a set of studies
+  function computeAllKPIs(studies) {
+    const daysSplit = calcAvgDaysToRecruit(studies, true);
+    return {
+      blended_cpo: calcBlendedCPO(studies),
+      paid_cpo: calcPaidCPO(studies, true),
+      paid_cpo_incl_outliers: calcPaidCPO(studies, false),
+      cpo_by_type: calcCPOByType(studies),
+      avg_days: daysSplit,
+      participants_onboarded: calcParticipantsOnboarded(studies),
+      completion_rate: calcCompletionRate(studies),
+      projected_cost: calcProjectedCost(studies),
+      study_count: getSponsoredStudies(studies).length,
+      paid_count: getSponsoredStudies(studies).filter(s => s.spend > 0).length,
+    };
+  }
+
+  // ============================================================
   // STATE
   // ============================================================
   let sortCol = 'status';
@@ -1055,6 +1358,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   let filterStatus = 'all';
   let filterType = 'all';
   let filterManual = 'all';
+  let filterSize = 'all';
+  let filterSource = 'all';
+  let filterOutlier = 'all';
 
   // ============================================================
   // RENDER: API Status
@@ -1218,6 +1524,140 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target (all-time)</div></div>`;
 
     grid.innerHTML = cards;
+  }
+
+  // ============================================================
+  // RENDER: KPI Tracking
+  // ============================================================
+  function renderKPITracking() {
+    const grid = $('#kpi-tracking-grid');
+    const quarterLabel = $('#kpi-quarter-label');
+    if (!grid) return;
+
+    // Determine which studies to compute KPIs for
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+
+    const kpis = computeAllKPIs(yearFiltered);
+    const curQ = getCurrentQuarter();
+    const targets = getTargetsForQuarter(curQ);
+
+    quarterLabel.textContent = targets ? `${curQ} targets active` : 'No targets set for ' + curQ;
+
+    // Helper to render a progress indicator vs target
+    function targetIndicator(actual, target, lowerIsBetter = false) {
+      if (target == null || actual == null) return '<span style="color:var(--text-dim)">No target</span>';
+      const pct = lowerIsBetter ? (target / actual) * 100 : (actual / target) * 100;
+      let cls, label;
+      if (lowerIsBetter) {
+        if (actual <= target) { cls = 'on-track'; label = 'On track'; }
+        else if (actual <= target * 1.1) { cls = 'near-target'; label = 'Near target'; }
+        else { cls = 'off-track'; label = 'Over target'; }
+      } else {
+        if (pct >= 100) { cls = 'on-track'; label = 'On track'; }
+        else if (pct >= 80) { cls = 'near-target'; label = 'Near target'; }
+        else { cls = 'off-track'; label = 'Below target'; }
+      }
+      const fmtTarget = typeof target === 'number' ? (target < 1 ? target : (Number.isInteger(target) ? target.toLocaleString() : target.toFixed(2))) : target;
+      return `<span class="${cls}">&#9679; ${label}</span> <span style="color:var(--text-dim)">Target: ${fmtTarget}</span>`;
+    }
+
+    function progressBar(actual, target, color, lowerIsBetter = false) {
+      if (target == null || actual == null) return '';
+      let pct = lowerIsBetter
+        ? Math.min(100, Math.max(0, (target / Math.max(actual, 0.01)) * 100))
+        : Math.min(100, Math.max(0, (actual / Math.max(target, 0.01)) * 100));
+      return `<div class="kt-bar"><div class="kt-bar-fill" style="width:${pct.toFixed(0)}%;background:${color}"></div></div>`;
+    }
+
+    let html = '';
+
+    // 1. Blended CPO
+    const blendedTarget = targets?.blended_cpo;
+    html += `<div class="kpi-track-card" style="border-top:3px solid var(--lime)">
+      <div class="kt-label">Blended CPO</div>
+      <div class="kt-value" style="color:var(--lime)">${kpis.blended_cpo != null ? '$' + kpis.blended_cpo.toFixed(2) : '—'}</div>
+      <div class="kt-target">${targetIndicator(kpis.blended_cpo, blendedTarget, true)}</div>
+      <div class="kt-sub">${kpis.paid_count} paid studies, ${kpis.study_count} total sponsored</div>
+      ${progressBar(kpis.blended_cpo, blendedTarget, 'var(--lime)', true)}
+    </div>`;
+
+    // 2. Paid CPO (excl outliers)
+    const paidTarget = targets?.paid_cpo_excl_outliers;
+    html += `<div class="kpi-track-card" style="border-top:3px solid var(--teal)">
+      <div class="kt-label">Paid CPO (excl. outliers)</div>
+      <div class="kt-value" style="color:var(--teal)">${kpis.paid_cpo != null ? '$' + kpis.paid_cpo.toFixed(2) : '—'}</div>
+      <div class="kt-target">${targetIndicator(kpis.paid_cpo, paidTarget, true)}</div>
+      <div class="kt-sub">Excludes flagged outlier studies</div>
+      ${progressBar(kpis.paid_cpo, paidTarget, 'var(--teal)', true)}
+    </div>`;
+
+    // 3. CPO by type
+    const cpoByType = kpis.cpo_by_type;
+    html += `<div class="kpi-track-card" style="border-top:3px solid var(--indigo)">
+      <div class="kt-label">CPO by Study Type</div>
+      <div style="display:flex;gap:16px;margin-top:4px;">
+        <div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">RCT</div><div style="font-size:22px;font-weight:700;color:var(--indigo)">${cpoByType.RCT != null ? '$' + cpoByType.RCT.toFixed(0) : '—'}</div></div>
+        <div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">RWA</div><div style="font-size:22px;font-weight:700;color:var(--teal)">${cpoByType.RWE != null ? '$' + cpoByType.RWE.toFixed(0) : '—'}</div></div>
+        <div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">VEP</div><div style="font-size:22px;font-weight:700;color:var(--lavender)">${cpoByType.VEP != null ? '$' + cpoByType.VEP.toFixed(0) : '$0'}</div></div>
+      </div>
+      <div class="kt-sub" style="margin-top:8px;">Targets — RCT: $${targets?.rct_cpo || 35} · RWA: $${targets?.rwa_cpo || 25} · VEP: $${targets?.vep_cpo || 0}</div>
+    </div>`;
+
+    // 4. Avg Days to Recruit
+    const days = kpis.avg_days;
+    const daysTarget = targets?.avg_days_to_recruit;
+    html += `<div class="kpi-track-card" style="border-top:3px solid var(--blue)">
+      <div class="kt-label">Avg Days to Recruit</div>
+      <div class="kt-value" style="color:var(--blue)">${days?.all != null ? days.all + 'd' : '—'}</div>
+      <div class="kt-target">${targetIndicator(days?.all, daysTarget, true)}</div>
+      <div class="kt-sub">
+        Digital-only: <strong>${days?.digital != null ? days.digital + 'd' : '—'}</strong> ·
+        Manual steps: <strong>${days?.manual != null ? days.manual + 'd' : '—'}</strong>
+      </div>
+      ${progressBar(days?.all, daysTarget, 'var(--blue)', true)}
+    </div>`;
+
+    // 5. Participants Onboarded
+    const onbTarget = targets?.participants_onboarded;
+    html += `<div class="kpi-track-card" style="border-top:3px solid var(--green)">
+      <div class="kt-label">Participants Onboarded</div>
+      <div class="kt-value" style="color:var(--green)">${fmtInt(kpis.participants_onboarded)}</div>
+      <div class="kt-target">${targetIndicator(kpis.participants_onboarded, onbTarget)}</div>
+      <div class="kt-sub">${kpis.study_count} sponsored studies</div>
+      ${progressBar(kpis.participants_onboarded, onbTarget, 'var(--green)')}
+    </div>`;
+
+    // 6. Completion Rate
+    const compTarget = targets?.completion_rate;
+    html += `<div class="kpi-track-card" style="border-top:3px solid var(--yellow)">
+      <div class="kt-label">Recruitment Completion Rate</div>
+      <div class="kt-value" style="color:var(--yellow)">${kpis.completion_rate != null ? kpis.completion_rate.toFixed(1) + '%' : '—'}</div>
+      <div class="kt-target">${targetIndicator(kpis.completion_rate, compTarget)}</div>
+      <div class="kt-sub">Onboarded ÷ target across all studies</div>
+      ${progressBar(kpis.completion_rate, compTarget, 'var(--yellow)')}
+    </div>`;
+
+    // 7. Projected Cost to Complete
+    const projections = kpis.projected_cost;
+    if (projections && projections.length > 0) {
+      const totalExpected = projections.reduce((a, p) => a + p.expected, 0);
+      const totalBest = projections.reduce((a, p) => a + p.best, 0);
+      const totalWorst = projections.reduce((a, p) => a + p.worst, 0);
+      html += `<div class="kpi-track-card" style="border-top:3px solid var(--rose)">
+        <div class="kt-label">Projected Cost to Complete</div>
+        <div class="kt-value" style="color:var(--rose)">${fmt(totalExpected)}</div>
+        <div class="kt-sub">
+          Best: <strong style="color:var(--green)">${fmt(totalBest)}</strong> ·
+          Worst: <strong style="color:var(--rose)">${fmt(totalWorst)}</strong>
+        </div>
+        <div class="kt-sub">${projections.length} active/recruiting stud${projections.length === 1 ? 'y' : 'ies'}</div>
+      </div>`;
+    }
+
+    grid.innerHTML = html;
   }
 
   // ============================================================
@@ -1605,6 +2045,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     { key: 'id', label: '#', align: 'right', sortable: true },
     { key: 'name', label: 'Study Name', align: 'left', sortable: true },
     { key: 'type', label: 'Type', align: 'left', sortable: true },
+    { key: 'size_category', label: 'Size', align: 'left', sortable: true },
     { key: 'status', label: 'Status', align: 'left', sortable: true },
     { key: 'launchDate', label: 'Launch', align: 'left', sortable: true },
     { key: 'endDate', label: 'End', align: 'left', sortable: false },
@@ -1613,10 +2054,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     { key: 'joined', label: 'Joins', align: 'right', sortable: true },
     { key: 'onboarded', label: 'Onboarded', align: 'right', sortable: true },
     { key: 'target', label: 'Target', align: 'right', sortable: true },
+    { key: 'completion_pct', label: '% Complete', align: 'right', sortable: true },
     { key: 'cpo', label: 'CPO', align: 'right', sortable: true },
+    { key: 'recruitment_source', label: 'Source', align: 'left', sortable: true },
     { key: 'wearable', label: 'Wearable', align: 'left', sortable: false },
     { key: 'days', label: 'Days', align: 'right', sortable: true },
     { key: 'manualQueue', label: 'Manual?', align: 'center', sortable: true },
+    { key: 'outlier', label: 'Outlier', align: 'center', sortable: true },
   ];
 
   function getCPO(s) {
@@ -1636,6 +2080,12 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       return isNaN(d) ? s.launchDate : d.toISOString();
     }
     if (col === 'manualQueue') return s.manualQueue ? 0 : 1;
+    if (col === 'outlier') return s.outlier ? 0 : 1;
+    if (col === 'completion_pct') return s.target > 0 ? (s.onboarded || 0) / s.target : -1;
+    if (col === 'size_category') {
+      const order = { pilot: 0, medium: 1, large: 2 };
+      return order[s.size_category] ?? 3;
+    }
     const val = s[col];
     return val == null ? -Infinity : val;
   }
@@ -1661,6 +2111,11 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     if (filterType !== 'all') studies = studies.filter(s => s.type === filterType);
     if (filterManual !== 'all') {
       studies = studies.filter(s => filterManual === 'yes' ? s.manualQueue : !s.manualQueue);
+    }
+    if (filterSize !== 'all') studies = studies.filter(s => s.size_category === filterSize);
+    if (filterSource !== 'all') studies = studies.filter(s => s.recruitment_source === filterSource);
+    if (filterOutlier !== 'all') {
+      studies = studies.filter(s => filterOutlier === 'yes' ? s.outlier : !s.outlier);
     }
 
     // Sort
@@ -1690,10 +2145,16 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         ? `${fmt(displaySpend)}${spendIsLive ? ' <span style="color:var(--lime);font-size:9px" title="Live from API">●</span>' : ''}`
         : '—';
 
+      const compPct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100) : null;
+      const compColor = compPct != null ? (compPct >= 100 ? 'var(--green)' : compPct >= 80 ? 'var(--yellow)' : 'var(--rose)') : '';
+      const sizeBadgeMap = { pilot: 'badge-gray', medium: 'badge-blue', large: 'badge-indigo' };
+      const sourceLabels = { paid: 'Paid', organic_community: 'Organic', partner_recruited: 'Partner', mixed: 'Mixed' };
+
       return `<tr>
         <td class="align-right">${s.id}</td>
-        <td>${esc(s.name)}${s.outlier ? ' <span class="badge badge-rose" style="font-size:9px">Outlier</span>' : ''}</td>
+        <td>${esc(s.name)}</td>
         <td>${typeBadge(s.type)}</td>
+        <td><span class="badge ${sizeBadgeMap[s.size_category] || 'badge-gray'}">${(s.size_category || '—').charAt(0).toUpperCase() + (s.size_category || '').slice(1)}</span></td>
         <td>${statusBadge(s.status)}</td>
         <td>${s.launchDate || '—'}</td>
         <td>${s.endDate || '—'}</td>
@@ -1702,10 +2163,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         <td class="align-right">${fmtInt(displayJoins)}</td>
         <td class="align-right">${fmtInt(displayOnboarded)}</td>
         <td class="align-right">${fmtInt(s.target)}</td>
+        <td class="align-right">${compPct != null ? `<span style="color:${compColor};font-weight:600">${compPct.toFixed(0)}%</span>` : '—'}</td>
         <td class="align-right">${cpo != null ? fmt(cpo) : '—'}</td>
+        <td>${sourceLabels[s.recruitment_source] || '—'}</td>
         <td>${s.wearable || '—'}</td>
         <td class="align-right">${s.days != null ? s.days : '—'}</td>
         <td style="text-align:center">${s.manualQueue ? '<span style="color:var(--yellow)">Yes</span>' : '<span style="color:var(--text-dim)">No</span>'}</td>
+        <td style="text-align:center">${s.outlier ? '<span style="color:var(--rose)" title="' + esc(s.outlier_reason || '') + '">Yes</span>' : '<span style="color:var(--text-dim)">No</span>'}</td>
       </tr>`;
     }).join('');
 
@@ -1718,16 +2182,18 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const totTarget = studies.reduce((a, s) => a + s.target, 0);
     const totCPO = totOnboarded > 0 && totSpend > 0 ? totSpend / totOnboarded : null;
 
+    const totCompPct = totTarget > 0 ? (totOnboarded / totTarget * 100).toFixed(0) + '%' : '—';
     tfoot.innerHTML = `<tr>
       <td class="align-right"></td><td><strong>${studies.length} studies</strong></td>
-      <td></td><td></td><td></td><td></td>
+      <td></td><td></td><td></td><td></td><td></td>
       <td class="align-right"><strong>${fmt(totSpend)}</strong></td>
       <td class="align-right"><strong>${fmtInt(totLeads)}</strong></td>
       <td class="align-right"><strong>${fmtInt(totJoined)}</strong></td>
       <td class="align-right"><strong>${fmtInt(totOnboarded)}</strong></td>
       <td class="align-right"><strong>${fmtInt(totTarget)}</strong></td>
+      <td class="align-right"><strong>${totCompPct}</strong></td>
       <td class="align-right"><strong>${totCPO != null ? fmt(totCPO) : '—'}</strong></td>
-      <td></td><td></td><td></td>
+      <td></td><td></td><td></td><td></td><td></td>
     </tr>`;
   }
 
@@ -2069,6 +2535,145 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   }
 
   // ============================================================
+  // RENDER: KPI Trends & Quarterly Review
+  // ============================================================
+  let chartCPOTrend, chartParticipantsTrend;
+
+  function renderKPITrends() {
+    // Destroy previous chart instances
+    if (chartCPOTrend) { chartCPOTrend.destroy(); chartCPOTrend = null; }
+    if (chartParticipantsTrend) { chartParticipantsTrend.destroy(); chartParticipantsTrend = null; }
+
+    // Determine quarters with data
+    const quarters = [];
+    const allSponsored = getSponsoredStudies();
+    const minYear = 2025, maxYear = new Date().getFullYear();
+    for (let y = minYear; y <= maxYear; y++) {
+      for (let q = 1; q <= 4; q++) {
+        const qKey = `${y}-Q${q}`;
+        const qStudies = getStudiesForQuarter(qKey);
+        if (qStudies.length > 0) quarters.push({ key: qKey, studies: qStudies });
+      }
+    }
+    if (!quarters.length) return;
+
+    // Quarterly review table
+    const reviewEl = $('#kpi-quarterly-review');
+    const curQ = getCurrentQuarter();
+    let reviewHtml = `<div class="table-wrap"><table style="width:100%;font-size:12px;">
+      <thead><tr>
+        <th>Quarter</th><th class="align-right">Studies</th><th class="align-right">Blended CPO</th>
+        <th class="align-right">Paid CPO</th><th class="align-right">Avg Days</th>
+        <th class="align-right">Onboarded</th><th class="align-right">Completion</th>
+        <th class="align-right">Target CPO</th><th class="align-right">Target Onb.</th><th>Status</th>
+      </tr></thead><tbody>`;
+
+    quarters.forEach(q => {
+      const kpis = computeAllKPIs(q.studies);
+      const targets = getTargetsForQuarter(q.key);
+      const isCurrent = q.key === curQ;
+
+      const cpoActual = kpis.blended_cpo;
+      const cpoTarget = targets?.blended_cpo;
+      const onbTarget = targets?.participants_onboarded;
+
+      let statusBadgeHtml;
+      if (isCurrent) {
+        statusBadgeHtml = '<span class="badge badge-lime">Current</span>';
+      } else if (cpoTarget && cpoActual != null && cpoActual <= cpoTarget) {
+        statusBadgeHtml = '<span class="badge badge-green">Met</span>';
+      } else if (cpoTarget && cpoActual != null) {
+        statusBadgeHtml = '<span class="badge badge-rose">Missed</span>';
+      } else {
+        statusBadgeHtml = '<span class="badge badge-gray">No target</span>';
+      }
+
+      reviewHtml += `<tr style="${isCurrent ? 'background:rgba(200,230,74,0.05);' : ''}">
+        <td><strong>${q.key}</strong></td>
+        <td class="align-right">${q.studies.length}</td>
+        <td class="align-right">${cpoActual != null ? '$' + cpoActual.toFixed(2) : '—'}</td>
+        <td class="align-right">${kpis.paid_cpo != null ? '$' + kpis.paid_cpo.toFixed(2) : '—'}</td>
+        <td class="align-right">${kpis.avg_days?.all != null ? kpis.avg_days.all + 'd' : '—'}</td>
+        <td class="align-right">${fmtInt(kpis.participants_onboarded)}</td>
+        <td class="align-right">${kpis.completion_rate != null ? kpis.completion_rate.toFixed(0) + '%' : '—'}</td>
+        <td class="align-right">${cpoTarget != null ? '$' + cpoTarget : '—'}</td>
+        <td class="align-right">${onbTarget != null ? fmtInt(onbTarget) : '—'}</td>
+        <td>${statusBadgeHtml}</td>
+      </tr>`;
+    });
+    reviewHtml += '</tbody></table></div>';
+    reviewEl.innerHTML = reviewHtml;
+
+    // CPO Trend Chart
+    const cpoCanvas = $('#chart-cpo-trend');
+    if (cpoCanvas) {
+      const labels = quarters.map(q => q.key);
+      const blendedData = quarters.map(q => calcBlendedCPO(q.studies));
+      const paidData = quarters.map(q => calcPaidCPO(q.studies, true));
+      const targetData = quarters.map(q => getTargetsForQuarter(q.key)?.blended_cpo ?? null);
+
+      chartCPOTrend = new Chart(cpoCanvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Blended CPO', data: blendedData, borderColor: 'var(--lime)', backgroundColor: 'rgba(200,230,74,0.08)', fill: false, tension: 0.3, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6 },
+            { label: 'Paid CPO (excl outliers)', data: paidData, borderColor: 'var(--teal)', backgroundColor: 'rgba(0,179,159,0.08)', fill: false, tension: 0.3, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6 },
+            { label: 'Target', data: targetData, borderColor: 'rgba(255,255,255,0.3)', borderDash: [6, 4], fill: false, borderWidth: 1, pointRadius: 0 },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'bottom', labels: { color: '#999', font: { size: 11 }, padding: 12, usePointStyle: true } },
+            tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + (ctx.parsed.y?.toFixed(2) ?? '—') } },
+          },
+          scales: {
+            x: { ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { ticks: { color: '#888', font: { size: 11 }, callback: v => '$' + v }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          },
+        },
+      });
+    }
+
+    // Cumulative Participants Trend Chart
+    const partCanvas = $('#chart-participants-trend');
+    if (partCanvas) {
+      const labels = quarters.map(q => q.key);
+      let cumulative = 0;
+      const cumulativeData = quarters.map(q => {
+        cumulative += calcParticipantsOnboarded(q.studies);
+        return cumulative;
+      });
+      const targetLine = quarters.map(q => {
+        const t = getTargetsForQuarter(q.key)?.participants_onboarded;
+        return t || null;
+      });
+
+      chartParticipantsTrend = new Chart(partCanvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Cumulative Onboarded', data: cumulativeData, backgroundColor: 'rgba(52,211,153,0.5)', borderColor: 'var(--green)', borderWidth: 1, borderRadius: 4 },
+            { label: 'Quarterly Target', data: targetLine, type: 'line', borderColor: 'rgba(255,255,255,0.3)', borderDash: [6, 4], fill: false, borderWidth: 1, pointRadius: 3, pointBackgroundColor: 'rgba(255,255,255,0.5)' },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'bottom', labels: { color: '#999', font: { size: 11 }, padding: 12, usePointStyle: true } },
+          },
+          scales: {
+            x: { ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          },
+        },
+      });
+    }
+  }
+
+  // ============================================================
   // RENDER: Public Studies
   // ============================================================
   function renderPublicStudies() {
@@ -2165,9 +2770,11 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
     renderApiStatus();
     renderKPIs();
+    renderKPITracking();
     renderFunnel();
     renderCharts();
     renderStudiesTable();
+    renderKPITrends();
     renderAds();
     renderEmail();
     renderScorecard();
@@ -2221,6 +2828,100 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   $('#filter-status').addEventListener('change', e => { filterStatus = e.target.value; renderStudiesTable(); });
   $('#filter-type').addEventListener('change', e => { filterType = e.target.value; renderStudiesTable(); });
   $('#filter-manual').addEventListener('change', e => { filterManual = e.target.value; renderStudiesTable(); });
+  $('#filter-size').addEventListener('change', e => { filterSize = e.target.value; renderStudiesTable(); });
+  $('#filter-source').addEventListener('change', e => { filterSource = e.target.value; renderStudiesTable(); });
+  $('#filter-outlier').addEventListener('change', e => { filterOutlier = e.target.value; renderStudiesTable(); });
+
+  // CSV Export
+  $('#btn-export-csv').addEventListener('click', () => {
+    let studies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
+    if (selectedYear !== 'all') {
+      const yr = parseInt(selectedYear);
+      studies = studies.filter(s => s.launchYear === yr || s.crossYear);
+    }
+    if (filterStatus !== 'all') studies = studies.filter(s => s.status === filterStatus);
+    if (filterType !== 'all') studies = studies.filter(s => s.type === filterType);
+    if (filterSize !== 'all') studies = studies.filter(s => s.size_category === filterSize);
+    if (filterSource !== 'all') studies = studies.filter(s => s.recruitment_source === filterSource);
+    if (filterManual !== 'all') studies = studies.filter(s => filterManual === 'yes' ? s.manualQueue : !s.manualQueue);
+    if (filterOutlier !== 'all') studies = studies.filter(s => filterOutlier === 'yes' ? s.outlier : !s.outlier);
+
+    const headers = ['ID','Name','Type','Size','Status','Launch','End','Spend','Leads','Joined','Onboarded','Target','Completion%','CPO','Source','Wearable','Days','Manual Steps','Outlier','Outlier Reason','Complexity Factors'];
+    const rows = studies.map(s => {
+      const spend = s.apiSpend != null ? s.apiSpend : s.spend;
+      const cpo = (spend > 0 && s.onboarded > 0) ? (spend / s.onboarded).toFixed(2) : '';
+      const compPct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100).toFixed(1) : '';
+      return [s.id, '"' + (s.name || '').replace(/"/g, '""') + '"', s.type, s.size_category, s.status, s.launchDate || '', s.endDate || '', spend.toFixed(2), s.leads || '', s.joined || '', s.onboarded || '', s.target, compPct, cpo, s.recruitment_source || '', s.wearable || '', s.days || '', s.has_manual_steps ? 'Yes' : 'No', s.outlier ? 'Yes' : 'No', '"' + (s.outlier_reason || '').replace(/"/g, '""') + '"', '"' + (s.complexity_factors || []).join(', ') + '"'];
+    });
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `reputable-studies-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Admin: Generate JSON
+  $('#admin-generate').addEventListener('click', () => {
+    const q = $('#admin-quarter').value;
+    const targets = {
+      blended_cpo: parseFloat($('#admin-blended-cpo').value) || 0,
+      paid_cpo_excl_outliers: parseFloat($('#admin-paid-cpo').value) || 0,
+      rct_cpo: parseFloat($('#admin-rct-cpo').value) || 0,
+      rwa_cpo: parseFloat($('#admin-rwa-cpo').value) || 0,
+      vep_cpo: 0,
+      avg_days_to_recruit: parseInt($('#admin-days').value) || 0,
+      participants_onboarded: parseInt($('#admin-onboarded').value) || 0,
+      completion_rate: parseInt($('#admin-completion').value) || 0,
+      notes: $('#admin-notes').value || '',
+    };
+    const output = $('#admin-json-output');
+    output.style.display = '';
+    output.textContent = `'${q}': ${JSON.stringify(targets, null, 2)},`;
+  });
+
+  // Admin: Pre-fill when quarter changes
+  $('#admin-quarter').addEventListener('change', e => {
+    const t = QUARTERLY_TARGETS[e.target.value];
+    if (t) {
+      $('#admin-blended-cpo').value = t.blended_cpo || '';
+      $('#admin-paid-cpo').value = t.paid_cpo_excl_outliers || '';
+      $('#admin-rct-cpo').value = t.rct_cpo || '';
+      $('#admin-rwa-cpo').value = t.rwa_cpo || '';
+      $('#admin-days').value = t.avg_days_to_recruit || '';
+      $('#admin-onboarded').value = t.participants_onboarded || '';
+      $('#admin-completion').value = t.completion_rate || '';
+      $('#admin-notes').value = t.notes || '';
+    }
+  });
+
+  // Admin: Export KPI Summary CSV
+  $('#admin-export-kpi-csv').addEventListener('click', () => {
+    const quarters = [];
+    for (let y = 2025; y <= new Date().getFullYear(); y++) {
+      for (let q = 1; q <= 4; q++) {
+        const qKey = `${y}-Q${q}`;
+        const qStudies = getStudiesForQuarter(qKey);
+        if (qStudies.length > 0) quarters.push({ key: qKey, studies: qStudies });
+      }
+    }
+    const headers = ['Quarter','Studies','Blended CPO','Paid CPO (excl outliers)','RCT CPO','RWE CPO','Avg Days','Digital Days','Manual Days','Onboarded','Completion%','Target CPO','Target Onboarded','Target Days'];
+    const rows = quarters.map(q => {
+      const kpis = computeAllKPIs(q.studies);
+      const targets = getTargetsForQuarter(q.key);
+      return [q.key, q.studies.length, kpis.blended_cpo?.toFixed(2) ?? '', kpis.paid_cpo?.toFixed(2) ?? '', kpis.cpo_by_type.RCT?.toFixed(2) ?? '', kpis.cpo_by_type.RWE?.toFixed(2) ?? '', kpis.avg_days?.all ?? '', kpis.avg_days?.digital ?? '', kpis.avg_days?.manual ?? '', kpis.participants_onboarded, kpis.completion_rate?.toFixed(1) ?? '', targets?.blended_cpo ?? '', targets?.participants_onboarded ?? '', targets?.avg_days_to_recruit ?? ''];
+    });
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `reputable-kpi-summary-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
 
   // ============================================================
   // LOAD DATA & RENDER
