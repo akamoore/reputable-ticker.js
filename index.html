@@ -2020,8 +2020,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     });
     const launched = yearFiltered.filter(s => s.status !== 'coming');
 
-    const manualStudies = launched.filter(s => s.manualQueue);
-    const autoStudies = launched.filter(s => !s.manualQueue);
+    const nonPublic = launched.filter(s => s.type !== 'PUBLIC');
+    const manualStudies = nonPublic.filter(s => s.manualQueue);
+    const autoStudies = nonPublic.filter(s => !s.manualQueue);
 
     function calcMetrics(arr) {
       const count = arr.length;
