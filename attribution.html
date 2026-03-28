@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attribution &amp; True CPO — Reputable Health</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--bg:#0a0a0a;--surface:#1a1a1a;--surface2:#141414;--border:rgba(255,255,255,0.08);--border-lime:rgba(200,230,74,0.2);--text:#fff;--text-dim:#999;--lime:#C8E64A;--lime-bg:rgba(200,230,74,0.08);--green:#34D399;--green-bg:rgba(52,211,153,0.12);--teal:#00B39F;--teal-bg:rgba(0,179,159,0.12);--blue:#60A5FA;--blue-bg:rgba(96,165,250,0.12);--indigo:#6C5CE7;--indigo-bg:rgba(108,92,231,0.12);--yellow:#FBBF24;--yellow-bg:rgba(251,191,36,0.12);--rose:#FB7185;--rose-bg:rgba(251,113,133,0.12);--lavender:#A78BFA;--lavender-bg:rgba(167,139,250,0.12);--sky:#74B9FF;--gray:#636e80;--gray-bg:rgba(99,110,128,0.12);--charcoal:#222220;--radius-md:12px;--radius-lg:16px;--radius-pill:100px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(200,230,74,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,230,74,0.018) 1px,transparent 1px);background-size:52px 52px}
+    .container{max-width:1200px;margin:0 auto}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .header h1{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:700}
+    .subtitle{font-size:13px;color:var(--text-dim);margin-top:4px}
+    .nav-link{font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill)}
+    .nav-link:hover{background:var(--lime-bg)}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px}
+    .section h2{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .section h2 .ic{color:var(--lime);font-size:14px}
+    .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+    .badge{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+    .cpo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+    .cpo-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px;position:relative;border-top:3px solid}
+    .cpo-card .cc-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;font-weight:700;margin-bottom:8px}
+    .cpo-card .cc-value{font-size:32px;font-weight:700;line-height:1.1}
+    .cpo-card .cc-target{font-size:11px;margin-top:6px}
+    .cpo-card .cc-sub{font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.4}
+    .cpo-card .cc-info{font-size:10px;color:var(--text-dim);margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);line-height:1.4;font-style:italic}
+    .quality-bar{display:flex;height:24px;border-radius:4px;overflow:hidden;margin-top:8px}
+    .quality-bar div{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,0.7)}
+    .mix-bar{display:flex;height:20px;border-radius:3px;overflow:hidden;margin-top:4px}
+    .mix-bar div{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(0,0,0,0.7);min-width:1px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:rgba(255,255,255,0.03);color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;font-size:10px;text-align:left;padding:10px;border-bottom:1px solid var(--border)}
+    td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .align-right{text-align:right}
+    .table-wrap{overflow-x:auto}
+    select{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px}
+    .filter-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:4px 12px;border-radius:var(--radius-pill);font-size:12px;cursor:pointer}
+    .filter-btn:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+    .filter-btn.active{border-color:var(--border-lime);color:var(--lime);background:var(--lime-bg)}
+    .ltv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+    .ltv-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;text-align:center;border-top:3px solid}
+    .ltv-card .lc-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em}
+    .ltv-card .lc-value{font-size:28px;font-weight:700;margin:6px 0}
+    .ltv-card .lc-sub{font-size:11px;color:var(--text-dim)}
+    .import-zone{border:2px dashed var(--border);border-radius:var(--radius-md);padding:30px;text-align:center;cursor:pointer}
+    .import-zone:hover{border-color:var(--lime)}
+    .queue-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px}
+    .queue-row:last-child{border-bottom:none}
+    .footer{text-align:center;font-size:11px;color:var(--text-dim);padding:24px 0}
+    @media(max-width:768px){.cpo-grid{grid-template-columns:1fr 1fr}.ltv-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>Attribution &amp; True CPO</h1><div class="subtitle" id="subtitle">Reputable Health — Cost Analysis &amp; Participant Value</div></div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <a href="index.html" class="nav-link">Command Center</a>
+      <a href="lifecycle.html" class="nav-link">Lifecycle</a>
+      <a href="reporting.html" class="nav-link">Reporting</a>
+    </div>
+  </div>
+
+  <!-- CPO Cards -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Cost Per Onboarded — Five Metrics</h2><div class="cpo-grid" id="cpo-grid"></div></div>
+
+  <!-- Attribution Quality -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Attribution Data Quality</h2><div id="quality-content"></div></div>
+
+  <!-- Per-Study Breakdown -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Per-Study Cost &amp; Attribution Breakdown</h2><div class="table-wrap" id="study-table-wrap"></div></div>
+
+  <!-- Attribution Mix -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Attribution Mix by Study</h2><div id="attr-mix-content"></div></div>
+
+  <!-- Ad Spend Efficiency -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Ad Campaign Efficiency</h2><div class="table-wrap" id="campaign-table-wrap"></div></div>
+
+  <!-- Ecosystem Growth -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Ecosystem Growth Waterfall</h2><div id="waterfall-content"></div></div>
+
+  <!-- LTV Framework -->
+  <div class="section"><h2><span class="ic">&#9673;</span> Participant Lifetime Value</h2><div id="ltv-content"></div></div>
+
+  <!-- LTV Distribution -->
+  <div class="section"><h2><span class="ic">&#9673;</span> LTV Distribution &amp; Re-enrollment Funnel</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="ltv-detail"></div></div>
+
+  <!-- Attribution Queue -->
+  <div class="section">
+    <div class="section-header"><h2 style="margin:0;"><span class="ic">&#9673;</span> Attribution Assignment Queue</h2><span style="font-size:12px;color:var(--text-dim);" id="queue-count"></span></div>
+    <div id="queue-content"></div>
+  </div>
+
+  <!-- Import & Tools -->
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="document.getElementById('tools-body').style.display=document.getElementById('tools-body').style.display==='none'?'':'none';">
+      <h2 style="margin:0;"><span class="ic">&#9673;</span> Import &amp; Attribution Tools</h2>
+      <span style="color:var(--text-dim);font-size:12px;">Click to expand</span>
+    </div>
+    <div id="tools-body" style="display:none;margin-top:16px;">
+      <h3 style="font-size:13px;margin-bottom:10px;color:var(--text-dim);">Import Meta Ads Manager CSV</h3>
+      <div class="import-zone" id="meta-drop-zone">
+        <div style="font-size:14px;margin-bottom:6px;">Drop Meta Ads CSV here or click to browse</div>
+        <div style="font-size:11px;color:var(--text-dim);">Columns: campaign_name, lead_name, email, phone, date, spend</div>
+        <input type="file" id="meta-file-input" accept=".csv" style="display:none;">
+      </div>
+      <div id="meta-preview" style="display:none;margin-top:12px;"></div>
+
+      <h3 style="font-size:13px;margin:20px 0 10px;color:var(--text-dim);">Bulk Attribution (CSV)</h3>
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Upload CSV with columns: participant_id, source_type, confidence (optional)</div>
+      <div class="import-zone" id="bulk-drop-zone" style="padding:20px;">
+        <div style="font-size:13px;">Drop bulk attribution CSV here</div>
+        <input type="file" id="bulk-file-input" accept=".csv" style="display:none;">
+      </div>
+      <div id="bulk-preview" style="display:none;margin-top:12px;"></div>
+
+      <h3 style="font-size:13px;margin:20px 0 10px;color:var(--text-dim);">Study Revenue per Participant</h3>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Set what each study is worth per completed participant (for LTV calculation)</div>
+      <div id="revenue-inputs"></div>
+
+      <div style="margin-top:20px;display:flex;gap:10px;">
+        <button id="btn-export-attr" style="background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime);border-radius:var(--radius-pill);padding:8px 16px;font-weight:600;font-size:12px;cursor:pointer;">Export Attribution Data (CSV)</button>
+        <button id="btn-reset" style="background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose);border-radius:var(--radius-pill);padding:8px 16px;font-weight:600;font-size:12px;cursor:pointer;">Reset Sample Data</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer" id="footer"></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
+const fmt=n=>n!=null?'$'+n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+const fmtInt=n=>n!=null?n.toLocaleString():'—';
+
+// ============================================================
+// DATA MODEL
+// ============================================================
+const STORAGE_KEY='reputable_attribution_v2';
+const SOURCE_TYPES=['meta_paid','google_paid','organic_search','organic_social','community_email','referral','partner_vep','direct','waitlist','unknown'];
+const SOURCE_LABELS={meta_paid:'Meta Paid',google_paid:'Google Paid',organic_search:'Organic Search',organic_social:'Organic Social',community_email:'Community Email',referral:'Referral',partner_vep:'VEP Partner',direct:'Direct',waitlist:'Waitlist',unknown:'Unknown'};
+const SOURCE_COLORS={meta_paid:'#6C5CE7',organic_social:'#74B9FF',community_email:'#FBBF24',partner_vep:'#A78BFA',referral:'#34D399',direct:'#60A5FA',organic_search:'#00B39F',waitlist:'#636e80',unknown:'#FB7185',google_paid:'#FF6B6B'};
+const CONFIDENCE_LEVELS=['verified','inferred','estimated','unknown'];
+const CONF_COLORS={verified:'#34D399',inferred:'#60A5FA',estimated:'#FBBF24',unknown:'#FB7185'};
+
+function load(){try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function save(d){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}catch(e){}}
+
+// ============================================================
+// STUDIES (mirror from main dashboard)
+// ============================================================
+const STUDIES=[
+  {id:'melatonin-somato',name:'Melatonin (Somato)',type:'RCT',spend:8807.67,onboarded:241,target:240,outlier:true,outlier_reason:'Baseline bug + eligibility question',revenue_per_participant:80},
+  {id:'proleevamax',name:'ProleevaMax',type:'RWE',spend:6461.48,onboarded:30,target:35,outlier:true,outlier_reason:'WHOOP + lab bottleneck',revenue_per_participant:120},
+  {id:'enhanced-brew',name:'Enhanced Brew',type:'RCT',spend:3184.93,onboarded:192,target:189,outlier:false,revenue_per_participant:60},
+  {id:'berkeley-life',name:'Berkeley Life',type:'RCT',spend:2632.02,onboarded:70,target:70,outlier:false,revenue_per_participant:80},
+  {id:'peptide-sleep',name:'Peptide Sleep',type:'RCT',spend:2464.11,onboarded:120,target:120,outlier:false,revenue_per_participant:70},
+  {id:'enhanced-brew-rct',name:'Enhanced Brew (RCT)',type:'RCT',spend:1046.99,onboarded:79,target:70,outlier:false,revenue_per_participant:60},
+  {id:'rootless',name:'Rootless',type:'RWE',spend:582.58,onboarded:50,target:50,outlier:false,revenue_per_participant:50},
+  {id:'quantum-upgrade',name:'Quantum Upgrade',type:'RCT',spend:266.14,onboarded:12,target:70,outlier:false,revenue_per_participant:70},
+  {id:'sleep-mushrooms',name:'Sleep Mushrooms+',type:'RWE',spend:0,onboarded:50,target:50,outlier:false,revenue_per_participant:40},
+  {id:'tapping-solutions',name:'Tapping Solutions',type:'VEP',spend:0,onboarded:20,target:20,outlier:false,revenue_per_participant:50},
+  {id:'natpat',name:'NatPat',type:'VEP',spend:0,onboarded:25,target:25,outlier:false,revenue_per_participant:40},
+  {id:'sensate',name:'Sensate',type:'VEP',spend:0,onboarded:25,target:24,outlier:false,revenue_per_participant:45},
+  {id:'lyfefuel',name:'LyfeFuel',type:'VEP',spend:0,onboarded:25,target:23,outlier:false,revenue_per_participant:35},
+  {id:'hapbee',name:'Hapbee',type:'VEP',spend:0,onboarded:10,target:10,outlier:false,revenue_per_participant:50},
+  {id:'mimio',name:'Mimio',type:'VEP',spend:0,onboarded:13,target:12,outlier:false,revenue_per_participant:40},
+  {id:'clearlight',name:'Clearlight',type:'RWE',spend:0,onboarded:20,target:20,outlier:false,revenue_per_participant:45},
+  {id:'hop-box',name:'HOP Box',type:'RWE',spend:0,onboarded:49,target:35,outlier:false,revenue_per_participant:50},
+  {id:'neuvana-xen',name:'Neuvana Xen',type:'RWE',spend:0,onboarded:40,target:40,outlier:false,revenue_per_participant:45},
+  {id:'vampire-serum',name:'Vampire Serum',type:'RWE',spend:0,onboarded:35,target:35,outlier:false,revenue_per_participant:40},
+];
+const STUDY_MAP={};STUDIES.forEach(s=>{STUDY_MAP[s.id]=s});
+
+// ============================================================
+// SAMPLE ATTRIBUTION DATA
+// ============================================================
+function generateSample(){
+  const participants=[];
+  let pid=1;
+  const campaigns=['SMTO_sleep_video_2026JAN','SMTO_wellness_carousel_2026FEB','BREW_coffee_2025NOV','PEPT_sleep_reel_2025DEC','PRLV_pain_2026JAN','GENERAL_wellness_2025Q4','ROOTLESS_women_2025NOV'];
+
+  STUDIES.forEach(study=>{
+    for(let i=0;i<study.onboarded;i++){
+      const isPaid=study.spend>0;
+      // Assign realistic attribution mix
+      let sourceType,enrollSource,confidence;
+      const r=Math.random();
+      if(isPaid){
+        if(r<0.55){sourceType='meta_paid';enrollSource='direct_ad';confidence='verified'}
+        else if(r<0.70){sourceType='meta_paid';enrollSource='ad_then_switched';confidence='inferred'}
+        else if(r<0.85){sourceType='community_email';enrollSource='community_existing';confidence='inferred'}
+        else if(r<0.92){sourceType='organic_social';enrollSource='community_existing';confidence='estimated'}
+        else{sourceType='unknown';enrollSource='unknown';confidence='unknown'}
+      } else if(study.type==='VEP'){
+        if(r<0.75){sourceType='partner_vep';enrollSource='partner_referred';confidence='verified'}
+        else if(r<0.90){sourceType='community_email';enrollSource='community_existing';confidence='inferred'}
+        else{sourceType='unknown';enrollSource='unknown';confidence='unknown'}
+      } else {
+        if(r<0.40){sourceType='community_email';enrollSource='community_existing';confidence='inferred'}
+        else if(r<0.65){sourceType='meta_paid';enrollSource='community_existing';confidence='estimated'}
+        else if(r<0.80){sourceType='organic_social';enrollSource='community_existing';confidence='estimated'}
+        else if(r<0.90){sourceType='referral';enrollSource='community_existing';confidence='estimated'}
+        else{sourceType='unknown';enrollSource='unknown';confidence='unknown'}
+      }
+
+      const daysAgo=Math.floor(Math.random()*300)+30;
+      const firstTouch=new Date(Date.now()-daysAgo*864e5).toISOString().slice(0,10);
+      const campaign=isPaid?campaigns[Math.floor(Math.random()*campaigns.length)]:'';
+      const studiesCompleted=Math.random()>0.7?Math.floor(Math.random()*3)+1:1;
+      const compliance=Math.round(65+Math.random()*35);
+
+      participants.push({
+        participant_id:'A'+String(pid++).padStart(5,'0'),
+        first_touch:{
+          source_type:sourceType,
+          utm_source:sourceType==='meta_paid'?'facebook':null,
+          utm_campaign:campaign||null,
+          intended_study:isPaid?study.id:null,
+          first_touch_at:firstTouch,
+          app_downloaded_at:sourceType!=='unknown'?new Date(new Date(firstTouch).getTime()+Math.random()*7*864e5).toISOString().slice(0,10):null,
+        },
+        study_enrollments:[{
+          study_id:study.id,
+          study_name:study.name,
+          enrollment_source:enrollSource,
+          attributed_to_study_ads:enrollSource==='direct_ad',
+          attributed_ad_cost:enrollSource==='direct_ad'&&study.onboarded>0?study.spend/study.onboarded:null,
+        }],
+        attribution_confidence:confidence,
+        ltv:{
+          studies_completed:studiesCompleted,
+          total_study_value:studiesCompleted*(study.revenue_per_participant||50)*(compliance/100),
+          compliance_avg:compliance,
+          acquisition_cost:sourceType==='meta_paid'&&isPaid?(study.spend/study.onboarded):0,
+        },
+        is_in_ecosystem_before:enrollSource==='community_existing'||enrollSource==='re_enrollment',
+      });
+    }
+  });
+
+  const data={participants,generated_at:new Date().toISOString(),version:2};
+  save(data);
+  return data;
+}
+
+let stored=load();
+if(!stored||stored.version!==2)stored=generateSample();
+let allP=stored.participants;
+
+// ============================================================
+// CPO CALCULATIONS
+// ============================================================
+function calcStudyMetrics(){
+  return STUDIES.map(study=>{
+    const enrolled=allP.filter(p=>p.study_enrollments.some(e=>e.study_id===study.id));
+    const directAd=enrolled.filter(p=>p.study_enrollments.find(e=>e.study_id===study.id)?.enrollment_source==='direct_ad');
+    const community=enrolled.filter(p=>p.is_in_ecosystem_before);
+    const attributed=enrolled.filter(p=>p.attribution_confidence==='verified'||p.attribution_confidence==='inferred');
+    const newParticipants=enrolled.filter(p=>!p.is_in_ecosystem_before);
+    return{
+      ...study,
+      enrolled_count:enrolled.length,
+      direct_ad_count:directAd.length,
+      community_count:community.length,
+      attributed_count:attributed.length,
+      new_count:newParticipants.length,
+      fill_cost:enrolled.length>0?study.spend/enrolled.length:null,
+      ad_cpo:directAd.length>0?study.spend/directAd.length:null,
+      marginal_cost:newParticipants.length>0&&study.spend>0?study.spend/newParticipants.length:study.spend>0?null:0,
+      attr_pct:enrolled.length>0?(attributed.length/enrolled.length*100):0,
+    };
+  });
+}
+
+function calcAggregateCPO(){
+  const totalSpend=STUDIES.reduce((a,s)=>a+s.spend,0);
+  const totalOnboarded=STUDIES.reduce((a,s)=>a+(s.onboarded||0),0);
+  const nonOutlierStudies=STUDIES.filter(s=>!s.outlier&&s.spend>0);
+  const nonOutlierSpend=nonOutlierStudies.reduce((a,s)=>a+s.spend,0);
+  const nonOutlierOnb=nonOutlierStudies.reduce((a,s)=>a+(s.onboarded||0),0);
+  const directAd=allP.filter(p=>p.study_enrollments.some(e=>e.attributed_to_study_ads));
+  const uniqueParticipants=allP.length;
+  const newPs=allP.filter(p=>!p.is_in_ecosystem_before);
+  const verified=allP.filter(p=>p.attribution_confidence==='verified');
+
+  return{
+    study_fill_cost:totalOnboarded>0?totalSpend/totalOnboarded:0,
+    true_acq_cpo:verified.length>0?totalSpend/verified.filter(p=>p.first_touch.source_type==='meta_paid').length:null,
+    true_acq_coverage:(verified.length/Math.max(allP.length,1)*100).toFixed(0),
+    ad_attributed_cpo:directAd.length>0?totalSpend/directAd.length:null,
+    ad_attributed_pct:(directAd.length/Math.max(totalOnboarded,1)*100).toFixed(0),
+    ecosystem_acq_cost:uniqueParticipants>0?totalSpend/uniqueParticipants:0,
+    marginal_cost:newPs.length>0?totalSpend/newPs.length:0,
+    total_spend:totalSpend,
+    total_onboarded:totalOnboarded,
+    unique_participants:uniqueParticipants,
+  };
+}
+
+// ============================================================
+// RENDER: CPO Cards
+// ============================================================
+function renderCPOCards(){
+  const m=calcAggregateCPO();
+  const cards=[
+    {label:'Study Fill Cost',value:fmt(m.study_fill_cost),color:'var(--lime)',target:'Target: $25',info:'Total ad spend ÷ total onboarded. Does NOT indicate whether those people came from ads. Useful as a budget metric.',sub:`${fmtInt(m.total_onboarded)} onboarded · ${fmt(m.total_spend)} total spend`},
+    {label:'Ad-Attributed CPO',value:m.ad_attributed_cpo!=null?fmt(m.ad_attributed_cpo):'—',color:'var(--teal)',target:'Target: <$20',info:'Ad spend ÷ participants with verified/inferred ad attribution. More accurate than fill cost — excludes community participants.',sub:`${m.ad_attributed_pct}% of participants attributed to ads`},
+    {label:'Ecosystem Acquisition Cost',value:fmt(m.ecosystem_acq_cost),color:'var(--indigo)',target:'Should decline over time',info:'Total all-time ad spend ÷ total unique participants in ecosystem. Measures overall efficiency. Drops as community grows.',sub:`${fmtInt(m.unique_participants)} unique participants`},
+    {label:'New Participant Acq. Cost',value:fmt(m.marginal_cost),color:'var(--rose)',target:'No target set',info:'Ad spend ÷ NET NEW participants only (excludes those already in ecosystem). Reveals true cost of growing the community.',sub:`Excludes re-enrollers and existing community`},
+  ];
+  if(m.true_acq_cpo!=null){
+    cards.splice(1,0,{label:'True Acquisition CPO',value:fmt(m.true_acq_cpo),color:'var(--blue)',target:`Based on ${m.true_acq_coverage}% verified`,info:'Ad spend attributed to specific verified participants. THE aspirational metric — improves as attribution data gets cleaner.',sub:`Coverage: ${m.true_acq_coverage}% of participants have verified attribution`});
+  }
+  $('#cpo-grid').innerHTML=cards.map(c=>`<div class="cpo-card" style="border-color:${c.color}"><div class="cc-label">${c.label}</div><div class="cc-value" style="color:${c.color}">${c.value}</div><div class="cc-target" style="color:var(--text-dim);">${c.target}</div><div class="cc-sub">${c.sub}</div><div class="cc-info">${c.info}</div></div>`).join('');
+}
+
+// ============================================================
+// RENDER: Attribution Quality
+// ============================================================
+function renderQuality(){
+  const counts={};CONFIDENCE_LEVELS.forEach(c=>{counts[c]=0});
+  allP.forEach(p=>{if(counts[p.attribution_confidence]!==undefined)counts[p.attribution_confidence]++});
+  const total=allP.length;
+  const verInf=counts.verified+counts.inferred;
+
+  let h=`<div style="margin-bottom:12px;font-size:13px;">${((verInf/total)*100).toFixed(0)}% of participants have verified or inferred attribution. CPO metrics based on partial data are flagged.</div>`;
+  h+='<div class="quality-bar">';
+  CONFIDENCE_LEVELS.forEach(c=>{
+    const pct=(counts[c]/total*100);
+    if(pct>0)h+=`<div style="width:${pct}%;background:${CONF_COLORS[c]};" title="${c}: ${counts[c]} (${pct.toFixed(1)}%)">${pct>8?pct.toFixed(0)+'% '+c:''}</div>`;
+  });
+  h+='</div>';
+  h+='<div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;">';
+  CONFIDENCE_LEVELS.forEach(c=>{h+=`<div style="font-size:11px;display:flex;align-items:center;gap:4px;"><div style="width:10px;height:10px;border-radius:2px;background:${CONF_COLORS[c]}"></div>${c}: ${fmtInt(counts[c])} (${(counts[c]/total*100).toFixed(1)}%)</div>`;});
+  h+='</div>';
+  $('#quality-content').innerHTML=h;
+}
+
+// ============================================================
+// RENDER: Per-Study Table
+// ============================================================
+function renderStudyTable(){
+  const metrics=calcStudyMetrics();
+  let h='<table><thead><tr><th>Study</th><th>Type</th><th class="align-right">Ad Spend</th><th class="align-right">Onboarded</th><th class="align-right">Fill Cost</th><th class="align-right">Attributed %</th><th class="align-right">Ad CPO</th><th class="align-right">Community</th><th class="align-right">New Acq Cost</th><th>Outlier</th></tr></thead><tbody>';
+  metrics.forEach(m=>{
+    h+=`<tr><td>${esc(m.name)}</td><td><span class="badge" style="background:${m.type==='RCT'?'var(--indigo-bg)':m.type==='VEP'?'var(--lavender-bg)':'var(--teal-bg)'};color:${m.type==='RCT'?'var(--indigo)':m.type==='VEP'?'var(--lavender)':'var(--teal)'}">${m.type}</span></td>
+    <td class="align-right">${m.spend>0?fmt(m.spend):'—'}</td><td class="align-right">${fmtInt(m.enrolled_count)}</td>
+    <td class="align-right">${m.fill_cost!=null?fmt(m.fill_cost):'$0'}</td>
+    <td class="align-right">${m.attr_pct.toFixed(0)}%</td>
+    <td class="align-right">${m.ad_cpo!=null?fmt(m.ad_cpo):'N/A'}</td>
+    <td class="align-right">${fmtInt(m.community_count)}</td>
+    <td class="align-right">${m.marginal_cost!=null?fmt(m.marginal_cost):'$0'}</td>
+    <td>${m.outlier?'<span style="color:var(--rose);" title="'+esc(m.outlier_reason||'')+'">Yes</span>':'<span style="color:var(--text-dim)">No</span>'}</td></tr>`;
+  });
+  h+='</tbody></table>';
+  $('#study-table-wrap').innerHTML=h;
+}
+
+// ============================================================
+// RENDER: Attribution Mix
+// ============================================================
+function renderAttrMix(){
+  const metrics=calcStudyMetrics();
+  const paidStudies=metrics.filter(m=>m.spend>0||m.enrolled_count>20);
+  let h='';
+  paidStudies.slice(0,8).forEach(study=>{
+    const enrolled=allP.filter(p=>p.study_enrollments.some(e=>e.study_id===study.id));
+    const srcCounts={};SOURCE_TYPES.forEach(s=>{srcCounts[s]=0});
+    enrolled.forEach(p=>{srcCounts[p.first_touch.source_type]=(srcCounts[p.first_touch.source_type]||0)+1});
+    const total=enrolled.length;
+
+    h+=`<div style="margin-bottom:14px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">${esc(study.name)} <span style="color:var(--text-dim);font-weight:400;">(${total} participants)</span></div>`;
+    h+='<div class="mix-bar">';
+    SOURCE_TYPES.forEach(s=>{
+      const pct=total>0?(srcCounts[s]/total*100):0;
+      if(pct>0)h+=`<div style="width:${pct}%;background:${SOURCE_COLORS[s]};" title="${SOURCE_LABELS[s]}: ${srcCounts[s]} (${pct.toFixed(1)}%)">${pct>8?pct.toFixed(0)+'%':''}</div>`;
+    });
+    h+='</div></div>';
+  });
+  // Legend
+  h+='<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">';
+  SOURCE_TYPES.filter(s=>allP.some(p=>p.first_touch.source_type===s)).forEach(s=>{h+=`<div style="font-size:11px;display:flex;align-items:center;gap:4px;"><div style="width:10px;height:10px;border-radius:2px;background:${SOURCE_COLORS[s]}"></div>${SOURCE_LABELS[s]}</div>`;});
+  h+='</div>';
+  $('#attr-mix-content').innerHTML=h;
+}
+
+// ============================================================
+// RENDER: Campaign Efficiency
+// ============================================================
+function renderCampaignEfficiency(){
+  const campaigns={};
+  allP.forEach(p=>{
+    const c=p.first_touch.utm_campaign;
+    if(!c)return;
+    if(!campaigns[c])campaigns[c]={name:c,leads:0,downloads:0,enrolled_intended:0,enrolled_other:0,spend:0};
+    campaigns[c].leads++;
+    if(p.first_touch.app_downloaded_at)campaigns[c].downloads++;
+    p.study_enrollments.forEach(e=>{
+      if(e.enrollment_source==='direct_ad')campaigns[c].enrolled_intended++;
+      else if(e.enrollment_source==='ad_then_switched')campaigns[c].enrolled_other++;
+    });
+  });
+  // Allocate spend proportionally
+  STUDIES.filter(s=>s.spend>0).forEach(study=>{
+    const studyCampaigns=Object.values(campaigns).filter(c=>c.name.toLowerCase().includes(study.id.split('-')[0]?.slice(0,4).toLowerCase()));
+    if(studyCampaigns.length)studyCampaigns.forEach(c=>{c.spend+=study.spend/studyCampaigns.length});
+  });
+
+  const sorted=Object.values(campaigns).sort((a,b)=>b.leads-a.leads);
+  if(!sorted.length){$('#campaign-table-wrap').innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px;">No campaign data. Import Meta Ads CSV to populate.</div>';return}
+
+  let h='<table><thead><tr><th>Campaign</th><th class="align-right">Leads</th><th class="align-right">Downloads</th><th class="align-right">DL Rate</th><th class="align-right">Enrolled (intended)</th><th class="align-right">Enrolled (other)</th><th class="align-right">Total Recruited</th><th class="align-right">Cost/Lead</th><th class="align-right">Cost/Enrolled</th></tr></thead><tbody>';
+  sorted.forEach(c=>{
+    const total=c.enrolled_intended+c.enrolled_other;
+    h+=`<tr><td style="max-width:200px;word-break:break-all;">${esc(c.name)}</td><td class="align-right">${fmtInt(c.leads)}</td><td class="align-right">${fmtInt(c.downloads)}</td><td class="align-right">${c.leads>0?(c.downloads/c.leads*100).toFixed(0)+'%':'—'}</td><td class="align-right">${fmtInt(c.enrolled_intended)}</td><td class="align-right">${fmtInt(c.enrolled_other)}</td><td class="align-right"><strong>${fmtInt(total)}</strong></td><td class="align-right">${c.spend>0&&c.leads>0?fmt(c.spend/c.leads):'—'}</td><td class="align-right">${c.spend>0&&total>0?fmt(c.spend/total):'—'}</td></tr>`;
+  });
+  h+='</tbody></table>';
+  $('#campaign-table-wrap').innerHTML=h;
+}
+
+// ============================================================
+// RENDER: Ecosystem Growth Waterfall
+// ============================================================
+function renderWaterfall(){
+  const months={};
+  allP.forEach(p=>{
+    const m=p.first_touch.first_touch_at?.slice(0,7);
+    if(!m)return;
+    if(!months[m])months[m]={new_paid:0,new_organic:0,new_vep:0,new_other:0};
+    if(p.first_touch.source_type==='meta_paid'||p.first_touch.source_type==='google_paid')months[m].new_paid++;
+    else if(p.first_touch.source_type==='partner_vep')months[m].new_vep++;
+    else if(p.first_touch.source_type==='organic_search'||p.first_touch.source_type==='organic_social'||p.first_touch.source_type==='direct')months[m].new_organic++;
+    else months[m].new_other++;
+  });
+  const sorted=Object.keys(months).sort().slice(-6);
+  if(!sorted.length){$('#waterfall-content').innerHTML='No data';return}
+
+  let cumulative=allP.filter(p=>p.first_touch.first_touch_at<sorted[0]+'-01').length;
+  let h='<table><thead><tr><th>Month</th><th class="align-right">Starting</th><th class="align-right">+ Paid</th><th class="align-right">+ Organic</th><th class="align-right">+ VEP</th><th class="align-right">+ Other</th><th class="align-right">= Ending</th><th class="align-right">Organic Ratio</th></tr></thead><tbody>';
+  sorted.forEach(m=>{
+    const d=months[m];
+    const totalNew=d.new_paid+d.new_organic+d.new_vep+d.new_other;
+    const organicRatio=totalNew>0?((d.new_organic+d.new_vep)/totalNew*100).toFixed(0)+'%':'—';
+    const orgColor=totalNew>0?((d.new_organic+d.new_vep)/totalNew>=0.4?'var(--green)':'var(--yellow)'):'var(--text-dim)';
+    const ending=cumulative+totalNew;
+    h+=`<tr><td><strong>${m}</strong></td><td class="align-right">${fmtInt(cumulative)}</td><td class="align-right" style="color:var(--indigo)">+${fmtInt(d.new_paid)}</td><td class="align-right" style="color:var(--teal)">+${fmtInt(d.new_organic)}</td><td class="align-right" style="color:var(--lavender)">+${fmtInt(d.new_vep)}</td><td class="align-right" style="color:var(--text-dim)">+${fmtInt(d.new_other)}</td><td class="align-right"><strong>${fmtInt(ending)}</strong></td><td class="align-right" style="color:${orgColor};font-weight:600;">${organicRatio}</td></tr>`;
+    cumulative=ending;
+  });
+  h+='</tbody></table>';
+  h+=`<div style="margin-top:12px;font-size:12px;color:var(--text-dim);">Organic ratio = (organic + VEP) ÷ total new. Rising ratio means the ecosystem is becoming self-sustaining.</div>`;
+  $('#waterfall-content').innerHTML=h;
+}
+
+// ============================================================
+// RENDER: LTV
+// ============================================================
+function renderLTV(){
+  const withLTV=allP.filter(p=>p.ltv);
+  if(!withLTV.length){$('#ltv-content').innerHTML='No LTV data';return}
+  const avgLTV=withLTV.reduce((a,p)=>a+p.ltv.total_study_value,0)/withLTV.length;
+  const avgCAC=withLTV.filter(p=>p.ltv.acquisition_cost>0);
+  const avgCACVal=avgCAC.length>0?avgCAC.reduce((a,p)=>a+p.ltv.acquisition_cost,0)/avgCAC.length:25;
+  const ratio=avgCACVal>0?avgLTV/avgCACVal:0;
+  const avgStudies=withLTV.reduce((a,p)=>a+p.ltv.studies_completed,0)/withLTV.length;
+  const avgCompliance=withLTV.reduce((a,p)=>a+p.ltv.compliance_avg,0)/withLTV.length;
+  const multiStudy=withLTV.filter(p=>p.ltv.studies_completed>1).length;
+  const multiPct=(multiStudy/withLTV.length*100).toFixed(1);
+
+  $('#ltv-content').innerHTML=`<div class="ltv-grid">
+    <div class="ltv-card" style="border-color:var(--lime);"><div class="lc-label">LTV : CAC Ratio</div><div class="lc-value" style="color:var(--lime);">${ratio.toFixed(1)}x</div><div class="lc-sub">${ratio>=3?'Healthy':'Needs improvement'} (target: 3x+)</div></div>
+    <div class="ltv-card" style="border-color:var(--green);"><div class="lc-label">Avg Participant LTV</div><div class="lc-value" style="color:var(--green);">${fmt(avgLTV)}</div><div class="lc-sub">Across ${fmtInt(withLTV.length)} participants</div></div>
+    <div class="ltv-card" style="border-color:var(--teal);"><div class="lc-label">Avg Acquisition Cost</div><div class="lc-value" style="color:var(--teal);">${fmt(avgCACVal)}</div><div class="lc-sub">${avgCAC.length} paid acquisitions</div></div>
+    <div class="ltv-card" style="border-color:var(--blue);"><div class="lc-label">Avg Studies per Participant</div><div class="lc-value" style="color:var(--blue);">${avgStudies.toFixed(1)}</div><div class="lc-sub">${multiPct}% multi-study</div></div>
+    <div class="ltv-card" style="border-color:var(--yellow);"><div class="lc-label">Avg Compliance</div><div class="lc-value" style="color:var(--yellow);">${avgCompliance.toFixed(0)}%</div><div class="lc-sub">Across all studies</div></div>
+  </div>`;
+}
+
+function renderLTVDetail(){
+  const el=$('#ltv-detail');
+  const withLTV=allP.filter(p=>p.ltv);
+  // LTV Distribution
+  const buckets=[{label:'$0-$25',min:0,max:25},{label:'$25-$75',min:25,max:75},{label:'$75-$150',min:75,max:150},{label:'$150-$300',min:150,max:300},{label:'$300+',min:300,max:Infinity}];
+  const bucketCounts=buckets.map(b=>({...b,count:withLTV.filter(p=>p.ltv.total_study_value>=b.min&&p.ltv.total_study_value<b.max).length}));
+  const maxBucket=Math.max(...bucketCounts.map(b=>b.count),1);
+
+  let h1='<div><h3 style="font-size:13px;margin-bottom:12px;color:var(--text-dim);">LTV Distribution</h3>';
+  bucketCounts.forEach(b=>{
+    const pct=(b.count/withLTV.length*100).toFixed(0);
+    const barPct=(b.count/maxBucket*100).toFixed(0);
+    h1+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div style="width:60px;font-size:11px;text-align:right;color:var(--text-dim);">${b.label}</div><div style="flex:1;"><div style="height:16px;border-radius:3px;background:var(--green);width:${barPct}%;min-width:2px;"></div></div><div style="width:50px;font-size:11px;">${pct}%</div></div>`;
+  });
+  h1+='</div>';
+
+  // Re-enrollment funnel
+  const completed1=withLTV.filter(p=>p.ltv.studies_completed>=1).length;
+  const enrolled2=withLTV.filter(p=>p.ltv.studies_completed>=2).length;
+  const enrolled3=withLTV.filter(p=>p.ltv.studies_completed>=3).length;
+
+  let h2=`<div><h3 style="font-size:13px;margin-bottom:12px;color:var(--text-dim);">Re-enrollment Funnel</h3>
+    <div style="font-size:12px;line-height:2;">
+      <div>Completed 1st study: <strong>${fmtInt(completed1)}</strong> <span style="color:var(--text-dim);">(100%)</span></div>
+      <div style="padding-left:16px;">Enrolled in 2nd: <strong style="color:var(--green);">${fmtInt(enrolled2)}</strong> <span style="color:var(--text-dim);">(${(enrolled2/Math.max(completed1,1)*100).toFixed(0)}%)</span></div>
+      <div style="padding-left:32px;">Enrolled in 3rd: <strong style="color:var(--teal);">${fmtInt(enrolled3)}</strong> <span style="color:var(--text-dim);">(${(enrolled3/Math.max(completed1,1)*100).toFixed(0)}%)</span></div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--text-dim);">1st→2nd conversion is the critical metric. Above 30% indicates sticky ecosystem.</div>
+  </div>`;
+
+  el.innerHTML=h1+h2;
+}
+
+// ============================================================
+// RENDER: Attribution Queue
+// ============================================================
+function renderQueue(){
+  const unknown=allP.filter(p=>p.attribution_confidence==='unknown').slice(0,20);
+  $('#queue-count').textContent=`${allP.filter(p=>p.attribution_confidence==='unknown').length} unattributed`;
+  if(!unknown.length){$('#queue-content').innerHTML='<div style="text-align:center;color:var(--text-dim);padding:16px;">No unattributed participants. All records have assigned sources.</div>';return}
+
+  let h='<div class="table-wrap"><table><thead><tr><th>ID</th><th>First Seen</th><th>Study</th><th>Possible Source</th><th>Action</th></tr></thead><tbody>';
+  unknown.forEach(p=>{
+    const study=p.study_enrollments[0]?.study_name||'None';
+    let hint='No signals';
+    if(p.first_touch.utm_campaign)hint='Meta lead match: '+p.first_touch.utm_campaign;
+    else if(p.first_touch.app_downloaded_at)hint='Has app — timing suggests organic';
+    h+=`<tr><td>${esc(p.participant_id)}</td><td>${p.first_touch.first_touch_at||'—'}</td><td>${esc(study)}</td><td style="color:var(--text-dim);">${esc(hint)}</td><td><select class="attr-select" data-pid="${esc(p.participant_id)}" style="font-size:11px;"><option value="">Assign...</option>${SOURCE_TYPES.map(s=>`<option value="${s}">${SOURCE_LABELS[s]}</option>`).join('')}</select></td></tr>`;
+  });
+  h+='</tbody></table></div>';
+  $('#queue-content').innerHTML=h;
+
+  // Bind attribution selects
+  $$('.attr-select').forEach(sel=>{
+    sel.addEventListener('change',e=>{
+      const pid=e.target.dataset.pid,src=e.target.value;
+      if(!src)return;
+      const p=allP.find(pp=>pp.participant_id===pid);
+      if(p){p.first_touch.source_type=src;p.attribution_confidence='estimated';save({participants:allP,generated_at:new Date().toISOString(),version:2});renderAll()}
+    });
+  });
+}
+
+// ============================================================
+// IMPORT HANDLERS
+// ============================================================
+function parseCSV(text){const lines=text.trim().split('\n');if(lines.length<2)return[];const headers=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/[^a-z_]/g,''));return lines.slice(1).map(line=>{const vals=line.split(',').map(v=>v.trim().replace(/^"|"$/g,''));const obj={};headers.forEach((h,i)=>{obj[h]=vals[i]||''});return obj})}
+
+const dz=$('#meta-drop-zone'),fi=$('#meta-file-input');
+dz.addEventListener('click',()=>fi.click());
+dz.addEventListener('dragover',e=>{e.preventDefault()});
+dz.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer.files.length)handleMeta(e.dataTransfer.files[0])});
+fi.addEventListener('change',e=>{if(e.target.files.length)handleMeta(e.target.files[0])});
+
+function handleMeta(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const rows=parseCSV(e.target.result),prev=$('#meta-preview');
+    if(!rows.length){prev.style.display='';prev.innerHTML='<div style="color:var(--rose);">No valid rows.</div>';return}
+    prev.style.display='';
+    prev.innerHTML=`<div style="margin-bottom:8px;font-size:12px;">${rows.length} rows. Columns: ${Object.keys(rows[0]).join(', ')}</div><button id="btn-import-meta" style="background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:8px 16px;font-weight:600;font-size:12px;cursor:pointer;">Import</button>`;
+    $('#btn-import-meta').addEventListener('click',()=>{
+      let n=0;const maxId=allP.reduce((m,p)=>{const x=parseInt(p.participant_id.replace('A',''));return x>m?x:m},0);
+      rows.forEach((row,i)=>{
+        n++;
+        allP.push({participant_id:'A'+String(maxId+n).padStart(5,'0'),first_touch:{source_type:'meta_paid',utm_source:'facebook',utm_campaign:row.campaign_name||row.campaign||'',intended_study:null,first_touch_at:row.date||new Date().toISOString().slice(0,10),app_downloaded_at:null},study_enrollments:[],attribution_confidence:'verified',ltv:{studies_completed:0,total_study_value:0,compliance_avg:0,acquisition_cost:0},is_in_ecosystem_before:false});
+      });
+      save({participants:allP,generated_at:new Date().toISOString(),version:2});
+      prev.innerHTML=`<div style="color:var(--green);font-weight:600;">${n} leads imported as RAW_LEAD with meta_paid attribution.</div>`;
+      renderAll();
+    });
+  };
+  reader.readAsText(file);
+}
+
+// Bulk attribution import
+const bdz=$('#bulk-drop-zone'),bfi=$('#bulk-file-input');
+bdz.addEventListener('click',()=>bfi.click());
+bdz.addEventListener('dragover',e=>{e.preventDefault()});
+bdz.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer.files.length)handleBulk(e.dataTransfer.files[0])});
+bfi.addEventListener('change',e=>{if(e.target.files.length)handleBulk(e.target.files[0])});
+
+function handleBulk(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const rows=parseCSV(e.target.result),prev=$('#bulk-preview');
+    let updated=0;
+    rows.forEach(row=>{
+      const p=allP.find(pp=>pp.participant_id===row.participant_id);
+      if(p&&row.source_type){p.first_touch.source_type=row.source_type;p.attribution_confidence=row.confidence||'estimated';updated++}
+    });
+    save({participants:allP,generated_at:new Date().toISOString(),version:2});
+    prev.style.display='';
+    prev.innerHTML=`<div style="color:var(--green);font-weight:600;">${updated} records updated.</div>`;
+    renderAll();
+  };
+  reader.readAsText(file);
+}
+
+// Revenue inputs
+function renderRevenueInputs(){
+  const el=$('#revenue-inputs');
+  el.innerHTML='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;">'+STUDIES.slice(0,12).map(s=>`<div style="display:flex;align-items:center;gap:6px;"><span style="font-size:11px;color:var(--text-dim);width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(s.name)}</span><input type="number" class="rev-input" data-sid="${s.id}" value="${s.revenue_per_participant}" style="width:70px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;"></div>`).join('')+'</div>';
+  $$('.rev-input').forEach(inp=>{inp.addEventListener('change',e=>{const s=STUDY_MAP[e.target.dataset.sid];if(s)s.revenue_per_participant=parseFloat(e.target.value)||0;renderAll()})});
+}
+
+// Export
+$('#btn-export-attr').addEventListener('click',()=>{
+  const h=['participant_id','source_type','confidence','utm_campaign','intended_study','studies','enrollment_source','ltv','acquisition_cost'];
+  const rows=allP.map(p=>[p.participant_id,p.first_touch.source_type,p.attribution_confidence,'"'+(p.first_touch.utm_campaign||'').replace(/"/g,'""')+'"',p.first_touch.intended_study||'',p.study_enrollments.length,p.study_enrollments[0]?.enrollment_source||'',p.ltv?.total_study_value?.toFixed(2)||'',p.ltv?.acquisition_cost?.toFixed(2)||'']);
+  const csv=[h.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=`reputable-attribution-${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(u);
+});
+
+$('#btn-reset').addEventListener('click',()=>{if(!confirm('Reset all attribution data?'))return;localStorage.removeItem(STORAGE_KEY);stored=generateSample();allP=stored.participants;renderAll()});
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function renderAll(){
+  const now=new Date(),ds=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),ts=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  $('#subtitle').textContent=`Reputable Health — ${fmtInt(allP.length)} participants · ${ds} ${ts}`;
+  renderCPOCards();renderQuality();renderStudyTable();renderAttrMix();renderCampaignEfficiency();renderWaterfall();renderLTV();renderLTVDetail();renderQueue();renderRevenueInputs();
+  $('#footer').textContent=`Attribution & True CPO — Reputable Health · ${ds} ${ts}`;
+}
+renderAll();
+})();
+</script>
+</body>
+</html>
