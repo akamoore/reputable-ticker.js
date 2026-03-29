@@ -375,7 +375,7 @@ async function renderConnection(){
     try{
       const controller=new AbortController();
       const timeout=setTimeout(()=>controller.abort(),3000);
-      const resp=await fetch(url+'/api/email/status',{signal:controller.signal,mode:'cors'});
+      const resp=await fetch(url+'/api/email/status',{signal:controller.signal});
       clearTimeout(timeout);
       if(resp.ok){statusData=await resp.json();connected=true;connectedUrl=url;API_BASE=url;break}
     }catch(e){console.warn('Proxy check failed for',url,e.message)}
@@ -391,11 +391,13 @@ async function renderConnection(){
         Uptime: ${Math.floor(statusData.uptime_seconds/60)}m
       </div></div>`;
   } else {
+    const isHttps=location.protocol==='https:';
+    const mixedContentWarning=isHttps?'<br><strong style="color:var(--rose);">Mixed content blocked:</strong> This page is served over HTTPS but the proxy is HTTP. Browsers block this. Open <a href="http://localhost:8080/nurture.html" style="color:var(--lime);">http://localhost:8080/nurture.html</a> instead.':'';
     el.innerHTML=`<div style="display:flex;align-items:center;gap:12px;">
       <span class="badge badge-yellow">Not Connected</span>
       <div style="font-size:12px;color:var(--text-dim);">
-        Could not reach email proxy${API_BASE?' at <code>'+esc(API_BASE)+'</code>':''}. Tried <code>${esc(DEFAULT_PROXY)}</code>.<br>
-        Start the proxy: <code>cd email-proxy && npm start</code><br>
+        Could not reach email proxy. Tried <code>${esc(DEFAULT_PROXY)}</code>.${mixedContentWarning}<br>
+        ${isHttps?'':'Start the proxy: <code>cd email-proxy && npm start</code><br>'}
         All UI features work with sample data. Real emails require the proxy.
       </div></div>`;
   }
