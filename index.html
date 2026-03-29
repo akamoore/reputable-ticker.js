@@ -2203,6 +2203,37 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   // ============================================================
   // RENDER: Ad Performance
   // ============================================================
+  // Normalize messy Meta campaign/ad names to clean display names
+  const CAMPAIGN_NAME_MAP = {
+    'somato sleep study': 'Melatonin Sleep Study (Somato)',
+    'melatonin sleep study': 'Melatonin Sleep Study (Somato)',
+    'pain relief: proleevamax': 'Pain Relief: ProleevaMax',
+    'proleevamax': 'Pain Relief: ProleevaMax',
+    'proleeva - 2': 'Pain Relief: ProleevaMax',
+    'new proleeva campaign': 'Pain Relief: ProleevaMax',
+    'proleeva - 2 - leads - instant forms': 'Pain Relief: ProleevaMax (Leads)',
+    'sleep peptide': 'Peptide Supplement: Sleep & Recovery',
+  };
+  const AD_NAME_MAP = {
+    'melatonin sleep study': 'Melatonin Sleep Study',
+    'pain relief: proleevamax': 'ProleevaMax',
+    'proleevamax - video': 'ProleevaMax — Video',
+    'proleeva - red morning (revised)': 'Red Morning (Revised)',
+    'proleeva - stuck in recovery (revised) - copy': 'Stuck in Recovery (Revised)',
+    'proleeva - pain in data (revised) - copy 2': 'Pain in Data (Revised)',
+    'proleeva': 'ProleevaMax',
+    'proleeva - red morning': 'Red Morning',
+    'proleeva - stuck in recovery': 'Stuck in Recovery',
+    'oura - nature': 'Oura — Nature',
+    'oura - sleep score': 'Oura — Sleep Score',
+    'oura - 3:14am': 'Oura — 3:14am',
+    'peptide supplement: sleep and recovery': 'Peptide Sleep & Recovery',
+    'mimio': 'Mimio',
+    'new traffic ad': 'New Traffic Ad',
+  };
+  function normalizeCampaign(name) { return CAMPAIGN_NAME_MAP[name?.toLowerCase()] || name; }
+  function normalizeAd(name) { return AD_NAME_MAP[name?.toLowerCase()] || name; }
+
   function renderAds() {
     const ads = dataService.getMetaAdsBreakdown();
     const section = $('#ads-section');
@@ -2213,8 +2244,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     section.style.display = '';
     const tbody = $('#ads-tbody');
     tbody.innerHTML = ads.map(a => `<tr>
-      <td>${esc(a.campaignName || '—')}</td>
-      <td>${esc(a.adName || '—')}</td>
+      <td>${esc(normalizeCampaign(a.campaignName) || '—')}</td>
+      <td>${esc(normalizeAd(a.adName) || '—')}</td>
       <td class="align-right">${fmtInt(a.impressions)}</td>
       <td class="align-right">${fmtInt(a.clicks)}</td>
       <td class="align-right">${fmt(a.spend)}</td>
