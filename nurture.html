@@ -373,9 +373,12 @@ async function renderConnection(){
   for(const url of candidates){
     if(!url)continue;
     try{
-      const resp=await fetch(url+'/api/email/status',{signal:AbortSignal.timeout(3000)});
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),3000);
+      const resp=await fetch(url+'/api/email/status',{signal:controller.signal,mode:'cors'});
+      clearTimeout(timeout);
       if(resp.ok){statusData=await resp.json();connected=true;connectedUrl=url;API_BASE=url;break}
-    }catch(e){}
+    }catch(e){console.warn('Proxy check failed for',url,e.message)}
   }
 
   if(connected&&statusData){
