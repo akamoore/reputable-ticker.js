@@ -1,303 +1,485 @@
 {
-  "updated_at": "2026-03-27T19:55:41.162Z",
+  "updated_at": "2026-03-29T08:46:26.423Z",
   "period": {
-    "start": "2026-01-01",
-    "end": "2026-03-27"
+    "start": "2025-12-29",
+    "end": "2026-03-29"
   },
   "totals": {
-    "installs": 2004,
-    "sessions": 0,
+    "installs": 2010,
+    "sessions": 2297,
     "uninstalls": 0
   },
   "daily": [
     {
       "date": "2026-01-07",
-      "installs": 2
+      "installs": 2,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-08",
-      "installs": 0
+      "installs": 0,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-09",
-      "installs": 1
+      "installs": 1,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-12",
-      "installs": 0
+      "installs": 0,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-13",
-      "installs": 1
+      "installs": 1,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-20",
-      "installs": 0
+      "installs": 0,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-21",
-      "installs": 2
+      "installs": 2,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-22",
-      "installs": 19
+      "installs": 19,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-23",
-      "installs": 166
+      "installs": 166,
+      "sessions": 10,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-24",
-      "installs": 143
+      "installs": 143,
+      "sessions": 41,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-25",
-      "installs": 74
+      "installs": 74,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-26",
-      "installs": 48
+      "installs": 48,
+      "sessions": 9,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-27",
-      "installs": 35
+      "installs": 35,
+      "sessions": 15,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-28",
-      "installs": 28
+      "installs": 28,
+      "sessions": 10,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-29",
-      "installs": 24
+      "installs": 24,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-30",
-      "installs": 60
+      "installs": 60,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-01-31",
-      "installs": 41
+      "installs": 41,
+      "sessions": 22,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-01",
-      "installs": 39
+      "installs": 39,
+      "sessions": 42,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-02",
-      "installs": 52
+      "installs": 52,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-03",
-      "installs": 21
+      "installs": 21,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-04",
-      "installs": 19
+      "installs": 19,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-05",
-      "installs": 26
+      "installs": 26,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-06",
-      "installs": 49
+      "installs": 49,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-07",
-      "installs": 31
+      "installs": 31,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-08",
-      "installs": 23
+      "installs": 23,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-09",
-      "installs": 21
+      "installs": 21,
+      "sessions": 11,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-10",
-      "installs": 34
+      "installs": 34,
+      "sessions": 62,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-11",
-      "installs": 23
+      "installs": 23,
+      "sessions": 1,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-12",
-      "installs": 22
+      "installs": 22,
+      "sessions": 115,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-13",
-      "installs": 27
+      "installs": 27,
+      "sessions": 59,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-14",
-      "installs": 27
+      "installs": 27,
+      "sessions": 14,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-15",
-      "installs": 19
+      "installs": 19,
+      "sessions": 115,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-16",
-      "installs": 19
+      "installs": 19,
+      "sessions": 5,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-17",
-      "installs": 32
+      "installs": 32,
+      "sessions": 403,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-18",
-      "installs": 23
+      "installs": 23,
+      "sessions": 75,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-19",
-      "installs": 27
+      "installs": 27,
+      "sessions": 11,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-20",
-      "installs": 31
+      "installs": 31,
+      "sessions": 86,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-21",
-      "installs": 27
+      "installs": 27,
+      "sessions": 54,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-22",
-      "installs": 22
+      "installs": 22,
+      "sessions": 122,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-23",
-      "installs": 29
+      "installs": 29,
+      "sessions": 139,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-24",
-      "installs": 45
+      "installs": 45,
+      "sessions": 56,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-25",
-      "installs": 43
+      "installs": 43,
+      "sessions": 78,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-26",
-      "installs": 26
+      "installs": 26,
+      "sessions": 4,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-27",
-      "installs": 53
+      "installs": 53,
+      "sessions": 28,
+      "uninstalls": 0
     },
     {
       "date": "2026-02-28",
-      "installs": 52
+      "installs": 52,
+      "sessions": 41,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-01",
-      "installs": 35
+      "installs": 35,
+      "sessions": 41,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-02",
-      "installs": 49
+      "installs": 49,
+      "sessions": 167,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-03",
-      "installs": 32
+      "installs": 32,
+      "sessions": 31,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-04",
-      "installs": 30
+      "installs": 30,
+      "sessions": 45,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-05",
-      "installs": 35
+      "installs": 35,
+      "sessions": 155,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-06",
-      "installs": 49
+      "installs": 49,
+      "sessions": 84,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-07",
-      "installs": 21
+      "installs": 21,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-08",
-      "installs": 11
+      "installs": 11,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-09",
-      "installs": 6
+      "installs": 6,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-10",
-      "installs": 7
+      "installs": 7,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-11",
-      "installs": 33
+      "installs": 33,
+      "sessions": 57,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-12",
-      "installs": 9
+      "installs": 9,
+      "sessions": 4,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-13",
-      "installs": 7
+      "installs": 7,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-14",
-      "installs": 8
+      "installs": 8,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-15",
-      "installs": 7
+      "installs": 7,
+      "sessions": 8,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-16",
-      "installs": 4
+      "installs": 4,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-17",
-      "installs": 5
+      "installs": 5,
+      "sessions": 5,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-18",
-      "installs": 3
+      "installs": 3,
+      "sessions": 1,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-19",
-      "installs": 3
+      "installs": 3,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-20",
-      "installs": 17
+      "installs": 17,
+      "sessions": 3,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-21",
-      "installs": 46
+      "installs": 46,
+      "sessions": 10,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-22",
-      "installs": 15
+      "installs": 15,
+      "sessions": 6,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-23",
-      "installs": 12
+      "installs": 12,
+      "sessions": 6,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-24",
-      "installs": 12
+      "installs": 12,
+      "sessions": 0,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-25",
-      "installs": 23
+      "installs": 23,
+      "sessions": 39,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-26",
-      "installs": 12
+      "installs": 12,
+      "sessions": 5,
+      "uninstalls": 0
     },
     {
       "date": "2026-03-27",
-      "installs": 7
+      "installs": 7,
+      "sessions": 2,
+      "uninstalls": 0
+    },
+    {
+      "date": "2026-03-28",
+      "installs": 5,
+      "sessions": 0,
+      "uninstalls": 0
+    },
+    {
+      "date": "2026-03-29",
+      "installs": 1,
+      "sessions": 0,
+      "uninstalls": 0
     }
   ],
-  "bySource": []
+  "bySource": [
+    {
+      "source": "Organic",
+      "installs": 1858,
+      "sessions": 0
+    },
+    {
+      "source": "Facebook Ads",
+      "installs": 103,
+      "sessions": 1113
+    },
+    {
+      "source": "af_app_invites",
+      "installs": 48,
+      "sessions": 1179
+    },
+    {
+      "source": "meta",
+      "installs": 1,
+      "sessions": 5
+    },
+    {
+      "source": "my_media_source",
+      "installs": 0,
+      "sessions": 0
+    }
+  ]
 }
