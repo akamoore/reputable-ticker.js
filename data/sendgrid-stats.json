@@ -1,34 +1,22 @@
 {
-  "updated_at": "2026-03-28T08:26:18.874Z",
+  "updated_at": "2026-03-29T08:27:58.097Z",
   "period": {
-    "start": "2026-02-26",
-    "end": "2026-03-28"
+    "start": "2026-02-27",
+    "end": "2026-03-29"
   },
   "totals": {
-    "sent": 36317,
-    "delivered": 32825,
-    "opens": 29890,
-    "unique_opens": 19488,
-    "clicks": 3485,
-    "unique_clicks": 1234,
-    "bounces": 90,
+    "sent": 36253,
+    "delivered": 32769,
+    "opens": 29720,
+    "unique_opens": 19451,
+    "clicks": 3460,
+    "unique_clicks": 1221,
+    "bounces": 88,
     "spam_reports": 6,
-    "unsubscribes": 812,
+    "unsubscribes": 815,
     "open_rate": "59.4%"
   },
   "daily": [
-    {
-      "date": "2026-02-26",
-      "requests": 66,
-      "delivered": 58,
-      "opens": 284,
-      "unique_opens": 129,
-      "clicks": 27,
-      "unique_clicks": 15,
-      "bounces": 2,
-      "spam_reports": 0,
-      "unsubscribes": 2
-    },
     {
       "date": "2026-02-27",
       "requests": 7113,
@@ -379,15 +367,27 @@
     },
     {
       "date": "2026-03-28",
+      "requests": 2,
+      "delivered": 2,
+      "opens": 121,
+      "unique_opens": 93,
+      "clicks": 2,
+      "unique_clicks": 2,
+      "bounces": 0,
+      "spam_reports": 0,
+      "unsubscribes": 7
+    },
+    {
+      "date": "2026-03-29",
       "requests": 0,
       "delivered": 0,
-      "opens": 24,
-      "unique_opens": 15,
+      "opens": 17,
+      "unique_opens": 14,
       "clicks": 0,
       "unique_clicks": 0,
       "bounces": 0,
       "spam_reports": 0,
-      "unsubscribes": 2
+      "unsubscribes": 0
     }
   ]
 }
