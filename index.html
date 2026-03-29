@@ -2609,6 +2609,45 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
           </div>
         </div>
       </div>
+
+      <!-- Public → Sponsored Pipeline -->
+      <div style="margin-top:20px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px;border-top:3px solid var(--teal);">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);margin-bottom:12px;">Public → Sponsored Pipeline</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px;">
+          Do participants who join free public challenges go on to enroll in sponsored or VEP studies? This is the key metric for whether public studies serve as a recruitment funnel.
+        </div>
+        ${(() => {
+          // Estimate overlap: public studies that launched BEFORE or alongside sponsored studies
+          // Participants who joined public studies could have later joined sponsored ones
+          const publicLaunchDates = publicStudies.filter(s => s.launchDate).map(s => new Date(s.launchDate));
+          const sponsoredAfterPublic = sponsoredStudies.filter(s => {
+            if (!s.launchDate) return false;
+            const sDate = new Date(s.launchDate);
+            return publicLaunchDates.some(pDate => sDate >= pDate);
+          });
+          const sponsoredAfterJoined = sponsoredAfterPublic.reduce((a, s) => a + (s.joined || 0), 0);
+          const sponsoredAfterOnboarded = sponsoredAfterPublic.reduce((a, s) => a + (s.onboarded || 0), 0);
+
+          return `
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px;">
+              <div style="text-align:center;padding:12px;background:rgba(0,179,159,0.08);border-radius:8px;">
+                <div style="font-size:24px;font-weight:700;color:var(--teal);">${fmtInt(publicJoined)}</div>
+                <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">Public participants</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:rgba(0,179,159,0.08);border-radius:8px;">
+                <div style="font-size:24px;font-weight:700;color:var(--teal);">${fmtInt(sponsoredAfterPublic.length)}</div>
+                <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">Sponsored studies launched after</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:rgba(0,179,159,0.08);border-radius:8px;">
+                <div style="font-size:24px;font-weight:700;color:var(--teal);">${fmtInt(sponsoredAfterOnboarded)}</div>
+                <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">Onboarded in those studies</div>
+              </div>
+            </div>
+            <div style="padding:12px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);border-radius:8px;font-size:12px;color:var(--text-dim);line-height:1.5;">
+              <strong style="color:var(--yellow);">Tracking gap:</strong> Per-participant cross-study data is not yet available. The numbers above show aggregate counts, not confirmed crossover. To measure actual public→sponsored conversion, we need participant-level study history from the operations API. This is tracked in the <a href="lifecycle.html" style="color:var(--lime);">Lifecycle dashboard</a> once participant data is imported.
+            </div>`;
+        })()}
+      </div>
     `;
   }
 
