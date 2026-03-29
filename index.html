@@ -863,8 +863,8 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
   // LOCAL STUDY DATA — canonical per-study detail
   // ============================================================
   const STUDIES = [
-    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8807.67, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, outlier_reason: 'Baseline bug lost ~150 participants; eligibility question excluded ~48 more', notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
-    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, outlier_reason: 'WHOOP small install base; lab bottleneck requires pre-study blood work', notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)', size_category: 'pilot', complexity_factors: ['non_oura_wearable', 'pre_study_lab_work', 'screening_call'], recruitment_source: 'paid' },
+    { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8624.65, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, outlier_reason: 'Baseline bug lost ~150 participants; eligibility question excluded ~48 more', notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 7717.02, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, outlier_reason: 'WHOOP small install base; lab bottleneck requires pre-study blood work', notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)', size_category: 'pilot', complexity_factors: ['non_oura_wearable', 'pre_study_lab_work', 'screening_call'], recruitment_source: 'paid' },
     { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 771, joined: 520, onboarded: 192, target: 189, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
     { id: 4, name: 'Nitrate Supplementation (Berkeley Life)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, outlier_reason: null, notes: 'Prescreening outside of app (manual step)', size_category: 'medium', complexity_factors: ['screening_call'], recruitment_source: 'paid' },
     { id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT', spend: 2464.11, leads: 575, joined: 338, onboarded: 120, target: 120, wearable: 'Oura', days: 30, launchDate: 'Dec 23, 2025', endDate: 'Jan 22, 2026', launchYear: 2025, crossYear: true, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: 'Cross-year: launched 2025, completed 2026', size_category: 'medium', complexity_factors: ['external_survey'], recruitment_source: 'paid' },
@@ -1146,12 +1146,27 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const campaignMap = this.getCampaignStudyMap();
       const adsBreakdown = this.getMetaAdsBreakdown();
 
-      // Build a spend-by-campaign lookup from metaAds.ads
-      // Each ad has campaignName + spend; aggregate by campaign
-      const spendByCampaign = {};
+      // Normalized campaign name → study name mapping
+      // This maps Meta Ads campaign names to the study they belong to
+      const CAMPAIGN_TO_STUDY = {
+        'somato sleep study': 'Melatonin Sleep Study (Somato)',
+        'melatonin sleep study': 'Melatonin Sleep Study (Somato)',
+        'pain relief: proleevamax': 'Pain Relief: ProleevaMax',
+        'proleevamax': 'Pain Relief: ProleevaMax',
+        'proleeva - 2': 'Pain Relief: ProleevaMax',
+        'new proleeva campaign': 'Pain Relief: ProleevaMax',
+        'proleeva - 2 - leads - instant forms': 'Pain Relief: ProleevaMax',
+        'sleep peptide': 'Peptide Supplement: Sleep & Recovery',
+      };
+
+      // Aggregate ad spend by study name using the mapping
+      const spendByStudy = {};
       adsBreakdown.forEach(ad => {
-        const key = (ad.campaignName || '').toLowerCase();
-        spendByCampaign[key] = (spendByCampaign[key] || 0) + (ad.spend || 0);
+        const rawCampaign = (ad.campaignName || '').toLowerCase();
+        const studyName = CAMPAIGN_TO_STUDY[rawCampaign];
+        if (studyName) {
+          spendByStudy[studyName] = (spendByStudy[studyName] || 0) + (ad.spend || 0);
+        }
       });
 
       return STUDIES.map(s => {
@@ -1169,22 +1184,11 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
           enriched.apiJoins = mapped.joins;
           enriched.apiOnboarded = mapped.onboarded;
           enriched.experimentId = mapped.experimentId;
-
-          // Pull ad spend from metaAds.ads via the matched campaignName
-          const campaignKey = (mapped.campaignName || '').toLowerCase();
-          if (spendByCampaign[campaignKey] != null) {
-            enriched.apiSpend = spendByCampaign[campaignKey];
-          }
         }
 
-        // Also try direct name match against metaAds campaign names
-        if (enriched.apiSpend == null) {
-          for (const [campaignKey, totalSpend] of Object.entries(spendByCampaign)) {
-            if (campaignKey.includes(sNamePrefix) || sNameLower.includes(campaignKey.split(' - ')[0]?.trim())) {
-              enriched.apiSpend = totalSpend;
-              break;
-            }
-          }
+        // Use aggregated spend from the campaign→study mapping
+        if (spendByStudy[s.name] != null) {
+          enriched.apiSpend = spendByStudy[s.name];
         }
 
         // Match in onboarding.byStudy
