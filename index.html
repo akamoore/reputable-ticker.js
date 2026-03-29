@@ -2494,64 +2494,118 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const sponsoredConv = sponsoredJoined > 0 ? (sponsoredOnboarded / sponsoredJoined * 100).toFixed(1) : 0;
     const overallConv = allJoined > 0 ? (totalOnboarded / allJoined * 100).toFixed(1) : 0;
 
+    // Lead → Join → Onboard funnel numbers
+    const leadToJoinPct = totalLeads > 0 ? (totalJoined / totalLeads * 100).toFixed(1) : 0;
+    const joinToOnboardPct = allJoined > 0 ? (totalOnboarded / allJoined * 100).toFixed(1) : 0;
+
     container.innerHTML = `
-      <div class="engagement-bar-wrap">
-        <div class="engagement-bar">
-          <div class="eb-seg" style="width:${noStudyPct}%;background:var(--rose);color:#fff;">${noStudyPct > 5 ? noStudyPct + '%' : ''}</div>
-          <div class="eb-seg" style="width:${publicPct}%;background:var(--sky);color:#fff;">${publicPct > 5 ? publicPct + '%' : ''}</div>
-          <div class="eb-seg" style="width:${vepPct}%;background:var(--indigo);color:#fff;">${vepPct > 5 ? vepPct + '%' : ''}</div>
-          <div class="eb-seg" style="width:${sponsoredPct}%;background:var(--green);color:#fff;">${sponsoredPct > 5 ? sponsoredPct + '%' : ''}</div>
+      <!-- Mini funnel: Leads → Joined → Onboarded -->
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="text-align:center;padding:14px 20px;background:rgba(108,92,231,0.08);border-radius:10px;min-width:120px;">
+          <div style="font-size:28px;font-weight:700;color:var(--indigo);">${fmtInt(totalLeads)}</div>
+          <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Leads</div>
         </div>
-        <div class="engagement-legend">
-          <div class="el-item"><div class="el-dot" style="background:var(--rose)"></div>No study joined — ${fmtInt(noStudy)} (${noStudyPct}%)</div>
-          <div class="el-item"><div class="el-dot" style="background:var(--sky)"></div>Public study — ${fmtInt(publicJoined)} (${publicPct}%)</div>
-          <div class="el-item"><div class="el-dot" style="background:var(--indigo)"></div>VEP — ${fmtInt(vepJoined)} (${vepPct}%)</div>
-          <div class="el-item"><div class="el-dot" style="background:var(--green)"></div>Sponsored (RCT/RWE) — ${fmtInt(sponsoredJoined)} (${sponsoredPct}%)</div>
+        <div style="padding:0 10px;text-align:center;">
+          <div style="font-size:14px;color:var(--text-dim);">→</div>
+          <div style="font-size:11px;font-weight:600;color:${parseFloat(leadToJoinPct) >= 30 ? 'var(--green)' : 'var(--yellow)'};">${leadToJoinPct}%</div>
+        </div>
+        <div style="text-align:center;padding:14px 20px;background:rgba(96,165,250,0.08);border-radius:10px;min-width:120px;">
+          <div style="font-size:28px;font-weight:700;color:var(--blue);">${fmtInt(allJoined)}</div>
+          <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Joined</div>
+        </div>
+        <div style="padding:0 10px;text-align:center;">
+          <div style="font-size:14px;color:var(--text-dim);">→</div>
+          <div style="font-size:11px;font-weight:600;color:${parseFloat(joinToOnboardPct) >= 50 ? 'var(--green)' : 'var(--yellow)'};">${joinToOnboardPct}%</div>
+        </div>
+        <div style="text-align:center;padding:14px 20px;background:rgba(52,211,153,0.08);border-radius:10px;min-width:120px;">
+          <div style="font-size:28px;font-weight:700;color:var(--green);">${fmtInt(totalOnboarded)}</div>
+          <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;">Onboarded</div>
+        </div>
+        <div style="padding:0 10px;text-align:center;">
+          <div style="font-size:14px;color:var(--text-dim);">→</div>
+          <div style="font-size:11px;font-weight:600;color:var(--rose);">${fmtInt(noStudy)} lost</div>
         </div>
       </div>
 
+      <!-- Participant distribution bar -->
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:600;">Where participants joined</div>
+      <div class="engagement-bar-wrap">
+        <div class="engagement-bar">
+          ${sponsoredPct > 0 ? `<div class="eb-seg" style="width:${sponsoredPct}%;background:var(--green);">${sponsoredPct > 8 ? fmtInt(sponsoredJoined) + ' Sponsored' : ''}</div>` : ''}
+          ${publicPct > 0 ? `<div class="eb-seg" style="width:${publicPct}%;background:var(--sky);">${publicPct > 8 ? fmtInt(publicJoined) + ' Public' : ''}</div>` : ''}
+          ${vepPct > 0 ? `<div class="eb-seg" style="width:${vepPct}%;background:var(--indigo);">${vepPct > 8 ? fmtInt(vepJoined) + ' VEP' : ''}</div>` : ''}
+        </div>
+        <div class="engagement-legend">
+          <div class="el-item"><div class="el-dot" style="background:var(--green)"></div>Sponsored (RCT/RWE) — <strong>${fmtInt(sponsoredJoined)}</strong> joined, <strong>${fmtInt(sponsoredOnboarded)}</strong> onboarded (${sponsoredConv}% conversion)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--sky)"></div>Public Challenges — <strong>${fmtInt(publicJoined)}</strong> joined, <strong>${fmtInt(publicOnboarded)}</strong> onboarded (${publicConv}% conversion)</div>
+          <div class="el-item"><div class="el-dot" style="background:var(--indigo)"></div>VEP (Partner) — <strong>${fmtInt(vepJoined)}</strong> joined, <strong>${fmtInt(vepOnboarded)}</strong> onboarded (${vepConv}% conversion)</div>
+        </div>
+      </div>
+
+      <!-- Detail cards -->
       <div class="engagement-detail-grid">
-        <div class="engagement-detail-card" style="border-top:3px solid var(--rose)">
-          <div class="edc-title" style="color:var(--rose)">Downloaded app, no study joined</div>
-          <div class="edc-hero" style="color:var(--rose)">${fmtInt(noStudy)}</div>
-          <div class="edc-sub">${fmtInt(totalLeads)} total leads · ${fmtInt(vepJoined + sponsoredJoined)} joined (VEP + sponsored) · ${totalLeads > 0 ? ((vepJoined + sponsoredJoined) / totalLeads * 100).toFixed(1) : 0}% conversion</div>
+        <!-- Sponsored studies -->
+        <div class="engagement-detail-card" style="border-top:3px solid var(--green)">
+          <div class="edc-title" style="color:var(--green)">Sponsored Studies (RCT / RWE)</div>
+          <div style="display:flex;gap:16px;align-items:baseline;margin-bottom:10px;">
+            <div><span style="font-size:24px;font-weight:700;color:var(--green);">${fmtInt(sponsoredJoined)}</span> <span style="font-size:11px;color:var(--text-dim);">joined</span></div>
+            <div><span style="font-size:24px;font-weight:700;color:var(--green);">${fmtInt(sponsoredOnboarded)}</span> <span style="font-size:11px;color:var(--text-dim);">onboarded</span></div>
+            <div><span style="font-size:18px;font-weight:700;color:var(--green);">${sponsoredConv}%</span> <span style="font-size:11px;color:var(--text-dim);">conversion</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;display:flex;justify-content:space-between;"><span>Study</span><span>Joined / Onboarded</span></div>
+          <div class="edc-list">
+            ${sponsoredStudies.map(s => `<div class="edc-row"><span>${esc(s.name)}</span><strong>${fmtInt(s.joined || 0)} / ${fmtInt(s.onboarded || 0)}</strong></div>`).join('')}
+          </div>
         </div>
 
+        <!-- Public studies -->
         <div class="engagement-detail-card" style="border-top:3px solid var(--sky)">
-          <div class="edc-title" style="color:var(--sky)">Joined a public study</div>
-          <div class="edc-hero" style="color:var(--sky)">${fmtInt(publicJoined)}</div>
+          <div class="edc-title" style="color:var(--sky)">Public Challenges</div>
+          <div style="display:flex;gap:16px;align-items:baseline;margin-bottom:10px;">
+            <div><span style="font-size:24px;font-weight:700;color:var(--sky);">${fmtInt(publicJoined)}</span> <span style="font-size:11px;color:var(--text-dim);">joined</span></div>
+            <div><span style="font-size:24px;font-weight:700;color:var(--sky);">${fmtInt(publicOnboarded)}</span> <span style="font-size:11px;color:var(--text-dim);">onboarded</span></div>
+            <div><span style="font-size:18px;font-weight:700;color:var(--sky);">${publicConv}%</span> <span style="font-size:11px;color:var(--text-dim);">conversion</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;display:flex;justify-content:space-between;"><span>Challenge</span><span>Joined / Onboarded</span></div>
           <div class="edc-list">
             ${publicStudies.map(s => `<div class="edc-row"><span>${esc(s.name)}</span><strong>${fmtInt(s.joined || 0)} / ${fmtInt(s.onboarded || 0)}</strong></div>`).join('')}
           </div>
         </div>
 
+        <!-- VEP studies -->
         <div class="engagement-detail-card" style="border-top:3px solid var(--indigo)">
-          <div class="edc-title" style="color:var(--indigo)">Joined a VEP study</div>
-          <div class="edc-hero" style="color:var(--indigo)">${fmtInt(vepJoined)}</div>
+          <div class="edc-title" style="color:var(--indigo)">VEP Studies (Partner-Recruited)</div>
+          <div style="display:flex;gap:16px;align-items:baseline;margin-bottom:10px;">
+            <div><span style="font-size:24px;font-weight:700;color:var(--indigo);">${fmtInt(vepJoined)}</span> <span style="font-size:11px;color:var(--text-dim);">joined</span></div>
+            <div><span style="font-size:24px;font-weight:700;color:var(--indigo);">${fmtInt(vepOnboarded)}</span> <span style="font-size:11px;color:var(--text-dim);">onboarded</span></div>
+            <div><span style="font-size:18px;font-weight:700;color:var(--indigo);">${vepConv}%</span> <span style="font-size:11px;color:var(--text-dim);">conversion</span></div>
+          </div>
+          <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;display:flex;justify-content:space-between;"><span>Study</span><span>Joined / Onboarded</span></div>
           <div class="edc-list">
             ${vepStudies.map(s => `<div class="edc-row"><span>${esc(s.name)}</span><strong>${fmtInt(s.joined || 0)} / ${fmtInt(s.onboarded || 0)}</strong></div>`).join('')}
           </div>
         </div>
 
-        <div class="engagement-detail-card" style="border-top:3px solid var(--green)">
-          <div class="edc-title" style="color:var(--green)">Join → Onboard conversion</div>
+        <!-- Overall conversion -->
+        <div class="engagement-detail-card" style="border-top:3px solid var(--lime)">
+          <div class="edc-title" style="color:var(--lime)">Join → Onboard Conversion by Type</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;">
-            <div style="text-align:center;padding:10px 6px;border-radius:8px;background:rgba(116,185,255,0.08);">
-              <div style="font-size:20px;font-weight:700;color:var(--sky)">${publicConv}%</div>
-              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Public</div>
+            <div style="text-align:center;padding:12px 6px;border-radius:8px;background:rgba(52,211,153,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--green)">${sponsoredConv}%</div>
+              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;">Sponsored</div>
             </div>
-            <div style="text-align:center;padding:10px 6px;border-radius:8px;background:rgba(108,92,231,0.08);">
-              <div style="font-size:20px;font-weight:700;color:var(--indigo)">${vepConv}%</div>
-              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">VEP</div>
+            <div style="text-align:center;padding:12px 6px;border-radius:8px;background:rgba(116,185,255,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--sky)">${publicConv}%</div>
+              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;">Public</div>
             </div>
-            <div style="text-align:center;padding:10px 6px;border-radius:8px;background:rgba(52,211,153,0.08);">
-              <div style="font-size:20px;font-weight:700;color:var(--green)">${sponsoredConv}%</div>
-              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Sponsored</div>
+            <div style="text-align:center;padding:12px 6px;border-radius:8px;background:rgba(108,92,231,0.08);">
+              <div style="font-size:22px;font-weight:700;color:var(--indigo)">${vepConv}%</div>
+              <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;">VEP</div>
             </div>
           </div>
-          <div style="text-align:center;padding:12px 10px;border-radius:8px;background:rgba(200,230,74,0.06);border:1px solid rgba(200,230,74,0.15);margin-top:8px;">
-            <div style="font-size:26px;font-weight:700;color:var(--lime)">${overallConv}%</div>
-            <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Overall</div>
+          <div style="text-align:center;padding:14px 10px;border-radius:8px;background:rgba(200,230,74,0.06);border:1px solid rgba(200,230,74,0.15);margin-top:10px;">
+            <div style="font-size:30px;font-weight:700;color:var(--lime)">${overallConv}%</div>
+            <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;">Overall join → onboard</div>
           </div>
         </div>
       </div>
