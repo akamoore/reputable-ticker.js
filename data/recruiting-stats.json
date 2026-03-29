@@ -51,9 +51,9 @@
     "yesterday": 1,
     "week": 2,
     "month": 6,
-    "newSignups": 5626,
+    "newSignups": 5627,
     "signupsYesterday": 2,
-    "signupsWeek": 38,
+    "signupsWeek": 39,
     "joinedTotal": 3549,
     "joinedYesterday": 1,
     "joinedWeek": 8,
@@ -4019,6 +4019,10 @@
       {
         "date": "2026-03-28",
         "count": 2
+      },
+      {
+        "date": "2026-03-29",
+        "count": 1
       }
     ],
     "daily": [
@@ -4303,12 +4307,12 @@
       }
     ],
     "onboardedByPeriod": {
-      "seven_days": 58,
-      "thirty_days": 410,
-      "ninety_days": 1097,
+      "seven_days": 59,
+      "thirty_days": 411,
+      "ninety_days": 1098,
       "year_2025": 680,
-      "year_2026": 1070,
-      "all": 1750
+      "year_2026": 1071,
+      "all": 1751
     }
   },
   "campaignStudyMap": [],
@@ -4319,6 +4323,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-29T01:54:02.927Z",
+  "_cached_at": "2026-03-29T06:56:54.172Z",
   "_source": "github-action"
 }
