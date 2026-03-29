@@ -655,7 +655,14 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
 
   <!-- Ad Performance -->
   <div class="section" id="ads-section">
-    <h2><span class="section-icon">&#9673;</span> Ad Performance (Meta)</h2>
+    <div class="section-header">
+      <h2 style="margin:0;"><span class="section-icon">&#9673;</span> Ad Performance (Meta)</h2>
+      <div class="table-controls">
+        <select id="filter-campaign">
+          <option value="all">All Campaigns</option>
+        </select>
+      </div>
+    </div>
     <div class="table-wrap">
       <table>
         <thead>
@@ -667,6 +674,7 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
           </tr>
         </thead>
         <tbody id="ads-tbody"></tbody>
+        <tfoot id="ads-tfoot"></tfoot>
       </table>
     </div>
   </div>
@@ -2234,14 +2242,31 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   function normalizeCampaign(name) { return CAMPAIGN_NAME_MAP[name?.toLowerCase()] || name; }
   function normalizeAd(name) { return AD_NAME_MAP[name?.toLowerCase()] || name; }
 
+  let filterCampaign = 'all';
+
   function renderAds() {
-    const ads = dataService.getMetaAdsBreakdown();
+    const allAds = dataService.getMetaAdsBreakdown();
     const section = $('#ads-section');
-    if (!ads.length) {
+    if (!allAds.length) {
       section.style.display = 'none';
       return;
     }
     section.style.display = '';
+
+    // Populate campaign filter dropdown with normalized names
+    const campaignSelect = $('#filter-campaign');
+    const uniqueCampaigns = [...new Set(allAds.map(a => normalizeCampaign(a.campaignName)))].sort();
+    const currentVal = campaignSelect.value;
+    campaignSelect.innerHTML = '<option value="all">All Campaigns</option>' +
+      uniqueCampaigns.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    campaignSelect.value = currentVal || 'all';
+
+    // Filter
+    const ads = filterCampaign === 'all'
+      ? allAds
+      : allAds.filter(a => normalizeCampaign(a.campaignName) === filterCampaign);
+
+    // Render rows
     const tbody = $('#ads-tbody');
     tbody.innerHTML = ads.map(a => `<tr>
       <td>${esc(normalizeCampaign(a.campaignName) || '—')}</td>
@@ -2253,6 +2278,26 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       <td class="align-right">${fmt(a.cpc)}</td>
       <td class="align-right">${fmt(a.cpm)}</td>
     </tr>`).join('');
+
+    // Totals row
+    const totImpressions = ads.reduce((a, d) => a + (d.impressions || 0), 0);
+    const totClicks = ads.reduce((a, d) => a + (d.clicks || 0), 0);
+    const totSpend = ads.reduce((a, d) => a + (d.spend || 0), 0);
+    const totCTR = totImpressions > 0 ? (totClicks / totImpressions * 100) : 0;
+    const totCPC = totClicks > 0 ? totSpend / totClicks : 0;
+    const totCPM = totImpressions > 0 ? totSpend / totImpressions * 1000 : 0;
+
+    const tfoot = $('#ads-tfoot');
+    tfoot.innerHTML = `<tr style="font-weight:700;">
+      <td>${filterCampaign === 'all' ? ads.length + ' ads' : esc(filterCampaign)}</td>
+      <td>Total</td>
+      <td class="align-right">${fmtInt(totImpressions)}</td>
+      <td class="align-right">${fmtInt(totClicks)}</td>
+      <td class="align-right">${fmt(totSpend)}</td>
+      <td class="align-right">${fmtPct(totCTR)}</td>
+      <td class="align-right">${fmt(totCPC)}</td>
+      <td class="align-right">${fmt(totCPM)}</td>
+    </tr>`;
   }
 
   // ============================================================
@@ -2865,6 +2910,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   $('#filter-size').addEventListener('change', e => { filterSize = e.target.value; renderStudiesTable(); });
   $('#filter-source').addEventListener('change', e => { filterSource = e.target.value; renderStudiesTable(); });
   $('#filter-outlier').addEventListener('change', e => { filterOutlier = e.target.value; renderStudiesTable(); });
+  $('#filter-campaign').addEventListener('change', e => { filterCampaign = e.target.value; renderAds(); });
 
   // CSV Export
   $('#btn-export-csv').addEventListener('click', () => {
