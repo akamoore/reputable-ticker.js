@@ -4307,12 +4307,12 @@
       }
     ],
     "onboardedByPeriod": {
-      "seven_days": 59,
-      "thirty_days": 411,
-      "ninety_days": 1098,
+      "seven_days": 60,
+      "thirty_days": 412,
+      "ninety_days": 1099,
       "year_2025": 680,
-      "year_2026": 1071,
-      "all": 1751
+      "year_2026": 1072,
+      "all": 1752
     }
   },
   "campaignStudyMap": [],
@@ -4323,6 +4323,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-29T12:40:51.080Z",
+  "_cached_at": "2026-03-29T18:33:34.022Z",
   "_source": "github-action"
 }
