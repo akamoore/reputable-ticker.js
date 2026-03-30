@@ -21,7 +21,7 @@
       "month": 0
     },
     "totalOnboarded": {
-      "yesterday": 1,
+      "yesterday": 0,
       "week": 2,
       "month": 6
     },
@@ -48,15 +48,15 @@
   },
   "onboarding": {
     "total": 49,
-    "yesterday": 1,
+    "yesterday": 0,
     "week": 2,
     "month": 6,
-    "newSignups": 5627,
+    "newSignups": 5628,
     "signupsYesterday": 2,
-    "signupsWeek": 39,
+    "signupsWeek": 32,
     "joinedTotal": 3549,
-    "joinedYesterday": 1,
-    "joinedWeek": 8,
+    "joinedYesterday": 0,
+    "joinedWeek": 7,
     "joinedDaily": [
       {
         "date": "2024-06-13",
@@ -4022,7 +4022,7 @@
       },
       {
         "date": "2026-03-29",
-        "count": 1
+        "count": 2
       }
     ],
     "daily": [
@@ -4307,9 +4307,9 @@
       }
     ],
     "onboardedByPeriod": {
-      "seven_days": 60,
-      "thirty_days": 412,
-      "ninety_days": 1099,
+      "seven_days": 52,
+      "thirty_days": 349,
+      "ninety_days": 1080,
       "year_2025": 680,
       "year_2026": 1072,
       "all": 1752
@@ -4323,6 +4323,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-29T18:26:59.632Z",
+  "_cached_at": "2026-03-30T01:22:16.248Z",
   "_source": "github-action"
 }
