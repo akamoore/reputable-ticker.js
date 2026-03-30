@@ -1,27 +1,18 @@
 {
-  "updated_at": "2026-03-29T15:58:52.250Z",
+  "updated_at": "2026-03-30T09:17:34.653Z",
   "period": {
-    "start": "2025-12-29",
-    "end": "2026-03-29"
+    "start": "2025-12-30",
+    "end": "2026-03-30"
   },
   "totals": {
-    "impressions": 1405682,
-    "clicks": 46811,
-    "spend": 17353.609999999993,
-    "cpc": 0.3707164982589561,
-    "cpm": 12.345331305373472,
-    "ctr": 3.330127297639153
+    "impressions": 1373225,
+    "clicks": 45188,
+    "spend": 17067.619999999995,
+    "cpc": 0.37770248738603157,
+    "cpm": 12.428859072621018,
+    "ctr": 3.290647927324364
   },
   "daily": [
-    {
-      "date": "2025-12-29",
-      "impressions": 32457,
-      "clicks": 1623,
-      "spend": 285.99,
-      "cpc": 0.176211,
-      "cpm": 8.81135,
-      "ctr": 5.000462
-    },
     {
       "date": "2025-12-30",
       "impressions": 20365,
@@ -626,6 +617,33 @@
       "ctr": 3.628118
     },
     {
+      "date": "2026-03-07",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-08",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-09",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
       "date": "2026-03-10",
       "impressions": 7808,
       "clicks": 135,
@@ -642,6 +660,24 @@
       "cpc": 0.679024,
       "cpm": 19.527706,
       "ctr": 2.875848
+    },
+    {
+      "date": "2026-03-12",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
+    },
+    {
+      "date": "2026-03-13",
+      "impressions": 0,
+      "clicks": 0,
+      "spend": 0,
+      "cpc": 0,
+      "cpm": 0,
+      "ctr": 0
     },
     {
       "date": "2026-03-20",
@@ -720,12 +756,12 @@
     {
       "adName": "Melatonin Sleep Study",
       "campaignName": "somato sleep study",
-      "impressions": 470568,
-      "clicks": 16173,
-      "spend": 4137.43,
-      "cpc": 0.255823,
-      "cpm": 8.792417,
-      "ctr": 3.43691
+      "impressions": 449873,
+      "clicks": 15090,
+      "spend": 3945.32,
+      "cpc": 0.261453,
+      "cpm": 8.769853,
+      "ctr": 3.35428
     },
     {
       "adName": "Proleeva - Red Morning (Revised)",
@@ -770,12 +806,12 @@
     {
       "adName": "Peptide Supplement: Sleep and Recovery",
       "campaignName": "sleep peptide",
-      "impressions": 131484,
-      "clicks": 4564,
-      "spend": 1011.94,
-      "cpc": 0.221722,
-      "cpm": 7.696298,
-      "ctr": 3.471145
+      "impressions": 119722,
+      "clicks": 4024,
+      "spend": 918.06,
+      "cpc": 0.228146,
+      "cpm": 7.668265,
+      "ctr": 3.36112
     },
     {
       "adName": "Melatonin Sleep Study",
