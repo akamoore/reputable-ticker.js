@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-03-29T08:46:26.423Z",
+  "updated_at": "2026-03-30T09:17:17.375Z",
   "period": {
-    "start": "2025-12-29",
-    "end": "2026-03-29"
+    "start": "2025-12-30",
+    "end": "2026-03-30"
   },
   "totals": {
-    "installs": 2010,
-    "sessions": 2297,
+    "installs": 2012,
+    "sessions": 2333,
     "uninstalls": 0
   },
   "daily": [
@@ -67,7 +67,7 @@
     {
       "date": "2026-01-24",
       "installs": 143,
-      "sessions": 41,
+      "sessions": 43,
       "uninstalls": 0
     },
     {
@@ -115,7 +115,7 @@
     {
       "date": "2026-02-01",
       "installs": 39,
-      "sessions": 42,
+      "sessions": 44,
       "uninstalls": 0
     },
     {
@@ -181,7 +181,7 @@
     {
       "date": "2026-02-12",
       "installs": 22,
-      "sessions": 115,
+      "sessions": 116,
       "uninstalls": 0
     },
     {
@@ -199,7 +199,7 @@
     {
       "date": "2026-02-15",
       "installs": 19,
-      "sessions": 115,
+      "sessions": 116,
       "uninstalls": 0
     },
     {
@@ -211,13 +211,13 @@
     {
       "date": "2026-02-17",
       "installs": 32,
-      "sessions": 403,
+      "sessions": 412,
       "uninstalls": 0
     },
     {
       "date": "2026-02-18",
       "installs": 23,
-      "sessions": 75,
+      "sessions": 76,
       "uninstalls": 0
     },
     {
@@ -235,7 +235,7 @@
     {
       "date": "2026-02-21",
       "installs": 27,
-      "sessions": 54,
+      "sessions": 55,
       "uninstalls": 0
     },
     {
@@ -247,19 +247,19 @@
     {
       "date": "2026-02-23",
       "installs": 29,
-      "sessions": 139,
+      "sessions": 141,
       "uninstalls": 0
     },
     {
       "date": "2026-02-24",
       "installs": 45,
-      "sessions": 56,
+      "sessions": 58,
       "uninstalls": 0
     },
     {
       "date": "2026-02-25",
       "installs": 43,
-      "sessions": 78,
+      "sessions": 79,
       "uninstalls": 0
     },
     {
@@ -283,13 +283,13 @@
     {
       "date": "2026-03-01",
       "installs": 35,
-      "sessions": 41,
+      "sessions": 42,
       "uninstalls": 0
     },
     {
       "date": "2026-03-02",
       "installs": 49,
-      "sessions": 167,
+      "sessions": 170,
       "uninstalls": 0
     },
     {
@@ -301,19 +301,19 @@
     {
       "date": "2026-03-04",
       "installs": 30,
-      "sessions": 45,
+      "sessions": 46,
       "uninstalls": 0
     },
     {
       "date": "2026-03-05",
       "installs": 35,
-      "sessions": 155,
+      "sessions": 160,
       "uninstalls": 0
     },
     {
       "date": "2026-03-06",
       "installs": 49,
-      "sessions": 84,
+      "sessions": 85,
       "uninstalls": 0
     },
     {
@@ -343,7 +343,7 @@
     {
       "date": "2026-03-11",
       "installs": 33,
-      "sessions": 57,
+      "sessions": 58,
       "uninstalls": 0
     },
     {
@@ -427,7 +427,7 @@
     {
       "date": "2026-03-25",
       "installs": 23,
-      "sessions": 39,
+      "sessions": 41,
       "uninstalls": 0
     },
     {
@@ -450,7 +450,7 @@
     },
     {
       "date": "2026-03-29",
-      "installs": 1,
+      "installs": 3,
       "sessions": 0,
       "uninstalls": 0
     }
@@ -458,18 +458,18 @@
   "bySource": [
     {
       "source": "Organic",
-      "installs": 1858,
+      "installs": 1860,
       "sessions": 0
     },
     {
       "source": "Facebook Ads",
       "installs": 103,
-      "sessions": 1113
+      "sessions": 1124
     },
     {
       "source": "af_app_invites",
       "installs": 48,
-      "sessions": 1179
+      "sessions": 1204
     },
     {
       "source": "meta",
