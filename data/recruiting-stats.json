@@ -22,7 +22,7 @@
     },
     "totalOnboarded": {
       "yesterday": 0,
-      "week": 2,
+      "week": 1,
       "month": 6
     },
     "costPerOnboard": {
@@ -49,14 +49,14 @@
   "onboarding": {
     "total": 49,
     "yesterday": 0,
-    "week": 2,
+    "week": 1,
     "month": 6,
-    "newSignups": 5628,
+    "newSignups": 5630,
     "signupsYesterday": 2,
-    "signupsWeek": 32,
-    "joinedTotal": 3549,
-    "joinedYesterday": 0,
-    "joinedWeek": 7,
+    "signupsWeek": 30,
+    "joinedTotal": 3550,
+    "joinedYesterday": 1,
+    "joinedWeek": 6,
     "joinedDaily": [
       {
         "date": "2024-06-13",
@@ -1152,6 +1152,10 @@
       },
       {
         "date": "2026-03-28",
+        "count": 1
+      },
+      {
+        "date": "2026-03-30",
         "count": 1
       }
     ],
@@ -4023,6 +4027,10 @@
       {
         "date": "2026-03-29",
         "count": 2
+      },
+      {
+        "date": "2026-03-30",
+        "count": 2
       }
     ],
     "daily": [
@@ -4307,12 +4315,12 @@
       }
     ],
     "onboardedByPeriod": {
-      "seven_days": 56,
-      "thirty_days": 353,
-      "ninety_days": 1084,
+      "seven_days": 49,
+      "thirty_days": 335,
+      "ninety_days": 1080,
       "year_2025": 680,
-      "year_2026": 1076,
-      "all": 1756
+      "year_2026": 1079,
+      "all": 1759
     }
   },
   "campaignStudyMap": [],
@@ -4323,6 +4331,6 @@
     "appsflyer": "failed",
     "analytics": "failed"
   },
-  "_cached_at": "2026-03-30T18:45:02.387Z",
+  "_cached_at": "2026-03-31T01:19:43.448Z",
   "_source": "github-action"
 }
