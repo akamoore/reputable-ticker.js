@@ -160,6 +160,10 @@
         <div class="multi-select" data-filter="reason" id="ms-reason"></div>
       </div>
       <div class="filter-group">
+        <label>Wearable</label>
+        <div class="multi-select" data-filter="wearable" id="ms-wearable"></div>
+      </div>
+      <div class="filter-group">
         <label>Has Email</label>
         <div class="multi-select" data-filter="has_email" id="ms-has_email"></div>
       </div>
@@ -292,7 +296,7 @@ const fmtInt=n=>n!=null?n.toLocaleString():'—';
 // ============================================================
 let currentAudience = 'in_app';
 let emailMode = 'template';
-let selectedFilters = {status:[],gender:[],study:[],reason:[],has_email:[]};
+let selectedFilters = {status:[],gender:[],study:[],reason:[],wearable:[],has_email:[]};
 let filteredParticipants = [];
 let sgConnected = false;
 let allInApp = [];
@@ -346,15 +350,28 @@ function parseCSVLine(line){
 // ============================================================
 async function loadData(){
   try{
-    const [masterResp, leadsResp] = await Promise.all([
+    const [masterResp, leadsResp, ouraResp] = await Promise.all([
       fetch('data/master-participants.csv'),
       fetch('data/meta-leads.csv'),
+      fetch('data/oura-database.csv'),
     ]);
     const masterText = await masterResp.text();
     const leadsText = await leadsResp.text();
+    const ouraText = await ouraResp.text();
 
     const masterRows = parseCSV(masterText);
     const leadsRows = parseCSV(leadsText);
+    const ouraRows = parseCSV(ouraText);
+
+    // Build Oura lookup by email
+    const ouraByEmail = {};
+    ouraRows.forEach(r => {
+      if(r.email && r.email !== 'NULL'){
+        ouraByEmail[r.email.toLowerCase().trim()] = {
+          wearable: (r.wearable && r.wearable.trim()) || 'Oura Ring',
+        };
+      }
+    });
 
     // Parse master database into in-app participants
     // Columns: name, email, user_id, gender, active, compliance_experiment,
@@ -379,6 +396,9 @@ async function loadData(){
         const reason = (!r.reason || r.reason === 'NULL') ? null : r.reason;
         const name = (!r.name || r.name === 'NULL') ? null : r.name;
 
+        const ouraMatch = ouraByEmail[r.email.toLowerCase().trim()];
+        const wearable = ouraMatch ? ouraMatch.wearable : 'Unknown';
+
         return {
           audience: 'in_app',
           user_id: r.user_id !== 'NULL' ? r.user_id : null,
@@ -390,41 +410,63 @@ async function loadData(){
           status,
           study,
           reason,
+          wearable,
           completedDate: hasCompleted ? r.last_completed_date : null,
           withdrawalDate: hasWithdrawal ? r.last_withdrawal_date : null,
           withdrawnStudy: (r.last_withdrawn_study_name && r.last_withdrawn_study_name !== 'NULL') ? r.last_withdrawn_study_name : null,
         };
       });
 
-    // Parse meta leads
-    // Columns: email, full_name
-    const inAppEmails = new Set(allInApp.map(p=>p.email.toLowerCase()));
-    allLeads = leadsRows
+    // Parse meta leads + Oura-only leads
+    // Meta columns: email, full_name
+    const inAppEmails = new Set(allInApp.map(p=>p.email.toLowerCase().trim()));
+
+    function makeLead(email, name, source, wearable){
+      return {
+        audience: 'outside_app',
+        user_id: null,
+        name,
+        firstName: name ? name.split(' ')[0] : null,
+        email,
+        gender: 'Not specified',
+        active: false,
+        status: 'Raw Lead',
+        study: null,
+        reason: null,
+        wearable: wearable || 'Unknown',
+        source,
+        completedDate: null,
+        withdrawalDate: null,
+        withdrawnStudy: null,
+        alreadyInApp: inAppEmails.has(email.toLowerCase().trim()),
+      };
+    }
+
+    const metaLeads = leadsRows
       .filter(r => r.email && r.email !== 'NULL')
-      .map(r => {
-        const name = r.full_name || r.name || null;
-        return {
-          audience: 'outside_app',
-          user_id: null,
-          name,
-          firstName: name ? name.split(' ')[0] : null,
-          email: r.email,
-          gender: 'Not specified',
-          active: false,
-          status: 'Raw Lead',
-          study: null,
-          reason: null,
-          completedDate: null,
-          withdrawalDate: null,
-          withdrawnStudy: null,
-          alreadyInApp: inAppEmails.has(r.email.toLowerCase()),
-        };
-      });
+      .map(r => makeLead(r.email, r.full_name || r.name || null, 'Meta Ads', 'Unknown'));
 
-    // Count overlap
+    // Oura-only leads (not in master DB)
+    const ouraLeads = ouraRows
+      .filter(r => r.email && r.email !== 'NULL' && !inAppEmails.has(r.email.toLowerCase().trim()))
+      .map(r => makeLead(r.email, r.name || null, 'Oura Database', 'Oura Ring'));
+
+    // Dedupe by email
+    const seenEmails = new Set();
+    allLeads = [];
+    for(const lead of [...metaLeads, ...ouraLeads]){
+      const key = lead.email.toLowerCase().trim();
+      if(!seenEmails.has(key)){
+        seenEmails.add(key);
+        allLeads.push(lead);
+      }
+    }
+
+    // Count stats
     const overlapCount = allLeads.filter(l=>l.alreadyInApp).length;
+    const ouraTagged = allInApp.filter(p=>p.wearable==='Oura Ring').length;
 
-    $('#data-source-label').textContent = `Master DB: ${fmtInt(allInApp.length)} participants · Meta Leads: ${fmtInt(allLeads.length)} (${overlapCount} overlap) · Last updated: Feb 2026`;
+    $('#data-source-label').textContent = `Master DB: ${fmtInt(allInApp.length)} participants (${fmtInt(ouraTagged)} Oura) · Leads: ${fmtInt(allLeads.length)} (${overlapCount} overlap) · Last updated: Feb 2026`;
     $('.data-source .dot').style.background = 'var(--green)';
 
     buildFilterOptions();
@@ -461,6 +503,12 @@ function buildFilterOptions(){
   allInApp.forEach(p=>{if(p.reason) reasons[p.reason]=(reasons[p.reason]||0)+1});
   const reasonsSorted = Object.entries(reasons).sort((a,b)=>b[1]-a[1]).map(([r])=>r);
   FILTER_OPTIONS.reason = reasonsSorted.map(r=>({value:r,label:r}));
+
+  // Wearable options
+  FILTER_OPTIONS.wearable = [
+    {value:'Oura Ring',label:'Oura Ring'},
+    {value:'Unknown',label:'Unknown / No wearable data'},
+  ];
 
   // Has email (for leads that may be missing)
   FILTER_OPTIONS.has_email = [
@@ -563,6 +611,10 @@ function applyFilters(){
     pool = pool.filter(p=>p.reason && selectedFilters.reason.includes(p.reason));
   }
 
+  if(selectedFilters.wearable.length){
+    pool = pool.filter(p=>selectedFilters.wearable.includes(p.wearable));
+  }
+
   if(selectedFilters.has_email.length){
     pool = pool.filter(p=>{
       const hasEmail = p.email && p.email !== 'NULL' && !p.email.includes('privaterelay.appleid.com');
@@ -588,16 +640,16 @@ function renderResults(){
   // Update table headers based on audience
   const thead = $('#preview-head');
   if(currentAudience === 'in_app'){
-    thead.innerHTML = '<tr><th>User ID</th><th>Name</th><th>Email</th><th>Gender</th><th>Status</th><th>Study</th><th>Reason</th></tr>';
+    thead.innerHTML = '<tr><th>User ID</th><th>Name</th><th>Email</th><th>Gender</th><th>Status</th><th>Study</th><th>Wearable</th><th>Reason</th></tr>';
   } else {
-    thead.innerHTML = '<tr><th>Name</th><th>Email</th><th>Already In App</th></tr>';
+    thead.innerHTML = '<tr><th>Name</th><th>Email</th><th>Source</th><th>Already In App</th></tr>';
   }
 
   const preview = filteredParticipants.slice(0,20);
   const tbody = $('#preview-body');
 
   if(!preview.length){
-    const cols = currentAudience==='in_app' ? 7 : 3;
+    const cols = currentAudience==='in_app' ? 8 : 4;
     tbody.innerHTML = `<tr><td colspan="${cols}" style="text-align:center;color:var(--text-dim);padding:24px;">No results match the current filters.</td></tr>`;
     return;
   }
@@ -615,6 +667,7 @@ function renderResults(){
         <td style="font-size:11px;">${esc(p.gender)}</td>
         <td><span style="color:${statusColor};font-weight:600;font-size:11px;">${esc(p.status)}</span></td>
         <td style="font-size:11px;">${p.study ? esc(p.study.length>30?p.study.slice(0,28)+'…':p.study) : '<span style="color:var(--text-dim);">—</span>'}</td>
+        <td style="font-size:11px;">${p.wearable==='Oura Ring' ? '<span style="color:var(--teal);">Oura Ring</span>' : '<span style="color:var(--text-dim);">—</span>'}</td>
         <td style="font-size:11px;">${p.reason ? esc(p.reason) : '<span style="color:var(--text-dim);">—</span>'}</td>
       </tr>`;
     }).join('');
@@ -626,6 +679,7 @@ function renderResults(){
       return `<tr>
         <td style="font-size:11px;">${p.name ? esc(p.name) : '—'}</td>
         <td style="font-size:11px;">${esc(p.email)}</td>
+        <td style="font-size:11px;">${esc(p.source||'—')}</td>
         <td>${overlap}</td>
       </tr>`;
     }).join('');
@@ -863,7 +917,7 @@ window.exportCSV = function(){
   if(!filteredParticipants.length){toast('No participants to export.','error');return}
 
   if(currentAudience === 'in_app'){
-    const h = ['user_id','name','email','gender','status','study','reason','completed_date','withdrawal_date','withdrawn_study'];
+    const h = ['user_id','name','email','gender','status','study','wearable','reason','completed_date','withdrawal_date','withdrawn_study'];
     const rows = filteredParticipants.map(p=>[
       p.user_id||'',
       '"'+(p.name||'').replace(/"/g,'""')+'"',
@@ -871,6 +925,7 @@ window.exportCSV = function(){
       p.gender,
       p.status,
       '"'+(p.study||'').replace(/"/g,'""')+'"',
+      p.wearable||'',
       '"'+(p.reason||'').replace(/"/g,'""')+'"',
       p.completedDate||'',
       p.withdrawalDate||'',
