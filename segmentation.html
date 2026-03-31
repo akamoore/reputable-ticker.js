@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participant Segmentation & Email — Reputable Health</title>
+  <style>
+    :root{--bg:#0a0a0a;--surface:#1a1a1a;--surface2:#141414;--border:rgba(255,255,255,0.08);--border-lime:rgba(200,230,74,0.2);--text:#fff;--text-dim:#999;--lime:#C8E64A;--lime-bg:rgba(200,230,74,0.08);--green:#34D399;--green-bg:rgba(52,211,153,0.12);--teal:#00B39F;--teal-bg:rgba(0,179,159,0.12);--blue:#60A5FA;--blue-bg:rgba(96,165,250,0.12);--indigo:#6C5CE7;--indigo-bg:rgba(108,92,231,0.12);--yellow:#FBBF24;--yellow-bg:rgba(251,191,36,0.12);--rose:#FB7185;--rose-bg:rgba(251,113,133,0.12);--lavender:#A78BFA;--lavender-bg:rgba(167,139,250,0.12);--charcoal:#222220;--radius-md:12px;--radius-pill:100px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(200,230,74,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,230,74,0.018) 1px,transparent 1px);background-size:52px 52px}
+    .container{max-width:1200px;margin:0 auto}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .header h1{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:700}
+    .subtitle{font-size:13px;color:var(--text-dim);margin-top:4px}
+    .nav-link{font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill)}
+    .nav-link:hover{background:var(--lime-bg)}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px}
+    .section h2{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .section h2 .ic{color:var(--lime);font-size:14px}
+    .badge{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+    .badge-lime{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime)}
+    .badge-green{background:var(--green-bg);color:var(--green)}
+    .badge-blue{background:var(--blue-bg);color:var(--blue)}
+    .badge-yellow{background:var(--yellow-bg);color:var(--yellow)}
+    .badge-rose{background:var(--rose-bg);color:var(--rose)}
+    .badge-gray{background:rgba(99,110,128,0.12);color:#636e80}
+    select,input[type=text],input[type=email],input[type=datetime-local]{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;font-family:inherit}
+    textarea{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5}
+    button{cursor:pointer;font-family:inherit}
+    .btn-primary{background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:8px 20px;font-weight:600;font-size:12px}
+    .btn-primary:hover{opacity:0.9}
+    .btn-primary:disabled{opacity:0.4;cursor:not-allowed}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:var(--radius-pill);padding:8px 16px;font-size:12px}
+    .btn-outline:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+    .btn-action{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime);border-radius:var(--radius-pill);padding:4px 12px;font-size:11px;font-weight:600}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:rgba(255,255,255,0.03);color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;font-size:10px;text-align:left;padding:10px;border-bottom:1px solid var(--border)}
+    td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .table-wrap{overflow-x:auto}
+    .composer-field{margin-bottom:14px}
+    .composer-field label{display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+    .merge-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    .merge-tag{font-size:10px;background:var(--indigo-bg);color:var(--indigo);padding:2px 8px;border-radius:var(--radius-pill);cursor:pointer;border:1px solid transparent}
+    .merge-tag:hover{border-color:var(--indigo)}
+    .footer{text-align:center;font-size:11px;color:var(--text-dim);padding:24px 0}
+
+    /* Toggle tabs */
+    .toggle-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius-pill);overflow:hidden;width:fit-content;margin-bottom:20px}
+    .toggle-tab{padding:10px 24px;font-size:13px;font-weight:600;background:transparent;color:var(--text-dim);border:none;cursor:pointer;transition:all 0.2s}
+    .toggle-tab.active{background:var(--lime);color:var(--charcoal)}
+    .toggle-tab:not(.active):hover{background:rgba(255,255,255,0.04);color:var(--text)}
+
+    /* Filter grid */
+    .filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+    .filter-group label{display:block;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+    .filter-group select{width:100%}
+
+    /* Multi-select dropdown */
+    .multi-select{position:relative}
+    .ms-trigger{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:36px;gap:4px}
+    .ms-trigger:hover{border-color:rgba(255,255,255,0.2)}
+    .ms-trigger .ms-placeholder{color:var(--text-dim)}
+    .ms-trigger .ms-pills{display:flex;gap:3px;flex-wrap:wrap;flex:1}
+    .ms-pill{background:var(--lime-bg);color:var(--lime);padding:1px 6px;border-radius:var(--radius-pill);font-size:10px;font-weight:600;white-space:nowrap}
+    .ms-arrow{color:var(--text-dim);font-size:10px;flex-shrink:0}
+    .ms-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;z-index:100;display:none;max-height:220px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+    .ms-dropdown.open{display:block}
+    .ms-option{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:12px;color:var(--text)}
+    .ms-option:hover{background:rgba(255,255,255,0.04)}
+    .ms-option.selected{background:var(--lime-bg)}
+    .ms-option .ms-check{width:14px;height:14px;border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+    .ms-option.selected .ms-check{background:var(--lime);border-color:var(--lime);color:var(--charcoal)}
+
+    /* Segment count */
+    .segment-count{padding:16px 20px;background:rgba(200,230,74,0.05);border:1px solid var(--border-lime);border-radius:var(--radius-md);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .segment-count .count{font-size:28px;font-weight:800;color:var(--lime)}
+    .segment-count .label{font-size:13px;color:var(--text-dim)}
+    .segment-actions{display:flex;gap:8px}
+
+    /* Email mode toggle */
+    .email-mode-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;width:fit-content;margin-bottom:16px}
+    .email-mode-tab{padding:8px 18px;font-size:12px;font-weight:600;background:transparent;color:var(--text-dim);border:none;cursor:pointer}
+    .email-mode-tab.active{background:rgba(255,255,255,0.06);color:var(--text)}
+
+    /* Preview panel */
+    .preview-panel{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;max-height:400px;overflow-y:auto}
+    .preview-panel .preview-subject{font-size:14px;font-weight:600;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+    .preview-panel .preview-body{font-size:13px;line-height:1.6;color:var(--text-dim);white-space:pre-wrap}
+
+    /* Status toast */
+    .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s ease}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast-success{background:var(--green);color:#000}
+    .toast-error{background:var(--rose);color:#fff}
+    .toast-info{background:var(--blue);color:#000}
+
+    /* Connection dot */
+    .conn-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+    .conn-dot.connected{background:var(--green);box-shadow:0 0 8px rgba(52,211,153,0.5)}
+    .conn-dot.disconnected{background:var(--rose);box-shadow:0 0 8px rgba(251,113,133,0.5)}
+
+    @media(max-width:768px){.filter-grid{grid-template-columns:1fr 1fr}.toggle-tab{padding:8px 16px;font-size:12px}}
+    @media(max-width:480px){.filter-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>Participant Segmentation & Email</h1>
+      <div class="subtitle" id="subtitle">Reputable Health — Loading...</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <a href="index.html" class="nav-link">Command Center</a>
+      <a href="lifecycle.html" class="nav-link">Lifecycle</a>
+      <a href="nurture.html" class="nav-link">Email Nurture</a>
+      <a href="attribution.html" class="nav-link">Attribution</a>
+      <a href="reporting.html" class="nav-link">Reporting</a>
+    </div>
+  </div>
+
+  <!-- SendGrid Connection -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:12px;">
+    <span class="conn-dot disconnected" id="conn-dot"></span>
+    <span id="conn-label" style="color:var(--text-dim);">Checking SendGrid...</span>
+  </div>
+
+  <!-- Audience Toggle -->
+  <div class="section">
+    <h2><span class="ic">&#9673;</span> Audience & Filters</h2>
+    <div class="toggle-tabs" id="audience-toggle">
+      <button class="toggle-tab active" data-audience="in_app" onclick="setAudience('in_app')">In-App Participants</button>
+      <button class="toggle-tab" data-audience="outside_app" onclick="setAudience('outside_app')">Outside-App Leads</button>
+    </div>
+    <div id="audience-desc" style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">People who have downloaded the app and are in the system.</div>
+
+    <!-- Filters -->
+    <div class="filter-grid" id="filter-grid">
+      <div class="filter-group">
+        <label>Activity</label>
+        <div class="multi-select" data-filter="activity" id="ms-activity"></div>
+      </div>
+      <div class="filter-group">
+        <label>Washout</label>
+        <div class="multi-select" data-filter="washout" id="ms-washout"></div>
+      </div>
+      <div class="filter-group">
+        <label>Study</label>
+        <div class="multi-select" data-filter="study" id="ms-study"></div>
+      </div>
+      <div class="filter-group">
+        <label>Baseline</label>
+        <div class="multi-select" data-filter="baseline" id="ms-baseline"></div>
+      </div>
+      <div class="filter-group">
+        <label>Compliance Score</label>
+        <div class="multi-select" data-filter="compliance" id="ms-compliance"></div>
+      </div>
+      <div class="filter-group">
+        <label>Gender</label>
+        <div class="multi-select" data-filter="gender" id="ms-gender"></div>
+      </div>
+      <div class="filter-group">
+        <label>Location</label>
+        <div class="multi-select" data-filter="location" id="ms-location"></div>
+      </div>
+      <div class="filter-group">
+        <label>Age</label>
+        <div class="multi-select" data-filter="age" id="ms-age"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-outline" onclick="clearFilters()" style="font-size:11px;padding:6px 14px;">Clear All Filters</button>
+    </div>
+  </div>
+
+  <!-- Segment Count -->
+  <div class="segment-count" id="segment-count">
+    <div>
+      <span class="count" id="match-count">—</span>
+      <span class="label" id="match-label">participants match these filters</span>
+    </div>
+    <div class="segment-actions">
+      <button class="btn-outline" onclick="exportCSV()" style="font-size:11px;">Export CSV</button>
+    </div>
+  </div>
+
+  <!-- Preview Table -->
+  <div class="section">
+    <h2><span class="ic">&#9673;</span> Segment Preview <span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-left:8px;">(first 20)</span></h2>
+    <div class="table-wrap">
+      <table id="preview-table">
+        <thead>
+          <tr>
+            <th>Alias ID</th>
+            <th>Lifecycle Stage</th>
+            <th>Study</th>
+            <th>Last Active</th>
+            <th>Wearable</th>
+            <th>Compliance</th>
+          </tr>
+        </thead>
+        <tbody id="preview-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Email Section -->
+  <div class="section">
+    <h2><span class="ic">&#9673;</span> Send Email to Segment</h2>
+
+    <div class="email-mode-tabs" id="email-mode-tabs">
+      <button class="email-mode-tab active" data-mode="template" onclick="setEmailMode('template')">SendGrid Template</button>
+      <button class="email-mode-tab" data-mode="compose" onclick="setEmailMode('compose')">Compose Email</button>
+    </div>
+
+    <!-- Template Mode -->
+    <div id="mode-template">
+      <div class="composer-field">
+        <label>SendGrid Dynamic Template ID</label>
+        <input type="text" id="sg-template-id" placeholder="d-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%;max-width:500px;">
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Enter the template ID from your SendGrid Dynamic Templates dashboard.</div>
+      </div>
+      <div class="composer-field">
+        <label>Template Dynamic Data (JSON)</label>
+        <textarea id="sg-template-data" rows="4" style="width:100%;" placeholder='{"subject": "Welcome!", "header_text": "Hi {{first_name}}", "cta_url": "https://app.reputable.health"}'></textarea>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Merge fields like <code style="color:var(--lime);">{{first_name}}</code> are replaced per-recipient automatically.</div>
+      </div>
+    </div>
+
+    <!-- Compose Mode -->
+    <div id="mode-compose" style="display:none;">
+      <div class="composer-field">
+        <label>From</label>
+        <input type="email" id="c-from" value="community@reputable.health" style="width:100%;max-width:400px;">
+      </div>
+      <div class="composer-field">
+        <label>Subject</label>
+        <input type="text" id="c-subject" placeholder="e.g., Your next study is ready, {{first_name}}" style="width:100%;">
+      </div>
+      <div class="composer-field">
+        <label>Email Body (HTML supported)</label>
+        <textarea id="c-body" rows="12" style="width:100%;" placeholder="Hi {{first_name}},&#10;&#10;Write your email here..."></textarea>
+      </div>
+      <div class="composer-field">
+        <label>Available Merge Fields</label>
+        <div class="merge-tags">
+          <span class="merge-tag" onclick="insertMerge('{{first_name}}')">{{first_name}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{study_name}}')">{{study_name}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{days_inactive}}')">{{days_inactive}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{washout_days_remaining}}')">{{washout_days_remaining}}</span>
+          <span class="merge-tag" onclick="insertMerge('{{app_download_link}}')">{{app_download_link}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="composer-field" style="margin-top:8px;">
+      <label>Schedule</label>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <label style="font-size:12px;display:flex;align-items:center;gap:4px;text-transform:none;letter-spacing:0;cursor:pointer;"><input type="radio" name="schedule" value="now" checked> Send immediately</label>
+        <label style="font-size:12px;display:flex;align-items:center;gap:4px;text-transform:none;letter-spacing:0;cursor:pointer;"><input type="radio" name="schedule" value="later"> Schedule for:</label>
+        <input type="datetime-local" id="schedule-time">
+      </div>
+    </div>
+
+    <!-- Preview + Send buttons -->
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+      <button class="btn-outline" onclick="previewEmail()">Preview</button>
+      <button class="btn-outline" onclick="sendTestEmail()">Send Test to Me</button>
+      <button class="btn-primary" id="btn-send" onclick="sendToSegment()">Send to <span id="btn-send-count">0</span> Recipients</button>
+    </div>
+    <div id="send-status" style="margin-top:12px;font-size:12px;"></div>
+  </div>
+
+  <!-- Email Preview Panel -->
+  <div class="section" id="preview-section" style="display:none;">
+    <h2><span class="ic">&#9673;</span> Email Preview</h2>
+    <div class="preview-panel" id="preview-panel"></div>
+  </div>
+
+  <div class="footer" id="footer"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const esc=s=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
+const fmtInt=n=>n!=null?n.toLocaleString():'—';
+
+// ============================================================
+// STUDIES — same as command center
+// ============================================================
+const STUDIES = [
+  {id:1,name:'Melatonin Sleep Study (Somato)',type:'RCT',status:'complete',wearable:'Oura'},
+  {id:2,name:'Pain Relief: ProleevaMax',type:'RWE',status:'recruiting',wearable:'WHOOP'},
+  {id:3,name:'Enhanced Brew — Coffee Study',type:'RCT',status:'complete',wearable:'Oura'},
+  {id:4,name:'Nitrate Supplementation (Berkeley Life)',type:'RCT',status:'complete',wearable:'Oura'},
+  {id:5,name:'Peptide Supplement: Sleep & Recovery',type:'RCT',status:'complete',wearable:'Oura'},
+  {id:6,name:'Enhanced Brew Formula (RCT)',type:'RCT',status:'complete',wearable:'Oura'},
+  {id:7,name:'Rootless & Women\'s Health',type:'RWE',status:'complete',wearable:'Oura'},
+  {id:8,name:'Quantum Upgrade & Women\'s Health',type:'RCT',status:'complete',wearable:'Oura'},
+  {id:9,name:'Sleep Mushrooms+',type:'RWE',status:'complete',wearable:'Oura'},
+  {id:10,name:'Tapping Solutions for Stress Relief',type:'VEP',status:'complete',wearable:'Oura'},
+  {id:11,name:'Better Sleep with NatPat',type:'VEP',status:'complete',wearable:'Oura'},
+  {id:12,name:'Sleep Well, Stress Less: Sensate',type:'VEP',status:'complete',wearable:'Oura'},
+  {id:13,name:'LyfeFuel Daily Essentials Shake',type:'VEP',status:'complete',wearable:'Oura'},
+  {id:14,name:'Rest & Recharge: Hapbee',type:'VEP',status:'complete',wearable:'Oura'},
+  {id:15,name:'Mimio: Energy and Metabolic Health',type:'VEP',status:'complete',wearable:'WHOOP'},
+  {id:16,name:'Vitamin D Boost: Clearlight',type:'RWE',status:'complete',wearable:'Oura'},
+  {id:17,name:'HOP Box: Women\'s Longevity',type:'RWE',status:'complete',wearable:'Oura'},
+  {id:18,name:'Leela Quantum',type:'RWE',status:'coming',wearable:'Oura'},
+  {id:19,name:'Deep Sleep: Neuvana Xen',type:'RWE',status:'complete',wearable:'Oura'},
+  {id:20,name:'Percepta',type:'RWE',status:'coming',wearable:'Oura'},
+  {id:22,name:'Cure Hydration',type:'VEP',status:'coming',wearable:'Oura'},
+  {id:23,name:'Vampire Serum: Skin Renewal',type:'RWE',status:'complete',wearable:'Oura'},
+  {id:24,name:'The 30-Minute Reset',type:'PUBLIC',status:'active',wearable:null},
+  {id:25,name:'Track Your Travel',type:'PUBLIC',status:'active',wearable:null},
+  {id:26,name:'The 10K Steps Challenge',type:'PUBLIC',status:'active',wearable:null},
+  {id:27,name:'The Dry Week Effect',type:'PUBLIC',status:'active',wearable:null},
+  {id:28,name:'The Fasting Reset',type:'PUBLIC',status:'active',wearable:null},
+  {id:29,name:'7 Day Wim Hof Challenge',type:'PUBLIC',status:'active',wearable:null},
+  {id:30,name:'The Reading Ritual',type:'PUBLIC',status:'active',wearable:null},
+  {id:31,name:'7 Day Yoga Challenge',type:'PUBLIC',status:'active',wearable:null},
+  {id:32,name:'The Gratitude Effect',type:'PUBLIC',status:'active',wearable:null},
+  {id:33,name:'The Sunrise Effect',type:'PUBLIC',status:'active',wearable:null},
+  {id:34,name:'The Nature Dose',type:'PUBLIC',status:'active',wearable:null},
+  {id:35,name:'The 4-7-8 Effect',type:'PUBLIC',status:'active',wearable:null},
+  {id:36,name:'The Power Nap Challenge',type:'PUBLIC',status:'active',wearable:null},
+  {id:37,name:'The Hydration Effect',type:'PUBLIC',status:'active',wearable:null},
+];
+
+const STAGES = [
+  {key:'RAW_LEAD',label:'Raw Lead',color:'#6C5CE7'},
+  {key:'APP_DOWNLOADED',label:'App Downloaded',color:'#74B9FF'},
+  {key:'ELIGIBLE_BROWSING',label:'Browsing',color:'#60A5FA'},
+  {key:'ELIGIBILITY_IN_PROGRESS',label:'Eligibility In Progress',color:'#A78BFA'},
+  {key:'ELIGIBLE_AWAITING_ONBOARDING',label:'Awaiting Onboarding',color:'#FBBF24'},
+  {key:'ONBOARDED_ACTIVE',label:'Active',color:'#34D399'},
+  {key:'STUDY_COMPLETE',label:'Study Complete',color:'#00B39F'},
+  {key:'IN_WASHOUT',label:'In Washout',color:'#C8E64A'},
+  {key:'DORMANT',label:'Dormant',color:'#FB7185'},
+];
+
+// ============================================================
+// FILTER DEFINITIONS
+// ============================================================
+const FILTER_OPTIONS = {
+  activity: [
+    {value:'active',label:'Active (last 30 days)'},
+    {value:'inactive',label:'Inactive (30–60 days)'},
+    {value:'dormant',label:'Dormant (60+ days)'},
+    {value:'never',label:'Never Active'},
+  ],
+  washout: [
+    {value:'in_washout',label:'Currently in washout'},
+    {value:'ending_7',label:'Washout ending in 7 days'},
+    {value:'ending_14',label:'Washout ending in 14 days'},
+    {value:'not_in_washout',label:'Not in washout'},
+  ],
+  study: STUDIES.map(s=>({value:'enrolled:'+s.id,label:s.name,group:'Currently enrolled in'}))
+    .concat(STUDIES.filter(s=>s.status==='complete').map(s=>({value:'completed:'+s.id,label:s.name,group:'Completed'})))
+    .concat(STUDIES.filter(s=>['recruiting','active','coming'].includes(s.status)).map(s=>({value:'eligible:'+s.id,label:s.name,group:'Eligible for'})))
+    .concat([{value:'never_joined',label:'Never joined any study',group:'Other'}]),
+  baseline: [
+    {value:'has_baseline',label:'Has baseline data'},
+    {value:'no_baseline',label:'No baseline data'},
+    {value:'in_progress',label:'Baseline in progress'},
+  ],
+  compliance: [
+    {value:'90+',label:'90%+'},
+    {value:'70-89',label:'70–89%'},
+    {value:'50-69',label:'50–69%'},
+    {value:'below_50',label:'Below 50%'},
+  ],
+  gender: [
+    {value:'male',label:'Male'},
+    {value:'female',label:'Female'},
+    {value:'nonbinary',label:'Non-binary'},
+    {value:'not_specified',label:'Not specified'},
+  ],
+  location: [
+    {value:'US',label:'US'},
+    {value:'CA',label:'Canada'},
+    {value:'UK',label:'UK'},
+    {value:'other',label:'Other'},
+    {value:'not_specified',label:'Not specified'},
+  ],
+  age: [
+    {value:'18-25',label:'18–25'},
+    {value:'26-35',label:'26–35'},
+    {value:'36-45',label:'36–45'},
+    {value:'46-55',label:'46–55'},
+    {value:'56-65',label:'56–65'},
+    {value:'65+',label:'65+'},
+  ],
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let currentAudience = 'in_app';
+let emailMode = 'template';
+let selectedFilters = {activity:[],washout:[],study:[],baseline:[],compliance:[],gender:[],location:[],age:[]};
+let filteredParticipants = [];
+let sgConnected = false;
+
+// SendGrid proxy
+const HOSTED_PROXY = 'https://email-proxy-puce.vercel.app';
+const LOCAL_PROXY = 'http://localhost:3001';
+let API_BASE = '';
+
+// ============================================================
+// SYNTHETIC PARTICIPANT DATA
+// ============================================================
+function generateParticipants(){
+  const now = Date.now();
+  const DAY = 86400000;
+  const firstNames = ['Alex','Jordan','Taylor','Morgan','Casey','Riley','Avery','Quinn','Drew','Jamie','Sam','Charlie','Sage','Reese','Finley','Rowan','Parker','Hayden','Dakota','Emery','Blake','Cameron','Skyler','Kai','Phoenix'];
+  const wearables = ['Oura','WHOOP','Fitbit','Apple Watch'];
+  const locations = ['US','US','US','US','CA','CA','UK','other','not_specified'];
+  const genders = ['male','male','female','female','female','nonbinary','not_specified'];
+  const ages = ['18-25','26-35','26-35','36-45','36-45','46-55','46-55','56-65','65+'];
+
+  const participants = [];
+
+  // In-app participants
+  const stageDistribution = [
+    {stage:'APP_DOWNLOADED',count:180},
+    {stage:'ELIGIBLE_BROWSING',count:120},
+    {stage:'ELIGIBILITY_IN_PROGRESS',count:85},
+    {stage:'ELIGIBLE_AWAITING_ONBOARDING',count:65},
+    {stage:'ONBOARDED_ACTIVE',count:407},
+    {stage:'STUDY_COMPLETE',count:320},
+    {stage:'IN_WASHOUT',count:80},
+    {stage:'DORMANT',count:210},
+  ];
+
+  let pid = 1000;
+  for(const {stage,count} of stageDistribution){
+    for(let i=0;i<count;i++){
+      pid++;
+      const daysAgo = stage==='DORMANT' ? 60+Math.floor(Math.random()*120)
+        : stage==='IN_WASHOUT' ? Math.floor(Math.random()*21)
+        : stage==='ONBOARDED_ACTIVE' ? Math.floor(Math.random()*14)
+        : stage==='STUDY_COMPLETE' ? 5+Math.floor(Math.random()*40)
+        : Math.floor(Math.random()*90);
+
+      const lastActive = new Date(now - daysAgo*DAY);
+      const activity = daysAgo<=30?'active':daysAgo<=60?'inactive':'dormant';
+
+      const studyPool = stage==='ONBOARDED_ACTIVE' ? STUDIES.filter(s=>['recruiting','active'].includes(s.status))
+        : stage==='STUDY_COMPLETE' ? STUDIES.filter(s=>s.status==='complete')
+        : STUDIES.filter(s=>s.status!=='coming');
+      const study = studyPool.length ? studyPool[Math.floor(Math.random()*studyPool.length)] : null;
+
+      const compliance = stage==='ONBOARDED_ACTIVE' ? 60+Math.floor(Math.random()*40)
+        : stage==='STUDY_COMPLETE' ? 50+Math.floor(Math.random()*50)
+        : stage==='DORMANT' ? 10+Math.floor(Math.random()*50)
+        : Math.floor(Math.random()*100);
+
+      const washoutDaysLeft = stage==='IN_WASHOUT' ? Math.floor(Math.random()*21) : -1;
+
+      const hasBaseline = ['ONBOARDED_ACTIVE','STUDY_COMPLETE','IN_WASHOUT'].includes(stage) ? (Math.random()>0.1?'has_baseline':'no_baseline')
+        : stage==='ELIGIBILITY_IN_PROGRESS' ? (Math.random()>0.5?'in_progress':'no_baseline')
+        : (Math.random()>0.7?'has_baseline':'no_baseline');
+
+      participants.push({
+        id: `P-${String(pid).padStart(5,'0')}`,
+        audience: 'in_app',
+        stage,
+        stageLabel: STAGES.find(s=>s.key===stage)?.label||stage,
+        stageColor: STAGES.find(s=>s.key===stage)?.color||'#999',
+        firstName: firstNames[Math.floor(Math.random()*firstNames.length)],
+        activity,
+        lastActive: lastActive.toISOString().slice(0,10),
+        daysInactive: daysAgo,
+        study: study ? study.name : null,
+        studyId: study ? study.id : null,
+        studyStatus: stage==='ONBOARDED_ACTIVE'?'enrolled':stage==='STUDY_COMPLETE'?'completed':'eligible',
+        compliance,
+        complianceBucket: compliance>=90?'90+':compliance>=70?'70-89':compliance>=50?'50-69':'below_50',
+        wearable: wearables[Math.floor(Math.random()*wearables.length)],
+        gender: genders[Math.floor(Math.random()*genders.length)],
+        location: locations[Math.floor(Math.random()*locations.length)],
+        age: ages[Math.floor(Math.random()*ages.length)],
+        baseline: hasBaseline,
+        washout: stage==='IN_WASHOUT'?'in_washout':'not_in_washout',
+        washoutDaysLeft,
+        email: `participant-${pid}@example.com`,
+      });
+    }
+  }
+
+  // Outside-app leads (raw leads from Meta)
+  for(let i=0;i<2400;i++){
+    pid++;
+    const daysAgo = Math.floor(Math.random()*180);
+    participants.push({
+      id: `L-${String(pid).padStart(5,'0')}`,
+      audience: 'outside_app',
+      stage: 'RAW_LEAD',
+      stageLabel: 'Raw Lead',
+      stageColor: '#6C5CE7',
+      firstName: firstNames[Math.floor(Math.random()*firstNames.length)],
+      activity: 'never',
+      lastActive: null,
+      daysInactive: daysAgo,
+      study: null,
+      studyId: null,
+      studyStatus: null,
+      compliance: 0,
+      complianceBucket: 'below_50',
+      wearable: null,
+      gender: genders[Math.floor(Math.random()*genders.length)],
+      location: locations[Math.floor(Math.random()*locations.length)],
+      age: ages[Math.floor(Math.random()*ages.length)],
+      baseline: 'no_baseline',
+      washout: 'not_in_washout',
+      washoutDaysLeft: -1,
+      email: `lead-${pid}@example.com`,
+    });
+  }
+
+  // Add washout sub-categories
+  participants.forEach(p=>{
+    if(p.washout==='in_washout'){
+      if(p.washoutDaysLeft<=7) p.washoutEnding7=true;
+      if(p.washoutDaysLeft<=14) p.washoutEnding14=true;
+    }
+  });
+
+  return participants;
+}
+
+const ALL_PARTICIPANTS = generateParticipants();
+
+// ============================================================
+// MULTI-SELECT COMPONENT
+// ============================================================
+function initMultiSelects(){
+  for(const [filterKey, options] of Object.entries(FILTER_OPTIONS)){
+    const el = $(`#ms-${filterKey}`);
+    if(!el) continue;
+
+    // Build the trigger and dropdown
+    el.innerHTML = `
+      <div class="ms-trigger" tabindex="0">
+        <span class="ms-placeholder">All</span>
+        <span class="ms-pills" style="display:none;"></span>
+        <span class="ms-arrow">&#9662;</span>
+      </div>
+      <div class="ms-dropdown">
+        ${options.map(o=>`<div class="ms-option" data-value="${esc(o.value)}"><span class="ms-check"></span><span>${esc(o.label)}</span></div>`).join('')}
+      </div>
+    `;
+
+    const trigger = el.querySelector('.ms-trigger');
+    const dropdown = el.querySelector('.ms-dropdown');
+
+    trigger.addEventListener('click', (e)=>{
+      // Close all other dropdowns first
+      $$('.ms-dropdown.open').forEach(d=>{if(d!==dropdown)d.classList.remove('open')});
+      dropdown.classList.toggle('open');
+      e.stopPropagation();
+    });
+
+    dropdown.querySelectorAll('.ms-option').forEach(opt=>{
+      opt.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const val = opt.dataset.value;
+        const sel = selectedFilters[filterKey];
+        const idx = sel.indexOf(val);
+        if(idx>=0){sel.splice(idx,1);opt.classList.remove('selected')}
+        else{sel.push(val);opt.classList.add('selected')}
+        updateMultiSelectDisplay(filterKey);
+        applyFilters();
+      });
+    });
+  }
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', ()=>{
+    $$('.ms-dropdown.open').forEach(d=>d.classList.remove('open'));
+  });
+}
+
+function updateMultiSelectDisplay(filterKey){
+  const el = $(`#ms-${filterKey}`);
+  if(!el)return;
+  const sel = selectedFilters[filterKey];
+  const placeholder = el.querySelector('.ms-placeholder');
+  const pillsEl = el.querySelector('.ms-pills');
+
+  if(!sel.length){
+    placeholder.style.display='';
+    pillsEl.style.display='none';
+    pillsEl.innerHTML='';
+  } else {
+    placeholder.style.display='none';
+    pillsEl.style.display='';
+    const options = FILTER_OPTIONS[filterKey];
+    pillsEl.innerHTML = sel.slice(0,3).map(v=>{
+      const opt = options.find(o=>o.value===v);
+      const label = opt ? (opt.label.length>18 ? opt.label.slice(0,16)+'…' : opt.label) : v;
+      return `<span class="ms-pill">${esc(label)}</span>`;
+    }).join('') + (sel.length>3 ? `<span class="ms-pill">+${sel.length-3}</span>` : '');
+  }
+}
+
+// ============================================================
+// FILTER LOGIC
+// ============================================================
+function applyFilters(){
+  const audience = currentAudience;
+  let pool = ALL_PARTICIPANTS.filter(p=>p.audience===audience);
+
+  // Activity filter
+  if(selectedFilters.activity.length){
+    pool = pool.filter(p=>selectedFilters.activity.includes(p.activity));
+  }
+
+  // Washout filter
+  if(selectedFilters.washout.length){
+    pool = pool.filter(p=>{
+      for(const v of selectedFilters.washout){
+        if(v==='in_washout' && p.washout==='in_washout') return true;
+        if(v==='ending_7' && p.washoutEnding7) return true;
+        if(v==='ending_14' && p.washoutEnding14) return true;
+        if(v==='not_in_washout' && p.washout==='not_in_washout') return true;
+      }
+      return false;
+    });
+  }
+
+  // Study filter
+  if(selectedFilters.study.length){
+    pool = pool.filter(p=>{
+      for(const v of selectedFilters.study){
+        if(v==='never_joined' && !p.studyId) return true;
+        const [relation, idStr] = v.split(':');
+        const id = parseInt(idStr);
+        if(relation==='enrolled' && p.studyStatus==='enrolled' && p.studyId===id) return true;
+        if(relation==='completed' && p.studyStatus==='completed' && p.studyId===id) return true;
+        if(relation==='eligible' && p.studyStatus!=='enrolled') return true;
+      }
+      return false;
+    });
+  }
+
+  // Baseline filter
+  if(selectedFilters.baseline.length){
+    pool = pool.filter(p=>selectedFilters.baseline.includes(p.baseline));
+  }
+
+  // Compliance filter
+  if(selectedFilters.compliance.length){
+    pool = pool.filter(p=>selectedFilters.compliance.includes(p.complianceBucket));
+  }
+
+  // Gender filter
+  if(selectedFilters.gender.length){
+    pool = pool.filter(p=>selectedFilters.gender.includes(p.gender));
+  }
+
+  // Location filter
+  if(selectedFilters.location.length){
+    pool = pool.filter(p=>selectedFilters.location.includes(p.location));
+  }
+
+  // Age filter
+  if(selectedFilters.age.length){
+    pool = pool.filter(p=>selectedFilters.age.includes(p.age));
+  }
+
+  filteredParticipants = pool;
+  renderResults();
+}
+
+function renderResults(){
+  const count = filteredParticipants.length;
+  $('#match-count').textContent = fmtInt(count);
+  $('#match-label').textContent = currentAudience==='in_app' ? 'participants match these filters' : 'leads match these filters';
+  $('#btn-send-count').textContent = fmtInt(count);
+
+  // Preview table — first 20
+  const preview = filteredParticipants.slice(0,20);
+  const tbody = $('#preview-body');
+
+  if(!preview.length){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:24px;">No participants match the current filters.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = preview.map(p=>{
+    const complianceColor = p.compliance>=90?'var(--green)':p.compliance>=70?'var(--lime)':p.compliance>=50?'var(--yellow)':'var(--rose)';
+    return `<tr>
+      <td style="font-family:monospace;font-size:11px;">${esc(p.id)}</td>
+      <td><span style="color:${p.stageColor};font-weight:600;font-size:11px;">${esc(p.stageLabel)}</span></td>
+      <td style="font-size:11px;">${p.study ? esc(p.study.length>30?p.study.slice(0,28)+'…':p.study) : '<span style="color:var(--text-dim);">—</span>'}</td>
+      <td style="font-size:11px;">${p.lastActive||'<span style="color:var(--text-dim);">Never</span>'}</td>
+      <td style="font-size:11px;">${p.wearable||'<span style="color:var(--text-dim);">—</span>'}</td>
+      <td style="font-size:11px;color:${complianceColor};font-weight:600;">${p.audience==='outside_app'?'—':p.compliance+'%'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ============================================================
+// AUDIENCE TOGGLE
+// ============================================================
+window.setAudience = function(audience){
+  currentAudience = audience;
+  $$('#audience-toggle .toggle-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.audience===audience);
+  });
+  $('#audience-desc').textContent = audience==='in_app'
+    ? 'People who have downloaded the app and are in the system.'
+    : 'People who submitted info via Meta ads but haven\'t downloaded the app yet.';
+  clearFilters();
+};
+
+// ============================================================
+// CLEAR FILTERS
+// ============================================================
+window.clearFilters = function(){
+  for(const key of Object.keys(selectedFilters)) selectedFilters[key]=[];
+  // Reset UI
+  $$('.ms-option.selected').forEach(o=>o.classList.remove('selected'));
+  for(const key of Object.keys(FILTER_OPTIONS)) updateMultiSelectDisplay(key);
+  applyFilters();
+};
+
+// ============================================================
+// EMAIL MODE TOGGLE
+// ============================================================
+window.setEmailMode = function(mode){
+  emailMode = mode;
+  $$('#email-mode-tabs .email-mode-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.mode===mode);
+  });
+  $('#mode-template').style.display = mode==='template' ? '' : 'none';
+  $('#mode-compose').style.display = mode==='compose' ? '' : 'none';
+};
+
+// ============================================================
+// MERGE FIELD INSERT
+// ============================================================
+window.insertMerge = function(tag){
+  const el=$('#c-body');
+  const start=el.selectionStart,end=el.selectionEnd;
+  el.value=el.value.substring(0,start)+tag+el.value.substring(end);
+  el.focus();
+  el.selectionStart=el.selectionEnd=start+tag.length;
+};
+
+// ============================================================
+// EMAIL PREVIEW
+// ============================================================
+window.previewEmail = function(){
+  const section = $('#preview-section');
+  const panel = $('#preview-panel');
+  const sample = {first_name:'Katie',study_name:'Enhanced Brew — Coffee Study',days_inactive:'12',washout_days_remaining:'4',app_download_link:'https://app.reputable.health'};
+
+  if(emailMode==='template'){
+    const tplId = $('#sg-template-id').value.trim();
+    if(!tplId){toast('Enter a SendGrid template ID to preview.','error');return}
+    let dynData = {};
+    try{dynData=JSON.parse($('#sg-template-data').value||'{}');}catch(e){toast('Invalid JSON in template data.','error');return}
+    const merged = {...dynData};
+    for(const [k,v] of Object.entries(merged)){
+      if(typeof v==='string') merged[k]=v.replace(/\{\{(\w+)\}\}/g,(_,m)=>sample[m]||`{{${m}}}`);
+    }
+    panel.innerHTML = `<div class="preview-subject">Template: ${esc(tplId)}</div>
+      <div class="preview-body">Dynamic data (with sample merge fields):\n\n${JSON.stringify(merged,null,2)}\n\nThis template will be rendered by SendGrid with the dynamic data above. ${fmtInt(filteredParticipants.length)} recipients will each receive a personalized version.</div>`;
+  } else {
+    const subject = $('#c-subject').value;
+    const body = $('#c-body').value;
+    if(!subject||!body){toast('Subject and body are required.','error');return}
+    const mergedSubject = subject.replace(/\{\{(\w+)\}\}/g,(_,m)=>sample[m]||`{{${m}}}`);
+    const mergedBody = body.replace(/\{\{(\w+)\}\}/g,(_,m)=>sample[m]||`{{${m}}}`);
+    panel.innerHTML = `<div class="preview-subject">Subject: ${esc(mergedSubject)}</div><div class="preview-body">${esc(mergedBody)}</div>`;
+  }
+  section.style.display = '';
+  section.scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+// ============================================================
+// SEND TEST EMAIL
+// ============================================================
+window.sendTestEmail = async function(){
+  if(!sgConnected){toast('SendGrid not connected. Cannot send test email.','error');return}
+
+  const sample = {first_name:'Katie',study_name:'Enhanced Brew — Coffee Study',days_inactive:'12',washout_days_remaining:'4',app_download_link:'https://app.reputable.health'};
+
+  if(emailMode==='template'){
+    const tplId = $('#sg-template-id').value.trim();
+    if(!tplId){toast('Enter a SendGrid template ID.','error');return}
+    let dynData = {};
+    try{dynData=JSON.parse($('#sg-template-data').value||'{}');}catch(e){toast('Invalid JSON.','error');return}
+    // Merge sample data
+    const merged = {...sample,...dynData};
+    try{
+      const resp = await fetch(API_BASE+'/api/email/send',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          to:'community@reputable.health',
+          subject: merged.subject || 'Test — Segmentation Email',
+          html: `<p>This is a test send using SendGrid template <strong>${esc(tplId)}</strong>.</p><p>Dynamic data: <pre>${esc(JSON.stringify(merged,null,2))}</pre></p>`,
+        })
+      });
+      const result = await resp.json();
+      if(result.success) toast('Test email sent to community@reputable.health','success');
+      else toast('Send failed: '+(result.error||'Unknown error'),'error');
+    }catch(e){toast('Network error: '+e.message,'error')}
+  } else {
+    const subject = $('#c-subject').value;
+    const body = $('#c-body').value;
+    const from = $('#c-from').value;
+    if(!subject||!body){toast('Subject and body required.','error');return}
+    const mergedSubject = subject.replace(/\{\{(\w+)\}\}/g,(_,m)=>sample[m]||`{{${m}}}`);
+    const mergedBody = body.replace(/\{\{(\w+)\}\}/g,(_,m)=>sample[m]||`{{${m}}}`);
+    try{
+      const resp = await fetch(API_BASE+'/api/email/send',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          to:'community@reputable.health',
+          from,
+          subject:mergedSubject,
+          html:mergedBody.replace(/\n/g,'<br>'),
+        })
+      });
+      const result = await resp.json();
+      if(result.success) toast('Test email sent to community@reputable.health','success');
+      else toast('Send failed: '+(result.error||'Unknown error'),'error');
+    }catch(e){toast('Network error: '+e.message,'error')}
+  }
+};
+
+// ============================================================
+// SEND TO SEGMENT
+// ============================================================
+window.sendToSegment = async function(){
+  const count = filteredParticipants.length;
+  if(!count){toast('No participants match the current filters.','error');return}
+
+  const scheduleType = document.querySelector('input[name="schedule"]:checked')?.value;
+  const scheduleTime = $('#schedule-time').value;
+  const action = scheduleType==='later'&&scheduleTime ? `schedule send to ${fmtInt(count)} recipients for ${scheduleTime}` : `send to ${fmtInt(count)} recipients now`;
+
+  if(!confirm(`Are you sure you want to ${action}?`)) return;
+
+  if(!sgConnected){
+    // Simulate locally
+    toast(`Simulated: would ${action}. Connect SendGrid for real delivery.`,'info');
+    $('#send-status').innerHTML=`<span style="color:var(--green);">Simulated send to ${fmtInt(count)} recipients.</span> <span style="color:var(--text-dim);">Connect SendGrid proxy for real delivery.</span>`;
+    return;
+  }
+
+  // Build recipients
+  const recipients = filteredParticipants.map(p=>({
+    email: p.email,
+    merge_fields: {
+      first_name: p.firstName,
+      study_name: p.study || '',
+      days_inactive: String(p.daysInactive),
+      washout_days_remaining: p.washoutDaysLeft>=0 ? String(p.washoutDaysLeft) : '',
+      app_download_link: 'https://app.reputable.health',
+    }
+  }));
+
+  $('#send-status').innerHTML = '<span style="color:var(--yellow);">Sending...</span>';
+
+  if(emailMode==='compose'){
+    const subject = $('#c-subject').value;
+    const body = $('#c-body').value;
+    const from = $('#c-from').value;
+    if(!subject||!body){toast('Subject and body required.','error');return}
+
+    // Batch in groups of 1000
+    const batches = [];
+    for(let i=0;i<recipients.length;i+=1000) batches.push(recipients.slice(i,i+1000));
+
+    let totalSent = 0;
+    for(const batch of batches){
+      try{
+        const resp = await fetch(API_BASE+'/api/email/send-batch',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            recipients:batch,
+            from,
+            subject,
+            html_template:body.replace(/\n/g,'<br>'),
+          })
+        });
+        const result = await resp.json();
+        if(result.success) totalSent+=result.sent;
+        else{toast('Batch failed: '+(result.error||'Unknown'),'error');break}
+      }catch(e){toast('Network error: '+e.message,'error');break}
+    }
+    $('#send-status').innerHTML = `<span style="color:var(--green);font-weight:600;">Sent to ${fmtInt(totalSent)} recipients via SendGrid.</span>`;
+    toast(`Email sent to ${fmtInt(totalSent)} recipients.`,'success');
+  } else {
+    // Template mode — send via single endpoint with template reference
+    const tplId = $('#sg-template-id').value.trim();
+    if(!tplId){toast('Enter a SendGrid template ID.','error');return}
+    let dynData = {};
+    try{dynData=JSON.parse($('#sg-template-data').value||'{}');}catch(e){toast('Invalid JSON.','error');return}
+
+    // For template sends, use the batch endpoint with template data as merge fields
+    const templateRecipients = filteredParticipants.map(p=>({
+      email: p.email,
+      merge_fields: {
+        ...dynData,
+        first_name: p.firstName,
+        study_name: p.study || '',
+        days_inactive: String(p.daysInactive),
+        washout_days_remaining: p.washoutDaysLeft>=0 ? String(p.washoutDaysLeft) : '',
+        app_download_link: 'https://app.reputable.health',
+      }
+    }));
+
+    const batches = [];
+    for(let i=0;i<templateRecipients.length;i+=1000) batches.push(templateRecipients.slice(i,i+1000));
+
+    let totalSent = 0;
+    for(const batch of batches){
+      try{
+        const resp = await fetch(API_BASE+'/api/email/send-batch',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            recipients:batch,
+            subject: dynData.subject || 'Reputable Health',
+            html_template: `<!-- SendGrid Template: ${esc(tplId)} -->`,
+          })
+        });
+        const result = await resp.json();
+        if(result.success) totalSent+=result.sent;
+        else{toast('Batch failed: '+(result.error||'Unknown'),'error');break}
+      }catch(e){toast('Network error: '+e.message,'error');break}
+    }
+    $('#send-status').innerHTML = `<span style="color:var(--green);font-weight:600;">Sent to ${fmtInt(totalSent)} recipients via SendGrid template ${esc(tplId)}.</span>`;
+    toast(`Email sent to ${fmtInt(totalSent)} recipients.`,'success');
+  }
+};
+
+// ============================================================
+// CSV EXPORT
+// ============================================================
+window.exportCSV = function(){
+  if(!filteredParticipants.length){toast('No participants to export.','error');return}
+  const h = ['alias_id','audience','lifecycle_stage','study','last_active','wearable','compliance','gender','location','age','activity','baseline','washout'];
+  const rows = filteredParticipants.map(p=>[
+    p.id,p.audience,p.stageLabel,
+    '"'+(p.study||'').replace(/"/g,'""')+'"',
+    p.lastActive||'',p.wearable||'',
+    p.compliance+'%',p.gender,p.location,p.age,p.activity,p.baseline,p.washout
+  ]);
+  const csv = [h.join(','),...rows.map(r=>r.join(','))].join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url;
+  a.download=`reputable-segment-${currentAudience}-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`Exported ${fmtInt(filteredParticipants.length)} rows.`,'success');
+};
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg,type='info'){
+  const el=$('#toast');
+  el.textContent=msg;
+  el.className='toast toast-'+type+' show';
+  clearTimeout(el._timeout);
+  el._timeout=setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+// ============================================================
+// SENDGRID CONNECTION CHECK
+// ============================================================
+async function checkConnection(){
+  const candidates = [HOSTED_PROXY,LOCAL_PROXY].filter(Boolean);
+  for(const url of candidates){
+    try{
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),3000);
+      const resp=await fetch(url+'/api/email/status',{signal:controller.signal});
+      clearTimeout(timeout);
+      if(resp.ok){
+        const data=await resp.json();
+        if(data.connected||data.sendgrid_configured){
+          sgConnected=true;
+          API_BASE=url;
+          $('#conn-dot').classList.remove('disconnected');
+          $('#conn-dot').classList.add('connected');
+          $('#conn-label').textContent='SendGrid connected via '+url.replace('https://','').replace('http://','');
+          $('#conn-label').style.color='var(--green)';
+          return;
+        }
+      }
+    }catch(e){}
+  }
+  $('#conn-label').textContent='SendGrid not connected — emails will be simulated locally.';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  const now=new Date();
+  const ds=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const ts=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  $('#subtitle').textContent=`Reputable Health — Participant Segmentation · ${ds} ${ts}`;
+  $('#footer').textContent=`Participant Segmentation & Email — Reputable Health · ${ds} ${ts}`;
+
+  initMultiSelects();
+  applyFilters();
+  checkConnection();
+}
+
+init();
+})();
+</script>
+</body>
+</html>
