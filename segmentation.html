@@ -350,28 +350,35 @@ function parseCSVLine(line){
 // ============================================================
 async function loadData(){
   try{
-    const [masterResp, leadsResp, ouraResp] = await Promise.all([
+    const [masterResp, leadsResp, ouraResp, whoopResp, awResp] = await Promise.all([
       fetch('data/master-participants.csv'),
       fetch('data/meta-leads.csv'),
       fetch('data/oura-database.csv'),
+      fetch('data/whoop-database.csv'),
+      fetch('data/apple-watch-database.csv'),
     ]);
     const masterText = await masterResp.text();
     const leadsText = await leadsResp.text();
     const ouraText = await ouraResp.text();
+    const whoopText = await whoopResp.text();
+    const awText = await awResp.text();
 
     const masterRows = parseCSV(masterText);
     const leadsRows = parseCSV(leadsText);
     const ouraRows = parseCSV(ouraText);
+    const whoopRows = parseCSV(whoopText);
+    const awRows = parseCSV(awText);
 
-    // Build Oura lookup by email
-    const ouraByEmail = {};
-    ouraRows.forEach(r => {
-      if(r.email && r.email !== 'NULL'){
-        ouraByEmail[r.email.toLowerCase().trim()] = {
-          wearable: (r.wearable && r.wearable.trim()) || 'Oura Ring',
-        };
-      }
-    });
+    // Build wearable lookup by email — each person can have multiple
+    const wearableByEmail = {};
+    function addWearable(email, type){
+      const key = email.toLowerCase().trim();
+      if(!wearableByEmail[key]) wearableByEmail[key] = new Set();
+      wearableByEmail[key].add(type);
+    }
+    ouraRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Oura Ring'); });
+    whoopRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'WHOOP'); });
+    awRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Apple Watch'); });
 
     // Parse master database into in-app participants
     // Columns: name, email, user_id, gender, active, compliance_experiment,
@@ -396,8 +403,9 @@ async function loadData(){
         const reason = (!r.reason || r.reason === 'NULL') ? null : r.reason;
         const name = (!r.name || r.name === 'NULL') ? null : r.name;
 
-        const ouraMatch = ouraByEmail[r.email.toLowerCase().trim()];
-        const wearable = ouraMatch ? ouraMatch.wearable : 'Unknown';
+        const wearableSet = wearableByEmail[r.email.toLowerCase().trim()];
+        const wearables = wearableSet ? [...wearableSet] : [];
+        const wearable = wearables.length ? wearables.join(', ') : 'Unknown';
 
         return {
           audience: 'in_app',
@@ -411,6 +419,7 @@ async function loadData(){
           study,
           reason,
           wearable,
+          wearables,
           completedDate: hasCompleted ? r.last_completed_date : null,
           withdrawalDate: hasWithdrawal ? r.last_withdrawal_date : null,
           withdrawnStudy: (r.last_withdrawn_study_name && r.last_withdrawn_study_name !== 'NULL') ? r.last_withdrawn_study_name : null,
@@ -421,7 +430,10 @@ async function loadData(){
     // Meta columns: email, full_name
     const inAppEmails = new Set(allInApp.map(p=>p.email.toLowerCase().trim()));
 
-    function makeLead(email, name, source, wearable){
+    function makeLead(email, name, source){
+      const key = email.toLowerCase().trim();
+      const wearableSet = wearableByEmail[key];
+      const wearables = wearableSet ? [...wearableSet] : [];
       return {
         audience: 'outside_app',
         user_id: null,
@@ -433,28 +445,41 @@ async function loadData(){
         status: 'Raw Lead',
         study: null,
         reason: null,
-        wearable: wearable || 'Unknown',
+        wearable: wearables.length ? wearables.join(', ') : 'Unknown',
+        wearables,
         source,
         completedDate: null,
         withdrawalDate: null,
         withdrawnStudy: null,
-        alreadyInApp: inAppEmails.has(email.toLowerCase().trim()),
+        alreadyInApp: inAppEmails.has(key),
       };
     }
 
     const metaLeads = leadsRows
       .filter(r => r.email && r.email !== 'NULL')
-      .map(r => makeLead(r.email, r.full_name || r.name || null, 'Meta Ads', 'Unknown'));
+      .map(r => makeLead(r.email, r.full_name || r.name || null, 'Meta Ads'));
 
-    // Oura-only leads (not in master DB)
-    const ouraLeads = ouraRows
-      .filter(r => r.email && r.email !== 'NULL' && !inAppEmails.has(r.email.toLowerCase().trim()))
-      .map(r => makeLead(r.email, r.name || null, 'Oura Database', 'Oura Ring'));
+    // Wearable-only leads (not in master DB) from all wearable CSVs
+    const allWearableRows = [
+      ...ouraRows.map(r=>({...r, src:'Oura Database'})),
+      ...whoopRows.map(r=>({...r, src:'WHOOP Database'})),
+      ...awRows.map(r=>({...r, src:'Apple Watch Database'})),
+    ];
+    const wearableLeads = [];
+    const wearableLeadSeen = new Set();
+    for(const r of allWearableRows){
+      if(!r.email || r.email==='NULL') continue;
+      const key = r.email.toLowerCase().trim();
+      if(!inAppEmails.has(key) && !wearableLeadSeen.has(key)){
+        wearableLeadSeen.add(key);
+        wearableLeads.push(makeLead(r.email, r.name || null, r.src));
+      }
+    }
 
     // Dedupe by email
     const seenEmails = new Set();
     allLeads = [];
-    for(const lead of [...metaLeads, ...ouraLeads]){
+    for(const lead of [...metaLeads, ...wearableLeads]){
       const key = lead.email.toLowerCase().trim();
       if(!seenEmails.has(key)){
         seenEmails.add(key);
@@ -507,6 +532,8 @@ function buildFilterOptions(){
   // Wearable options
   FILTER_OPTIONS.wearable = [
     {value:'Oura Ring',label:'Oura Ring'},
+    {value:'WHOOP',label:'WHOOP'},
+    {value:'Apple Watch',label:'Apple Watch'},
     {value:'Unknown',label:'Unknown / No wearable data'},
   ];
 
@@ -612,7 +639,10 @@ function applyFilters(){
   }
 
   if(selectedFilters.wearable.length){
-    pool = pool.filter(p=>selectedFilters.wearable.includes(p.wearable));
+    pool = pool.filter(p=>{
+      if(selectedFilters.wearable.includes('Unknown') && (!p.wearables || !p.wearables.length)) return true;
+      return p.wearables && p.wearables.some(w=>selectedFilters.wearable.includes(w));
+    });
   }
 
   if(selectedFilters.has_email.length){
@@ -667,7 +697,7 @@ function renderResults(){
         <td style="font-size:11px;">${esc(p.gender)}</td>
         <td><span style="color:${statusColor};font-weight:600;font-size:11px;">${esc(p.status)}</span></td>
         <td style="font-size:11px;">${p.study ? esc(p.study.length>30?p.study.slice(0,28)+'…':p.study) : '<span style="color:var(--text-dim);">—</span>'}</td>
-        <td style="font-size:11px;">${p.wearable==='Oura Ring' ? '<span style="color:var(--teal);">Oura Ring</span>' : '<span style="color:var(--text-dim);">—</span>'}</td>
+        <td style="font-size:11px;">${p.wearables&&p.wearables.length ? p.wearables.map(w=>w==='Oura Ring'?'<span style="color:var(--teal);">Oura</span>':w==='WHOOP'?'<span style="color:var(--yellow);">WHOOP</span>':'<span style="color:var(--blue);">Apple Watch</span>').join(', ') : '<span style="color:var(--text-dim);">—</span>'}</td>
         <td style="font-size:11px;">${p.reason ? esc(p.reason) : '<span style="color:var(--text-dim);">—</span>'}</td>
       </tr>`;
     }).join('');
