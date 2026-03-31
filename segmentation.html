@@ -396,12 +396,12 @@ const FILTER_OPTIONS = {
     {value:'not_specified',label:'Not specified'},
   ],
   age: [
-    {value:'18-25',label:'18–25'},
-    {value:'26-35',label:'26–35'},
-    {value:'36-45',label:'36–45'},
-    {value:'46-55',label:'46–55'},
-    {value:'56-65',label:'56–65'},
-    {value:'65+',label:'65+'},
+    {value:'18-20',label:'18–20'},
+    {value:'20-30',label:'20–30'},
+    {value:'30-40',label:'30–40'},
+    {value:'40-50',label:'40–50'},
+    {value:'50-60',label:'50–60'},
+    {value:'60+',label:'60+'},
   ],
   wearable: [
     {value:'Oura',label:'Oura'},
@@ -436,7 +436,7 @@ function generateParticipants(){
   const wearables = ['Oura','WHOOP','Fitbit','Apple Watch'];
   const locations = ['US','US','US','US','CA','CA','UK','other','not_specified'];
   const genders = ['male','male','female','female','female','nonbinary','not_specified'];
-  const ages = ['18-25','26-35','26-35','36-45','36-45','46-55','46-55','56-65','65+'];
+  const ages = ['18-20','20-30','20-30','30-40','30-40','40-50','40-50','50-60','60+'];
 
   const participants = [];
 
