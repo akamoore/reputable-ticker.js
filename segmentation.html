@@ -168,6 +168,10 @@
         <label>Age</label>
         <div class="multi-select" data-filter="age" id="ms-age"></div>
       </div>
+      <div class="filter-group">
+        <label>Wearable</label>
+        <div class="multi-select" data-filter="wearable" id="ms-wearable"></div>
+      </div>
     </div>
     <div style="display:flex;gap:8px;">
       <button class="btn-outline" onclick="clearFilters()" style="font-size:11px;padding:6px 14px;">Clear All Filters</button>
@@ -399,6 +403,13 @@ const FILTER_OPTIONS = {
     {value:'56-65',label:'56–65'},
     {value:'65+',label:'65+'},
   ],
+  wearable: [
+    {value:'Oura',label:'Oura'},
+    {value:'WHOOP',label:'WHOOP'},
+    {value:'Fitbit',label:'Fitbit'},
+    {value:'Apple Watch',label:'Apple Watch'},
+    {value:'none',label:'No wearable'},
+  ],
 };
 
 // ============================================================
@@ -406,7 +417,7 @@ const FILTER_OPTIONS = {
 // ============================================================
 let currentAudience = 'in_app';
 let emailMode = 'template';
-let selectedFilters = {activity:[],washout:[],study:[],baseline:[],compliance:[],gender:[],location:[],age:[]};
+let selectedFilters = {activity:[],washout:[],study:[],baseline:[],compliance:[],gender:[],location:[],age:[],wearable:[]};
 let filteredParticipants = [];
 let sgConnected = false;
 
@@ -676,6 +687,14 @@ function applyFilters(){
   // Age filter
   if(selectedFilters.age.length){
     pool = pool.filter(p=>selectedFilters.age.includes(p.age));
+  }
+
+  // Wearable filter
+  if(selectedFilters.wearable.length){
+    pool = pool.filter(p=>{
+      if(selectedFilters.wearable.includes('none') && !p.wearable) return true;
+      return p.wearable && selectedFilters.wearable.includes(p.wearable);
+    });
   }
 
   filteredParticipants = pool;
