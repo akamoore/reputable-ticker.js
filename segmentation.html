@@ -156,12 +156,20 @@
         <div class="multi-select" data-filter="study" id="ms-study"></div>
       </div>
       <div class="filter-group">
+        <label>Submitted Study</label>
+        <div class="multi-select" data-filter="submitted_study" id="ms-submitted_study"></div>
+      </div>
+      <div class="filter-group">
         <label>Withdrawal Reason</label>
         <div class="multi-select" data-filter="reason" id="ms-reason"></div>
       </div>
       <div class="filter-group">
         <label>Wearable</label>
         <div class="multi-select" data-filter="wearable" id="ms-wearable"></div>
+      </div>
+      <div class="filter-group">
+        <label>Location</label>
+        <div class="multi-select" data-filter="location" id="ms-location"></div>
       </div>
       <div class="filter-group">
         <label>Has Email</label>
@@ -296,7 +304,7 @@ const fmtInt=n=>n!=null?n.toLocaleString():'—';
 // ============================================================
 let currentAudience = 'in_app';
 let emailMode = 'template';
-let selectedFilters = {status:[],gender:[],study:[],reason:[],wearable:[],has_email:[]};
+let selectedFilters = {status:[],gender:[],study:[],submitted_study:[],reason:[],wearable:[],location:[],has_email:[]};
 let filteredParticipants = [];
 let sgConnected = false;
 let allInApp = [];
@@ -350,24 +358,27 @@ function parseCSVLine(line){
 // ============================================================
 async function loadData(){
   try{
-    const [masterResp, leadsResp, ouraResp, whoopResp, awResp] = await Promise.all([
+    const [masterResp, leadsResp, ouraResp, whoopResp, awResp, subsResp] = await Promise.all([
       fetch('data/master-participants.csv'),
       fetch('data/meta-leads.csv'),
       fetch('data/oura-database.csv'),
       fetch('data/whoop-database.csv'),
       fetch('data/apple-watch-database.csv'),
+      fetch('data/all-submissions.csv'),
     ]);
     const masterText = await masterResp.text();
     const leadsText = await leadsResp.text();
     const ouraText = await ouraResp.text();
     const whoopText = await whoopResp.text();
     const awText = await awResp.text();
+    const subsText = await subsResp.text();
 
     const masterRows = parseCSV(masterText);
     const leadsRows = parseCSV(leadsText);
     const ouraRows = parseCSV(ouraText);
     const whoopRows = parseCSV(whoopText);
     const awRows = parseCSV(awText);
+    const subsRows = parseCSV(subsText);
 
     // Build wearable lookup by email — each person can have multiple
     const wearableByEmail = {};
@@ -379,6 +390,33 @@ async function loadData(){
     ouraRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Oura Ring'); });
     whoopRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'WHOOP'); });
     awRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Apple Watch'); });
+    // Add wearable data from submissions
+    subsRows.forEach(r => {
+      const email = (r.Email || '').trim();
+      const w = (r.wearable || '').trim();
+      if(!email || email==='NULL') return;
+      if(w.toLowerCase().includes('oura')) addWearable(email, 'Oura Ring');
+      else if(w.toLowerCase().includes('whoop')) addWearable(email, 'WHOOP');
+      else if(w.toLowerCase().includes('apple')) addWearable(email, 'Apple Watch');
+    });
+
+    // Build submissions lookup by email — track submitted studies and location
+    const submissionsByEmail = {};
+    subsRows.forEach(r => {
+      const email = (r.Email || '').trim().toLowerCase();
+      const study = (r.Study || '').trim();
+      const location = (r.Location || '').trim();
+      const date = (r.Date || '').trim();
+      const name = (r.Name || '').trim();
+      if(!email || email==='null') return;
+      if(!submissionsByEmail[email]) submissionsByEmail[email] = {studies:[], location:null, name:null, latestDate:null};
+      const entry = submissionsByEmail[email];
+      if(study && !entry.studies.includes(study)) entry.studies.push(study);
+      if(location && location!=='USA') entry.location = location; // almost all USA, store anyway
+      if(!entry.location && location) entry.location = location;
+      if(name && !entry.name) entry.name = name;
+      if(date && (!entry.latestDate || date > entry.latestDate)) entry.latestDate = date;
+    });
 
     // Parse master database into in-app participants
     // Columns: name, email, user_id, gender, active, compliance_experiment,
@@ -403,20 +441,26 @@ async function loadData(){
         const reason = (!r.reason || r.reason === 'NULL') ? null : r.reason;
         const name = (!r.name || r.name === 'NULL') ? null : r.name;
 
-        const wearableSet = wearableByEmail[r.email.toLowerCase().trim()];
+        const emailKey = r.email.toLowerCase().trim();
+        const wearableSet = wearableByEmail[emailKey];
         const wearables = wearableSet ? [...wearableSet] : [];
         const wearable = wearables.length ? wearables.join(', ') : 'Unknown';
+        const sub = submissionsByEmail[emailKey];
+        const submittedStudies = sub ? sub.studies : [];
+        const location = (sub && sub.location) ? sub.location : 'Not specified';
 
         return {
           audience: 'in_app',
           user_id: r.user_id !== 'NULL' ? r.user_id : null,
-          name,
-          firstName: name ? name.split(' ')[0] : null,
+          name: name || (sub && sub.name) || null,
+          firstName: (name || (sub && sub.name) || '').split(' ')[0] || null,
           email: r.email,
           gender,
           active: active === 'TRUE',
           status,
           study,
+          submittedStudies,
+          location,
           reason,
           wearable,
           wearables,
@@ -430,20 +474,25 @@ async function loadData(){
     // Meta columns: email, full_name
     const inAppEmails = new Set(allInApp.map(p=>p.email.toLowerCase().trim()));
 
-    function makeLead(email, name, source){
+    function makeLead(email, name, source, extraStudies){
       const key = email.toLowerCase().trim();
       const wearableSet = wearableByEmail[key];
       const wearables = wearableSet ? [...wearableSet] : [];
+      const sub = submissionsByEmail[key];
+      const submittedStudies = sub ? sub.studies : (extraStudies || []);
+      const location = (sub && sub.location) ? sub.location : 'Not specified';
       return {
         audience: 'outside_app',
         user_id: null,
-        name,
-        firstName: name ? name.split(' ')[0] : null,
+        name: name || (sub && sub.name) || null,
+        firstName: (name || (sub && sub.name) || '').split(' ')[0] || null,
         email,
         gender: 'Not specified',
         active: false,
-        status: 'Raw Lead',
-        study: null,
+        status: 'Submitted (not in app)',
+        study: submittedStudies.length ? submittedStudies[0] : null,
+        submittedStudies,
+        location,
         reason: null,
         wearable: wearables.length ? wearables.join(', ') : 'Unknown',
         wearables,
@@ -476,10 +525,24 @@ async function loadData(){
       }
     }
 
+    // Submission-only leads (not in master DB)
+    const submissionLeads = [];
+    const subLeadSeen = new Set();
+    for(const r of subsRows){
+      const email = (r.Email || '').trim();
+      if(!email || email==='NULL') continue;
+      const key = email.toLowerCase().trim();
+      if(!inAppEmails.has(key) && !subLeadSeen.has(key)){
+        subLeadSeen.add(key);
+        const study = (r.Study || '').trim();
+        submissionLeads.push(makeLead(email, (r.Name||'').trim()||null, 'Eligibility Submission', study ? [study] : []));
+      }
+    }
+
     // Dedupe by email
     const seenEmails = new Set();
     allLeads = [];
-    for(const lead of [...metaLeads, ...wearableLeads]){
+    for(const lead of [...metaLeads, ...wearableLeads, ...submissionLeads]){
       const key = lead.email.toLowerCase().trim();
       if(!seenEmails.has(key)){
         seenEmails.add(key);
@@ -491,7 +554,7 @@ async function loadData(){
     const overlapCount = allLeads.filter(l=>l.alreadyInApp).length;
     const ouraTagged = allInApp.filter(p=>p.wearable==='Oura Ring').length;
 
-    $('#data-source-label').textContent = `Master DB: ${fmtInt(allInApp.length)} participants (${fmtInt(ouraTagged)} Oura) · Leads: ${fmtInt(allLeads.length)} (${overlapCount} overlap) · Last updated: Feb 2026`;
+    $('#data-source-label').textContent = `Master DB: ${fmtInt(allInApp.length)} participants (${fmtInt(ouraTagged)} Oura) · Outside-app leads: ${fmtInt(allLeads.length)} · Submissions: ${fmtInt(subsRows.length)} · Last updated: Mar 2026`;
     $('.data-source .dot').style.background = 'var(--green)';
 
     buildFilterOptions();
@@ -528,6 +591,23 @@ function buildFilterOptions(){
   allInApp.forEach(p=>{if(p.reason) reasons[p.reason]=(reasons[p.reason]||0)+1});
   const reasonsSorted = Object.entries(reasons).sort((a,b)=>b[1]-a[1]).map(([r])=>r);
   FILTER_OPTIONS.reason = reasonsSorted.map(r=>({value:r,label:r}));
+
+  // Submitted study options — from all-submissions data
+  const subStudyCounts = {};
+  [...allInApp, ...allLeads].forEach(p=>{
+    if(p.submittedStudies) p.submittedStudies.forEach(s=>{ subStudyCounts[s]=(subStudyCounts[s]||0)+1 });
+  });
+  const subStudiesSorted = Object.entries(subStudyCounts).sort((a,b)=>b[1]-a[1]).map(([s])=>s);
+  FILTER_OPTIONS.submitted_study = subStudiesSorted.map(s=>({value:s,label:s}));
+
+  // Location options
+  const locationCounts = {};
+  [...allInApp, ...allLeads].forEach(p=>{
+    const loc = p.location || 'Not specified';
+    locationCounts[loc] = (locationCounts[loc]||0)+1;
+  });
+  const locationsSorted = Object.entries(locationCounts).sort((a,b)=>b[1]-a[1]).map(([l])=>l);
+  FILTER_OPTIONS.location = locationsSorted.map(l=>({value:l,label:l}));
 
   // Wearable options
   FILTER_OPTIONS.wearable = [
@@ -638,6 +718,14 @@ function applyFilters(){
     pool = pool.filter(p=>p.reason && selectedFilters.reason.includes(p.reason));
   }
 
+  if(selectedFilters.submitted_study.length){
+    pool = pool.filter(p=>p.submittedStudies && p.submittedStudies.some(s=>selectedFilters.submitted_study.includes(s)));
+  }
+
+  if(selectedFilters.location.length){
+    pool = pool.filter(p=>selectedFilters.location.includes(p.location || 'Not specified'));
+  }
+
   if(selectedFilters.wearable.length){
     pool = pool.filter(p=>{
       if(selectedFilters.wearable.includes('Unknown') && (!p.wearables || !p.wearables.length)) return true;
@@ -672,14 +760,14 @@ function renderResults(){
   if(currentAudience === 'in_app'){
     thead.innerHTML = '<tr><th>User ID</th><th>Name</th><th>Email</th><th>Gender</th><th>Status</th><th>Study</th><th>Wearable</th><th>Reason</th></tr>';
   } else {
-    thead.innerHTML = '<tr><th>Name</th><th>Email</th><th>Source</th><th>Already In App</th></tr>';
+    thead.innerHTML = '<tr><th>Name</th><th>Email</th><th>Wearable</th><th>Submitted Study</th><th>Source</th><th>Already In App</th></tr>';
   }
 
   const preview = filteredParticipants.slice(0,20);
   const tbody = $('#preview-body');
 
   if(!preview.length){
-    const cols = currentAudience==='in_app' ? 8 : 4;
+    const cols = currentAudience==='in_app' ? 8 : 6;
     tbody.innerHTML = `<tr><td colspan="${cols}" style="text-align:center;color:var(--text-dim);padding:24px;">No results match the current filters.</td></tr>`;
     return;
   }
@@ -709,6 +797,8 @@ function renderResults(){
       return `<tr>
         <td style="font-size:11px;">${p.name ? esc(p.name) : '—'}</td>
         <td style="font-size:11px;">${esc(p.email)}</td>
+        <td style="font-size:11px;">${p.wearables&&p.wearables.length ? p.wearables.map(w=>w==='Oura Ring'?'<span style="color:var(--teal);">Oura</span>':w==='WHOOP'?'<span style="color:var(--yellow);">WHOOP</span>':'<span style="color:var(--blue);">Apple Watch</span>').join(', ') : '<span style="color:var(--text-dim);">—</span>'}</td>
+        <td style="font-size:11px;">${p.submittedStudies&&p.submittedStudies.length ? esc(p.submittedStudies[0].length>25?p.submittedStudies[0].slice(0,23)+'…':p.submittedStudies[0]) + (p.submittedStudies.length>1?' <span style="color:var(--text-dim);">+'+( p.submittedStudies.length-1)+'</span>':'') : '<span style="color:var(--text-dim);">—</span>'}</td>
         <td style="font-size:11px;">${esc(p.source||'—')}</td>
         <td>${overlap}</td>
       </tr>`;
