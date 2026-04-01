@@ -418,12 +418,13 @@ function parseCSVLine(line){
 // ============================================================
 async function loadData(){
   try{
-    const [masterResp, leadsResp, ouraResp, whoopResp, awResp, subsResp] = await Promise.all([
+    const [masterResp, leadsResp, ouraResp, whoopResp, awResp, fitbitResp, subsResp] = await Promise.all([
       fetch('data/master-participants.csv'),
       fetch('data/meta-leads.csv'),
       fetch('data/oura-database.csv'),
       fetch('data/whoop-database.csv'),
       fetch('data/apple-watch-database.csv'),
+      fetch('data/fitbit-database.csv'),
       fetch('data/all-submissions.csv'),
     ]);
     const masterText = await masterResp.text();
@@ -431,6 +432,7 @@ async function loadData(){
     const ouraText = await ouraResp.text();
     const whoopText = await whoopResp.text();
     const awText = await awResp.text();
+    const fitbitText = await fitbitResp.text();
     const subsText = await subsResp.text();
 
     const masterRows = parseCSV(masterText);
@@ -438,6 +440,7 @@ async function loadData(){
     const ouraRows = parseCSV(ouraText);
     const whoopRows = parseCSV(whoopText);
     const awRows = parseCSV(awText);
+    const fitbitRows = parseCSV(fitbitText);
     const subsRows = parseCSV(subsText);
 
     // Build wearable lookup by email — each person can have multiple
@@ -450,6 +453,7 @@ async function loadData(){
     ouraRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Oura Ring'); });
     whoopRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'WHOOP'); });
     awRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Apple Watch'); });
+    fitbitRows.forEach(r => { if(r.email && r.email!=='NULL') addWearable(r.email, 'Fitbit'); });
     // Add wearable data from submissions
     subsRows.forEach(r => {
       const email = (r.Email || '').trim();
@@ -573,6 +577,7 @@ async function loadData(){
       ...ouraRows.map(r=>({...r, src:'Oura Database'})),
       ...whoopRows.map(r=>({...r, src:'WHOOP Database'})),
       ...awRows.map(r=>({...r, src:'Apple Watch Database'})),
+      ...fitbitRows.map(r=>({...r, src:'Fitbit Database'})),
     ];
     const wearableLeads = [];
     const wearableLeadSeen = new Set();
@@ -674,6 +679,7 @@ function buildFilterOptions(){
     {value:'Oura Ring',label:'Oura Ring'},
     {value:'WHOOP',label:'WHOOP'},
     {value:'Apple Watch',label:'Apple Watch'},
+    {value:'Fitbit',label:'Fitbit'},
     {value:'Unknown',label:'Unknown / No wearable data'},
   ];
 
@@ -845,7 +851,7 @@ function renderResults(){
         <td style="font-size:11px;">${esc(p.gender)}</td>
         <td><span style="color:${statusColor};font-weight:600;font-size:11px;">${esc(p.status)}</span></td>
         <td style="font-size:11px;">${p.study ? esc(p.study.length>30?p.study.slice(0,28)+'…':p.study) : '<span style="color:var(--text-dim);">—</span>'}</td>
-        <td style="font-size:11px;">${p.wearables&&p.wearables.length ? p.wearables.map(w=>w==='Oura Ring'?'<span style="color:var(--teal);">Oura</span>':w==='WHOOP'?'<span style="color:var(--yellow);">WHOOP</span>':'<span style="color:var(--blue);">Apple Watch</span>').join(', ') : '<span style="color:var(--text-dim);">—</span>'}</td>
+        <td style="font-size:11px;">${p.wearables&&p.wearables.length ? p.wearables.map(w=>w==='Oura Ring'?'<span style="color:var(--teal);">Oura</span>':w==='WHOOP'?'<span style="color:var(--yellow);">WHOOP</span>':w==='Fitbit'?'<span style="color:var(--green);">Fitbit</span>':'<span style="color:var(--blue);">Apple Watch</span>').join(', ') : '<span style="color:var(--text-dim);">—</span>'}</td>
         <td style="font-size:11px;">${p.reason ? esc(p.reason) : '<span style="color:var(--text-dim);">—</span>'}</td>
       </tr>`;
     }).join('');
@@ -857,7 +863,7 @@ function renderResults(){
       return `<tr>
         <td style="font-size:11px;">${p.name ? esc(p.name) : '—'}</td>
         <td style="font-size:11px;">${esc(p.email)}</td>
-        <td style="font-size:11px;">${p.wearables&&p.wearables.length ? p.wearables.map(w=>w==='Oura Ring'?'<span style="color:var(--teal);">Oura</span>':w==='WHOOP'?'<span style="color:var(--yellow);">WHOOP</span>':'<span style="color:var(--blue);">Apple Watch</span>').join(', ') : '<span style="color:var(--text-dim);">—</span>'}</td>
+        <td style="font-size:11px;">${p.wearables&&p.wearables.length ? p.wearables.map(w=>w==='Oura Ring'?'<span style="color:var(--teal);">Oura</span>':w==='WHOOP'?'<span style="color:var(--yellow);">WHOOP</span>':w==='Fitbit'?'<span style="color:var(--green);">Fitbit</span>':'<span style="color:var(--blue);">Apple Watch</span>').join(', ') : '<span style="color:var(--text-dim);">—</span>'}</td>
         <td style="font-size:11px;">${p.submittedStudies&&p.submittedStudies.length ? esc(p.submittedStudies[0].length>25?p.submittedStudies[0].slice(0,23)+'…':p.submittedStudies[0]) + (p.submittedStudies.length>1?' <span style="color:var(--text-dim);">+'+( p.submittedStudies.length-1)+'</span>':'') : '<span style="color:var(--text-dim);">—</span>'}</td>
         <td style="font-size:11px;">${esc(p.source||'—')}</td>
         <td>${overlap}</td>
