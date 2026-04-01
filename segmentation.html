@@ -5,116 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Participant Segmentation & Email — Reputable Health</title>
   <style>
-    :root{--bg:#0a0a0a;--surface:#1a1a1a;--surface2:#141414;--border:rgba(255,255,255,0.08);--border-lime:rgba(200,230,74,0.2);--text:#fff;--text-dim:#999;--lime:#C8E64A;--lime-bg:rgba(200,230,74,0.08);--green:#34D399;--green-bg:rgba(52,211,153,0.12);--teal:#00B39F;--teal-bg:rgba(0,179,159,0.12);--blue:#60A5FA;--blue-bg:rgba(96,165,250,0.12);--indigo:#6C5CE7;--indigo-bg:rgba(108,92,231,0.12);--yellow:#FBBF24;--yellow-bg:rgba(251,191,36,0.12);--rose:#FB7185;--rose-bg:rgba(251,113,133,0.12);--lavender:#A78BFA;--lavender-bg:rgba(167,139,250,0.12);--charcoal:#222220;--radius-md:12px;--radius-pill:100px}
+    :root{--bg:#0a0a0a;--surface:#1a1a1a;--surface2:#141414;--border:rgba(255,255,255,0.08);--border-lime:rgba(200,230,74,0.2);--text:#fff;--text-dim:#999;--lime:#C8E64A;--lime-light:#D9FF85;--lime-bg:rgba(200,230,74,0.08);--lime-glow:rgba(200,230,74,0.12);--green:#34D399;--green-bg:rgba(52,211,153,0.12);--teal:#00B39F;--teal-bg:rgba(0,179,159,0.12);--blue:#60A5FA;--blue-bg:rgba(96,165,250,0.12);--indigo:#6C5CE7;--indigo-bg:rgba(108,92,231,0.12);--yellow:#FBBF24;--yellow-bg:rgba(251,191,36,0.12);--rose:#FB7185;--rose-bg:rgba(251,113,133,0.12);--lavender:#A78BFA;--lavender-bg:rgba(167,139,250,0.12);--charcoal:#222220;--radius-md:12px;--radius-lg:16px;--radius-pill:100px}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(200,230,74,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,230,74,0.018) 1px,transparent 1px);background-size:52px 52px}
-    .container{max-width:1200px;margin:0 auto}
-    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-    .header h1{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:700}
-    .subtitle{font-size:13px;color:var(--text-dim);margin-top:4px}
-    .nav-link{font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill)}
-    .nav-link:hover{background:var(--lime-bg)}
-    .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px}
-    .section h2{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-    .section h2 .ic{color:var(--lime);font-size:14px}
-    .badge{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);padding:clamp(16px,4vw,32px);-webkit-font-smoothing:antialiased;min-height:100vh;position:relative;overflow-x:hidden}
+
+    /* Background treatment: grid + gradient orbs */
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(200,230,74,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,230,74,0.018) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0}
+    body::after{content:'';position:fixed;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(200,230,74,0.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+    .orb-teal{position:fixed;bottom:-15%;left:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(0,179,159,0.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+    .container{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+
+    /* Loading overlay */
+    .loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.4s ease}
+    .loading-overlay.hidden{opacity:0;pointer-events:none}
+    .loading-spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.08);border-top-color:var(--lime);border-radius:50%;animation:spin 0.8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Header */
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;flex-wrap:wrap;gap:16px}
+    .header h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-0.02em}
+    .subtitle{font-size:13px;color:var(--text-dim);margin-top:6px}
+    .nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .nav-link{font-size:11px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill);transition:all 0.2s ease;font-weight:500;letter-spacing:0.02em}
+    .nav-link:hover{background:var(--lime-bg);transform:translateY(-1px)}
+
+    /* Status bar */
+    .status-bar{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-md);flex-wrap:wrap}
+    .status-item{display:flex;align-items:center;gap:8px;font-size:12px}
+    .conn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .conn-dot.connected{background:var(--green);box-shadow:0 0 10px rgba(52,211,153,0.5)}
+    .conn-dot.disconnected{background:var(--rose);box-shadow:0 0 10px rgba(251,113,133,0.5)}
+    .data-source{font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px}
+    .data-source .dot{width:6px;height:6px;border-radius:50%;background:var(--yellow);flex-shrink:0}
+    .status-divider{width:1px;height:16px;background:var(--border);flex-shrink:0}
+
+    /* Sections */
+    .section{background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;margin-bottom:24px;transition:border-color 0.2s ease}
+    .section:hover{border-color:rgba(255,255,255,0.12)}
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+    .section h2{font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px;margin:0}
+    .section h2 .ic{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px rgba(200,230,74,0.5);flex-shrink:0}
+    .section-badge{font-size:10px;color:var(--text-dim);font-weight:500;background:rgba(255,255,255,0.04);padding:3px 10px;border-radius:var(--radius-pill);letter-spacing:0.04em}
+
+    /* Badges */
+    .badge{display:inline-block;padding:3px 10px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
     .badge-lime{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime)}
     .badge-green{background:var(--green-bg);color:var(--green)}
     .badge-blue{background:var(--blue-bg);color:var(--blue)}
     .badge-yellow{background:var(--yellow-bg);color:var(--yellow)}
     .badge-rose{background:var(--rose-bg);color:var(--rose)}
     .badge-gray{background:rgba(99,110,128,0.12);color:#636e80}
-    select,input[type=text],input[type=email],input[type=datetime-local]{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;font-family:inherit}
-    textarea{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.5}
-    button{cursor:pointer;font-family:inherit}
-    .btn-primary{background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:8px 20px;font-weight:600;font-size:12px}
-    .btn-primary:hover{opacity:0.9}
-    .btn-primary:disabled{opacity:0.4;cursor:not-allowed}
-    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:var(--radius-pill);padding:8px 16px;font-size:12px}
-    .btn-outline:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
-    .btn-action{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime);border-radius:var(--radius-pill);padding:4px 12px;font-size:11px;font-weight:600}
+
+    /* Form elements */
+    select,input[type=text],input[type=email],input[type=datetime-local]{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;font-family:inherit;transition:border-color 0.2s ease}
+    select:focus,input[type=text]:focus,input[type=email]:focus,input[type=datetime-local]:focus{outline:none;border-color:rgba(200,230,74,0.3)}
+    textarea{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.6;transition:border-color 0.2s ease}
+    textarea:focus{outline:none;border-color:rgba(200,230,74,0.3)}
+
+    /* Buttons */
+    button{cursor:pointer;font-family:inherit;transition:all 0.2s ease}
+    .btn-primary{background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:10px 24px;font-weight:600;font-size:12px;letter-spacing:0.02em}
+    .btn-primary:hover{background:var(--lime-light);box-shadow:0 4px 20px rgba(200,230,74,0.25);transform:translateY(-1px)}
+    .btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.12);color:var(--text-dim);border-radius:var(--radius-pill);padding:10px 20px;font-size:12px;font-weight:500}
+    .btn-outline:hover{border-color:rgba(255,255,255,0.25);color:var(--text);background:rgba(255,255,255,0.03)}
+    .btn-action{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime);border-radius:var(--radius-pill);padding:5px 14px;font-size:11px;font-weight:600}
+
+    /* Table */
     table{width:100%;border-collapse:collapse;font-size:12px}
-    th{background:rgba(255,255,255,0.03);color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;font-size:10px;text-align:left;padding:10px;border-bottom:1px solid var(--border)}
-    td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04)}
-    .table-wrap{overflow-x:auto}
-    .composer-field{margin-bottom:14px}
-    .composer-field label{display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
-    .merge-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-    .merge-tag{font-size:10px;background:var(--indigo-bg);color:var(--indigo);padding:2px 8px;border-radius:var(--radius-pill);cursor:pointer;border:1px solid transparent}
-    .merge-tag:hover{border-color:var(--indigo)}
-    .footer{text-align:center;font-size:11px;color:var(--text-dim);padding:24px 0}
+    th{background:rgba(255,255,255,0.03);color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;font-size:10px;text-align:left;padding:12px 10px;border-bottom:1px solid var(--border)}
+    td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.04)}
+    tr:hover td{background:rgba(255,255,255,0.015)}
+    .table-wrap{overflow-x:auto;border-radius:8px}
+
+    /* Composer */
+    .composer-field{margin-bottom:18px}
+    .composer-field label{display:block;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;font-weight:600}
+    .merge-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .merge-tag{font-size:10px;background:var(--indigo-bg);color:var(--indigo);padding:4px 10px;border-radius:var(--radius-pill);cursor:pointer;border:1px solid transparent;transition:all 0.2s ease;font-weight:500}
+    .merge-tag:hover{border-color:var(--indigo);transform:translateY(-1px)}
+    .footer{text-align:center;font-size:11px;color:rgba(255,255,255,0.2);padding:32px 0;letter-spacing:0.04em}
 
     /* Toggle tabs */
     .toggle-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius-pill);overflow:hidden;width:fit-content;margin-bottom:20px}
-    .toggle-tab{padding:10px 24px;font-size:13px;font-weight:600;background:transparent;color:var(--text-dim);border:none;cursor:pointer;transition:all 0.2s}
+    .toggle-tab{padding:10px 28px;font-size:13px;font-weight:600;background:transparent;color:var(--text-dim);border:none;cursor:pointer;transition:all 0.2s ease;letter-spacing:0.01em}
     .toggle-tab.active{background:var(--lime);color:var(--charcoal)}
     .toggle-tab:not(.active):hover{background:rgba(255,255,255,0.04);color:var(--text)}
 
     /* Filter grid */
-    .filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
-    .filter-group label{display:block;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px}
+    .filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px}
+    .filter-group{position:relative}
+    .filter-group label{display:block;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;font-weight:600}
     .filter-group select{width:100%}
 
     /* Multi-select dropdown */
     .multi-select{position:relative}
-    .ms-trigger{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:36px;gap:4px}
+    .ms-trigger{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:38px;gap:4px;transition:border-color 0.2s ease}
     .ms-trigger:hover{border-color:rgba(255,255,255,0.2)}
     .ms-trigger .ms-placeholder{color:var(--text-dim)}
-    .ms-trigger .ms-pills{display:flex;gap:3px;flex-wrap:wrap;flex:1}
-    .ms-pill{background:var(--lime-bg);color:var(--lime);padding:1px 6px;border-radius:var(--radius-pill);font-size:10px;font-weight:600;white-space:nowrap}
-    .ms-arrow{color:var(--text-dim);font-size:10px;flex-shrink:0}
-    .ms-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px;z-index:100;display:none;max-height:220px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+    .ms-trigger .ms-pills{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+    .ms-pill{background:var(--lime-bg);color:var(--lime);padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:600;white-space:nowrap;border:1px solid rgba(200,230,74,0.15)}
+    .ms-arrow{color:var(--text-dim);font-size:10px;flex-shrink:0;transition:transform 0.2s ease}
+    .ms-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:6px;z-index:100;display:none;max-height:240px;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
     .ms-dropdown.open{display:block}
-    .ms-option{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:12px;color:var(--text)}
-    .ms-option:hover{background:rgba(255,255,255,0.04)}
+    .ms-option{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text);transition:background 0.15s ease}
+    .ms-option:hover{background:rgba(255,255,255,0.05)}
     .ms-option.selected{background:var(--lime-bg)}
-    .ms-option .ms-check{width:14px;height:14px;border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+    .ms-option .ms-check{width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.15);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all 0.15s ease}
     .ms-option.selected .ms-check{background:var(--lime);border-color:var(--lime);color:var(--charcoal)}
 
     /* Segment count */
-    .segment-count{padding:16px 20px;background:rgba(200,230,74,0.05);border:1px solid var(--border-lime);border-radius:var(--radius-md);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-    .segment-count .count{font-size:28px;font-weight:800;color:var(--lime)}
+    .segment-count{padding:20px 24px;background:linear-gradient(135deg,rgba(200,230,74,0.06) 0%,rgba(200,230,74,0.02) 100%);border:1px solid var(--border-lime);border-radius:var(--radius-lg);margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .segment-count .count-group{display:flex;align-items:baseline;gap:12px}
+    .segment-count .count{font-size:36px;font-weight:800;color:var(--lime);line-height:1;text-shadow:0 0 30px rgba(200,230,74,0.15)}
     .segment-count .label{font-size:13px;color:var(--text-dim)}
     .segment-actions{display:flex;gap:8px}
 
     /* Email mode toggle */
-    .email-mode-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;width:fit-content;margin-bottom:16px}
-    .email-mode-tab{padding:8px 18px;font-size:12px;font-weight:600;background:transparent;color:var(--text-dim);border:none;cursor:pointer}
+    .email-mode-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;width:fit-content;margin-bottom:20px}
+    .email-mode-tab{padding:9px 22px;font-size:12px;font-weight:600;background:transparent;color:var(--text-dim);border:none;cursor:pointer;transition:all 0.2s ease}
     .email-mode-tab.active{background:rgba(255,255,255,0.06);color:var(--text)}
+    .email-mode-tab:not(.active):hover{background:rgba(255,255,255,0.03)}
 
     /* Preview panel */
-    .preview-panel{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;max-height:400px;overflow-y:auto}
-    .preview-panel .preview-subject{font-size:14px;font-weight:600;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-    .preview-panel .preview-body{font-size:13px;line-height:1.6;color:var(--text-dim);white-space:pre-wrap}
+    .preview-panel{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:24px;max-height:400px;overflow-y:auto}
+    .preview-panel .preview-subject{font-size:14px;font-weight:600;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .preview-panel .preview-body{font-size:13px;line-height:1.7;color:var(--text-dim);white-space:pre-wrap}
 
     /* Status toast */
-    .toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s ease}
+    .toast{position:fixed;bottom:24px;right:24px;padding:14px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s ease;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
     .toast.show{transform:translateY(0);opacity:1}
     .toast-success{background:var(--green);color:#000}
     .toast-error{background:var(--rose);color:#fff}
     .toast-info{background:var(--blue);color:#000}
 
-    /* Connection dot */
-    .conn-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
-    .conn-dot.connected{background:var(--green);box-shadow:0 0 8px rgba(52,211,153,0.5)}
-    .conn-dot.disconnected{background:var(--rose);box-shadow:0 0 8px rgba(251,113,133,0.5)}
+    /* Scrollbar styling */
+    ::-webkit-scrollbar{width:6px;height:6px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.15)}
 
-    /* Data source badge */
-    .data-source{font-size:11px;color:var(--text-dim);padding:4px 10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-pill);display:inline-flex;align-items:center;gap:6px}
-    .data-source .dot{width:6px;height:6px;border-radius:50%;background:var(--yellow)}
-
-    @media(max-width:768px){.filter-grid{grid-template-columns:1fr 1fr}.toggle-tab{padding:8px 16px;font-size:12px}}
-    @media(max-width:480px){.filter-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){.filter-grid{grid-template-columns:1fr 1fr}.toggle-tab{padding:8px 16px;font-size:12px}.section{padding:20px 16px}.segment-count .count{font-size:28px}}
+    @media(max-width:480px){.filter-grid{grid-template-columns:1fr}.status-divider{display:none}}
   </style>
 </head>
 <body>
+<div class="orb-teal"></div>
+
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+</div>
+
 <div class="container">
+  <!-- Header -->
   <div class="header">
     <div>
       <h1>Participant Segmentation & Email</h1>
       <div class="subtitle" id="subtitle">Reputable Health — Loading...</div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+    <div class="nav-links">
       <a href="index.html" class="nav-link">Command Center</a>
       <a href="lifecycle.html" class="nav-link">Lifecycle</a>
       <a href="nurture.html" class="nav-link">Email Nurture</a>
@@ -123,23 +173,26 @@
     </div>
   </div>
 
-  <!-- SendGrid Connection + Data Source -->
-  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;font-size:12px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:8px;">
+  <!-- Status bar -->
+  <div class="status-bar">
+    <div class="status-item">
       <span class="conn-dot disconnected" id="conn-dot"></span>
       <span id="conn-label" style="color:var(--text-dim);">Checking SendGrid...</span>
     </div>
+    <div class="status-divider"></div>
     <div class="data-source"><span class="dot"></span> <span id="data-source-label">Loading data...</span></div>
   </div>
 
   <!-- Audience Toggle -->
   <div class="section">
-    <h2><span class="ic">&#9673;</span> Audience & Filters</h2>
+    <div class="section-header">
+      <h2><span class="ic"></span> Audience & Filters</h2>
+    </div>
     <div class="toggle-tabs" id="audience-toggle">
       <button class="toggle-tab active" data-audience="in_app" onclick="setAudience('in_app')">In-App Participants</button>
       <button class="toggle-tab" data-audience="outside_app" onclick="setAudience('outside_app')">Outside-App Leads</button>
     </div>
-    <div id="audience-desc" style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">People who have downloaded the app and are in the system.</div>
+    <div id="audience-desc" style="font-size:12px;color:var(--text-dim);margin-bottom:18px;">People who have downloaded the app and are in the system.</div>
 
     <!-- Filters -->
     <div class="filter-grid" id="filter-grid">
@@ -183,7 +236,7 @@
 
   <!-- Segment Count -->
   <div class="segment-count" id="segment-count">
-    <div>
+    <div class="count-group">
       <span class="count" id="match-count">—</span>
       <span class="label" id="match-label">participants match these filters</span>
     </div>
@@ -194,7 +247,10 @@
 
   <!-- Preview Table -->
   <div class="section">
-    <h2><span class="ic">&#9673;</span> Segment Preview <span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-left:8px;">(first 20)</span></h2>
+    <div class="section-header">
+      <h2><span class="ic"></span> Segment Preview</h2>
+      <span class="section-badge">First 20 results</span>
+    </div>
     <div class="table-wrap">
       <table id="preview-table">
         <thead id="preview-head">
@@ -215,7 +271,9 @@
 
   <!-- Email Section -->
   <div class="section">
-    <h2><span class="ic">&#9673;</span> Send Email to Segment</h2>
+    <div class="section-header">
+      <h2><span class="ic"></span> Send Email to Segment</h2>
+    </div>
 
     <div class="email-mode-tabs" id="email-mode-tabs">
       <button class="email-mode-tab active" data-mode="template" onclick="setEmailMode('template')">SendGrid Template</button>
@@ -281,7 +339,9 @@
 
   <!-- Email Preview Panel -->
   <div class="section" id="preview-section" style="display:none;">
-    <h2><span class="ic">&#9673;</span> Email Preview</h2>
+    <div class="section-header">
+      <h2><span class="ic"></span> Email Preview</h2>
+    </div>
     <div class="preview-panel" id="preview-panel"></div>
   </div>
 
@@ -1123,7 +1183,13 @@ function init(){
   $('#subtitle').textContent=`Reputable Health — Participant Segmentation · ${ds} ${ts}`;
   $('#footer').textContent=`Participant Segmentation & Email — Reputable Health · ${ds} ${ts}`;
 
-  loadData();
+  loadData().then(()=>{
+    const loader=$('#loading');
+    if(loader) loader.classList.add('hidden');
+  }).catch(()=>{
+    const loader=$('#loading');
+    if(loader) loader.classList.add('hidden');
+  });
   checkConnection();
 }
 
