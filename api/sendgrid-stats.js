@@ -8,68 +8,71 @@ module.exports = (req, res) => {
     return res.status(500).json({ error: 'SENDGRID_API_KEY not configured' });
   }
 
-  // Calculate date range
   const end = new Date();
   const start = new Date(end.getTime() - days * 86400000);
   const startDate = start.toISOString().slice(0, 10);
   const endDate = end.toISOString().slice(0, 10);
 
+  const path = '/v3/stats?start_date=' + startDate + '&end_date=' + endDate + '&aggregated_by=day';
+
   const options = {
     hostname: 'api.sendgrid.com',
-    path: `/v3/stats?start_date=${startDate}&end_date=${endDate}&aggregated_by=day`,
+    path: path,
     method: 'GET',
     headers: {
-      'Authorization': `Bearer ${API_KEY}`,
+      'Authorization': 'Bearer ' + API_KEY,
       'Content-Type': 'application/json',
     },
   };
 
-  const upstream = https.request(options, (upstreamRes) => {
-    let body = '';
-    upstreamRes.on('data', chunk => { body += chunk; });
-    upstreamRes.on('end', () => {
+  var upstream = https.request(options, function(upstreamRes) {
+    var body = '';
+    upstreamRes.on('data', function(chunk) { body += chunk; });
+    upstreamRes.on('end', function() {
       try {
-        const raw = JSON.parse(body);
+        var raw = JSON.parse(body);
         if (!Array.isArray(raw)) {
           res.setHeader('Content-Type', 'application/json');
-          res.status(upstreamRes.statusCode).send(body);
-          return;
+          return res.status(upstreamRes.statusCode).send(body);
         }
 
-        const daily = raw.map(d => ({
-          date: d.date,
-          requests: d.stats[0]?.metrics?.requests || 0,
-          delivered: d.stats[0]?.metrics?.delivered || 0,
-          opens: d.stats[0]?.metrics?.opens || 0,
-          unique_opens: d.stats[0]?.metrics?.unique_opens || 0,
-          clicks: d.stats[0]?.metrics?.clicks || 0,
-          unique_clicks: d.stats[0]?.metrics?.unique_clicks || 0,
-          bounces: d.stats[0]?.metrics?.bounces || 0,
-          spam_reports: d.stats[0]?.metrics?.spam_reports || 0,
-          unsubscribes: d.stats[0]?.metrics?.unsubscribes || 0,
-        }));
+        var daily = raw.map(function(d) {
+          var m = (d.stats && d.stats[0] && d.stats[0].metrics) || {};
+          return {
+            date: d.date,
+            requests: m.requests || 0,
+            delivered: m.delivered || 0,
+            opens: m.opens || 0,
+            unique_opens: m.unique_opens || 0,
+            clicks: m.clicks || 0,
+            unique_clicks: m.unique_clicks || 0,
+            bounces: m.bounces || 0,
+            spam_reports: m.spam_reports || 0,
+            unsubscribes: m.unsubscribes || 0,
+          };
+        });
 
-        const totals = daily.reduce((acc, d) => ({
-          sent: acc.sent + d.requests,
-          delivered: acc.delivered + d.delivered,
-          opens: acc.opens + d.opens,
-          unique_opens: acc.unique_opens + d.unique_opens,
-          clicks: acc.clicks + d.clicks,
-          unique_clicks: acc.unique_clicks + d.unique_clicks,
-          bounces: acc.bounces + d.bounces,
-          spam_reports: acc.spam_reports + d.spam_reports,
-          unsubscribes: acc.unsubscribes + d.unsubscribes,
-        }), { sent: 0, delivered: 0, opens: 0, unique_opens: 0, clicks: 0, unique_clicks: 0, bounces: 0, spam_reports: 0, unsubscribes: 0 });
-
+        var totals = { sent: 0, delivered: 0, opens: 0, unique_opens: 0, clicks: 0, unique_clicks: 0, bounces: 0, spam_reports: 0, unsubscribes: 0 };
+        for (var i = 0; i < daily.length; i++) {
+          totals.sent += daily[i].requests;
+          totals.delivered += daily[i].delivered;
+          totals.opens += daily[i].opens;
+          totals.unique_opens += daily[i].unique_opens;
+          totals.clicks += daily[i].clicks;
+          totals.unique_clicks += daily[i].unique_clicks;
+          totals.bounces += daily[i].bounces;
+          totals.spam_reports += daily[i].spam_reports;
+          totals.unsubscribes += daily[i].unsubscribes;
+        }
         totals.open_rate = totals.delivered > 0
           ? ((totals.unique_opens / totals.delivered) * 100).toFixed(1) + '%'
           : '0%';
 
-        const output = {
+        var output = {
           updated_at: new Date().toISOString(),
           period: { start: startDate, end: endDate },
-          totals,
-          daily,
+          totals: totals,
+          daily: daily,
         };
 
         res.setHeader('Content-Type', 'application/json');
@@ -81,11 +84,11 @@ module.exports = (req, res) => {
     });
   });
 
-  upstream.on('error', (err) => {
+  upstream.on('error', function(err) {
     res.status(502).json({ error: 'Failed to reach SendGrid API', detail: err.message });
   });
 
-  upstream.setTimeout(15000, () => {
+  upstream.setTimeout(15000, function() {
     upstream.destroy();
     res.status(504).json({ error: 'SendGrid API timed out' });
   });
