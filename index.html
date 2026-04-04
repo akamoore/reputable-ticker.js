@@ -1576,27 +1576,11 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
     if (selectedView === 'paid') {
       // ── PAID VIEW ──
-      // For time-windowed views, count studies that were recruiting during the window
-      // (currently recruiting OR completed during the window — they were recruiting before completing)
-      const recruiting = useWindow
-        ? progressSet.filter(s => {
-            if (s.status === 'recruiting') return true;
-            // Study completed during the window = it was recruiting in this period
-            if (s.status === 'complete' && s.endDate) {
-              const end = new Date(s.endDate);
-              const windowStart = new Date(Date.now() - selectedDays * 86400000);
-              return !isNaN(end) && end >= windowStart;
-            }
-            return false;
-          })
-        : sponsoredLaunched.filter(s => s.status === 'recruiting');
+      // Recruiting count and Recruitment Progress are ALWAYS cumulative (exempt from time filter)
+      const recruiting = sponsoredLaunched.filter(s => s.status === 'recruiting');
       const recruitingNames = recruiting.map(s => s.name).join(', ') || 'None';
-      // Recruitment progress uses windowed studies when a time filter is active
-      const progressSet = useWindow ? kpiSponsored : sponsoredLaunched;
-      const progressOnboarded = useWindow
-        ? progressSet.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-        : progressSet.reduce((a, s) => a + (s.onboarded || 0), 0);
-      const progressTarget = progressSet.reduce((a, s) => a + s.target, 0);
+      const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
       const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
       const totalSpend = sumSpend(kpiSponsored);
       const paidKpi = kpiSponsored.filter(s => s.spend > 0);
@@ -1674,23 +1658,30 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const cbOnb = $('#cb-onboarded');
     if (!cbPart) return;
 
-    // Always use ALL studies (ignoring view toggle), but respect year/time filter
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
-      const yr = parseInt(selectedYear);
-      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
-    });
-    const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
-    const windowStudies = getStudiesInWindow(selectedDays);
-    const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
-    const useWindow = !isAllTime && windowStudies.length > 0;
-    const studies = useWindow ? windowStudies : allLaunched;
-
+    // Total participants and total studies are ALWAYS cumulative (all time, all studies)
+    const allLaunched = STUDIES.filter(s => s.status !== 'coming');
     const totalParticipants = allLaunched.reduce((a, s) => a + (s.joined || 0), 0);
     const totalStudies = allLaunched.length;
-    const periodOnboarded = useWindow
-      ? studies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-      : allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const periodLabel = isAllTime ? '' : ` (${selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d'})`;
+
+    // "Onboarded this period" DOES respect the time filter
+    const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
+    const useWindow = !isAllTime;
+    const windowStudies = getStudiesInWindow(selectedDays);
+    const yearFiltered = selectedYear === 'all' ? allLaunched : allLaunched.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear;
+    });
+    let periodOnboarded, periodLabel;
+    if (useWindow && windowStudies.length > 0) {
+      periodOnboarded = windowStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0);
+      periodLabel = ` (${selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d'})`;
+    } else if (selectedYear !== 'all') {
+      periodOnboarded = yearFiltered.reduce((a, s) => a + (s.onboarded || 0), 0);
+      periodLabel = ` (${selectedYear})`;
+    } else {
+      periodOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      periodLabel = ' (all time)';
+    }
 
     cbPart.innerHTML = `<strong style="color:var(--text)">${fmtInt(totalParticipants)}</strong> total participants`;
     cbStudies.innerHTML = `<strong style="color:var(--text)">${totalStudies}</strong> active studies`;
