@@ -535,11 +535,18 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
   <!-- ============================================================ -->
   <!-- OVERVIEW — always visible, compact, one screen -->
   <!-- ============================================================ -->
-  <div style="margin-bottom:8px;">
-    <select id="study-selector" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-pill);padding:8px 16px;font-size:13px;font-weight:500;min-width:260px;cursor:pointer;">
-      <option value="all">All Paid Studies</option>
-    </select>
-    <span id="study-selector-detail" style="margin-left:12px;font-size:12px;color:var(--text-dim);"></span>
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
+    <div class="filter-bar" id="view-toggle">
+      <button class="filter-btn active" data-view="paid">Paid Studies</button>
+      <button class="filter-btn" data-view="public">Public Studies</button>
+      <button class="filter-btn" data-view="all">All</button>
+    </div>
+    <div id="study-selector-wrap">
+      <select id="study-selector" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-pill);padding:8px 16px;font-size:13px;font-weight:500;min-width:260px;cursor:pointer;">
+        <option value="all">All Paid Studies</option>
+      </select>
+      <span id="study-selector-detail" style="margin-left:12px;font-size:12px;color:var(--text-dim);"></span>
+    </div>
   </div>
 
   <div class="kpi-grid" id="kpi-grid"></div>
@@ -1388,6 +1395,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   let filterAdSpend = 'all';
   let filterOutlier = 'all';
   let selectedStudy = 'all';
+  let selectedView = 'paid'; // 'paid' | 'public' | 'all'
 
   // ============================================================
   // RENDER: API Status
@@ -1474,7 +1482,6 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
   function renderKPIs() {
     const grid = $('#kpi-grid');
-    const summary = dataService.getSummary();
     const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
       const yr = parseInt(selectedYear);
       if (s.launchYear === yr || s.crossYear) return true;
@@ -1483,104 +1490,130 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     });
     const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
     const windowStudies = getStudiesInWindow(selectedDays);
+    const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
+    const useWindow = !isAllTime && windowStudies.length > 0;
+    const kpiLabel = isAllTime ? (selectedYear !== 'all' ? selectedYear : 'Total') : (useWindow ? (selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d') : selectedYear);
 
-    // Populate paid study selector dropdown
+    // Study subsets
+    const sponsoredAll = yearFiltered.filter(s => s.type !== 'PUBLIC');
+    const sponsoredLaunched = sponsoredAll.filter(s => s.status !== 'coming');
+    const publicStudiesArr = yearFiltered.filter(s => s.type === 'PUBLIC');
+    const paidStudiesAll = allLaunched.filter(s => s.spend > 0 && s.type !== 'PUBLIC');
+
+    // Study selector — changes based on view
     const selector = $('#study-selector');
-    const paidStudies = allLaunched.filter(s => s.spend > 0 && s.type !== 'PUBLIC');
-    const prevVal = selector.value;
-    selector.innerHTML = '<option value="all">All Paid Studies</option>' +
-      paidStudies.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
-    selector.value = prevVal;
-    if (selector.value !== prevVal) { selectedStudy = 'all'; selector.value = 'all'; }
+    const selectorWrap = $('#study-selector-wrap');
+    const detailEl = $('#study-selector-detail');
+
+    if (selectedView === 'paid') {
+      selectorWrap.style.display = '';
+      const prevVal = selector.value;
+      selector.innerHTML = '<option value="all">All Paid Studies</option>' +
+        paidStudiesAll.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+      selector.value = prevVal;
+      if (selector.value !== prevVal) { selectedStudy = 'all'; selector.value = 'all'; }
+    } else if (selectedView === 'public') {
+      selectorWrap.style.display = '';
+      const prevVal = selector.value;
+      selector.innerHTML = '<option value="all">All Public Studies</option>' +
+        publicStudiesArr.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+      selector.value = prevVal;
+      if (selector.value !== prevVal) { selectedStudy = 'all'; selector.value = 'all'; }
+    } else {
+      selectorWrap.style.display = '';
+      const prevVal = selector.value;
+      selector.innerHTML = '<option value="all">All Studies</option>' +
+        allLaunched.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+      selector.value = prevVal;
+      if (selector.value !== prevVal) { selectedStudy = 'all'; selector.value = 'all'; }
+    }
 
     // Show detail for selected study
-    const detailEl = $('#study-selector-detail');
     if (selectedStudy !== 'all') {
       const s = STUDIES.find(st => st.id === parseInt(selectedStudy));
       if (s) {
         const cpo = s.spend > 0 && s.onboarded > 0 ? s.spend / s.onboarded : null;
         const pct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100).toFixed(0) : 0;
-        detailEl.innerHTML = `<strong>${fmt(s.spend)}</strong> spend · <strong>${fmtInt(s.onboarded)}</strong>/${fmtInt(s.target)} onboarded (${pct}%) · CPO: <strong>${cpo ? fmt(cpo) : '—'}</strong> · ${statusBadge(s.status)}`;
+        detailEl.innerHTML = `<strong>${s.spend > 0 ? fmt(s.spend) + ' spend · ' : ''}</strong><strong>${fmtInt(s.onboarded)}</strong>/${fmtInt(s.target)} onboarded (${pct}%)${cpo ? ' · CPO: <strong>' + fmt(cpo) + '</strong>' : ''} · ${statusBadge(s.status)}`;
       }
     } else {
       detailEl.innerHTML = '';
     }
 
-    // Separate sponsored (non-public) studies for KPIs
-    const sponsored = yearFiltered.filter(s => s.type !== 'PUBLIC');
-    const sponsoredLaunched = sponsored.filter(s => s.status !== 'coming');
-    const publicCount = yearFiltered.filter(s => s.type === 'PUBLIC').length;
-    const totalStudies = sponsored.length;
-    const active = sponsored.filter(s => s.status === 'active').length;
-    const recruiting = sponsored.filter(s => s.status === 'recruiting').length;
-    const completed = sponsored.filter(s => s.status === 'complete').length;
-    const coming = sponsored.filter(s => s.status === 'coming').length;
-
-    // Map selectedDays to the API summary period keys
-    // API provides 'week' and 'month' summaries — 90d has no dedicated key
-    const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : null;
-    const periodLabel = selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d';
-
-    // For local data: use time-windowed studies when available, fall back to cumulative year totals.
-    // Year filters (All, 2025, 2026) show cumulative. Day filters (7d/30d/90d) show windowed.
-    const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
-    const useWindow = !isAllTime && windowStudies.length > 0;
+    // Windowed study helpers
     const windowSponsored = windowStudies.filter(s => s.type !== 'PUBLIC');
-    const kpiStudies = isAllTime ? sponsoredLaunched : (useWindow ? windowSponsored : sponsoredLaunched);
-    const kpiLabel = isAllTime ? (selectedYear !== 'all' ? selectedYear : 'Total') : (useWindow ? periodLabel : selectedYear);
-    // When using a time window, pro-rate spend/joined/onboarded to the window portion
-    const kpiSpend = useWindow
-      ? kpiStudies.reduce((a, s) => a + getWindowedSpend(s, selectedDays), 0)
-      : kpiStudies.reduce((a, s) => a + s.spend, 0);
-    const kpiOnboarded = useWindow
-      ? kpiStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-      : kpiStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const kpiJoined = useWindow
-      ? kpiStudies.reduce((a, s) => a + getWindowedMetric(s, 'joined', selectedDays), 0)
-      : kpiStudies.reduce((a, s) => a + (s.joined || 0), 0);
-    const kpiBlendedCPO = kpiOnboarded > 0 ? kpiSpend / kpiOnboarded : 0;
-    const kpiPaidCount = kpiStudies.filter(s => s.spend > 0).length;
+    const kpiSponsored = isAllTime ? sponsoredLaunched : (useWindow ? windowSponsored : sponsoredLaunched);
+    const windowAll = useWindow ? windowStudies : allLaunched;
 
-    // Recruitment progress — sponsored only
-    const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
-    const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
-
-    // CPO metrics
-    const paidKpiStudies = kpiStudies.filter(s => s.spend > 0);
-    const paidSpend = useWindow
-      ? paidKpiStudies.reduce((a, s) => a + getWindowedSpend(s, selectedDays), 0)
-      : paidKpiStudies.reduce((a, s) => a + s.spend, 0);
-    const paidOnboarded = useWindow
-      ? paidKpiStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-      : paidKpiStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
-
-    // All onboarded (incl public) for blended CPO
-    const allWindowStudies = useWindow ? windowStudies : yearFiltered.filter(s => s.status !== 'coming');
-    const allOnboarded = useWindow
-      ? allWindowStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-      : allWindowStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const blendedCPO = allOnboarded > 0 ? kpiSpend / allOnboarded : 0;
-    const paidCPO = paidOnboarded > 0 ? paidSpend / paidOnboarded : 0;
+    function sumMetric(arr, metric) {
+      return useWindow
+        ? arr.reduce((a, s) => a + getWindowedMetric(s, metric, selectedDays), 0)
+        : arr.reduce((a, s) => a + (s[metric] || 0), 0);
+    }
+    function sumSpend(arr) {
+      return useWindow
+        ? arr.reduce((a, s) => a + getWindowedSpend(s, selectedDays), 0)
+        : arr.reduce((a, s) => a + s.spend, 0);
+    }
 
     let cards = '';
 
-    // 1. Currently recruiting
-    const recruitingStudies = sponsoredLaunched.filter(s => s.status === 'recruiting');
-    const recruitingNames = recruitingStudies.map(s => s.name).join(', ') || 'None';
-    cards += `<div class="kpi-card"><div class="kpi-label">Recruiting</div><div class="kpi-value lime">${recruiting}</div><div class="kpi-sub">${recruiting > 0 ? recruitingNames : 'All studies at target'}</div></div>`;
+    // Section visibility based on view
+    const adsSection = $('#ads-section');
+    const funnelSection = $('#funnel-section');
+    const ltvSection = $('#ltv-section');
+    if (adsSection) adsSection.style.display = selectedView === 'public' ? 'none' : '';
+    if (funnelSection) funnelSection.style.display = selectedView === 'public' ? 'none' : '';
+    if (ltvSection) ltvSection.style.display = '';
 
-    // 2. Recruitment progress
-    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(progressOnboarded)} / ${fmtInt(progressTarget)} · ${sponsoredLaunched.length} sponsored</div></div>`;
+    if (selectedView === 'paid') {
+      // ── PAID VIEW ──
+      const recruiting = sponsoredLaunched.filter(s => s.status === 'recruiting');
+      const recruitingNames = recruiting.map(s => s.name).join(', ') || 'None';
+      const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
+      const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
+      const totalSpend = sumSpend(kpiSponsored);
+      const paidKpi = kpiSponsored.filter(s => s.spend > 0);
+      const paidOnb = sumMetric(paidKpi, 'onboarded');
+      const allOnb = sumMetric(windowAll, 'onboarded');
+      const blendedCPO = allOnb > 0 ? totalSpend / allOnb : 0;
+      const paidCPO = paidOnb > 0 ? totalSpend / paidOnb : 0;
 
-    // 3. Total ad spend
-    cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(kpiSpend)}</div><div class="kpi-sub">${kpiPaidCount} paid studies</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Recruiting</div><div class="kpi-value lime">${recruiting.length}</div><div class="kpi-sub">${recruiting.length > 0 ? recruitingNames : 'All studies at target'}</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(progressOnboarded)} / ${fmtInt(progressTarget)} · ${sponsoredLaunched.length} sponsored</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(totalSpend)}</div><div class="kpi-sub">${paidKpi.length} paid studies</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Blended CPO</div><div class="kpi-value green">${blendedCPO > 0 ? fmt(blendedCPO) : '—'}</div><div class="kpi-sub">spend ÷ all onboarded (${fmtInt(allOnb)})</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Paid CPO</div><div class="kpi-value teal">${paidCPO > 0 ? fmt(paidCPO) : '—'}</div><div class="kpi-sub">spend ÷ paid study onboarded (${fmtInt(paidOnb)})</div></div>`;
 
-    // 4. Blended CPO
-    cards += `<div class="kpi-card"><div class="kpi-label">Blended CPO</div><div class="kpi-value green">${blendedCPO > 0 ? fmt(blendedCPO) : '—'}</div><div class="kpi-sub">spend ÷ all onboarded (${fmtInt(allOnboarded)})</div></div>`;
+    } else if (selectedView === 'public') {
+      // ── PUBLIC VIEW ──
+      const pubLaunched = publicStudiesArr.filter(s => s.status !== 'coming');
+      const totalParticipants = pubLaunched.reduce((a, s) => a + (s.joined || 0), 0);
+      const totalOnboarded = pubLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const totalInStudy = pubLaunched.reduce((a, s) => a + (s.inStudy || 0), 0);
+      const totalCompN = pubLaunched.reduce((a, s) => a + (s.complianceN || 0), 0);
+      const totalCompD = pubLaunched.reduce((a, s) => a + (s.complianceD || 0), 0);
+      const compPct = totalCompD > 0 ? ((totalCompN / totalCompD) * 100).toFixed(0) : '—';
 
-    // 5. Paid CPO
-    cards += `<div class="kpi-card"><div class="kpi-label">Paid CPO</div><div class="kpi-value teal">${paidCPO > 0 ? fmt(paidCPO) : '—'}</div><div class="kpi-sub">spend ÷ paid study onboarded (${fmtInt(paidOnboarded)})</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Public Studies</div><div class="kpi-value sky">${pubLaunched.length}</div><div class="kpi-sub">active community challenges</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Participants</div><div class="kpi-value teal">${fmtInt(totalParticipants)}</div><div class="kpi-sub">${fmtInt(totalOnboarded)} completed onboarding</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Active in Study</div><div class="kpi-value green">${fmtInt(totalInStudy)}</div><div class="kpi-sub">currently engaged</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Compliance</div><div class="kpi-value yellow">${compPct}%</div><div class="kpi-sub">${fmtInt(totalCompN)} / ${fmtInt(totalCompD)} compliant</div></div>`;
+
+    } else {
+      // ── ALL VIEW ──
+      const totalStudyCount = allLaunched.length;
+      const totalParticipants = sumMetric(windowAll, 'joined');
+      const totalOnboarded = sumMetric(windowAll, 'onboarded');
+      const totalSpend = sumSpend(windowAll);
+      const blendedCPO = totalOnboarded > 0 ? totalSpend / totalOnboarded : 0;
+
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Studies (${kpiLabel})</div><div class="kpi-value indigo">${totalStudyCount}</div><div class="kpi-sub">${allLaunched.filter(s=>s.type!=='PUBLIC').length} sponsored · ${allLaunched.filter(s=>s.type==='PUBLIC').length} public</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Participants</div><div class="kpi-value teal">${fmtInt(totalParticipants)}</div><div class="kpi-sub">${fmtInt(totalOnboarded)} onboarded</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(totalSpend)}</div><div class="kpi-sub">across paid studies</div></div>`;
+      cards += `<div class="kpi-card"><div class="kpi-label">Blended CPO</div><div class="kpi-value green">${blendedCPO > 0 ? fmt(blendedCPO) : '—'}</div><div class="kpi-sub">spend ÷ all onboarded (${fmtInt(totalOnboarded)})</div></div>`;
+    }
 
     grid.innerHTML = cards;
   }
@@ -1591,6 +1624,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   function renderOverviewFlags() {
     const el = $('#overview-flags');
     if (!el) return;
+    if (selectedView === 'public') { el.innerHTML = ''; return; }
     const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
       const yr = parseInt(selectedYear);
       return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
@@ -3097,6 +3131,17 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   $('#filter-outlier').addEventListener('change', e => { filterOutlier = e.target.value; renderStudiesTable(); });
   $('#filter-campaign').addEventListener('change', e => { filterCampaign = e.target.value; renderAds(); });
   $('#study-selector').addEventListener('change', e => { selectedStudy = e.target.value; renderAll(); });
+
+  // View toggle (Paid / Public / All)
+  document.addEventListener('click', e => {
+    if (e.target.matches('#view-toggle .filter-btn')) {
+      $$('#view-toggle .filter-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      selectedView = e.target.dataset.view;
+      selectedStudy = 'all';
+      renderAll();
+    }
+  });
 
   // CSV Export
   $('#btn-export-csv').addEventListener('click', () => {
