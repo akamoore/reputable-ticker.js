@@ -1086,19 +1086,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     },
 
     async fetchSendGridStats() {
-      // Try live Vercel API endpoint first (always fresh from SendGrid)
-      if (IS_VERCEL) {
-        try {
-          const resp = await fetch('/api/sendgrid-stats?days=90');
-          if (resp.ok) {
-            const data = await resp.json();
-            if (data.daily?.length) return data;
-          }
-        } catch (err) {
-          console.warn('Live SendGrid API failed, falling back to cached:', err.message);
-        }
-      }
-      // Fall back to cached static JSON
+      // Fall back to cached static JSON (operations API newsletter data used via apiData)
       try {
         const resp = await fetch('./data/sendgrid-stats.json');
         if (!resp.ok) throw new Error(`SendGrid stats ${resp.status}`);
@@ -1110,7 +1098,17 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     },
 
     getNewsletterDaily() {
-      const allDaily = sendgridData?.daily?.length ? sendgridData.daily : (apiData?.newsletter?.daily || []);
+      // Merge static file + live API data, preferring API for overlapping dates (it's fresher)
+      const staticDaily = sendgridData?.daily || [];
+      const apiDaily = apiData?.newsletter?.daily || [];
+      let allDaily;
+      if (staticDaily.length && apiDaily.length) {
+        const apiDates = new Set(apiDaily.map(d => d.date));
+        const merged = staticDaily.filter(d => !apiDates.has(d.date)).concat(apiDaily);
+        allDaily = merged.sort((a, b) => a.date.localeCompare(b.date));
+      } else {
+        allDaily = staticDaily.length ? staticDaily : apiDaily;
+      }
       if (!allDaily.length) return [];
       if (selectedDays === Infinity) {
         if (selectedYear === 'all') return allDaily;

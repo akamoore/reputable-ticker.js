@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/recruiting", "destination": "/api/recruiting" },
-    { "source": "/api/sendgrid-stats", "destination": "/api/sendgrid-stats" }
+    { "source": "/api/recruiting", "destination": "/api/recruiting" }
   ]
 }
