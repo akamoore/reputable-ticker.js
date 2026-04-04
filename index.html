@@ -468,6 +468,22 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Collapsible sections */
+    .section-toggle {
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+      user-select: none; -webkit-user-select: none;
+    }
+    .section-toggle .chevron {
+      font-size: 14px; color: var(--text-dim); transition: transform 0.2s ease;
+    }
+    .section-toggle.collapsed .chevron { transform: rotate(-90deg); }
+    .section-body.collapsed { display: none; }
+    .tier-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
+      color: var(--text-dim); margin: 32px 0 12px; padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
     /* Footer */
     .footer {
       text-align: center; color: var(--text-dim); font-size: 11px;
@@ -483,7 +499,6 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
       .funnel-step { min-width: calc(33% - 2px); }
       .charts-grid { grid-template-columns: 1fr; }
       .chart-card canvas { height: 280px !important; }
-      .scorecard-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -517,6 +532,14 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     </div>
   </div>
 
+  <!-- Study Selector -->
+  <div style="margin-bottom:16px;">
+    <select id="study-selector" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-pill);padding:8px 16px;font-size:13px;font-weight:500;min-width:260px;cursor:pointer;">
+      <option value="all">All Paid Studies</option>
+    </select>
+    <span id="study-selector-detail" style="margin-left:12px;font-size:12px;color:var(--text-dim);"></span>
+  </div>
+
   <!-- KPI Cards -->
   <div class="kpi-grid" id="kpi-grid"></div>
 
@@ -537,6 +560,8 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     <h2><span class="section-icon">&#9673;</span> Recruiting Funnel</h2>
     <div class="funnel-row" id="funnel-row"></div>
   </div>
+
+  <div class="tier-label">Detailed Sections</div>
 
   <!-- Charts -->
   <div class="charts-grid" id="charts-grid">
@@ -615,12 +640,10 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
           <option value="medium">Medium</option>
           <option value="large">Large</option>
         </select>
-        <select id="filter-source">
-          <option value="all">All Sources</option>
-          <option value="paid">Paid</option>
-          <option value="organic_community">Organic</option>
-          <option value="partner_recruited">Partner</option>
-          <option value="mixed">Mixed</option>
+        <select id="filter-adspend">
+          <option value="all">Ad Spend: All</option>
+          <option value="has">Has Ad Spend</option>
+          <option value="none">No Ad Spend</option>
         </select>
         <select id="filter-manual">
           <option value="all">Manual Step: Any</option>
@@ -646,24 +669,33 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
 
   <!-- KPI Trends -->
   <div class="section" id="kpi-trends-section">
-    <h2><span class="section-icon">&#9673;</span> KPI Trends &amp; Quarterly Review</h2>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> KPI Trends &amp; Quarterly Review</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
     <div id="kpi-quarterly-review"></div>
     <div class="charts-grid" style="grid-template-columns:repeat(2,1fr);margin-top:20px;">
       <div class="chart-card"><h3>CPO Over Time</h3><div style="height:300px;"><canvas id="chart-cpo-trend"></canvas></div></div>
       <div class="chart-card"><h3>Cumulative Participants Onboarded</h3><div style="height:300px;"><canvas id="chart-participants-trend"></canvas></div></div>
     </div>
+    </div>
   </div>
 
   <!-- Ad Performance -->
   <div class="section" id="ads-section">
-    <div class="section-header">
-      <h2 style="margin:0;"><span class="section-icon">&#9673;</span> Ad Performance (Meta)</h2>
-      <div class="table-controls">
-        <select id="filter-campaign">
-          <option value="all">All Campaigns</option>
-        </select>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <div class="section-header" style="flex:1;margin-bottom:0;">
+        <h2 style="margin:0;"><span class="section-icon">&#9673;</span> Ad Performance (Meta)</h2>
+        <div class="table-controls" onclick="event.stopPropagation()">
+          <select id="filter-campaign">
+            <option value="all">All Campaigns</option>
+          </select>
+        </div>
       </div>
+      <span class="chevron">&#9660;</span>
     </div>
+    <div class="section-body">
     <div class="table-wrap">
       <table>
         <thead>
@@ -678,43 +710,64 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
         <tfoot id="ads-tfoot"></tfoot>
       </table>
     </div>
+    </div>
   </div>
 
   <!-- Newsletter / Email -->
   <div class="section" id="email-section">
-    <h2><span class="section-icon">&#9673;</span> Email &amp; Newsletter</h2>
-    <div class="email-grid" id="email-grid"></div>
-  </div>
-
-  <!-- Study Scorecard -->
-  <div class="section" id="scorecard-section">
-    <h2><span class="section-icon">&#9673;</span> Recruitment Progress</h2>
-    <div class="scorecard-grid" id="scorecard-grid"></div>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Email &amp; Newsletter</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="email-grid" id="email-grid"></div>
+    </div>
   </div>
 
   <!-- Study Type Breakdown -->
   <div class="section" id="type-breakdown-section">
-    <h2><span class="section-icon">&#9673;</span> Study Type Breakdown</h2>
-    <div class="type-breakdown-grid" id="type-breakdown-grid"></div>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Study Type Breakdown</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="type-breakdown-grid" id="type-breakdown-grid"></div>
+    </div>
   </div>
 
   <!-- App Engagement Breakdown -->
   <div class="section" id="engagement-section">
-    <h2><span class="section-icon">&#9673;</span> App Engagement Breakdown</h2>
-    <div id="engagement-content"></div>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> App Engagement Breakdown</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div id="engagement-content"></div>
+    </div>
   </div>
 
   <!-- Manual Queue Impact -->
   <div class="section" id="manual-impact-section">
-    <h2><span class="section-icon">&#9673;</span> Manual Queue Impact</h2>
-    <div class="manual-compare-grid" id="manual-compare-grid"></div>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Manual Queue Impact</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="manual-compare-grid" id="manual-compare-grid"></div>
+    </div>
   </div>
 
+  <div class="tier-label">Community</div>
 
   <!-- Public Studies Overview -->
   <div class="section" id="public-studies-section">
-    <h2><span class="section-icon">&#9673;</span> Public Studies</h2>
-    <div id="public-studies-content"></div>
+    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Community / Public Studies</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div id="public-studies-content"></div>
+    </div>
   </div>
 
   <!-- Benchmarks -->
@@ -819,29 +872,21 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     'Berkeley Life':  { manualStep: true, category: 'RCT' },
     'Clearlight':     { manualStep: true, category: 'RWE' },
     'HOP Box':        { manualStep: true, category: 'RWE' },
+    'Percepta':       { manualStep: true, category: 'RWE' },
   };
 
   // ============================================================
   // KPI QUARTERLY TARGETS
   // ============================================================
   const QUARTERLY_TARGETS = {
-    '2025-Q3': {
-      blended_cpo: 30, paid_cpo_excl_outliers: 25, rct_cpo: 40, rwa_cpo: 30, vep_cpo: 0,
-      avg_days_to_recruit: 35, participants_onboarded: 200, completion_rate: 80,
-      notes: 'Early period — establishing baselines, limited VEP pipeline',
-    },
-    '2025-Q4': {
-      blended_cpo: 25, paid_cpo_excl_outliers: 20, rct_cpo: 35, rwa_cpo: 25, vep_cpo: 0,
-      avg_days_to_recruit: 30, participants_onboarded: 300, completion_rate: 85,
-      notes: 'VEP studies launching, ecosystem growing',
-    },
+    // No formal targets were set for 2025-Q3 or 2025-Q4
     '2026-Q1': {
-      blended_cpo: 20, paid_cpo_excl_outliers: 18, rct_cpo: 35, rwa_cpo: 25, vep_cpo: 0,
+      blended_cpo: 20, paid_cpo: 18, rct_cpo: 35, rwa_cpo: 25, vep_cpo: 0,
       avg_days_to_recruit: 25, participants_onboarded: 500, completion_rate: 90,
       notes: 'Scale quarter — public studies + VEP ramping, paid CPO improving',
     },
     '2026-Q2': {
-      blended_cpo: 18, paid_cpo_excl_outliers: 15, rct_cpo: 30, rwa_cpo: 20, vep_cpo: 0,
+      blended_cpo: 18, paid_cpo: 15, rct_cpo: 30, rwa_cpo: 20, vep_cpo: 0,
       avg_days_to_recruit: 21, participants_onboarded: 800, completion_rate: 90,
       notes: 'Target: continued efficiency gains as community grows',
     },
@@ -849,8 +894,8 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   const TARGET_HISTORY = {
     '2026-Q1': [
-      { set_date: '2025-12-15', targets: { blended_cpo: 25, paid_cpo_excl_outliers: 20, participants_onboarded: 400 }, notes: 'Initial targets' },
-      { set_date: '2026-01-10', targets: { blended_cpo: 20, paid_cpo_excl_outliers: 18, participants_onboarded: 500 }, notes: 'Revised — VEP pipeline stronger than expected' },
+      { set_date: '2025-12-15', targets: { blended_cpo: 25, paid_cpo: 20, participants_onboarded: 400 }, notes: 'Initial targets' },
+      { set_date: '2026-01-10', targets: { blended_cpo: 20, paid_cpo: 18, participants_onboarded: 500 }, notes: 'Revised — VEP pipeline stronger than expected' },
     ],
   };
 
@@ -1273,14 +1318,15 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
   // CPO calculations
   function calcBlendedCPO(studies) {
-    const s = getSponsoredStudies(studies);
-    const totalSpend = s.reduce((a, st) => a + st.spend, 0);
-    const totalOnboarded = s.reduce((a, st) => a + (st.onboarded || 0), 0);
+    // Blended CPO: total ad spend / ALL onboarded (including public, VEP, etc.)
+    const launched = (studies || STUDIES).filter(s => s.status !== 'coming');
+    const totalSpend = launched.reduce((a, st) => a + st.spend, 0);
+    const totalOnboarded = launched.reduce((a, st) => a + (st.onboarded || 0), 0);
     return totalOnboarded > 0 ? totalSpend / totalOnboarded : null;
   }
-  function calcPaidCPO(studies, excludeOutliers = true) {
-    let s = getSponsoredStudies(studies).filter(st => st.spend > 0);
-    if (excludeOutliers) s = s.filter(st => !st.outlier);
+  function calcPaidCPO(studies) {
+    // Paid CPO: total ad spend / onboarded ONLY from studies with ad spend
+    let s = (studies || STUDIES).filter(st => st.status !== 'coming' && st.spend > 0);
     const totalSpend = s.reduce((a, st) => a + st.spend, 0);
     const totalOnboarded = s.reduce((a, st) => a + (st.onboarded || 0), 0);
     return totalOnboarded > 0 ? totalSpend / totalOnboarded : null;
@@ -1329,7 +1375,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   function calcProjectedCost(studies) {
     const active = getSponsoredStudies(studies).filter(s => s.status === 'recruiting' || s.status === 'active');
     if (!active.length) return null;
-    const currentCPO = calcPaidCPO(studies, true) || calcBlendedCPO(studies) || 25;
+    const currentCPO = calcPaidCPO(studies) || calcBlendedCPO(studies) || 25;
     return active.map(s => {
       const remaining = Math.max(0, s.target - (s.onboarded || 0));
       const studyCPO = (s.spend > 0 && s.onboarded > 0) ? s.spend / s.onboarded : currentCPO;
@@ -1354,8 +1400,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const daysSplit = calcAvgDaysToRecruit(studies, true);
     return {
       blended_cpo: calcBlendedCPO(studies),
-      paid_cpo: calcPaidCPO(studies, true),
-      paid_cpo_incl_outliers: calcPaidCPO(studies, false),
+      paid_cpo: calcPaidCPO(studies),
       cpo_by_type: calcCPOByType(studies),
       avg_days: daysSplit,
       participants_onboarded: calcParticipantsOnboarded(studies),
@@ -1375,8 +1420,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   let filterType = 'all';
   let filterManual = 'all';
   let filterSize = 'all';
-  let filterSource = 'all';
+  let filterAdSpend = 'all';
   let filterOutlier = 'all';
+  let selectedStudy = 'all';
 
   // ============================================================
   // RENDER: API Status
@@ -1472,11 +1518,38 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     });
     const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
     const windowStudies = getStudiesInWindow(selectedDays);
-    const totalStudies = yearFiltered.length;
-    const active = yearFiltered.filter(s => s.status === 'active').length;
-    const recruiting = yearFiltered.filter(s => s.status === 'recruiting').length;
-    const completed = yearFiltered.filter(s => s.status === 'complete').length;
-    const coming = yearFiltered.filter(s => s.status === 'coming').length;
+
+    // Populate paid study selector dropdown
+    const selector = $('#study-selector');
+    const paidStudies = allLaunched.filter(s => s.spend > 0 && s.type !== 'PUBLIC');
+    const prevVal = selector.value;
+    selector.innerHTML = '<option value="all">All Paid Studies</option>' +
+      paidStudies.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+    selector.value = prevVal;
+    if (selector.value !== prevVal) { selectedStudy = 'all'; selector.value = 'all'; }
+
+    // Show detail for selected study
+    const detailEl = $('#study-selector-detail');
+    if (selectedStudy !== 'all') {
+      const s = STUDIES.find(st => st.id === parseInt(selectedStudy));
+      if (s) {
+        const cpo = s.spend > 0 && s.onboarded > 0 ? s.spend / s.onboarded : null;
+        const pct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100).toFixed(0) : 0;
+        detailEl.innerHTML = `<strong>${fmt(s.spend)}</strong> spend · <strong>${fmtInt(s.onboarded)}</strong>/${fmtInt(s.target)} onboarded (${pct}%) · CPO: <strong>${cpo ? fmt(cpo) : '—'}</strong> · ${statusBadge(s.status)}`;
+      }
+    } else {
+      detailEl.innerHTML = '';
+    }
+
+    // Separate sponsored (non-public) studies for KPIs
+    const sponsored = yearFiltered.filter(s => s.type !== 'PUBLIC');
+    const sponsoredLaunched = sponsored.filter(s => s.status !== 'coming');
+    const publicCount = yearFiltered.filter(s => s.type === 'PUBLIC').length;
+    const totalStudies = sponsored.length;
+    const active = sponsored.filter(s => s.status === 'active').length;
+    const recruiting = sponsored.filter(s => s.status === 'recruiting').length;
+    const completed = sponsored.filter(s => s.status === 'complete').length;
+    const coming = sponsored.filter(s => s.status === 'coming').length;
 
     // Map selectedDays to the API summary period keys
     // API provides 'week' and 'month' summaries — 90d has no dedicated key
@@ -1487,7 +1560,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     // Year filters (All, 2025, 2026) show cumulative. Day filters (7d/30d/90d) show windowed.
     const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
     const useWindow = !isAllTime && windowStudies.length > 0;
-    const kpiStudies = isAllTime ? allLaunched : (useWindow ? windowStudies : allLaunched);
+    const windowSponsored = windowStudies.filter(s => s.type !== 'PUBLIC');
+    const kpiStudies = isAllTime ? sponsoredLaunched : (useWindow ? windowSponsored : sponsoredLaunched);
     const kpiLabel = isAllTime ? (selectedYear !== 'all' ? selectedYear : 'Total') : (useWindow ? periodLabel : selectedYear);
     // When using a time window, pro-rate spend/joined/onboarded to the window portion
     const kpiSpend = useWindow
@@ -1505,7 +1579,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     let cards = '';
 
     // Total Studies (always all for selected year)
-    cards += `<div class="kpi-card"><div class="kpi-label">Total Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming</div></div>`;
+    cards += `<div class="kpi-card"><div class="kpi-label">Sponsored Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming${publicCount ? ` · ${publicCount} public` : ''}</div></div>`;
 
     if (summary && !isAllTime && periodKey) {
       // Real-time API data available with a matching period key — show time-windowed metrics
@@ -1533,11 +1607,12 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       cards += `<div class="kpi-card"><div class="kpi-label">Joined (${kpiLabel})</div><div class="kpi-value teal">${fmtInt(kpiJoined)}</div><div class="kpi-sub">${kpiStudies.length} studies</div></div>`;
     }
 
-    // Recruitment progress (always all-time)
-    const totalOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const totalTarget = allLaunched.reduce((a, s) => a + s.target, 0);
+    // Recruitment progress ��� sponsored studies only (public and coming-soon already excluded)
+    const progressStudies = sponsoredLaunched;
+    const totalOnboarded = progressStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totalTarget = progressStudies.reduce((a, s) => a + s.target, 0);
     const pctComplete = totalTarget > 0 ? ((totalOnboarded / totalTarget) * 100).toFixed(1) : 0;
-    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target (all-time)</div></div>`;
+    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target · ${progressStudies.length} sponsored studies</div></div>`;
 
     grid.innerHTML = cards;
   }
@@ -1600,13 +1675,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       ${progressBar(kpis.blended_cpo, blendedTarget, 'var(--lime)', true)}
     </div>`;
 
-    // 2. Paid CPO (excl outliers)
-    const paidTarget = targets?.paid_cpo_excl_outliers;
+    // 2. Paid CPO (studies with ad spend only)
+    const paidTarget = targets?.paid_cpo;
     html += `<div class="kpi-track-card" style="border-top:3px solid var(--teal)">
-      <div class="kt-label">Paid CPO (excl. outliers)</div>
+      <div class="kt-label">Paid CPO</div>
       <div class="kt-value" style="color:var(--teal)">${kpis.paid_cpo != null ? '$' + kpis.paid_cpo.toFixed(2) : '—'}</div>
       <div class="kt-target">${targetIndicator(kpis.paid_cpo, paidTarget, true)}</div>
-      <div class="kt-sub">Excludes flagged outlier studies</div>
+      <div class="kt-sub">${kpis.paid_count} studies with ad spend</div>
       ${progressBar(kpis.paid_cpo, paidTarget, 'var(--teal)', true)}
     </div>`;
 
@@ -1681,54 +1756,62 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   // ============================================================
   function renderFunnel() {
     const row = $('#funnel-row');
-    const funnel = dataService.getFunnel();
 
-    if (!funnel) {
-      // Fallback funnel: use time-windowed studies when available, cumulative otherwise
-      const windowStudies = getStudiesInWindow(selectedDays);
-      const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
-        const yr = parseInt(selectedYear);
-        if (s.launchYear === yr || s.crossYear) return true;
-        if (!s.launchYear && s.status === 'coming') return true;
-        return false;
-      });
-      const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
-      const useWindowFunnel = selectedYear !== 'all' && selectedDays !== Infinity && windowStudies.length > 0;
-      const launched = useWindowFunnel ? windowStudies : allLaunched;
-      const totalLeads = useWindowFunnel
-        ? launched.reduce((a, s) => a + getWindowedMetric(s, 'leads', selectedDays), 0)
-        : launched.reduce((a, s) => a + (s.leads || 0), 0);
-      const totalJoined = useWindowFunnel
-        ? launched.reduce((a, s) => a + getWindowedMetric(s, 'joined', selectedDays), 0)
-        : launched.reduce((a, s) => a + (s.joined || 0), 0);
-      const totalOnboarded = useWindowFunnel
-        ? launched.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-        : launched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    // Build funnel from local study data (always accurate for year/time filters)
+    const windowStudies = getStudiesInWindow(selectedDays);
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      if (s.launchYear === yr || s.crossYear) return true;
+      if (!s.launchYear && s.status === 'coming') return true;
+      return false;
+    });
+    const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
+    const useWindow = selectedDays !== Infinity && windowStudies.length > 0;
+    const launched = useWindow ? windowStudies : allLaunched;
+    const localLeads = useWindow
+      ? launched.reduce((a, s) => a + getWindowedMetric(s, 'leads', selectedDays), 0)
+      : launched.reduce((a, s) => a + (s.leads || 0), 0);
+    const localJoined = useWindow
+      ? launched.reduce((a, s) => a + getWindowedMetric(s, 'joined', selectedDays), 0)
+      : launched.reduce((a, s) => a + (s.joined || 0), 0);
+    const localOnboarded = useWindow
+      ? launched.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
+      : launched.reduce((a, s) => a + (s.onboarded || 0), 0);
 
+    // Enrich with external data sources (impressions, clicks, installs, emails) when available and matching the time window
+    const metaDaily = dataService.getMetaAdsDaily();
+    const afDaily = dataService.getAppsflyerDaily();
+    const emailDaily = dataService.getNewsletterDaily();
+    const totalImpressions = metaDaily.reduce((a, d) => a + (d.impressions || 0), 0);
+    const totalClicks = metaDaily.reduce((a, d) => a + (d.clicks || 0), 0);
+    const totalInstalls = afDaily.reduce((a, d) => a + (d.installs || 0), 0);
+    const totalEmailsSent = emailDaily.reduce((a, d) => a + (d.requests || d.sent || 0), 0);
+    const totalEmailOpens = emailDaily.reduce((a, d) => a + (d.unique_opens || d.opens || 0), 0);
+
+    // If we have external data, show the full funnel; otherwise show the study-only funnel
+    if (totalImpressions > 0 || totalInstalls > 0) {
+      const steps = [
+        { val: totalImpressions, label: 'Impressions', prev: null },
+        { val: totalClicks, label: 'Ad Clicks', prev: totalImpressions },
+        { val: totalEmailsSent, label: 'Emails Sent', prev: null },
+        { val: totalEmailOpens, label: 'Email Opens', prev: totalEmailsSent },
+        { val: totalInstalls, label: 'App Installs', prev: totalClicks },
+        { val: localOnboarded, label: 'Onboarded', prev: totalInstalls },
+      ];
+      row.innerHTML = steps.map(s => `
+        <div class="funnel-step">
+          <div class="funnel-val">${fmtInt(s.val)}</div>
+          <div class="funnel-label">${s.label}</div>
+          ${s.prev ? `<div class="funnel-rate">${fmtPct(s.val / s.prev * 100)} conv</div>` : ''}
+        </div>
+      `).join('');
+    } else {
       row.innerHTML = `
-        <div class="funnel-step"><div class="funnel-val">${fmtInt(totalLeads)}</div><div class="funnel-label">Leads</div></div>
-        <div class="funnel-step"><div class="funnel-val">${fmtInt(totalJoined)}</div><div class="funnel-label">Joined</div><div class="funnel-rate">${totalLeads > 0 ? fmtPct(totalJoined / totalLeads * 100) : '—'}</div></div>
-        <div class="funnel-step"><div class="funnel-val">${fmtInt(totalOnboarded)}</div><div class="funnel-label">Onboarded</div><div class="funnel-rate">${totalJoined > 0 ? fmtPct(totalOnboarded / totalJoined * 100) : '—'}</div></div>
+        <div class="funnel-step"><div class="funnel-val">${fmtInt(localLeads)}</div><div class="funnel-label">Leads</div></div>
+        <div class="funnel-step"><div class="funnel-val">${fmtInt(localJoined)}</div><div class="funnel-label">Joined</div><div class="funnel-rate">${localLeads > 0 ? fmtPct(localJoined / localLeads * 100) : '—'}</div></div>
+        <div class="funnel-step"><div class="funnel-val">${fmtInt(localOnboarded)}</div><div class="funnel-label">Onboarded</div><div class="funnel-rate">${localJoined > 0 ? fmtPct(localOnboarded / localJoined * 100) : '—'}</div></div>
       `;
-      return;
     }
-
-    const steps = [
-      { val: funnel.adImpressions, label: 'Impressions', prev: null },
-      { val: funnel.adClicks, label: 'Ad Clicks', prev: funnel.adImpressions },
-      { val: funnel.emailsSent, label: 'Emails Sent', prev: null },
-      { val: funnel.emailOpens, label: 'Email Opens', prev: funnel.emailsSent },
-      { val: funnel.appInstalls, label: 'App Installs', prev: funnel.adClicks },
-      { val: funnel.onboarded, label: 'Onboarded', prev: funnel.appInstalls },
-    ];
-
-    row.innerHTML = steps.map(s => `
-      <div class="funnel-step">
-        <div class="funnel-val">${fmtInt(s.val)}</div>
-        <div class="funnel-label">${s.label}</div>
-        ${s.prev ? `<div class="funnel-rate">${fmtPct(s.val / s.prev * 100)} conv</div>` : ''}
-      </div>
-    `).join('');
   }
 
   // ============================================================
@@ -1942,6 +2025,15 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       joinedDaily = joinedDailyRaw.filter(d => new Date(d.date) >= cutoff);
     }
 
+    // Local study data for enrolled total fallback
+    const windowStudies = getStudiesInWindow(selectedDays);
+    const yearFilteredChart = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+    const allLaunchedForChart = yearFilteredChart.filter(s => s.status !== 'coming');
+    const useWindow = selectedDays !== Infinity && windowStudies.length > 0;
+
     // Need at least spend or onboarding daily data
     if (!spendDaily.length && !onbDaily.length) {
       card.style.display = 'none';
@@ -2033,7 +2125,12 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     });
 
     // Sidebar: enrolled total + dynamic label
-    const enrolledTotal = enrolledArr.reduce((a, b) => a + b, 0);
+    // Use local study data for enrolled total (API daily data may undercount)
+    const localStudiesForEnroll = useWindow ? windowStudies : allLaunchedForChart;
+    const localEnrolledTotal = localStudiesForEnroll.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const apiEnrolledTotal = enrolledArr.reduce((a, b) => a + b, 0);
+    // Use whichever is higher — local data is more complete for cumulative totals
+    const enrolledTotal = Math.max(localEnrolledTotal, apiEnrolledTotal);
     $('#rc-enrolled-total').textContent = fmtInt(enrolledTotal);
     const enrolledLabel = selectedDays === Infinity ? `Enrolled (${selectedYear === 'all' ? 'All' : selectedYear})` : `Enrolled (${selectedDays}d)`;
     $('#rc-enrolled-label').textContent = enrolledLabel;
@@ -2072,7 +2169,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     { key: 'target', label: 'Target', align: 'right', sortable: true },
     { key: 'completion_pct', label: '% Complete', align: 'right', sortable: true },
     { key: 'cpo', label: 'CPO', align: 'right', sortable: true },
-    { key: 'recruitment_source', label: 'Source', align: 'left', sortable: true },
+    { key: 'has_spend', label: 'Ad Spend?', align: 'center', sortable: true },
     { key: 'wearable', label: 'Wearable', align: 'left', sortable: false },
     { key: 'days', label: 'Days', align: 'right', sortable: true },
     { key: 'manualQueue', label: 'Manual?', align: 'center', sortable: true },
@@ -2097,6 +2194,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     }
     if (col === 'manualQueue') return s.manualQueue ? 0 : 1;
     if (col === 'outlier') return s.outlier ? 0 : 1;
+    if (col === 'has_spend') return s.spend > 0 ? 0 : 1;
     if (col === 'completion_pct') return s.target > 0 ? (s.onboarded || 0) / s.target : -1;
     if (col === 'size_category') {
       const order = { pilot: 0, medium: 1, large: 2 };
@@ -2129,7 +2227,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       studies = studies.filter(s => filterManual === 'yes' ? s.manualQueue : !s.manualQueue);
     }
     if (filterSize !== 'all') studies = studies.filter(s => s.size_category === filterSize);
-    if (filterSource !== 'all') studies = studies.filter(s => s.recruitment_source === filterSource);
+    if (filterAdSpend !== 'all') {
+      studies = studies.filter(s => filterAdSpend === 'has' ? s.spend > 0 : s.spend === 0);
+    }
     if (filterOutlier !== 'all') {
       studies = studies.filter(s => filterOutlier === 'yes' ? s.outlier : !s.outlier);
     }
@@ -2164,7 +2264,6 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const compPct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100) : null;
       const compColor = compPct != null ? (compPct >= 100 ? 'var(--green)' : compPct >= 80 ? 'var(--yellow)' : 'var(--rose)') : '';
       const sizeBadgeMap = { pilot: 'badge-gray', medium: 'badge-blue', large: 'badge-indigo' };
-      const sourceLabels = { paid: 'Paid', organic_community: 'Organic', partner_recruited: 'Partner', mixed: 'Mixed' };
 
       return `<tr>
         <td class="align-right">${s.id}</td>
@@ -2181,7 +2280,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         <td class="align-right">${fmtInt(s.target)}</td>
         <td class="align-right">${compPct != null ? `<span style="color:${compColor};font-weight:600">${compPct.toFixed(0)}%</span>` : '—'}</td>
         <td class="align-right">${cpo != null ? fmt(cpo) : '—'}</td>
-        <td>${sourceLabels[s.recruitment_source] || '—'}</td>
+        <td style="text-align:center">${s.spend > 0 ? '<span style="color:var(--lime)">Yes</span>' : '<span style="color:var(--text-dim)">No</span>'}</td>
         <td>${s.wearable || '—'}</td>
         <td class="align-right">${s.days != null ? s.days : '—'}</td>
         <td style="text-align:center">${s.manualQueue ? '<span style="color:var(--yellow)">Yes</span>' : '<span style="color:var(--text-dim)">No</span>'}</td>
@@ -2786,7 +2885,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     if (cpoCanvas) {
       const labels = quarters.map(q => q.key);
       const blendedData = quarters.map(q => calcBlendedCPO(q.studies));
-      const paidData = quarters.map(q => calcPaidCPO(q.studies, true));
+      const paidData = quarters.map(q => calcPaidCPO(q.studies));
       const targetData = quarters.map(q => getTargetsForQuarter(q.key)?.blended_cpo ?? null);
 
       chartCPOTrend = new Chart(cpoCanvas, {
@@ -2795,7 +2894,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
           labels,
           datasets: [
             { label: 'Blended CPO', data: blendedData, borderColor: 'var(--lime)', backgroundColor: 'rgba(200,230,74,0.08)', fill: false, tension: 0.3, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6 },
-            { label: 'Paid CPO (excl outliers)', data: paidData, borderColor: 'var(--teal)', backgroundColor: 'rgba(0,179,159,0.08)', fill: false, tension: 0.3, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6 },
+            { label: 'Paid CPO', data: paidData, borderColor: 'var(--teal)', backgroundColor: 'rgba(0,179,159,0.08)', fill: false, tension: 0.3, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6 },
             { label: 'Target', data: targetData, borderColor: 'rgba(255,255,255,0.3)', borderDash: [6, 4], fill: false, borderWidth: 1, pointRadius: 0 },
           ],
         },
@@ -2954,7 +3053,6 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     renderKPITrends();
     renderAds();
     renderEmail();
-    renderScorecard();
     renderTypeBreakdown();
     renderEngagement();
     renderManualImpact();
@@ -2976,7 +3074,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       if (e.target.dataset.year) {
         selectedYear = e.target.dataset.year;
         selectedDays = Infinity;
-        renderAll();
+        loadAndRender();
         return;
       }
       selectedYear = '2026';
@@ -3006,9 +3104,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   $('#filter-type').addEventListener('change', e => { filterType = e.target.value; renderStudiesTable(); });
   $('#filter-manual').addEventListener('change', e => { filterManual = e.target.value; renderStudiesTable(); });
   $('#filter-size').addEventListener('change', e => { filterSize = e.target.value; renderStudiesTable(); });
-  $('#filter-source').addEventListener('change', e => { filterSource = e.target.value; renderStudiesTable(); });
+  $('#filter-adspend').addEventListener('change', e => { filterAdSpend = e.target.value; renderStudiesTable(); });
   $('#filter-outlier').addEventListener('change', e => { filterOutlier = e.target.value; renderStudiesTable(); });
   $('#filter-campaign').addEventListener('change', e => { filterCampaign = e.target.value; renderAds(); });
+  $('#study-selector').addEventListener('change', e => { selectedStudy = e.target.value; renderAll(); });
 
   // CSV Export
   $('#btn-export-csv').addEventListener('click', () => {
@@ -3020,7 +3119,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     if (filterStatus !== 'all') studies = studies.filter(s => s.status === filterStatus);
     if (filterType !== 'all') studies = studies.filter(s => s.type === filterType);
     if (filterSize !== 'all') studies = studies.filter(s => s.size_category === filterSize);
-    if (filterSource !== 'all') studies = studies.filter(s => s.recruitment_source === filterSource);
+    if (filterAdSpend !== 'all') studies = studies.filter(s => filterAdSpend === 'has' ? s.spend > 0 : s.spend === 0);
     if (filterManual !== 'all') studies = studies.filter(s => filterManual === 'yes' ? s.manualQueue : !s.manualQueue);
     if (filterOutlier !== 'all') studies = studies.filter(s => filterOutlier === 'yes' ? s.outlier : !s.outlier);
 
@@ -3046,7 +3145,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const q = $('#admin-quarter').value;
     const targets = {
       blended_cpo: parseFloat($('#admin-blended-cpo').value) || 0,
-      paid_cpo_excl_outliers: parseFloat($('#admin-paid-cpo').value) || 0,
+      paid_cpo: parseFloat($('#admin-paid-cpo').value) || 0,
       rct_cpo: parseFloat($('#admin-rct-cpo').value) || 0,
       rwa_cpo: parseFloat($('#admin-rwa-cpo').value) || 0,
       vep_cpo: 0,
@@ -3065,7 +3164,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const t = QUARTERLY_TARGETS[e.target.value];
     if (t) {
       $('#admin-blended-cpo').value = t.blended_cpo || '';
-      $('#admin-paid-cpo').value = t.paid_cpo_excl_outliers || '';
+      $('#admin-paid-cpo').value = t.paid_cpo || '';
       $('#admin-rct-cpo').value = t.rct_cpo || '';
       $('#admin-rwa-cpo').value = t.rwa_cpo || '';
       $('#admin-days').value = t.avg_days_to_recruit || '';
