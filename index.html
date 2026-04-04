@@ -1607,13 +1607,6 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       cards += `<div class="kpi-card"><div class="kpi-label">Joined (${kpiLabel})</div><div class="kpi-value teal">${fmtInt(kpiJoined)}</div><div class="kpi-sub">${kpiStudies.length} studies</div></div>`;
     }
 
-    // Recruitment progress ��� sponsored studies only (public and coming-soon already excluded)
-    const progressStudies = sponsoredLaunched;
-    const totalOnboarded = progressStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const totalTarget = progressStudies.reduce((a, s) => a + s.target, 0);
-    const pctComplete = totalTarget > 0 ? ((totalOnboarded / totalTarget) * 100).toFixed(1) : 0;
-    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target · ${progressStudies.length} sponsored studies</div></div>`;
-
     grid.innerHTML = cards;
   }
 
