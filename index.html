@@ -1578,8 +1578,12 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       // ── PAID VIEW ──
       const recruiting = sponsoredLaunched.filter(s => s.status === 'recruiting');
       const recruitingNames = recruiting.map(s => s.name).join(', ') || 'None';
-      const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
-      const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
+      // Recruitment progress uses windowed studies when a time filter is active
+      const progressSet = useWindow ? kpiSponsored : sponsoredLaunched;
+      const progressOnboarded = useWindow
+        ? progressSet.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
+        : progressSet.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const progressTarget = progressSet.reduce((a, s) => a + s.target, 0);
       const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
       const totalSpend = sumSpend(kpiSponsored);
       const paidKpi = kpiSponsored.filter(s => s.spend > 0);
