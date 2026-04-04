@@ -532,94 +532,133 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
     </div>
   </div>
 
-  <!-- Study Selector -->
-  <div style="margin-bottom:16px;">
+  <!-- ============================================================ -->
+  <!-- OVERVIEW — always visible, compact, one screen -->
+  <!-- ============================================================ -->
+  <div style="margin-bottom:8px;">
     <select id="study-selector" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-pill);padding:8px 16px;font-size:13px;font-weight:500;min-width:260px;cursor:pointer;">
       <option value="all">All Paid Studies</option>
     </select>
     <span id="study-selector-detail" style="margin-left:12px;font-size:12px;color:var(--text-dim);"></span>
   </div>
 
-  <!-- KPI Cards -->
   <div class="kpi-grid" id="kpi-grid"></div>
 
-  <!-- KPI Tracking — CPO, Days, Completion -->
-  <div class="section" id="kpi-tracking-section">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <h2 style="margin:0;"><span class="section-icon">&#9673;</span> KPI Tracking</h2>
-      <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em;" id="kpi-quarter-label"></div>
+  <!-- Critical flags / active recruiting detail -->
+  <div id="overview-flags" style="margin-top:12px;margin-bottom:8px;"></div>
+
+  <!-- ============================================================ -->
+  <!-- COLLAPSIBLE SECTIONS — all collapsed by default -->
+  <!-- ============================================================ -->
+
+  <!-- 1. Ad Spend & Performance -->
+  <div class="section" id="ads-section">
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Ad Spend &amp; Performance</h2>
+      <span class="chevron">&#9660;</span>
     </div>
-    <div class="kpi-tracking-grid" id="kpi-tracking-grid"></div>
-    <div id="kpi-cpo-caveat" style="margin-top:12px; padding:10px 14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:8px; font-size:11px; color:var(--text-dim); line-height:1.5;">
-      CPO is calculated at the study level (total ad spend for study ÷ total onboarded for study). Per-participant source attribution is not yet available. These numbers reflect the cost to fill a study, not the cost to acquire an individual participant through ads specifically.
+    <div class="section-body collapsed">
+      <!-- Charts -->
+      <div class="charts-grid" id="charts-grid" style="margin-bottom:20px;">
+        <div class="chart-card" id="signups-card" style="display:none;">
+          <h3 style="margin-bottom:14px;">New Signups</h3>
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:16px;">
+            <div id="signups-total" style="font-size:42px; font-weight:700; color:#60A5FA; line-height:1;">—</div>
+            <div style="font-size:13px; color:#888;">total</div>
+          </div>
+          <div style="display:flex; gap:24px;">
+            <div>
+              <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Yesterday</div>
+              <div id="signups-yesterday" style="font-size:22px; font-weight:600; color:#e4e6ef;">—</div>
+            </div>
+            <div>
+              <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Last 7 days</div>
+              <div id="signups-week" style="font-size:22px; font-weight:600; color:#e4e6ef;">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card" id="recruiting-chart-card" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+            <div>
+              <h3 style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled</h3>
+              <div style="font-size:12px; color:#888;">See whether spend changes drive joins and enrollment spikes</div>
+            </div>
+            <div style="text-align:right;">
+              <div id="rc-enrolled-label" style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Enrolled</div>
+              <div id="rc-enrolled-total" style="font-size:32px; font-weight:700; color:#34D399; line-height:1.1;">—</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:20px;">
+            <div style="flex:1; min-width:0;"><canvas id="chart-recruiting"></canvas></div>
+            <div id="rc-per-study" style="width:200px; flex-shrink:0; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; display:none;">
+              <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; text-align:center; margin-bottom:10px;">Per Study</div>
+              <div id="rc-study-list"></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3 id="chart-spend-title">Ad Spend &amp; Clicks (Daily)</h3>
+          <canvas id="chart-spend"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3 id="chart-installs-title">App Installs (Daily)</h3>
+          <canvas id="chart-installs"></canvas>
+        </div>
+      </div>
+      <!-- Ad Performance Table -->
+      <div class="section-header" style="margin-bottom:12px;">
+        <h3 style="margin:0;color:var(--text-dim);">Meta Ads Breakdown</h3>
+        <div class="table-controls">
+          <select id="filter-campaign">
+            <option value="all">All Campaigns</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Campaign</th><th>Ad Name</th>
+              <th class="align-right">Impressions</th><th class="align-right">Clicks</th>
+              <th class="align-right">Spend</th><th class="align-right">CTR</th>
+              <th class="align-right">CPC</th><th class="align-right">CPM</th>
+            </tr>
+          </thead>
+          <tbody id="ads-tbody"></tbody>
+          <tfoot id="ads-tfoot"></tfoot>
+        </table>
+      </div>
+      <!-- KPI Trends -->
+      <div style="margin-top:24px;">
+        <h3 style="color:var(--text-dim);margin-bottom:12px;">KPI Trends &amp; Quarterly Review</h3>
+        <div id="kpi-quarterly-review"></div>
+        <div class="charts-grid" style="grid-template-columns:repeat(2,1fr);margin-top:20px;">
+          <div class="chart-card"><h3>CPO Over Time</h3><div style="height:300px;"><canvas id="chart-cpo-trend"></canvas></div></div>
+          <div class="chart-card"><h3>Cumulative Participants Onboarded</h3><div style="height:300px;"><canvas id="chart-participants-trend"></canvas></div></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Funnel -->
+  <!-- 2. Recruiting Funnel -->
   <div class="section" id="funnel-section">
-    <h2><span class="section-icon">&#9673;</span> Recruiting Funnel</h2>
-    <div class="funnel-row" id="funnel-row"></div>
-  </div>
-
-  <div class="tier-label">Detailed Sections</div>
-
-  <!-- Charts -->
-  <div class="charts-grid" id="charts-grid">
-    <div class="chart-card" id="signups-card" style="display:none;">
-      <h3 style="margin-bottom:14px;">New Signups</h3>
-      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:16px;">
-        <div id="signups-total" style="font-size:42px; font-weight:700; color:#60A5FA; line-height:1;">—</div>
-        <div style="font-size:13px; color:#888;">total</div>
-      </div>
-      <div style="display:flex; gap:24px;">
-        <div>
-          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Yesterday</div>
-          <div id="signups-yesterday" style="font-size:22px; font-weight:600; color:#e4e6ef;">—</div>
-        </div>
-        <div>
-          <div style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Last 7 days</div>
-          <div id="signups-week" style="font-size:22px; font-weight:600; color:#e4e6ef;">—</div>
-        </div>
-      </div>
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Recruiting Funnel</h2>
+      <span class="chevron">&#9660;</span>
     </div>
-    <div class="chart-card" id="recruiting-chart-card" style="display:none;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
-        <div>
-          <h3 style="margin-bottom:4px;">Daily Spend, Joined &amp; Enrolled</h3>
-          <div style="font-size:12px; color:#888;">See whether spend changes drive joins and enrollment spikes</div>
-        </div>
-        <div style="text-align:right;">
-          <div id="rc-enrolled-label" style="font-size:11px; color:#888; text-transform:uppercase; letter-spacing:0.5px;">Enrolled</div>
-          <div id="rc-enrolled-total" style="font-size:32px; font-weight:700; color:#34D399; line-height:1.1;">—</div>
-        </div>
-      </div>
-      <div style="display:flex; gap:20px;">
-        <div style="flex:1; min-width:0;"><canvas id="chart-recruiting"></canvas></div>
-        <div id="rc-per-study" style="width:200px; flex-shrink:0; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; display:none;">
-          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; text-align:center; margin-bottom:10px;">Per Study</div>
-          <div id="rc-study-list"></div>
-        </div>
-      </div>
-    </div>
-    <div class="chart-card">
-      <h3 id="chart-spend-title">Ad Spend &amp; Clicks (Daily)</h3>
-      <canvas id="chart-spend"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3 id="chart-installs-title">App Installs (Daily)</h3>
-      <canvas id="chart-installs"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Email Opens &amp; Clicks (Daily)</h3>
-      <canvas id="chart-email"></canvas>
+    <div class="section-body collapsed">
+      <div class="funnel-row" id="funnel-row"></div>
     </div>
   </div>
 
-  <!-- Studies Table -->
+  <!-- 3. Study-by-Study Breakdown -->
   <div class="section" id="studies-section">
-    <div class="section-header">
-      <h2><span class="section-icon">&#9673;</span> Studies</h2>
-      <div class="table-controls" id="table-controls">
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Study-by-Study Breakdown</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body collapsed">
+      <div class="table-controls" id="table-controls" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;">
         <select id="filter-status">
           <option value="all">All Statuses</option>
           <option value="recruiting">Recruiting</option>
@@ -657,154 +696,80 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
         </select>
         <button id="btn-export-csv" class="filter-btn" style="background:var(--lime-bg);color:var(--lime);border-color:var(--border-lime);cursor:pointer;font-size:12px;padding:4px 12px;">Export CSV</button>
       </div>
-    </div>
-    <div class="table-wrap">
-      <table id="studies-table">
-        <thead><tr id="studies-thead"></tr></thead>
-        <tbody id="studies-tbody"></tbody>
-        <tfoot id="studies-tfoot"></tfoot>
-      </table>
-    </div>
-  </div>
-
-  <!-- KPI Trends -->
-  <div class="section" id="kpi-trends-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
-      <h2><span class="section-icon">&#9673;</span> KPI Trends &amp; Quarterly Review</h2>
-      <span class="chevron">&#9660;</span>
-    </div>
-    <div class="section-body">
-    <div id="kpi-quarterly-review"></div>
-    <div class="charts-grid" style="grid-template-columns:repeat(2,1fr);margin-top:20px;">
-      <div class="chart-card"><h3>CPO Over Time</h3><div style="height:300px;"><canvas id="chart-cpo-trend"></canvas></div></div>
-      <div class="chart-card"><h3>Cumulative Participants Onboarded</h3><div style="height:300px;"><canvas id="chart-participants-trend"></canvas></div></div>
-    </div>
-    </div>
-  </div>
-
-  <!-- Ad Performance -->
-  <div class="section" id="ads-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
-      <div class="section-header" style="flex:1;margin-bottom:0;">
-        <h2 style="margin:0;"><span class="section-icon">&#9673;</span> Ad Performance (Meta)</h2>
-        <div class="table-controls" onclick="event.stopPropagation()">
-          <select id="filter-campaign">
-            <option value="all">All Campaigns</option>
-          </select>
-        </div>
+      <div class="table-wrap">
+        <table id="studies-table">
+          <thead><tr id="studies-thead"></tr></thead>
+          <tbody id="studies-tbody"></tbody>
+          <tfoot id="studies-tfoot"></tfoot>
+        </table>
       </div>
-      <span class="chevron">&#9660;</span>
-    </div>
-    <div class="section-body">
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Campaign</th><th>Ad Name</th>
-            <th class="align-right">Impressions</th><th class="align-right">Clicks</th>
-            <th class="align-right">Spend</th><th class="align-right">CTR</th>
-            <th class="align-right">CPC</th><th class="align-right">CPM</th>
-          </tr>
-        </thead>
-        <tbody id="ads-tbody"></tbody>
-        <tfoot id="ads-tfoot"></tfoot>
-      </table>
-    </div>
+      <!-- Study Type Breakdown -->
+      <div style="margin-top:24px;">
+        <h3 style="color:var(--text-dim);margin-bottom:12px;">Study Type Breakdown</h3>
+        <div class="type-breakdown-grid" id="type-breakdown-grid"></div>
+      </div>
+      <!-- Manual Queue Impact -->
+      <div style="margin-top:24px;">
+        <h3 style="color:var(--text-dim);margin-bottom:12px;">Manual Queue Impact</h3>
+        <div class="manual-compare-grid" id="manual-compare-grid"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Newsletter / Email -->
+  <!-- 4. Email & Newsletter -->
   <div class="section" id="email-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
       <h2><span class="section-icon">&#9673;</span> Email &amp; Newsletter</h2>
       <span class="chevron">&#9660;</span>
     </div>
-    <div class="section-body">
+    <div class="section-body collapsed">
       <div class="email-grid" id="email-grid"></div>
+      <div class="chart-card" style="margin-top:16px;">
+        <h3>Email Opens &amp; Clicks (Daily)</h3>
+        <canvas id="chart-email"></canvas>
+      </div>
     </div>
   </div>
 
-  <!-- Study Type Breakdown -->
-  <div class="section" id="type-breakdown-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
-      <h2><span class="section-icon">&#9673;</span> Study Type Breakdown</h2>
-      <span class="chevron">&#9660;</span>
-    </div>
-    <div class="section-body">
-      <div class="type-breakdown-grid" id="type-breakdown-grid"></div>
-    </div>
-  </div>
-
-  <!-- App Engagement Breakdown -->
-  <div class="section" id="engagement-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
-      <h2><span class="section-icon">&#9673;</span> App Engagement Breakdown</h2>
-      <span class="chevron">&#9660;</span>
-    </div>
-    <div class="section-body">
-      <div id="engagement-content"></div>
-    </div>
-  </div>
-
-  <!-- Manual Queue Impact -->
-  <div class="section" id="manual-impact-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
-      <h2><span class="section-icon">&#9673;</span> Manual Queue Impact</h2>
-      <span class="chevron">&#9660;</span>
-    </div>
-    <div class="section-body">
-      <div class="manual-compare-grid" id="manual-compare-grid"></div>
-    </div>
-  </div>
-
-  <div class="tier-label">Community</div>
-
-  <!-- Public Studies Overview -->
+  <!-- 5. Community / Public Studies -->
   <div class="section" id="public-studies-section">
-    <div class="section-toggle" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
       <h2><span class="section-icon">&#9673;</span> Community / Public Studies</h2>
       <span class="chevron">&#9660;</span>
     </div>
-    <div class="section-body">
+    <div class="section-body collapsed">
       <div id="public-studies-content"></div>
+      <!-- App Engagement Breakdown -->
+      <div style="margin-top:24px;">
+        <h3 style="color:var(--text-dim);margin-bottom:12px;">App Engagement Breakdown</h3>
+        <div id="engagement-content"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Benchmarks -->
-  <div class="section" id="bench-section">
-    <h2><span class="section-icon">&#9673;</span> Recruitment Benchmarks</h2>
-    <div class="bench-grid">
-      <div class="bench-pill">
-        <div class="bench-size">Small Study</div>
-        <div class="bench-detail">10–50 participants</div>
-        <div class="bench-days" style="color:var(--lime)">21 days</div>
-        <div class="bench-detail">~2–3 / day with focused spend</div>
-      </div>
-      <div class="bench-pill">
-        <div class="bench-size">Medium Study</div>
-        <div class="bench-detail">50–150 participants</div>
-        <div class="bench-days" style="color:var(--teal)">45 days</div>
-        <div class="bench-detail">~3 / day sustained; scale spend</div>
-      </div>
-      <div class="bench-pill">
-        <div class="bench-size">Large Study</div>
-        <div class="bench-detail">200+ participants</div>
-        <div class="bench-days" style="color:var(--indigo)">75 days</div>
-        <div class="bench-detail">Multi-channel; budget for drop-off</div>
-      </div>
-      <div class="bench-pill">
-        <div class="bench-size">Organic / VEP</div>
-        <div class="bench-detail">Any size</div>
-        <div class="bench-days" style="color:var(--yellow)">30–60 days</div>
-        <div class="bench-detail">Partner-dependent; no ad lever</div>
+  <!-- 6. LTV & Financial (Placeholder) -->
+  <div class="section" id="ltv-section">
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> LTV &amp; Financial</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body collapsed">
+      <div style="padding:32px;text-align:center;color:var(--text-dim);font-size:13px;">
+        <div style="font-size:24px;margin-bottom:8px;">Coming soon</div>
+        Lifetime value calculations, participant acquisition costs, client acquisition costs, and quarter-over-quarter trends.
       </div>
     </div>
   </div>
 
   <!-- Data Source Status -->
   <div class="section" id="status-section">
-    <h2><span class="section-icon">&#9673;</span> Data Source Health</h2>
-    <div class="status-grid" id="status-grid"></div>
+    <div class="section-toggle collapsed" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('collapsed')">
+      <h2><span class="section-icon">&#9673;</span> Data Source Health</h2>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body collapsed">
+      <div class="status-grid" id="status-grid"></div>
+    </div>
   </div>
 
   <!-- Admin: Set Quarterly Targets -->
@@ -1576,38 +1541,69 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const kpiBlendedCPO = kpiOnboarded > 0 ? kpiSpend / kpiOnboarded : 0;
     const kpiPaidCount = kpiStudies.filter(s => s.spend > 0).length;
 
+    // Recruitment progress — sponsored only
+    const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
+    const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
+
+    // CPO metrics
+    const paidKpiStudies = kpiStudies.filter(s => s.spend > 0);
+    const paidSpend = useWindow
+      ? paidKpiStudies.reduce((a, s) => a + getWindowedSpend(s, selectedDays), 0)
+      : paidKpiStudies.reduce((a, s) => a + s.spend, 0);
+    const paidOnboarded = useWindow
+      ? paidKpiStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
+      : paidKpiStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+
+    // All onboarded (incl public) for blended CPO
+    const allWindowStudies = useWindow ? windowStudies : yearFiltered.filter(s => s.status !== 'coming');
+    const allOnboarded = useWindow
+      ? allWindowStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
+      : allWindowStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const blendedCPO = allOnboarded > 0 ? kpiSpend / allOnboarded : 0;
+    const paidCPO = paidOnboarded > 0 ? paidSpend / paidOnboarded : 0;
+
     let cards = '';
 
-    // Total Studies (always all for selected year)
-    cards += `<div class="kpi-card"><div class="kpi-label">Sponsored Studies</div><div class="kpi-value indigo">${totalStudies}</div><div class="kpi-sub">${active} active · ${recruiting} recruiting · ${completed} completed · ${coming} upcoming${publicCount ? ` · ${publicCount} public` : ''}</div></div>`;
+    // 1. Currently recruiting
+    const recruitingStudies = sponsoredLaunched.filter(s => s.status === 'recruiting');
+    const recruitingNames = recruitingStudies.map(s => s.name).join(', ') || 'None';
+    cards += `<div class="kpi-card"><div class="kpi-label">Recruiting</div><div class="kpi-value lime">${recruiting}</div><div class="kpi-sub">${recruiting > 0 ? recruitingNames : 'All studies at target'}</div></div>`;
 
-    if (summary && !isAllTime && periodKey) {
-      // Real-time API data available with a matching period key — show time-windowed metrics
-      const spend = summary.totalSpend?.[periodKey] ?? 0;
-      const clicks = summary.totalClicks?.[periodKey] ?? 0;
-      let installs = summary.totalInstalls?.[periodKey] ?? 0;
-      if (installs === 0) {
-        installs = dataService.getAppsflyerDaily().reduce((s, d) => s + (d.installs || 0), 0);
-      }
-      const cpi = installs > 0 ? spend / installs : 0;
-      const obp = apiData?.onboarding?.onboardedByPeriod;
-      const onboarded = selectedDays <= 7 ? (obp?.seven_days ?? summary.totalOnboarded?.week ?? 0)
-        : selectedDays <= 30 ? (obp?.thirty_days ?? summary.totalOnboarded?.month ?? 0)
-        : (obp?.ninety_days ?? summary.totalOnboarded?.month ?? 0);
-      const cpo = onboarded > 0 ? spend / onboarded : 0;
+    // 2. Recruitment progress
+    cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(progressOnboarded)} / ${fmtInt(progressTarget)} · ${sponsoredLaunched.length} sponsored</div></div>`;
 
-      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${periodLabel})</div><div class="kpi-value lime">${fmt(spend)}</div><div class="kpi-sub">${fmtInt(clicks)} clicks</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">App Installs (${periodLabel})</div><div class="kpi-value teal">${fmtInt(installs)}</div><div class="kpi-sub">CPI: ${fmt(cpi)}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${periodLabel})</div><div class="kpi-value green">${fmtInt(onboarded)}</div><div class="kpi-sub">CPO: ${fmt(cpo)}</div></div>`;
-    } else {
-      // Local data: windowed when available, cumulative fallback
-      const subLabel = useWindow ? `${kpiPaidCount} paid studies in window` : `${kpiPaidCount} paid studies`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(kpiSpend)}</div><div class="kpi-sub">${subLabel}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Onboarded (${kpiLabel})</div><div class="kpi-value green">${fmtInt(kpiOnboarded)}</div><div class="kpi-sub">CPO: ${kpiBlendedCPO > 0 ? fmt(kpiBlendedCPO) : '—'}</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Joined (${kpiLabel})</div><div class="kpi-value teal">${fmtInt(kpiJoined)}</div><div class="kpi-sub">${kpiStudies.length} studies</div></div>`;
-    }
+    // 3. Total ad spend
+    cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(kpiSpend)}</div><div class="kpi-sub">${kpiPaidCount} paid studies</div></div>`;
+
+    // 4. Blended CPO
+    cards += `<div class="kpi-card"><div class="kpi-label">Blended CPO</div><div class="kpi-value green">${blendedCPO > 0 ? fmt(blendedCPO) : '—'}</div><div class="kpi-sub">spend ÷ all onboarded (${fmtInt(allOnboarded)})</div></div>`;
+
+    // 5. Paid CPO
+    cards += `<div class="kpi-card"><div class="kpi-label">Paid CPO</div><div class="kpi-value teal">${paidCPO > 0 ? fmt(paidCPO) : '—'}</div><div class="kpi-sub">spend ÷ paid study onboarded (${fmtInt(paidOnboarded)})</div></div>`;
 
     grid.innerHTML = cards;
+  }
+
+  // ============================================================
+  // RENDER: Overview Flags (critical status callouts)
+  // ============================================================
+  function renderOverviewFlags() {
+    const el = $('#overview-flags');
+    if (!el) return;
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+    const recruiting = yearFiltered.filter(s => s.type !== 'PUBLIC' && s.status === 'recruiting');
+    const flags = [];
+    recruiting.forEach(s => {
+      const remaining = Math.max(0, s.target - (s.onboarded || 0));
+      if (remaining > 0 && remaining <= 10) {
+        flags.push(`<span style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--yellow-bg);border:1px solid rgba(251,191,36,0.2);border-radius:var(--radius-pill);font-size:12px;font-weight:600;color:var(--yellow);">${esc(s.name)}: ${remaining} spot${remaining === 1 ? '' : 's'} remaining</span>`);
+      }
+    });
+    el.innerHTML = flags.length ? flags.join(' ') : '';
   }
 
   // ============================================================
@@ -3039,7 +3035,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
     renderApiStatus();
     renderKPIs();
-    renderKPITracking();
+    renderOverviewFlags();
     renderFunnel();
     renderCharts();
     renderStudiesTable();
