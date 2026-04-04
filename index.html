@@ -2484,9 +2484,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const totals = dataService.getNewsletterTotals();
     const grid = $('#email-grid');
 
+    // Show data freshness indicator
+    const daily = dataService.getNewsletterDaily();
+    const lastDate = daily.length ? daily[daily.length - 1].date : null;
+    const staleNote = lastDate ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:12px;">Data through ${lastDate}${sendgridData?.updated_at ? ' · Last synced ' + new Date(sendgridData.updated_at).toLocaleDateString() : ''}</div>` : '';
+
     if (!totals) {
-      // Placeholder
-      grid.innerHTML = `
+      grid.innerHTML = `${staleNote}
         <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Sent</div></div>
         <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Delivered</div></div>
         <div class="email-metric"><div class="em-val" style="color:var(--text-dim)">—</div><div class="em-label">Opens</div></div>
@@ -2497,17 +2501,20 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       return;
     }
 
-    const openRate = totals.delivered > 0 ? (totals.opens / totals.delivered * 100) : 0;
-    const clickRate = totals.delivered > 0 ? (totals.clicks / totals.delivered * 100) : 0;
+    // Note: SendGrid "opens" include re-opens of previously sent emails, so opens can exceed
+    // sent/delivered in short time windows. Use unique_opens when available for rates.
+    const uniqueOpens = totals.unique_opens || totals.opens;
+    const openRate = totals.delivered > 0 ? (uniqueOpens / totals.delivered * 100) : null;
+    const clickRate = totals.delivered > 0 ? (totals.clicks / totals.delivered * 100) : null;
 
-    grid.innerHTML = `
+    grid.innerHTML = `${staleNote}
       <div class="email-metric"><div class="em-val" style="color:var(--blue)">${fmtInt(totals.sent)}</div><div class="em-label">Sent</div></div>
       <div class="email-metric"><div class="em-val" style="color:var(--teal)">${fmtInt(totals.delivered)}</div><div class="em-label">Delivered</div></div>
-      <div class="email-metric"><div class="em-val" style="color:var(--yellow)">${fmtInt(totals.opens)}</div><div class="em-label">Opens</div></div>
-      <div class="email-metric"><div class="em-val" style="color:var(--lavender)">${fmtInt(totals.clicks)}</div><div class="em-label">Clicks</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--yellow)">${fmtInt(totals.opens)}</div><div class="em-label">Opens</div><div style="font-size:10px;color:var(--text-dim);">${totals.unique_opens ? fmtInt(totals.unique_opens) + ' unique' : ''}</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--lavender)">${fmtInt(totals.clicks)}</div><div class="em-label">Clicks</div><div style="font-size:10px;color:var(--text-dim);">${totals.unique_clicks ? fmtInt(totals.unique_clicks) + ' unique' : ''}</div></div>
       <div class="email-metric"><div class="em-val" style="color:var(--rose)">${fmtInt(totals.bounces)}</div><div class="em-label">Bounces</div></div>
-      <div class="email-metric"><div class="em-val" style="color:var(--green)">${fmtPct(openRate)}</div><div class="em-label">Open Rate</div></div>
-      <div class="email-metric"><div class="em-val" style="color:var(--lime)">${fmtPct(clickRate)}</div><div class="em-label">Click Rate</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--green)">${openRate != null ? fmtPct(openRate) : 'N/A'}</div><div class="em-label">Open Rate</div></div>
+      <div class="email-metric"><div class="em-val" style="color:var(--lime)">${clickRate != null ? fmtPct(clickRate) : 'N/A'}</div><div class="em-label">Click Rate</div></div>
     `;
   }
 
