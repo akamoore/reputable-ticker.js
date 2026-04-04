@@ -554,6 +554,14 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
   <!-- Critical flags / active recruiting detail -->
   <div id="overview-flags" style="margin-top:12px;margin-bottom:8px;"></div>
 
+  <!-- Community stats bar — always visible, always shows combined totals -->
+  <div id="community-bar" style="display:flex;align-items:center;gap:24px;padding:10px 18px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);margin-bottom:8px;flex-wrap:wrap;">
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-dim);">Community</span>
+    <span id="cb-participants" style="font-size:12px;color:var(--text-secondary);"></span>
+    <span id="cb-studies" style="font-size:12px;color:var(--text-secondary);"></span>
+    <span id="cb-onboarded" style="font-size:12px;color:var(--text-secondary);"></span>
+  </div>
+
   <!-- ============================================================ -->
   <!-- COLLAPSIBLE SECTIONS — all collapsed by default -->
   <!-- ============================================================ -->
@@ -1638,6 +1646,38 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       }
     });
     el.innerHTML = flags.length ? flags.join(' ') : '';
+  }
+
+  // ============================================================
+  // RENDER: Community Stats Bar (always combined totals)
+  // ============================================================
+  function renderCommunityBar() {
+    const cbPart = $('#cb-participants');
+    const cbStudies = $('#cb-studies');
+    const cbOnb = $('#cb-onboarded');
+    if (!cbPart) return;
+
+    // Always use ALL studies (ignoring view toggle), but respect year/time filter
+    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const yr = parseInt(selectedYear);
+      return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
+    });
+    const allLaunched = yearFiltered.filter(s => s.status !== 'coming');
+    const windowStudies = getStudiesInWindow(selectedDays);
+    const isAllTime = selectedYear === 'all' || selectedDays === Infinity;
+    const useWindow = !isAllTime && windowStudies.length > 0;
+    const studies = useWindow ? windowStudies : allLaunched;
+
+    const totalParticipants = allLaunched.reduce((a, s) => a + (s.joined || 0), 0);
+    const totalStudies = allLaunched.length;
+    const periodOnboarded = useWindow
+      ? studies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
+      : allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const periodLabel = isAllTime ? '' : ` (${selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d'})`;
+
+    cbPart.innerHTML = `<strong style="color:var(--text)">${fmtInt(totalParticipants)}</strong> total participants`;
+    cbStudies.innerHTML = `<strong style="color:var(--text)">${totalStudies}</strong> active studies`;
+    cbOnb.innerHTML = `<strong style="color:var(--text)">${fmtInt(periodOnboarded)}</strong> onboarded${periodLabel}`;
   }
 
   // ============================================================
@@ -3070,6 +3110,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     renderApiStatus();
     renderKPIs();
     renderOverviewFlags();
+    renderCommunityBar();
     renderFunnel();
     renderCharts();
     renderStudiesTable();
