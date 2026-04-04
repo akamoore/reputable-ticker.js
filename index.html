@@ -1086,6 +1086,19 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     },
 
     async fetchSendGridStats() {
+      // Try live Vercel API endpoint first (always fresh from SendGrid)
+      if (IS_VERCEL) {
+        try {
+          const resp = await fetch('/api/sendgrid-stats?days=90');
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data.daily?.length) return data;
+          }
+        } catch (err) {
+          console.warn('Live SendGrid API failed, falling back to cached:', err.message);
+        }
+      }
+      // Fall back to cached static JSON
       try {
         const resp = await fetch('./data/sendgrid-stats.json');
         if (!resp.ok) throw new Error(`SendGrid stats ${resp.status}`);
