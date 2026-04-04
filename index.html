@@ -2484,10 +2484,21 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const totals = dataService.getNewsletterTotals();
     const grid = $('#email-grid');
 
-    // Show data freshness indicator
+    // Show data freshness indicator with color-coded staleness
     const daily = dataService.getNewsletterDaily();
-    const lastDate = daily.length ? daily[daily.length - 1].date : null;
-    const staleNote = lastDate ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:12px;">Data through ${lastDate}${sendgridData?.updated_at ? ' · Last synced ' + new Date(sendgridData.updated_at).toLocaleDateString() : ''}</div>` : '';
+    const allDaily = sendgridData?.daily || [];
+    const lastDate = allDaily.length ? allDaily[allDaily.length - 1].date : null;
+    let staleNote = '';
+    if (lastDate) {
+      const daysSinceSync = Math.floor((Date.now() - new Date(lastDate + 'T23:59:59').getTime()) / 86400000);
+      const staleColor = daysSinceSync <= 1 ? 'var(--green)' : daysSinceSync <= 3 ? 'var(--yellow)' : 'var(--rose)';
+      const staleLabel = daysSinceSync <= 1 ? 'Current' : daysSinceSync <= 3 ? `${daysSinceSync}d behind` : `${daysSinceSync}d stale`;
+      staleNote = `<div style="font-size:11px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-flex;align-items:center;gap:5px;color:${staleColor};font-weight:600;"><span style="width:6px;height:6px;border-radius:50%;background:${staleColor};"></span>${staleLabel}</span>
+        <span style="color:var(--text-dim);">Data through ${lastDate}${sendgridData?.updated_at ? ' · Synced ' + new Date(sendgridData.updated_at).toLocaleDateString() : ''}</span>
+        ${daysSinceSync > 1 ? '<span style="color:var(--text-dim);font-size:10px;">(SendGrid sync may need re-enabling in GitHub Actions)</span>' : ''}
+      </div>`;
+    }
 
     if (!totals) {
       grid.innerHTML = `${staleNote}
