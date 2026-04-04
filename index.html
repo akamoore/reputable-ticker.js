@@ -1576,7 +1576,20 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
     if (selectedView === 'paid') {
       // ── PAID VIEW ──
-      const recruiting = sponsoredLaunched.filter(s => s.status === 'recruiting');
+      // For time-windowed views, count studies that were recruiting during the window
+      // (currently recruiting OR completed during the window — they were recruiting before completing)
+      const recruiting = useWindow
+        ? progressSet.filter(s => {
+            if (s.status === 'recruiting') return true;
+            // Study completed during the window = it was recruiting in this period
+            if (s.status === 'complete' && s.endDate) {
+              const end = new Date(s.endDate);
+              const windowStart = new Date(Date.now() - selectedDays * 86400000);
+              return !isNaN(end) && end >= windowStart;
+            }
+            return false;
+          })
+        : sponsoredLaunched.filter(s => s.status === 'recruiting');
       const recruitingNames = recruiting.map(s => s.name).join(', ') || 'None';
       // Recruitment progress uses windowed studies when a time filter is active
       const progressSet = useWindow ? kpiSponsored : sponsoredLaunched;
