@@ -520,6 +520,8 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
       <a href="attribution.html" style="font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill);">Attribution</a>
       <a href="nurture.html" style="font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill);">Email Nurture</a>
       <a href="segmentation.html" style="font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill);">Segmentation & Email</a>
+      <a href="participant-filter.html" style="font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill);">Participants</a>
+      <a href="sequences.html" style="font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill);">Sequences</a>
       <div id="api-status"></div>
       <div class="filter-bar" id="main-filter">
         <button class="filter-btn" data-year="all">All</button>
@@ -529,6 +531,32 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
         <button class="filter-btn active" data-days="30">30 Days</button>
         <button class="filter-btn" data-days="90">90 Days</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- RECRUITMENT SPRINT CHECKLIST -->
+  <!-- ============================================================ -->
+  <div id="sprint-section" style="margin-bottom:20px;padding:24px 28px;background:var(--bg-surface);border:1px solid var(--lime-border);border-radius:var(--radius-lg);position:relative;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px rgba(200,230,74,0.4);"></span>
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:var(--lime);">Recruitment Sprint</span>
+        </div>
+        <div id="sprint-week-label" style="font-size:18px;font-weight:600;color:var(--text);margin-top:4px;"></div>
+      </div>
+      <div style="text-align:right;">
+        <div id="sprint-progress-label" style="font-size:13px;color:var(--text-dim);margin-bottom:6px;"></div>
+        <div style="width:180px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
+          <div id="sprint-progress-bar" style="height:100%;background:var(--lime);border-radius:3px;transition:width 0.3s ease;width:0%;"></div>
+        </div>
+      </div>
+    </div>
+    <div id="sprint-tasks" style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
+      <div id="sprint-footer" style="font-size:11px;color:var(--text-dim);"></div>
+      <button id="sprint-add-task" style="background:none;border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-pill);padding:4px 14px;font-size:11px;color:var(--text-dim);cursor:pointer;">+ Add task</button>
     </div>
   </div>
 
@@ -3132,6 +3160,186 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       </div>
     `;
   }
+
+  // ============================================================
+  // RENDER ALL
+  // ============================================================
+  // ============================================================
+  // SPRINT CHECKLIST
+  // ============================================================
+  function getSprintWeekKey() {
+    const now = new Date();
+    const day = now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((day + 6) % 7));
+    return monday.toISOString().slice(0, 10);
+  }
+
+  function getSprintWeekLabel() {
+    const now = new Date();
+    const day = now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((day + 6) % 7));
+    return 'Week of ' + monday.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  }
+
+  function getDefaultSprintTasks() {
+    // Auto-generate study-specific tasks for studies with < 10% remaining
+    const urgentStudies = STUDIES.filter(s => {
+      if (s.status !== 'recruiting' || s.type === 'PUBLIC') return false;
+      const remaining = s.target - (s.onboarded || 0);
+      return remaining > 0 && remaining / s.target < 0.10;
+    });
+
+    const tasks = [
+      { id: 'd1', category: 'daily', text: 'Review new leads from Meta (check ad dashboard)', done: false },
+      { id: 'd2', category: 'daily', text: 'Check washout expirations — anyone ready for new study?', done: false },
+      { id: 'd3', category: 'daily', text: 'Reply to participant messages/emails', done: false },
+      { id: 'w1', category: 'weekly', text: 'Send nurture email batch to inactive participants', done: false },
+      { id: 'w2', category: 'weekly', text: 'Update study recruitment numbers in dashboard', done: false },
+      { id: 'w3', category: 'weekly', text: 'Review email sequence performance (open rates, exits)', done: false },
+      { id: 'w4', category: 'weekly', text: 'Check compliance scores — flag anyone below 50%', done: false },
+      { id: 'w5', category: 'weekly', text: 'Update lifecycle funnel numbers (manual entry for now)', done: false },
+    ];
+
+    urgentStudies.forEach(s => {
+      const remaining = s.target - (s.onboarded || 0);
+      tasks.push({
+        id: 's_' + s.id,
+        category: 'study',
+        text: `${s.name}: ${remaining} spot${remaining === 1 ? '' : 's'} remaining — push recruitment`,
+        done: false
+      });
+    });
+
+    return tasks;
+  }
+
+  function loadSprintData() {
+    const weekKey = getSprintWeekKey();
+    const stored = localStorage.getItem('sprint_' + weekKey);
+    if (stored) return JSON.parse(stored);
+    // Check for last week data for streak
+    return { tasks: getDefaultSprintTasks(), customTasks: [] };
+  }
+
+  function saveSprintData(data) {
+    const weekKey = getSprintWeekKey();
+    localStorage.setItem('sprint_' + weekKey, JSON.stringify(data));
+  }
+
+  function getLastWeekStats() {
+    const now = new Date();
+    const day = now.getDay();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((day + 6) % 7) - 7);
+    const lastKey = monday.toISOString().slice(0, 10);
+    const stored = localStorage.getItem('sprint_' + lastKey);
+    if (!stored) return null;
+    const data = JSON.parse(stored);
+    const all = [...(data.tasks || []), ...(data.customTasks || [])];
+    const done = all.filter(t => t.done).length;
+    return { done, total: all.length, pct: all.length > 0 ? Math.round(done / all.length * 100) : 0 };
+  }
+
+  function getStreak() {
+    let streak = 0;
+    const now = new Date();
+    const day = now.getDay();
+    const thisMonday = new Date(now);
+    thisMonday.setDate(now.getDate() - ((day + 6) % 7));
+    for (let w = 1; w <= 52; w++) {
+      const mon = new Date(thisMonday);
+      mon.setDate(thisMonday.getDate() - 7 * w);
+      const key = mon.toISOString().slice(0, 10);
+      const stored = localStorage.getItem('sprint_' + key);
+      if (!stored) break;
+      const data = JSON.parse(stored);
+      const all = [...(data.tasks || []), ...(data.customTasks || [])];
+      if (all.length > 0 && all.every(t => t.done)) streak++;
+      else break;
+    }
+    return streak;
+  }
+
+  function renderSprint() {
+    const data = loadSprintData();
+    const allTasks = [...data.tasks, ...(data.customTasks || [])];
+    const doneCount = allTasks.filter(t => t.done).length;
+    const totalCount = allTasks.length;
+    const pct = totalCount > 0 ? Math.round(doneCount / totalCount * 100) : 0;
+
+    $('#sprint-week-label').textContent = getSprintWeekLabel();
+    $('#sprint-progress-label').textContent = `${doneCount} of ${totalCount} tasks complete`;
+    $('#sprint-progress-bar').style.width = pct + '%';
+
+    const daily = allTasks.filter(t => t.category === 'daily');
+    const weekly = allTasks.filter(t => t.category === 'weekly');
+    const study = allTasks.filter(t => t.category === 'study');
+    const custom = allTasks.filter(t => t.category === 'custom');
+
+    function taskHTML(t) {
+      const checked = t.done ? 'checked' : '';
+      const dimStyle = t.done ? 'text-decoration:line-through;color:var(--text-dim);' : 'color:var(--text-secondary);';
+      return `<label style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;cursor:pointer;font-size:13px;${dimStyle}">
+        <input type="checkbox" ${checked} data-task-id="${t.id}" style="accent-color:var(--lime);margin-top:2px;cursor:pointer;">
+        <span>${esc(t.text)}</span>
+      </label>`;
+    }
+
+    function sectionHTML(title, tasks) {
+      if (!tasks.length) return '';
+      return `<div style="margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-dim);margin-bottom:6px;">${title}</div>
+        ${tasks.map(taskHTML).join('')}
+      </div>`;
+    }
+
+    const leftCol = sectionHTML('Daily Tasks', daily) + sectionHTML('Study-Specific', [...study, ...custom]);
+    const rightCol = sectionHTML('Weekly Tasks', weekly);
+    $('#sprint-tasks').innerHTML = `<div>${leftCol}</div><div>${rightCol}</div>`;
+
+    // Footer
+    const lastWeek = getLastWeekStats();
+    const streak = getStreak();
+    const parts = [];
+    if (lastWeek) parts.push(`Last week: ${lastWeek.done}/${lastWeek.total} completed (${lastWeek.pct}%)`);
+    parts.push(`Streak: ${streak} week${streak === 1 ? '' : 's'}`);
+    $('#sprint-footer').textContent = parts.join('  |  ');
+  }
+
+  // Sprint event handlers
+  document.addEventListener('change', e => {
+    if (e.target.matches('#sprint-section input[type="checkbox"]')) {
+      const id = e.target.dataset.taskId;
+      const data = loadSprintData();
+      const allTasks = [...data.tasks, ...(data.customTasks || [])];
+      const task = allTasks.find(t => t.id === id);
+      if (task) {
+        task.done = e.target.checked;
+        saveSprintData(data);
+        renderSprint();
+      }
+    }
+  });
+
+  $('#sprint-add-task').addEventListener('click', () => {
+    const text = prompt('Enter task description:');
+    if (!text || !text.trim()) return;
+    const data = loadSprintData();
+    if (!data.customTasks) data.customTasks = [];
+    data.customTasks.push({
+      id: 'c_' + Date.now(),
+      category: 'custom',
+      text: text.trim(),
+      done: false
+    });
+    saveSprintData(data);
+    renderSprint();
+  });
+
+  // Render sprint on load
+  renderSprint();
 
   // ============================================================
   // RENDER ALL
