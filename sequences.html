@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Sequences — Reputable Health</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--bg:#0a0a0a;--surface:#1a1a1a;--surface2:#141414;--border:rgba(255,255,255,0.08);--border-lime:rgba(200,230,74,0.2);--text:#fff;--text-dim:#999;--lime:#C8E64A;--lime-bg:rgba(200,230,74,0.08);--green:#34D399;--green-bg:rgba(52,211,153,0.12);--teal:#00B39F;--teal-bg:rgba(0,179,159,0.12);--blue:#60A5FA;--blue-bg:rgba(96,165,250,0.12);--indigo:#6C5CE7;--indigo-bg:rgba(108,92,231,0.12);--yellow:#FBBF24;--yellow-bg:rgba(251,191,36,0.12);--rose:#FB7185;--rose-bg:rgba(251,113,133,0.12);--lavender:#A78BFA;--lavender-bg:rgba(167,139,250,0.12);--charcoal:#222220;--radius-md:12px;--radius-lg:16px;--radius-pill:100px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);padding:20px;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(200,230,74,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(200,230,74,0.018) 1px,transparent 1px);background-size:52px 52px}
+    .container{max-width:1100px;margin:0 auto}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .header h1{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:700}
+    .subtitle{font-size:13px;color:var(--text-dim);margin-top:4px}
+    .nav-link{font-size:12px;color:var(--lime);text-decoration:none;border:1px solid var(--border-lime);padding:6px 14px;border-radius:var(--radius-pill)}
+    .nav-link:hover{background:var(--lime-bg)}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px}
+    .section h2{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .section h2 .ic{color:var(--lime);font-size:14px}
+    .badge{display:inline-block;padding:3px 10px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em}
+    .badge-green{background:var(--green-bg);color:var(--green)}
+    .badge-yellow{background:var(--yellow-bg);color:var(--yellow)}
+    .badge-blue{background:var(--blue-bg);color:var(--blue)}
+    .badge-lime{background:var(--lime-bg);color:var(--lime);border:1px solid var(--border-lime)}
+    .badge-rose{background:var(--rose-bg);color:var(--rose)}
+    .badge-gray{background:rgba(99,110,128,0.12);color:#636e80}
+
+    .btn-primary{background:var(--lime);color:var(--charcoal);border:none;border-radius:var(--radius-pill);padding:8px 20px;font-weight:600;font-size:12px;cursor:pointer;transition:all 0.2s ease}
+    .btn-primary:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,230,74,0.2)}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:var(--radius-pill);padding:8px 16px;font-size:12px;cursor:pointer;transition:all 0.2s ease}
+    .btn-outline:hover{border-color:rgba(255,255,255,0.2);color:var(--text)}
+    .btn-sm{padding:5px 12px;font-size:11px}
+    .btn-danger{background:transparent;border:1px solid var(--rose);color:var(--rose);border-radius:var(--radius-pill);padding:5px 12px;font-size:11px;cursor:pointer}
+    .btn-danger:hover{background:var(--rose-bg)}
+
+    input[type=text],input[type=number],textarea{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;width:100%}
+    input[type=text]:focus,input[type=number]:focus,textarea:focus{outline:none;border-color:rgba(200,230,74,0.3)}
+    textarea{resize:vertical;min-height:60px}
+    label{display:block;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;margin-bottom:6px}
+
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{background:rgba(255,255,255,0.03);color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;font-size:10px;text-align:left;padding:10px;border-bottom:1px solid var(--border)}
+    td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04)}
+
+    .seq-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px;margin-bottom:16px;transition:border-color 0.2s}
+    .seq-card:hover{border-color:rgba(255,255,255,0.14)}
+    .seq-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .seq-card-title{font-size:15px;font-weight:600}
+    .seq-card-stats{display:flex;gap:24px;margin-bottom:14px;flex-wrap:wrap}
+    .seq-stat{text-align:center}
+    .seq-stat .sv{font-size:20px;font-weight:700}
+    .seq-stat .sl{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em}
+    .seq-step-dist{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+    .seq-step-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--text-dim)}
+    .seq-step-chip strong{color:var(--text);font-weight:600}
+    .seq-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+    /* Builder */
+    .builder-section{margin-bottom:28px}
+    .builder-section h3{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .builder-section h3 .step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--lime-bg);color:var(--lime);font-size:11px;font-weight:700;border:1px solid var(--border-lime)}
+    .radio-group{display:flex;flex-direction:column;gap:8px}
+    .radio-option{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s}
+    .radio-option:hover{border-color:rgba(255,255,255,0.14)}
+    .radio-option.selected{border-color:var(--border-lime);background:var(--lime-bg)}
+    .radio-option input[type=radio]{accent-color:var(--lime);width:14px;height:14px}
+    .radio-option span{font-size:13px}
+
+    .timeline{position:relative;padding-left:28px}
+    .timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:rgba(255,255,255,0.08)}
+    .timeline-step{position:relative;margin-bottom:0}
+    .timeline-step .step-dot{position:absolute;left:-22px;top:16px;width:12px;height:12px;border-radius:50%;border:2px solid var(--lime);background:var(--bg);z-index:1}
+    .timeline-step .step-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:0}
+    .timeline-step .step-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .timeline-step .step-label{font-size:12px;font-weight:700;color:var(--lime)}
+    .timeline-step .day-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;background:rgba(255,255,255,0.04);padding:2px 8px;border-radius:4px}
+    .step-field{margin-bottom:10px}
+    .step-field:last-child{margin-bottom:0}
+    .step-field label{font-size:10px;margin-bottom:4px}
+    .step-field input{font-size:12px;padding:8px 10px}
+    .step-field .checkbox-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim)}
+    .step-field .checkbox-row input[type=checkbox]{accent-color:var(--lime)}
+
+    .wait-connector{display:flex;align-items:center;gap:10px;padding:8px 0 8px 6px;position:relative}
+    .wait-connector .wait-line{width:2px;height:20px;background:rgba(200,230,74,0.15)}
+    .wait-connector input[type=number]{width:60px;padding:5px 8px;font-size:12px;text-align:center}
+    .wait-connector span{font-size:11px;color:var(--text-dim)}
+
+    .exit-options{display:flex;flex-direction:column;gap:8px}
+    .exit-option{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-dim)}
+    .exit-option input[type=checkbox]{accent-color:var(--lime)}
+    .exit-option.checked{border-color:rgba(200,230,74,0.15);color:var(--text)}
+
+    .review-summary{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px}
+    .review-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+    .review-row:last-child{border-bottom:none}
+    .review-row .rk{color:var(--text-dim)}
+    .review-row .rv{font-weight:600}
+
+    /* Detail view */
+    .detail-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+    .detail-stat{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;text-align:center}
+    .detail-stat .ds-val{font-size:28px;font-weight:700;line-height:1.1}
+    .detail-stat .ds-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px}
+
+    .funnel-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+    .funnel-bar-label{width:80px;font-size:12px;font-weight:600;flex-shrink:0}
+    .funnel-bar-wrap{flex:1;background:rgba(255,255,255,0.04);border-radius:4px;height:28px;overflow:hidden}
+    .funnel-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:700;min-width:30px;transition:width 0.4s ease}
+    .funnel-bar-val{width:50px;text-align:right;font-size:13px;font-weight:700;flex-shrink:0}
+
+    .exit-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
+    .exit-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center}
+    .exit-card .ec-val{font-size:22px;font-weight:700}
+    .exit-card .ec-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px}
+
+    .chart-wrap{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px;margin-bottom:24px}
+    .chart-wrap h3{font-size:13px;font-weight:600;margin-bottom:12px}
+
+    /* Modal */
+    .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+    .modal-overlay.show{display:flex}
+    .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+    .modal h3{font-size:16px;font-weight:600;margin-bottom:16px}
+    .modal-preview{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;color:var(--text-dim);font-size:13px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+
+    .footer{text-align:center;font-size:11px;color:var(--text-dim);padding:24px 0}
+    .hidden{display:none !important}
+
+    @media(max-width:768px){
+      .seq-card-stats{gap:16px}
+      .detail-stats{grid-template-columns:1fr 1fr}
+      .exit-cards{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1 id="page-title">Email Sequences</h1>
+      <div class="subtitle" id="page-subtitle">Automated multi-step email campaigns</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <a href="index.html" class="nav-link">Command Center</a>
+      <a href="lifecycle.html" class="nav-link">Lifecycle</a>
+      <a href="attribution.html" class="nav-link">Attribution</a>
+      <a href="nurture.html" class="nav-link">Email Nurture</a>
+      <a href="segmentation.html" class="nav-link">Segmentation</a>
+    </div>
+  </div>
+
+  <!-- VIEW 1: Sequence List -->
+  <div id="view-list">
+    <div id="seq-cards"></div>
+    <div style="margin-top:20px">
+      <button class="btn-primary" onclick="showBuilder(null)" style="font-size:13px;padding:10px 24px">+ Create New Sequence</button>
+    </div>
+  </div>
+
+  <!-- VIEW 2: Sequence Builder -->
+  <div id="view-builder" class="hidden">
+    <div style="margin-bottom:20px">
+      <button class="btn-outline btn-sm" onclick="cancelBuilder()">&larr; Back to Sequences</button>
+    </div>
+
+    <!-- 1. Name -->
+    <div class="section">
+      <div class="builder-section">
+        <h3><span class="step-num">1</span> Sequence Name</h3>
+        <div class="step-field" style="margin-bottom:12px">
+          <label>Name</label>
+          <input type="text" id="b-name" placeholder="e.g. New Lead Welcome Series">
+        </div>
+        <div class="step-field">
+          <label>Description</label>
+          <textarea id="b-desc" placeholder="What does this sequence do?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Trigger -->
+    <div class="section">
+      <div class="builder-section">
+        <h3><span class="step-num">2</span> Trigger</h3>
+        <div class="radio-group" id="b-triggers">
+          <label class="radio-option" data-val="manual">
+            <input type="radio" name="trigger" value="manual"> <span>Manual enrollment (from filtered segment)</span>
+          </label>
+          <label class="radio-option" data-val="meta_lead">
+            <input type="radio" name="trigger" value="meta_lead"> <span>Auto-trigger: New lead from Meta ads</span>
+          </label>
+          <label class="radio-option" data-val="app_download">
+            <input type="radio" name="trigger" value="app_download"> <span>Auto-trigger: App downloaded</span>
+          </label>
+          <label class="radio-option" data-val="dormant">
+            <input type="radio" name="trigger" value="dormant"> <span>Auto-trigger: Went dormant (60+ days inactive)</span>
+          </label>
+          <label class="radio-option" data-val="washout_ending">
+            <input type="radio" name="trigger" value="washout_ending"> <span>Auto-trigger: Washout ending in 7 days</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Steps -->
+    <div class="section">
+      <div class="builder-section">
+        <h3><span class="step-num">3</span> Steps</h3>
+        <div class="timeline" id="b-steps-timeline"></div>
+        <div style="margin-top:16px">
+          <button class="btn-outline" onclick="addBuilderStep()">+ Add Step</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Exit Condition -->
+    <div class="section">
+      <div class="builder-section">
+        <h3><span class="step-num">4</span> Exit Condition</h3>
+        <div class="exit-options" id="b-exits">
+          <label class="exit-option"><input type="checkbox" value="app_download"> Participant downloads the app</label>
+          <label class="exit-option"><input type="checkbox" value="account_created"> Participant creates an account</label>
+          <label class="exit-option"><input type="checkbox" value="study_enrolled"> Participant enrolls in a study</label>
+          <label class="exit-option"><input type="checkbox" value="baseline_complete"> Participant completes baseline</label>
+          <label class="exit-option"><input type="checkbox" value="study_complete"> Participant completes study</label>
+          <label class="exit-option"><input type="checkbox" value="manual_only"> Manual removal only</label>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <input type="checkbox" id="b-stop-emails" checked style="accent-color:var(--lime)">
+            <span style="font-size:13px">Stop remaining emails when exit condition met</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <input type="checkbox" id="b-send-congrats" style="accent-color:var(--lime)">
+            <span style="font-size:13px">Send congratulations email on exit</span>
+          </div>
+          <div id="congrats-template-field" class="hidden" style="margin-top:8px;margin-left:26px">
+            <label>Congratulations Template ID</label>
+            <input type="text" id="b-congrats-template" placeholder="d-xxxxxxxxxxxxxxxx" style="max-width:300px">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Review -->
+    <div class="section">
+      <div class="builder-section">
+        <h3><span class="step-num">5</span> Review</h3>
+        <div class="review-summary" id="b-review"></div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
+          <button class="btn-outline" onclick="saveSequence('draft')">Save as Draft</button>
+          <button class="btn-primary" onclick="saveSequence('active')">Activate Sequence</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 3: Sequence Detail -->
+  <div id="view-detail" class="hidden">
+    <div style="margin-bottom:20px">
+      <button class="btn-outline btn-sm" onclick="showList()">&larr; Back to Sequences</button>
+    </div>
+    <div id="detail-content"></div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div class="modal-overlay" id="preview-modal">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3 style="margin:0">Email Preview</h3>
+        <button class="btn-outline btn-sm" onclick="closePreview()">Close</button>
+      </div>
+      <div class="modal-preview" id="preview-content">
+        <div style="font-size:32px;opacity:0.3">&#9993;</div>
+        <div>Email template preview will render here when a valid SendGrid template ID is connected.</div>
+        <div style="font-size:11px;margin-top:8px;color:rgba(255,255,255,0.3)">Template ID: <span id="preview-template-id">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Reputable Health &middot; Email Sequences &middot; reputable.health</div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────
+const TRIGGER_LABELS = {
+  manual: 'Manual enrollment (from filtered segment)',
+  meta_lead: 'Auto-trigger: New lead from Meta ads',
+  app_download: 'Auto-trigger: App downloaded',
+  dormant: 'Auto-trigger: Went dormant (60+ days inactive)',
+  washout_ending: 'Auto-trigger: Washout ending in 7 days'
+};
+
+const EXIT_LABELS = {
+  app_download: 'Participant downloads the app',
+  account_created: 'Participant creates an account',
+  study_enrolled: 'Participant enrolls in a study',
+  baseline_complete: 'Participant completes baseline',
+  study_complete: 'Participant completes study',
+  manual_only: 'Manual removal only'
+};
+
+let sequences = [
+  {
+    id: 1,
+    name: 'New Lead \u2192 App Download',
+    description: 'Welcome series for new Meta ad leads, nudging them toward downloading the app.',
+    status: 'active',
+    trigger: 'meta_lead',
+    enrolled: 142,
+    completed: 38,
+    exited: 12,
+    stepDistribution: [45, 32, 15, 12],
+    exitConditions: ['app_download'],
+    stopOnExit: true,
+    sendCongrats: false,
+    congratsTemplate: '',
+    steps: [
+      { subject: 'Welcome to Reputable', templateId: 'd-welcome001', useTemplateSubject: false, waitAfter: 2 },
+      { subject: 'See what others discovered', templateId: 'd-social-proof002', useTemplateSubject: false, waitAfter: 3 },
+      { subject: 'Your personalized study match', templateId: 'd-match003', useTemplateSubject: false, waitAfter: 5 },
+      { subject: 'Last chance to join', templateId: 'd-urgency004', useTemplateSubject: false, waitAfter: 0 }
+    ],
+    detail: {
+      active: 80,
+      enrollmentHistory: [8,12,10,14,9,11,7,13,10,8,15,9,6,10],
+      funnel: [142, 97, 53, 38],
+      exitReasons: { 'Completed goal': 38, 'Unsubscribed': 5, 'Bounced': 2, 'Manual removal': 5 },
+      participants: [
+        { alias: 'P-1042', step: 'Step 2', enrolled: '2026-03-18', status: 'Active' },
+        { alias: 'P-1098', step: 'Completed', enrolled: '2026-03-12', status: 'Completed' },
+        { alias: 'P-1105', step: 'Step 3', enrolled: '2026-03-20', status: 'Active' },
+        { alias: 'P-1111', step: 'Exited', enrolled: '2026-03-10', status: 'Exited' },
+        { alias: 'P-1123', step: 'Step 1', enrolled: '2026-03-28', status: 'Active' },
+        { alias: 'P-1130', step: 'Completed', enrolled: '2026-03-08', status: 'Completed' },
+        { alias: 'P-1147', step: 'Step 4', enrolled: '2026-03-15', status: 'Active' },
+        { alias: 'P-1152', step: 'Step 2', enrolled: '2026-03-22', status: 'Active' }
+      ]
+    }
+  },
+  {
+    id: 2,
+    name: 'Dormant Re-engagement',
+    description: 'Win-back series for participants inactive 60+ days.',
+    status: 'paused',
+    trigger: 'dormant',
+    enrolled: 67,
+    completed: 8,
+    exited: 3,
+    stepDistribution: [30, 20, 9],
+    exitConditions: ['app_download'],
+    stopOnExit: true,
+    sendCongrats: false,
+    congratsTemplate: '',
+    steps: [
+      { subject: 'We miss you', templateId: 'd-winback001', useTemplateSubject: false, waitAfter: 5 },
+      { subject: 'New studies available', templateId: 'd-newstudies002', useTemplateSubject: false, waitAfter: 9 },
+      { subject: 'Final check-in', templateId: 'd-final003', useTemplateSubject: false, waitAfter: 0 }
+    ],
+    detail: {
+      active: 56,
+      enrollmentHistory: [3,5,4,6,3,4,5,7,4,3,6,5,4,8],
+      funnel: [67, 37, 17, 8],
+      exitReasons: { 'Completed goal': 8, 'Unsubscribed': 2, 'Bounced': 0, 'Manual removal': 1 },
+      participants: [
+        { alias: 'P-2010', step: 'Step 1', enrolled: '2026-03-20', status: 'Active' },
+        { alias: 'P-2015', step: 'Step 2', enrolled: '2026-03-14', status: 'Active' },
+        { alias: 'P-2022', step: 'Completed', enrolled: '2026-03-02', status: 'Completed' },
+        { alias: 'P-2031', step: 'Step 1', enrolled: '2026-03-25', status: 'Active' },
+        { alias: 'P-2044', step: 'Exited', enrolled: '2026-03-05', status: 'Exited' },
+        { alias: 'P-2058', step: 'Step 3', enrolled: '2026-03-10', status: 'Active' }
+      ]
+    }
+  },
+  {
+    id: 3,
+    name: 'Washout Ending \u2192 Next Study',
+    description: 'Reminder series for participants whose washout period is ending soon.',
+    status: 'active',
+    trigger: 'washout_ending',
+    enrolled: 23,
+    completed: 15,
+    exited: 1,
+    stepDistribution: [5, 2],
+    exitConditions: ['study_enrolled'],
+    stopOnExit: true,
+    sendCongrats: true,
+    congratsTemplate: 'd-congrats-enroll001',
+    steps: [
+      { subject: 'Your washout is ending soon', templateId: 'd-washout001', useTemplateSubject: false, waitAfter: 5 },
+      { subject: 'Ready for your next study?', templateId: 'd-nextstudy002', useTemplateSubject: false, waitAfter: 0 }
+    ],
+    detail: {
+      active: 7,
+      enrollmentHistory: [1,2,1,3,2,1,2,1,2,1,1,2,2,2],
+      funnel: [23, 18, 15],
+      exitReasons: { 'Completed goal': 15, 'Unsubscribed': 0, 'Bounced': 0, 'Manual removal': 1 },
+      participants: [
+        { alias: 'P-3001', step: 'Step 1', enrolled: '2026-03-26', status: 'Active' },
+        { alias: 'P-3005', step: 'Completed', enrolled: '2026-03-15', status: 'Completed' },
+        { alias: 'P-3008', step: 'Step 2', enrolled: '2026-03-22', status: 'Active' },
+        { alias: 'P-3012', step: 'Completed', enrolled: '2026-03-10', status: 'Completed' },
+        { alias: 'P-3019', step: 'Step 1', enrolled: '2026-03-30', status: 'Active' }
+      ]
+    }
+  }
+];
+
+let editingId = null;
+let builderSteps = [];
+let enrollmentChart = null;
+
+// ──────────────────────────────────────────────
+// VIEW SWITCHING
+// ──────────────────────────────────────────────
+function showView(name) {
+  document.getElementById('view-list').classList.toggle('hidden', name !== 'list');
+  document.getElementById('view-builder').classList.toggle('hidden', name !== 'builder');
+  document.getElementById('view-detail').classList.toggle('hidden', name !== 'detail');
+}
+
+function showList() {
+  document.getElementById('page-title').textContent = 'Email Sequences';
+  document.getElementById('page-subtitle').textContent = 'Automated multi-step email campaigns';
+  showView('list');
+  renderList();
+}
+
+// ──────────────────────────────────────────────
+// VIEW 1: LIST
+// ──────────────────────────────────────────────
+function renderList() {
+  const container = document.getElementById('seq-cards');
+  container.innerHTML = '';
+  sequences.forEach(seq => {
+    const statusClass = seq.status === 'active' ? 'badge-green' : 'badge-yellow';
+    const statusLabel = seq.status === 'active' ? 'ACTIVE' : 'PAUSED';
+    const toggleLabel = seq.status === 'active' ? 'Pause' : 'Resume';
+    const totalDays = calcTotalDays(seq.steps);
+
+    let distHtml = seq.stepDistribution.map((n, i) =>
+      `<span class="seq-step-chip"><strong>${n}</strong> Step ${i + 1}</span>`
+    ).join('');
+
+    container.innerHTML += `
+      <div class="seq-card">
+        <div class="seq-card-header">
+          <div>
+            <span class="seq-card-title">${seq.name}</span>
+            <span class="badge ${statusClass}" style="margin-left:10px">${statusLabel}</span>
+          </div>
+          <span style="font-size:11px;color:var(--text-dim)">${seq.steps.length} steps &middot; ${totalDays} days</span>
+        </div>
+        <div class="seq-card-stats">
+          <div class="seq-stat"><div class="sv">${seq.enrolled}</div><div class="sl">Enrolled</div></div>
+          <div class="seq-stat"><div class="sv" style="color:var(--green)">${seq.completed}</div><div class="sl">Completed Goal</div></div>
+          <div class="seq-stat"><div class="sv" style="color:var(--rose)">${seq.exited}</div><div class="sl">Exited</div></div>
+        </div>
+        <div class="seq-step-dist">${distHtml}</div>
+        <div class="seq-actions">
+          <button class="btn-outline btn-sm" onclick="showDetail(${seq.id})">View Details</button>
+          <button class="btn-outline btn-sm" onclick="toggleStatus(${seq.id})">${toggleLabel}</button>
+          <button class="btn-outline btn-sm" onclick="showBuilder(${seq.id})">Edit</button>
+        </div>
+      </div>`;
+  });
+}
+
+function toggleStatus(id) {
+  const seq = sequences.find(s => s.id === id);
+  if (seq) {
+    seq.status = seq.status === 'active' ? 'paused' : 'active';
+    renderList();
+  }
+}
+
+function calcTotalDays(steps) {
+  return steps.reduce((sum, s) => sum + (s.waitAfter || 0), 0);
+}
+
+function calcDayForStep(steps, index) {
+  let day = 0;
+  for (let i = 0; i < index; i++) day += steps[i].waitAfter || 0;
+  return day;
+}
+
+// ──────────────────────────────────────────────
+// VIEW 2: BUILDER
+// ──────────────────────────────────────────────
+function showBuilder(id) {
+  editingId = id;
+  showView('builder');
+
+  if (id !== null) {
+    const seq = sequences.find(s => s.id === id);
+    document.getElementById('page-title').textContent = 'Edit Sequence';
+    document.getElementById('page-subtitle').textContent = seq.name;
+    document.getElementById('b-name').value = seq.name;
+    document.getElementById('b-desc').value = seq.description;
+
+    // Set trigger
+    document.querySelectorAll('#b-triggers input[type=radio]').forEach(r => {
+      r.checked = r.value === seq.trigger;
+      r.closest('.radio-option').classList.toggle('selected', r.checked);
+    });
+
+    // Set steps
+    builderSteps = JSON.parse(JSON.stringify(seq.steps));
+
+    // Set exit conditions
+    document.querySelectorAll('#b-exits input[type=checkbox]').forEach(cb => {
+      cb.checked = seq.exitConditions.includes(cb.value);
+      cb.closest('.exit-option').classList.toggle('checked', cb.checked);
+    });
+
+    document.getElementById('b-stop-emails').checked = seq.stopOnExit;
+    document.getElementById('b-send-congrats').checked = seq.sendCongrats;
+    document.getElementById('b-congrats-template').value = seq.congratsTemplate || '';
+    document.getElementById('congrats-template-field').classList.toggle('hidden', !seq.sendCongrats);
+  } else {
+    document.getElementById('page-title').textContent = 'Create New Sequence';
+    document.getElementById('page-subtitle').textContent = 'Build a multi-step email campaign';
+    document.getElementById('b-name').value = '';
+    document.getElementById('b-desc').value = '';
+    document.querySelectorAll('#b-triggers input[type=radio]').forEach(r => {
+      r.checked = false;
+      r.closest('.radio-option').classList.remove('selected');
+    });
+    builderSteps = [
+      { subject: '', templateId: '', useTemplateSubject: false, waitAfter: 2 },
+      { subject: '', templateId: '', useTemplateSubject: false, waitAfter: 3 },
+      { subject: '', templateId: '', useTemplateSubject: false, waitAfter: 0 }
+    ];
+    document.querySelectorAll('#b-exits input[type=checkbox]').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.exit-option').classList.remove('checked');
+    });
+    document.getElementById('b-stop-emails').checked = true;
+    document.getElementById('b-send-congrats').checked = false;
+    document.getElementById('b-congrats-template').value = '';
+    document.getElementById('congrats-template-field').classList.add('hidden');
+  }
+
+  renderBuilderSteps();
+  updateReview();
+  window.scrollTo(0, 0);
+}
+
+function renderBuilderSteps() {
+  const container = document.getElementById('b-steps-timeline');
+  container.innerHTML = '';
+
+  builderSteps.forEach((step, i) => {
+    const day = calcDayForStep(builderSteps, i);
+    const canRemove = builderSteps.length > 1;
+
+    let html = `<div class="timeline-step">
+      <div class="step-dot"></div>
+      <div class="step-card">
+        <div class="step-card-header">
+          <span class="step-label">Step ${i + 1}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="day-label">Send: Day ${day}</span>
+            ${canRemove ? `<button class="btn-danger" onclick="removeBuilderStep(${i})" style="padding:2px 8px;font-size:10px">&times;</button>` : ''}
+          </div>
+        </div>
+        <div class="step-field">
+          <label>SendGrid Template ID</label>
+          <input type="text" value="${step.templateId}" placeholder="d-xxxxxxxxxxxxxxxx" onchange="builderSteps[${i}].templateId=this.value;updateReview()">
+        </div>
+        <div class="step-field">
+          <div class="checkbox-row" style="margin-bottom:6px">
+            <input type="checkbox" ${step.useTemplateSubject ? 'checked' : ''} onchange="builderSteps[${i}].useTemplateSubject=this.checked;this.closest('.step-card').querySelector('.subject-input').classList.toggle('hidden',this.checked);updateReview()">
+            <span>Use template subject</span>
+          </div>
+          <div class="subject-input ${step.useTemplateSubject ? 'hidden' : ''}">
+            <label>Subject Line</label>
+            <input type="text" value="${escHtml(step.subject)}" placeholder="Email subject line" onchange="builderSteps[${i}].subject=this.value;updateReview()">
+          </div>
+        </div>
+        <div style="margin-top:8px">
+          <button class="btn-outline btn-sm" onclick="showPreview(${i})">Preview</button>
+        </div>
+      </div>
+    </div>`;
+
+    if (i < builderSteps.length - 1) {
+      html += `<div class="wait-connector">
+        <div style="display:flex;align-items:center;gap:8px;margin-left:6px">
+          <span style="font-size:11px;color:var(--text-dim)">Wait</span>
+          <input type="number" min="1" max="90" value="${step.waitAfter}" onchange="builderSteps[${i}].waitAfter=parseInt(this.value)||1;renderBuilderSteps();updateReview()">
+          <span style="font-size:11px;color:var(--text-dim)">days</span>
+        </div>
+      </div>`;
+    }
+
+    container.innerHTML += html;
+  });
+}
+
+function addBuilderStep() {
+  if (builderSteps.length > 0) {
+    const last = builderSteps[builderSteps.length - 1];
+    if (last.waitAfter === 0) last.waitAfter = 3;
+  }
+  builderSteps.push({ subject: '', templateId: '', useTemplateSubject: false, waitAfter: 0 });
+  renderBuilderSteps();
+  updateReview();
+}
+
+function removeBuilderStep(index) {
+  if (builderSteps.length <= 1) return;
+  builderSteps.splice(index, 1);
+  renderBuilderSteps();
+  updateReview();
+}
+
+function updateReview() {
+  const name = document.getElementById('b-name').value || '(unnamed)';
+  const trigger = document.querySelector('#b-triggers input[type=radio]:checked');
+  const triggerLabel = trigger ? TRIGGER_LABELS[trigger.value] : '(none selected)';
+  const totalDays = calcTotalDays(builderSteps);
+  const exitConds = [];
+  document.querySelectorAll('#b-exits input[type=checkbox]:checked').forEach(cb => {
+    exitConds.push(EXIT_LABELS[cb.value]);
+  });
+
+  document.getElementById('b-review').innerHTML = `
+    <div class="review-row"><span class="rk">Sequence name</span><span class="rv">${escHtml(name)}</span></div>
+    <div class="review-row"><span class="rk">Trigger</span><span class="rv">${escHtml(triggerLabel)}</span></div>
+    <div class="review-row"><span class="rk">Steps</span><span class="rv">${builderSteps.length} emails</span></div>
+    <div class="review-row"><span class="rk">Total duration</span><span class="rv">${totalDays} days</span></div>
+    <div class="review-row"><span class="rk">Exit conditions</span><span class="rv">${exitConds.length ? exitConds.join(', ') : '(none)'}</span></div>
+  `;
+}
+
+function saveSequence(statusType) {
+  const name = document.getElementById('b-name').value.trim();
+  if (!name) { alert('Please enter a sequence name.'); return; }
+
+  const trigger = document.querySelector('#b-triggers input[type=radio]:checked');
+  if (!trigger) { alert('Please select a trigger.'); return; }
+
+  const exitConds = [];
+  document.querySelectorAll('#b-exits input[type=checkbox]:checked').forEach(cb => exitConds.push(cb.value));
+
+  const seqData = {
+    name,
+    description: document.getElementById('b-desc').value.trim(),
+    status: statusType === 'active' ? 'active' : 'paused',
+    trigger: trigger.value,
+    steps: JSON.parse(JSON.stringify(builderSteps)),
+    exitConditions: exitConds,
+    stopOnExit: document.getElementById('b-stop-emails').checked,
+    sendCongrats: document.getElementById('b-send-congrats').checked,
+    congratsTemplate: document.getElementById('b-congrats-template').value.trim(),
+    enrolled: 0,
+    completed: 0,
+    exited: 0,
+    stepDistribution: builderSteps.map(() => 0),
+    detail: {
+      active: 0,
+      enrollmentHistory: new Array(14).fill(0),
+      funnel: builderSteps.map(() => 0).concat([0]),
+      exitReasons: { 'Completed goal': 0, 'Unsubscribed': 0, 'Bounced': 0, 'Manual removal': 0 },
+      participants: []
+    }
+  };
+
+  if (editingId !== null) {
+    const idx = sequences.findIndex(s => s.id === editingId);
+    if (idx !== -1) {
+      // Preserve runtime data when editing
+      seqData.enrolled = sequences[idx].enrolled;
+      seqData.completed = sequences[idx].completed;
+      seqData.exited = sequences[idx].exited;
+      seqData.stepDistribution = sequences[idx].stepDistribution;
+      seqData.detail = sequences[idx].detail;
+      seqData.id = editingId;
+      sequences[idx] = seqData;
+    }
+  } else {
+    seqData.id = Date.now();
+    sequences.push(seqData);
+  }
+
+  showList();
+}
+
+function cancelBuilder() {
+  showList();
+}
+
+// ──────────────────────────────────────────────
+// VIEW 3: DETAIL
+// ──────────────────────────────────────────────
+function showDetail(id) {
+  const seq = sequences.find(s => s.id === id);
+  if (!seq) return;
+
+  showView('detail');
+  document.getElementById('page-title').textContent = seq.name;
+  document.getElementById('page-subtitle').textContent = seq.description;
+
+  const statusClass = seq.status === 'active' ? 'badge-green' : 'badge-yellow';
+  const statusLabel = seq.status === 'active' ? 'ACTIVE' : 'PAUSED';
+  const d = seq.detail;
+  const totalDays = calcTotalDays(seq.steps);
+
+  // Stats
+  let html = `
+    <div style="margin-bottom:16px">
+      <span class="badge ${statusClass}">${statusLabel}</span>
+      <span style="font-size:12px;color:var(--text-dim);margin-left:10px">${seq.steps.length} steps &middot; ${totalDays} days &middot; Trigger: ${TRIGGER_LABELS[seq.trigger] || seq.trigger}</span>
+    </div>
+    <div class="detail-stats">
+      <div class="detail-stat"><div class="ds-val">${seq.enrolled}</div><div class="ds-label">Enrolled</div></div>
+      <div class="detail-stat"><div class="ds-val" style="color:var(--green)">${seq.completed}</div><div class="ds-label">At Goal</div></div>
+      <div class="detail-stat"><div class="ds-val" style="color:var(--rose)">${seq.exited}</div><div class="ds-label">Exited</div></div>
+      <div class="detail-stat"><div class="ds-val" style="color:var(--blue)">${d.active}</div><div class="ds-label">Active</div></div>
+    </div>`;
+
+  // Enrollment chart
+  html += `<div class="chart-wrap"><h3>Enrollments (last 14 days)</h3><canvas id="enrollment-chart" height="160"></canvas></div>`;
+
+  // Step funnel
+  const maxFunnel = Math.max(...d.funnel);
+  html += `<div class="section" style="margin-bottom:24px"><h2><span class="ic">&#9673;</span> Step Funnel</h2>`;
+  d.funnel.forEach((val, i) => {
+    const label = i < seq.steps.length ? `Step ${i + 1}` : 'Goal';
+    const pct = maxFunnel > 0 ? (val / maxFunnel * 100) : 0;
+    const color = i < seq.steps.length ? 'var(--lime)' : 'var(--green)';
+    html += `<div class="funnel-bar-row">
+      <span class="funnel-bar-label">${label}</span>
+      <div class="funnel-bar-wrap"><div class="funnel-bar-fill" style="width:${pct}%;background:${color}">${val}</div></div>
+      <span class="funnel-bar-val">${val}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Exit reasons
+  html += `<div class="section" style="margin-bottom:24px"><h2><span class="ic">&#9673;</span> Exit Reasons</h2><div class="exit-cards">`;
+  const exitColors = { 'Completed goal': 'var(--green)', 'Unsubscribed': 'var(--yellow)', 'Bounced': 'var(--rose)', 'Manual removal': 'var(--text-dim)' };
+  Object.entries(d.exitReasons).forEach(([reason, count]) => {
+    html += `<div class="exit-card"><div class="ec-val" style="color:${exitColors[reason] || 'var(--text)'}">${count}</div><div class="ec-label">${reason}</div></div>`;
+  });
+  html += `</div></div>`;
+
+  // Participant table
+  html += `<div class="section"><h2><span class="ic">&#9673;</span> Participants</h2>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Alias ID</th><th>Current Step</th><th>Enrolled Date</th><th>Status</th></tr></thead>
+      <tbody>`;
+  d.participants.forEach(p => {
+    let sColor = 'var(--text)';
+    if (p.status === 'Completed') sColor = 'var(--green)';
+    else if (p.status === 'Exited') sColor = 'var(--rose)';
+    else sColor = 'var(--blue)';
+    html += `<tr>
+      <td style="font-weight:600">${p.alias}</td>
+      <td>${p.step}</td>
+      <td>${p.enrolled}</td>
+      <td style="color:${sColor}">${p.status}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>
+    <div style="margin-top:16px"><button class="btn-primary btn-sm" onclick="alert('Enrollment from segment filter coming soon.')">Enroll More</button></div>
+  </div>`;
+
+  document.getElementById('detail-content').innerHTML = html;
+
+  // Render chart
+  setTimeout(() => {
+    if (enrollmentChart) { enrollmentChart.destroy(); enrollmentChart = null; }
+    const ctx = document.getElementById('enrollment-chart');
+    if (!ctx) return;
+    const labels = [];
+    const today = new Date();
+    for (let i = 13; i >= 0; i--) {
+      const dt = new Date(today);
+      dt.setDate(dt.getDate() - i);
+      labels.push(`${dt.getMonth()+1}/${dt.getDate()}`);
+    }
+    enrollmentChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Enrollments',
+          data: d.enrollmentHistory,
+          backgroundColor: 'rgba(200,230,74,0.3)',
+          borderColor: '#C8E64A',
+          borderWidth: 1,
+          borderRadius: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#666', font: { size: 10 } } },
+          y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#666', font: { size: 10 }, stepSize: 5 } }
+        }
+      }
+    });
+  }, 50);
+
+  window.scrollTo(0, 0);
+}
+
+// ──────────────────────────────────────────────
+// PREVIEW MODAL
+// ──────────────────────────────────────────────
+function showPreview(stepIndex) {
+  const step = builderSteps[stepIndex];
+  document.getElementById('preview-template-id').textContent = step.templateId || '(none)';
+  document.getElementById('preview-modal').classList.add('show');
+}
+
+function closePreview() {
+  document.getElementById('preview-modal').classList.remove('show');
+}
+
+// ──────────────────────────────────────────────
+// EVENT LISTENERS
+// ──────────────────────────────────────────────
+document.querySelectorAll('#b-triggers .radio-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#b-triggers .radio-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    opt.querySelector('input[type=radio]').checked = true;
+    updateReview();
+  });
+});
+
+document.querySelectorAll('#b-exits .exit-option').forEach(opt => {
+  opt.addEventListener('click', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    const cb = opt.querySelector('input[type=checkbox]');
+    cb.checked = !cb.checked;
+    opt.classList.toggle('checked', cb.checked);
+    updateReview();
+  });
+  opt.querySelector('input[type=checkbox]').addEventListener('change', function() {
+    opt.classList.toggle('checked', this.checked);
+    updateReview();
+  });
+});
+
+document.getElementById('b-send-congrats').addEventListener('change', function() {
+  document.getElementById('congrats-template-field').classList.toggle('hidden', !this.checked);
+});
+
+document.getElementById('preview-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePreview();
+});
+
+// ──────────────────────────────────────────────
+// UTILS
+// ──────────────────────────────────────────────
+function escHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ──────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────
+renderList();
+</script>
+</body>
+</html>

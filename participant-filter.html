@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participant Filter Panel — Reputable Health</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #1a1a1a;
+      --surface2: #141414;
+      --border: rgba(255,255,255,0.08);
+      --border-lime: rgba(200,230,74,0.2);
+      --text: #ffffff;
+      --text-dim: #999999;
+      --lime: #C8E64A;
+      --lime-light: #D9FF85;
+      --lime-dim: #A3C232;
+      --lime-bg: rgba(200,230,74,0.08);
+      --lime-glow: rgba(200,230,74,0.12);
+      --charcoal: #222220;
+      --teal: #00B39F;
+      --blue: #60A5FA;
+      --rose: #FB7185;
+      --amber: #FBBF24;
+      --emerald: #34D399;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-pill: 100px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,230,74,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,230,74,0.018) 1px, transparent 1px);
+      background-size: 52px 52px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(200,230,74,0.06) 0%, transparent 70%);
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-left h1 {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .header-left .subtitle {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      color: var(--lime);
+      text-decoration: none;
+      border: 1px solid var(--border-lime);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      transition: background 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--lime-bg);
+    }
+
+    /* Toggle tabs */
+    .toggle-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      background: var(--surface2);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      width: fit-content;
+      border: 1px solid var(--border);
+    }
+    .toggle-tab {
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-family: inherit;
+    }
+    .toggle-tab.active {
+      background: var(--lime);
+      color: var(--charcoal);
+    }
+    .toggle-tab:not(.active):hover {
+      color: var(--text);
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .filter-group {
+      position: relative;
+      min-width: 140px;
+      flex: 1;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .filter-select-btn {
+      width: 100%;
+      padding: 8px 32px 8px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .filter-select-btn::after {
+      content: '\25BC';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 9px;
+      color: var(--text-dim);
+    }
+    .filter-select-btn:hover {
+      border-color: rgba(200,230,74,0.3);
+    }
+    .filter-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 220px;
+      max-height: 280px;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      z-index: 100;
+      padding: 8px 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .filter-dropdown.open {
+      display: block;
+    }
+    .filter-dropdown label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+    .filter-dropdown label:hover {
+      background: var(--lime-bg);
+    }
+    .filter-dropdown input[type="checkbox"] {
+      accent-color: var(--lime);
+      width: 14px;
+      height: 14px;
+    }
+    .filter-dropdown .study-sub {
+      padding-left: 36px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .filter-dropdown .study-name {
+      font-weight: 600;
+      color: var(--lime);
+      padding: 8px 14px 4px;
+      font-size: 12px;
+      text-transform: none;
+      letter-spacing: 0;
+      cursor: default;
+    }
+    .filter-dropdown .study-name:hover {
+      background: transparent;
+    }
+    .age-inputs {
+      display: flex;
+      gap: 8px;
+    }
+    .age-input {
+      width: 70px;
+      padding: 8px 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .age-input::placeholder {
+      color: #555;
+    }
+    .age-input:focus {
+      outline: none;
+      border-color: rgba(200,230,74,0.3);
+    }
+
+    /* Filter actions */
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .btn-primary {
+      padding: 10px 28px;
+      background: var(--lime);
+      color: var(--charcoal);
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .btn-primary:hover {
+      background: var(--lime-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(217,255,133,0.3);
+    }
+    .btn-outline {
+      padding: 10px 28px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: #fff;
+      transform: translateY(-2px);
+    }
+    .reset-link {
+      color: var(--text-dim);
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .reset-link:hover {
+      color: var(--text);
+    }
+
+    /* Results area */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.4rem 1.25rem;
+      background: var(--lime-bg);
+      border: 1px solid rgba(217,255,133,0.3);
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--lime);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .count-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 10px rgba(200,230,74,0.5);
+    }
+
+    /* Table */
+    .table-wrap {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: var(--surface2);
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    tbody tr:hover {
+      background: rgba(200,230,74,0.03);
+    }
+    tbody td:first-child, thead th:first-child {
+      width: 40px;
+      text-align: center;
+    }
+    table input[type="checkbox"] {
+      accent-color: var(--lime);
+      width: 14px;
+      height: 14px;
+    }
+    .compliance-high { color: var(--emerald); }
+    .compliance-mid { color: var(--lime); }
+    .compliance-low { color: var(--amber); }
+    .compliance-poor { color: var(--rose); }
+    .alias-id { color: var(--text); font-weight: 600; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+    .stage-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .stage-active { background: rgba(52,211,153,0.12); color: #34D399; }
+    .stage-inactive { background: rgba(251,191,36,0.12); color: #FBBF24; }
+    .stage-dormant { background: rgba(251,113,133,0.12); color: #FB7185; }
+    .stage-never { background: rgba(99,110,128,0.12); color: #636e80; }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .page-btn {
+      padding: 6px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      color: var(--text-dim);
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .page-btn.active {
+      background: var(--lime);
+      color: var(--charcoal);
+      border-color: var(--lime);
+      font-weight: 600;
+    }
+    .page-btn:not(.active):hover {
+      border-color: rgba(200,230,74,0.3);
+      color: var(--text);
+    }
+    .page-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Action buttons */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    /* Saved segments */
+    .saved-segments {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+    .saved-segments h3 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .segment-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+    }
+    .segment-item .seg-name {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .segment-item .seg-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .segment-item .seg-count {
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .segment-item .seg-delete {
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 14px;
+      background: none;
+      border: none;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .segment-item .seg-delete:hover {
+      color: var(--rose);
+      background: rgba(251,113,133,0.1);
+    }
+    .no-segments {
+      color: var(--text-dim);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .filter-row { flex-direction: column; }
+      .filter-group { min-width: 100%; }
+      .header { flex-direction: column; }
+      .toggle-tabs { width: 100%; }
+      .toggle-tab { flex: 1; text-align: center; font-size: 11px; padding: 8px 12px; }
+    }
+
+    /* Scrollbar */
+    .filter-dropdown::-webkit-scrollbar { width: 6px; }
+    .filter-dropdown::-webkit-scrollbar-track { background: transparent; }
+    .filter-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Participant Filter Panel</h1>
+      <div class="subtitle">Reputable Health — Search, segment, and act on participant data</div>
+    </div>
+    <div class="header-right">
+      <a href="index.html" class="nav-link">Command Center</a>
+      <a href="lifecycle.html" class="nav-link">Lifecycle</a>
+      <a href="attribution.html" class="nav-link">Attribution</a>
+      <a href="nurture.html" class="nav-link">Email Nurture</a>
+      <a href="segmentation.html" class="nav-link">Segmentation</a>
+    </div>
+  </div>
+
+  <!-- Toggle tabs -->
+  <div class="toggle-tabs">
+    <button class="toggle-tab active" data-tab="in-app" onclick="switchTab('in-app')">In-App Participants</button>
+    <button class="toggle-tab" data-tab="outside" onclick="switchTab('outside')">Outside-App Leads</button>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <div class="filter-row">
+      <!-- Activity Status -->
+      <div class="filter-group">
+        <label>Activity Status</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="activity">
+          <label><input type="checkbox" value="Active"> Active (last 30d)</label>
+          <label><input type="checkbox" value="Inactive"> Inactive (30-60d)</label>
+          <label><input type="checkbox" value="Dormant"> Dormant (60+d)</label>
+          <label><input type="checkbox" value="Never Active"> Never Active</label>
+        </div>
+      </div>
+
+      <!-- Washout Status -->
+      <div class="filter-group">
+        <label>Washout Status</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="washout">
+          <label><input type="checkbox" value="Currently in washout"> Currently in washout</label>
+          <label><input type="checkbox" value="Ending in 7 days"> Ending in 7 days</label>
+          <label><input type="checkbox" value="Ending in 14 days"> Ending in 14 days</label>
+          <label><input type="checkbox" value="Not in washout"> Not in washout</label>
+        </div>
+      </div>
+
+      <!-- Study -->
+      <div class="filter-group">
+        <label>Study</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="study" id="study-dropdown"></div>
+      </div>
+
+      <!-- Compliance Score -->
+      <div class="filter-group">
+        <label>Compliance Score</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="compliance">
+          <label><input type="checkbox" value="90+"> 90%+</label>
+          <label><input type="checkbox" value="70-89"> 70-89%</label>
+          <label><input type="checkbox" value="50-69"> 50-69%</label>
+          <label><input type="checkbox" value="below50"> Below 50%</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-row" style="margin-top: 12px;">
+      <!-- Gender -->
+      <div class="filter-group">
+        <label>Gender</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="gender">
+          <label><input type="checkbox" value="Female"> Female</label>
+          <label><input type="checkbox" value="Male"> Male</label>
+          <label><input type="checkbox" value="Non-binary"> Non-binary</label>
+          <label><input type="checkbox" value="Not specified"> Not specified</label>
+        </div>
+      </div>
+
+      <!-- Age -->
+      <div class="filter-group">
+        <label>Age Range</label>
+        <div class="age-inputs">
+          <input type="number" class="age-input" id="age-min" placeholder="Min" min="18" max="99">
+          <input type="number" class="age-input" id="age-max" placeholder="Max" min="18" max="99">
+        </div>
+      </div>
+
+      <!-- Wearable -->
+      <div class="filter-group">
+        <label>Wearable</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="wearable">
+          <label><input type="checkbox" value="Oura Ring"> Oura Ring</label>
+          <label><input type="checkbox" value="WHOOP"> WHOOP</label>
+          <label><input type="checkbox" value="Apple Watch"> Apple Watch</label>
+          <label><input type="checkbox" value="Garmin"> Garmin</label>
+          <label><input type="checkbox" value="None"> None</label>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="filter-group">
+        <label>Location</label>
+        <button class="filter-select-btn" onclick="toggleDropdown(this)">All</button>
+        <div class="filter-dropdown" data-filter="location">
+          <label><input type="checkbox" value="US"> US</label>
+          <label><input type="checkbox" value="Canada"> Canada</label>
+          <label><input type="checkbox" value="UK"> UK</label>
+          <label><input type="checkbox" value="Other"> Other</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn-primary" onclick="applyFilters()">Apply Filters</button>
+      <button class="reset-link" onclick="resetFilters()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-header">
+    <div class="count-badge">
+      <span class="dot"></span>
+      <span id="result-count">280 participants match these filters</span>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="select-all" onchange="toggleSelectAll(this)"></th>
+          <th>Alias ID</th>
+          <th>Lifecycle Stage</th>
+          <th>Current Study</th>
+          <th>Last Active</th>
+          <th>Wearable</th>
+          <th>Age Bracket</th>
+          <th>Compliance Score</th>
+        </tr>
+      </thead>
+      <tbody id="participants-table"></tbody>
+    </table>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+
+  <!-- Action bar -->
+  <div class="action-bar">
+    <a href="nurture.html" class="btn-primary" style="text-decoration:none; display:inline-block;">Email This Segment</a>
+    <button class="btn-outline" onclick="exportCSV()">Export CSV</button>
+    <button class="btn-outline" onclick="saveSegment()">Save Segment</button>
+  </div>
+
+  <!-- Saved Segments -->
+  <div class="saved-segments">
+    <h3>Saved Segments</h3>
+    <div id="saved-segments-list">
+      <div class="no-segments">No saved segments yet. Apply filters and click "Save Segment" to create one.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ────────────────────────────────────────────
+// Constants
+// ────────────────────────────────────────────
+const STUDIES = [
+  'Melatonin Sleep Study',
+  'Pain Relief: ProleevaMax',
+  'Enhanced Brew Coffee',
+  'Nitrate Supplementation Berkeley Life',
+  'Peptide Supplement Sleep & Recovery',
+  'Rootless Women\'s Health',
+  'Sleep Mushrooms+',
+  'Tapping Solutions',
+  'HOP Box Women\'s Longevity',
+  'Deep Sleep Neuvana Xen',
+  'Vampire Serum Skin Renewal',
+  'The 30-Minute Reset',
+  'The 10K Steps Challenge',
+  'The Fasting Reset',
+  '7 Day Yoga Challenge',
+  'The 4-7-8 Effect'
+];
+
+const STUDY_SUB_OPTIONS = ['Currently enrolled', 'Completed', 'Eligible', 'Never joined'];
+const WEARABLES = ['Oura Ring', 'WHOOP', 'Apple Watch', 'Garmin', 'None'];
+const GENDERS = ['Female', 'Male', 'Non-binary', 'Not specified'];
+const LOCATIONS = ['US', 'Canada', 'UK', 'Other'];
+const ACTIVITY_STATUSES = ['Active', 'Inactive', 'Dormant', 'Never Active'];
+const WASHOUT_STATUSES = ['Currently in washout', 'Ending in 7 days', 'Ending in 14 days', 'Not in washout'];
+const PER_PAGE = 50;
+
+let currentTab = 'in-app';
+let allParticipants = [];
+let filteredParticipants = [];
+let currentPage = 1;
+let selectedIds = new Set();
+
+// ────────────────────────────────────────────
+// Data generation
+// ────────────────────────────────────────────
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function normalRandom(rng, mean, stddev) {
+  const u1 = rng();
+  const u2 = rng();
+  const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  return Math.round(mean + z * stddev);
+}
+
+function weightedPick(rng, items, weights) {
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = rng() * total;
+  for (let i = 0; i < items.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return items[i];
+  }
+  return items[items.length - 1];
+}
+
+function generateParticipants() {
+  const rng = seededRandom(42);
+  const participants = [];
+  const now = new Date('2026-04-02');
+
+  for (let i = 1; i <= 280; i++) {
+    const activity = weightedPick(rng, ACTIVITY_STATUSES, [60, 20, 15, 5]);
+    const wearable = weightedPick(rng, WEARABLES, [40, 25, 20, 10, 5]);
+    const gender = weightedPick(rng, GENDERS, [45, 40, 10, 5]);
+    const location = weightedPick(rng, LOCATIONS, [70, 15, 10, 5]);
+    const washout = weightedPick(rng, WASHOUT_STATUSES, [10, 8, 12, 70]);
+
+    let age = normalRandom(rng, 35, 9);
+    age = Math.max(22, Math.min(68, age));
+
+    const complianceTier = weightedPick(rng, ['90+', '70-89', '50-69', 'below50'], [30, 40, 20, 10]);
+    let compliance;
+    if (complianceTier === '90+') compliance = 90 + Math.floor(rng() * 11);
+    else if (complianceTier === '70-89') compliance = 70 + Math.floor(rng() * 20);
+    else if (complianceTier === '50-69') compliance = 50 + Math.floor(rng() * 20);
+    else compliance = 15 + Math.floor(rng() * 35);
+
+    const study = STUDIES[Math.floor(rng() * STUDIES.length)];
+    const studySub = STUDY_SUB_OPTIONS[Math.floor(rng() * STUDY_SUB_OPTIONS.length)];
+
+    // Last active date based on activity status
+    let daysAgo;
+    if (activity === 'Active') daysAgo = Math.floor(rng() * 30);
+    else if (activity === 'Inactive') daysAgo = 30 + Math.floor(rng() * 30);
+    else if (activity === 'Dormant') daysAgo = 60 + Math.floor(rng() * 30);
+    else daysAgo = null; // Never Active
+
+    let lastActive = null;
+    if (daysAgo !== null) {
+      lastActive = new Date(now);
+      lastActive.setDate(lastActive.getDate() - daysAgo);
+    }
+
+    participants.push({
+      id: 'P-' + String(i).padStart(4, '0'),
+      activity,
+      washout,
+      study,
+      studySub,
+      compliance,
+      gender,
+      age,
+      wearable,
+      location,
+      lastActive,
+      isOutside: rng() < 0.3 // 30% are outside-app leads for the second tab
+    });
+  }
+  return participants;
+}
+
+// ────────────────────────────────────────────
+// Study dropdown (special structure)
+// ────────────────────────────────────────────
+function buildStudyDropdown() {
+  const container = document.getElementById('study-dropdown');
+  let html = '';
+  STUDIES.forEach(study => {
+    html += `<div class="study-name">${study}</div>`;
+    STUDY_SUB_OPTIONS.forEach(sub => {
+      html += `<label class="study-sub"><input type="checkbox" value="${study}||${sub}"> ${sub}</label>`;
+    });
+  });
+  container.innerHTML = html;
+}
+
+// ────────────────────────────────────────────
+// Dropdown toggle
+// ────────────────────────────────────────────
+function toggleDropdown(btn) {
+  const dropdown = btn.nextElementSibling;
+  // Close all other dropdowns first
+  document.querySelectorAll('.filter-dropdown.open').forEach(d => {
+    if (d !== dropdown) d.classList.remove('open');
+  });
+  dropdown.classList.toggle('open');
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.filter-group')) {
+    document.querySelectorAll('.filter-dropdown.open').forEach(d => d.classList.remove('open'));
+  }
+});
+
+// Update button text when checkboxes change
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'checkbox' && e.target.closest('.filter-dropdown')) {
+    const dropdown = e.target.closest('.filter-dropdown');
+    const btn = dropdown.previousElementSibling;
+    const checked = dropdown.querySelectorAll('input[type="checkbox"]:checked');
+    if (checked.length === 0) {
+      btn.textContent = 'All';
+    } else if (checked.length <= 2) {
+      const labels = Array.from(checked).map(cb => {
+        const val = cb.value;
+        if (val.includes('||')) return val.split('||')[1];
+        return val;
+      });
+      btn.textContent = labels.join(', ');
+    } else {
+      btn.textContent = checked.length + ' selected';
+    }
+  }
+});
+
+// ────────────────────────────────────────────
+// Tab switching
+// ────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.toggle-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  applyFilters();
+}
+
+// ────────────────────────────────────────────
+// Filter logic
+// ────────────────────────────────────────────
+function getCheckedValues(filterName) {
+  const dropdown = document.querySelector(`.filter-dropdown[data-filter="${filterName}"]`);
+  if (!dropdown) return [];
+  return Array.from(dropdown.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+}
+
+function applyFilters() {
+  const activityVals = getCheckedValues('activity');
+  const washoutVals = getCheckedValues('washout');
+  const studyVals = getCheckedValues('study');
+  const complianceVals = getCheckedValues('compliance');
+  const genderVals = getCheckedValues('gender');
+  const wearableVals = getCheckedValues('wearable');
+  const locationVals = getCheckedValues('location');
+  const ageMin = document.getElementById('age-min').value ? parseInt(document.getElementById('age-min').value) : null;
+  const ageMax = document.getElementById('age-max').value ? parseInt(document.getElementById('age-max').value) : null;
+
+  // Parse study filters
+  const studyFilters = {};
+  studyVals.forEach(v => {
+    const [study, sub] = v.split('||');
+    if (!studyFilters[study]) studyFilters[study] = [];
+    studyFilters[study].push(sub);
+  });
+
+  filteredParticipants = allParticipants.filter(p => {
+    // Tab filter
+    if (currentTab === 'in-app' && p.isOutside) return false;
+    if (currentTab === 'outside' && !p.isOutside) return false;
+
+    if (activityVals.length && !activityVals.includes(p.activity)) return false;
+    if (washoutVals.length && !washoutVals.includes(p.washout)) return false;
+
+    // Study filter: match study name AND sub-option
+    if (Object.keys(studyFilters).length > 0) {
+      const matchStudy = studyFilters[p.study];
+      if (!matchStudy) return false;
+      if (!matchStudy.includes(p.studySub)) return false;
+    }
+
+    if (complianceVals.length) {
+      let match = false;
+      complianceVals.forEach(v => {
+        if (v === '90+' && p.compliance >= 90) match = true;
+        if (v === '70-89' && p.compliance >= 70 && p.compliance < 90) match = true;
+        if (v === '50-69' && p.compliance >= 50 && p.compliance < 70) match = true;
+        if (v === 'below50' && p.compliance < 50) match = true;
+      });
+      if (!match) return false;
+    }
+
+    if (genderVals.length && !genderVals.includes(p.gender)) return false;
+    if (wearableVals.length && !wearableVals.includes(p.wearable)) return false;
+    if (locationVals.length && !locationVals.includes(p.location)) return false;
+    if (ageMin !== null && p.age < ageMin) return false;
+    if (ageMax !== null && p.age > ageMax) return false;
+
+    return true;
+  });
+
+  currentPage = 1;
+  selectedIds.clear();
+  document.getElementById('select-all').checked = false;
+  renderResults();
+}
+
+function resetFilters() {
+  document.querySelectorAll('.filter-dropdown input[type="checkbox"]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('.filter-select-btn').forEach(btn => btn.textContent = 'All');
+  document.getElementById('age-min').value = '';
+  document.getElementById('age-max').value = '';
+  applyFilters();
+}
+
+// ────────────────────────────────────────────
+// Render results
+// ────────────────────────────────────────────
+function formatDate(d) {
+  if (!d) return '—';
+  const month = d.toLocaleString('en-US', { month: 'short' });
+  const day = d.getDate();
+  const year = d.getFullYear();
+  return `${month} ${day}, ${year}`;
+}
+
+function getAgeBracket(age) {
+  if (age < 25) return '22-24';
+  if (age < 30) return '25-29';
+  if (age < 35) return '30-34';
+  if (age < 40) return '35-39';
+  if (age < 45) return '40-44';
+  if (age < 50) return '45-49';
+  if (age < 55) return '50-54';
+  if (age < 60) return '55-59';
+  return '60-68';
+}
+
+function complianceClass(val) {
+  if (val >= 90) return 'compliance-high';
+  if (val >= 70) return 'compliance-mid';
+  if (val >= 50) return 'compliance-low';
+  return 'compliance-poor';
+}
+
+function stageClass(activity) {
+  if (activity === 'Active') return 'stage-active';
+  if (activity === 'Inactive') return 'stage-inactive';
+  if (activity === 'Dormant') return 'stage-dormant';
+  return 'stage-never';
+}
+
+function renderResults() {
+  const count = filteredParticipants.length;
+  document.getElementById('result-count').textContent = `${count} participant${count !== 1 ? 's' : ''} match${count === 1 ? 'es' : ''} these filters`;
+
+  const totalPages = Math.max(1, Math.ceil(count / PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * PER_PAGE;
+  const pageData = filteredParticipants.slice(start, start + PER_PAGE);
+
+  const tbody = document.getElementById('participants-table');
+  tbody.innerHTML = pageData.map(p => `
+    <tr>
+      <td><input type="checkbox" value="${p.id}" ${selectedIds.has(p.id) ? 'checked' : ''} onchange="toggleSelect(this)"></td>
+      <td class="alias-id">${p.id}</td>
+      <td><span class="stage-badge ${stageClass(p.activity)}">${p.activity}</span></td>
+      <td style="color: var(--text); max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${p.study}</td>
+      <td>${formatDate(p.lastActive)}</td>
+      <td>${p.wearable}</td>
+      <td>${getAgeBracket(p.age)}</td>
+      <td class="${complianceClass(p.compliance)}" style="font-weight: 600;">${p.compliance}%</td>
+    </tr>
+  `).join('');
+
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+  const container = document.getElementById('pagination');
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+  let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&laquo; Prev</button>`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (totalPages > 7 && i > 2 && i < totalPages - 1 && Math.abs(i - currentPage) > 1) {
+      if (i === 3 || i === totalPages - 2) html += `<span style="color:var(--text-dim);padding:0 4px;">...</span>`;
+      continue;
+    }
+    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+  }
+
+  html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next &raquo;</button>`;
+  container.innerHTML = html;
+}
+
+function goToPage(page) {
+  const totalPages = Math.ceil(filteredParticipants.length / PER_PAGE);
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  renderResults();
+  document.querySelector('.table-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ────────────────────────────────────────────
+// Selection
+// ────────────────────────────────────────────
+function toggleSelect(cb) {
+  if (cb.checked) selectedIds.add(cb.value);
+  else selectedIds.delete(cb.value);
+}
+
+function toggleSelectAll(cb) {
+  const start = (currentPage - 1) * PER_PAGE;
+  const pageData = filteredParticipants.slice(start, start + PER_PAGE);
+  pageData.forEach(p => {
+    if (cb.checked) selectedIds.add(p.id);
+    else selectedIds.delete(p.id);
+  });
+  document.querySelectorAll('#participants-table input[type="checkbox"]').forEach(c => c.checked = cb.checked);
+}
+
+// ────────────────────────────────────────────
+// Export CSV
+// ────────────────────────────────────────────
+function exportCSV() {
+  const data = filteredParticipants;
+  if (!data.length) { alert('No participants to export.'); return; }
+
+  const headers = ['Alias ID', 'Lifecycle Stage', 'Current Study', 'Study Status', 'Last Active', 'Wearable', 'Age', 'Age Bracket', 'Compliance Score', 'Gender', 'Location', 'Washout Status'];
+  const rows = data.map(p => [
+    p.id,
+    p.activity,
+    `"${p.study}"`,
+    p.studySub,
+    p.lastActive ? p.lastActive.toISOString().split('T')[0] : '',
+    p.wearable,
+    p.age,
+    getAgeBracket(p.age),
+    p.compliance + '%',
+    p.gender,
+    p.location,
+    p.washout
+  ]);
+
+  let csv = headers.join(',') + '\n';
+  rows.forEach(r => csv += r.join(',') + '\n');
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'reputable-participants-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ────────────────────────────────────────────
+// Save Segment
+// ────────────────────────────────────────────
+function saveSegment() {
+  const name = prompt('Enter a name for this segment:');
+  if (!name || !name.trim()) return;
+
+  const segments = JSON.parse(localStorage.getItem('reputable_segments') || '[]');
+
+  // Capture current filter state
+  const filterState = {
+    activity: getCheckedValues('activity'),
+    washout: getCheckedValues('washout'),
+    study: getCheckedValues('study'),
+    compliance: getCheckedValues('compliance'),
+    gender: getCheckedValues('gender'),
+    wearable: getCheckedValues('wearable'),
+    location: getCheckedValues('location'),
+    ageMin: document.getElementById('age-min').value,
+    ageMax: document.getElementById('age-max').value,
+    tab: currentTab
+  };
+
+  segments.push({
+    name: name.trim(),
+    count: filteredParticipants.length,
+    filters: filterState,
+    created: new Date().toISOString()
+  });
+
+  localStorage.setItem('reputable_segments', JSON.stringify(segments));
+  renderSavedSegments();
+}
+
+function deleteSavedSegment(index) {
+  const segments = JSON.parse(localStorage.getItem('reputable_segments') || '[]');
+  segments.splice(index, 1);
+  localStorage.setItem('reputable_segments', JSON.stringify(segments));
+  renderSavedSegments();
+}
+
+function renderSavedSegments() {
+  const segments = JSON.parse(localStorage.getItem('reputable_segments') || '[]');
+  const container = document.getElementById('saved-segments-list');
+
+  if (!segments.length) {
+    container.innerHTML = '<div class="no-segments">No saved segments yet. Apply filters and click "Save Segment" to create one.</div>';
+    return;
+  }
+
+  container.innerHTML = segments.map((s, i) => `
+    <div class="segment-item">
+      <span class="seg-name">${s.name}</span>
+      <div class="seg-meta">
+        <span class="seg-count">${s.count} participants</span>
+        <button class="seg-delete" onclick="deleteSavedSegment(${i})" title="Delete segment">&times;</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ────────────────────────────────────────────
+// Init
+// ────────────────────────────────────────────
+buildStudyDropdown();
+allParticipants = generateParticipants();
+filteredParticipants = allParticipants.filter(p => !p.isOutside);
+renderResults();
+renderSavedSegments();
+</script>
+</body>
+</html>
