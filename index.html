@@ -1610,7 +1610,12 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
       const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
       const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
-      const totalSpend = sumSpend(kpiSponsored);
+      // Total Ad Spend: prefer live Meta Ads daily data (already filtered by window/year)
+      // Falls back to pro-rated study spend only if no daily data is available
+      const metaDaily = dataService.getMetaAdsDaily();
+      const totalSpend = metaDaily.length > 0
+        ? metaDaily.reduce((a, d) => a + (d.spend || 0), 0)
+        : sumSpend(kpiSponsored);
       const paidKpi = kpiSponsored.filter(s => s.spend > 0);
       const paidOnb = sumMetric(paidKpi, 'onboarded');
       const allOnb = sumMetric(windowAll, 'onboarded');
@@ -1643,7 +1648,11 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const totalStudyCount = allLaunched.length;
       const totalParticipants = sumMetric(windowAll, 'joined');
       const totalOnboarded = sumMetric(windowAll, 'onboarded');
-      const totalSpend = sumSpend(windowAll);
+      // Prefer live Meta Ads daily data for accurate spend, fallback to pro-rated
+      const metaDailyAll = dataService.getMetaAdsDaily();
+      const totalSpend = metaDailyAll.length > 0
+        ? metaDailyAll.reduce((a, d) => a + (d.spend || 0), 0)
+        : sumSpend(windowAll);
       const blendedCPO = totalOnboarded > 0 ? totalSpend / totalOnboarded : 0;
 
       cards += `<div class="kpi-card"><div class="kpi-label">Total Studies (${kpiLabel})</div><div class="kpi-value indigo">${totalStudyCount}</div><div class="kpi-sub">${allLaunched.filter(s=>s.type!=='PUBLIC').length} sponsored · ${allLaunched.filter(s=>s.type==='PUBLIC').length} public</div></div>`;
