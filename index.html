@@ -1085,7 +1085,17 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     },
 
     getMetaAdsDaily() {
-      const allDaily = metaAdsData?.daily?.length ? metaAdsData.daily : (apiData?.metaAds?.daily || []);
+      // Merge static file (historical) + live API (recent), preferring API for overlapping dates
+      const staticDaily = metaAdsData?.daily || [];
+      const apiDaily = apiData?.metaAds?.daily || [];
+      let allDaily;
+      if (staticDaily.length && apiDaily.length) {
+        const apiDates = new Set(apiDaily.map(d => d.date));
+        const merged = staticDaily.filter(d => !apiDates.has(d.date)).concat(apiDaily);
+        allDaily = merged.sort((a, b) => a.date.localeCompare(b.date));
+      } else {
+        allDaily = staticDaily.length ? staticDaily : apiDaily;
+      }
       if (!allDaily.length) return [];
       if (selectedDays === Infinity) {
         if (selectedYear === 'all') return allDaily;
@@ -1166,7 +1176,17 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     },
 
     getAppsflyerDaily() {
-      const allDaily = appsflyerData?.daily?.length ? appsflyerData.daily : (apiData?.appsflyer?.daily || []);
+      // Merge static file (historical) + live API (recent), preferring API for overlapping dates
+      const staticDaily = appsflyerData?.daily || [];
+      const apiDaily = apiData?.appsflyer?.daily || [];
+      let allDaily;
+      if (staticDaily.length && apiDaily.length) {
+        const apiDates = new Set(apiDaily.map(d => d.date));
+        const merged = staticDaily.filter(d => !apiDates.has(d.date)).concat(apiDaily);
+        allDaily = merged.sort((a, b) => a.date.localeCompare(b.date));
+      } else {
+        allDaily = staticDaily.length ? staticDaily : apiDaily;
+      }
       if (!allDaily.length) return [];
       if (selectedDays === Infinity) {
         if (selectedYear === 'all') return allDaily;
