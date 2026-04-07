@@ -1631,9 +1631,11 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
       const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
       // Total Ad Spend: prefer live Meta Ads daily data (already filtered by window/year)
-      // Falls back to pro-rated study spend only if no daily data is available
+      // If we have ANY meta data anywhere, trust it — "no entries in window" means $0 spent.
+      // Only fall back to pro-rated study spend if Meta data is entirely unavailable.
       const metaDaily = dataService.getMetaAdsDaily();
-      const totalSpend = metaDaily.length > 0
+      const hasMetaData = (metaAdsData?.daily?.length || 0) > 0 || (apiData?.metaAds?.daily?.length || 0) > 0;
+      const totalSpend = hasMetaData
         ? metaDaily.reduce((a, d) => a + (d.spend || 0), 0)
         : sumSpend(kpiSponsored);
       const paidKpi = kpiSponsored.filter(s => s.spend > 0);
@@ -1674,9 +1676,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const totalStudyCount = allLaunched.length;
       const totalParticipants = sumMetric(windowAll, 'joined');
       const totalOnboarded = sumMetric(windowAll, 'onboarded');
-      // Prefer live Meta Ads daily data for accurate spend, fallback to pro-rated
+      // Prefer live Meta Ads daily data for accurate spend
       const metaDailyAll = dataService.getMetaAdsDaily();
-      const totalSpend = metaDailyAll.length > 0
+      const hasMetaDataAll = (metaAdsData?.daily?.length || 0) > 0 || (apiData?.metaAds?.daily?.length || 0) > 0;
+      const totalSpend = hasMetaDataAll
         ? metaDailyAll.reduce((a, d) => a + (d.spend || 0), 0)
         : sumSpend(windowAll);
       const blendedCPO = totalOnboarded > 0 ? totalSpend / totalOnboarded : 0;
