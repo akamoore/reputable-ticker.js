@@ -1644,7 +1644,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
       cards += `<div class="kpi-card"><div class="kpi-label">Recruiting</div><div class="kpi-value lime">${recruiting.length}</div><div class="kpi-sub">${recruiting.length > 0 ? recruitingNames : 'All studies at target'}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(progressOnboarded)} / ${fmtInt(progressTarget)} · ${sponsoredLaunched.length} sponsored</div></div>`;
-      cards += `<div class="kpi-card"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(totalSpend)}</div><div class="kpi-sub">${paidKpi.length} paid studies</div></div>`;
+      // Build paid study list with their pro-rated spend in the window
+      const paidStudyList = paidKpi.map(s => {
+        const studySpend = useWindow ? getWindowedSpend(s, selectedDays) : s.spend;
+        return { name: s.name, spend: studySpend };
+      }).sort((a, b) => b.spend - a.spend);
+      const paidStudyOptions = paidStudyList.map(s => `<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 12px;font-size:11px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,0.04);"><span>${esc(s.name)}</span><span style="color:var(--text);font-weight:600;">${fmt(s.spend)}</span></div>`).join('');
+      cards += `<div class="kpi-card" style="position:relative;"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(totalSpend)}</div><div class="kpi-sub" id="paid-studies-toggle" style="cursor:pointer;display:inline-flex;align-items:center;gap:4px;user-select:none;" onclick="const d=document.getElementById('paid-studies-list');d.style.display=d.style.display==='none'?'block':'none';this.querySelector('.chev').textContent=d.style.display==='none'?'▼':'▲';">${paidKpi.length} paid studies <span class="chev" style="font-size:9px;">▼</span></div><div id="paid-studies-list" style="display:none;position:absolute;top:100%;left:0;right:0;margin-top:6px;background:var(--bg-raised);border:1px solid var(--border);border-radius:8px;z-index:10;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.4);">${paidStudyOptions || '<div style="padding:10px;font-size:11px;color:var(--text-dim);">No paid studies in this window</div>'}</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">Blended CPO</div><div class="kpi-value green">${blendedCPO > 0 ? fmt(blendedCPO) : '—'}</div><div class="kpi-sub">spend ÷ all onboarded (${fmtInt(allOnb)})</div></div>`;
       cards += `<div class="kpi-card"><div class="kpi-label">Paid CPO</div><div class="kpi-value teal">${paidCPO > 0 ? fmt(paidCPO) : '—'}</div><div class="kpi-sub">spend ÷ paid study onboarded (${fmtInt(paidOnb)})</div></div>`;
 
