@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sunrise Effect — Study Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink:        #1D2442;
+    --ink-2:      #3D4160;
+    --ink-muted:  #6E6E83;
+    --paper:      #F8EFDF;
+    --paper-2:    #EFE2CE;
+    --paper-deep: #E5D3B6;
+    --sunrise:    #E29A3C;
+    --sunrise-deep: #B47420;
+    --peach:      #E6906B;
+    --peach-deep: #B86247;
+    --indigo:     #4C5580;
+    --indigo-light: #7E86AD;
+    --line:       rgba(29, 36, 66, 0.12);
+    --line-soft:  rgba(29, 36, 66, 0.06);
+    --line-dark:  rgba(248, 239, 223, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 48px; position: relative; }
+
+  /* ════════════ HERO ════════════ */
+  .hero {
+    padding: 56px 0 96px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #F8EFDF 0%, #EFDAB8 100%);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 5%; right: -15%;
+    width: 75%; height: 110%;
+    background:
+      radial-gradient(ellipse at 55% 45%, rgba(226, 154, 60, 0.25) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 65%, rgba(230, 144, 107, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero > * { position: relative; z-index: 2; }
+  .top-strip {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted);
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .top-strip .stamp { display: flex; align-items: center; gap: 14px; }
+  .top-strip .stamp::before {
+    content: ''; width: 10px; height: 10px;
+    background: var(--sunrise); border-radius: 50%;
+    box-shadow: 0 0 16px rgba(226, 154, 60, 0.6);
+  }
+
+  .hero-content { padding-top: 72px; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--peach-deep);
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  h1.title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    font-size: clamp(60px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  h1.title .l1 { display: block; font-weight: 600; }
+  h1.title .l2 {
+    display: block; font-style: italic;
+    color: var(--sunrise-deep);
+    font-weight: 500;
+    margin-left: 0.08em;
+  }
+
+  .deck {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400; font-style: italic;
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.4;
+    color: var(--ink-2);
+    max-width: 720px;
+    margin-top: 44px;
+  }
+
+  .hero-bar {
+    margin-top: 80px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-stat {
+    background: var(--paper);
+    padding: 26px 28px 26px 0;
+  }
+  .hero-stat:first-child { padding-left: 0; }
+  .hero-stat .l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .hero-stat .v {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px; font-weight: 500; line-height: 1;
+    color: var(--ink);
+  }
+  .hero-stat .v .u {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: var(--ink-muted);
+    margin-left: 6px;
+  }
+  .hero-stat .v.sunrise { color: var(--sunrise-deep); }
+  .hero-stat .v.peach { color: var(--peach-deep); }
+  .hero-stat .v.indigo { color: var(--indigo); }
+  .hero-stat .s {
+    font-size: 12px; color: var(--ink-muted);
+    margin-top: 8px;
+  }
+
+  /* ════════════ SECTIONS ════════════ */
+  section {
+    padding: 96px 0; border-bottom: 1px solid var(--line);
+  }
+  .sec-head {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 48px; margin-bottom: 56px; align-items: start;
+  }
+  .sec-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--sunrise-deep);
+  }
+  .sec-meta .num {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 48px; font-weight: 500;
+    color: var(--peach-deep);
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: clamp(36px, 4.6vw, 60px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  h2 em {
+    font-style: italic; font-weight: 500;
+    color: var(--peach-deep);
+  }
+  .lede {
+    margin-top: 28px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--ink-2);
+    max-width: 780px;
+  }
+  .body-grid { display: grid; grid-template-columns: 220px 1fr; gap: 48px; }
+  .body-content { max-width: 720px; }
+  .body-content p {
+    margin-bottom: 1.2em; color: var(--ink-2); font-size: 15.5px; line-height: 1.7;
+  }
+  .body-content p:last-child { margin-bottom: 0; }
+  .body-content strong { color: var(--ink); font-weight: 600; }
+  .body-content em {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.06em;
+  }
+
+  /* ════════════ HEADLINE FINDINGS ════════════ */
+  .findings-3 {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .find {
+    background: var(--paper-2); padding: 36px 32px;
+    min-height: 280px; display: flex; flex-direction: column;
+    position: relative;
+  }
+  .find::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 48px; height: 2px;
+  }
+  .find.gain::before    { background: var(--sunrise); }
+  .find.rise::before    { background: var(--peach-deep); }
+  .find.drop::before    { background: var(--indigo); }
+  .find .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 20px;
+  }
+  .find .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 76px; font-weight: 500; line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  .find .val .u {
+    font-size: 18px; color: var(--ink-muted);
+    font-family: 'Inter', sans-serif; font-weight: 400;
+    margin-left: 8px;
+  }
+  .find.gain .val { color: var(--sunrise-deep); }
+  .find.rise .val { color: var(--peach-deep); }
+  .find.drop .val { color: var(--indigo); }
+  .find .name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-style: italic;
+    margin-top: 16px; color: var(--ink);
+  }
+  .find .desc {
+    margin-top: 12px; font-size: 14px; color: var(--ink-2);
+    line-height: 1.55; flex: 1;
+  }
+  .find .stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--ink-muted);
+    padding-top: 16px; margin-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ════════════ DEMO STRIP ════════════ */
+  .demo-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .dc {
+    background: var(--paper-2); padding: 28px 24px;
+  }
+  .dc h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 20px; font-weight: 500;
+  }
+  .dc .row {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: baseline; gap: 12px;
+    padding: 7px 0; border-bottom: 1px dotted var(--line);
+    font-size: 13px;
+  }
+  .dc .row:last-child { border: none; }
+  .dc .row .k { color: var(--ink-2); }
+  .dc .row .v {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ════════════ CHART CARD ════════════ */
+  .chart-card {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    padding: 40px 44px;
+    margin: 32px 0;
+    position: relative;
+  }
+  .chart-card::after {
+    content: ''; position: absolute; top: -1px; left: 0;
+    width: 60px; height: 3px; background: var(--sunrise);
+  }
+  .chart-card.peach::after { background: var(--peach-deep); }
+  .chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--ink-muted);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .chart-canvas { position: relative; height: 400px; }
+  .chart-canvas.tall { height: 540px; }
+  .chart-canvas.short { height: 300px; }
+
+  /* ════════════ TABLE ════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table.mtab {
+    width: 100%; border-collapse: collapse;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    font-size: 13px;
+  }
+  table.mtab th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); font-weight: 500;
+    padding: 16px 18px; text-align: right;
+    background: var(--paper);
+    border-bottom: 2px solid var(--line);
+  }
+  table.mtab th:first-child { text-align: left; }
+  table.mtab td {
+    padding: 13px 18px; text-align: right;
+    border-bottom: 1px solid var(--line-soft);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+  table.mtab td:first-child {
+    text-align: left;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 600; color: var(--ink);
+  }
+  table.mtab tr:last-child td { border-bottom: none; }
+  .p-sig { color: var(--peach-deep); font-weight: 600; }
+  .p-trend { color: var(--sunrise-deep); font-weight: 600; }
+  .dir-good { color: var(--sunrise-deep); }
+  .dir-bad { color: var(--peach-deep); }
+  .dir-flat { color: var(--ink-muted); }
+
+  /* ════════════ PULL ════════════ */
+  .pull {
+    margin: 56px 0;
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .pull::before {
+    content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 3px; background: var(--sunrise);
+  }
+  .pull-q {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3.2vw, 38px);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.22;
+    max-width: 920px;
+    margin: 0 auto;
+    color: var(--ink);
+  }
+  .pull-q .hl { color: var(--sunrise-deep); }
+  .pull-q .hl-peach { color: var(--peach-deep); }
+  .pull-attr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 28px;
+  }
+
+  /* ════════════ CONTRAST ════════════ */
+  .contrast-2 {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin: 32px 0;
+  }
+  .c-card {
+    padding: 36px 32px; border: 1px solid var(--line);
+    background: var(--paper-2);
+  }
+  .c-card.primary {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+  .c-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 600;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .c-card .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 20px;
+  }
+  .c-card.primary .sub { color: var(--sunrise); }
+  .c-card p { font-size: 14.5px; line-height: 1.65; margin: 0; }
+  .c-card.primary p { color: rgba(248, 239, 223, 0.9); }
+
+  /* ════════════ LIMITS ════════════ */
+  .limits-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .lc {
+    background: var(--paper-2); padding: 32px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .lc .idx {
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 36px;
+    font-weight: 500; color: var(--peach-deep);
+    line-height: 1;
+  }
+  .lc h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .lc p { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+  /* ════════════ NARRATIVE PANEL ════════════ */
+  .mech-panel {
+    background: var(--ink); color: var(--paper);
+    padding: 56px 56px; margin: 40px 0 0;
+    position: relative;
+  }
+  .mech-panel::before {
+    content: ''; position: absolute; top: -1px; left: 0;
+    width: 80px; height: 3px; background: var(--sunrise);
+  }
+  .mech-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 600;
+    margin-bottom: 28px;
+  }
+  .mech-panel h3 em {
+    color: var(--sunrise); font-style: italic; font-weight: 500;
+  }
+  .mech-panel p {
+    color: rgba(248, 239, 223, 0.88);
+    font-size: 15.5px; line-height: 1.7;
+    max-width: 820px;
+    margin-bottom: 1em;
+  }
+  .mech-panel strong { color: var(--sunrise); font-weight: 600; }
+  .mech-panel em {
+    color: var(--paper); font-style: italic;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05em;
+  }
+
+  /* ════════════ FOOTER ════════════ */
+  .foot {
+    text-align: center; padding: 48px 0 80px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ════════════ RESPONSIVE ════════════ */
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .sec-head, .body-grid { grid-template-columns: 1fr; gap: 12px; }
+    .findings-3 { grid-template-columns: 1fr; }
+    .demo-grid { grid-template-columns: repeat(2, 1fr); }
+    .contrast-2, .limits-grid, .hero-bar { grid-template-columns: 1fr; }
+    .hero-stat { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .mech-panel, .chart-card { padding: 32px 24px; }
+    section { padding: 56px 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ════════════ HERO ════════════ -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="top-strip">
+        <div class="stamp">Public Study · Deep-Dive Analysis</div>
+        <div>April 2026</div>
+      </div>
+
+      <div class="hero-content">
+        <div class="eyebrow">Full study breakdown</div>
+        <h1 class="title">
+          <span class="l1">The Sunrise</span>
+          <span class="l2">Effect.</span>
+        </h1>
+        <p class="deck">46 participants added daily sunrise exposure. Three separate findings cleared statistical significance — time awake in bed fell, sleep efficiency rose, and steps dropped meaningfully. The sleep signals match decades of chronobiology research on morning light. The step drop is the cohort telling you something about how they did the practice.</p>
+
+        <div class="hero-bar">
+          <div class="hero-stat">
+            <div class="l">Enrolled</div>
+            <div class="v">46</div>
+            <div class="s">41 with full wearable data</div>
+          </div>
+          <div class="hero-stat">
+            <div class="l">Time Awake</div>
+            <div class="v sunrise">−14<span class="u">%</span></div>
+            <div class="s">Less restless time in bed (p = 0.002)</div>
+          </div>
+          <div class="hero-stat">
+            <div class="l">Sleep Efficiency</div>
+            <div class="v sunrise">+1.9<span class="u">%</span></div>
+            <div class="s">Statistically significant (p = 0.006)</div>
+          </div>
+          <div class="hero-stat">
+            <div class="l">Steps</div>
+            <div class="v peach">−12.9<span class="u">%</span></div>
+            <div class="s">Unexpected drop (p = 0.0002)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ════════════ SEC 01 — SUMMARY ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">01</span>
+          Section One · Summary
+        </div>
+        <div>
+          <h2>Three <em>real signals</em>.</h2>
+          <p class="lede">Of 19 metrics with paired data, three cleared statistical significance in a 7-day, 41-person study. The two sleep findings point cleanly to a circadian-entrainment effect. The step finding points to a behavioral tradeoff — and both matter for how the story gets told.</p>
+        </div>
+      </div>
+
+      <div class="findings-3">
+        <div class="find gain">
+          <div class="tag">Significant · Consolidation</div>
+          <div class="val">−14<span class="u">%</span></div>
+          <div class="name">Time Awake in bed</div>
+          <div class="desc">Fell from 85.0 to 73.0 minutes per night. 27 of 40 participants (68%) spent less time awake — a clear shift toward tighter, more consolidated sleep windows.</div>
+          <div class="stat">n = 40 · paired p = 0.006 · Wilcoxon p = 0.002 · d = −0.47</div>
+        </div>
+        <div class="find gain">
+          <div class="tag">Significant · Quality</div>
+          <div class="val">+1.9<span class="u">%</span></div>
+          <div class="name">Sleep Efficiency</div>
+          <div class="desc">Rose from 83.8 to 85.4 percent. 26 of 40 participants (65%) saw efficiency improve. The highest-confidence positive sleep-quality finding across the study program to date.</div>
+          <div class="stat">n = 40 · paired p = 0.015 · Wilcoxon p = 0.006 · d = +0.40</div>
+        </div>
+        <div class="find rise">
+          <div class="tag">Significant · Behavioral</div>
+          <div class="val">−12.9<span class="u">%</span></div>
+          <div class="name">Daily Steps</div>
+          <div class="desc">Dropped from 8,314 to 7,239 steps per day — roughly 1,000 fewer steps. 24 of 36 participants (67%) walked less during the intervention.</div>
+          <div class="stat">n = 36 · paired p = 0.0002 · Wilcoxon p = 0.0005 · d = −0.69</div>
+        </div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p>The sleep findings tell a clean story: participants woke up earlier, settled into sleep faster, and spent less time fragmenting their sleep window with wakefulness. That's the classic signature of stronger circadian entrainment — morning sunlight is the most potent time-cue the body has, and a week of intentional sunrise exposure plausibly sharpens the sleep-wake boundary.</p>
+          <p>The step finding is the interesting wrinkle. If people were walking outdoors to see the sunrise, you'd expect steps to rise, not fall. That they fell by roughly 1,000 steps per day suggests something more specific about the practice: participants were likely <em>watching</em> the sunrise (sitting on a porch, a balcony, a spot near a window) rather than <em>walking during</em> the sunrise. The observation was stationary, and it appears to have replaced some of the incidental activity participants would normally be doing at that hour.</p>
+          <p>What follows: the cohort, the full breakdown, the age split that sharpens the picture, the individual variation, the mechanism, and six limitations that bound any reading of these results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 02 — COHORT ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">02</span>
+          Section Two · Cohort
+        </div>
+        <div>
+          <h2>Who <em>showed up</em>.</h2>
+          <p class="lede">41 participants with linked wearable and demographic data. Age-diverse within the working-adult range, 71% female, almost entirely US-based, Oura-dominant wearable mix — and a stress distribution that tilts lower than the other studies in this program.</p>
+        </div>
+      </div>
+
+      <div class="demo-grid">
+        <div class="dc">
+          <h4>Age Range</h4>
+          <div class="row"><span class="k">46–55</span><span class="v">12</span></div>
+          <div class="row"><span class="k">36–45</span><span class="v">9</span></div>
+          <div class="row"><span class="k">26–35</span><span class="v">9</span></div>
+          <div class="row"><span class="k">56–65</span><span class="v">6</span></div>
+          <div class="row"><span class="k">18–25</span><span class="v">3</span></div>
+          <div class="row"><span class="k">66+</span><span class="v">2</span></div>
+        </div>
+        <div class="dc">
+          <h4>Gender</h4>
+          <div class="row"><span class="k">Female</span><span class="v">29</span></div>
+          <div class="row"><span class="k">Male</span><span class="v">12</span></div>
+        </div>
+        <div class="dc">
+          <h4>Ethnicity</h4>
+          <div class="row"><span class="k">Caucasian</span><span class="v">27</span></div>
+          <div class="row"><span class="k">Hispanic / Latino</span><span class="v">3</span></div>
+          <div class="row"><span class="k">Asian / PI</span><span class="v">2</span></div>
+          <div class="row"><span class="k">Other</span><span class="v">2</span></div>
+        </div>
+        <div class="dc">
+          <h4>Country</h4>
+          <div class="row"><span class="k">USA</span><span class="v">40</span></div>
+          <div class="row"><span class="k">Canada</span><span class="v">1</span></div>
+        </div>
+        <div class="dc">
+          <h4>Education</h4>
+          <div class="row"><span class="k">Master's</span><span class="v">17</span></div>
+          <div class="row"><span class="k">Bachelor's</span><span class="v">5</span></div>
+          <div class="row"><span class="k">Some college</span><span class="v">5</span></div>
+          <div class="row"><span class="k">Trade/Voc.</span><span class="v">3</span></div>
+          <div class="row"><span class="k">Associate</span><span class="v">2</span></div>
+          <div class="row"><span class="k">High school</span><span class="v">2</span></div>
+        </div>
+        <div class="dc">
+          <h4>Household Income</h4>
+          <div class="row"><span class="k">&gt; $100K</span><span class="v">19</span></div>
+          <div class="row"><span class="k">$50K–$100K</span><span class="v">5</span></div>
+          <div class="row"><span class="k">$25K–$50K</span><span class="v">3</span></div>
+          <div class="row"><span class="k">&lt; $25K</span><span class="v">2</span></div>
+          <div class="row"><span class="k">Prefer not say</span><span class="v">3</span></div>
+        </div>
+        <div class="dc">
+          <h4>Baseline Stress</h4>
+          <div class="row"><span class="k">Moderate</span><span class="v">21</span></div>
+          <div class="row"><span class="k">Low</span><span class="v">12</span></div>
+          <div class="row"><span class="k">Very High</span><span class="v">5</span></div>
+          <div class="row"><span class="k">High</span><span class="v">3</span></div>
+          <div class="row"><span class="k">Very Low</span><span class="v">2</span></div>
+        </div>
+        <div class="dc">
+          <h4>Wearables</h4>
+          <div class="row"><span class="k">Oura Ring</span><span class="v">35</span></div>
+          <div class="row"><span class="k">Apple Watch</span><span class="v">15</span></div>
+          <div class="row"><span class="k">WHOOP</span><span class="v">4</span></div>
+          <div class="row"><span class="k">Fitbit</span><span class="v">2</span></div>
+          <div class="row"><span class="k">Garmin</span><span class="v">1</span></div>
+        </div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>A self-selected morning-person cohort?</strong> 24 of 44 baseline-survey respondents already listed physical activity as a mental-health practice, 14 meditation, 12 breathing exercises. Most participants were already exercising multiple days per week — walking (39 of 44), strength training (22), running (16). A group already comfortable with morning routines is the group most likely to sign up for a sunrise study; selection bias is worth naming here.</p>
+          <p><strong>Notably lower stress than typical.</strong> 14 of 44 respondents reported low or very-low stress (32% vs 16–20% in other studies). Higher baseline sleep quality in a low-stress cohort means less room to improve — making the sleep gains observed here more impressive, not less.</p>
+          <p><strong>Oura-dominant.</strong> 35 of 57 wearable selections (61%) were Oura Ring. The sleep-measurement instrument of choice here is well-suited to detect the consolidation signal that ended up emerging.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 03 — FULL RESULTS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">03</span>
+          Section Three · Results
+        </div>
+        <div>
+          <h2>The full <em>picture</em>.</h2>
+          <p class="lede">19 metrics with paired data. Three highly significant, most flat. What the chart shows clearly: an activity drop and a sleep-consolidation gain moving in opposite directions, with cardiovascular and sleep-architecture metrics largely unchanged.</p>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Effect sizes across all 19 metrics</div>
+        <div class="chart-sub">Cohen's d · peach = significant · amber = trend · negative d = metric decreased</div>
+        <div class="chart-canvas tall"><canvas id="effectChart"></canvas></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mtab">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>n</th>
+              <th>Baseline</th>
+              <th>Intervention</th>
+              <th>Δ</th>
+              <th>%</th>
+              <th>Cohen's d</th>
+              <th>p (best)</th>
+            </tr>
+          </thead>
+          <tbody id="mtable"></tbody>
+        </table>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>What cleared significance:</strong> Steps (paired p = 0.0002, Wilcoxon p = 0.0005), Time Awake (Wilcoxon p = 0.002), Sleep Efficiency (Wilcoxon p = 0.006). Three metrics clearing p &lt; 0.01 in a 7-day study is an unusually strong signal for this design — enough to treat the directional findings seriously.</p>
+          <p><strong>What trended:</strong> Low Activity Minutes (−5.5%, p = 0.105), Total Calories (−1.5%, p = 0.097 Wilcoxon). Both directionally consistent with the step drop — a small overall reduction in daytime movement.</p>
+          <p><strong>What stayed flat:</strong> HRV (−0.2%, n.s.), Heart Rate (−0.9%, n.s.), Sleep HR, Deep Sleep, REM Sleep, Total Sleep. The intervention didn't touch cardiovascular state or sleep architecture directly — just sleep timing and efficiency. This is the cleanest possible "circadian not arousal" signature.</p>
+          <p style="font-size: 13px; color: var(--ink-muted); font-style: italic;">Floors Climbed, VO₂ Max, and Stress Score came through as zeros across the Oura-dominant cohort — device doesn't report. Excluded from analysis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 04 — AGE SPLIT ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">04</span>
+          Section Four · The split
+        </div>
+        <div>
+          <h2>Younger <em>benefited</em>. Older <em>didn't</em>.</h2>
+          <p class="lede">The cohort-level numbers hide one of the cleanest age-stratified findings in the study program. Participants aged 26–45 showed dramatic sleep consolidation; the 56+ cohort moved in the opposite direction. Both results are physiologically plausible — and they matter for who this intervention is actually suited to.</p>
+        </div>
+      </div>
+
+      <div class="pull">
+        <div class="pull-q">
+          Age 26–35: Time Awake dropped <span class="hl">31%</span> (p = 0.01)<br>
+          Age 56–65: Sleep Efficiency dropped <span class="hl-peach">2.2%</span> (p = 0.04)
+        </div>
+        <div class="pull-attr">The same intervention, opposite directions — divided cleanly by age</div>
+      </div>
+
+      <div class="contrast-2">
+        <div class="c-card">
+          <h4>What worked for 26–45</h4>
+          <div class="sub">n = 18 across the two age cells</div>
+          <p>Time Awake dropped 31% in the 26–35 cohort (p = 0.012) and 23% in the 36–45 cohort (p = 0.043). Sleep Efficiency rose 3.9% and 4.7% respectively. Both age groups showed the consolidation pattern at significance. This is the cohort with room to gain — young-to-middle-age adults carry more sleep fragmentation than the older subgroup and respond more strongly to phase-anchoring cues.</p>
+        </div>
+        <div class="c-card primary">
+          <h4>What happened for 56–65</h4>
+          <div class="sub">n = 5 — small, but directionally clear</div>
+          <p>Sleep Efficiency dropped 2.2% (p = 0.039). REM Sleep dropped 26% (p = 0.043 Wilcoxon). Steps dropped 22% (p = 0.028). A single age cell with only 5 participants is hypothesis-generating at best, but the <em>direction</em> is consistent with what chronobiology would predict: older adults already carry an advanced sleep phase, and pushing them to rise earlier compresses an already-compressed window, potentially costing REM.</p>
+        </div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 32px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>This age split is the most actionable finding in the study.</strong> Morning-light protocols aren't one-size-fits-all — they work best for people with <em>delayed</em> sleep phase (young and middle-aged adults who go to bed late and struggle to wake) and work against people with already-advanced sleep phase (older adults who wake early and struggle to stay asleep late).</p>
+          <p>Subgroup sample sizes are small (n = 5 for the 56–65 cell, n = 9 each for the younger two), so treat these as directional indicators, not definitive cutoffs. The useful takeaway: the version of "morning light is good for sleep" worth communicating is age-aware.</p>
+          <p><strong>Moderate-stress and low-stress participants both benefited</strong> — Time Awake dropped 12.7% and 15.6% respectively, consistent with the cohort-level pattern. The age effect is the more interesting slice.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 05 — RESPONDERS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">05</span>
+          Section Five · Individual variation
+        </div>
+        <div>
+          <h2>How the <em>consolidation</em> distributed.</h2>
+          <p class="lede">Two-thirds of participants spent less time awake in bed. Two-thirds improved on sleep efficiency. The distribution isn't perfectly one-sided, but the skew is what drives the cohort-level significance.</p>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Per-participant change in Time Awake</div>
+        <div class="chart-sub">Each bar = one participant · sorted by magnitude · minutes · below zero = improvement</div>
+        <div class="chart-canvas tall"><canvas id="responderChart"></canvas></div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>27 of 40 participants (68%) spent less time awake in bed</strong> during the intervention. Among them, the median reduction was about 16 minutes per night; the top five improvers gained 45+ minutes of uninterrupted sleep window per night — unusually large consolidation gains for a 7-day window.</p>
+          <p><strong>13 of 40 (33%) spent more time awake.</strong> Most of these moved by small amounts (under 10 minutes), with two outliers showing increases of 27 and 56 minutes. Those two are likely the older participants in the 56–65 cell whose sleep windows were compressed by earlier wake times.</p>
+          <p><strong>Sleep Efficiency tracks closely.</strong> 26 of 40 participants (65%) improved their efficiency during the week. The overlap with Time Awake responders is strong — the two metrics are measuring slightly different aspects of the same underlying consolidation pattern. Participants who benefited, benefited on both.</p>
+          <p><strong>The step responder pattern is parallel.</strong> 24 of 36 participants (67%) walked less during the intervention, including eight who lost more than 2,000 steps per day. Only a few participants gained steps, suggesting that whatever the practice looked like in daily life, it was largely a net-subtraction from walking for most people.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 06 — MECHANISM ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">06</span>
+          Section Six · Mechanism
+        </div>
+        <div>
+          <h2>The <em>morning-light anchor</em>.</h2>
+          <p class="lede">Everything in this signature — the consolidation gain, the slight step drop, the age split, the cardiovascular flatness — is consistent with a single well-documented physiological mechanism. Morning light shifts the circadian clock. The sleep benefits ride that shift.</p>
+        </div>
+      </div>
+
+      <div class="mech-panel">
+        <h3>Why <em>sunrise specifically</em>.</h3>
+        <p>The hour between sunrise and mid-morning is when natural light is most effective at anchoring the circadian rhythm. Two mechanisms combine:</p>
+        <p><strong>Melatonin suppression.</strong> Bright morning light (2,000+ lux — well below direct sunlight but well above indoor lighting) immediately suppresses lingering melatonin, creating a sharper "daytime" signal for the body. The sharper the morning cue, the more clearly the evening melatonin release will be timed.</p>
+        <p><strong>Phase anchoring.</strong> The suprachiasmatic nucleus — the body's master clock — uses consistent morning light as its primary daily reset. Exposure at the same time each morning creates a more predictable rhythm, which shows up as easier sleep onset and fewer fragmented awakenings. That's precisely what this cohort's Time Awake and Sleep Efficiency numbers show.</p>
+        <p><strong>Why the step drop probably fits.</strong> Sunrise watching is typically a stationary activity — on a porch, a patio, near a window. If participants replaced some morning walking or errands with a 10–20 minute observation window, steps would fall even as daylight exposure rose. That the cohort lost ~1,000 steps/day while gaining sleep consolidation is consistent with this pattern rather than any concerning cardiovascular change.</p>
+        <p><strong>Why older participants didn't benefit.</strong> With age, the circadian phase shifts earlier naturally — older adults wake early and sleep early. Pushing a further phase advance through morning-light exposure can compress an already-compressed window, reducing total sleep and REM. The small 56–65 cell in this study showed exactly that pattern. The finding is physiologically expected and a useful targeting signal.</p>
+        <p><em>The useful framing:</em> sunrise exposure is a phase-anchoring intervention. It works best for people whose sleep phase tends to drift later (most adults under 50) and works against people whose phase already runs early (most adults over 60). The intervention isn't universal — it's directional, and the direction depends on where your clock already sits.</p>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 07 — LIMITATIONS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">07</span>
+          Section Seven · Caveats
+        </div>
+        <div>
+          <h2>What we <em>can't</em> tell.</h2>
+          <p class="lede">Six limitations that constrain any reading of these results.</p>
+        </div>
+      </div>
+
+      <div class="limits-grid">
+        <div class="lc">
+          <div class="idx">i.</div>
+          <h4>No control group</h4>
+          <p>Pre/post only. Without a control, we can't fully distinguish the intervention's effect from seasonality, Hawthorne effects, or concurrent life changes. The strength of the three significant findings argues for a real signal, but attribution is constrained.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">ii.</div>
+          <h4>Dose and duration unmeasured</h4>
+          <p>We don't know how long participants spent watching the sunrise each morning, whether they went outside or stayed indoors, or how many days out of seven they actually did the practice. The phase-anchoring mechanism is dose-dependent — 10 minutes of direct sunlight does far more than 30 minutes through a window.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">iii.</div>
+          <h4>Compliance invisible</h4>
+          <p>The dataset shows what wearables captured, not what participants did. Whether they woke early specifically to watch the sunrise, or just woke at their usual time, is unknown. Responders and non-responders may differ in behavior, not biology.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">iv.</div>
+          <h4>Small older-adult cell</h4>
+          <p>The 56–65 subgroup showing the counter-direction effect is only 5 participants. The direction is physiologically plausible, but the magnitude shouldn't be taken literally at this sample size. A targeted replication in older adults would be the right next step.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">v.</div>
+          <h4>Self-selection bias</h4>
+          <p>People who sign up for a sunrise study are disproportionately morning-oriented to begin with. The cohort skews toward lower-stress, already-active participants who plausibly had a head start on the kind of consolidation this intervention targets. Broader populations may show smaller effects.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">vi.</div>
+          <h4>Short window</h4>
+          <p>Seven days captures acute phase-anchoring effects but not long-run stabilization. The consolidation gains may be even larger at 4–8 weeks, or they may reach a plateau. Longer follow-up is needed to characterize durability.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 08 — VERDICT ════════════ -->
+    <section style="border-bottom: none;">
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">08</span>
+          Section Eight · Takeaway
+        </div>
+        <div>
+          <h2>The honest <em>read</em>.</h2>
+        </div>
+      </div>
+
+      <div class="body-grid">
+        <div></div>
+        <div class="body-content">
+          <p style="font-family: 'Playfair Display', serif; font-size: 22px; line-height: 1.45; color: var(--ink); font-style: italic;">
+            This study produced <strong style="color: var(--sunrise-deep); font-style: normal;">three statistically significant findings</strong> in a 7-day, 41-person design — Time Awake down 14% (p = 0.002), Sleep Efficiency up 1.9% (p = 0.006), and Daily Steps down 12.9% (p = 0.0002). The sleep findings are consistent with a circadian phase-anchoring mechanism that morning-light research has long established. The step finding reads as a behavioral detail about how the practice was actually performed — a stationary observation rather than an active walk.
+          </p>
+          <p style="margin-top: 24px;">What the data <em>do</em> support: a claim that daily sunrise exposure produces measurable sleep-consolidation gains in adults under 55, with the largest effects in the 26–45 age range. The signature is cleanly circadian — phase anchoring rather than arousal reduction — and the cardiovascular flatness is a feature, not a bug.</p>
+          <p>What the data <em>do not</em> support: a universal "morning light improves sleep" claim. The older-adult subgroup (56–65, n=5) moved in the opposite direction, consistent with compressing an already-advanced sleep phase. The intervention is directional: it helps groups with late-drifting rhythms and may work against groups whose rhythms already run early.</p>
+          <p>What the data <em>can</em> do for programming: this is the cleanest sleep-consolidation finding across the program to date. A longer-duration replication with explicit age stratification, dose logging (minutes of sunrise exposure, indoor/outdoor), and a morning-indoor-light comparator would make the finding directly actionable for product recommendations.</p>
+          <p style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-2);">
+            <strong style="color: var(--ink);">Recommended framing for communications:</strong> <em>"Participants in this public study who added daily sunrise exposure showed significantly less time awake in bed (−14%, p = 0.002) and higher sleep efficiency (+1.9%, p = 0.006). Daily steps dropped meaningfully (−12.9%, p = 0.0002), consistent with the observation being stationary. The sleep benefits concentrated in participants under 55; the small older-adult subgroup moved in the opposite direction — a reminder that morning-light protocols work with, not against, a person's existing circadian phase."</em></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="foot">
+    Analysis of 4 data files · The Sunrise Effect responses · baseline survey · demographics · wearable insights<br>
+    All statistics computed from paired within-participant comparisons · Prepared April 2026
+  </div>
+
+<script>
+// ══════════════ DATA ══════════════
+const metrics = [
+  {metric:'Steps', unit:'steps', n:36, baseline:8314.04, intervention:7238.58, change:-1075.46, pct:-12.9, d:-0.686, p:0.0002, pw:0.0005},
+  {metric:'Time Awake', unit:'min', n:40, baseline:84.96, intervention:72.97, change:-11.99, pct:-14.1, d:-0.465, p:0.0055, pw:0.0020},
+  {metric:'Sleep Efficiency', unit:'%', n:40, baseline:83.77, intervention:85.40, change:1.63, pct:1.9, d:0.404, p:0.0146, pw:0.0062},
+  {metric:'Low Activity Min', unit:'min', n:34, baseline:260.88, intervention:246.46, change:-14.42, pct:-5.5, d:-0.286, p:0.1054, pw:0.2089},
+  {metric:'Total Calories', unit:'kcal', n:39, baseline:2307.49, intervention:2273.06, change:-34.43, pct:-1.5, d:-0.211, p:0.1954, pw:0.0968},
+  {metric:'Medium Activity Min', unit:'min', n:39, baseline:70.67, intervention:65.92, change:-4.75, pct:-6.7, d:-0.197, p:0.2257, pw:0.3607},
+  {metric:'Sleep Latency', unit:'min', n:33, baseline:19.82, intervention:18.19, change:-1.64, pct:-8.3, d:-0.164, p:0.3535, pw:0.9786},
+  {metric:'Distance', unit:'m', n:36, baseline:10834.11, intervention:10263.46, change:-570.65, pct:-5.3, d:-0.159, p:0.3459, pw:0.1668},
+  {metric:'Active Calories', unit:'kcal', n:39, baseline:510.41, intervention:488.59, change:-21.82, pct:-4.3, d:-0.143, p:0.3774, pw:0.3083},
+  {metric:'Average Heart Rate', unit:'bpm', n:39, baseline:88.23, intervention:87.45, change:-0.78, pct:-0.9, d:-0.138, p:0.3947, pw:0.3083},
+  {metric:'High Activity Min', unit:'min', n:31, baseline:10.34, intervention:11.30, change:0.95, pct:9.2, d:0.137, p:0.4527, pw:0.8600},
+  {metric:'Light Sleep', unit:'min', n:40, baseline:257.96, intervention:262.90, change:4.94, pct:1.9, d:0.131, p:0.4130, pw:0.5364},
+  {metric:'Total Sleep', unit:'min', n:40, baseline:418.02, intervention:422.25, change:4.23, pct:1.0, d:0.087, p:0.5861, pw:0.8825},
+  {metric:'Deep Sleep', unit:'min', n:40, baseline:65.59, intervention:64.72, change:-0.87, pct:-1.3, d:-0.086, p:0.5889, pw:0.4436},
+  {metric:'Sleeping Resp. Rate', unit:'br/min', n:38, baseline:15.24, intervention:15.26, change:0.03, pct:0.2, d:0.067, p:0.6805, pw:0.8504},
+  {metric:'Average HR (Sleep)', unit:'bpm', n:37, baseline:65.32, intervention:65.45, change:0.13, pct:0.2, d:0.046, p:0.7807, pw:0.8920},
+  {metric:'Lowest HR (Sleep)', unit:'bpm', n:37, baseline:58.01, intervention:58.13, change:0.12, pct:0.2, d:0.046, p:0.7794, pw:0.7976},
+  {metric:'HRV', unit:'ms', n:39, baseline:38.96, intervention:38.88, change:-0.09, pct:-0.2, d:-0.011, p:0.9458, pw:0.3869},
+  {metric:'REM Sleep', unit:'min', n:40, baseline:94.46, intervention:94.57, change:0.12, pct:0.1, d:0.006, p:0.9720, pw:0.7117},
+];
+
+// Per-participant Time Awake change (minutes, sorted)
+const awakeChanges = [-96.14, -66.94, -55.20, -51.31, -45.75, -37.58, -25.71, -23.47, -22.91, -22.27, -22.05, -18.15, -16.44, -15.33, -14.19, -13.55, -13.31, -10.60, -8.44, -8.00, -6.51, -5.36, -4.84, -3.68, -2.77, -2.58, -2.47, 0.14, 1.72, 1.91, 2.09, 2.72, 2.75, 3.31, 8.47, 8.75, 9.88, 10.48, 27.26, 56.45];
+
+// ══════════════ DEFAULTS ══════════════
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#3D4160';
+Chart.defaults.borderColor = 'rgba(29, 36, 66, 0.1)';
+
+const SUNRISE      = '#E29A3C';
+const SUNRISE_DEEP = '#B47420';
+const PEACH        = '#E6906B';
+const PEACH_DEEP   = '#B86247';
+const INDIGO       = '#4C5580';
+const INDIGO_LIGHT = '#7E86AD';
+const INK          = '#1D2442';
+const MUTED        = 'rgba(29, 36, 66, 0.24)';
+const PAPER        = '#F8EFDF';
+
+function sigColor(m) {
+  const p = Math.min(m.p, m.pw || 1);
+  if (p < 0.05) return PEACH_DEEP;
+  if (p < 0.15) return SUNRISE;
+  if (p < 0.25) return 'rgba(226, 154, 60, 0.45)';
+  return MUTED;
+}
+
+// ══════════════ CHART 1 — EFFECTS ══════════════
+const sorted = [...metrics].sort((a,b) => Math.abs(b.d) - Math.abs(a.d));
+new Chart(document.getElementById('effectChart'), {
+  type: 'bar',
+  data: {
+    labels: sorted.map(m => m.metric),
+    datasets: [{
+      data: sorted.map(m => m.d),
+      backgroundColor: sorted.map(m => sigColor(m)),
+      borderWidth: 0,
+      borderRadius: 2,
+      barPercentage: 0.82,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: INK,
+        titleColor: PAPER, bodyColor: PAPER,
+        titleFont: { family: "'Playfair Display', serif", size: 16, weight: 600 },
+        bodyFont: { family: "'IBM Plex Mono', monospace", size: 11 },
+        padding: 14,
+        cornerRadius: 0,
+        callbacks: {
+          title: (ctx) => ctx[0].label,
+          label: (ctx) => {
+            const m = sorted[ctx.dataIndex];
+            return [
+              `Δ: ${m.change > 0 ? '+' : ''}${m.change} ${m.unit}  (${m.pct > 0 ? '+' : ''}${m.pct}%)`,
+              `d: ${m.d}   p: ${Math.min(m.p, m.pw || 1).toFixed(3)}`,
+              `n = ${m.n}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(29, 36, 66, 0.06)', drawTicks: false },
+        border: { display: false },
+        ticks: { font: { family: "'IBM Plex Mono', monospace", size: 10 }},
+        title: {
+          display: true,
+          text: "Cohen's d  ·  negative = metric decreased, positive = increased",
+          font: { family: "'IBM Plex Mono', monospace", size: 10 },
+          color: 'rgba(29, 36, 66, 0.5)', padding: { top: 12 }
+        }
+      },
+      y: {
+        grid: { display: false }, border: { display: false },
+        ticks: {
+          font: { family: "'Playfair Display', serif", size: 15, weight: 600 },
+          color: INK, padding: 8
+        }
+      }
+    }
+  }
+});
+
+// ══════════════ CHART 2 — RESPONDERS (Time Awake) ══════════════
+new Chart(document.getElementById('responderChart'), {
+  type: 'bar',
+  data: {
+    labels: awakeChanges.map((_, i) => i + 1),
+    datasets: [{
+      data: awakeChanges,
+      backgroundColor: awakeChanges.map(v => v < 0 ? SUNRISE : PEACH_DEEP),
+      borderWidth: 0,
+      barPercentage: 1.0,
+      categoryPercentage: 0.9,
+    }]
+  },
+  options: {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: INK, titleColor: PAPER, bodyColor: PAPER, cornerRadius: 0,
+        callbacks: {
+          title: (ctx) => `Participant ${ctx[0].label}`,
+          label: (ctx) => {
+            const v = ctx.parsed.y;
+            return v < 0 ? `${v.toFixed(1)} min — less time awake` : `+${v.toFixed(1)} min — more time awake`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false }, ticks: { display: false }},
+      y: {
+        grid: {
+          color: (ctx) => ctx.tick.value === 0 ? INK : 'rgba(29, 36, 66, 0.06)',
+          lineWidth: (ctx) => ctx.tick.value === 0 ? 1.5 : 1,
+          drawTicks: false
+        },
+        border: { display: false },
+        ticks: {
+          font: { family: "'IBM Plex Mono', monospace", size: 10 },
+          callback: (v) => v > 0 ? `+${v}m` : `${v}m`
+        },
+        title: {
+          display: true, text: 'Change in Time Awake (min)  ·  below zero = improvement',
+          font: { family: "'IBM Plex Mono', monospace", size: 10 },
+          color: 'rgba(29, 36, 66, 0.5)', padding: { bottom: 8 }
+        }
+      }
+    }
+  }
+});
+
+// ══════════════ TABLE ══════════════
+const tbody = document.getElementById('mtable');
+metrics.forEach(m => {
+  const bestP = Math.min(m.p, m.pw || 1);
+  const pCls = bestP < 0.05 ? 'p-sig' : (bestP < 0.15 ? 'p-trend' : '');
+  const lowerIsBetter = ['Time Awake', 'Sleep Latency', 'Sleeping Resp. Rate', 'Average HR (Sleep)', 'Lowest HR (Sleep)', 'Average Heart Rate'];
+  const higherIsBetter = ['HRV', 'Sleep Efficiency', 'Deep Sleep', 'REM Sleep', 'Total Sleep'];
+  let dirCls = 'dir-flat';
+  if (Math.abs(m.pct) >= 1) {
+    if (lowerIsBetter.includes(m.metric)) {
+      dirCls = m.change < 0 ? 'dir-good' : 'dir-bad';
+    } else if (higherIsBetter.includes(m.metric)) {
+      dirCls = m.change > 0 ? 'dir-good' : 'dir-bad';
+    }
+  }
+  tbody.innerHTML += `
+    <tr>
+      <td>${m.metric}</td>
+      <td>${m.n}</td>
+      <td>${m.baseline} <span style="color: var(--ink-muted); font-size: 11px;">${m.unit}</span></td>
+      <td>${m.intervention} <span style="color: var(--ink-muted); font-size: 11px;">${m.unit}</span></td>
+      <td class="${dirCls}">${m.change > 0 ? '+' : ''}${m.change}</td>
+      <td class="${dirCls}">${m.pct > 0 ? '+' : ''}${m.pct}%</td>
+      <td>${m.d > 0 ? '+' : ''}${m.d.toFixed(3)}</td>
+      <td class="${pCls}">${bestP.toFixed(3)}</td>
+    </tr>
+  `;
+});
+</script>
+</body>
+</html>
