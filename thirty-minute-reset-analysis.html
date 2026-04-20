@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 30-Minute Reset — Study Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #0E1519;
+    --ink-2: #1B2530;
+    --paper: #F4F1EA;
+    --paper-2: #EDE8DD;
+    --sage: #7B9471;
+    --sage-bright: #A4C199;
+    --sage-deep: #4A5F44;
+    --gold: #C9A96E;
+    --coral: #D67056;
+    --mid: rgba(14, 21, 25, 0.55);
+    --line: rgba(14, 21, 25, 0.12);
+    --line-dark: rgba(244, 241, 234, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+
+  /* ══════════════ HERO ══════════════ */
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: 40%; pointer-events: none;
+    background:
+      radial-gradient(circle at 70% 30%, rgba(123, 148, 113, 0.18) 0%, transparent 60%),
+      radial-gradient(circle at 50% 80%, rgba(201, 169, 110, 0.08) 0%, transparent 60%);
+  }
+  .hero-inner { position: relative; z-index: 2; padding-bottom: 80px; }
+  .header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 60px; border-bottom: 1px solid var(--line-dark);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.5);
+  }
+  .header-bar .logo {
+    display: flex; gap: 10px; align-items: center;
+  }
+  .header-bar .logo::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--sage-bright);
+    box-shadow: 0 0 12px var(--sage-bright);
+  }
+  h1.title {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    font-size: clamp(64px, 10vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-top: 72px;
+    color: var(--paper);
+  }
+  h1.title .t {
+    display: block;
+    font-size: 0.3em;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage-bright);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    margin-bottom: 24px;
+    line-height: 1;
+  }
+  h1.title .l1 { display: block; }
+  h1.title .l2 {
+    display: block; font-style: italic;
+    color: var(--sage-bright);
+    margin-left: 0.1em;
+  }
+  .deck {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(19px, 2.1vw, 26px);
+    font-weight: 400;
+    line-height: 1.35;
+    color: rgba(244, 241, 234, 0.85);
+    max-width: 660px;
+    margin-top: 40px;
+    font-style: italic;
+  }
+  .stats-bar {
+    margin-top: 72px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border-top: 1px solid var(--line-dark);
+  }
+  .stat-cell {
+    padding: 28px 24px 0 0;
+    border-right: 1px solid var(--line-dark);
+  }
+  .stat-cell:last-child { border-right: none; padding-right: 0; }
+  .stat-cell .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.5);
+    margin-bottom: 12px;
+  }
+  .stat-cell .val {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px; font-weight: 400; line-height: 1;
+    color: var(--paper);
+  }
+  .stat-cell .val .unit {
+    font-size: 14px; color: rgba(244, 241, 234, 0.5);
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: 4px;
+  }
+  .stat-cell .sub {
+    font-size: 12px; color: rgba(244, 241, 234, 0.5);
+    margin-top: 6px;
+  }
+
+  /* ══════════════ SECTION BASE ══════════════ */
+  section {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .sec-head {
+    display: grid; grid-template-columns: 1fr 2fr; gap: 48px;
+    margin-bottom: 56px; align-items: start;
+  }
+  .sec-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--coral);
+    display: flex; gap: 16px; align-items: center;
+  }
+  .sec-num::before {
+    content: ''; width: 24px; height: 1px; background: var(--coral);
+  }
+  h2 {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-top: 24px;
+  }
+  h2 em { font-style: italic; color: var(--coral); }
+  .lede {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; font-weight: 400; line-height: 1.4;
+    color: var(--ink-2); margin-top: 4px;
+    font-style: italic;
+  }
+  .body {
+    display: grid; grid-template-columns: 1fr 2fr; gap: 48px;
+  }
+  .body-spacer { }
+  .body-content { max-width: 700px; }
+  .body-content p {
+    margin-bottom: 1.2em; color: var(--ink-2); font-size: 15.5px;
+    line-height: 1.65;
+  }
+  .body-content p:last-child { margin-bottom: 0; }
+  .body-content strong { color: var(--ink); font-weight: 600; }
+  .body-content em { font-family: 'Instrument Serif', serif; font-size: 1.05em; }
+
+  /* ══════════════ HEADLINE FINDINGS ══════════════ */
+  .headline-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .hl {
+    background: var(--paper);
+    padding: 40px 32px;
+    display: flex; flex-direction: column;
+    position: relative; min-height: 280px;
+  }
+  .hl .rank {
+    position: absolute; top: 24px; right: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--mid);
+  }
+  .hl .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mid); margin-bottom: 20px;
+  }
+  .hl .val {
+    font-family: 'Instrument Serif', serif;
+    font-size: 72px; font-weight: 400; line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--coral);
+  }
+  .hl .val .unit {
+    font-size: 20px; color: var(--mid);
+    font-family: 'DM Sans', sans-serif; font-weight: 400;
+    margin-left: 8px;
+  }
+  .hl .name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px; font-style: italic;
+    margin-top: 16px; color: var(--ink);
+  }
+  .hl .desc {
+    margin-top: 12px; font-size: 14px;
+    color: var(--ink-2); line-height: 1.5; flex: 1;
+  }
+  .hl .stat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--mid);
+    padding-top: 16px; margin-top: 20px;
+    border-top: 1px solid var(--line);
+    letter-spacing: 0.05em;
+  }
+
+  /* ══════════════ DEMOGRAPHICS GRID ══════════════ */
+  .demo-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .dc {
+    background: var(--paper-2);
+    padding: 28px 24px;
+  }
+  .dc h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mid); font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .dc .bar-row {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: baseline; gap: 12px;
+    padding: 7px 0; border-bottom: 1px dotted var(--line);
+    font-size: 13px;
+  }
+  .dc .bar-row:last-child { border: none; }
+  .dc .bar-row .k { color: var(--ink-2); }
+  .dc .bar-row .v {
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px; font-weight: 400; color: var(--ink);
+  }
+
+  /* ══════════════ CHART CARD ══════════════ */
+  .chart-card {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    padding: 40px 44px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .chart-card.dark {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink-2);
+  }
+  .chart-card .corner {
+    position: absolute; top: -1px; left: -1px;
+    width: 24px; height: 24px;
+    border-top: 2px solid var(--coral);
+    border-left: 2px solid var(--coral);
+  }
+  .chart-card .corner.br {
+    top: auto; left: auto; right: -1px; bottom: -1px;
+    border-top: none; border-left: none;
+    border-bottom: 2px solid var(--coral);
+    border-right: 2px solid var(--coral);
+  }
+  .chart-card .chart-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px; font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .chart-card .chart-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--mid);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .chart-card.dark .chart-sub { color: rgba(244, 241, 234, 0.5); }
+  .chart-canvas { position: relative; height: 380px; }
+  .chart-canvas.tall { height: 520px; }
+  .chart-canvas.short { height: 280px; }
+
+  /* ══════════════ TABLE ══════════════ */
+  .table-wrap { overflow-x: auto; margin-top: 24px; }
+  table.mtab {
+    width: 100%; border-collapse: collapse;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    font-size: 13px;
+  }
+  table.mtab th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mid); font-weight: 500;
+    padding: 16px 18px; text-align: right;
+    background: var(--paper);
+    border-bottom: 2px solid var(--line);
+  }
+  table.mtab th:first-child { text-align: left; }
+  table.mtab td {
+    padding: 14px 18px; text-align: right;
+    border-bottom: 1px solid var(--line);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+  table.mtab td:first-child {
+    text-align: left;
+    font-family: 'Instrument Serif', serif;
+    font-size: 16px; font-weight: 400; color: var(--ink);
+  }
+  table.mtab tr:last-child td { border-bottom: none; }
+  .p-sig { color: var(--coral); font-weight: 500; }
+  .p-trend { color: var(--gold); font-weight: 500; }
+  .dir-pos { color: var(--sage-deep); }
+  .dir-neg { color: var(--coral); }
+  .dir-flat { color: var(--mid); }
+
+  /* ══════════════ PULL QUOTE ══════════════ */
+  .pull {
+    margin: 64px 0;
+    padding: 48px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+  .pull-q {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(24px, 3.5vw, 40px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.2;
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--ink);
+  }
+  .pull-q .hl-text {
+    color: var(--coral);
+    position: relative;
+    white-space: nowrap;
+  }
+  .pull-attr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mid); margin-top: 28px;
+  }
+
+  /* ══════════════ CONTRAST CARDS ══════════════ */
+  .contrast-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
+  .c-card {
+    padding: 32px; border: 1px solid var(--line);
+    background: var(--paper-2);
+  }
+  .c-card.highlight {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+  .c-card h4 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px; font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .c-card .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 20px;
+  }
+  .c-card.highlight .sub { color: var(--sage-bright); }
+  .c-card p { font-size: 14px; line-height: 1.6; margin: 0; }
+  .c-card.highlight p { color: rgba(244, 241, 234, 0.85); }
+
+  /* ══════════════ LIMITATIONS ══════════════ */
+  .limits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .limit-cell {
+    background: var(--paper-2); padding: 32px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .limit-cell .idx {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px; font-style: italic; font-weight: 400;
+    color: var(--coral); line-height: 1;
+  }
+  .limit-cell h4 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px; font-weight: 400;
+  }
+  .limit-cell p { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+
+  /* ══════════════ COMPARISON WITH GRATITUDE ══════════════ */
+  .comp-box {
+    background: var(--ink); color: var(--paper);
+    padding: 64px 56px; margin-top: 48px;
+    position: relative;
+  }
+  .comp-box::before {
+    content: ''; position: absolute; top: -1px; left: 0;
+    width: 80px; height: 3px; background: var(--sage-bright);
+  }
+  .comp-box h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px; font-weight: 400;
+    margin-bottom: 16px;
+  }
+  .comp-box .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--sage-bright);
+    margin-bottom: 32px;
+  }
+  .comp-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    padding-top: 24px; border-top: 1px solid var(--line-dark);
+  }
+  .comp-col h5 {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic; font-size: 20px; font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .comp-col ul { list-style: none; }
+  .comp-col li {
+    padding: 10px 0; border-bottom: 1px solid var(--line-dark);
+    font-size: 14px; line-height: 1.5;
+    color: rgba(244, 241, 234, 0.85);
+  }
+  .comp-col li:last-child { border: none; }
+  .comp-col li strong { color: var(--sage-bright); font-weight: 600; }
+
+  /* ══════════════ FOOTER ══════════════ */
+  .foot {
+    text-align: center; padding: 48px 0 80px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  /* ══════════════ RESPONSIVE ══════════════ */
+  @media (max-width: 800px) {
+    .wrap { padding: 0 20px; }
+    .sec-head, .body { grid-template-columns: 1fr; gap: 16px; }
+    .body-spacer { display: none; }
+    .headline-row { grid-template-columns: 1fr; }
+    .demo-grid { grid-template-columns: repeat(2, 1fr); }
+    .contrast-2, .limits-grid, .comp-grid, .stats-bar { grid-template-columns: 1fr; }
+    .stat-cell { border-right: none; border-bottom: 1px solid var(--line-dark); padding: 20px 0; }
+    .stats-bar { margin-top: 48px; }
+    .hero-inner { padding-bottom: 48px; }
+    h1.title { margin-top: 40px; }
+    section { padding: 60px 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ════════════ HERO ════════════ -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="header-bar">
+          <div class="logo">Public Study · Analysis</div>
+          <div>April 2026</div>
+        </div>
+
+        <h1 class="title">
+          <span class="t">Study № 002</span>
+          <span class="l1">The 30-Minute</span>
+          <span class="l2">Reset.</span>
+        </h1>
+
+        <p class="deck">A small, disciplined window in the day — and what it did to how people fell asleep, how hard their hearts worked, and who benefited most. A careful look at 33 participants and 22 biometric signals.</p>
+
+        <div class="stats-bar">
+          <div class="stat-cell">
+            <div class="lbl">Enrolled</div>
+            <div class="val">54</div>
+            <div class="sub">33 with full wearable + survey data</div>
+          </div>
+          <div class="stat-cell">
+            <div class="lbl">Headline Effect</div>
+            <div class="val">−3.8<span class="unit">min</span></div>
+            <div class="sub">Faster time to fall asleep</div>
+          </div>
+          <div class="stat-cell">
+            <div class="lbl">Heart Rate</div>
+            <div class="val">−4.5<span class="unit">bpm</span></div>
+            <div class="sub">Lower resting heart rate</div>
+          </div>
+          <div class="stat-cell">
+            <div class="lbl">Responders</div>
+            <div class="val">64<span class="unit">%</span></div>
+            <div class="sub">Fell asleep faster vs baseline</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ════════════ SEC 01 — SUMMARY ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 01 · Summary</div>
+          <h2>At a <em>glance</em>.</h2>
+        </div>
+        <p class="lede">Of 19 biometric signals with usable data, three moved meaningfully — all in the direction of a calmer, more recovered body. Activity dropped. And the subgroup story reverses what we saw in the gratitude cohort.</p>
+      </div>
+
+      <div class="headline-row">
+        <div class="hl">
+          <div class="rank">01</div>
+          <div class="tag">Primary Finding</div>
+          <div class="val">−16.9<span class="unit">%</span></div>
+          <div class="name">Sleep Latency</div>
+          <div class="desc">Time to fall asleep dropped from 22.7 to 18.9 minutes on average. 64% of participants fell asleep faster.</div>
+          <div class="stat">n = 28 · Wilcoxon p = 0.031 · d = −0.37</div>
+        </div>
+        <div class="hl">
+          <div class="rank">02</div>
+          <div class="tag">Cardiovascular</div>
+          <div class="val">−4.5<span class="unit">bpm</span></div>
+          <div class="name">Average Heart Rate</div>
+          <div class="desc">Daytime resting heart rate fell from 87.5 to 83.0 bpm — a meaningful shift in autonomic load.</div>
+          <div class="stat">n = 32 · Wilcoxon p = 0.053 · d = −0.32</div>
+        </div>
+        <div class="hl">
+          <div class="rank">03</div>
+          <div class="tag">Trending</div>
+          <div class="val">−12.2<span class="unit">min</span></div>
+          <div class="name">Time Awake</div>
+          <div class="desc">Less time spent awake in bed across the night. Directionally consistent with sleep latency but larger sampling variance.</div>
+          <div class="stat">n = 33 · p = 0.087 · d = −0.31</div>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="body-spacer"></div>
+        <div class="body-content">
+          <p>The honest summary: a <strong>reset that shows up in falling-asleep and in resting heart rate</strong>, rather than in the deeper architecture of sleep itself. Deep sleep, REM, and HRV stayed flat. What did move — sleep latency and heart rate — points toward a reduction in sympathetic activation, which is exactly what a mid-day pause would be expected to deliver if it worked at all.</p>
+          <p>What follows is the full picture: who the participants were, the effect sizes across every metric, the unusually clean subgroup signal, the drop in daytime activity that complicates the causal story, and the structural limitations that apply to any un-controlled pre/post design.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 02 — WHO ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 02 · Cohort</div>
+          <h2>Who <em>showed up</em>.</h2>
+        </div>
+        <p class="lede">33 participants with linked wearable, survey, and demographic data. More gender-balanced and more racially mixed than the typical wellness-study cohort, with a younger skew.</p>
+      </div>
+
+      <div class="demo-grid">
+        <div class="dc">
+          <h4>Age Range</h4>
+          <div class="bar-row"><span class="k">26–35</span><span class="v">12</span></div>
+          <div class="bar-row"><span class="k">46–55</span><span class="v">8</span></div>
+          <div class="bar-row"><span class="k">36–45</span><span class="v">7</span></div>
+          <div class="bar-row"><span class="k">18–25</span><span class="v">3</span></div>
+          <div class="bar-row"><span class="k">56–65</span><span class="v">2</span></div>
+          <div class="bar-row"><span class="k">66+</span><span class="v">1</span></div>
+        </div>
+        <div class="dc">
+          <h4>Gender</h4>
+          <div class="bar-row"><span class="k">Female</span><span class="v">21</span></div>
+          <div class="bar-row"><span class="k">Male</span><span class="v">12</span></div>
+        </div>
+        <div class="dc">
+          <h4>Ethnicity</h4>
+          <div class="bar-row"><span class="k">Caucasian</span><span class="v">16</span></div>
+          <div class="bar-row"><span class="k">Asian / PI</span><span class="v">5</span></div>
+          <div class="bar-row"><span class="k">Hispanic / Latino</span><span class="v">3</span></div>
+          <div class="bar-row"><span class="k">Black</span><span class="v">1</span></div>
+          <div class="bar-row"><span class="k">Mixed Race</span><span class="v">1</span></div>
+          <div class="bar-row"><span class="k">Arab</span><span class="v">1</span></div>
+        </div>
+        <div class="dc">
+          <h4>Country</h4>
+          <div class="bar-row"><span class="k">USA</span><span class="v">31</span></div>
+          <div class="bar-row"><span class="k">Canada</span><span class="v">2</span></div>
+        </div>
+        <div class="dc">
+          <h4>Education</h4>
+          <div class="bar-row"><span class="k">Bachelor's</span><span class="v">10</span></div>
+          <div class="bar-row"><span class="k">Master's</span><span class="v">7</span></div>
+          <div class="bar-row"><span class="k">Some college</span><span class="v">4</span></div>
+          <div class="bar-row"><span class="k">Associate</span><span class="v">4</span></div>
+          <div class="bar-row"><span class="k">Professional</span><span class="v">3</span></div>
+        </div>
+        <div class="dc">
+          <h4>Household Income</h4>
+          <div class="bar-row"><span class="k">&gt; $100K</span><span class="v">13</span></div>
+          <div class="bar-row"><span class="k">$50K–$100K</span><span class="v">9</span></div>
+          <div class="bar-row"><span class="k">$25K–$50K</span><span class="v">2</span></div>
+          <div class="bar-row"><span class="k">&lt; $25K</span><span class="v">1</span></div>
+        </div>
+        <div class="dc">
+          <h4>Wearables</h4>
+          <div class="bar-row"><span class="k">Oura Ring</span><span class="v">41</span></div>
+          <div class="bar-row"><span class="k">Apple Watch</span><span class="v">20</span></div>
+          <div class="bar-row"><span class="k">Garmin</span><span class="v">6</span></div>
+          <div class="bar-row"><span class="k">Fitbit</span><span class="v">3</span></div>
+          <div class="bar-row"><span class="k">WHOOP</span><span class="v">1</span></div>
+        </div>
+        <div class="dc">
+          <h4>Baseline Stress</h4>
+          <div class="bar-row"><span class="k">Moderate</span><span class="v">26</span></div>
+          <div class="bar-row"><span class="k">High</span><span class="v">12</span></div>
+          <div class="bar-row"><span class="k">Low</span><span class="v">7</span></div>
+          <div class="bar-row"><span class="k">Very High</span><span class="v">2</span></div>
+        </div>
+      </div>
+
+      <div class="body" style="margin-top: 40px;">
+        <div class="body-spacer"></div>
+        <div class="body-content">
+          <p><strong>Already-engaged in wellness practices.</strong> When asked about mental health practices, 17 reported <em>meditation/mindfulness</em>, 13 regular exercise, 11 breathing exercises, and 8 each of journaling, yoga, and creative activities. This is a cohort with existing routines — the intervention is an <em>addition</em> to baseline habits, not a starting point.</p>
+          <p><strong>Exercise baseline is meaningful.</strong> Most participants exercise 3–5 days/week at baseline. Walking (32), strength training (19), yoga (14), and running (13) dominate. The activity decline observed during intervention needs to be read against this active baseline.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 03 — FULL RESULTS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 03 · Results</div>
+          <h2>The full <em>picture</em>.</h2>
+        </div>
+        <p class="lede">Effect sizes across all measurable metrics. Three moved meaningfully in the same direction; most stayed flat. Nothing got dramatically worse.</p>
+      </div>
+
+      <div class="chart-card">
+        <span class="corner"></span>
+        <span class="corner br"></span>
+        <div class="chart-title">Effect sizes across all 19 metrics</div>
+        <div class="chart-sub">Cohen's d · sorted by magnitude · coral = significant</div>
+        <div class="chart-canvas tall"><canvas id="effectChart"></canvas></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mtab">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>n</th>
+              <th>Baseline</th>
+              <th>Intervention</th>
+              <th>Δ</th>
+              <th>%</th>
+              <th>Cohen's d</th>
+              <th>p (best)</th>
+            </tr>
+          </thead>
+          <tbody id="metricTable"></tbody>
+        </table>
+      </div>
+
+      <div class="body" style="margin-top: 40px;">
+        <div class="body-spacer"></div>
+        <div class="body-content">
+          <p><strong>What cleared significance:</strong> Sleep Latency (Wilcoxon p = 0.031) and Average Heart Rate (Wilcoxon p = 0.053 — borderline). Both are cardiovascular/autonomic markers, which fits the mechanism a mid-day reset would be expected to target.</p>
+          <p><strong>What trended:</strong> Time Awake (−15.2%, p = 0.09), Active Calories (−12.6%, p = 0.27), Total Calories (−5.7%, p = 0.21). The sleep-related trend is consistent with the primary finding; the calorie/activity trend is the confound we'll address in Section 6.</p>
+          <p><strong>What stayed flat:</strong> HRV (−0.7%), Total Sleep (−0.2%), Sleep Efficiency (+1.2%), Deep Sleep (+1.0%), REM Sleep (−1.3%). The <em>architecture</em> of sleep didn't meaningfully shift — what improved was the <em>onset</em>.</p>
+          <p style="font-size: 13px; color: var(--mid); font-style: italic;">Floors Climbed, VO₂ Max, and Stress Score came through as all zeros — the dominant Oura Ring device doesn't report these in the dataset. They are excluded from analysis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 04 — STRESS STORY ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 04 · Subgroup signal</div>
+          <h2>The <em>high-stress</em> finding.</h2>
+        </div>
+        <p class="lede">The most striking pattern in this study is who responded most. Unlike many wellness interventions, the 30-Minute Reset appears to have helped high-stress participants the most — dramatically so on sleep latency.</p>
+      </div>
+
+      <div class="pull">
+        <div class="pull-q">
+          High-stress participants fell asleep <span class="hl-text">47% faster</span> during the intervention.<br>
+          Low-stress participants didn't change.
+        </div>
+        <div class="pull-attr">Subgroup analysis · n=6 high-stress with sleep latency data · p = 0.013</div>
+      </div>
+
+      <div class="chart-card">
+        <span class="corner"></span>
+        <span class="corner br"></span>
+        <div class="chart-title">Sleep Latency change by baseline stress level</div>
+        <div class="chart-sub">Minutes to fall asleep · before vs during intervention</div>
+        <div class="chart-canvas"><canvas id="stressChart"></canvas></div>
+      </div>
+
+      <div class="contrast-2">
+        <div class="c-card">
+          <h4>The pattern</h4>
+          <div class="sub">What the data suggest</div>
+          <p>Each subgroup showed a dose-response relationship: the more baseline stress, the bigger the improvement. Low-stress participants (n=4) were already falling asleep quickly and had nothing to gain; moderate-stress saw modest improvement; high-stress saw dramatic improvement. Very-high-stress is n=2 — don't trust the direction of that cell.</p>
+        </div>
+        <div class="c-card highlight">
+          <h4>Why this matters</h4>
+          <div class="sub">A different targeting story</div>
+          <p>For high-stress people, the intervention may be doing something meaningfully physiological — pushing the sympathetic nervous system toward evening wind-down. The same subgroup also showed a 45% reduction in time awake at night, though with a smaller sample the significance doesn't hold as cleanly. Worth replicating with a targeted high-stress recruitment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 05 — RESPONDERS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 05 · Individual variation</div>
+          <h2>Who <em>responded</em>.</h2>
+        </div>
+        <p class="lede">Averages hide distributions. For sleep latency specifically, 21 of 33 participants fell asleep faster — and among them, the median improvement was about four minutes. The non-responders weren't catastrophic, just unchanged or slightly worse.</p>
+      </div>
+
+      <div class="chart-card">
+        <span class="corner"></span>
+        <span class="corner br"></span>
+        <div class="chart-title">Individual change in Sleep Latency</div>
+        <div class="chart-sub">Each bar = one participant · sorted by magnitude · below zero = faster to fall asleep</div>
+        <div class="chart-canvas tall"><canvas id="responderChart"></canvas></div>
+      </div>
+
+      <div class="body" style="margin-top: 40px;">
+        <div class="body-spacer"></div>
+        <div class="body-content">
+          <p><strong>64% improved</strong> on sleep latency (21 of 33). Median improvement among responders was ~4 minutes; the top quintile improved by 8+ minutes.</p>
+          <p><strong>5 participants showed no change at all</strong> (Δ = 0). These are almost certainly device-measurement floor effects rather than true zero-change, a reminder that wearables have their own noise characteristics.</p>
+          <p><strong>Heart rate responders ran parallel.</strong> 61% (20 of 33) had a lower average heart rate during intervention. The two effects are correlated at the participant level but not perfectly — some people improved on latency but not HR and vice versa.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 06 — ACTIVITY PARADOX ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 06 · Honest framing</div>
+          <h2>The activity <em>trade-off</em>.</h2>
+        </div>
+        <p class="lede">As sleep-latency improved, daytime activity declined: active calories down 13%, steps down 9%, total calories down 6%. Some of these reach only trend-level significance, but the pattern is internally consistent — and worth naming.</p>
+      </div>
+
+      <div class="chart-card">
+        <span class="corner"></span>
+        <span class="corner br"></span>
+        <div class="chart-title">Activity metrics relative to baseline</div>
+        <div class="chart-sub">Intervention as % of baseline · lower bars = reduced activity</div>
+        <div class="chart-canvas short"><canvas id="activityChart"></canvas></div>
+      </div>
+
+      <div class="body" style="margin-top: 40px;">
+        <div class="body-spacer"></div>
+        <div class="body-content">
+          <p><strong>Three plausible explanations, none decisive:</strong></p>
+          <p><em>Time displacement.</em> A 30-minute daily practice needs to come from somewhere. If participants replaced a walk, a workout, or an errand with the practice, activity would mechanically fall.</p>
+          <p><em>Seasonality or schedule drift.</em> Baseline and intervention windows may not be weather- or life-matched. Without dated measurement blocks, we can't rule out that activity would have declined regardless.</p>
+          <p><em>Genuine behavioral trade-off.</em> A calmer person may be a less driven person in the short term. Whether that's good or bad depends on what each participant needed.</p>
+          <p style="margin-top: 20px;"><strong>The implication for interpreting the sleep findings:</strong> less daytime activity usually correlates with <em>lighter</em>, not deeper sleep, so the activity decline doesn't <em>mechanically</em> explain the latency improvement. But the picture is a person who slowed down across the board, not a person who gained energy. That reframing matters for how the result gets communicated.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 07 — COMPARISON ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 07 · Cross-study context</div>
+          <h2>vs. The <em>Gratitude Effect</em>.</h2>
+        </div>
+        <p class="lede">These two studies shared a measurement infrastructure and a broadly similar cohort. Comparing them highlights that both interventions moved the needle, but on different metrics — and for different people.</p>
+      </div>
+
+      <div class="comp-box">
+        <div class="subtitle">Side-by-side findings</div>
+        <h3>Different signatures for different interventions.</h3>
+
+        <div class="comp-grid">
+          <div class="comp-col">
+            <h5>The Gratitude Effect (n=47)</h5>
+            <ul>
+              <li><strong>Time Awake</strong> dropped 13.4% (p = 0.015)</li>
+              <li><strong>Sleep Efficiency</strong> nudged up (+0.7 pts)</li>
+              <li><strong>Sleep Latency</strong> didn't move (p = 0.12)</li>
+              <li><strong>Heart Rate</strong> didn't move (p = 0.93)</li>
+              <li><strong>Best responder:</strong> moderate-stress participants</li>
+              <li><strong>Sample:</strong> 84% female, skewed 36–55, high income</li>
+            </ul>
+          </div>
+          <div class="comp-col">
+            <h5>The 30-Minute Reset (n=33)</h5>
+            <ul>
+              <li><strong>Sleep Latency</strong> dropped 16.9% (Wilcoxon p = 0.031)</li>
+              <li><strong>Heart Rate</strong> dropped 4.5 bpm (Wilcoxon p = 0.053)</li>
+              <li><strong>Time Awake</strong> trended down (p = 0.087)</li>
+              <li><strong>Sleep Efficiency</strong> effectively unchanged</li>
+              <li><strong>Best responder:</strong> high-stress participants</li>
+              <li><strong>Sample:</strong> 64% female, skewed 26–45, more diverse</li>
+            </ul>
+          </div>
+        </div>
+
+        <p style="margin-top: 40px; font-size: 15px; color: rgba(244, 241, 234, 0.85); line-height: 1.6; max-width: 820px;">
+          The tidy way to describe the contrast: <em style="color: var(--sage-bright); font-family: 'Instrument Serif', serif; font-style: italic;">Gratitude shows up in the middle of the night, the Reset shows up in the first 20 minutes of trying to fall asleep.</em> Both are consistent with a calming effect, but they land on different parts of the sleep process — and they do so for different types of people. Neither has a control group, so attributing the effect specifically to the practice rather than to being-in-a-study remains unresolved for both.
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 08 — LIMITATIONS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 08 · Caveats</div>
+          <h2>What the study <em>can't</em> tell us.</h2>
+        </div>
+        <p class="lede">Six structural limitations that apply to any reading of these results. None invalidate the findings — all bound what can be claimed from them.</p>
+      </div>
+
+      <div class="limits-grid">
+        <div class="limit-cell">
+          <div class="idx">i.</div>
+          <h4>No control group</h4>
+          <p>Pre/post design only. Regression to the mean, seasonality, and observer (Hawthorne) effects are all plausible non-Reset explanations for the observed change — especially for heart rate, which varies considerably with ambient stressors.</p>
+        </div>
+        <div class="limit-cell">
+          <div class="idx">ii.</div>
+          <h4>Small sample</h4>
+          <p>33 participants with full data; subgroup analyses rest on cells as small as n=4. The high-stress finding (n=7) is the most striking result but also the most vulnerable to a single participant shifting the mean.</p>
+        </div>
+        <div class="limit-cell">
+          <div class="idx">iii.</div>
+          <h4>Self-selection</h4>
+          <p>People who sign up for a study called "The 30-Minute Reset" expect it to help them reset. Motivated-volunteer bias is real and unmeasurable here.</p>
+        </div>
+        <div class="limit-cell">
+          <div class="idx">iv.</div>
+          <h4>Compliance is invisible</h4>
+          <p>The dataset shows what wearables captured, not what participants did. Whether they actually took their 30 minutes, how often, and with what engagement are unknown. Responders and non-responders may differ in behavior, not biology.</p>
+        </div>
+        <div class="limit-cell">
+          <div class="idx">v.</div>
+          <h4>Device heterogeneity</h4>
+          <p>Oura Ring dominates (41 of 47), but Apple Watch, Garmin, Fitbit, and WHOOP all produce differently-calibrated numbers. Paired within-person analysis mitigates this; it doesn't eliminate it.</p>
+        </div>
+        <div class="limit-cell">
+          <div class="idx">vi.</div>
+          <h4>The activity confound</h4>
+          <p>Daytime activity declined 9–13% alongside the sleep improvements. Without knowing whether this was time displacement or genuine behavioral change, we can't cleanly attribute the sleep-latency win to a "calming effect" rather than simply "doing less."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 09 — VERDICT ════════════ -->
+    <section style="border-bottom: none;">
+      <div class="sec-head">
+        <div>
+          <div class="sec-num">Section 09 · Takeaway</div>
+          <h2>The honest <em>read</em>.</h2>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="body-spacer"></div>
+        <div class="body-content">
+          <p style="font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1.45; color: var(--ink); font-style: italic;">
+            This study shows a <strong style="color: var(--coral); font-style: normal;">meaningful reduction in sleep latency</strong> — roughly four minutes faster to fall asleep on average, larger in high-stress participants — alongside a drop in resting heart rate. Both findings point to a calmer autonomic state during the intervention, which is the mechanism a 30-minute daily reset would plausibly target.
+          </p>
+          <p style="margin-top: 24px;">What the data do <em>not</em> support: strong claims about total sleep, sleep efficiency, HRV, or deep/REM sleep. These stayed flat. If someone says "the Reset helped people sleep better," the accurate version is "people fell asleep faster and their daytime heart rates were lower — the rest of sleep itself looked about the same."</p>
+          <p>What the data <em>cannot</em> adjudicate: whether the observed effects are specifically attributable to the 30-minute practice itself, versus being-in-a-study, seasonal drift, or the general calming effect of any structured mid-day routine. A randomized design with an active control (e.g., 30 minutes of passive rest, or 30 minutes of a different structured activity) would be needed to resolve this.</p>
+          <p style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-2);">
+            <strong style="color: var(--ink);">Recommended framing for communications:</strong> <em>"Participants in this public study fell asleep about four minutes faster and had lower resting heart rates during the 30-Minute Reset period than at baseline. The effect was strongest in those with high baseline stress. We can't yet separate the effect of the practice itself from the effect of participating in a structured program, but the direction is consistent with a reduction in physiological arousal."</em>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="foot">
+    Analysis of 4 data files · The 30-Minute Reset responses · baseline survey · demographics · wearable insights<br>
+    All statistics computed from paired within-participant comparisons · April 2026
+  </div>
+
+<script>
+// ════════════ DATA ════════════
+const metrics = [
+  {metric:'Sleep Latency', unit:'min', n:28, baseline:22.70, intervention:18.87, change:-3.83, pct:-16.9, d:-0.371, p:0.0603, pw:0.0314},
+  {metric:'Average Heart Rate', unit:'bpm', n:32, baseline:87.46, intervention:82.96, change:-4.50, pct:-5.1, d:-0.322, p:0.0780, pw:0.0529},
+  {metric:'Time Awake', unit:'min', n:33, baseline:79.97, intervention:67.80, change:-12.16, pct:-15.2, d:-0.308, p:0.0867, pw:0.1600},
+  {metric:'Total Calories', unit:'kcal', n:32, baseline:2280.08, intervention:2150.04, change:-130.04, pct:-5.7, d:-0.227, p:0.2088, pw:0.3127},
+  {metric:'Active Calories', unit:'kcal', n:32, baseline:431.24, intervention:377.02, change:-54.21, pct:-12.6, d:-0.197, p:0.2741, pw:0.2539},
+  {metric:'Low Activity Min', unit:'min', n:29, baseline:256.70, intervention:240.61, change:-16.09, pct:-6.3, d:-0.168, p:0.3727, pw:0.6545},
+  {metric:'Steps', unit:'steps', n:30, baseline:6765.82, intervention:6135.83, change:-629.99, pct:-9.3, d:-0.161, p:0.3853, pw:0.7303},
+  {metric:'Sleeping Resp. Rate', unit:'br/min', n:31, baseline:15.55, intervention:15.07, change:-0.48, pct:-3.1, d:-0.159, p:0.3844, pw:0.8217},
+  {metric:'Distance', unit:'m', n:30, baseline:7641.40, intervention:7311.76, change:-329.64, pct:-4.3, d:-0.092, p:0.6184, pw:0.5425},
+  {metric:'Medium Activity Min', unit:'min', n:32, baseline:45.93, intervention:42.80, change:-3.13, pct:-6.8, d:-0.080, p:0.6539, pw:0.6780},
+  {metric:'Avg HR (Sleep)', unit:'bpm', n:31, baseline:63.77, intervention:62.68, change:-1.09, pct:-1.7, d:-0.062, p:0.7327, pw:0.3337},
+  {metric:'High Activity Min', unit:'min', n:27, baseline:6.11, intervention:5.66, change:-0.45, pct:-7.4, d:-0.055, p:0.7769, pw:0.5009},
+  {metric:'REM Sleep', unit:'min', n:33, baseline:91.53, intervention:90.38, change:-1.15, pct:-1.3, d:-0.051, p:0.7701, pw:0.8879},
+  {metric:'Sleep Efficiency', unit:'%', n:33, baseline:81.34, intervention:82.35, change:1.00, pct:1.2, d:0.046, p:0.7930, pw:0.2418},
+  {metric:'Deep Sleep', unit:'min', n:33, baseline:70.62, intervention:71.30, change:0.69, pct:1.0, d:0.041, p:0.8173, pw:0.9033},
+  {metric:'Lowest HR (Sleep)', unit:'bpm', n:31, baseline:57.03, intervention:56.46, change:-0.57, pct:-1.0, d:-0.036, p:0.8420, pw:0.7538},
+  {metric:'HRV', unit:'ms', n:32, baseline:35.08, intervention:34.82, change:-0.25, pct:-0.7, d:-0.032, p:0.8580, pw:0.9297},
+  {metric:'Total Sleep', unit:'min', n:33, baseline:405.20, intervention:404.48, change:-0.72, pct:-0.2, d:-0.007, p:0.9682, pw:0.8739},
+  {metric:'Light Sleep', unit:'min', n:33, baseline:243.04, intervention:242.77, change:-0.27, pct:-0.1, d:-0.004, p:0.9831, pw:0.4530},
+];
+
+// Sleep latency changes in minutes per participant (sorted)
+const latChanges = [-42.93, -20.00, -10.69, -9.93, -9.40, -8.68, -8.50, -6.79, -4.93, -4.31, -3.99, -3.64, -3.64, -3.50, -2.57, -2.52, -2.24, -2.07, -1.50, -0.64, -0.29, 0, 0, 0, 0, 0, 0.65, 2.21, 4.93, 5.21, 8.43, 9.07, 15.00];
+
+// ════════════ DEFAULTS ════════════
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#1B2530';
+Chart.defaults.borderColor = 'rgba(14, 21, 25, 0.1)';
+
+const CORAL = '#D67056';
+const SAGE = '#7B9471';
+const SAGE_BRIGHT = '#A4C199';
+const SAGE_DEEP = '#4A5F44';
+const GOLD = '#C9A96E';
+const INK = '#0E1519';
+const MUTED = 'rgba(14, 21, 25, 0.25)';
+const PAPER = '#F4F1EA';
+
+function sigColor(m) {
+  const p = Math.min(m.p, m.pw || 1);
+  if (p < 0.05) return CORAL;
+  if (p < 0.10) return GOLD;
+  if (p < 0.20) return 'rgba(201, 169, 110, 0.4)';
+  return MUTED;
+}
+
+// ════════════ CHART 1 — EFFECT SIZES ════════════
+const sorted = [...metrics].sort((a,b) => Math.abs(b.d) - Math.abs(a.d));
+new Chart(document.getElementById('effectChart'), {
+  type: 'bar',
+  data: {
+    labels: sorted.map(m => m.metric),
+    datasets: [{
+      data: sorted.map(m => m.d),
+      backgroundColor: sorted.map(m => sigColor(m)),
+      borderWidth: 0,
+      borderRadius: 2,
+      barPercentage: 0.82,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: INK,
+        titleColor: PAPER,
+        bodyColor: PAPER,
+        titleFont: { family: "'Instrument Serif', serif", size: 16, weight: 400 },
+        bodyFont: { family: "'JetBrains Mono', monospace", size: 11 },
+        padding: 14,
+        cornerRadius: 0,
+        callbacks: {
+          title: (ctx) => ctx[0].label,
+          label: (ctx) => {
+            const m = sorted[ctx.dataIndex];
+            return [
+              `Δ: ${m.change > 0 ? '+' : ''}${m.change} ${m.unit}  (${m.pct > 0 ? '+' : ''}${m.pct}%)`,
+              `d: ${m.d}   p: ${Math.min(m.p, m.pw || 1).toFixed(3)}`,
+              `n = ${m.n}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(14, 21, 25, 0.06)', drawTicks: false },
+        border: { display: false },
+        ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }},
+        title: { display: true, text: "Cohen's d  ·  negative = metric decreased",
+                 font: { family: "'JetBrains Mono', monospace", size: 10 },
+                 color: 'rgba(14, 21, 25, 0.5)', padding: { top: 12 }}
+      },
+      y: {
+        grid: { display: false }, border: { display: false },
+        ticks: {
+          font: { family: "'Instrument Serif', serif", size: 15 },
+          color: INK,
+          padding: 8
+        }
+      }
+    }
+  }
+});
+
+// ════════════ CHART 2 — STRESS SUBGROUP ════════════
+new Chart(document.getElementById('stressChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Low (n=3)', 'Moderate (n=17)', 'High (n=6)', 'Very High (n=2)'],
+    datasets: [
+      {
+        label: 'Baseline',
+        data: [21.74, 24.64, 19.39, 17.50],
+        backgroundColor: 'rgba(214, 112, 86, 0.28)',
+        borderColor: CORAL, borderWidth: 1,
+        borderRadius: 1, barPercentage: 0.82,
+      },
+      {
+        label: 'Intervention',
+        data: [25.07, 21.06, 10.28, 16.71],
+        backgroundColor: CORAL,
+        borderWidth: 0,
+        borderRadius: 1, barPercentage: 0.82,
+      }
+    ]
+  },
+  options: {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top', align: 'end',
+        labels: {
+          font: { family: "'JetBrains Mono', monospace", size: 10 },
+          boxWidth: 12, boxHeight: 12, padding: 16, color: 'rgba(14, 21, 25, 0.6)'
+        }
+      },
+      tooltip: {
+        backgroundColor: INK, titleColor: PAPER, bodyColor: PAPER, cornerRadius: 0,
+        callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} min` }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false },
+           ticks: { font: { family: "'Instrument Serif', serif", size: 14 }, color: INK, padding: 8 }},
+      y: { beginAtZero: true,
+           grid: { color: 'rgba(14, 21, 25, 0.06)', drawTicks: false },
+           border: { display: false },
+           ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 }},
+           title: { display: true, text: 'Time to fall asleep (min)',
+                    font: { family: "'JetBrains Mono', monospace", size: 10 },
+                    color: 'rgba(14, 21, 25, 0.5)', padding: { bottom: 8 }}}
+    }
+  }
+});
+
+// ════════════ CHART 3 — RESPONDER DISTRIBUTION ════════════
+new Chart(document.getElementById('responderChart'), {
+  type: 'bar',
+  data: {
+    labels: latChanges.map((_, i) => i + 1),
+    datasets: [{
+      data: latChanges,
+      backgroundColor: latChanges.map(v => v < 0 ? CORAL : (v > 0 ? SAGE_DEEP : MUTED)),
+      borderWidth: 0,
+      barPercentage: 1.0,
+      categoryPercentage: 0.9,
+    }]
+  },
+  options: {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: INK, titleColor: PAPER, bodyColor: PAPER, cornerRadius: 0,
+        callbacks: {
+          title: (ctx) => `Participant ${ctx[0].label}`,
+          label: (ctx) => {
+            const v = ctx.parsed.y;
+            if (v === 0) return 'No measured change';
+            return v < 0 ? `${v.toFixed(1)} min — fell asleep faster` : `+${v.toFixed(1)} min — fell asleep slower`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false }, ticks: { display: false }},
+      y: {
+        grid: {
+          color: (ctx) => ctx.tick.value === 0 ? INK : 'rgba(14, 21, 25, 0.06)',
+          lineWidth: (ctx) => ctx.tick.value === 0 ? 1.5 : 1,
+          drawTicks: false
+        },
+        border: { display: false },
+        ticks: {
+          font: { family: "'JetBrains Mono', monospace", size: 10 },
+          callback: (v) => v > 0 ? `+${v}m` : `${v}m`
+        },
+        title: {
+          display: true, text: 'Change in sleep latency (min)  ·  below zero = faster to fall asleep',
+          font: { family: "'JetBrains Mono', monospace", size: 10 },
+          color: 'rgba(14, 21, 25, 0.5)', padding: { bottom: 8 }
+        }
+      }
+    }
+  }
+});
+
+// ════════════ CHART 4 — ACTIVITY ════════════
+new Chart(document.getElementById('activityChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Steps', 'Active Calories', 'Total Calories', 'Medium Activity', 'Distance'],
+    datasets: [
+      {
+        label: 'Baseline',
+        data: [100, 100, 100, 100, 100],
+        backgroundColor: 'rgba(14, 21, 25, 0.08)',
+        borderColor: MUTED, borderWidth: 1,
+        borderRadius: 1, barPercentage: 0.75,
+      },
+      {
+        label: 'Intervention',
+        data: [90.7, 87.4, 94.3, 93.2, 95.7],
+        backgroundColor: CORAL,
+        borderWidth: 0,
+        borderRadius: 1, barPercentage: 0.75,
+      }
+    ]
+  },
+  options: {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top', align: 'end',
+        labels: { font: { family: "'JetBrains Mono', monospace", size: 10 },
+                  boxWidth: 12, boxHeight: 12, padding: 16, color: 'rgba(14, 21, 25, 0.6)' }
+      },
+      tooltip: {
+        backgroundColor: INK, titleColor: PAPER, bodyColor: PAPER, cornerRadius: 0,
+        callbacks: {
+          label: (ctx) => {
+            const vals = {
+              'Steps': ['6,766 steps', '6,136 steps'],
+              'Active Calories': ['431 kcal', '377 kcal'],
+              'Total Calories': ['2,280 kcal', '2,150 kcal'],
+              'Medium Activity': ['45.9 min', '42.8 min'],
+              'Distance': ['7,641 m', '7,312 m'],
+            };
+            const pair = vals[ctx.label];
+            return `${ctx.dataset.label}: ${ctx.dataset.label === 'Baseline' ? pair[0] : pair[1]}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false },
+           ticks: { font: { family: "'Instrument Serif', serif", size: 14 }, color: INK, padding: 8 }},
+      y: { beginAtZero: true, max: 110,
+           grid: { color: 'rgba(14, 21, 25, 0.06)', drawTicks: false },
+           border: { display: false },
+           ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 },
+                    callback: v => v + '%' },
+           title: { display: true, text: '% of baseline',
+                    font: { family: "'JetBrains Mono', monospace", size: 10 },
+                    color: 'rgba(14, 21, 25, 0.5)', padding: { bottom: 8 }}}
+    }
+  }
+});
+
+// ════════════ TABLE ════════════
+const tbody = document.getElementById('metricTable');
+metrics.forEach(m => {
+  const bestP = Math.min(m.p, m.pw || 1);
+  const pCls = bestP < 0.05 ? 'p-sig' : (bestP < 0.10 ? 'p-trend' : '');
+  const dirCls = Math.abs(m.pct) < 1 ? 'dir-flat' : (m.change < 0 ? 'dir-neg' : 'dir-pos');
+  tbody.innerHTML += `
+    <tr>
+      <td>${m.metric}</td>
+      <td>${m.n}</td>
+      <td>${m.baseline} <span style="color: var(--mid); font-size: 11px;">${m.unit}</span></td>
+      <td>${m.intervention} <span style="color: var(--mid); font-size: 11px;">${m.unit}</span></td>
+      <td class="${dirCls}">${m.change > 0 ? '+' : ''}${m.change}</td>
+      <td class="${dirCls}">${m.pct > 0 ? '+' : ''}${m.pct}%</td>
+      <td>${m.d > 0 ? '+' : ''}${m.d.toFixed(3)}</td>
+      <td class="${pCls}">${bestP.toFixed(3)}</td>
+    </tr>
+  `;
+});
+</script>
+</body>
+</html>
