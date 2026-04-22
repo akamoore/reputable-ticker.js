@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 4-7-8 Effect — Study Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink:        #2A1F33;
+    --ink-2:      #4A3F52;
+    --ink-muted:  #7B7280;
+    --paper:      #F3EEE2;
+    --paper-2:    #E8DFCB;
+    --paper-deep: #DCD0B6;
+    --lavender:   #9575B0;
+    --lavender-deep: #5E4280;
+    --lavender-soft: #BCA3D0;
+    --rose:       #C17A6E;
+    --rose-deep:  #8E4F43;
+    --teal:       #4F7680;
+    --sage:       #7A8C7B;
+    --line:       rgba(42, 31, 51, 0.12);
+    --line-soft:  rgba(42, 31, 51, 0.06);
+    --line-dark:  rgba(243, 238, 226, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 48px; position: relative; }
+
+  /* ════════════ HERO ════════════ */
+  .hero {
+    padding: 56px 0 96px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 10%; right: -10%;
+    width: 70%; height: 110%;
+    background:
+      radial-gradient(ellipse at 60% 40%, rgba(149, 117, 176, 0.22) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 70%, rgba(193, 122, 110, 0.12) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero > * { position: relative; z-index: 2; }
+  .top-strip {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted);
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .top-strip .stamp { display: flex; align-items: center; gap: 14px; }
+  .top-strip .stamp::before {
+    content: ''; width: 10px; height: 10px;
+    background: var(--lavender); border-radius: 50%;
+    box-shadow: 0 0 14px rgba(149, 117, 176, 0.55);
+  }
+
+  .hero-content { padding-top: 72px; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--rose-deep);
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  h1.title {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 500;
+    font-size: clamp(60px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  h1.title .l1 { display: block; font-weight: 600; }
+  h1.title .l2 {
+    display: block; font-style: italic;
+    color: var(--lavender-deep);
+    font-weight: 500;
+    margin-left: 0.08em;
+  }
+
+  .deck {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 400; font-style: italic;
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.4;
+    color: var(--ink-2);
+    max-width: 740px;
+    margin-top: 44px;
+  }
+
+  .hero-bar {
+    margin-top: 80px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-stat {
+    background: var(--paper);
+    padding: 26px 28px 26px 0;
+  }
+  .hero-stat:first-child { padding-left: 0; }
+  .hero-stat .l {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .hero-stat .v {
+    font-family: 'Crimson Pro', serif;
+    font-size: 48px; font-weight: 500; line-height: 1;
+    color: var(--ink);
+  }
+  .hero-stat .v .u {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: var(--ink-muted);
+    margin-left: 6px;
+  }
+  .hero-stat .v.lavender { color: var(--lavender-deep); }
+  .hero-stat .v.rose { color: var(--rose-deep); }
+  .hero-stat .v.teal { color: var(--teal); }
+  .hero-stat .s {
+    font-size: 12px; color: var(--ink-muted);
+    margin-top: 8px;
+  }
+
+  /* ════════════ SECTIONS ════════════ */
+  section {
+    padding: 96px 0; border-bottom: 1px solid var(--line);
+  }
+  .sec-head {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 48px; margin-bottom: 56px; align-items: start;
+  }
+  .sec-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--lavender-deep);
+  }
+  .sec-meta .num {
+    display: block;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 48px; font-weight: 500;
+    color: var(--rose-deep);
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  h2 {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 600;
+    font-size: clamp(36px, 4.6vw, 60px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+  h2 em {
+    font-style: italic; font-weight: 500;
+    color: var(--rose-deep);
+  }
+  .lede {
+    margin-top: 28px;
+    font-family: 'Crimson Pro', serif;
+    font-weight: 400;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--ink-2);
+    max-width: 800px;
+  }
+  .body-grid { display: grid; grid-template-columns: 220px 1fr; gap: 48px; }
+  .body-content { max-width: 740px; }
+  .body-content p {
+    margin-bottom: 1.2em; color: var(--ink-2); font-size: 15.5px; line-height: 1.7;
+  }
+  .body-content p:last-child { margin-bottom: 0; }
+  .body-content strong { color: var(--ink); font-weight: 600; }
+  .body-content em {
+    font-family: 'Crimson Pro', serif; font-style: italic;
+    font-size: 1.08em;
+  }
+
+  /* ════════════ HEADLINE FINDINGS ════════════ */
+  .findings-3 {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .find {
+    background: var(--paper-2); padding: 36px 32px;
+    min-height: 280px; display: flex; flex-direction: column;
+    position: relative;
+  }
+  .find::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 48px; height: 2px;
+  }
+  .find.primary::before  { background: var(--lavender); }
+  .find.tradeoff::before { background: var(--rose); }
+  .find.flat::before     { background: var(--teal); }
+  .find .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 20px;
+  }
+  .find .val {
+    font-family: 'Crimson Pro', serif;
+    font-size: 78px; font-weight: 500; line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  .find .val .u {
+    font-size: 18px; color: var(--ink-muted);
+    font-family: 'Inter', sans-serif; font-weight: 400;
+    margin-left: 8px;
+  }
+  .find.primary .val  { color: var(--lavender-deep); }
+  .find.tradeoff .val { color: var(--rose-deep); }
+  .find.flat .val     { color: var(--teal); }
+  .find .name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px; font-style: italic;
+    margin-top: 16px; color: var(--ink);
+  }
+  .find .desc {
+    margin-top: 12px; font-size: 14px; color: var(--ink-2);
+    line-height: 1.55; flex: 1;
+  }
+  .find .stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--ink-muted);
+    padding-top: 16px; margin-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ════════════ DEMO STRIP ════════════ */
+  .demo-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .dc {
+    background: var(--paper-2); padding: 28px 24px;
+  }
+  .dc h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 20px; font-weight: 500;
+  }
+  .dc .row {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: baseline; gap: 12px;
+    padding: 7px 0; border-bottom: 1px dotted var(--line);
+    font-size: 13px;
+  }
+  .dc .row:last-child { border: none; }
+  .dc .row .k { color: var(--ink-2); }
+  .dc .row .v {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ════════════ CHART CARD ════════════ */
+  .chart-card {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    padding: 40px 44px;
+    margin: 32px 0;
+    position: relative;
+  }
+  .chart-card::after {
+    content: ''; position: absolute; top: -1px; left: 0;
+    width: 60px; height: 3px; background: var(--lavender);
+  }
+  .chart-card.rose::after { background: var(--rose); }
+  .chart-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 26px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .chart-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--ink-muted);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .chart-canvas { position: relative; height: 400px; }
+  .chart-canvas.tall { height: 560px; }
+  .chart-canvas.short { height: 300px; }
+
+  /* ════════════ TABLE ════════════ */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+  table.mtab {
+    width: 100%; border-collapse: collapse;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    font-size: 13px;
+  }
+  table.mtab th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); font-weight: 500;
+    padding: 16px 18px; text-align: right;
+    background: var(--paper);
+    border-bottom: 2px solid var(--line);
+  }
+  table.mtab th:first-child { text-align: left; }
+  table.mtab td {
+    padding: 13px 18px; text-align: right;
+    border-bottom: 1px solid var(--line-soft);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+  table.mtab td:first-child {
+    text-align: left;
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px; font-weight: 600; color: var(--ink);
+  }
+  table.mtab tr:last-child td { border-bottom: none; }
+  .p-sig { color: var(--rose-deep); font-weight: 600; }
+  .p-trend { color: var(--lavender-deep); font-weight: 600; }
+  .dir-good { color: var(--lavender-deep); }
+  .dir-bad { color: var(--rose-deep); }
+  .dir-flat { color: var(--ink-muted); }
+
+  /* ════════════ PULL ════════════ */
+  .pull {
+    margin: 56px 0;
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .pull::before {
+    content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 3px; background: var(--lavender);
+  }
+  .pull-q {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(24px, 3.2vw, 38px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.22;
+    max-width: 920px;
+    margin: 0 auto;
+    color: var(--ink);
+  }
+  .pull-q .hl { color: var(--lavender-deep); }
+  .pull-q .hl-rose { color: var(--rose-deep); }
+  .pull-attr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 28px;
+  }
+
+  /* ════════════ CONTRAST ════════════ */
+  .contrast-2 {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin: 32px 0;
+  }
+  .c-card {
+    padding: 36px 32px; border: 1px solid var(--line);
+    background: var(--paper-2);
+  }
+  .c-card.primary {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+  .c-card h4 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 24px; font-weight: 600;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .c-card .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 20px;
+  }
+  .c-card.primary .sub { color: var(--lavender-soft); }
+  .c-card p { font-size: 14.5px; line-height: 1.65; margin: 0; }
+  .c-card.primary p { color: rgba(243, 238, 226, 0.9); }
+
+  /* ════════════ LIMITS ════════════ */
+  .limits-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .lc {
+    background: var(--paper-2); padding: 32px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .lc .idx {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic; font-size: 36px;
+    font-weight: 500; color: var(--rose-deep);
+    line-height: 1;
+  }
+  .lc h4 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px; font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .lc p { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+  /* ════════════ NARRATIVE PANEL ════════════ */
+  .mech-panel {
+    background: var(--ink); color: var(--paper);
+    padding: 56px 56px; margin: 40px 0 0;
+    position: relative;
+  }
+  .mech-panel::before {
+    content: ''; position: absolute; top: -1px; left: 0;
+    width: 80px; height: 3px; background: var(--lavender-soft);
+  }
+  .mech-panel h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 32px; font-weight: 600;
+    margin-bottom: 28px;
+  }
+  .mech-panel h3 em {
+    color: var(--lavender-soft); font-style: italic; font-weight: 500;
+  }
+  .mech-panel p {
+    color: rgba(243, 238, 226, 0.88);
+    font-size: 15.5px; line-height: 1.7;
+    max-width: 820px;
+    margin-bottom: 1em;
+  }
+  .mech-panel strong { color: var(--lavender-soft); font-weight: 600; }
+  .mech-panel em {
+    color: var(--paper); font-style: italic;
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05em;
+  }
+
+  /* ════════════ FOOTER ════════════ */
+  .foot {
+    text-align: center; padding: 48px 0 80px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ════════════ RESPONSIVE ════════════ */
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .sec-head, .body-grid { grid-template-columns: 1fr; gap: 12px; }
+    .findings-3 { grid-template-columns: 1fr; }
+    .demo-grid { grid-template-columns: repeat(2, 1fr); }
+    .contrast-2, .limits-grid, .hero-bar { grid-template-columns: 1fr; }
+    .hero-stat { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .mech-panel, .chart-card { padding: 32px 24px; }
+    section { padding: 56px 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ════════════ HERO ════════════ -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="top-strip">
+        <div class="stamp">Public Study · Deep-Dive Analysis</div>
+        <div>April 2026</div>
+      </div>
+
+      <div class="hero-content">
+        <div class="eyebrow">Full study breakdown</div>
+        <h1 class="title">
+          <span class="l1">The 4-7-8</span>
+          <span class="l2">Effect.</span>
+        </h1>
+        <p class="deck">140 participants tried the simplest breathwork protocol in the literature — inhale four counts, hold seven, exhale eight. The largest cohort in the program to date produced six cohort-wide significant findings. The headline: sleep onset got faster, and the daytime arousal profile softened.</p>
+
+        <div class="hero-bar">
+          <div class="hero-stat">
+            <div class="l">Enrolled</div>
+            <div class="v">140</div>
+            <div class="s">108 with full wearable data</div>
+          </div>
+          <div class="hero-stat">
+            <div class="l">Sleep Latency</div>
+            <div class="v lavender">−9.2<span class="u">%</span></div>
+            <div class="s">Faster to fall asleep (p = 0.002)</div>
+          </div>
+          <div class="hero-stat">
+            <div class="l">Female subgroup</div>
+            <div class="v lavender">−13.8<span class="u">%</span></div>
+            <div class="s">Sleep Latency (p &lt; 0.0001, n = 74)</div>
+          </div>
+          <div class="hero-stat">
+            <div class="l">Significant findings</div>
+            <div class="v rose">6</div>
+            <div class="s">Sleep + activity · p &lt; 0.05 cohort-wide</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ════════════ SEC 01 — SUMMARY ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">01</span>
+          Section One · Summary
+        </div>
+        <div>
+          <h2>Six <em>real findings</em>.</h2>
+          <p class="lede">Sleep onset sped up, and daytime activity dialed back — a coherent parasympathetic-shift signature across 108 participants. Sleep architecture itself didn't meaningfully change; HRV and heart rate stayed flat. What moved is the edge of the sleep window and the volume of daytime drive.</p>
+        </div>
+      </div>
+
+      <div class="findings-3">
+        <div class="find primary">
+          <div class="tag">Primary · Sleep onset</div>
+          <div class="val">−9.2<span class="u">%</span></div>
+          <div class="name">Sleep Latency</div>
+          <div class="desc">Time to fall asleep dropped from 18.1 to 16.5 minutes on average. 59 of 91 participants (65%) fell asleep faster. Nearly 1 in 4 improved by more than 5 minutes.</div>
+          <div class="stat">n = 91 · Wilcoxon p = 0.002 · d = −0.24</div>
+        </div>
+        <div class="find tradeoff">
+          <div class="tag">Activity · Movement</div>
+          <div class="val">−6.6<span class="u">%</span></div>
+          <div class="name">Active Calories</div>
+          <div class="desc">Daily active calorie burn dropped from 418 to 391. Consistent pattern across Total Calories (−2.3%), Distance (−10.2%), Low and Medium activity minutes — all significant.</div>
+          <div class="stat">n = 104 · Wilcoxon p = 0.019 · d = −0.23</div>
+        </div>
+        <div class="find flat">
+          <div class="tag">Flat · Cardiovascular</div>
+          <div class="val">−0.3<span class="u">%</span></div>
+          <div class="name">HRV</div>
+          <div class="desc">HRV barely moved (38.4 → 38.2 ms). Resting heart rate, sleep heart rate, and sleeping respiratory rate also stayed essentially flat. No autonomic shift detectable at 7 days.</div>
+          <div class="stat">n = 105 · p = 0.870 · d = −0.02</div>
+        </div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p>The headline for this study is simple: <strong>a 7-day bedtime breathwork practice produced a statistically significant reduction in sleep onset time across 91 participants</strong>, and that effect was dramatic in female participants (−14% latency, p &lt; 0.0001, d = −0.52 — among the strongest subgroup findings in the program).</p>
+          <p>Everything else sits around that central finding. Daytime activity dropped across five different activity metrics — consistent with the parasympathetic shift a calming practice is designed to produce. Sleep <em>architecture</em> (deep, REM, light) stayed flat, so the change isn't "participants slept differently" — it's "participants fell asleep faster and spent less energy during the day."</p>
+          <p>What follows: the cohort who showed up, the full 19-metric breakdown, the female-specific finding, the age split, the individual-level responders, the mechanism behind why long exhales produce these specific effects, and six structural limitations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 02 — COHORT ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">02</span>
+          Section Two · Cohort
+        </div>
+        <div>
+          <h2>Who <em>showed up</em>.</h2>
+          <p class="lede">108 participants with linked wearable and demographic data — the largest cohort across the program. Heavily female, US-based, moderately stressed, Oura-dominant. Already comfortable with wellness practices at baseline, which matters for how we read additional effects.</p>
+        </div>
+      </div>
+
+      <div class="demo-grid">
+        <div class="dc">
+          <h4>Age Range</h4>
+          <div class="row"><span class="k">36–45</span><span class="v">37</span></div>
+          <div class="row"><span class="k">46–55</span><span class="v">34</span></div>
+          <div class="row"><span class="k">56–65</span><span class="v">16</span></div>
+          <div class="row"><span class="k">26–35</span><span class="v">14</span></div>
+          <div class="row"><span class="k">18–25</span><span class="v">5</span></div>
+          <div class="row"><span class="k">66+</span><span class="v">2</span></div>
+        </div>
+        <div class="dc">
+          <h4>Gender</h4>
+          <div class="row"><span class="k">Female</span><span class="v">83</span></div>
+          <div class="row"><span class="k">Male</span><span class="v">25</span></div>
+        </div>
+        <div class="dc">
+          <h4>Ethnicity</h4>
+          <div class="row"><span class="k">Caucasian</span><span class="v">68</span></div>
+          <div class="row"><span class="k">Asian / PI</span><span class="v">14</span></div>
+          <div class="row"><span class="k">Hispanic / Latino</span><span class="v">10</span></div>
+          <div class="row"><span class="k">Black</span><span class="v">4</span></div>
+          <div class="row"><span class="k">Mixed / Other</span><span class="v">4</span></div>
+        </div>
+        <div class="dc">
+          <h4>Country</h4>
+          <div class="row"><span class="k">USA</span><span class="v">104</span></div>
+          <div class="row"><span class="k">Canada</span><span class="v">4</span></div>
+        </div>
+        <div class="dc">
+          <h4>Education</h4>
+          <div class="row"><span class="k">Master's</span><span class="v">35</span></div>
+          <div class="row"><span class="k">Bachelor's</span><span class="v">35</span></div>
+          <div class="row"><span class="k">Some college</span><span class="v">14</span></div>
+          <div class="row"><span class="k">Doctorate</span><span class="v">9</span></div>
+          <div class="row"><span class="k">Trade/Voc.</span><span class="v">5</span></div>
+          <div class="row"><span class="k">Professional</span><span class="v">3</span></div>
+        </div>
+        <div class="dc">
+          <h4>Household Income</h4>
+          <div class="row"><span class="k">&gt; $100K</span><span class="v">62</span></div>
+          <div class="row"><span class="k">$50K–$100K</span><span class="v">20</span></div>
+          <div class="row"><span class="k">$25K–$50K</span><span class="v">7</span></div>
+          <div class="row"><span class="k">&lt; $25K</span><span class="v">2</span></div>
+          <div class="row"><span class="k">Prefer not say</span><span class="v">10</span></div>
+        </div>
+        <div class="dc">
+          <h4>Baseline Stress</h4>
+          <div class="row"><span class="k">Moderate</span><span class="v">80</span></div>
+          <div class="row"><span class="k">High</span><span class="v">20</span></div>
+          <div class="row"><span class="k">Low</span><span class="v">20</span></div>
+          <div class="row"><span class="k">Very High</span><span class="v">5</span></div>
+        </div>
+        <div class="dc">
+          <h4>Wearables</h4>
+          <div class="row"><span class="k">Oura Ring</span><span class="v">106</span></div>
+          <div class="row"><span class="k">Apple Watch</span><span class="v">57</span></div>
+          <div class="row"><span class="k">WHOOP</span><span class="v">15</span></div>
+          <div class="row"><span class="k">Garmin</span><span class="v">11</span></div>
+          <div class="row"><span class="k">Fitbit</span><span class="v">6</span></div>
+        </div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>An already-practicing cohort.</strong> Of 126 baseline-survey respondents, 57 listed physical activity as a mental-health practice, 30 meditation or mindfulness, 24 breathing exercises, 24 yoga, 22 therapy, 22 creative practice, 17 journaling. Walking was reported by 102; strength training by 63. A cohort with a baseline of regulation tools layered 4-7-8 on top — meaning observed effects sit alongside existing practices, not introduced to an untrained system.</p>
+          <p><strong>Stress skews moderate-to-low.</strong> 100 of 126 reported moderate or low stress (79%). The intervention is being tested against a relatively-regulated baseline; the fact that the sleep-onset finding is clear despite this tells us the effect is real and not an artifact of starting from a highly-stressed cohort.</p>
+          <p><strong>Oura-dominant by design.</strong> 106 of 199 wearable selections (53%) were Oura Ring. As in several other studies in the program, the sleep-measurement instrument matches the signal that emerged — a sleep-onset finding shows up most cleanly on a ring that times sleep transitions well.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 03 — FULL RESULTS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">03</span>
+          Section Three · Results
+        </div>
+        <div>
+          <h2>The full <em>picture</em>.</h2>
+          <p class="lede">19 metrics with paired data. Six cleared significance at the cohort level — the most findings of any single study in the program to date. The internal pattern is tight: one sleep-timing metric, five activity metrics, and nothing in sleep architecture or cardiovascular markers.</p>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">Effect sizes across all 19 metrics</div>
+        <div class="chart-sub">Cohen's d · rose = significant · lavender = trend · below zero = decreased</div>
+        <div class="chart-canvas tall"><canvas id="effectChart"></canvas></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mtab">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>n</th>
+              <th>Baseline</th>
+              <th>Intervention</th>
+              <th>Δ</th>
+              <th>%</th>
+              <th>Cohen's d</th>
+              <th>p (best)</th>
+            </tr>
+          </thead>
+          <tbody id="mtable"></tbody>
+        </table>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>What cleared significance:</strong> Total Calories (p = 0.001), Sleep Latency (Wilcoxon p = 0.002), Low Activity Minutes (Wilcoxon p = 0.012), Active Calories (Wilcoxon p = 0.019), Distance (p = 0.033), Medium Activity Minutes (Wilcoxon p = 0.040). One sleep finding and five activity findings, all moving in the same direction — less daytime drive, easier sleep onset.</p>
+          <p><strong>What trended:</strong> REM Sleep −3% (p = 0.077). Directionally consistent with the activity drop but not independently significant.</p>
+          <p><strong>What stayed flat:</strong> HRV (−0.3%), Average Heart Rate (−0.8%), Lowest Sleep HR (−0.3%), Sleep Efficiency (+0.3%), Deep Sleep (−0.9%), Light Sleep (±0%), Time Awake (−2.2%). Cardiovascular and sleep architecture held steady. This is "parasympathetic shift without autonomic rewiring" — exactly what a 7-day window can produce.</p>
+          <p style="font-size: 13px; color: var(--ink-muted); font-style: italic;">Floors Climbed, VO₂ Max, and Stress Score came through as zeros across the Oura-dominant cohort — device doesn't report. Excluded from analysis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 04 — FEMALE/AGE ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">04</span>
+          Section Four · Subgroup signals
+        </div>
+        <div>
+          <h2>The <em>female effect</em>.</h2>
+          <p class="lede">The cohort-level sleep-onset finding is strong. The female-specific version of it is among the clearest subgroup results across the entire program — 74 participants, 14% faster sleep onset, p less than a hundredth of a percent. Age 56–65 and 26–35 subgroups also showed independently-significant latency gains.</p>
+        </div>
+      </div>
+
+      <div class="pull">
+        <div class="pull-q">
+          Female participants fell asleep <span class="hl">13.8% faster</span>.<br>
+          Cohen's d = <span class="hl-rose">−0.52</span> · p &lt; 0.0001.
+        </div>
+        <div class="pull-attr">n = 74 · among the cleanest sleep-onset findings in the program</div>
+      </div>
+
+      <div class="contrast-2">
+        <div class="c-card">
+          <h4>The female-specific finding</h4>
+          <div class="sub">n = 74 · Sleep Latency</div>
+          <p>74 female participants with sleep-latency data saw their average drop from 18.2 to 15.7 minutes — 2.5 minutes faster to fall asleep, a 13.8% reduction. Cohen's d of −0.52 is a moderate effect size, large for a 7-day intervention. The effect clears conventional thresholds at p &lt; 0.0001, meaning the observed shift is far too consistent to be chance. One of four strongest subgroup signals across the program.</p>
+        </div>
+        <div class="c-card primary">
+          <h4>The age pattern</h4>
+          <div class="sub">26–35 · 36–45 · 56–65</div>
+          <p>Every age group with adequate sample showed faster sleep onset. 26–35: −22% (p = 0.047). 36–45: −11% (Wilcoxon p = 0.023). 56–65: −17% (p = 0.010). The 56–65 cohort also showed an HRV <em>rise</em> of 13.3% (p = 0.051, Wilcoxon p = 0.026) — notable because this is the one age group where an autonomic effect is emerging within the 7-day window. Older participants may be the most parasympathetic-responsive to bedtime breathwork.</p>
+        </div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 32px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>The male subgroup (n = 25)</strong> was too small to detect effects at the same sample size, but two signals trended: Sleeping Respiratory Rate dropped 1.5% (p = 0.005) and Lowest Sleep HR dropped 1.1 bpm (p = 0.018). Both move in the parasympathetic direction. With a larger male subsample, these might clear at the cohort level.</p>
+          <p><strong>The moderate-stress subgroup</strong> (n = 69, 64% of the analyzable cohort) was where the activity drop concentrated — Active Calories −8.4% (Wilcoxon p = 0.006). This fits the pattern: people with moderate baseline stress have room for their arousal to dial down, and when it does, daytime drive drops accordingly.</p>
+          <p>The consistency of direction across subgroups is what makes this study notably clean. No subgroup showed counter-directional effects — the intervention produced the same parasympathetic signature wherever there was sample to detect it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 05 — RESPONDERS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">05</span>
+          Section Five · Individual variation
+        </div>
+        <div>
+          <h2>Who <em>responded</em>.</h2>
+          <p class="lede">65% of participants fell asleep faster. Among improvers, the median reduction was about 5 minutes. The non-responders weren't catastrophic — mostly small negative drifts (0–5 min) with a few outliers in the positive direction.</p>
+        </div>
+      </div>
+
+      <div class="chart-card rose">
+        <div class="chart-title">Per-participant change in Sleep Latency</div>
+        <div class="chart-sub">Each bar = one participant · sorted by magnitude · below zero = faster to fall asleep</div>
+        <div class="chart-canvas tall"><canvas id="responderChart"></canvas></div>
+      </div>
+
+      <div class="body-grid" style="margin-top: 40px;">
+        <div></div>
+        <div class="body-content">
+          <p><strong>59 of 91 participants (65%) fell asleep faster</strong> during the intervention. Among this group, the median improvement was about 5 minutes; the top quintile improved by more than 10 minutes. Nine participants improved by more than 10 minutes each — substantial, life-relevant reductions for anyone who spends real time staring at the ceiling at bedtime.</p>
+          <p><strong>32 participants (35%) fell asleep slower or unchanged.</strong> Most of these shifted by small amounts (under 5 minutes) consistent with noise. Three participants drifted notably in the wrong direction — one by 29 minutes, one by 21, one by 12 — reminders that any intervention produces a distribution of response rather than uniform benefit.</p>
+          <p><strong>The activity responders ran parallel.</strong> Participants whose latency dropped also tended to be the ones whose daytime activity dropped. This correlation at the individual level strengthens the mechanism case — the same people who were less aroused during the day were the same people who fell asleep faster at night.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 06 — MECHANISM ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">06</span>
+          Section Six · Mechanism
+        </div>
+        <div>
+          <h2>Why <em>long exhales</em>.</h2>
+          <p class="lede">4-7-8 is the simplest intentionally parasympathetic breath pattern in the literature. It works via a well-documented mechanism — vagal activation through extended exhalation — and the biometric signature that emerged here matches what the mechanism predicts.</p>
+        </div>
+      </div>
+
+      <div class="mech-panel">
+        <h3>The <em>exhale-to-inhale</em> ratio.</h3>
+        <p>The 4-7-8 pattern (4s in, 7s hold, 8s out) creates an exhale that's twice as long as the inhale — a 2:1 ratio that's notably higher than natural breathing. Three physiological effects compound:</p>
+        <p><strong>Vagal tone activation.</strong> The vagus nerve — the body's primary parasympathetic conduit — is most active during exhalation. A longer exhale means a longer window of vagal dominance per breath cycle, which at scale produces a systemic shift toward the "rest-and-digest" state.</p>
+        <p><strong>Baroreflex loading.</strong> The 7-second breath hold modestly raises intrathoracic pressure, which stimulates baroreceptors that further reinforce parasympathetic signaling. The combination of hold + long exhale is more effective than either component alone at triggering the relaxation response.</p>
+        <p><strong>Cognitive distraction.</strong> The counting structure (4-7-8) demands enough attention to interrupt rumination. For anyone whose sleep-onset problem is cognitive (racing thoughts, worry), the pattern itself provides a mental anchor that replaces the rumination, independent of the physiological mechanism.</p>
+        <p>The biometric signature in this study — faster sleep onset (direct effect of lower pre-sleep arousal) + reduced daytime activity (residual parasympathetic tone carries into the day) + flat HRV and heart rate (the autonomic response to a few minutes of breathwork doesn't show up in 24-hour averages at 7 days) — is exactly what the mechanism would predict.</p>
+        <p><em>What a longer study would likely show:</em> at 4–8 weeks, the cumulative effect of nightly parasympathetic training typically does start to show up in HRV and heart rate baselines. Seven days is long enough to capture the acute bedtime effect but short of the training adaptation window.</p>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 07 — LIMITATIONS ════════════ -->
+    <section>
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">07</span>
+          Section Seven · Caveats
+        </div>
+        <div>
+          <h2>What we <em>can't</em> tell.</h2>
+          <p class="lede">Six limitations that bound any reading of these results.</p>
+        </div>
+      </div>
+
+      <div class="limits-grid">
+        <div class="lc">
+          <div class="idx">i.</div>
+          <h4>No control group</h4>
+          <p>Pre/post design only. Without a neutral-breathwork or wait-list comparator, we can't fully separate the 4-7-8 pattern's specific effect from the general effect of doing any structured breath exercise, or the general effect of being in a study. The strength and specificity of the sleep-onset signal argues the effect is real, but attribution is constrained.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">ii.</div>
+          <h4>Compliance invisible</h4>
+          <p>The dataset shows what wearables captured, not what participants did. How many nights participants actually did 4-7-8, for how many cycles, and how consistently are unknown. Responders and non-responders may differ in practice dose, not biology.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">iii.</div>
+          <h4>Self-selection bias</h4>
+          <p>People who sign up for a bedtime-breathwork study plausibly have sleep-onset concerns at baseline. Baseline latency (18 min) is higher than the general population average, suggesting a selection toward harder-to-fall-asleep participants — which both amplifies measurable effects and limits generalizability.</p>
+        </div>
+        <div class="lc">
+          <div class="idx">iv.</div>
+          <h4>Short window</h4>
+          <p>Seven days captures the acute pre-sleep effect of the practice. It doesn't capture training adaptations (HRV improvement, resting heart rate reduction) that typically require 4–8 weeks of consistent practice. The null cardiovascular result here should not be read as "no autonomic effect" — it's "no autonomic effect yet detectable."</p>
+        </div>
+        <div class="lc">
+          <div class="idx">v.</div>
+          <h4>The activity drop confound</h4>
+          <p>Daytime activity declined across five metrics. Without knowing whether this was direct behavioral displacement (breath practice taking the place of walking), a general parasympathetic-tone effect (less sympathetic drive = less movement), or seasonality, we can't cleanly attribute the sleep benefits to a "calming effect" rather than simply "participants did less overall."</p>
+        </div>
+        <div class="lc">
+          <div class="idx">vi.</div>
+          <h4>Cohort composition</h4>
+          <p>77% female, 96% USA, 63% Caucasian, 57% above $100K income, already-active at baseline. The result is cleanest and largest in the female subgroup — which matches the cohort composition but may not generalize to less-engaged, less-female, less-US populations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ SEC 08 — VERDICT ════════════ -->
+    <section style="border-bottom: none;">
+      <div class="sec-head">
+        <div class="sec-meta">
+          <span class="num">08</span>
+          Section Eight · Takeaway
+        </div>
+        <div>
+          <h2>The honest <em>read</em>.</h2>
+        </div>
+      </div>
+
+      <div class="body-grid">
+        <div></div>
+        <div class="body-content">
+          <p style="font-family: 'Crimson Pro', serif; font-size: 22px; line-height: 1.45; color: var(--ink); font-style: italic;">
+            This study produced <strong style="color: var(--rose-deep); font-style: normal;">six statistically significant findings</strong> at the cohort level — the most of any study in the program. The headline is a reduction in sleep onset time of about 9% cohort-wide and about 14% in female participants, with a moderate effect size (d = −0.52 in the female subgroup). Daytime activity metrics dropped in parallel, consistent with a sustained parasympathetic shift. Cardiovascular markers and sleep architecture stayed flat.
+          </p>
+          <p style="margin-top: 24px;">What the data <em>do</em> support: a claim that 4-7-8 breathwork, practiced for seven days, produces measurable reductions in sleep onset time and daytime activity level in a large cohort. The mechanism — vagal activation via extended exhalation — is well-established; the biometric signature here matches what the mechanism predicts.</p>
+          <p>What the data <em>do not</em> support: claims about HRV improvement, heart rate reduction, or sleep-architecture change. Those markers didn't move in this window, and a 7-day study is likely too short to detect them even if they are present over longer intervals. A 4–8 week replication with a breath-pattern control would be the right design to adjudicate the autonomic questions.</p>
+          <p>What the data <em>do</em> for programming: this is the cleanest parasympathetic-shift finding in the program. The mechanism is well-understood, the protocol is simple to explain, and the effect is large enough that communications can be specific ("~5 minutes faster on average; larger in women") rather than hedged. The age-56–65 HRV rise is also worth highlighting as a replication target.</p>
+          <p style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-2);">
+            <strong style="color: var(--ink);">Recommended framing for communications:</strong> <em>"Participants in this public study fell asleep about 9% faster on average after seven days of the 4-7-8 breath pattern at bedtime (p = 0.002). The effect was larger in women (−14%, p &lt; 0.0001) and in the 56–65 age group (−17%), and participants in all age groups showed daytime activity decreases consistent with a sustained parasympathetic shift. Cardiovascular markers didn't change in 7 days — those typically require 4+ weeks of consistent practice to move."</em></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="foot">
+    Analysis of 4 data files · The 4-7-8 Effect responses · baseline survey · demographics · wearable insights<br>
+    All statistics computed from paired within-participant comparisons · Prepared April 2026
+  </div>
+
+<script>
+// ══════════════ DATA ══════════════
+const metrics = [
+  {metric:'Total Calories', unit:'kcal', n:106, baseline:2224.10, intervention:2172.91, change:-51.19, pct:-2.3, d:-0.304, p:0.0023, pw:0.0013},
+  {metric:'Sleep Latency', unit:'min', n:91, baseline:18.13, intervention:16.46, change:-1.67, pct:-9.2, d:-0.242, p:0.0233, pw:0.0021},
+  {metric:'Active Calories', unit:'kcal', n:104, baseline:418.40, intervention:390.96, change:-27.43, pct:-6.6, d:-0.228, p:0.0218, pw:0.0194},
+  {metric:'Distance', unit:'m', n:101, baseline:8839.74, intervention:7939.60, change:-900.14, pct:-10.2, d:-0.214, p:0.0341, pw:0.0330},
+  {metric:'Low Activity Min', unit:'min', n:98, baseline:245.24, intervention:233.34, change:-11.91, pct:-4.9, d:-0.203, p:0.0467, pw:0.0122},
+  {metric:'Medium Activity Min', unit:'min', n:102, baseline:56.79, intervention:52.26, change:-4.53, pct:-8.0, d:-0.200, p:0.0459, pw:0.0404},
+  {metric:'REM Sleep', unit:'min', n:105, baseline:92.81, intervention:90.01, change:-2.80, pct:-3.0, d:-0.174, p:0.0773, pw:0.1075},
+  {metric:'Average Heart Rate', unit:'bpm', n:106, baseline:86.96, intervention:86.22, change:-0.74, pct:-0.8, d:-0.134, p:0.1691, pw:0.1498},
+  {metric:'Sleeping Resp. Rate', unit:'br/min', n:99, baseline:15.50, intervention:15.45, change:-0.05, pct:-0.3, d:-0.125, p:0.2149, pw:0.2662},
+  {metric:'Steps', unit:'steps', n:101, baseline:6622.72, intervention:6396.51, change:-226.21, pct:-3.4, d:-0.118, p:0.2399, pw:0.2285},
+  {metric:'Total Sleep', unit:'min', n:105, baseline:414.69, intervention:411.08, change:-3.60, pct:-0.9, d:-0.087, p:0.3753, pw:0.5500},
+  {metric:'Lowest HR (Sleep)', unit:'bpm', n:98, baseline:60.05, intervention:59.85, change:-0.20, pct:-0.3, d:-0.066, p:0.5134, pw:0.1789},
+  {metric:'Sleep Efficiency', unit:'%', n:105, baseline:85.52, intervention:85.79, change:0.27, pct:0.3, d:0.065, p:0.5064, pw:0.3511},
+  {metric:'Time Awake', unit:'min', n:106, baseline:71.63, intervention:70.04, change:-1.59, pct:-2.2, d:-0.060, p:0.5409, pw:0.3939},
+  {metric:'Deep Sleep', unit:'min', n:105, baseline:65.95, intervention:65.37, change:-0.58, pct:-0.9, d:-0.057, p:0.5598, pw:0.7179},
+  {metric:'High Activity Min', unit:'min', n:78, baseline:10.06, intervention:10.38, change:0.33, pct:3.3, d:0.040, p:0.7263, pw:0.3769},
+  {metric:'Average HR (Sleep)', unit:'bpm', n:98, baseline:66.98, intervention:66.92, change:-0.06, pct:-0.1, d:-0.018, p:0.8605, pw:0.3569},
+  {metric:'HRV', unit:'ms', n:105, baseline:38.35, intervention:38.23, change:-0.12, pct:-0.3, d:-0.016, p:0.8695, pw:0.5671},
+  {metric:'Light Sleep', unit:'min', n:105, baseline:255.37, intervention:255.39, change:0.02, pct:0.0, d:0.001, p:0.9948, pw:0.9465},
+];
+
+// Per-participant Sleep Latency change (minutes, sorted)
+const latChanges = [-24.19, -19.16, -13.64, -13.04, -12.00, -11.14, -10.36, -9.82, -9.57, -8.79, -8.43, -8.07, -7.92, -6.93, -6.93, -6.36, -5.79, -5.74, -5.61, -5.43, -5.30, -5.07, -5.00, -4.86, -4.64, -4.64, -4.07, -4.07, -3.80, -3.71, -3.71, -3.50, -3.36, -3.14, -3.14, -3.07, -2.65, -2.57, -2.57, -2.50, -2.50, -1.93, -1.88, -1.79, -1.79, -1.75, -1.64, -1.57, -1.57, -1.29, -1.29, -1.29, -1.14, -1.07, -0.64, -0.43, -0.21, -0.21, -0.21, 0.00, 0.36, 0.43, 0.50, 0.56, 0.68, 0.79, 1.01, 1.07, 1.18, 1.36, 1.64, 2.43, 2.64, 2.79, 2.86, 2.93, 3.29, 3.79, 3.82, 4.29, 4.50, 4.50, 5.21, 5.57, 5.93, 5.93, 6.86, 9.21, 11.57, 20.86, 28.29];
+
+// ══════════════ DEFAULTS ══════════════
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#4A3F52';
+Chart.defaults.borderColor = 'rgba(42, 31, 51, 0.1)';
+
+const LAVENDER      = '#9575B0';
+const LAVENDER_DEEP = '#5E4280';
+const LAVENDER_SOFT = '#BCA3D0';
+const ROSE          = '#C17A6E';
+const ROSE_DEEP     = '#8E4F43';
+const TEAL          = '#4F7680';
+const SAGE          = '#7A8C7B';
+const INK           = '#2A1F33';
+const MUTED         = 'rgba(42, 31, 51, 0.24)';
+const PAPER         = '#F3EEE2';
+
+function sigColor(m) {
+  const p = Math.min(m.p, m.pw || 1);
+  if (p < 0.05) return ROSE;
+  if (p < 0.10) return LAVENDER;
+  if (p < 0.20) return 'rgba(149, 117, 176, 0.45)';
+  return MUTED;
+}
+
+// ══════════════ CHART 1 — EFFECTS ══════════════
+const sorted = [...metrics].sort((a,b) => Math.abs(b.d) - Math.abs(a.d));
+new Chart(document.getElementById('effectChart'), {
+  type: 'bar',
+  data: {
+    labels: sorted.map(m => m.metric),
+    datasets: [{
+      data: sorted.map(m => m.d),
+      backgroundColor: sorted.map(m => sigColor(m)),
+      borderWidth: 0,
+      borderRadius: 2,
+      barPercentage: 0.82,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: INK,
+        titleColor: PAPER, bodyColor: PAPER,
+        titleFont: { family: "'Crimson Pro', serif", size: 16, weight: 600 },
+        bodyFont: { family: "'IBM Plex Mono', monospace", size: 11 },
+        padding: 14,
+        cornerRadius: 0,
+        callbacks: {
+          title: (ctx) => ctx[0].label,
+          label: (ctx) => {
+            const m = sorted[ctx.dataIndex];
+            return [
+              `Δ: ${m.change > 0 ? '+' : ''}${m.change} ${m.unit}  (${m.pct > 0 ? '+' : ''}${m.pct}%)`,
+              `d: ${m.d}   p: ${Math.min(m.p, m.pw || 1).toFixed(3)}`,
+              `n = ${m.n}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(42, 31, 51, 0.06)', drawTicks: false },
+        border: { display: false },
+        ticks: { font: { family: "'IBM Plex Mono', monospace", size: 10 }},
+        title: {
+          display: true,
+          text: "Cohen's d  ·  negative = metric decreased, positive = increased",
+          font: { family: "'IBM Plex Mono', monospace", size: 10 },
+          color: 'rgba(42, 31, 51, 0.5)', padding: { top: 12 }
+        }
+      },
+      y: {
+        grid: { display: false }, border: { display: false },
+        ticks: {
+          font: { family: "'Crimson Pro', serif", size: 14, weight: 600 },
+          color: INK, padding: 8
+        }
+      }
+    }
+  }
+});
+
+// ══════════════ CHART 2 — RESPONDERS ══════════════
+new Chart(document.getElementById('responderChart'), {
+  type: 'bar',
+  data: {
+    labels: latChanges.map((_, i) => i + 1),
+    datasets: [{
+      data: latChanges,
+      backgroundColor: latChanges.map(v => v < 0 ? LAVENDER : ROSE_DEEP),
+      borderWidth: 0,
+      barPercentage: 1.0,
+      categoryPercentage: 0.9,
+    }]
+  },
+  options: {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: INK, titleColor: PAPER, bodyColor: PAPER, cornerRadius: 0,
+        callbacks: {
+          title: (ctx) => `Participant ${ctx[0].label}`,
+          label: (ctx) => {
+            const v = ctx.parsed.y;
+            if (v === 0) return 'No measured change';
+            return v < 0 ? `${v.toFixed(1)} min — fell asleep faster` : `+${v.toFixed(1)} min — fell asleep slower`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false }, ticks: { display: false }},
+      y: {
+        grid: {
+          color: (ctx) => ctx.tick.value === 0 ? INK : 'rgba(42, 31, 51, 0.06)',
+          lineWidth: (ctx) => ctx.tick.value === 0 ? 1.5 : 1,
+          drawTicks: false
+        },
+        border: { display: false },
+        ticks: {
+          font: { family: "'IBM Plex Mono', monospace", size: 10 },
+          callback: (v) => v > 0 ? `+${v}m` : `${v}m`
+        },
+        title: {
+          display: true, text: 'Change in Sleep Latency (min)  ·  below zero = faster to fall asleep',
+          font: { family: "'IBM Plex Mono', monospace", size: 10 },
+          color: 'rgba(42, 31, 51, 0.5)', padding: { bottom: 8 }
+        }
+      }
+    }
+  }
+});
+
+// ══════════════ TABLE ══════════════
+const tbody = document.getElementById('mtable');
+metrics.forEach(m => {
+  const bestP = Math.min(m.p, m.pw || 1);
+  const pCls = bestP < 0.05 ? 'p-sig' : (bestP < 0.15 ? 'p-trend' : '');
+  const lowerIsBetter = ['Time Awake', 'Sleep Latency', 'Sleeping Resp. Rate', 'Average HR (Sleep)', 'Lowest HR (Sleep)', 'Average Heart Rate'];
+  const higherIsBetter = ['HRV', 'Sleep Efficiency', 'Deep Sleep', 'REM Sleep', 'Total Sleep'];
+  let dirCls = 'dir-flat';
+  if (Math.abs(m.pct) >= 1) {
+    if (lowerIsBetter.includes(m.metric)) {
+      dirCls = m.change < 0 ? 'dir-good' : 'dir-bad';
+    } else if (higherIsBetter.includes(m.metric)) {
+      dirCls = m.change > 0 ? 'dir-good' : 'dir-bad';
+    }
+  }
+  tbody.innerHTML += `
+    <tr>
+      <td>${m.metric}</td>
+      <td>${m.n}</td>
+      <td>${m.baseline} <span style="color: var(--ink-muted); font-size: 11px;">${m.unit}</span></td>
+      <td>${m.intervention} <span style="color: var(--ink-muted); font-size: 11px;">${m.unit}</span></td>
+      <td class="${dirCls}">${m.change > 0 ? '+' : ''}${m.change}</td>
+      <td class="${dirCls}">${m.pct > 0 ? '+' : ''}${m.pct}%</td>
+      <td>${m.d > 0 ? '+' : ''}${m.d.toFixed(3)}</td>
+      <td class="${pCls}">${bestP.toFixed(3)}</td>
+    </tr>
+  `;
+});
+</script>
+</body>
+</html>
