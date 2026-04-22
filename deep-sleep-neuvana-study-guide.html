@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Sleep — A 6-Week Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #2A2640;
+    --ink-2:      #4A4560;
+    --ink-muted:  #7F7A95;
+    --paper:      #F4F1F7;
+    --paper-2:    #E9E2ED;
+    --paper-deep: #DED2E3;
+    --violet:     #6B7AB8;
+    --violet-deep: #3D4A85;
+    --violet-soft: #9FAED6;
+    --terracotta: #C47B60;
+    --terracotta-deep: #93573E;
+    --sage:       #8A9F7E;
+    --line:       rgba(42, 38, 64, 0.12);
+    --line-soft:  rgba(42, 38, 64, 0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    font-weight: 400;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 840px; margin: 0 auto; padding: 0 32px; }
+
+  /* ════════════ HERO ════════════ */
+  .hero {
+    padding: 72px 0 64px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; height: 120%;
+    background:
+      radial-gradient(ellipse at center top, rgba(107, 122, 184, 0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 60%, rgba(196, 123, 96, 0.1) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero > * { position: relative; z-index: 2; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--violet-deep);
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  h1.title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'opsz' 144;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  h1.title em {
+    font-style: italic; font-weight: 300;
+    color: var(--violet-deep);
+  }
+  .subtitle {
+    font-family: 'Fraunces', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(18px, 2vw, 22px);
+    line-height: 1.4;
+    color: var(--ink-2);
+    max-width: 620px;
+    margin: 0 auto 48px;
+  }
+  .welcome-note {
+    font-size: 16px; line-height: 1.75;
+    color: var(--ink-2); max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ════════════ QUICK FACTS ════════════ */
+  .quick-facts {
+    margin-top: 56px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 4px; overflow: hidden;
+  }
+  .qf {
+    background: var(--paper); padding: 24px 18px;
+    text-align: center;
+  }
+  .qf .lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .qf .val {
+    font-family: 'Fraunces', serif;
+    font-size: 28px; font-weight: 500;
+    color: var(--ink); line-height: 1.1;
+  }
+
+  /* ════════════ SECTIONS ════════════ */
+  section {
+    padding: 64px 0;
+    border-top: 1px solid var(--line);
+  }
+  section:first-of-type { border-top: none; }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    margin-bottom: 24px;
+  }
+  h2 em {
+    font-style: italic; font-weight: 300;
+    color: var(--violet-deep);
+  }
+  p.lede {
+    font-size: 18px; line-height: 1.65;
+    color: var(--ink-2);
+    margin-bottom: 20px;
+  }
+  p {
+    font-size: 16px; line-height: 1.7;
+    color: var(--ink-2);
+    margin-bottom: 14px;
+  }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--ink); font-weight: 600; }
+
+  /* ════════════ TIMELINE ════════════ */
+  .timeline {
+    margin: 40px 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: ''; position: absolute;
+    top: 36px; left: 8%; right: 8%;
+    height: 2px;
+    background: linear-gradient(90deg,
+      var(--violet-soft) 0%,
+      var(--violet-soft) 50%,
+      var(--terracotta) 100%);
+    z-index: 0;
+  }
+  .tp { position: relative; text-align: center; z-index: 1; }
+  .tp .dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--paper); border: 2px solid var(--violet);
+    margin: 28px auto 16px;
+    position: relative; z-index: 2;
+  }
+  .tp.end .dot { border-color: var(--terracotta); }
+  .tp .day {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--violet-deep); font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .tp.end .day { color: var(--terracotta-deep); }
+  .tp .label {
+    font-family: 'Fraunces', serif;
+    font-size: 20px; font-weight: 500;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .tp .desc {
+    font-size: 13px; color: var(--ink-muted);
+    line-height: 1.5; max-width: 200px; margin: 0 auto;
+  }
+
+  /* ════════════ DAILY ROUTINE STEPS ════════════ */
+  .steps {
+    margin-top: 36px;
+    display: grid; gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px; overflow: hidden;
+  }
+  .step {
+    background: var(--paper); padding: 24px 28px;
+    display: grid; grid-template-columns: 64px 1fr;
+    gap: 20px; align-items: start;
+  }
+  .step .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 36px; font-weight: 400;
+    color: var(--violet-deep); line-height: 1;
+  }
+  .step .content h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 19px; font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .step .content p {
+    font-size: 14.5px; margin: 0;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  /* ════════════ WHAT WE MEASURE ════════════ */
+  .measure-grid {
+    margin-top: 32px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .measure-card {
+    background: var(--paper-2); padding: 28px 24px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .measure-card h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px; font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .measure-card .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--violet-deep); margin-bottom: 16px;
+  }
+  .measure-card p { font-size: 14px; line-height: 1.6; margin: 0; }
+
+  /* ════════════ KEEP CLEAN ════════════ */
+  .check-list {
+    margin-top: 24px;
+    padding-left: 0; list-style: none;
+  }
+  .check-list li {
+    padding: 10px 0 10px 32px;
+    position: relative;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 15px; color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .check-list li:last-child { border-bottom: none; }
+  .check-list li::before {
+    content: '';
+    position: absolute; left: 0; top: 16px;
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--violet);
+    border-radius: 4px;
+    background: var(--paper);
+  }
+  .check-list li.dont::before {
+    border-color: var(--terracotta);
+    background: var(--paper);
+  }
+
+  /* ════════════ SIGN-OFF ════════════ */
+  .signoff {
+    text-align: center;
+    padding: 64px 32px;
+    background: var(--paper-2);
+    border-radius: 8px;
+    margin: 32px 0 0;
+  }
+  .signoff h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400; font-style: italic;
+    font-size: 28px;
+    color: var(--ink); margin-bottom: 16px;
+  }
+  .signoff p {
+    max-width: 480px; margin: 0 auto 12px;
+    font-size: 15px;
+  }
+  .signoff .contact {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--violet-deep); margin-top: 20px;
+  }
+
+  /* ════════════ FOOTER ════════════ */
+  .foot {
+    text-align: center; padding: 40px 0 64px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ════════════ RESPONSIVE ════════════ */
+  @media (max-width: 700px) {
+    .wrap { padding: 0 20px; }
+    .quick-facts { grid-template-columns: repeat(2, 1fr); }
+    .timeline { grid-template-columns: 1fr; gap: 32px; }
+    .timeline::before { display: none; }
+    .tp .dot { margin-top: 0; }
+    .measure-grid { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 48px 1fr; padding: 20px; }
+    .step .num { font-size: 28px; }
+    section { padding: 48px 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ════════════ HERO ════════════ -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Reputable Health · Participant Guide</div>
+      <h1 class="title">Deep <em>Sleep</em>.</h1>
+      <p class="subtitle">A 6-week study exploring whether Neuvana Xen — a device you wear on your ears — can help you sleep better.</p>
+      <p class="welcome-note">
+        Thanks for joining. This guide is short on purpose. Everything you need to do, everything we'll ask, and everything we'll track is on this page. Bookmark it — you can always come back.
+      </p>
+
+      <div class="quick-facts">
+        <div class="qf">
+          <div class="lbl">Duration</div>
+          <div class="val">6 weeks</div>
+        </div>
+        <div class="qf">
+          <div class="lbl">Daily time</div>
+          <div class="val">~15 min</div>
+        </div>
+        <div class="qf">
+          <div class="lbl">Check-ins</div>
+          <div class="val">3 surveys</div>
+        </div>
+        <div class="qf">
+          <div class="lbl">Wearable</div>
+          <div class="val">Oura</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ════════════ WHAT THIS IS ════════════ -->
+    <section>
+      <h2>What this study is <em>about</em>.</h2>
+      <p class="lede">Neuvana Xen is a pair of earbuds that sends a very gentle electrical pulse through your ears to stimulate the vagus nerve — the nerve that helps your body shift into a calmer, more rested state. Early research suggests it might help with sleep and stress.</p>
+      <p>This study asks a simple question: <strong>if you use the device every day for six weeks, does your sleep actually change?</strong> We'll measure sleep two ways — through your Oura ring (which tracks sleep stages, heart rate, and recovery overnight) and through your own answers on short surveys at three points during the study.</p>
+      <p>You don't need to be a researcher. You don't need to change your life. You just need to keep your usual routines, use the device once a day, and answer a few questions when we ask. That's it.</p>
+    </section>
+
+    <!-- ════════════ TIMELINE ════════════ -->
+    <section>
+      <h2>Your 6-week <em>journey</em>.</h2>
+      <p class="lede">Three key moments. The days in between are yours — keep your regular routine and use the device daily.</p>
+
+      <div class="timeline">
+        <div class="tp">
+          <div class="day">Day 0</div>
+          <div class="dot"></div>
+          <div class="label">Getting Started</div>
+          <div class="desc">Complete your baseline survey. Start using the device daily.</div>
+        </div>
+        <div class="tp">
+          <div class="day">Day 21</div>
+          <div class="dot"></div>
+          <div class="label">Midpoint</div>
+          <div class="desc">A quick check-in survey to see how you're doing at the halfway point.</div>
+        </div>
+        <div class="tp end">
+          <div class="day">Day 42</div>
+          <div class="dot"></div>
+          <div class="label">Wrap Up</div>
+          <div class="desc">Final survey. Tell us what you experienced and how you feel.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ DAILY ROUTINE ════════════ -->
+    <section>
+      <h2>Your daily <em>routine</em>.</h2>
+      <p class="lede">Three simple things. None take long.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="num">i</div>
+          <div class="content">
+            <h4>Use Neuvana Xen once a day</h4>
+            <p>Follow the instructions that came with your device. Most people use it in the evening, before bed — but you can pick the time that works for you, as long as it's consistent.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">ii</div>
+          <div class="content">
+            <h4>Wear your Oura ring every day and every night</h4>
+            <p>Keep the ring on your finger as much as possible — including while you sleep. Sync it with the Reputable Health platform once a day or so. That's how we'll see your sleep data.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">iii</div>
+          <div class="content">
+            <h4>Complete each survey when it arrives</h4>
+            <p>You'll get a short survey at the start, at day 21, and at day 42. Each one takes about 5–10 minutes. Answer honestly — there's no "right" answer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ WHAT WE MEASURE ════════════ -->
+    <section>
+      <h2>What we're <em>measuring</em>.</h2>
+      <p class="lede">Two sources of information: your ring, and your own words.</p>
+
+      <div class="measure-grid">
+        <div class="measure-card">
+          <h4>From your Oura ring</h4>
+          <div class="tag">Automatic · Nightly</div>
+          <p>Total sleep, how long it takes you to fall asleep, time spent in deep sleep and REM, heart rate, and heart rate variability. You don't have to do anything — just wear the ring and let it sync.</p>
+        </div>
+        <div class="measure-card">
+          <h4>From your surveys</h4>
+          <div class="tag">3 short check-ins</div>
+          <p>How you feel you've been sleeping, how often certain things woke you up, how rested you feel in the morning, and whether you noticed any effect from the device. Your experience matters as much as the data.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ KEEP CLEAN ════════════ -->
+    <section>
+      <h2>Keeping things <em>clean</em>.</h2>
+      <p class="lede">So we can tell what's actually the device versus something else, please try to keep the rest of your life steady for the 6 weeks.</p>
+
+      <ul class="check-list">
+        <li><strong>Keep your usual sleep schedule.</strong> No big shifts in bedtime or wake time if you can help it.</li>
+        <li><strong>Keep your usual exercise routine.</strong> Don't start or stop an exercise program during the study.</li>
+        <li><strong>Don't start new sleep/stress/mood medications or supplements</strong> (prescription or over-the-counter) while the study is running.</li>
+        <li class="dont"><strong>Don't worry if a night goes sideways</strong> — one bad night won't ruin the study. Just keep going.</li>
+        <li class="dont"><strong>Don't push through if something feels wrong.</strong> If the device ever feels uncomfortable or you want out, just let us know.</li>
+      </ul>
+    </section>
+
+    <!-- ════════════ YOUR PRIVACY ════════════ -->
+    <section>
+      <h2>Your <em>privacy</em>.</h2>
+      <p>Your data stays private. When we write up what we found at the end of the study, we'll only ever share <em>averages</em> across all participants — never anything traceable back to you. Your name, email, and personal details are kept separate from your sleep data and survey answers. Only the research team sees the underlying data.</p>
+      <p>If at any point you want to stop the study, remove your data, or ask us a question about how we're handling it, you can — no explanation needed.</p>
+    </section>
+
+    <!-- ════════════ SIGN-OFF ════════════ -->
+    <div class="signoff">
+      <h3>Any questions before you start?</h3>
+      <p>We're here. The research team reads every message — usually within a business day.</p>
+      <div class="contact">studies@reputable.health</div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    Reputable Health · Deep Sleep Study · Neuvana Xen<br>
+    6-week participant study · For questions: studies@reputable.health
+  </div>
+
+</body>
+</html>
