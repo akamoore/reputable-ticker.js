@@ -698,7 +698,7 @@
   // ============================================================
   const STUDIES = [
     { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8807.67, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question' },
-    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)' },
+    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 6461.48, leads: 218, joined: 102, onboarded: 30, target: 35, wearable: 'WHOOP', days: 88, launchDate: 'Jan 5, 2026', endDate: 'Apr 3, 2026', launchYear: 2026, crossYear: false, manualQueue: true, status: 'complete', outlier: true, notes: 'OUTLIER — WHOOP user base issue, lab bottleneck (manual step)' },
     { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 771, joined: 520, onboarded: 192, target: 189, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, notes: '' },
     { id: 4, name: 'Nitrate Supplementation (Berkeley Life)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, notes: 'Prescreening outside of app (manual step)' },
     { id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT', spend: 2464.11, leads: 575, joined: 338, onboarded: 120, target: 120, wearable: 'Oura', days: 30, launchDate: 'Dec 23, 2025', endDate: 'Jan 22, 2026', launchYear: 2025, crossYear: true, manualQueue: false, status: 'complete', outlier: false, notes: 'Cross-year: launched 2025, completed 2026' },
@@ -921,7 +921,8 @@
     },
 
     // Merge API data with local STUDIES — enriches with live
-    // ad spend, joins, and onboarded from the API when available
+    // ad spend, joins, and onboarded from the API when available.
+    // Also appends synthetic records for API studies missing from STUDIES.
     getEnrichedStudies() {
       const byStudy = this.getOnboardingByStudy();
       const campaignMap = this.getCampaignStudyMap();
@@ -935,18 +936,23 @@
         spendByCampaign[key] = (spendByCampaign[key] || 0) + (ad.spend || 0);
       });
 
-      return STUDIES.map(s => {
+      const matchedCampaignIdx = new Set();
+      const matchedByStudyIdx = new Set();
+
+      const enrichedStudies = STUDIES.map(s => {
         const enriched = { ...s };
         const sNameLower = s.name.toLowerCase();
         const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
 
         // Match in campaignStudyMap (has studyName, campaignName, joins, onboarded)
-        const mapped = campaignMap.find(c =>
+        const mappedIdx = campaignMap.findIndex(c =>
           sNameLower.includes(c.studyName?.toLowerCase()) ||
           c.studyName?.toLowerCase().includes(sNamePrefix) ||
           c.campaignName?.toLowerCase().includes(sNamePrefix)
         );
-        if (mapped) {
+        if (mappedIdx >= 0) {
+          matchedCampaignIdx.add(mappedIdx);
+          const mapped = campaignMap[mappedIdx];
           enriched.apiJoins = mapped.joins;
           enriched.apiOnboarded = mapped.onboarded;
           enriched.experimentId = mapped.experimentId;
@@ -969,17 +975,81 @@
         }
 
         // Match in onboarding.byStudy
-        const obMatch = byStudy.find(o =>
+        const obMatchIdx = byStudy.findIndex(o =>
           sNameLower.includes(o.studyName?.toLowerCase()) ||
           o.studyName?.toLowerCase().includes(sNamePrefix)
         );
-        if (obMatch) {
+        if (obMatchIdx >= 0) {
+          matchedByStudyIdx.add(obMatchIdx);
+          const obMatch = byStudy[obMatchIdx];
           enriched.apiOnboarded = obMatch.onboarded;
           enriched.experimentId = obMatch.experimentId;
         }
 
         return enriched;
       });
+
+      // Auto-discover: append any API studies not already matched to a local entry
+      const seenExperimentIds = new Set();
+      const seenNames = new Set();
+      enrichedStudies.forEach(s => {
+        if (s.experimentId) seenExperimentIds.add(s.experimentId);
+        seenNames.add(s.name.toLowerCase());
+      });
+
+      const synthetic = [];
+      const currentYear = new Date().getFullYear();
+      let nextSyntheticId = 9000;
+
+      const addSynthetic = (entry, source) => {
+        const name = entry.studyName || entry.campaignName;
+        if (!name) return;
+        const nameLower = name.toLowerCase();
+        if (entry.experimentId && seenExperimentIds.has(entry.experimentId)) return;
+        if (seenNames.has(nameLower)) return;
+
+        const campaignKey = (entry.campaignName || '').toLowerCase();
+        synthetic.push({
+          id: nextSyntheticId++,
+          name,
+          type: 'NEW',
+          status: 'recruiting',
+          spend: 0,
+          apiSpend: campaignKey && spendByCampaign[campaignKey] != null ? spendByCampaign[campaignKey] : null,
+          leads: null,
+          joined: null,
+          apiJoins: entry.joins ?? null,
+          onboarded: 0,
+          apiOnboarded: entry.onboarded ?? null,
+          target: null,
+          wearable: null,
+          days: null,
+          launchDate: null,
+          endDate: null,
+          launchYear: currentYear,
+          crossYear: false,
+          manualQueue: false,
+          outlier: false,
+          experimentId: entry.experimentId,
+          _fromApi: true,
+          _source: source,
+          notes: 'Auto-discovered from API — add to STUDIES for full metadata',
+        });
+        if (entry.experimentId) seenExperimentIds.add(entry.experimentId);
+        seenNames.add(nameLower);
+      };
+
+      campaignMap.forEach((c, idx) => {
+        if (matchedCampaignIdx.has(idx)) return;
+        addSynthetic(c, 'campaignMap');
+      });
+
+      byStudy.forEach((o, idx) => {
+        if (matchedByStudyIdx.has(idx)) return;
+        addSynthetic(o, 'byStudy');
+      });
+
+      return [...enrichedStudies, ...synthetic];
     }
   };
 
@@ -1005,7 +1075,7 @@
   }
 
   function typeBadge(type) {
-    const map = { RCT: 'badge-indigo', RWE: 'badge-teal', VEP: 'badge-lavender', PUBLIC: 'badge-sky' };
+    const map = { RCT: 'badge-indigo', RWE: 'badge-teal', VEP: 'badge-lavender', PUBLIC: 'badge-sky', NEW: 'badge-gray' };
     return `<span class="badge ${map[type] || 'badge-gray'}">${type}</span>`;
   }
 
@@ -1628,7 +1698,7 @@ const periodKey = selectedDays <= 7 ? 'week' : selectedDays <= 30 ? 'month' : 'm
 
       return `<tr>
         <td class="align-right">${s.id}</td>
-        <td>${esc(s.name)}${s.outlier ? ' <span class="badge badge-rose" style="font-size:9px">Outlier</span>' : ''}</td>
+        <td>${esc(s.name)}${s.outlier ? ' <span class="badge badge-rose" style="font-size:9px">Outlier</span>' : ''}${s._fromApi ? ' <span class="badge badge-gray" style="font-size:9px" title="Auto-discovered from API">Auto</span>' : ''}</td>
         <td>${typeBadge(s.type)}</td>
         <td>${statusBadge(s.status)}</td>
         <td>${s.launchDate || '—'}</td>
