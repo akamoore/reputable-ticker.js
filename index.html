@@ -634,6 +634,8 @@
   let metaAdsData = null;
   let selectedDays = 30;
   let selectedYear = 'all';
+  let _enrichedCache = null;
+  let _enrichedCacheKey = null;
 
   const dataService = {
     async fetchRecruitingData(days) {
@@ -760,6 +762,9 @@
     // ad spend, joins, and onboarded from the API when available.
     // Also appends synthetic records for API studies missing from STUDIES.
     getEnrichedStudies() {
+      const cacheKey = JSON.stringify(apiData?.status || '') + (metaAdsData?.updated_at || '');
+      if (_enrichedCache && _enrichedCacheKey === cacheKey) return _enrichedCache;
+
       const byStudy = this.getOnboardingByStudy();
       const campaignMap = this.getCampaignStudyMap();
       const adsBreakdown = this.getMetaAdsBreakdown();
@@ -885,7 +890,9 @@
         addSynthetic(o, 'byStudy');
       });
 
-      return [...enrichedStudies, ...synthetic];
+      _enrichedCache = [...enrichedStudies, ...synthetic];
+      _enrichedCacheKey = cacheKey;
+      return _enrichedCache;
     }
   };
 
@@ -943,7 +950,8 @@
   function getStudiesInWindow(days) {
     const now = new Date();
     const cutoff = new Date(now.getTime() - days * 86400000);
-    return STUDIES.filter(s => {
+    const allStudies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
+    return allStudies.filter(s => {
       if (s.status === 'coming') return false;
       // Year filter
       if (selectedYear !== 'all') {
@@ -1008,7 +1016,8 @@
   function renderKPIs() {
     const grid = $('#kpi-grid');
     const summary = dataService.getSummary();
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+    const allStudies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
+    const yearFiltered = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
       const yr = parseInt(selectedYear);
       if (s.launchYear === yr || s.crossYear) return true;
       if (!s.launchYear && s.status === 'coming') return true;
@@ -1039,10 +1048,10 @@
       : kpiStudies.reduce((a, s) => a + s.spend, 0);
     const kpiOnboarded = useWindow
       ? kpiStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-      : kpiStudies.reduce((a, s) => a + (s.onboarded || 0), 0);
+      : kpiStudies.reduce((a, s) => a + (s.apiOnboarded ?? s.onboarded ?? 0), 0);
     const kpiJoined = useWindow
       ? kpiStudies.reduce((a, s) => a + getWindowedMetric(s, 'joined', selectedDays), 0)
-      : kpiStudies.reduce((a, s) => a + (s.joined || 0), 0);
+      : kpiStudies.reduce((a, s) => a + (s.apiJoins ?? s.joined ?? 0), 0);
     const kpiBlendedCPO = kpiOnboarded > 0 ? kpiSpend / kpiOnboarded : 0;
     const kpiPaidCount = kpiStudies.filter(s => s.spend > 0).length;
 
@@ -1074,8 +1083,8 @@
     }
 
     // Recruitment progress (always all-time)
-    const totalOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const totalTarget = allLaunched.reduce((a, s) => a + s.target, 0);
+    const totalOnboarded = allLaunched.reduce((a, s) => a + (s.apiOnboarded ?? s.onboarded ?? 0), 0);
+    const totalTarget = allLaunched.reduce((a, s) => a + (s.target || 0), 0);
     const pctComplete = totalTarget > 0 ? ((totalOnboarded / totalTarget) * 100).toFixed(1) : 0;
     cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(totalOnboarded)} / ${fmtInt(totalTarget)} target (all-time)</div></div>`;
 
@@ -1092,7 +1101,8 @@
     if (!funnel) {
       // Fallback funnel: use time-windowed studies when available, cumulative otherwise
       const windowStudies = getStudiesInWindow(selectedDays);
-      const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+      const allStudies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
+      const yearFiltered = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
         const yr = parseInt(selectedYear);
         if (s.launchYear === yr || s.crossYear) return true;
         if (!s.launchYear && s.status === 'coming') return true;
@@ -1106,10 +1116,10 @@
         : launched.reduce((a, s) => a + (s.leads || 0), 0);
       const totalJoined = useWindowFunnel
         ? launched.reduce((a, s) => a + getWindowedMetric(s, 'joined', selectedDays), 0)
-        : launched.reduce((a, s) => a + (s.joined || 0), 0);
+        : launched.reduce((a, s) => a + (s.apiJoins ?? s.joined ?? 0), 0);
       const totalOnboarded = useWindowFunnel
         ? launched.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-        : launched.reduce((a, s) => a + (s.onboarded || 0), 0);
+        : launched.reduce((a, s) => a + (s.apiOnboarded ?? s.onboarded ?? 0), 0);
 
       row.innerHTML = `
         <div class="funnel-step"><div class="funnel-val">${fmtInt(totalLeads)}</div><div class="funnel-label">Leads</div></div>
@@ -1275,8 +1285,8 @@
           data: {
             labels,
             datasets: [
-              { label: 'Joined', data: studies.map(s => s.joined || 0), backgroundColor: 'rgba(0,179,159,0.4)', borderColor: '#00B39F', borderWidth: 1 },
-              { label: 'Onboarded', data: studies.map(s => s.onboarded || 0), backgroundColor: 'rgba(52,211,153,0.5)', borderColor: '#34D399', borderWidth: 1 },
+              { label: 'Joined', data: studies.map(s => s.apiJoins ?? s.joined ?? 0), backgroundColor: 'rgba(0,179,159,0.4)', borderColor: '#00B39F', borderWidth: 1 },
+              { label: 'Onboarded', data: studies.map(s => s.apiOnboarded ?? s.onboarded ?? 0), backgroundColor: 'rgba(52,211,153,0.5)', borderColor: '#34D399', borderWidth: 1 },
             ],
           },
           options: chartDefaults,
@@ -1463,7 +1473,9 @@
   ];
 
   function getCPO(s) {
-    return (s.spend > 0 && s.onboarded > 0) ? s.spend / s.onboarded : null;
+    const spend = s.apiSpend ?? s.spend ?? 0;
+    const ob = s.apiOnboarded ?? s.onboarded ?? 0;
+    return (spend > 0 && ob > 0) ? spend / ob : null;
   }
 
   function getSortValue(s, col) {
@@ -1556,9 +1568,9 @@
     const tfoot = $('#studies-tfoot');
     const totSpend = studies.reduce((a, s) => a + (s.apiSpend != null ? s.apiSpend : s.spend), 0);
     const totLeads = studies.reduce((a, s) => a + (s.leads || 0), 0);
-    const totJoined = studies.reduce((a, s) => a + (s.joined || 0), 0);
-    const totOnboarded = studies.reduce((a, s) => a + (s.onboarded || 0), 0);
-    const totTarget = studies.reduce((a, s) => a + s.target, 0);
+    const totJoined = studies.reduce((a, s) => a + (s.apiJoins ?? s.joined ?? 0), 0);
+    const totOnboarded = studies.reduce((a, s) => a + (s.apiOnboarded ?? s.onboarded ?? 0), 0);
+    const totTarget = studies.reduce((a, s) => a + (s.target || 0), 0);
     const totCPO = totOnboarded > 0 && totSpend > 0 ? totSpend / totOnboarded : null;
 
     tfoot.innerHTML = `<tr>
@@ -1637,10 +1649,12 @@
   // ============================================================
   function renderScorecard() {
     const grid = $('#scorecard-grid');
-    const launched = STUDIES.filter(s => s.status !== 'coming');
+    const allStudies = dataService.getEnrichedStudies ? dataService.getEnrichedStudies() : [...STUDIES];
+    const launched = allStudies.filter(s => s.status !== 'coming');
 
     grid.innerHTML = launched.map(s => {
-      const pct = s.target > 0 ? Math.min(100, (s.onboarded / s.target) * 100) : 0;
+      const ob = s.apiOnboarded ?? s.onboarded ?? 0;
+      const pct = s.target > 0 ? Math.min(100, (ob / s.target) * 100) : 0;
       const cpo = getCPO(s);
       let barClass = 'lime';
       if (pct >= 100) barClass = 'green';
@@ -1653,7 +1667,7 @@
             <div class="sc-meta">${typeBadge(s.type)} ${statusBadge(s.status)}</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:18px;font-weight:700;color:${pct >= 100 ? 'var(--green)' : 'var(--lime)'}">${s.onboarded}/${s.target}</div>
+            <div style="font-size:18px;font-weight:700;color:${pct >= 100 ? 'var(--green)' : 'var(--lime)'}">${ob}/${s.target || 0}</div>
             <div style="font-size:10px;color:var(--text-dim)">${pct.toFixed(0)}%</div>
           </div>
         </div>
