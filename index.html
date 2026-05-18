@@ -1273,23 +1273,34 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       const matchedExperimentIds = new Set();
       const matchedStudyNames = new Set();
 
+      // API field names: onboarding.byStudy uses experimentTitle/count
+      // (not studyName/onboarded). campaignStudyMap exposes studyName + joins.
+      // Read both with fallbacks so either shape works.
+      const entryName = e => e.studyName || e.experimentTitle || '';
+      const entryJoins = e => e.joins ?? e.count;
+      const entryOnboarded = e => e.onboarded ?? e.count;
+
       const enrichedLocal = STUDIES.map(s => {
         const enriched = { ...s };
         const sNameLower = s.name.toLowerCase();
         const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
 
         // Match in campaignStudyMap (has studyName, campaignName, joins, onboarded)
-        const mapped = campaignMap.find(c =>
-          sNameLower.includes(c.studyName?.toLowerCase()) ||
-          c.studyName?.toLowerCase().includes(sNamePrefix) ||
-          c.campaignName?.toLowerCase().includes(sNamePrefix)
-        );
+        const mapped = campaignMap.find(c => {
+          const cName = entryName(c).toLowerCase();
+          return (cName && sNameLower.includes(cName)) ||
+            (cName && cName.includes(sNamePrefix)) ||
+            c.campaignName?.toLowerCase().includes(sNamePrefix);
+        });
         if (mapped) {
-          enriched.apiJoins = mapped.joins;
-          enriched.apiOnboarded = mapped.onboarded;
+          const joinsVal = entryJoins(mapped);
+          const onbVal = entryOnboarded(mapped);
+          if (joinsVal != null) enriched.apiJoins = joinsVal;
+          if (onbVal != null) enriched.apiOnboarded = onbVal;
           enriched.experimentId = mapped.experimentId;
           if (mapped.experimentId != null) matchedExperimentIds.add(mapped.experimentId);
-          if (mapped.studyName) matchedStudyNames.add(mapped.studyName.toLowerCase());
+          const mName = entryName(mapped);
+          if (mName) matchedStudyNames.add(mName.toLowerCase());
         }
 
         // Use aggregated spend from the campaign→study mapping
@@ -1297,16 +1308,19 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
           enriched.apiSpend = spendByStudy[s.name];
         }
 
-        // Match in onboarding.byStudy
-        const obMatch = byStudy.find(o =>
-          sNameLower.includes(o.studyName?.toLowerCase()) ||
-          o.studyName?.toLowerCase().includes(sNamePrefix)
-        );
+        // Match in onboarding.byStudy (experimentTitle + count)
+        const obMatch = byStudy.find(o => {
+          const oName = entryName(o).toLowerCase();
+          if (!oName) return false;
+          return sNameLower.includes(oName) || oName.includes(sNamePrefix);
+        });
         if (obMatch) {
-          enriched.apiOnboarded = obMatch.onboarded;
+          const onbVal = entryOnboarded(obMatch);
+          if (onbVal != null) enriched.apiOnboarded = onbVal;
           enriched.experimentId = obMatch.experimentId;
           if (obMatch.experimentId != null) matchedExperimentIds.add(obMatch.experimentId);
-          if (obMatch.studyName) matchedStudyNames.add(obMatch.studyName.toLowerCase());
+          const oName = entryName(obMatch);
+          if (oName) matchedStudyNames.add(oName.toLowerCase());
         }
 
         return enriched;
@@ -1317,18 +1331,23 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       // sync with newly-launched studies before they're hand-curated.
       let nextSyntheticId = (STUDIES.reduce((m, s) => Math.max(m, s.id || 0), 0) || 0) + 1000;
       const synthByKey = new Map();
-      const synthAdd = (rec) => {
-        const idKey = rec.experimentId != null ? `id:${rec.experimentId}` : `name:${(rec.studyName || '').toLowerCase()}`;
-        if (!idKey || idKey === 'name:') return;
+      const addSynthetic = (entry) => {
+        const displayName = entry.studyName || entry.experimentTitle || entry.campaignName || '';
+        const idKey = entry.experimentId != null
+          ? `id:${entry.experimentId}`
+          : `name:${displayName.toLowerCase()}`;
+        if (idKey === 'name:') return;
+        const joinsVal = entry.joins ?? entry.count;
+        const onbVal = entry.onboarded ?? entry.count;
         const existing = synthByKey.get(idKey);
         if (existing) {
-          if (rec.joins != null) existing.apiJoins = rec.joins;
-          if (rec.onboarded != null) existing.apiOnboarded = rec.onboarded;
+          if (joinsVal != null) existing.apiJoins = joinsVal;
+          if (onbVal != null) existing.apiOnboarded = onbVal;
           return;
         }
         synthByKey.set(idKey, {
           id: nextSyntheticId++,
-          name: rec.studyName || `Experiment ${rec.experimentId}`,
+          name: displayName || `Experiment ${entry.experimentId}`,
           type: 'RWE',
           spend: 0,
           leads: null,
@@ -1350,24 +1369,24 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
           complexity_factors: [],
           recruitment_source: 'organic_community',
           has_manual_steps: false,
-          experimentId: rec.experimentId,
-          apiJoins: rec.joins ?? null,
-          apiOnboarded: rec.onboarded ?? null,
+          experimentId: entry.experimentId,
+          apiJoins: joinsVal ?? null,
+          apiOnboarded: onbVal ?? null,
           synthetic: true,
         });
       };
 
       campaignMap.forEach(c => {
-        const nameLower = (c.studyName || '').toLowerCase();
+        const nameLower = (c.studyName || c.experimentTitle || '').toLowerCase();
         if (c.experimentId != null && matchedExperimentIds.has(c.experimentId)) return;
         if (nameLower && matchedStudyNames.has(nameLower)) return;
-        synthAdd(c);
+        addSynthetic(c);
       });
       byStudy.forEach(o => {
-        const nameLower = (o.studyName || '').toLowerCase();
+        const nameLower = (o.studyName || o.experimentTitle || '').toLowerCase();
         if (o.experimentId != null && matchedExperimentIds.has(o.experimentId)) return;
         if (nameLower && matchedStudyNames.has(nameLower)) return;
-        synthAdd(o);
+        addSynthetic(o);
       });
 
       return enrichedLocal.concat(Array.from(synthByKey.values()));
