@@ -907,7 +907,7 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
   // ============================================================
   const STUDIES = [
     { id: 1, name: 'Melatonin Sleep Study (Somato)', type: 'RCT', spend: 8624.65, leads: 848, joined: 312, onboarded: 241, target: 240, wearable: 'Oura', days: 63, launchDate: 'Jan 13, 2026', endDate: 'Mar 11, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: true, outlier_reason: 'Baseline bug lost ~150 participants; eligibility question excluded ~48 more', notes: 'OUTLIER — ~150 lost to baseline bug, ~48 to eligibility question', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
-    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 7717.02, leads: 218, joined: 102, onboarded: 34, target: 35, wearable: 'WHOOP', days: 71, launchDate: 'Jan 5, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: true, status: 'recruiting', outlier: true, outlier_reason: 'WHOOP small install base; lab bottleneck requires pre-study blood work', notes: 'Basically fully recruited — 1 spot left being nurtured, expected to close by end of week. WHOOP user base issue, lab bottleneck (manual step)', size_category: 'pilot', complexity_factors: ['non_oura_wearable', 'pre_study_lab_work', 'screening_call'], recruitment_source: 'paid' },
+    { id: 2, name: 'Pain Relief: ProleevaMax', type: 'RWE', spend: 7717.02, leads: 218, joined: 102, onboarded: 34, target: 35, wearable: 'WHOOP', days: 88, launchDate: 'Jan 5, 2026', endDate: 'Apr 3, 2026', launchYear: 2026, crossYear: false, manualQueue: true, status: 'complete', outlier: true, outlier_reason: 'WHOOP small install base; lab bottleneck requires pre-study blood work', notes: 'Basically fully recruited — 1 spot left being nurtured, expected to close by end of week. WHOOP user base issue, lab bottleneck (manual step)', size_category: 'pilot', complexity_factors: ['non_oura_wearable', 'pre_study_lab_work', 'screening_call'], recruitment_source: 'paid' },
     { id: 3, name: 'Enhanced Brew — Coffee Study', type: 'RCT', spend: 3184.93, leads: 771, joined: 520, onboarded: 192, target: 189, wearable: 'Oura', days: 23, launchDate: 'Nov 20, 2025', endDate: 'Dec 13, 2025', launchYear: 2025, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
     { id: 4, name: 'Nitrate Supplementation (Berkeley Life)', type: 'RCT', spend: 2632.02, leads: null, joined: 70, onboarded: 70, target: 70, wearable: 'Oura', days: null, launchDate: '2025', endDate: '2025', launchYear: 2025, crossYear: false, manualQueue: true, status: 'complete', outlier: false, outlier_reason: null, notes: 'Prescreening outside of app (manual step)', size_category: 'medium', complexity_factors: ['screening_call'], recruitment_source: 'paid' },
     { id: 5, name: 'Peptide Supplement: Sleep & Recovery', type: 'RCT', spend: 2464.11, leads: 575, joined: 338, onboarded: 120, target: 120, wearable: 'Oura', days: 30, launchDate: 'Dec 23, 2025', endDate: 'Jan 22, 2026', launchYear: 2025, crossYear: true, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: 'Cross-year: launched 2025, completed 2026', size_category: 'medium', complexity_factors: ['external_survey'], recruitment_source: 'paid' },
@@ -928,6 +928,22 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     { id: 23, name: 'Vampire Serum: Skin Renewal', type: 'RWE', spend: 0, leads: 53, joined: null, onboarded: 35, target: 35, wearable: 'Oura', days: 2, launchDate: 'Mar 5, 2026', endDate: 'Mar 6, 2026', launchYear: 2026, crossYear: false, manualQueue: false, status: 'complete', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
     { id: 20, name: 'Percepta', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 154, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'large', complexity_factors: [], recruitment_source: 'paid' },
     { id: 22, name: 'Cure Hydration', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 70, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: null, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'medium', complexity_factors: [], recruitment_source: 'partner_recruited' },
+    // ── New sponsor studies (placeholders; live data flows in via getEnrichedStudies → API) ──
+    { id: 38, name: 'Zbiotics Study', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 39, name: 'Rehydration Recovery', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 40, name: '14 Day Yoga Challenge', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 41, name: '4-7-8 Effect Extended', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 42, name: 'Paraxanthine & ACV', type: 'RCT', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'recruiting', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 43, name: 'The Red Bull Effect', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 44, name: 'The Ghost Effect', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 45, name: 'The Monster Effect', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 46, name: 'The Celsius Effect', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 47, name: 'Brain Wellness Cognitive Focus', type: 'RCT', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 48, name: 'Seasonal Superfoods', type: 'RWE', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 49, name: 'The Box Breathing Effect', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 50, name: 'The Cold Shower Effect', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'organic_community' },
+    { id: 51, name: 'Quantum Upgrade Cognitive Performance', type: 'RCT', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'paid' },
+    { id: 52, name: 'Optimize Her Retreat', type: 'VEP', spend: 0, leads: null, joined: null, onboarded: 0, target: 0, wearable: 'Oura', days: null, launchDate: null, endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'coming', outlier: false, outlier_reason: null, notes: '', size_category: 'pilot', complexity_factors: [], recruitment_source: 'partner_recruited' },
     // ── Public Studies (free, in-app challenges) ──
     { id: 24, name: 'The 30-Minute Reset', type: 'PUBLIC', spend: 0, leads: null, joined: 33, onboarded: 24, target: 33, wearable: null, days: null, launchDate: 'Jan 29, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 1 in study, 100% compliance (1/1)', inStudy: 1, complianceN: 1, complianceD: 1 },
     { id: 25, name: 'Track Your Travel', type: 'PUBLIC', spend: 0, leads: null, joined: 7, onboarded: 6, target: 25, wearable: null, days: null, launchDate: 'Jan 31, 2026', endDate: null, launchYear: 2026, crossYear: false, manualQueue: false, status: 'active', outlier: false, notes: 'Public study — 0 in study, 0% compliance (0/0)', inStudy: 0, complianceN: 0, complianceD: 0 },
@@ -987,16 +1003,27 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   const dataService = {
     async fetchRecruitingData(days) {
-      // Try live API first
+      // 1) Vercel proxy first — works in any browser (no CORS, no key leak).
+      //    Same-origin /api/recruiting works whether the host is reputable-ticker.vercel.app,
+      //    a preview URL, or any deployment that includes /api/recruiting.js.
       try {
-const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
-        const resp = await fetch(`${API_BASE}?days=${days}`, { headers });
+        const resp = await fetch(`/api/recruiting?days=${days}`);
+        if (resp.ok) return await resp.json();
+        throw new Error(`Proxy ${resp.status}: ${resp.statusText}`);
+      } catch (err) {
+        console.warn('Vercel proxy unavailable, trying direct API:', err.message);
+      }
+      // 2) Fall back to direct upstream API (or user-supplied ?proxy=).
+      try {
+        const headers = PROXY_BASE ? {} : { 'x-api-key': API_KEY };
+        const directUrl = PROXY_BASE ? `${PROXY_BASE}/api/recruiting?days=${days}` : `${DIRECT_API}?days=${days}`;
+        const resp = await fetch(directUrl, { headers });
         if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
         return await resp.json();
       } catch (err) {
-        console.warn('Live API failed, trying cached data:', err.message);
+        console.warn('Direct API failed, trying cached data:', err.message);
       }
-      // Fall back to cached recruiting stats (populated by GitHub Action)
+      // 3) Fall back to cached recruiting stats (populated by GitHub Action)
       try {
         const resp = await fetch('./data/recruiting-stats.json');
         if (!resp.ok) throw new Error(`Cached stats ${resp.status}`);
@@ -1243,7 +1270,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         }
       });
 
-      return STUDIES.map(s => {
+      const matchedExperimentIds = new Set();
+      const matchedStudyNames = new Set();
+
+      const enrichedLocal = STUDIES.map(s => {
         const enriched = { ...s };
         const sNameLower = s.name.toLowerCase();
         const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
@@ -1258,6 +1288,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
           enriched.apiJoins = mapped.joins;
           enriched.apiOnboarded = mapped.onboarded;
           enriched.experimentId = mapped.experimentId;
+          if (mapped.experimentId != null) matchedExperimentIds.add(mapped.experimentId);
+          if (mapped.studyName) matchedStudyNames.add(mapped.studyName.toLowerCase());
         }
 
         // Use aggregated spend from the campaign→study mapping
@@ -1273,12 +1305,83 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
         if (obMatch) {
           enriched.apiOnboarded = obMatch.onboarded;
           enriched.experimentId = obMatch.experimentId;
+          if (obMatch.experimentId != null) matchedExperimentIds.add(obMatch.experimentId);
+          if (obMatch.studyName) matchedStudyNames.add(obMatch.studyName.toLowerCase());
         }
 
         return enriched;
       });
+
+      // Auto-merge: append synthetic records for API-known studies that
+      // have no entry in the local STUDIES array. Keeps the dashboard in
+      // sync with newly-launched studies before they're hand-curated.
+      let nextSyntheticId = (STUDIES.reduce((m, s) => Math.max(m, s.id || 0), 0) || 0) + 1000;
+      const synthByKey = new Map();
+      const synthAdd = (rec) => {
+        const idKey = rec.experimentId != null ? `id:${rec.experimentId}` : `name:${(rec.studyName || '').toLowerCase()}`;
+        if (!idKey || idKey === 'name:') return;
+        const existing = synthByKey.get(idKey);
+        if (existing) {
+          if (rec.joins != null) existing.apiJoins = rec.joins;
+          if (rec.onboarded != null) existing.apiOnboarded = rec.onboarded;
+          return;
+        }
+        synthByKey.set(idKey, {
+          id: nextSyntheticId++,
+          name: rec.studyName || `Experiment ${rec.experimentId}`,
+          type: 'RWE',
+          spend: 0,
+          leads: null,
+          joined: null,
+          onboarded: 0,
+          target: 0,
+          wearable: null,
+          days: null,
+          launchDate: null,
+          endDate: null,
+          launchYear: null,
+          crossYear: false,
+          manualQueue: false,
+          status: 'active',
+          outlier: false,
+          outlier_reason: null,
+          notes: 'Auto-detected from API — add to STUDIES array to curate',
+          size_category: 'pilot',
+          complexity_factors: [],
+          recruitment_source: 'organic_community',
+          has_manual_steps: false,
+          experimentId: rec.experimentId,
+          apiJoins: rec.joins ?? null,
+          apiOnboarded: rec.onboarded ?? null,
+          synthetic: true,
+        });
+      };
+
+      campaignMap.forEach(c => {
+        const nameLower = (c.studyName || '').toLowerCase();
+        if (c.experimentId != null && matchedExperimentIds.has(c.experimentId)) return;
+        if (nameLower && matchedStudyNames.has(nameLower)) return;
+        synthAdd(c);
+      });
+      byStudy.forEach(o => {
+        const nameLower = (o.studyName || '').toLowerCase();
+        if (o.experimentId != null && matchedExperimentIds.has(o.experimentId)) return;
+        if (nameLower && matchedStudyNames.has(nameLower)) return;
+        synthAdd(o);
+      });
+
+      return enrichedLocal.concat(Array.from(synthByKey.values()));
     }
   };
+
+  // ============================================================
+  // ENRICHED-STUDY HELPERS — prefer API-derived fields when present
+  // ============================================================
+  const studyOnboarded = s => s.apiOnboarded != null ? s.apiOnboarded : (s.onboarded || 0);
+  const studyJoined = s => s.apiJoins != null ? s.apiJoins : (s.joined || 0);
+  const studySpend = s => s.apiSpend != null ? s.apiSpend : (s.spend || 0);
+  let enrichedStudiesCache = STUDIES;
+  function getStudies() { return enrichedStudiesCache; }
 
   // ============================================================
   // HELPERS
@@ -1341,22 +1444,22 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     });
   }
   function getSponsoredStudies(studies) {
-    return (studies || STUDIES).filter(s => s.type !== 'PUBLIC' && s.status !== 'coming');
+    return (studies || getStudies()).filter(s => s.type !== 'PUBLIC' && s.status !== 'coming');
   }
 
   // CPO calculations
   function calcBlendedCPO(studies) {
     // Blended CPO: total ad spend / ALL onboarded (including public, VEP, etc.)
-    const launched = (studies || STUDIES).filter(s => s.status !== 'coming');
-    const totalSpend = launched.reduce((a, st) => a + st.spend, 0);
-    const totalOnboarded = launched.reduce((a, st) => a + (st.onboarded || 0), 0);
+    const launched = (studies || getStudies()).filter(s => s.status !== 'coming');
+    const totalSpend = launched.reduce((a, st) => a + studySpend(st), 0);
+    const totalOnboarded = launched.reduce((a, st) => a + studyOnboarded(st), 0);
     return totalOnboarded > 0 ? totalSpend / totalOnboarded : null;
   }
   function calcPaidCPO(studies) {
     // Paid CPO: total ad spend / onboarded ONLY from studies with ad spend
-    let s = (studies || STUDIES).filter(st => st.status !== 'coming' && st.spend > 0);
-    const totalSpend = s.reduce((a, st) => a + st.spend, 0);
-    const totalOnboarded = s.reduce((a, st) => a + (st.onboarded || 0), 0);
+    let s = (studies || getStudies()).filter(st => st.status !== 'coming' && studySpend(st) > 0);
+    const totalSpend = s.reduce((a, st) => a + studySpend(st), 0);
+    const totalOnboarded = s.reduce((a, st) => a + studyOnboarded(st), 0);
     return totalOnboarded > 0 ? totalSpend / totalOnboarded : null;
   }
   function calcCPOByType(studies) {
@@ -1364,8 +1467,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const result = {};
     for (const type of ['RCT', 'RWE', 'VEP']) {
       const group = s.filter(st => st.type === type);
-      const spend = group.reduce((a, st) => a + st.spend, 0);
-      const onb = group.reduce((a, st) => a + (st.onboarded || 0), 0);
+      const spend = group.reduce((a, st) => a + studySpend(st), 0);
+      const onb = group.reduce((a, st) => a + studyOnboarded(st), 0);
       result[type] = onb > 0 ? spend / onb : null;
     }
     return result;
@@ -1388,13 +1491,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
   // Participants onboarded
   function calcParticipantsOnboarded(studies) {
-    return getSponsoredStudies(studies).reduce((a, s) => a + (s.onboarded || 0), 0);
+    return getSponsoredStudies(studies).reduce((a, s) => a + studyOnboarded(s), 0);
   }
 
   // Completion rate
   function calcCompletionRate(studies) {
     const s = getSponsoredStudies(studies).filter(st => st.target > 0);
-    const onb = s.reduce((a, st) => a + (st.onboarded || 0), 0);
+    const onb = s.reduce((a, st) => a + studyOnboarded(st), 0);
     const target = s.reduce((a, st) => a + st.target, 0);
     return target > 0 ? (onb / target * 100) : null;
   }
@@ -1405,15 +1508,17 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     if (!active.length) return null;
     const currentCPO = calcPaidCPO(studies) || calcBlendedCPO(studies) || 25;
     return active.map(s => {
-      const remaining = Math.max(0, s.target - (s.onboarded || 0));
-      const studyCPO = (s.spend > 0 && s.onboarded > 0) ? s.spend / s.onboarded : currentCPO;
+      const sSpend = studySpend(s);
+      const sOnb = studyOnboarded(s);
+      const remaining = Math.max(0, s.target - sOnb);
+      const cpo = (sSpend > 0 && sOnb > 0) ? sSpend / sOnb : currentCPO;
       return {
         name: s.name,
         remaining,
-        best: remaining * Math.min(studyCPO, currentCPO) * 0.7,
-        expected: remaining * studyCPO,
-        worst: remaining * studyCPO * 1.5,
-        currentSpend: s.spend,
+        best: remaining * Math.min(cpo, currentCPO) * 0.7,
+        expected: remaining * cpo,
+        worst: remaining * cpo * 1.5,
+        currentSpend: sSpend,
       };
     });
   }
@@ -1435,7 +1540,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       completion_rate: calcCompletionRate(studies),
       projected_cost: calcProjectedCost(studies),
       study_count: getSponsoredStudies(studies).length,
-      paid_count: getSponsoredStudies(studies).filter(s => s.spend > 0).length,
+      paid_count: getSponsoredStudies(studies).filter(s => studySpend(s) > 0).length,
     };
   }
 
@@ -1470,11 +1575,12 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   // ============================================================
   // RENDER: KPI Cards
   // ============================================================
-  // Filter local studies by time window (days since launch)
+  // Filter local studies by time window (days since launch).
+  // Returns enriched (API-merged) records so callers can read apiOnboarded/apiJoins/apiSpend.
   function getStudiesInWindow(days) {
     const now = new Date();
     const cutoff = new Date(now.getTime() - days * 86400000);
-    return STUDIES.filter(s => {
+    return getStudies().filter(s => {
       if (s.status === 'coming') return false;
       // Year filter
       if (selectedYear !== 'all') {
@@ -1538,7 +1644,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
   function renderKPIs() {
     const grid = $('#kpi-grid');
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+    const allStudies = getStudies();
+    const yearFiltered = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
       const yr = parseInt(selectedYear);
       if (s.launchYear === yr || s.crossYear) return true;
       if (!s.launchYear && s.status === 'coming') return true;
@@ -1554,7 +1661,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const sponsoredAll = yearFiltered.filter(s => s.type !== 'PUBLIC');
     const sponsoredLaunched = sponsoredAll.filter(s => s.status !== 'coming');
     const publicStudiesArr = yearFiltered.filter(s => s.type === 'PUBLIC');
-    const paidStudiesAll = allLaunched.filter(s => s.spend > 0 && s.type !== 'PUBLIC');
+    const paidStudiesAll = allLaunched.filter(s => studySpend(s) > 0 && s.type !== 'PUBLIC');
 
     // Study selector — changes based on view
     const selector = $('#study-selector');
@@ -1586,11 +1693,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
     // Show detail for selected study
     if (selectedStudy !== 'all') {
-      const s = STUDIES.find(st => st.id === parseInt(selectedStudy));
+      const s = allStudies.find(st => st.id === parseInt(selectedStudy));
       if (s) {
-        const cpo = s.spend > 0 && s.onboarded > 0 ? s.spend / s.onboarded : null;
-        const pct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100).toFixed(0) : 0;
-        detailEl.innerHTML = `<strong>${s.spend > 0 ? fmt(s.spend) + ' spend · ' : ''}</strong><strong>${fmtInt(s.onboarded)}</strong>/${fmtInt(s.target)} onboarded (${pct}%)${cpo ? ' · CPO: <strong>' + fmt(cpo) + '</strong>' : ''} · ${statusBadge(s.status)}`;
+        const sSpend = studySpend(s);
+        const sOnb = studyOnboarded(s);
+        const cpo = sSpend > 0 && sOnb > 0 ? sSpend / sOnb : null;
+        const pct = s.target > 0 ? (sOnb / s.target * 100).toFixed(0) : 0;
+        detailEl.innerHTML = `<strong>${sSpend > 0 ? fmt(sSpend) + ' spend · ' : ''}</strong><strong>${fmtInt(sOnb)}</strong>/${fmtInt(s.target)} onboarded (${pct}%)${cpo ? ' · CPO: <strong>' + fmt(cpo) + '</strong>' : ''} · ${statusBadge(s.status)}`;
       }
     } else {
       detailEl.innerHTML = '';
@@ -1601,15 +1710,20 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const kpiSponsored = isAllTime ? sponsoredLaunched : (useWindow ? windowSponsored : sponsoredLaunched);
     const windowAll = useWindow ? windowStudies : allLaunched;
 
+    function pickMetric(s, metric) {
+      if (metric === 'onboarded') return studyOnboarded(s);
+      if (metric === 'joined') return studyJoined(s);
+      return s[metric] || 0;
+    }
     function sumMetric(arr, metric) {
       return useWindow
         ? arr.reduce((a, s) => a + getWindowedMetric(s, metric, selectedDays), 0)
-        : arr.reduce((a, s) => a + (s[metric] || 0), 0);
+        : arr.reduce((a, s) => a + pickMetric(s, metric), 0);
     }
     function sumSpend(arr) {
       return useWindow
         ? arr.reduce((a, s) => a + getWindowedSpend(s, selectedDays), 0)
-        : arr.reduce((a, s) => a + s.spend, 0);
+        : arr.reduce((a, s) => a + studySpend(s), 0);
     }
 
     let cards = '';
@@ -1627,7 +1741,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       // Recruiting count and Recruitment Progress are ALWAYS cumulative (exempt from time filter)
       const recruiting = sponsoredLaunched.filter(s => s.status === 'recruiting');
       const recruitingNames = recruiting.map(s => s.name).join(', ') || 'None';
-      const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const progressOnboarded = sponsoredLaunched.reduce((a, s) => a + studyOnboarded(s), 0);
       const progressTarget = sponsoredLaunched.reduce((a, s) => a + s.target, 0);
       const pctComplete = progressTarget > 0 ? ((progressOnboarded / progressTarget) * 100).toFixed(0) : 0;
       // Total Ad Spend: prefer live Meta Ads daily data (already filtered by window/year)
@@ -1638,7 +1752,7 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       const totalSpend = hasMetaData
         ? metaDaily.reduce((a, d) => a + (d.spend || 0), 0)
         : sumSpend(kpiSponsored);
-      const paidKpi = kpiSponsored.filter(s => s.spend > 0);
+      const paidKpi = kpiSponsored.filter(s => studySpend(s) > 0);
       const paidOnb = sumMetric(paidKpi, 'onboarded');
       const allOnb = sumMetric(windowAll, 'onboarded');
       const blendedCPO = allOnb > 0 ? totalSpend / allOnb : 0;
@@ -1648,8 +1762,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       cards += `<div class="kpi-card"><div class="kpi-label">Recruitment Progress</div><div class="kpi-value yellow">${pctComplete}%</div><div class="kpi-sub">${fmtInt(progressOnboarded)} / ${fmtInt(progressTarget)} · ${sponsoredLaunched.length} sponsored</div></div>`;
       // Build paid study list with their pro-rated spend in the window
       const paidStudyList = paidKpi.map(s => {
-        const studySpend = useWindow ? getWindowedSpend(s, selectedDays) : s.spend;
-        return { name: s.name, spend: studySpend };
+        const windowedSpend = useWindow ? getWindowedSpend(s, selectedDays) : studySpend(s);
+        return { name: s.name, spend: windowedSpend };
       }).sort((a, b) => b.spend - a.spend);
       const paidStudyOptions = paidStudyList.map(s => `<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 12px;font-size:11px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,0.04);"><span>${esc(s.name)}</span><span style="color:var(--text);font-weight:600;">${fmt(s.spend)}</span></div>`).join('');
       cards += `<div class="kpi-card" style="position:relative;"><div class="kpi-label">Total Ad Spend (${kpiLabel})</div><div class="kpi-value lime">${fmt(totalSpend)}</div><div class="kpi-sub" id="paid-studies-toggle" style="cursor:pointer;display:inline-flex;align-items:center;gap:4px;user-select:none;" onclick="const d=document.getElementById('paid-studies-list');d.style.display=d.style.display==='none'?'block':'none';this.querySelector('.chev').textContent=d.style.display==='none'?'▼':'▲';">${paidKpi.length} paid studies <span class="chev" style="font-size:9px;">▼</span></div><div id="paid-studies-list" style="display:none;position:absolute;top:100%;left:0;right:0;margin-top:6px;background:var(--bg-raised);border:1px solid var(--border);border-radius:8px;z-index:10;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.4);">${paidStudyOptions || '<div style="padding:10px;font-size:11px;color:var(--text-dim);">No paid studies in this window</div>'}</div></div>`;
@@ -1659,8 +1773,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     } else if (selectedView === 'public') {
       // ── PUBLIC VIEW ──
       const pubLaunched = publicStudiesArr.filter(s => s.status !== 'coming');
-      const totalParticipants = pubLaunched.reduce((a, s) => a + (s.joined || 0), 0);
-      const totalOnboarded = pubLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      const totalParticipants = pubLaunched.reduce((a, s) => a + studyJoined(s), 0);
+      const totalOnboarded = pubLaunched.reduce((a, s) => a + studyOnboarded(s), 0);
       const totalInStudy = pubLaunched.reduce((a, s) => a + (s.inStudy || 0), 0);
       const totalCompN = pubLaunched.reduce((a, s) => a + (s.complianceN || 0), 0);
       const totalCompD = pubLaunched.reduce((a, s) => a + (s.complianceD || 0), 0);
@@ -1700,14 +1814,15 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const el = $('#overview-flags');
     if (!el) return;
     if (selectedView === 'public') { el.innerHTML = ''; return; }
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+    const allStudies = getStudies();
+    const yearFiltered = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
       const yr = parseInt(selectedYear);
       return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
     });
     const recruiting = yearFiltered.filter(s => s.type !== 'PUBLIC' && s.status === 'recruiting');
     const flags = [];
     recruiting.forEach(s => {
-      const remaining = Math.max(0, s.target - (s.onboarded || 0));
+      const remaining = Math.max(0, s.target - studyOnboarded(s));
       if (remaining > 0 && remaining <= 10) {
         flags.push(`<span style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--yellow-bg);border:1px solid rgba(251,191,36,0.2);border-radius:var(--radius-pill);font-size:12px;font-weight:600;color:var(--yellow);">${esc(s.name)}: ${remaining} spot${remaining === 1 ? '' : 's'} remaining</span>`);
       }
@@ -1725,8 +1840,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     if (!cbPart) return;
 
     // Total participants and total studies are ALWAYS cumulative (all time, all studies)
-    const allLaunched = STUDIES.filter(s => s.status !== 'coming');
-    const totalParticipants = allLaunched.reduce((a, s) => a + (s.joined || 0), 0);
+    const allLaunched = getStudies().filter(s => s.status !== 'coming');
+    const totalParticipants = allLaunched.reduce((a, s) => a + studyJoined(s), 0);
     const totalStudies = allLaunched.length;
 
     // "Onboarded this period" DOES respect the time filter
@@ -1742,10 +1857,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       periodOnboarded = windowStudies.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0);
       periodLabel = ` (${selectedDays <= 7 ? '7d' : selectedDays <= 30 ? '30d' : '90d'})`;
     } else if (selectedYear !== 'all') {
-      periodOnboarded = yearFiltered.reduce((a, s) => a + (s.onboarded || 0), 0);
+      periodOnboarded = yearFiltered.reduce((a, s) => a + studyOnboarded(s), 0);
       periodLabel = ` (${selectedYear})`;
     } else {
-      periodOnboarded = allLaunched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      periodOnboarded = allLaunched.reduce((a, s) => a + studyOnboarded(s), 0);
       periodLabel = ' (all time)';
     }
 
@@ -1762,8 +1877,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     const quarterLabel = $('#kpi-quarter-label');
     if (!grid) return;
 
-    // Determine which studies to compute KPIs for
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+    // Determine which studies to compute KPIs for (enriched view → API values when present)
+    const allStudies = getStudies();
+    const yearFiltered = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
       const yr = parseInt(selectedYear);
       return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
     });
@@ -1894,9 +2010,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   function renderFunnel() {
     const row = $('#funnel-row');
 
-    // Build funnel from local study data (always accurate for year/time filters)
+    // Build funnel from enriched study data (uses API joined/onboarded when available)
     const windowStudies = getStudiesInWindow(selectedDays);
-    const yearFiltered = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+    const allStudies = getStudies();
+    const yearFiltered = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
       const yr = parseInt(selectedYear);
       if (s.launchYear === yr || s.crossYear) return true;
       if (!s.launchYear && s.status === 'coming') return true;
@@ -1910,10 +2027,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       : launched.reduce((a, s) => a + (s.leads || 0), 0);
     const localJoined = useWindow
       ? launched.reduce((a, s) => a + getWindowedMetric(s, 'joined', selectedDays), 0)
-      : launched.reduce((a, s) => a + (s.joined || 0), 0);
+      : launched.reduce((a, s) => a + studyJoined(s), 0);
     const localOnboarded = useWindow
       ? launched.reduce((a, s) => a + getWindowedMetric(s, 'onboarded', selectedDays), 0)
-      : launched.reduce((a, s) => a + (s.onboarded || 0), 0);
+      : launched.reduce((a, s) => a + studyOnboarded(s), 0);
 
     // Enrich with external data sources (impressions, clicks, installs, emails) when available and matching the time window
     const metaDaily = dataService.getMetaAdsDaily();
@@ -2162,9 +2279,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       joinedDaily = joinedDailyRaw.filter(d => new Date(d.date) >= cutoff);
     }
 
-    // Local study data for enrolled total fallback
+    // Enriched study data for enrolled total fallback
     const windowStudies = getStudiesInWindow(selectedDays);
-    const yearFilteredChart = selectedYear === 'all' ? STUDIES : STUDIES.filter(s => {
+    const allStudies = getStudies();
+    const yearFilteredChart = selectedYear === 'all' ? allStudies : allStudies.filter(s => {
       const yr = parseInt(selectedYear);
       return s.launchYear === yr || s.crossYear || (!s.launchYear && s.status === 'coming');
     });
@@ -2262,9 +2380,9 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     });
 
     // Sidebar: enrolled total + dynamic label
-    // Use local study data for enrolled total (API daily data may undercount)
+    // Use enriched study data for enrolled total (uses API onboarded when present)
     const localStudiesForEnroll = useWindow ? windowStudies : allLaunchedForChart;
-    const localEnrolledTotal = localStudiesForEnroll.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const localEnrolledTotal = localStudiesForEnroll.reduce((a, s) => a + studyOnboarded(s), 0);
     const apiEnrolledTotal = enrolledArr.reduce((a, b) => a + b, 0);
     // Use whichever is higher — local data is more complete for cumulative totals
     const enrolledTotal = Math.max(localEnrolledTotal, apiEnrolledTotal);
@@ -2385,20 +2503,18 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
     // Tbody
     const tbody = $('#studies-tbody');
     tbody.innerHTML = studies.map(s => {
-      // Use API spend if available, fall back to local
-      const displaySpend = s.apiSpend != null ? s.apiSpend : s.spend;
+      // Use API spend/joins/onboarded if available, fall back to local
+      const displaySpend = studySpend(s);
       const spendIsLive = s.apiSpend != null;
-      const cpo = (displaySpend > 0 && s.onboarded > 0) ? displaySpend / s.onboarded : null;
-
-      // Use API joins/onboarded if available
       const displayJoins = s.apiJoins != null ? s.apiJoins : s.joined;
-      const displayOnboarded = s.apiOnboarded != null ? s.apiOnboarded : s.onboarded;
+      const displayOnboarded = studyOnboarded(s);
+      const cpo = (displaySpend > 0 && displayOnboarded > 0) ? displaySpend / displayOnboarded : null;
 
       const spendCell = displaySpend > 0
         ? `${fmt(displaySpend)}${spendIsLive ? ' <span style="color:var(--lime);font-size:9px" title="Live from API">●</span>' : ''}`
         : '—';
 
-      const compPct = s.target > 0 ? ((s.onboarded || 0) / s.target * 100) : null;
+      const compPct = s.target > 0 ? (displayOnboarded / s.target * 100) : null;
       const compColor = compPct != null ? (compPct >= 100 ? 'var(--green)' : compPct >= 80 ? 'var(--yellow)' : 'var(--rose)') : '';
       const sizeBadgeMap = { pilot: 'badge-gray', medium: 'badge-blue', large: 'badge-indigo' };
 
@@ -2427,10 +2543,10 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
 
     // Tfoot
     const tfoot = $('#studies-tfoot');
-    const totSpend = studies.reduce((a, s) => a + (s.apiSpend != null ? s.apiSpend : s.spend), 0);
+    const totSpend = studies.reduce((a, s) => a + studySpend(s), 0);
     const totLeads = studies.reduce((a, s) => a + (s.leads || 0), 0);
-    const totJoined = studies.reduce((a, s) => a + (s.joined || 0), 0);
-    const totOnboarded = studies.reduce((a, s) => a + (s.onboarded || 0), 0);
+    const totJoined = studies.reduce((a, s) => a + studyJoined(s), 0);
+    const totOnboarded = studies.reduce((a, s) => a + studyOnboarded(s), 0);
     const totTarget = studies.reduce((a, s) => a + s.target, 0);
     const totCPO = totOnboarded > 0 && totSpend > 0 ? totSpend / totOnboarded : null;
 
@@ -2598,11 +2714,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
   // ============================================================
   function renderScorecard() {
     const grid = $('#scorecard-grid');
-    const launched = STUDIES.filter(s => s.status !== 'coming' && s.type !== 'PUBLIC');
+    const launched = getStudies().filter(s => s.status !== 'coming' && s.type !== 'PUBLIC');
 
     grid.innerHTML = launched.map(s => {
-      const pct = s.target > 0 ? Math.min(100, (s.onboarded / s.target) * 100) : 0;
-      const cpo = getCPO(s);
+      const sOnb = studyOnboarded(s);
+      const sSpend = studySpend(s);
+      const pct = s.target > 0 ? Math.min(100, (sOnb / s.target) * 100) : 0;
+      const cpo = (sSpend > 0 && sOnb > 0) ? sSpend / sOnb : null;
       let barClass = 'lime';
       if (pct >= 100) barClass = 'green';
       else if (pct < 50) barClass = 'yellow';
@@ -2614,13 +2732,13 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
             <div class="sc-meta">${typeBadge(s.type)} ${statusBadge(s.status)}</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:18px;font-weight:700;color:${pct >= 100 ? 'var(--green)' : 'var(--lime)'}">${s.onboarded}/${s.target}</div>
+            <div style="font-size:18px;font-weight:700;color:${pct >= 100 ? 'var(--green)' : 'var(--lime)'}">${sOnb}/${s.target}</div>
             <div style="font-size:10px;color:var(--text-dim)">${pct.toFixed(0)}%</div>
           </div>
         </div>
         <div class="progress-bar"><div class="progress-fill ${barClass}" style="width:${pct}%"></div></div>
         <div class="sc-stats">
-          ${s.spend > 0 ? `<div class="sc-stat">Spend: <strong>${fmt(s.spend)}</strong></div>` : ''}
+          ${sSpend > 0 ? `<div class="sc-stat">Spend: <strong>${fmt(sSpend)}</strong></div>` : ''}
           ${cpo != null ? `<div class="sc-stat">CPO: <strong>${fmt(cpo)}</strong></div>` : ''}
           ${s.days != null ? `<div class="sc-stat">Days: <strong>${s.days}</strong></div>` : ''}
           ${s.manualQueue ? '<div class="sc-stat" style="color:var(--yellow)">Manual step</div>' : ''}
@@ -3390,6 +3508,8 @@ const headers = (IS_VERCEL || PROXY_BASE) ? {} : { 'x-api-key': API_KEY };
       apiError = err.message;
       apiData = null;
     }
+    // Refresh enriched cache (used by KPIs, funnel, charts, totals, scorecard)
+    enrichedStudiesCache = dataService.getEnrichedStudies();
     renderAll();
     $('#loading').classList.add('hidden');
   }
