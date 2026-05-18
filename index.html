@@ -538,11 +538,11 @@
   // CONFIG & API
   // ============================================================
   // Use CORS proxy when available; falls back to direct API call.
-  // To use the proxy, set ?proxy=http://localhost:3001 in the URL
-  // or deploy the api-proxy and update PROXY_BASE below.
+  // Auto-detects Vercel proxy at /api/recruiting. For local dev,
+  // set ?proxy=http://localhost:3001 in the URL.
   const PROXY_BASE = new URLSearchParams(window.location.search).get('proxy') || '';
   const DIRECT_API = 'https://operations.reputablehealth.net/api/recruiting';
-  const API_BASE = PROXY_BASE ? `${PROXY_BASE}/api/recruiting` : DIRECT_API;
+  const VERCEL_PROXY = '/api/recruiting';
   const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   // ============================================================
@@ -639,15 +639,29 @@
 
   const dataService = {
     async fetchRecruitingData(days) {
-      try {
-        const headers = PROXY_BASE ? {} : { 'x-api-key': API_KEY };
-        const resp = await fetch(`${API_BASE}?days=${days}`, { headers });
-        if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
-        return await resp.json();
-      } catch (err) {
-        console.warn('API fetch failed:', err.message);
-        throw err;
+      // Priority: explicit proxy param > Vercel serverless proxy > direct API
+      const attempts = [];
+      if (PROXY_BASE) {
+        attempts.push({ url: `${PROXY_BASE}/api/recruiting?days=${days}`, headers: {} });
+      } else {
+        attempts.push({ url: `${VERCEL_PROXY}?days=${days}`, headers: {} });
+        attempts.push({ url: `${DIRECT_API}?days=${days}`, headers: { 'x-api-key': API_KEY } });
       }
+      let lastErr;
+      for (const { url, headers } of attempts) {
+        try {
+          const resp = await fetch(url, { headers });
+          if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
+          const data = await resp.json();
+          if (data.error) throw new Error(data.error);
+          console.log('API loaded from:', url);
+          return data;
+        } catch (err) {
+          console.warn('API attempt failed:', url, err.message);
+          lastErr = err;
+        }
+      }
+      throw lastErr;
     },
 
     getSummary() {
@@ -937,7 +951,10 @@
   function renderApiStatus() {
     const el = $('#api-status');
     if (apiData) {
-      el.innerHTML = '<span class="status-badge live"><span class="dot"></span>Live API</span>';
+      const studyCount = (apiData.campaignStudyMap || []).length + (apiData.onboarding?.byStudy || []).length;
+      el.innerHTML = `<span class="status-badge live"><span class="dot"></span>Live API</span><span style="font-size:10px;color:var(--text-dim);margin-left:8px">${studyCount} API entries</span>`;
+    } else if (apiError) {
+      el.innerHTML = `<span class="status-badge offline"><span class="dot"></span>API Error</span><span style="font-size:10px;color:#FB7185;margin-left:8px">${esc(apiError)}</span>`;
     } else {
       el.innerHTML = '<span class="status-badge offline"><span class="dot"></span>Local Data</span>';
     }
