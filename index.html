@@ -121,6 +121,77 @@
     .filter-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); background: rgba(255,255,255,0.03); }
     .filter-btn.active { border-color: var(--border-lime); color: var(--lime); background: var(--lime-bg); }
 
+    /* Top-level tab bar (Command Center / Public Studies) */
+    .top-tab-bar {
+      display: flex; gap: 6px; padding: 4px;
+      background: var(--bg-raised); border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      width: max-content; margin: 0 0 20px;
+    }
+    .top-tab-btn {
+      padding: 8px 22px; border-radius: var(--radius-pill);
+      border: 1px solid transparent; background: transparent;
+      color: var(--text-dim); font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: all 0.18s ease;
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .top-tab-btn:hover { color: var(--text); }
+    .top-tab-btn.active {
+      color: var(--lime); background: var(--lime-bg);
+      border-color: var(--border-lime);
+    }
+
+    /* Public Studies analytics layout */
+    .ps-section { margin-bottom: 28px; }
+    .ps-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--text-dim);
+      margin: 0 0 12px; display: flex; align-items: center; gap: 10px;
+    }
+    .ps-section-title::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
+    }
+    .ps-chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 20px;
+    }
+    .ps-chart-card h3 {
+      font-size: 13px; font-weight: 600; margin: 0 0 14px;
+      color: var(--text);
+    }
+    .ps-chart-wrap { position: relative; height: 260px; }
+    .ps-chart-wrap.tall { height: 360px; }
+    .ps-charts-row {
+      display: grid; gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-bottom: 20px;
+    }
+    .ps-table {
+      width: 100%; border-collapse: collapse; font-size: 12px;
+    }
+    .ps-table th, .ps-table td {
+      padding: 10px 12px; text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .ps-table th {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-dim); font-weight: 700; cursor: pointer;
+      user-select: none; white-space: nowrap;
+    }
+    .ps-table th:hover { color: var(--lime); }
+    .ps-table th.sorted { color: var(--lime); }
+    .ps-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .ps-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .ps-table .ps-cat {
+      display: inline-block; padding: 2px 8px; border-radius: var(--radius-pill);
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .ps-cat-sleep { background: rgba(108,92,231,0.12); color: var(--indigo); }
+    .ps-cat-recovery { background: rgba(0,179,159,0.12); color: var(--teal); }
+    .ps-cat-stress { background: rgba(251,113,133,0.12); color: var(--rose); }
+    .ps-cat-fitness { background: rgba(200,230,74,0.12); color: var(--lime); }
+
     /* KPI Grid */
     .kpi-grid {
       display: grid;
@@ -531,6 +602,16 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
   </nav>
 
   <!-- ============================================================ -->
+  <!-- TOP-LEVEL TABS — Command Center vs Public Studies analytics -->
+  <!-- ============================================================ -->
+  <div class="top-tab-bar" id="top-tab-bar" role="tablist">
+    <button class="top-tab-btn active" data-tab="command-center" role="tab" aria-selected="true">Command Center</button>
+    <button class="top-tab-btn" data-tab="public-studies" role="tab" aria-selected="false">Public Studies</button>
+  </div>
+
+  <div id="tab-command-center" role="tabpanel">
+
+  <!-- ============================================================ -->
   <!-- CONTROLS BAR — filters + view toggle in one clean row -->
   <!-- ============================================================ -->
   <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
@@ -841,6 +922,74 @@ tr:hover td:nth-child(1), tr:hover td:nth-child(2) { background: var(--surface);
       <pre id="admin-json-output" style="display:none;margin-top:14px;background:var(--bg);padding:16px;border-radius:8px;font-size:11px;overflow-x:auto;color:var(--lime);border:1px solid var(--border-lime);"></pre>
     </div>
   </div>
+
+  </div><!-- /#tab-command-center -->
+
+  <!-- ============================================================ -->
+  <!-- TAB: PUBLIC STUDIES — analytics from Manpreet's May 15 export -->
+  <!-- ============================================================ -->
+  <div id="tab-public-studies" role="tabpanel" hidden>
+    <div style="margin-bottom:18px;">
+      <h2 style="font-size:22px;font-weight:700;margin:0 0 4px;">Public Studies Analytics</h2>
+      <div style="font-size:12px;color:var(--text-dim);">Source: Manpreet&apos;s May 15, 2026 participant export · all-time public-challenge dataset</div>
+    </div>
+
+    <div class="kpi-grid" id="ps-kpi-grid"></div>
+
+    <div class="ps-section">
+      <div class="ps-section-title">Completion Rate by Study</div>
+      <div class="ps-chart-card">
+        <div class="ps-chart-wrap tall"><canvas id="ps-chart-completion"></canvas></div>
+      </div>
+    </div>
+
+    <div class="ps-section">
+      <div class="ps-section-title">Demographics</div>
+      <div class="ps-charts-row">
+        <div class="ps-chart-card">
+          <h3>Gender</h3>
+          <div class="ps-chart-wrap"><canvas id="ps-chart-gender"></canvas></div>
+        </div>
+        <div class="ps-chart-card">
+          <h3>Age</h3>
+          <div class="ps-chart-wrap"><canvas id="ps-chart-age"></canvas></div>
+        </div>
+        <div class="ps-chart-card">
+          <h3>Ethnicity</h3>
+          <div class="ps-chart-wrap"><canvas id="ps-chart-ethnicity"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ps-section">
+      <div class="ps-section-title">Wearable Distribution</div>
+      <div class="ps-chart-card" style="max-width:520px;">
+        <div class="ps-chart-wrap"><canvas id="ps-chart-wearables"></canvas></div>
+      </div>
+    </div>
+
+    <div class="ps-section">
+      <div class="ps-section-title">Per-Study Detail</div>
+      <div class="ps-chart-card" style="padding:0;overflow-x:auto;">
+        <table class="ps-table" id="ps-detail-table">
+          <thead>
+            <tr>
+              <th data-col="name">Study</th>
+              <th data-col="category">Category</th>
+              <th data-col="participants" class="num">Participants</th>
+              <th data-col="new" class="num">New</th>
+              <th data-col="returning" class="num">Returning</th>
+              <th data-col="completed" class="num">Completed</th>
+              <th data-col="completionRate" class="num">Completion %</th>
+              <th data-col="avgDaysTagged" class="num">Avg Days Tagged</th>
+              <th data-col="avgDaysMissed" class="num">Avg Days Missed</th>
+            </tr>
+          </thead>
+          <tbody id="ps-detail-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /#tab-public-studies -->
 
   <div class="footer" id="footer"></div>
 </div>
@@ -3539,6 +3688,205 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
   // Initial load
   loadAndRender();
+
+  // ============================================================
+  // PUBLIC STUDIES TAB — embedded data from Manpreet's May 15 export
+  // ============================================================
+  const PS_DATA = {
+    gender: { 'Female': 1042, 'Male': 380, 'Unknown': 85, 'Prefer Not to Say': 3 },
+    age: { '<18': 5, '18–25': 83, '26–35': 279, '36–45': 322, '46–55': 277, '56–65': 113, '66+': 22 },
+    ethnicity: {
+      'Caucasian / White': 729, 'Unknown': 156, 'Asian / Pacific Islander': 96,
+      'Hispanic / Latino': 88, 'Black / African American': 47, 'Mixed Race': 18,
+      'Other': 13, 'Prefer Not to State': 8, 'Arab': 8,
+      'Native American / American Indian': 2, 'Indigenous / Aboriginal': 2,
+    },
+    wearables: { 'Oura': 1149, 'Unknown': 139, 'WHOOP v2': 115, 'Apple Health': 91, 'Garmin': 40, 'Fitbit': 38 },
+    studies: [
+      { id: 492, name: 'The 4-7-8 Effect', category: 'Sleep', participants: 180, new: 36, returning: 144, completed: 105, completionRate: 58.33, avgDaysTagged: 4.2, avgDaysMissed: 0.6 },
+      { id: 522, name: '7 Day Yoga Challenge', category: 'Sleep', participants: 127, new: 18, returning: 109, completed: 57, completionRate: 44.88, avgDaysTagged: 3.4, avgDaysMissed: 0.8 },
+      { id: 521, name: 'The Dry Week Effect', category: 'Sleep', participants: 119, new: 17, returning: 102, completed: 70, completionRate: 58.82, avgDaysTagged: 4.4, avgDaysMissed: 0.4 },
+      { id: 498, name: 'The Fasting Reset', category: 'Sleep', participants: 115, new: 25, returning: 90, completed: 53, completionRate: 46.09, avgDaysTagged: 3.4, avgDaysMissed: 0.5 },
+      { id: 511, name: 'The Gratitude Effect', category: 'Sleep', participants: 110, new: 22, returning: 88, completed: 64, completionRate: 58.18, avgDaysTagged: 4.3, avgDaysMissed: 0.4 },
+      { id: 514, name: 'The 10K Steps Challenge', category: 'Recovery', participants: 110, new: 14, returning: 96, completed: 58, completionRate: 52.73, avgDaysTagged: 4.1, avgDaysMissed: 0.8 },
+      { id: 527, name: 'The Reading Ritual', category: 'Sleep', participants: 102, new: 12, returning: 90, completed: 60, completionRate: 58.82, avgDaysTagged: 4.2, avgDaysMissed: 0.6 },
+      { id: 526, name: 'The Hydration Effect', category: 'Recovery', participants: 98, new: 15, returning: 83, completed: 62, completionRate: 63.27, avgDaysTagged: 4.7, avgDaysMissed: 0.6 },
+      { id: 512, name: 'The 30-Minute Reset', category: 'Stress', participants: 97, new: 25, returning: 72, completed: 53, completionRate: 54.64, avgDaysTagged: 4.1, avgDaysMissed: 0.7 },
+      { id: 531, name: 'The Sunrise Effect', category: 'Sleep', participants: 97, new: 10, returning: 87, completed: 63, completionRate: 64.95, avgDaysTagged: 4.8, avgDaysMissed: 0.4 },
+      { id: 523, name: '7 Day Wim Hof Challenge', category: 'Stress', participants: 91, new: 13, returning: 78, completed: 41, completionRate: 45.05, avgDaysTagged: 3.5, avgDaysMissed: 0.7 },
+      { id: 529, name: 'The Nature Dose', category: 'Stress', participants: 75, new: 9, returning: 66, completed: 54, completionRate: 72.00, avgDaysTagged: 5.1, avgDaysMissed: 0.6 },
+      { id: 528, name: 'The Power Nap Challenge', category: 'Recovery', participants: 62, new: 6, returning: 56, completed: 34, completionRate: 54.84, avgDaysTagged: 3.9, avgDaysMissed: 0.7 },
+      { id: 475, name: 'Caffeine Effect', category: 'Sleep', participants: 59, new: 46, returning: 13, completed: 11, completionRate: 18.64, avgDaysTagged: 1.8, avgDaysMissed: 0.4 },
+      { id: 536, name: 'Seasonal Superfoods', category: 'Recovery', participants: 33, new: 2, returning: 31, completed: 28, completionRate: 84.85, avgDaysTagged: 6.0, avgDaysMissed: 0.2 },
+      { id: 535, name: 'The Box Breathing Effect', category: 'Stress', participants: 32, new: 1, returning: 31, completed: 24, completionRate: 75.00, avgDaysTagged: 5.5, avgDaysMissed: 0.5 },
+      { id: 534, name: 'The Cold Shower Effect', category: 'Recovery', participants: 30, new: 1, returning: 29, completed: 24, completionRate: 80.00, avgDaysTagged: 5.4, avgDaysMissed: 0.2 },
+      { id: 477, name: 'Caffeine Effect (W)', category: 'Sleep', participants: 14, new: 9, returning: 5, completed: 3, completionRate: 21.43, avgDaysTagged: 1.8, avgDaysMissed: 0.6 },
+      { id: 513, name: 'Track Your Travel', category: 'Sleep', participants: 13, new: 9, returning: 4, completed: 6, completionRate: 46.15, avgDaysTagged: 3.5, avgDaysMissed: 0.2 },
+      { id: 548, name: '14 Day Yoga Challenge', category: 'FitnessAndActivity', participants: 11, new: 0, returning: 11, completed: 0, completionRate: 0, avgDaysTagged: 2.2, avgDaysMissed: 0.3 },
+      { id: 547, name: '4-7-8 Effect (Extended)', category: 'Sleep', participants: 10, new: 1, returning: 9, completed: 0, completionRate: 0, avgDaysTagged: 2.9, avgDaysMissed: 0.7 },
+    ],
+  };
+
+  const PS_CATEGORY_COLOR = { Sleep: '#6C5CE7', Recovery: '#00B39F', Stress: '#FB7185', FitnessAndActivity: '#C8E64A' };
+  const PS_CAT_CLASS = { Sleep: 'ps-cat-sleep', Recovery: 'ps-cat-recovery', Stress: 'ps-cat-stress', FitnessAndActivity: 'ps-cat-fitness' };
+  // Brand-aligned palette for slicing distribution charts
+  const PS_PALETTE = ['#C8E64A', '#00B39F', '#6C5CE7', '#60A5FA', '#FB7185', '#FBBF24', '#34D399', '#A78BFA', '#F472B6', '#94A3B8', '#10B981'];
+
+  let psRendered = false;
+  let psCharts = {};
+  let psSortCol = 'participants';
+  let psSortDir = 'desc';
+
+  function psRenderKPIs() {
+    const studies = PS_DATA.studies;
+    const totalParticipants = studies.reduce((a, s) => a + s.participants, 0);
+    const totalNew = studies.reduce((a, s) => a + s.new, 0);
+    const totalReturning = studies.reduce((a, s) => a + s.returning, 0);
+    const completedStudies = studies.filter(s => s.completionRate > 0).length;
+    const completedRates = studies.filter(s => s.completionRate > 0).map(s => s.completionRate);
+    const avgRate = completedRates.length ? completedRates.reduce((a, b) => a + b, 0) / completedRates.length : 0;
+    const returningPct = totalParticipants > 0 ? (totalReturning / totalParticipants * 100) : 0;
+
+    $('#ps-kpi-grid').innerHTML = `
+      <div class="kpi-card"><div class="kpi-label">Total Participants</div><div class="kpi-value teal">${totalParticipants.toLocaleString()}</div><div class="kpi-sub">across ${studies.length} public studies</div></div>
+      <div class="kpi-card"><div class="kpi-label">Studies Completed</div><div class="kpi-value indigo">${completedStudies}</div><div class="kpi-sub">of ${studies.length} with reported completion</div></div>
+      <div class="kpi-card"><div class="kpi-label">Avg Completion Rate</div><div class="kpi-value lime">${avgRate.toFixed(1)}%</div><div class="kpi-sub">study-weighted mean</div></div>
+      <div class="kpi-card"><div class="kpi-label">New vs Returning</div><div class="kpi-value green">${returningPct.toFixed(0)}% returning</div><div class="kpi-sub">${totalReturning.toLocaleString()} returning · ${totalNew.toLocaleString()} new</div></div>
+    `;
+  }
+
+  function psRenderCompletionChart() {
+    const sorted = PS_DATA.studies.slice().sort((a, b) => b.completionRate - a.completionRate);
+    const labels = sorted.map(s => s.name);
+    const data = sorted.map(s => s.completionRate);
+    const colors = sorted.map(s => PS_CATEGORY_COLOR[s.category] || '#999');
+    psCharts.completion = new Chart($('#ps-chart-completion'), {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Completion %', data, backgroundColor: colors, borderWidth: 0 }] },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `${ctx.parsed.x.toFixed(2)}%` } },
+        },
+        scales: {
+          x: { beginAtZero: true, max: 100, ticks: { color: '#888', callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: '#888', font: { size: 11 } }, grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  function psDoughnut(canvasId, dataObj, sortDesc = true) {
+    const entries = Object.entries(dataObj);
+    if (sortDesc) entries.sort((a, b) => b[1] - a[1]);
+    const labels = entries.map(([k]) => k);
+    const values = entries.map(([, v]) => v);
+    const colors = entries.map((_, i) => PS_PALETTE[i % PS_PALETTE.length]);
+    const total = values.reduce((a, b) => a + b, 0);
+    return new Chart($(canvasId), {
+      type: 'doughnut',
+      data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: 'var(--surface)', borderWidth: 2 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '60%',
+        plugins: {
+          legend: { position: 'right', labels: { color: '#999', font: { size: 11 }, padding: 8, boxWidth: 10 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const v = ctx.parsed;
+                const pct = total > 0 ? (v / total * 100).toFixed(1) : 0;
+                return `${ctx.label}: ${v.toLocaleString()} (${pct}%)`;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function psBar(canvasId, dataObj) {
+    const labels = Object.keys(dataObj);
+    const values = Object.values(dataObj);
+    return new Chart($(canvasId), {
+      type: 'bar',
+      data: { labels, datasets: [{ data: values, backgroundColor: '#C8E64A', borderWidth: 0 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y.toLocaleString() } } },
+        scales: {
+          x: { ticks: { color: '#888', font: { size: 11 } }, grid: { display: false } },
+          y: { beginAtZero: true, ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        },
+      },
+    });
+  }
+
+  function psRenderTable() {
+    const studies = PS_DATA.studies.slice().sort((a, b) => {
+      const av = a[psSortCol]; const bv = b[psSortCol];
+      if (typeof av === 'string') return psSortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+      return psSortDir === 'asc' ? av - bv : bv - av;
+    });
+    $('#ps-detail-tbody').innerHTML = studies.map(s => {
+      const catClass = PS_CAT_CLASS[s.category] || 'ps-cat-sleep';
+      const ratePct = s.completionRate > 0 ? s.completionRate.toFixed(2) + '%' : '—';
+      const rateColor = s.completionRate >= 70 ? 'var(--green)' : s.completionRate >= 50 ? 'var(--lime)' : s.completionRate > 0 ? 'var(--yellow)' : 'var(--text-dim)';
+      return `<tr>
+        <td>${esc(s.name)}</td>
+        <td><span class="ps-cat ${catClass}">${s.category}</span></td>
+        <td class="num">${s.participants.toLocaleString()}</td>
+        <td class="num">${s.new.toLocaleString()}</td>
+        <td class="num">${s.returning.toLocaleString()}</td>
+        <td class="num">${s.completed.toLocaleString()}</td>
+        <td class="num" style="color:${rateColor};font-weight:600;">${ratePct}</td>
+        <td class="num">${s.avgDaysTagged.toFixed(1)}</td>
+        <td class="num">${s.avgDaysMissed.toFixed(1)}</td>
+      </tr>`;
+    }).join('');
+    $$('#ps-detail-table th').forEach(th => {
+      th.classList.toggle('sorted', th.dataset.col === psSortCol);
+      const arrow = th.dataset.col === psSortCol ? (psSortDir === 'asc' ? ' ▲' : ' ▼') : '';
+      th.textContent = th.textContent.replace(/[ ▲▼]+$/, '') + arrow;
+    });
+  }
+
+  function psRenderAll() {
+    if (psRendered) return;
+    psRendered = true;
+    psRenderKPIs();
+    psRenderCompletionChart();
+    psCharts.gender = psDoughnut('#ps-chart-gender', PS_DATA.gender);
+    psCharts.age = psBar('#ps-chart-age', PS_DATA.age);
+    psCharts.ethnicity = psBar('#ps-chart-ethnicity', PS_DATA.ethnicity);
+    psCharts.wearables = psDoughnut('#ps-chart-wearables', PS_DATA.wearables);
+    psRenderTable();
+  }
+
+  // Tab switching
+  document.getElementById('top-tab-bar').addEventListener('click', e => {
+    const btn = e.target.closest('.top-tab-btn');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+    $$('#top-tab-bar .top-tab-btn').forEach(b => {
+      const active = b === btn;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.getElementById('tab-command-center').hidden = (tab !== 'command-center');
+    document.getElementById('tab-public-studies').hidden = (tab !== 'public-studies');
+    if (tab === 'public-studies') psRenderAll();
+  });
+
+  // Per-study detail table sorting
+  document.getElementById('ps-detail-table').addEventListener('click', e => {
+    const th = e.target.closest('th[data-col]');
+    if (!th) return;
+    const col = th.dataset.col;
+    if (psSortCol === col) psSortDir = psSortDir === 'asc' ? 'desc' : 'asc';
+    else { psSortCol = col; psSortDir = (col === 'name' || col === 'category') ? 'asc' : 'desc'; }
+    psRenderTable();
+  });
 
 })();
 </script>
