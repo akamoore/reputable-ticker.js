@@ -799,17 +799,17 @@
         const sNameLower = s.name.toLowerCase();
         const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
 
-        // Match in campaignStudyMap (has studyName, campaignName, joins, onboarded)
-        const mappedIdx = campaignMap.findIndex(c =>
-          sNameLower.includes(c.studyName?.toLowerCase()) ||
-          c.studyName?.toLowerCase().includes(sNamePrefix) ||
-          c.campaignName?.toLowerCase().includes(sNamePrefix)
-        );
+        // Match in campaignStudyMap (API may use studyName or experimentTitle)
+        const mappedIdx = campaignMap.findIndex(c => {
+          const cName = (c.studyName || c.experimentTitle || '').toLowerCase();
+          return (cName && (sNameLower.includes(cName) || cName.includes(sNamePrefix))) ||
+            c.campaignName?.toLowerCase().includes(sNamePrefix);
+        });
         if (mappedIdx >= 0) {
           matchedCampaignIdx.add(mappedIdx);
           const mapped = campaignMap[mappedIdx];
-          enriched.apiJoins = mapped.joins;
-          enriched.apiOnboarded = mapped.onboarded;
+          enriched.apiJoins = mapped.joins ?? mapped.count ?? null;
+          enriched.apiOnboarded = mapped.onboarded ?? mapped.count ?? null;
           enriched.experimentId = mapped.experimentId;
 
           // Pull ad spend from metaAds.ads via the matched campaignName
@@ -829,15 +829,15 @@
           }
         }
 
-        // Match in onboarding.byStudy
-        const obMatchIdx = byStudy.findIndex(o =>
-          sNameLower.includes(o.studyName?.toLowerCase()) ||
-          o.studyName?.toLowerCase().includes(sNamePrefix)
-        );
+        // Match in onboarding.byStudy (API uses experimentTitle + count)
+        const obMatchIdx = byStudy.findIndex(o => {
+          const oName = (o.studyName || o.experimentTitle || '').toLowerCase();
+          return oName && (sNameLower.includes(oName) || oName.includes(sNamePrefix));
+        });
         if (obMatchIdx >= 0) {
           matchedByStudyIdx.add(obMatchIdx);
           const obMatch = byStudy[obMatchIdx];
-          enriched.apiOnboarded = obMatch.onboarded;
+          enriched.apiOnboarded = obMatch.onboarded ?? obMatch.count ?? null;
           enriched.experimentId = obMatch.experimentId;
         }
 
@@ -857,7 +857,7 @@
       let nextSyntheticId = 9000;
 
       const addSynthetic = (entry, source) => {
-        const name = entry.studyName || entry.campaignName;
+        const name = entry.studyName || entry.experimentTitle || entry.campaignName;
         if (!name) return;
         const nameLower = name.toLowerCase();
         if (entry.experimentId && seenExperimentIds.has(entry.experimentId)) return;
@@ -873,9 +873,9 @@
           apiSpend: campaignKey && spendByCampaign[campaignKey] != null ? spendByCampaign[campaignKey] : null,
           leads: null,
           joined: null,
-          apiJoins: entry.joins ?? null,
+          apiJoins: entry.joins ?? entry.count ?? null,
           onboarded: 0,
-          apiOnboarded: entry.onboarded ?? null,
+          apiOnboarded: entry.onboarded ?? entry.count ?? null,
           target: null,
           wearable: null,
           days: null,
