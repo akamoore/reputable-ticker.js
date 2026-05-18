@@ -325,6 +325,43 @@
       padding: 24px 0 8px; border-top: 1px solid var(--border); margin-top: 8px;
     }
 
+    /* Main Tab Bar */
+    .main-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .main-tabs .tab-btn {
+      padding: 10px 24px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.15);
+      background: transparent; color: #999; cursor: pointer; font-size: 14px; font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .main-tabs .tab-btn.active { background: rgba(200,230,74,0.12); border-color: rgba(200,230,74,0.3); color: #C8E64A; }
+    .main-tabs .tab-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    /* Public Studies Tab */
+    .ps-note {
+      font-size: 12px; color: var(--text-dim); margin-bottom: 20px;
+      padding: 10px 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: var(--radius-md); display: inline-block;
+    }
+    .ps-demographics-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px;
+    }
+    .ps-chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 28px;
+    }
+    .ps-chart-card h3 {
+      font-size: 14px; font-weight: 600; margin-bottom: 14px; color: var(--text-secondary);
+    }
+    .ps-chart-card canvas { width: 100% !important; }
+    .ps-category-badge {
+      display: inline-block; padding: 3px 10px; border-radius: var(--radius-pill);
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .ps-cat-Sleep { background: rgba(96,165,250,0.12); color: #60A5FA; }
+    .ps-cat-Recovery { background: rgba(52,211,153,0.12); color: #34D399; }
+    .ps-cat-Stress { background: rgba(251,113,133,0.12); color: #FB7185; }
+    .ps-cat-FitnessAndActivity { background: rgba(251,191,36,0.12); color: #FBBF24; }
+    #ps-table th.ps-sorted { color: var(--lime); }
+
     /* Responsive */
     @media (max-width: 768px) {
       body { padding: 12px; }
@@ -334,6 +371,7 @@
       .charts-grid { grid-template-columns: 1fr; }
       .chart-card canvas { height: 280px !important; }
       .scorecard-grid { grid-template-columns: 1fr; }
+      .ps-demographics-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -364,6 +402,15 @@
       </div>
     </div>
   </div>
+
+  <!-- Main Tab Bar -->
+  <div class="main-tabs">
+    <button class="tab-btn active" data-tab="command-center">Command Center</button>
+    <button class="tab-btn" data-tab="public-studies">Public Studies</button>
+  </div>
+
+  <!-- TAB: Command Center (existing content) -->
+  <div id="tab-command-center">
 
   <!-- KPI Cards -->
   <div class="kpi-grid" id="kpi-grid"></div>
@@ -526,6 +573,55 @@
     <h2><span class="section-icon">&#9673;</span> Data Source Health</h2>
     <div class="status-grid" id="status-grid"></div>
   </div>
+
+  </div><!-- /tab-command-center -->
+
+  <!-- TAB: Public Studies -->
+  <div id="tab-public-studies" style="display:none">
+    <div class="ps-note">Analysis data from May 15, 2026 — Manpreet</div>
+
+    <!-- Public Studies KPIs -->
+    <div class="kpi-grid" id="ps-kpi-grid"></div>
+
+    <!-- Completion Rate by Study (horizontal bar) -->
+    <div class="section" style="margin-bottom:24px;">
+      <h2><span class="section-icon">&#9673;</span> Completion rate by study</h2>
+      <div style="position:relative; width:100%;"><canvas id="ps-chart-completion"></canvas></div>
+    </div>
+
+    <!-- Demographics Row (3 charts) -->
+    <div class="ps-demographics-grid">
+      <div class="ps-chart-card">
+        <h3>Gender Distribution</h3>
+        <canvas id="ps-chart-gender" style="max-height:260px;"></canvas>
+      </div>
+      <div class="ps-chart-card">
+        <h3>Age Distribution</h3>
+        <canvas id="ps-chart-age" style="max-height:260px;"></canvas>
+      </div>
+      <div class="ps-chart-card">
+        <h3>Ethnicity Distribution (Top 6)</h3>
+        <canvas id="ps-chart-ethnicity" style="max-height:260px;"></canvas>
+      </div>
+    </div>
+
+    <!-- Wearable Distribution -->
+    <div class="section" style="margin-bottom:24px;">
+      <h2><span class="section-icon">&#9673;</span> Wearable distribution</h2>
+      <div style="max-width:400px; margin:0 auto;"><canvas id="ps-chart-wearable" style="max-height:320px;"></canvas></div>
+    </div>
+
+    <!-- Public Studies Detailed Table -->
+    <div class="section" id="ps-table-section">
+      <h2><span class="section-icon">&#9673;</span> Study details</h2>
+      <div class="table-wrap">
+        <table id="ps-table">
+          <thead><tr id="ps-thead"></tr></thead>
+          <tbody id="ps-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /tab-public-studies -->
 
   <div class="footer" id="footer"></div>
 </div>
