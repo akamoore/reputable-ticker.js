@@ -1040,6 +1040,48 @@
   let filterStatus = 'all';
   let filterType = 'all';
   let filterManual = 'all';
+  let publicChartsRendered = false;
+
+  // ============================================================
+  // PUBLIC STUDIES DATA (from CSV analysis, May 15, 2026)
+  // ============================================================
+  const PUBLIC_STUDY_DATA = [
+    { id: 492, name: 'The 4-7-8 Effect', category: 'Sleep', participants: 180, newParticipants: 36, returning: 144, completed: 105, completionRate: 58.33, avgDaysTagged: 4.2, avgDaysMissed: 0.6 },
+    { id: 522, name: '7 Day Yoga Challenge', category: 'Sleep', participants: 127, newParticipants: 18, returning: 109, completed: 57, completionRate: 44.88, avgDaysTagged: 3.4, avgDaysMissed: 0.8 },
+    { id: 521, name: 'The Dry Week Effect', category: 'Sleep', participants: 119, newParticipants: 17, returning: 102, completed: 70, completionRate: 58.82, avgDaysTagged: 4.4, avgDaysMissed: 0.4 },
+    { id: 498, name: 'The Fasting Reset', category: 'Sleep', participants: 115, newParticipants: 25, returning: 90, completed: 53, completionRate: 46.09, avgDaysTagged: 3.4, avgDaysMissed: 0.5 },
+    { id: 511, name: 'The Gratitude Effect', category: 'Sleep', participants: 110, newParticipants: 22, returning: 88, completed: 64, completionRate: 58.18, avgDaysTagged: 4.3, avgDaysMissed: 0.4 },
+    { id: 514, name: 'The 10K Steps Challenge', category: 'Recovery', participants: 110, newParticipants: 14, returning: 96, completed: 58, completionRate: 52.73, avgDaysTagged: 4.1, avgDaysMissed: 0.8 },
+    { id: 527, name: 'The Reading Ritual', category: 'Sleep', participants: 102, newParticipants: 12, returning: 90, completed: 60, completionRate: 58.82, avgDaysTagged: 4.2, avgDaysMissed: 0.6 },
+    { id: 526, name: 'The Hydration Effect', category: 'Recovery', participants: 98, newParticipants: 15, returning: 83, completed: 62, completionRate: 63.27, avgDaysTagged: 4.7, avgDaysMissed: 0.6 },
+    { id: 512, name: 'The 30-Minute Reset', category: 'Stress', participants: 97, newParticipants: 25, returning: 72, completed: 53, completionRate: 54.64, avgDaysTagged: 4.1, avgDaysMissed: 0.7 },
+    { id: 531, name: 'The Sunrise Effect', category: 'Sleep', participants: 97, newParticipants: 10, returning: 87, completed: 63, completionRate: 64.95, avgDaysTagged: 4.8, avgDaysMissed: 0.4 },
+    { id: 523, name: '7 Day Wim Hof Challenge', category: 'Stress', participants: 91, newParticipants: 13, returning: 78, completed: 41, completionRate: 45.05, avgDaysTagged: 3.5, avgDaysMissed: 0.7 },
+    { id: 529, name: 'The Nature Dose', category: 'Stress', participants: 75, newParticipants: 9, returning: 66, completed: 54, completionRate: 72.0, avgDaysTagged: 5.1, avgDaysMissed: 0.6 },
+    { id: 475, name: 'Caffeine Effect', category: 'Sleep', participants: 59, newParticipants: 46, returning: 13, completed: 11, completionRate: 18.64, avgDaysTagged: 1.8, avgDaysMissed: 0.4 },
+    { id: 528, name: 'The Power Nap Challenge', category: 'Recovery', participants: 62, newParticipants: 6, returning: 56, completed: 34, completionRate: 54.84, avgDaysTagged: 3.9, avgDaysMissed: 0.7 },
+    { id: 536, name: 'Seasonal Superfoods', category: 'Recovery', participants: 33, newParticipants: 2, returning: 31, completed: 28, completionRate: 84.85, avgDaysTagged: 6.0, avgDaysMissed: 0.2 },
+    { id: 535, name: 'The Box Breathing Effect', category: 'Stress', participants: 32, newParticipants: 1, returning: 31, completed: 24, completionRate: 75.0, avgDaysTagged: 5.5, avgDaysMissed: 0.5 },
+    { id: 534, name: 'The Cold Shower Effect', category: 'Recovery', participants: 30, newParticipants: 1, returning: 29, completed: 24, completionRate: 80.0, avgDaysTagged: 5.4, avgDaysMissed: 0.2 },
+    { id: 477, name: 'Caffeine Effect (W)', category: 'Sleep', participants: 14, newParticipants: 9, returning: 5, completed: 3, completionRate: 21.43, avgDaysTagged: 1.8, avgDaysMissed: 0.6 },
+    { id: 513, name: 'Track Your Travel', category: 'Sleep', participants: 13, newParticipants: 9, returning: 4, completed: 6, completionRate: 46.15, avgDaysTagged: 3.5, avgDaysMissed: 0.2 },
+    { id: 548, name: '14 Day Yoga Challenge', category: 'FitnessAndActivity', participants: 11, newParticipants: 0, returning: 11, completed: 0, completionRate: 0, avgDaysTagged: 2.2, avgDaysMissed: 0.3 },
+    { id: 547, name: '4-7-8 Effect (Extended)', category: 'Sleep', participants: 10, newParticipants: 1, returning: 9, completed: 0, completionRate: 0, avgDaysTagged: 2.9, avgDaysMissed: 0.7 },
+    { id: 545, name: 'The Red Bull Effect', category: 'Recovery', participants: 0, newParticipants: 0, returning: 0, completed: 0, completionRate: 0, avgDaysTagged: 0, avgDaysMissed: 0 },
+    { id: 543, name: 'The Ghost Effect', category: 'Recovery', participants: 0, newParticipants: 0, returning: 0, completed: 0, completionRate: 0, avgDaysTagged: 0, avgDaysMissed: 0 },
+    { id: 542, name: 'The Monster Effect', category: 'Recovery', participants: 0, newParticipants: 0, returning: 0, completed: 0, completionRate: 0, avgDaysTagged: 0, avgDaysMissed: 0 },
+    { id: 541, name: 'The Celsius Effect', category: 'Recovery', participants: 0, newParticipants: 0, returning: 0, completed: 0, completionRate: 0, avgDaysTagged: 0, avgDaysMissed: 0 },
+  ];
+
+  const PUBLIC_DEMO_DATA = {
+    gender: { Female: 1042, Male: 380, unknown: 85, 'Prefer Not to Say': 3 },
+    age: { '17-': 5, '18-25': 83, '26-35': 279, '36-45': 322, '46-55': 277, '56-65': 113, '66+': 22 },
+    ethnicity: { 'Caucasian or White': 729, unknown: 156, 'Asian or Pacific Islander': 96, 'Hispanic or Latino': 88, 'Black or African American': 47, 'Mixed Race': 18, Other: 13, 'Prefer Not To State': 8, Arab: 8, 'Native American or American Indian': 2, 'Indigenous or Aboriginal': 2 },
+  };
+
+  const PUBLIC_WEARABLE_DATA = {
+    oura: 1149, whoop_v2: 115, apple_health_kit: 91, unknown: 139, garmin: 40, fitbit: 38
+  };
 
   // ============================================================
   // RENDER: API Status
@@ -1897,6 +1939,331 @@
   $('#filter-status').addEventListener('change', e => { filterStatus = e.target.value; renderStudiesTable(); });
   $('#filter-type').addEventListener('change', e => { filterType = e.target.value; renderStudiesTable(); });
   $('#filter-manual').addEventListener('change', e => { filterManual = e.target.value; renderStudiesTable(); });
+
+  // ============================================================
+  // TAB SWITCHING
+  // ============================================================
+  document.querySelectorAll('.main-tabs .tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.tab;
+      document.getElementById('tab-command-center').style.display = target === 'command-center' ? '' : 'none';
+      document.getElementById('tab-public-studies').style.display = target === 'public-studies' ? '' : 'none';
+      if (target === 'public-studies' && !publicChartsRendered) renderPublicStudiesTab();
+    });
+  });
+
+  // ============================================================
+  // RENDER: Public Studies Tab
+  // ============================================================
+  let psChartCompletion, psChartGender, psChartAge, psChartEthnicity, psChartWearable;
+  let psSortCol = 'participants';
+  let psSortDir = 'desc';
+
+  function renderPublicStudiesTab() {
+    publicChartsRendered = true;
+
+    const activeStudies = PUBLIC_STUDY_DATA.filter(s => s.participants > 0);
+
+    // --- KPI Cards ---
+    const totalParticipants = PUBLIC_STUDY_DATA.reduce((a, s) => a + s.participants, 0);
+    const studiesWithCompleted = PUBLIC_STUDY_DATA.filter(s => s.completed > 0).length;
+    const nonZeroRates = PUBLIC_STUDY_DATA.filter(s => s.completionRate > 0);
+    const avgCompletionRate = nonZeroRates.length > 0
+      ? (nonZeroRates.reduce((a, s) => a + s.completionRate, 0) / nonZeroRates.length).toFixed(1)
+      : 0;
+    const totalNew = PUBLIC_STUDY_DATA.reduce((a, s) => a + s.newParticipants, 0);
+    const totalReturning = PUBLIC_STUDY_DATA.reduce((a, s) => a + s.returning, 0);
+
+    $('#ps-kpi-grid').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-label">Total Participants</div>
+        <div class="kpi-value lime">${fmtInt(totalParticipants)}</div>
+        <div class="kpi-sub">${activeStudies.length} active studies</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Studies Completed</div>
+        <div class="kpi-value teal">${studiesWithCompleted}</div>
+        <div class="kpi-sub">of ${PUBLIC_STUDY_DATA.length} total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Completion Rate</div>
+        <div class="kpi-value green">${avgCompletionRate}%</div>
+        <div class="kpi-sub">${nonZeroRates.length} studies with completions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">New vs Returning</div>
+        <div class="kpi-value blue">${fmtInt(totalNew)} / ${fmtInt(totalReturning)}</div>
+        <div class="kpi-sub">${totalParticipants > 0 ? ((totalReturning / totalParticipants) * 100).toFixed(0) : 0}% returning participants</div>
+      </div>
+    `;
+
+    // --- Completion Rate by Study (horizontal bar) ---
+    const sortedByRate = activeStudies.slice().sort((a, b) => b.completionRate - a.completionRate);
+    psChartCompletion = new Chart($('#ps-chart-completion'), {
+      type: 'bar',
+      data: {
+        labels: sortedByRate.map(s => s.name),
+        datasets: [{
+          label: 'Completion Rate (%)',
+          data: sortedByRate.map(s => s.completionRate),
+          backgroundColor: sortedByRate.map(s => {
+            if (s.completionRate >= 70) return 'rgba(52,211,153,0.7)';
+            if (s.completionRate >= 50) return 'rgba(200,230,74,0.7)';
+            if (s.completionRate >= 30) return 'rgba(251,191,36,0.7)';
+            return 'rgba(251,113,133,0.7)';
+          }),
+          borderColor: sortedByRate.map(s => {
+            if (s.completionRate >= 70) return '#34D399';
+            if (s.completionRate >= 50) return '#C8E64A';
+            if (s.completionRate >= 30) return '#FBBF24';
+            return '#FB7185';
+          }),
+          borderWidth: 1,
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10,
+            callbacks: {
+              label: ctx => `${ctx.parsed.x.toFixed(1)}% completion (${sortedByRate[ctx.dataIndex].participants} participants)`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: '#888', font: { size: 12 }, callback: v => v + '%' },
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            max: 100,
+          },
+          y: {
+            ticks: { color: '#999', font: { size: 11 } },
+            grid: { display: false },
+          },
+        },
+      },
+    });
+    // Set canvas height based on number of studies
+    $('#ps-chart-completion').parentElement.style.height = Math.max(400, sortedByRate.length * 32) + 'px';
+
+    // --- Gender Distribution (doughnut) ---
+    const genderLabels = Object.keys(PUBLIC_DEMO_DATA.gender);
+    const genderValues = Object.values(PUBLIC_DEMO_DATA.gender);
+    const genderColors = ['#C8E64A', '#60A5FA', '#A78BFA', '#FB7185', '#FBBF24', '#34D399', '#00B39F'];
+    psChartGender = new Chart($('#ps-chart-gender'), {
+      type: 'doughnut',
+      data: {
+        labels: genderLabels,
+        datasets: [{
+          data: genderValues,
+          backgroundColor: genderColors.slice(0, genderLabels.length),
+          borderColor: '#0a0a0a',
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#999', font: { size: 11 }, padding: 12 },
+          },
+          tooltip: {
+            titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10,
+            callbacks: {
+              label: ctx => {
+                const total = genderValues.reduce((a, b) => a + b, 0);
+                const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                return `${ctx.label}: ${fmtInt(ctx.parsed)} (${pct}%)`;
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // --- Age Distribution (vertical bar) ---
+    const ageLabels = Object.keys(PUBLIC_DEMO_DATA.age);
+    const ageValues = Object.values(PUBLIC_DEMO_DATA.age);
+    psChartAge = new Chart($('#ps-chart-age'), {
+      type: 'bar',
+      data: {
+        labels: ageLabels,
+        datasets: [{
+          label: 'Participants',
+          data: ageValues,
+          backgroundColor: 'rgba(0,179,159,0.6)',
+          borderColor: '#00B39F',
+          borderWidth: 1,
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10 },
+        },
+        scales: {
+          x: { ticks: { color: '#999', font: { size: 11 } }, grid: { display: false } },
+          y: { ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        },
+      },
+    });
+
+    // --- Ethnicity Distribution (horizontal bar, top 6) ---
+    const ethEntries = Object.entries(PUBLIC_DEMO_DATA.ethnicity).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const ethColors = ['#C8E64A', '#60A5FA', '#FB7185', '#FBBF24', '#A78BFA', '#34D399'];
+    psChartEthnicity = new Chart($('#ps-chart-ethnicity'), {
+      type: 'bar',
+      data: {
+        labels: ethEntries.map(e => e[0]),
+        datasets: [{
+          label: 'Participants',
+          data: ethEntries.map(e => e[1]),
+          backgroundColor: ethColors.map(c => c + 'B3'),
+          borderColor: ethColors,
+          borderWidth: 1,
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10 },
+        },
+        scales: {
+          x: { ticks: { color: '#888', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: '#999', font: { size: 10 } }, grid: { display: false } },
+        },
+      },
+    });
+
+    // --- Wearable Distribution (doughnut) ---
+    const wearableLabels = { oura: 'Oura Ring', whoop_v2: 'WHOOP', apple_health_kit: 'Apple Health', unknown: 'Unknown', garmin: 'Garmin', fitbit: 'Fitbit' };
+    const wKeys = Object.keys(PUBLIC_WEARABLE_DATA);
+    const wValues = Object.values(PUBLIC_WEARABLE_DATA);
+    const wColors = ['#C8E64A', '#FB7185', '#60A5FA', '#666666', '#FBBF24', '#00B39F'];
+    psChartWearable = new Chart($('#ps-chart-wearable'), {
+      type: 'doughnut',
+      data: {
+        labels: wKeys.map(k => wearableLabels[k] || k),
+        datasets: [{
+          data: wValues,
+          backgroundColor: wColors,
+          borderColor: '#0a0a0a',
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#999', font: { size: 12 }, padding: 14 },
+          },
+          tooltip: {
+            titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10,
+            callbacks: {
+              label: ctx => {
+                const total = wValues.reduce((a, b) => a + b, 0);
+                const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                return `${ctx.label}: ${fmtInt(ctx.parsed)} (${pct}%)`;
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // --- Render the detailed table ---
+    renderPublicStudiesTable();
+  }
+
+  // ============================================================
+  // RENDER: Public Studies Table
+  // ============================================================
+  const PS_COLUMNS = [
+    { key: 'name', label: 'Study Name', align: 'left', sortable: true },
+    { key: 'category', label: 'Category', align: 'left', sortable: true },
+    { key: 'participants', label: 'Participants', align: 'right', sortable: true },
+    { key: 'newParticipants', label: 'New', align: 'right', sortable: true },
+    { key: 'returning', label: 'Returning', align: 'right', sortable: true },
+    { key: 'completed', label: 'Completed', align: 'right', sortable: true },
+    { key: 'completionRate', label: 'Completion %', align: 'right', sortable: true },
+    { key: 'avgDaysTagged', label: 'Avg Days Tagged', align: 'right', sortable: true },
+    { key: 'avgDaysMissed', label: 'Avg Days Missed', align: 'right', sortable: true },
+  ];
+
+  function renderPublicStudiesTable() {
+    const thead = $('#ps-thead');
+    const tbody = $('#ps-tbody');
+    const activeStudies = PUBLIC_STUDY_DATA.filter(s => s.participants > 0);
+
+    // Header
+    thead.innerHTML = PS_COLUMNS.map(c => {
+      const isSorted = psSortCol === c.key;
+      const arrow = isSorted ? (psSortDir === 'asc' ? ' &#9650;' : ' &#9660;') : '';
+      const cls = (c.align === 'right' ? ' class="align-right' + (isSorted ? ' ps-sorted' : '') + '"' :
+                   (isSorted ? ' class="ps-sorted"' : ''));
+      return `<th data-col="${c.key}"${cls} style="${c.sortable ? 'cursor:pointer;' : ''}">${c.label}${c.sortable ? '<span class="sort-arrow">' + arrow + '</span>' : ''}</th>`;
+    }).join('');
+
+    // Sort
+    const sorted = activeStudies.slice().sort((a, b) => {
+      let va = a[psSortCol], vb = b[psSortCol];
+      if (typeof va === 'string') va = va.toLowerCase();
+      if (typeof vb === 'string') vb = vb.toLowerCase();
+      if (va < vb) return psSortDir === 'asc' ? -1 : 1;
+      if (va > vb) return psSortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+    // Body
+    tbody.innerHTML = sorted.map(s => {
+      const catClass = 'ps-cat-' + s.category;
+      return `<tr>
+        <td>${esc(s.name)}</td>
+        <td><span class="ps-category-badge ${catClass}">${s.category}</span></td>
+        <td class="align-right">${fmtInt(s.participants)}</td>
+        <td class="align-right">${fmtInt(s.newParticipants)}</td>
+        <td class="align-right">${fmtInt(s.returning)}</td>
+        <td class="align-right">${fmtInt(s.completed)}</td>
+        <td class="align-right" style="color:${s.completionRate >= 60 ? 'var(--green)' : s.completionRate >= 40 ? 'var(--lime)' : 'var(--rose)'}; font-weight:600;">${s.completionRate.toFixed(1)}%</td>
+        <td class="align-right">${s.avgDaysTagged.toFixed(1)}</td>
+        <td class="align-right">${s.avgDaysMissed.toFixed(1)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Public studies table sort handler
+  document.addEventListener('click', e => {
+    const th = e.target.closest('#ps-thead th');
+    if (!th) return;
+    const col = th.dataset.col;
+    const colDef = PS_COLUMNS.find(c => c.key === col);
+    if (!colDef?.sortable) return;
+    if (psSortCol === col) {
+      psSortDir = psSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      psSortCol = col;
+      psSortDir = 'desc';
+    }
+    renderPublicStudiesTable();
+  });
 
   // ============================================================
   // LOAD DATA & RENDER
