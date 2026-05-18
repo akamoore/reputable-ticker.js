@@ -984,6 +984,8 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     }
     // Default outlier_reason
     if (s.outlier && !s.outlier_reason) s.outlier_reason = s.notes || 'Flagged as outlier';
+    // All PUBLIC challenges share the standard 200-participant target
+    if (s.type === 'PUBLIC') s.target = 200;
   });
 
   // Names the API may still return for deleted/merged studies — keep auto-merge
