@@ -806,7 +806,10 @@
     },
 
     getNewsletterDaily() {
-      const allDaily = sendgridData?.daily?.length ? sendgridData.daily : (apiData?.newsletter?.daily || []);
+      const apiDaily = apiData?.newsletter?.daily || [];
+      const localDaily = sendgridData?.daily || [];
+      // Prefer whichever source has more recent data
+      const allDaily = apiDaily.length ? apiDaily : localDaily;
       if (!allDaily.length) return [];
       // Filter to selectedDays window
       const cutoff = new Date(Date.now() - selectedDays * 86400000);
@@ -816,9 +819,7 @@
     getNewsletterTotals() {
       const daily = this.getNewsletterDaily();
       if (!daily.length) {
-        // Fall back to pre-computed totals if no daily data
-        if (sendgridData?.totals) return sendgridData.totals;
-        return apiData?.newsletter?.totals || null;
+        return apiData?.newsletter?.totals || sendgridData?.totals || null;
       }
       // Compute totals from windowed daily data
       const totals = daily.reduce((acc, d) => ({
