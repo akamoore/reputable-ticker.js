@@ -736,12 +736,13 @@
   const dataService = {
     async fetchRecruitingData(days) {
       // Priority: explicit proxy param > Vercel serverless proxy > direct API
+      // scope=all returns all studies (public + clinical + completed + coming)
       const attempts = [];
       if (PROXY_BASE) {
-        attempts.push({ url: `${PROXY_BASE}/api/recruiting?days=${days}`, headers: {} });
+        attempts.push({ url: `${PROXY_BASE}/api/recruiting?days=${days}&scope=all`, headers: {} });
       } else {
-        attempts.push({ url: `${VERCEL_PROXY}?days=${days}`, headers: {} });
-        attempts.push({ url: `${DIRECT_API}?days=${days}`, headers: { 'x-api-key': API_KEY } });
+        attempts.push({ url: `${VERCEL_PROXY}?days=${days}&scope=all`, headers: {} });
+        attempts.push({ url: `${DIRECT_API}?days=${days}&scope=all`, headers: { 'x-api-key': API_KEY } });
       }
       let lastErr;
       for (const { url, headers } of attempts) {
@@ -868,9 +869,9 @@
       return apiData?.status || {};
     },
 
-    // Merge API data with local STUDIES — enriches with live
-    // ad spend, joins, and onboarded from the API when available.
-    // Also appends synthetic records for API studies missing from STUDIES.
+    // Build the full study list from API + local STUDIES fallback.
+    // API is now the primary source (scope=all returns all metadata).
+    // STUDIES array provides fallback for historical data the API doesn't have.
     getEnrichedStudies() {
       const cacheKey = JSON.stringify(apiData?.status || '') + (metaAdsData?.updated_at || '');
       if (_enrichedCache && _enrichedCacheKey === cacheKey) return _enrichedCache;
@@ -879,128 +880,106 @@
       const campaignMap = this.getCampaignStudyMap();
       const adsBreakdown = this.getMetaAdsBreakdown();
 
-      // Build a spend-by-campaign lookup from metaAds.ads
-      // Each ad has campaignName + spend; aggregate by campaign
       const spendByCampaign = {};
       adsBreakdown.forEach(ad => {
         const key = (ad.campaignName || '').toLowerCase();
         spendByCampaign[key] = (spendByCampaign[key] || 0) + (ad.spend || 0);
       });
 
-      const matchedCampaignIdx = new Set();
-      const matchedByStudyIdx = new Set();
+      // Index local STUDIES by lowercase name for fast lookup
+      const localByName = {};
+      STUDIES.forEach(s => { localByName[s.name.toLowerCase()] = s; });
 
-      const enrichedStudies = STUDIES.map(s => {
-        const enriched = { ...s };
-        const sNameLower = s.name.toLowerCase();
-        const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
+      // Helper: extract year from date string
+      const yearFrom = d => { if (!d) return null; const m = String(d).match(/(\d{4})/); return m ? parseInt(m[1]) : null; };
 
-        // Match in campaignStudyMap (API may use studyName or experimentTitle)
-        const mappedIdx = campaignMap.findIndex(c => {
-          const cName = (c.studyName || c.experimentTitle || '').toLowerCase();
-          return (cName && (sNameLower.includes(cName) || cName.includes(sNamePrefix))) ||
-            c.campaignName?.toLowerCase().includes(sNamePrefix);
-        });
-        if (mappedIdx >= 0) {
-          matchedCampaignIdx.add(mappedIdx);
-          const mapped = campaignMap[mappedIdx];
-          enriched.apiJoins = mapped.joins ?? mapped.count ?? null;
-          enriched.apiOnboarded = mapped.onboarded ?? mapped.count ?? null;
-          enriched.experimentId = mapped.experimentId;
-
-          // Pull ad spend from metaAds.ads via the matched campaignName
-          const campaignKey = (mapped.campaignName || '').toLowerCase();
-          if (spendByCampaign[campaignKey] != null) {
-            enriched.apiSpend = spendByCampaign[campaignKey];
-          }
-        }
-
-        // Also try direct name match against metaAds campaign names
-        if (enriched.apiSpend == null) {
-          for (const [campaignKey, totalSpend] of Object.entries(spendByCampaign)) {
-            if (campaignKey.includes(sNamePrefix) || sNameLower.includes(campaignKey.split(' - ')[0]?.trim())) {
-              enriched.apiSpend = totalSpend;
-              break;
-            }
-          }
-        }
-
-        // Match in onboarding.byStudy (API uses experimentTitle + count)
-        const obMatchIdx = byStudy.findIndex(o => {
-          const oName = (o.studyName || o.experimentTitle || '').toLowerCase();
-          return oName && (sNameLower.includes(oName) || oName.includes(sNamePrefix));
-        });
-        if (obMatchIdx >= 0) {
-          matchedByStudyIdx.add(obMatchIdx);
-          const obMatch = byStudy[obMatchIdx];
-          enriched.apiOnboarded = obMatch.onboarded ?? obMatch.count ?? null;
-          enriched.experimentId = obMatch.experimentId;
-        }
-
-        return enriched;
-      });
-
-      // Auto-discover: append any API studies not already matched to a local entry
-      const seenExperimentIds = new Set();
-      const seenNames = new Set();
-      enrichedStudies.forEach(s => {
-        if (s.experimentId) seenExperimentIds.add(s.experimentId);
-        seenNames.add(s.name.toLowerCase());
-      });
-
-      const synthetic = [];
-      const currentYear = new Date().getFullYear();
-      let nextSyntheticId = 9000;
-
-      const addSynthetic = (entry, source) => {
-        const name = entry.studyName || entry.experimentTitle || entry.campaignName;
-        if (!name) return;
-        const nameLower = name.toLowerCase();
-        if (entry.experimentId && seenExperimentIds.has(entry.experimentId)) return;
-        if (seenNames.has(nameLower)) return;
-
+      // Helper: normalize API entry to a study object
+      const apiToStudy = (entry, id) => {
+        const name = entry.studyName || entry.experimentTitle || entry.campaignName || '';
+        const local = localByName[name.toLowerCase()];
+        const launchDate = entry.launchDate || local?.launchDate || null;
+        const endDate = entry.endDate || local?.endDate || null;
+        const launchYear = yearFrom(launchDate) || local?.launchYear || new Date().getFullYear();
+        const status = entry.status || local?.status || 'coming';
         const campaignKey = (entry.campaignName || '').toLowerCase();
-        synthetic.push({
-          id: nextSyntheticId++,
+
+        return {
+          id: local?.id || id,
           name,
-          type: 'NEW',
-          status: 'recruiting',
-          spend: 0,
+          type: entry.type || local?.type || 'NEW',
+          status,
+          spend: local?.spend || 0,
           apiSpend: campaignKey && spendByCampaign[campaignKey] != null ? spendByCampaign[campaignKey] : null,
-          leads: null,
-          joined: null,
-          apiJoins: entry.joins ?? entry.count ?? null,
-          onboarded: 0,
+          leads: entry.leads ?? local?.leads ?? null,
+          joined: local?.joined ?? null,
+          apiJoins: entry.joined ?? entry.joins ?? entry.count ?? null,
+          onboarded: local?.onboarded ?? 0,
           apiOnboarded: entry.onboarded ?? entry.count ?? null,
-          target: null,
-          wearable: null,
-          days: null,
-          launchDate: null,
-          endDate: null,
-          launchYear: currentYear,
-          crossYear: false,
-          manualQueue: false,
-          outlier: false,
+          target: entry.target ?? local?.target ?? null,
+          wearable: entry.wearable || local?.wearable || null,
+          days: entry.days ?? local?.days ?? null,
+          launchDate,
+          endDate,
+          launchYear,
+          crossYear: local?.crossYear || false,
+          manualQueue: local?.manualQueue || false,
+          outlier: local?.outlier || false,
           experimentId: entry.experimentId,
-          _fromApi: true,
-          _source: source,
-          notes: 'Auto-discovered from API — add to STUDIES for full metadata',
-        });
-        if (entry.experimentId) seenExperimentIds.add(entry.experimentId);
-        seenNames.add(nameLower);
+          notes: local?.notes || '',
+          _fromApi: !local,
+        };
       };
 
-      campaignMap.forEach((c, idx) => {
-        if (matchedCampaignIdx.has(idx)) return;
-        addSynthetic(c, 'campaignMap');
+      // Build from API byStudy as primary source
+      const result = [];
+      const seenExperimentIds = new Set();
+      const seenNames = new Set();
+
+      byStudy.forEach((entry, idx) => {
+        const name = (entry.studyName || entry.experimentTitle || '').toLowerCase();
+        if (!name) return;
+        if (entry.experimentId && seenExperimentIds.has(entry.experimentId)) return;
+        if (seenNames.has(name)) return;
+
+        result.push(apiToStudy(entry, 9000 + idx));
+        if (entry.experimentId) seenExperimentIds.add(entry.experimentId);
+        seenNames.add(name);
       });
 
-      byStudy.forEach((o, idx) => {
-        if (matchedByStudyIdx.has(idx)) return;
-        addSynthetic(o, 'byStudy');
+      // Also check campaignMap for studies not in byStudy
+      campaignMap.forEach((entry, idx) => {
+        const name = (entry.studyName || entry.experimentTitle || '').toLowerCase();
+        if (!name) return;
+        if (entry.experimentId && seenExperimentIds.has(entry.experimentId)) return;
+        if (seenNames.has(name)) return;
+
+        result.push(apiToStudy(entry, 9500 + idx));
+        if (entry.experimentId) seenExperimentIds.add(entry.experimentId);
+        seenNames.add(name);
       });
 
-      _enrichedCache = [...enrichedStudies, ...synthetic];
+      // Add any local STUDIES not matched by the API (historical studies)
+      STUDIES.forEach(s => {
+        const sNameLower = s.name.toLowerCase();
+        if (seenNames.has(sNameLower)) return;
+        if (s.experimentId && seenExperimentIds.has(s.experimentId)) return;
+        result.push({ ...s });
+        seenNames.add(sNameLower);
+      });
+
+      // Enrich with ad spend from metaAds for any study missing it
+      result.forEach(s => {
+        if (s.apiSpend != null) return;
+        const prefix = s.name.split(':')[0].trim().toLowerCase();
+        for (const [key, spend] of Object.entries(spendByCampaign)) {
+          if (key.includes(prefix) || prefix.includes(key.split(' - ')[0]?.trim())) {
+            s.apiSpend = spend;
+            break;
+          }
+        }
+      });
+
+      _enrichedCache = result;
       _enrichedCacheKey = cacheKey;
       return _enrichedCache;
     }
