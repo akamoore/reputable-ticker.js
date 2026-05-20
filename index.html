@@ -2789,19 +2789,24 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     const totals = dataService.getNewsletterTotals();
     const grid = $('#email-grid');
 
-    // Show data freshness indicator with color-coded staleness
-    const daily = dataService.getNewsletterDaily();
-    const allDaily = sendgridData?.daily || [];
-    const lastDate = allDaily.length ? allDaily[allDaily.length - 1].date : null;
+    // Show data source indicator — live API when available, else the local cache's last date.
+    const apiDailyAll = apiData?.newsletter?.daily || [];
+    const localDailyAll = sendgridData?.daily || [];
     let staleNote = '';
-    if (lastDate) {
+    if (apiDailyAll.length) {
+      const lastDate = apiDailyAll[apiDailyAll.length - 1].date;
+      staleNote = `<div style="font-size:11px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-flex;align-items:center;gap:5px;color:var(--green);font-weight:600;"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);"></span>Live API</span>
+        <span style="color:var(--text-dim);">Data through ${lastDate}</span>
+      </div>`;
+    } else if (localDailyAll.length) {
+      const lastDate = localDailyAll[localDailyAll.length - 1].date;
       const daysSinceSync = Math.floor((Date.now() - new Date(lastDate + 'T23:59:59').getTime()) / 86400000);
       const staleColor = daysSinceSync <= 1 ? 'var(--green)' : daysSinceSync <= 3 ? 'var(--yellow)' : 'var(--rose)';
-      const staleLabel = daysSinceSync <= 1 ? 'Current' : daysSinceSync <= 3 ? `${daysSinceSync}d behind` : `${daysSinceSync}d stale`;
+      const staleLabel = daysSinceSync <= 1 ? 'Current' : `${daysSinceSync}d behind`;
       staleNote = `<div style="font-size:11px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
         <span style="display:inline-flex;align-items:center;gap:5px;color:${staleColor};font-weight:600;"><span style="width:6px;height:6px;border-radius:50%;background:${staleColor};"></span>${staleLabel}</span>
         <span style="color:var(--text-dim);">Data through ${lastDate}${sendgridData?.updated_at ? ' · Synced ' + new Date(sendgridData.updated_at).toLocaleDateString() : ''}</span>
-        ${daysSinceSync > 1 ? '<span style="color:var(--text-dim);font-size:10px;">(SendGrid sync may need re-enabling in GitHub Actions)</span>' : ''}
       </div>`;
     }
 
