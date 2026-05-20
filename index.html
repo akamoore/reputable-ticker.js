@@ -2207,12 +2207,33 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     if (chartRecruiting) { chartRecruiting.destroy(); chartRecruiting = null; }
   }
 
+  // Shared tooltip + interaction styling — applied globally so every Chart.js
+  // instance inherits, plus mirrored into chartDefaults so anywhere that spreads
+  // chartDefaults.plugins.tooltip still sees the same shape.
+  const TOOLTIP_STYLE = {
+    enabled: true,
+    backgroundColor: 'rgba(20,20,20,0.95)',
+    titleFont: { size: 13, weight: 600 },
+    bodyFont: { size: 12 },
+    padding: 12,
+    cornerRadius: 8,
+    displayColors: true,
+    boxPadding: 4,
+    caretSize: 6,
+  };
+  const INTERACTION_STYLE = { mode: 'index', intersect: false };
+  if (typeof Chart !== 'undefined' && Chart.defaults) {
+    Object.assign(Chart.defaults.plugins.tooltip, TOOLTIP_STYLE);
+    Chart.defaults.interaction = { ...Chart.defaults.interaction, ...INTERACTION_STYLE };
+  }
+
   const chartDefaults = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: { ...INTERACTION_STYLE },
     plugins: {
       legend: { display: true, labels: { color: '#999', font: { size: 13 }, padding: 16 } },
-      tooltip: { titleFont: { size: 13 }, bodyFont: { size: 13 }, padding: 10 },
+      tooltip: { ...TOOLTIP_STYLE },
     },
     scales: {
       x: { ticks: { color: '#888', font: { size: 12 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.05)' } },
