@@ -2416,6 +2416,75 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
   }
 
   // ============================================================
+  // External HTML tooltip for #chart-recruiting — keeps the tooltip out
+  // of the canvas so it always renders at native DPI (no blurring).
+  // ============================================================
+  function getOrCreateTooltipEl(chart) {
+    let el = document.getElementById('chartjs-tooltip-recruiting');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'chartjs-tooltip-recruiting';
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  function externalTooltipHandler(context) {
+    const { chart, tooltip } = context;
+    const el = getOrCreateTooltipEl(chart);
+
+    if (tooltip.opacity === 0) {
+      el.style.opacity = '0';
+      el.style.pointerEvents = 'none';
+      return;
+    }
+
+    let inner = '';
+    if (tooltip.title && tooltip.title.length) {
+      inner += '<div style="font-weight:700;color:#fff;margin-bottom:6px;font-size:13px;letter-spacing:0.02em;">' + tooltip.title[0] + '</div>';
+    }
+    if (tooltip.body) {
+      tooltip.body.forEach((bodyItem, i) => {
+        const colors = tooltip.labelColors[i];
+        const dot = '<span style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;flex-shrink:0;background:' + (colors.borderColor || colors.backgroundColor) + ';"></span>';
+        const lines = bodyItem.lines || [];
+        lines.forEach(line => {
+          inner += '<div style="display:flex;align-items:center;padding:2px 0;font-size:12.5px;color:#d0d0d0;line-height:1.4;">' + dot + '<span>' + line + '</span></div>';
+        });
+      });
+    }
+
+    el.innerHTML = inner;
+
+    const canvasRect = chart.canvas.getBoundingClientRect();
+    let left = canvasRect.left + window.scrollX + tooltip.caretX + 14;
+    let top = canvasRect.top + window.scrollY + tooltip.caretY - (el.offsetHeight / 2);
+
+    // Flip left if too close to right edge
+    if (left + 180 > canvasRect.right + window.scrollX) {
+      left = canvasRect.left + window.scrollX + tooltip.caretX - 180 - 14;
+    }
+
+    Object.assign(el.style, {
+      opacity: '1',
+      position: 'absolute',
+      left: left + 'px',
+      top: top + 'px',
+      background: 'rgba(15,15,15,0.97)',
+      border: '1px solid rgba(255,255,255,0.15)',
+      borderRadius: '10px',
+      padding: '10px 16px',
+      pointerEvents: 'none',
+      zIndex: '9999',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+      whiteSpace: 'nowrap',
+      transition: 'opacity 0.12s ease',
+      WebkitFontSmoothing: 'antialiased',
+    });
+  }
+
+  // ============================================================
   // RENDER: Daily Spend, Joined & Enrolled Chart
   // ============================================================
   function renderRecruitingChart() {
@@ -2529,7 +2598,8 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
         plugins: {
           legend: { display: true, position: 'bottom', labels: { color: '#999', font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'line' } },
           tooltip: {
-            titleFont: { size: 12 }, bodyFont: { size: 12 }, padding: 10,
+            enabled: false,
+            external: externalTooltipHandler,
             callbacks: {
               label: ctx => {
                 const val = ctx.parsed.y;
