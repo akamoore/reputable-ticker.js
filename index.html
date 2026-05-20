@@ -1682,6 +1682,8 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
   let filterOutlier = 'all';
   let selectedStudy = 'all';
   let selectedView = 'paid'; // 'paid' | 'public' | 'all'
+  let psSortCol = 'launchDate';
+  let psSortDir = 'desc';
 
   // ============================================================
   // RENDER: API Status
@@ -3368,6 +3370,14 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       return;
     }
 
+    const sortedPublicStudies = [...publicStudies].sort((a, b) => {
+      const av = getPsSortValue(a, psSortCol);
+      const bv = getPsSortValue(b, psSortCol);
+      if (av < bv) return psSortDir === 'asc' ? -1 : 1;
+      if (av > bv) return psSortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+
     // Summary stats
     const totalRecruited = publicStudies.reduce((a, s) => a + (s.joined || 0), 0);
     const totalTarget = publicStudies.reduce((a, s) => a + (s.target || 0), 0);
@@ -3399,36 +3409,60 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
         </div>
       </div>
       <div style="overflow-x:auto;">
-        <table class="ps-table">
+        <table class="ps-table" id="public-studies-table">
           <thead>
             <tr>
-              <th>Study Name</th>
-              <th>Recruited</th>
-              <th>In Study</th>
-              <th>Completed</th>
-              <th>Compliance</th>
-              <th>Start Date</th>
+              ${psColumns.map(c => {
+                const sorted = psSortCol === c.key;
+                const arrow = sorted ? (psSortDir === 'asc' ? ' ▲' : ' ▼') : '';
+                return `<th data-col="${c.key}" class="${sorted ? 'sorted' : ''}">${c.label}<span class="sort-arrow">${arrow}</span></th>`;
+              }).join('')}
             </tr>
           </thead>
           <tbody>
-            ${publicStudies.map(s => {
-              const recPct = s.target > 0 ? (s.joined / s.target * 100) : 0;
-              const compPct = s.joined > 0 ? (s.onboarded / s.joined * 100) : 0;
-              const inPct = s.joined > 0 ? (s.inStudy / s.joined * 100) : 0;
-              const complPct = s.complianceD > 0 ? (s.complianceN / s.complianceD * 100) : 0;
-              const recColor = recPct >= 100 ? 'var(--green)' : recPct >= 80 ? 'var(--lime)' : recPct >= 50 ? 'var(--yellow)' : 'var(--rose)';
+            ${sortedPublicStudies.map(s => {
+              const joined = s.joined;
+              const target = s.target;
+              const onboarded = s.onboarded;
+              const inStudy = s.inStudy;
+              const compD = s.complianceD;
+              const compN = s.complianceN;
+
+              const recPct = (target > 0 && joined != null) ? (joined / target * 100) : null;
+              const compPct = (joined > 0 && onboarded != null) ? (onboarded / joined * 100) : null;
+              const inPct = (joined > 0 && inStudy != null) ? (inStudy / joined * 100) : null;
+              const complPct = (compD > 0) ? (compN / compD * 100) : null;
+              const recColor = recPct == null ? 'var(--text-dim)'
+                : recPct >= 100 ? 'var(--green)'
+                : recPct >= 80 ? 'var(--lime)'
+                : recPct >= 50 ? 'var(--yellow)' : 'var(--rose)';
+
+              const recCell = (target > 0 && joined != null)
+                ? `<div style="display:flex;align-items:center;gap:8px;">
+                    <span style="color:${recColor};font-weight:600;">${recPct.toFixed(0)}%</span>
+                    <span>${joined}/${target}</span>
+                  </div>
+                  <div class="ps-bar" style="width:80px;margin-top:3px;"><div class="ps-bar-fill" style="width:${Math.min(recPct, 100)}%;background:${recColor};"></div></div>`
+                : '<span style="color:var(--text-dim);">—</span>';
+
+              const inCell = (inStudy != null && joined > 0)
+                ? `<span style="font-weight:600;">${inPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${inStudy}/${joined}</span>`
+                : '<span style="color:var(--text-dim);">—</span>';
+
+              const compCell = (onboarded != null && joined > 0)
+                ? `<span style="font-weight:600;">${compPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${onboarded}/${joined}</span>`
+                : '<span style="color:var(--text-dim);">—</span>';
+
+              const complCell = (complPct != null)
+                ? `<span style="font-weight:600;color:${complPct >= 90 ? 'var(--green)' : complPct >= 70 ? 'var(--yellow)' : 'var(--rose)'};">${complPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${compN}/${compD}</span>`
+                : '<span style="color:var(--text-dim);">—</span>';
+
               return `<tr>
                 <td>${esc(s.name)}</td>
-                <td>
-                  <div style="display:flex;align-items:center;gap:8px;">
-                    <span style="color:${recColor};font-weight:600;">${recPct.toFixed(0)}%</span>
-                    <span>${s.joined}/${s.target}</span>
-                  </div>
-                  <div class="ps-bar" style="width:80px;margin-top:3px;"><div class="ps-bar-fill" style="width:${Math.min(recPct, 100)}%;background:${recColor};"></div></div>
-                </td>
-                <td><span style="font-weight:600;">${inPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${s.inStudy}/${s.joined}</span></td>
-                <td><span style="font-weight:600;">${compPct.toFixed(0)}%</span> <span style="color:var(--text-dim);">${s.onboarded}/${s.joined}</span></td>
-                <td><span style="font-weight:600;color:${complPct >= 90 ? 'var(--green)' : complPct >= 70 ? 'var(--yellow)' : 'var(--rose)'};">${s.complianceD > 0 ? complPct.toFixed(0) + '%' : '—'}</span> <span style="color:var(--text-dim);">${s.complianceD > 0 ? s.complianceN + '/' + s.complianceD : ''}</span></td>
+                <td>${recCell}</td>
+                <td>${inCell}</td>
+                <td>${compCell}</td>
+                <td>${complCell}</td>
                 <td style="white-space:nowrap;">${s.launchDate || '—'}</td>
               </tr>`;
             }).join('')}
@@ -3436,6 +3470,30 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
         </table>
       </div>
     `;
+  }
+
+  const psColumns = [
+    { key: 'name', label: 'Study Name' },
+    { key: 'recruited', label: 'Recruited' },
+    { key: 'inStudy', label: 'In Study' },
+    { key: 'completed', label: 'Completed' },
+    { key: 'compliance', label: 'Compliance' },
+    { key: 'launchDate', label: 'Start Date' },
+  ];
+
+  function getPsSortValue(s, col) {
+    switch (col) {
+      case 'name': return (s.name || '').toLowerCase();
+      case 'recruited': return s.joined ?? -1;
+      case 'inStudy': return s.inStudy ?? -1;
+      case 'completed': return s.onboarded ?? -1;
+      case 'compliance': return s.complianceD > 0 ? (s.complianceN / s.complianceD) : -1;
+      case 'launchDate': {
+        const t = s.launchDate ? Date.parse(s.launchDate) : NaN;
+        return Number.isFinite(t) ? t : -Infinity;
+      }
+      default: return 0;
+    }
   }
 
   // ============================================================
@@ -3508,6 +3566,21 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       sortDir = 'asc';
     }
     renderStudiesTable();
+  });
+
+  // Public Studies table column sort
+  document.addEventListener('click', e => {
+    const th = e.target.closest('#public-studies-table thead th[data-col]');
+    if (!th) return;
+    const col = th.dataset.col;
+    if (!psColumns.some(c => c.key === col)) return;
+    if (psSortCol === col) {
+      psSortDir = psSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      psSortCol = col;
+      psSortDir = 'asc';
+    }
+    renderPublicStudies();
   });
 
   // Table filters
