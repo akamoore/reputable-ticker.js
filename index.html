@@ -2358,7 +2358,22 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
             { label: 'Clicks', data: emailDaily.map(d => d.clicks), borderColor: '#A78BFA', backgroundColor: 'rgba(167,139,250,0.1)', pointRadius: 2, borderWidth: 2, fill: true },
           ],
         },
-        options: chartDefaults,
+        options: {
+          ...chartDefaults,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            ...chartDefaults.plugins,
+            tooltip: {
+              ...chartDefaults.plugins.tooltip,
+              enabled: true,
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${(ctx.parsed.y ?? 0).toLocaleString()}`,
+              },
+            },
+          },
+        },
       });
     }
   }
