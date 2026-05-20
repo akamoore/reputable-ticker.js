@@ -1158,7 +1158,7 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       //    Same-origin /api/recruiting works whether the host is reputable-ticker.vercel.app,
       //    a preview URL, or any deployment that includes /api/recruiting.js.
       try {
-        const resp = await fetch(`/api/recruiting?days=${days}`);
+        const resp = await fetch(`/api/recruiting?days=${days}&scope=all`);
         if (resp.ok) return await resp.json();
         throw new Error(`Proxy ${resp.status}: ${resp.statusText}`);
       } catch (err) {
@@ -1167,7 +1167,7 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       // 2) Fall back to direct upstream API (or user-supplied ?proxy=).
       try {
         const headers = PROXY_BASE ? {} : { 'x-api-key': API_KEY };
-        const directUrl = PROXY_BASE ? `${PROXY_BASE}/api/recruiting?days=${days}` : `${DIRECT_API}?days=${days}`;
+        const directUrl = PROXY_BASE ? `${PROXY_BASE}/api/recruiting?days=${days}&scope=all` : `${DIRECT_API}?days=${days}&scope=all`;
         const resp = await fetch(directUrl, { headers });
         if (!resp.ok) throw new Error(`API ${resp.status}: ${resp.statusText}`);
         return await resp.json();
@@ -1391,15 +1391,16 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
       return apiData?.status || {};
     },
 
-    // Merge API data with local STUDIES — enriches with live
-    // ad spend, joins, and onboarded from the API when available
+    // Build studies from the API (primary source). The API's
+    // onboarding.byStudy now returns status, type, target, joined, leads,
+    // launchDate, endDate, wearable, and days for each study — so API
+    // entries define the universe. Any local STUDIES not matched by the
+    // API are appended as historical fallback.
     getEnrichedStudies() {
       const byStudy = this.getOnboardingByStudy();
-      const campaignMap = this.getCampaignStudyMap();
       const adsBreakdown = this.getMetaAdsBreakdown();
 
-      // Normalized campaign name → study name mapping
-      // This maps Meta Ads campaign names to the study they belong to
+      // Normalized campaign name → study name mapping for ad spend rollups.
       const CAMPAIGN_TO_STUDY = {
         'somato sleep study': 'Melatonin Sleep Study (Somato)',
         'melatonin sleep study': 'Melatonin Sleep Study (Somato)',
@@ -1410,8 +1411,6 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
         'proleeva - 2 - leads - instant forms': 'Pain Relief: ProleevaMax',
         'sleep peptide': 'Peptide Supplement: Sleep & Recovery',
       };
-
-      // Aggregate ad spend by study name using the mapping
       const spendByStudy = {};
       adsBreakdown.forEach(ad => {
         const rawCampaign = (ad.campaignName || '').toLowerCase();
@@ -1421,128 +1420,91 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
         }
       });
 
-      const matchedExperimentIds = new Set();
-      const matchedStudyNames = new Set();
+      const entryName = e => e.studyName || e.experimentTitle || e.name || '';
+      const MANUAL_FACTORS = ['screening_call', 'pre_study_lab_work', 'external_survey'];
 
-      // API field names: onboarding.byStudy uses experimentTitle/count
-      // (not studyName/onboarded). campaignStudyMap exposes studyName + joins.
-      // Read both with fallbacks so either shape works.
-      const entryName = e => e.studyName || e.experimentTitle || '';
-      const entryJoins = e => e.joins ?? e.count;
-      const entryOnboarded = e => e.onboarded ?? e.count;
-
-      const enrichedLocal = STUDIES.map(s => {
-        const enriched = { ...s };
-        const sNameLower = s.name.toLowerCase();
-        const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
-
-        // Match in campaignStudyMap (has studyName, campaignName, joins, onboarded)
-        const mapped = campaignMap.find(c => {
-          const cName = entryName(c).toLowerCase();
-          return (cName && sNameLower.includes(cName)) ||
-            (cName && cName.includes(sNamePrefix)) ||
-            c.campaignName?.toLowerCase().includes(sNamePrefix);
-        });
-        if (mapped) {
-          const joinsVal = entryJoins(mapped);
-          const onbVal = entryOnboarded(mapped);
-          if (joinsVal != null) enriched.apiJoins = joinsVal;
-          if (onbVal != null) enriched.apiOnboarded = onbVal;
-          enriched.experimentId = mapped.experimentId;
-          if (mapped.experimentId != null) matchedExperimentIds.add(mapped.experimentId);
-          const mName = entryName(mapped);
-          if (mName) matchedStudyNames.add(mName.toLowerCase());
-        }
-
-        // Use aggregated spend from the campaign→study mapping
-        if (spendByStudy[s.name] != null) {
-          enriched.apiSpend = spendByStudy[s.name];
-        }
-
-        // Match in onboarding.byStudy (experimentTitle + count)
-        const obMatch = byStudy.find(o => {
-          const oName = entryName(o).toLowerCase();
-          if (!oName) return false;
-          return sNameLower.includes(oName) || oName.includes(sNamePrefix);
-        });
-        if (obMatch) {
-          const onbVal = entryOnboarded(obMatch);
-          if (onbVal != null) enriched.apiOnboarded = onbVal;
-          enriched.experimentId = obMatch.experimentId;
-          if (obMatch.experimentId != null) matchedExperimentIds.add(obMatch.experimentId);
-          const oName = entryName(obMatch);
-          if (oName) matchedStudyNames.add(oName.toLowerCase());
-        }
-
-        return enriched;
-      });
-
-      // Auto-merge: append synthetic records for API-known studies that
-      // have no entry in the local STUDIES array. Keeps the dashboard in
-      // sync with newly-launched studies before they're hand-curated.
       let nextSyntheticId = (STUDIES.reduce((m, s) => Math.max(m, s.id || 0), 0) || 0) + 1000;
-      const synthByKey = new Map();
-      const addSynthetic = (entry) => {
-        const displayName = entry.studyName || entry.experimentTitle || entry.campaignName || '';
+      const matchedLocalIds = new Set();
+
+      // 1) Build studies from API entries first.
+      const apiStudies = [];
+      byStudy.forEach(entry => {
+        const displayName = entryName(entry);
+        if (!displayName) return;
         const nameLower = displayName.toLowerCase();
         if (EXCLUDED_NAMES.some(ex => nameLower.includes(ex))) return;
-        const idKey = entry.experimentId != null
-          ? `id:${entry.experimentId}`
-          : `name:${nameLower}`;
-        if (idKey === 'name:') return;
-        const joinsVal = entry.joins ?? entry.count;
-        const onbVal = entry.onboarded ?? entry.count;
-        const existing = synthByKey.get(idKey);
-        if (existing) {
-          if (joinsVal != null) existing.apiJoins = joinsVal;
-          if (onbVal != null) existing.apiOnboarded = onbVal;
-          return;
-        }
-        synthByKey.set(idKey, {
-          id: nextSyntheticId++,
-          name: displayName || `Experiment ${entry.experimentId}`,
-          type: 'RWE',
-          spend: 0,
-          leads: null,
-          joined: null,
-          onboarded: 0,
-          target: 0,
-          wearable: null,
-          days: null,
-          launchDate: null,
-          endDate: null,
-          launchYear: null,
-          crossYear: false,
-          manualQueue: false,
-          status: 'active',
-          outlier: false,
-          outlier_reason: null,
-          notes: 'Auto-detected from API — add to STUDIES array to curate',
-          size_category: 'pilot',
-          complexity_factors: [],
-          recruitment_source: 'organic_community',
-          has_manual_steps: false,
-          experimentId: entry.experimentId,
-          apiJoins: joinsVal ?? null,
-          apiOnboarded: onbVal ?? null,
-          synthetic: true,
+
+        // Substring match against local STUDIES to inherit curated extras
+        // (notes, outlier flags, complexity factors, etc.).
+        const localMatch = STUDIES.find(s => {
+          if (matchedLocalIds.has(s.id)) return false;
+          const sNameLower = s.name.toLowerCase();
+          const sNamePrefix = s.name.split(':')[0].trim().toLowerCase();
+          return sNameLower.includes(nameLower) || nameLower.includes(sNamePrefix);
         });
-      };
+        if (localMatch) matchedLocalIds.add(localMatch.id);
 
-      campaignMap.forEach(c => {
-        const nameLower = (c.studyName || c.experimentTitle || '').toLowerCase();
-        if (c.experimentId != null && matchedExperimentIds.has(c.experimentId)) return;
-        if (nameLower && matchedStudyNames.has(nameLower)) return;
-        addSynthetic(c);
-      });
-      byStudy.forEach(o => {
-        const nameLower = (o.studyName || o.experimentTitle || '').toLowerCase();
-        if (o.experimentId != null && matchedExperimentIds.has(o.experimentId)) return;
-        if (nameLower && matchedStudyNames.has(nameLower)) return;
-        addSynthetic(o);
+        const joinsVal = entry.joined ?? entry.joins ?? entry.count ?? null;
+        const onbVal = entry.onboarded ?? entry.count ?? null;
+        const curatedName = localMatch?.name || displayName;
+        const apiSpend = spendByStudy[curatedName] ?? spendByStudy[displayName] ?? null;
+
+        const study = {
+          // Inherit curated fields first
+          ...(localMatch || {}),
+          // API is authoritative for these
+          id: localMatch?.id ?? entry.experimentId ?? nextSyntheticId++,
+          experimentId: entry.experimentId ?? localMatch?.experimentId ?? null,
+          name: curatedName,
+          status: entry.status ?? localMatch?.status ?? 'active',
+          type: entry.type ?? localMatch?.type ?? 'RWE',
+          target: entry.target ?? localMatch?.target ?? 0,
+          joined: joinsVal ?? localMatch?.joined ?? null,
+          leads: entry.leads ?? localMatch?.leads ?? null,
+          onboarded: onbVal ?? localMatch?.onboarded ?? 0,
+          wearable: entry.wearable ?? localMatch?.wearable ?? null,
+          days: entry.days ?? localMatch?.days ?? null,
+          launchDate: entry.launchDate ?? localMatch?.launchDate ?? null,
+          endDate: entry.endDate ?? localMatch?.endDate ?? null,
+          // Surface raw API values for helpers that prefer them
+          apiJoins: joinsVal,
+          apiOnboarded: onbVal,
+          apiSpend,
+          fromApi: true,
+        };
+
+        // Backfill derived fields when no local match exists
+        if (!study.complexity_factors) study.complexity_factors = [];
+        if (study.has_manual_steps == null) {
+          study.has_manual_steps = !!study.manualQueue ||
+            study.complexity_factors.some(f => MANUAL_FACTORS.includes(f));
+        }
+        if (!study.size_category) {
+          if (study.target <= 35) study.size_category = 'pilot';
+          else if (study.target <= 150) study.size_category = 'medium';
+          else study.size_category = 'large';
+        }
+        if (!study.recruitment_source) {
+          if (study.type === 'VEP') study.recruitment_source = 'partner_recruited';
+          else if (study.type === 'PUBLIC') study.recruitment_source = 'organic_community';
+          else if ((study.spend || 0) > 0 || (apiSpend || 0) > 0) study.recruitment_source = 'paid';
+          else study.recruitment_source = 'organic_community';
+        }
+        if (study.type === 'PUBLIC' && !study.target) study.target = 200;
+
+        apiStudies.push(study);
       });
 
-      return enrichedLocal.concat(Array.from(synthByKey.values()));
+      // 2) Append local STUDIES not matched by any API entry — historical fallback.
+      const fallbackStudies = STUDIES
+        .filter(s => !matchedLocalIds.has(s.id))
+        .map(s => {
+          const enriched = { ...s };
+          if (spendByStudy[s.name] != null) enriched.apiSpend = spendByStudy[s.name];
+          return enriched;
+        });
+
+      return apiStudies.concat(fallbackStudies);
     }
   };
 

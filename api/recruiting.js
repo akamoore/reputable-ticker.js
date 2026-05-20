@@ -4,14 +4,18 @@ module.exports = (req, res) => {
   const API_HOST = process.env.API_HOST || 'operations.reputablehealth.net';
   const API_KEY = process.env.API_KEY || '';
   const days = parseInt(req.query.days, 10) || 30;
+  const scope = typeof req.query.scope === 'string' ? req.query.scope : '';
 
   if (!API_KEY) {
     return res.status(500).json({ error: 'API_KEY not configured on proxy server' });
   }
 
+  const params = new URLSearchParams({ days: String(days) });
+  if (scope) params.set('scope', scope);
+
   const options = {
     hostname: API_HOST,
-    path: `/api/recruiting?days=${days}`,
+    path: `/api/recruiting?${params.toString()}`,
     method: 'GET',
     headers: {
       'x-api-key': API_KEY,
