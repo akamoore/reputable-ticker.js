@@ -1462,6 +1462,49 @@
       .sort((a, b) => b.spend - a.spend);
   }
 
+  function getOrCreateTooltipEl(chart) {
+    let el = chart.canvas.parentNode.querySelector('.chartjs-tooltip');
+    if (!el) {
+      el = document.createElement('div');
+      el.classList.add('chartjs-tooltip');
+      el.style.cssText = 'position:absolute;pointer-events:none;background:rgba(20,20,20,0.96);border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:10px 14px;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,sans-serif;font-size:12px;color:#ccc;transition:opacity 0.15s ease,left 0.1s ease,top 0.1s ease;opacity:0;z-index:100;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.4);';
+      chart.canvas.parentNode.style.position = 'relative';
+      chart.canvas.parentNode.appendChild(el);
+    }
+    return el;
+  }
+
+  function externalTooltipHandler(context) {
+    const { chart, tooltip } = context;
+    const el = getOrCreateTooltipEl(chart);
+    if (tooltip.opacity === 0) { el.style.opacity = '0'; return; }
+    let html = '';
+    if (tooltip.title && tooltip.title.length) {
+      html += '<div style="font-weight:600;color:#fff;margin-bottom:6px;font-size:13px;">' + esc(tooltip.title[0]) + '</div>';
+    }
+    if (tooltip.body) {
+      tooltip.body.forEach((bodyItem, i) => {
+        const colors = tooltip.labelColors[i];
+        const dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:' + colors.borderColor + ';"></span>';
+        const lines = bodyItem.lines || [];
+        lines.forEach(line => {
+          html += '<div style="display:flex;align-items:center;padding:2px 0;">' + dot + '<span>' + esc(String(line)) + '</span></div>';
+        });
+      });
+    }
+    el.innerHTML = html;
+    el.style.opacity = '1';
+    const pos = chart.canvas.getBoundingClientRect();
+    const caretX = tooltip.caretX;
+    const caretY = tooltip.caretY;
+    let left = caretX + 12;
+    let top = caretY - el.offsetHeight / 2;
+    if (left + el.offsetWidth > chart.canvas.offsetWidth - 10) left = caretX - el.offsetWidth - 12;
+    if (top < 4) top = 4;
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+  }
+
   // ============================================================
   // RENDER: Daily Spend, Joined & Enrolled Chart
   // ============================================================
@@ -1549,21 +1592,12 @@
         plugins: {
           legend: { display: true, position: 'bottom', labels: { color: '#999', font: { size: 12 }, padding: 16, usePointStyle: true, pointStyle: 'line' } },
           tooltip: {
-            backgroundColor: 'rgba(26,26,26,0.95)',
-            titleColor: '#fff',
-            bodyColor: '#ccc',
-            borderColor: 'rgba(255,255,255,0.12)',
-            borderWidth: 1,
-            titleFont: { size: 13, weight: '600' },
-            bodyFont: { size: 12 },
-            padding: 12,
-            cornerRadius: 8,
-            boxPadding: 4,
-            usePointStyle: true,
+            enabled: false,
+            external: externalTooltipHandler,
             callbacks: {
               label: ctx => {
                 const val = ctx.parsed.y;
-                return ctx.dataset.label === 'Spend ($)' ? ` Spend: $${val.toFixed(2)}` : ` ${ctx.dataset.label}: ${val}`;
+                return ctx.dataset.label === 'Spend ($)' ? 'Spend: $' + val.toFixed(2) : ctx.dataset.label + ': ' + val;
               },
             },
           },
