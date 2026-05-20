@@ -1301,17 +1301,10 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     },
 
     getNewsletterDaily() {
-      // Merge static file + live API data, preferring API for overlapping dates (it's fresher)
-      const staticDaily = sendgridData?.daily || [];
+      // Prefer API data over the local sendgrid-stats.json (which can go stale).
       const apiDaily = apiData?.newsletter?.daily || [];
-      let allDaily;
-      if (staticDaily.length && apiDaily.length) {
-        const apiDates = new Set(apiDaily.map(d => d.date));
-        const merged = staticDaily.filter(d => !apiDates.has(d.date)).concat(apiDaily);
-        allDaily = merged.sort((a, b) => a.date.localeCompare(b.date));
-      } else {
-        allDaily = staticDaily.length ? staticDaily : apiDaily;
-      }
+      const localDaily = sendgridData?.daily || [];
+      const allDaily = apiDaily.length ? apiDaily : localDaily;
       if (!allDaily.length) return [];
       if (selectedDays === Infinity) {
         if (selectedYear === 'all') return allDaily;
@@ -1324,9 +1317,7 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
     getNewsletterTotals() {
       const daily = this.getNewsletterDaily();
       if (!daily.length) {
-        // Fall back to pre-computed totals if no daily data
-        if (sendgridData?.totals) return sendgridData.totals;
-        return apiData?.newsletter?.totals || null;
+        return apiData?.newsletter?.totals || sendgridData?.totals || null;
       }
       // Compute totals from windowed daily data
       const totals = daily.reduce((acc, d) => ({
