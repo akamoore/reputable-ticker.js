@@ -2342,7 +2342,11 @@ const API_KEY = 'X5luAfkKBfDdrF0ITHMmIuntpmDKp0W2xyoxlVpFqWc';
 
     // Email
     if (emailDaily.length) {
-      const labels = emailDaily.map(d => d.date?.slice(5) || '');
+      const labels = emailDaily.map(d => {
+        if (!d.date) return '';
+        const dow = new Date(d.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' });
+        return `${dow} ${d.date.slice(5)}`;
+      });
       chartEmail = new Chart($('#chart-email'), {
         type: 'line',
         data: {
