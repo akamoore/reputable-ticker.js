@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Reputable Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#13120e; --ink-2:#1b1a14; --card:#1f1d16; --card-2:#252319;
+    --line:#3a372b; --cream:#efe9da; --cream-dim:#cfc9ba; --muted:#938d7c;
+    --amber:#e9a23b; --amber-soft:#f3c073; --sage:#9bb08a; --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(233,162,59,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(155,176,138,.07), transparent 55%),
+      var(--ink);
+    color:var(--cream); font-family:"Hanken Grotesk",sans-serif; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  header.hero{padding:74px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin:0 0 18px}
+  h1.title{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(46px,9vw,104px);line-height:.92;margin:0;letter-spacing:-.02em;font-optical-sizing:auto}
+  h1.title em{font-style:italic;font-weight:500;color:var(--amber-soft)}
+  .sub{max-width:660px;color:var(--cream-dim);font-size:18px;margin:24px 0 0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted)}
+  .meta b{color:var(--cream);font-weight:500}
+
+  .toolbar{position:sticky;top:0;z-index:20;background:rgba(19,18,14,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .toolbar .wrap{display:flex;align-items:center;gap:14px;padding:12px 22px;flex-wrap:wrap}
+  .nav{display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:200px}
+  .nav a{font-family:"JetBrains Mono",monospace;font-size:12px;text-decoration:none;color:var(--cream-dim);padding:6px 10px;border-radius:7px;letter-spacing:.02em;transition:.18s;white-space:nowrap}
+  .nav a:hover{background:var(--card-2);color:var(--cream)}
+  .search{position:relative}
+  .search input{font-family:"Hanken Grotesk",sans-serif;font-size:14px;color:var(--cream);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:9px 14px 9px 34px;width:230px;outline:none;transition:.18s}
+  .search input:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(233,162,59,.15)}
+  .search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5}
+  .search input::placeholder{color:var(--muted)}
+
+  section{padding:64px 0 12px;scroll-margin-top:70px}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:8px}
+  .sec-num{font-family:"JetBrains Mono",monospace;color:var(--amber);font-size:13px;letter-spacing:.2em}
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(30px,4.4vw,46px);margin:6px 0 0;letter-spacing:-.015em;line-height:1.04}
+  .sec-desc{color:var(--cream-dim);max-width:700px;margin:16px 0 30px;font-size:16px}
+  .count{font-family:"JetBrains Mono",monospace;color:var(--muted);font-size:12px;white-space:nowrap}
+
+  .cat-band{display:flex;align-items:center;gap:12px;margin:42px 0 18px}
+  .cat-tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);background:var(--amber);padding:5px 11px;border-radius:6px;font-weight:500}
+  .cat-line{flex:1;height:1px;background:var(--line)}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .grid.one{grid-template-columns:1fr}
+  .card{background:linear-gradient(180deg,var(--card),var(--ink-2));border:1px solid var(--line);border-radius:16px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;transition:.2s border-color,.2s transform}
+  .card:hover{border-color:#55503e;transform:translateY(-2px)}
+  .card .tab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .card .name{font-family:"Fraunces",serif;font-weight:600;font-size:18px;color:var(--cream);letter-spacing:-.01em}
+  .card .idx{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.12em}
+  .ptext{font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.62;color:var(--cream-dim);margin:0;white-space:pre-wrap;word-break:break-word}
+  .ptext .ph{color:var(--amber-soft)}
+  .ptext .verify{color:var(--sage)}
+  .copy{align-self:flex-start;cursor:pointer;border:1px solid var(--line);background:var(--card-2);color:var(--cream);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.04em;padding:8px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:7px;transition:.16s;margin-top:auto}
+  .copy:hover{border-color:var(--amber);color:var(--amber-soft)}
+  .copy.done{border-color:var(--sage);color:var(--sage)}
+  .copy svg{width:14px;height:14px}
+
+  .cmds{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .cmd{display:flex;align-items:baseline;gap:12px;padding:11px 14px;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+  .cmd code{font-family:"JetBrains Mono",monospace;color:var(--amber);font-size:13.5px;font-weight:500;white-space:nowrap}
+  .cmd span{color:var(--cream-dim);font-size:14px}
+
+  .note{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--card);border-radius:12px;padding:16px 18px;margin:22px 0;color:var(--cream-dim);font-size:14.5px}
+  .note b{color:var(--cream);font-weight:600}
+  .note code{font-family:"JetBrains Mono",monospace;color:var(--amber)}
+
+  .howto{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .step{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
+  .step .n{font-family:"Fraunces",serif;font-size:30px;color:var(--amber);line-height:1}
+  .step p{margin:10px 0 0;color:var(--cream-dim);font-size:14.5px}
+  .step code{font-family:"JetBrains Mono",monospace;color:var(--sage);font-size:13px}
+
+  .accbox{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--card),var(--ink-2));padding:24px;position:relative}
+  .accbox::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;background:linear-gradient(var(--amber),var(--sage));border-radius:3px}
+  .accbox ol{margin:10px 0 0;padding-left:22px}
+  .accbox li{margin:11px 0;color:var(--cream-dim);font-size:14.5px;line-height:1.55}
+  .accbox li b{color:var(--cream)}
+  .accbox li code{font-family:"JetBrains Mono",monospace;color:var(--sage)}
+
+  .empty{display:none;text-align:center;color:var(--muted);font-family:"JetBrains Mono",monospace;padding:60px 0}
+
+  footer{border-top:1px solid var(--line);margin-top:70px;padding:34px 0 70px;color:var(--muted);font-size:13px}
+  footer a{color:var(--cream-dim);text-decoration:none;border-bottom:1px solid var(--line)}
+  footer p{margin:8px 0;max-width:780px;line-height:1.6}
+
+  @media(max-width:760px){
+    .grid,.cmds,.howto{grid-template-columns:1fr}
+    .nav{display:none}.search input{width:100%}.search{flex:1}
+    header.hero{padding:54px 0 32px}
+  }
+  .reveal{opacity:0;transform:translateY(14px);animation:rise .6s forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap reveal">
+    <p class="kicker">Reputable Health · Internal Prompt Library</p>
+    <h1 class="title">The Reputable<br><em>Playbook</em></h1>
+    <p class="sub">Claude prompts for the team, built around how we actually work: research, content, sales, and study ops. Start every task by pasting the Reputable Standard, then grab what you need and fill in the brackets.</p>
+    <div class="meta">
+      <span><b id="total">0</b> prompts</span>
+      <span><b>5</b> sections</span>
+      <span>Filter by keyword to narrow fast</span>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="#standard">The Standard</a>
+      <a href="#library">Library</a>
+      <a href="#personas">Personas</a>
+      <a href="#focus">Focus</a>
+      <a href="#commands">Commands</a>
+    </nav>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#938d7c" stroke-width="2"/><path d="M21 21l-4-4" stroke="#938d7c" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="filter" type="text" placeholder="Filter prompts..." autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- HOW TO USE -->
+  <section id="howto" style="padding-top:54px">
+    <div class="sec-head"><div><span class="sec-num">00</span><h2>How to use this</h2></div></div>
+    <div class="howto">
+      <div class="step"><div class="n">1</div><p>Paste <b style="color:var(--cream)">the Reputable Standard</b> once at the start of a chat. It keeps Claude from inventing facts and is non-negotiable for anything that might ship.</p></div>
+      <div class="step"><div class="n">2</div><p>Copy a prompt, swap the <span style="color:var(--amber-soft);font-family:'JetBrains Mono',monospace">[brackets]</span> for your specifics, paste. The more real detail you give, the better the output.</p></div>
+      <div class="step"><div class="n">3</div><p>When Claude can't source a fact it will leave a <code>[Mackenzie: verify]</code> tag. Resolve every tag before anything goes out the door.</p></div>
+    </div>
+  </section>
+
+  <!-- THE REPUTABLE STANDARD -->
+  <section id="standard">
+    <div class="sec-head"><div><span class="sec-num">01</span><h2>The Reputable Standard</h2></div></div>
+    <p class="sec-desc">Our standing instruction for Claude. Paste it into Settings, then General, then the "Instructions for Claude" field so it applies to every chat, and paste it at the top of any important drafting session as a reminder. This is what keeps our content credible.</p>
+    <div class="accbox">
+      <p class="ptext" id="acc-intro" style="color:var(--cream)"></p>
+      <ol id="acc-rules"></ol>
+      <button class="copy" data-copy="accuracy" style="margin-top:20px">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="2"/></svg>
+        Copy the full Standard
+      </button>
+    </div>
+  </section>
+
+  <!-- LIBRARY -->
+  <section id="library">
+    <div class="sec-head"><div><span class="sec-num">02</span><h2>The Prompt Library</h2></div><span class="count" data-count></span></div>
+    <p class="sec-desc">The everyday toolkit, sorted by the job you're doing. Grab one, fill the brackets, go.</p>
+    <div data-group="library"></div>
+  </section>
+
+  <!-- PERSONAS -->
+  <section id="personas">
+    <div class="sec-head"><div><span class="sec-num">03</span><h2>Power Personas</h2></div><span class="count" data-count></span></div>
+    <p class="sec-desc">Long setup prompts that put Claude in a specific mode for a whole conversation. Paste one at the start of a fresh chat, after the Standard, then start working.</p>
+    <div class="grid one" data-group="personas"></div>
+  </section>
+
+  <!-- FOCUS -->
+  <section id="focus">
+    <div class="sec-head"><div><span class="sec-num">04</span><h2>Focus &amp; Follow-Through</h2></div><span class="count" data-count></span></div>
+    <p class="sec-desc">For the days when starting is the hard part. Prompts built around momentum and getting unstuck.</p>
+    <div class="grid" data-group="focus"></div>
+  </section>
+
+  <!-- COMMANDS -->
+  <section id="commands">
+    <div class="sec-head"><div><span class="sec-num">05</span><h2>Quick Commands</h2></div><span class="count" data-count></span></div>
+    <p class="sec-desc">Short triggers for common moves. The five below come with full text, so copy and paste them as-is.</p>
+    <div class="grid one" data-group="commandsFull"></div>
+    <div class="note">
+      <b>Heads up on shortcuts:</b> the one-word triggers below are not built-in Claude features. Typing <code>/devil</code> on its own does nothing. Treat this as a menu of effects you can ask for in plain language, or define a shortcut for Claude yourself at the start of a chat.
+    </div>
+    <div class="cmds" data-group="commandsShort"></div>
+  </section>
+
+  <div class="empty" id="empty">No prompts match that filter.</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Internal reference for the Reputable Health team. Base prompts gathered and adapted from publicly shared social posts by <a href="#">@theroshankrishna</a>, <a href="#">@thewizeai</a>, and <a href="#">tech_decode.ai</a>, then rewritten for our workflows. The Reputable Standard reflects our own content rules.</p>
+    <p style="color:var(--muted);opacity:.8">Placeholders use [brackets]. Peptide-specific claims are draft-only until clinical and regulatory sign-off. Never ship a draft with an unresolved verify tag.</p>
+  </div>
+</footer>
+
+<script>
+const DATA = {
+  accuracy: {
+    intro:"You are helping create research, content, and outreach for Reputable Health, a wearable-powered health-research platform. Accuracy and credibility come before everything else, including being helpful or persuasive. A confident wrong claim is worse than no claim. Follow these rules in every response:",
+    rules:[
+      ["Never fabricate","Do not invent facts, statistics, study counts, trial details, sample sizes, citations, author names, URLs, or any peptide research data. If it isn't sourced, it doesn't go in."],
+      ["Use the verify tag","When a fact is needed and you cannot source it, insert [Mackenzie: verify] in place of the claim instead of guessing or estimating. Leave the gap visible."],
+      ["Peptide content is draft-only","Treat anything peptide-specific as unapproved until it has clinical and regulatory sign-off. Flag every peptide claim clearly so it can be reviewed."],
+      ["No overclaiming","For a health audience, do not imply efficacy, treatment, cure, or outcomes beyond what the cited evidence actually states. Hedge to match the strength of the evidence."],
+      ["Sources must be real","If you cannot name a verifiable source, say \"I do not have a verified source for this.\" Never approximate or reconstruct a citation."],
+      ["Flag every number","Mark any statistic you are not fully confident in as approximate and recommend checking it against the primary source."],
+      ["Note what may have changed","Remind me when a topic, study, or regulatory status may have shifted since your knowledge cutoff. Do not present outdated information as current."],
+      ["Ask, don't assume","If context is missing or unclear, ask a clarifying question before answering rather than filling the gap with assumptions."],
+      ["Never use em dashes","Do not use em dashes anywhere in your output. Use commas, periods, or parentheses instead."]
+    ]
+  },
+  library: [
+    {cat:"Research & Evidence", prompts:[
+      "Summarize this study: [paste]. Give me the design, sample size, what it actually shows, and its main limitations. Flag any number I should check against the primary source.",
+      "I just read this: [paste article or summary]. Give me 5 takeaways, then tell me what the author overstated, left out, or got wrong.",
+      "Translate this clinical finding into plain language for a general audience: [paste]. Keep it accurate, do not imply efficacy beyond what the evidence states, and tag anything that needs verification.",
+      "Fact-check this claim: [paste claim]. Tell me what's accurate, what's misleading, and what's flat-out wrong. Flag peptide-specific points as needing clinical sign-off, and don't invent sources.",
+      "Give me the strongest, fairest version of the skeptic's case against [our position on X]. What would a sharp clinician push back on, and how would we honestly answer?",
+      "Here's a topic we want to cover: [topic]. What do we actually have solid evidence for, what is suggestive but thin, and what would be overclaiming? Be blunt about the line."
+    ]},
+    {cat:"Content & Social", prompts:[
+      "Write 8 hook options for a LinkedIn post about [topic]. Range from data-led to contrarian to story-driven. No hype, nothing that overclaims.",
+      "Turn this study or finding into a LinkedIn carousel outline: [paste]. Give me a title slide, 5 content slides, and a closing slide. Mark any stat that needs a verify tag.",
+      "Repurpose this LinkedIn post into an Instagram caption plus 3 story frames: [paste]. Keep the credibility, lose the corporate tone.",
+      "Rewrite this draft so it reads like a credible researcher wrote it, not a hype account: [paste]. Keep it sharp but defensible.",
+      "Give me 5 contrarian-but-defensible angles on [topic] for thought-leadership content. For each, note the evidence we'd need to back it.",
+      "Proofread this caption: [paste]. Flag anything that overclaims, anything that needs a [Mackenzie: verify] tag, and anything that sounds AI-written. Give me a fix for each."
+    ]},
+    {cat:"Sales & Outreach", prompts:[
+      "Write a cold email to [person] at [company] about [partnership or idea]. Subject line plus a 3-sentence body. Start with why it matters to them, not why it's great for us.",
+      "Write a follow-up email to [name] about [topic]. Under 60 words. No filler opener. Reference one specific thing from our last conversation.",
+      "Turn this slide from the sales deck into a LinkedIn post that drives toward [CTA]: [paste]. Keep claims defensible and flag anything unverified.",
+      "Write a 'no, but' email declining [request] while keeping the door open for [alternative]. Grateful, firm, one-sentence reason.",
+      "Draft talking points for a [call type] with [prospect type]. List their likely objections and an honest, non-overclaiming response to each.",
+      "I'm handing this lead to [colleague]: [context]. Write a tight handoff note covering who they are, what they want, and the single next action."
+    ]},
+    {cat:"Study & Recruitment", prompts:[
+      "Write recruitment copy for [study]. Cover who we're looking for, what's involved, the time commitment, and why it matters. Clear eligibility, no hype.",
+      "Draft 5 screening questions to confirm a candidate fits [study criteria]. Keep them plain and unambiguous.",
+      "Write a participant update message for [milestone]. Warm, clear, and it should set expectations for the next step.",
+      "Scope this study idea: [paste]. What do we need to nail down before committing, and what's realistic to run in [timeframe]?",
+      "I have a study transcript or notes: [paste]. Pull out the key signals, what surprised us, and the open questions we still need to answer."
+    ]},
+    {cat:"Planning & Operations", prompts:[
+      "Here are my tasks for today: [list]. Rank them by actual impact, not urgency. Tell me the two to execute today and what to drop or delegate.",
+      "Write the agenda for my [meeting type] with [person or team]. Maximum 4 items. End with one decision that must be made before anyone leaves.",
+      "Here's my meeting transcript: [paste]. What was actually decided? Who owns what action? What's still unresolved?",
+      "Write my weekly update for [manager]. Here's what I did: [list]. Three bullets max. Lead every bullet with the outcome, not the activity.",
+      "I need to do [annoying or complex task]. Break it into 10 steps. The first must take under 5 minutes so I actually start today.",
+      "I have 45 minutes before [deadline]. What's the single highest-leverage thing I can do right now? Do not suggest organizing, planning, or reviewing notes."
+    ]}
+  ],
+  personas: [
+    {name:"Private Research Analyst", text:"You are a world-class research analyst with deep expertise in health research, longevity, consumer psychology, and market intelligence. Research any topic in depth and break it into key insights, opportunities, risks, emerging trends, hidden patterns, audience behavior, and competitive advantages. Make the output sharp, practical, and data-driven. Where the evidence is thin or contested, say so plainly rather than smoothing it over. Do not invent sources or statistics, and flag anything that needs verification."},
+    {name:"Strategy Consultant", text:"You are a world-class strategy consultant. Take messy thoughts, meeting notes, voice transcripts, rough ideas, or unstructured plans and turn them into a clear strategy. Identify the real problem, simplify the thinking, organize priorities, find bottlenecks, suggest execution steps, and create actionable systems. Make the output sharp, structured, and high-level, like a premium consulting document written for founders and operators."},
+    {name:"Content Strategist, Credible Edition", text:"You are an elite content strategist who understands internet psychology, storytelling, and attention, writing for a health-research brand that lives or dies on credibility. Turn an idea into shareable content: hooks, carousel concepts, reel angles, contrarian-but-defensible takes. For every idea give the hook, why people would share or save it, the target audience, and the best platform. Be sharp and opinionated, but never imply efficacy beyond the evidence, never overclaim, and flag anything that needs verification. Write like a top creator who is also trusted by clinicians."},
+    {name:"Sales & Outreach Copywriter", text:"You are an elite copywriter and communication strategist who understands persuasion, psychology, and human behavior. Write cold emails, follow-ups, outreach messages, and partnership pitches that feel human, confident, and impossible to ignore. Avoid sounding salesy, desperate, or robotic. Every message should create curiosity, build trust quickly, and increase reply rates. Generate 3 variations: smart, direct, and warm. Keep every claim defensible and flag anything that would need sign-off before sending."},
+    {name:"Systems Builder", text:"You are an elite operations and productivity expert. Help me build a clear, repeatable system for an area that feels overwhelming, inconsistent, or time-consuming. Create step-by-step workflows, automations, habits, tools, templates, accountability systems, and simple routines that make execution easier. Make everything practical, scalable, easy to follow, and designed to reduce mental load while improving consistency and output."},
+    {name:"Weekly Planner", text:"You are an elite planning and execution strategist. Help me organize my entire week with maximum clarity and focus. Based on my goals, priorities, deadlines, and available time, create a structured plan with deep work blocks, meetings, content creation, admin tasks, and recovery time. Remove unnecessary tasks, reduce overwhelm, and design the schedule for high output without burnout. Make it realistic, actionable, and easy to follow."}
+  ],
+  focus: [
+    {name:"Task Paralysis Shatterer", text:"I am staring at [Task] and can't start. Break this down into 'Ridiculously Small' steps that take less than 1 minute each. Give me the first step and tell me exactly where to put my hands to begin."},
+    {name:"Dopamine Menu Architect", text:"I am feeling under-stimulated. Create a 'Dopamine Menu' for me with 5-minute 'Appetizers' (quick movement), 20-minute 'Entrees' (deep work), and 10-minute 'Sides' (creative play) to keep my brain engaged."},
+    {name:"Body Doubling Simulator", text:"Act as my virtual body double for the next 30 minutes. I will tell you what I'm working on, and I want you to check in every 10 minutes to ask for a status update and keep my focus anchored."},
+    {name:"Context-Switching Guide", text:"I just finished [Task A] and need to start [Task B], but my brain is stuck. Design a 3-minute 'Mental Palate Cleanser' routine to help me transition between these two different types of energy."},
+    {name:"Interest-Based Filter", text:"I have a boring administrative task: [Task]. Help me gamify this by connecting it to my current hyper-fixation: [Interest]. Create a 'Quest' structure where finishing the task unlocks a reward."},
+    {name:"Time-Blindness Auditor", text:"I think [Project] will take 20 minutes, but it usually takes 2 hours. Help me 'Time-Map' this by identifying the 3 hidden sub-tasks I always forget to account for so I can set a realistic deadline."}
+  ],
+  commandsFull: [
+    {name:"Argue Against Me First", text:"Before you agree with me, argue AGAINST my idea first. Find every flaw, every risk, every reason this could fail. Only after that, tell me if it's still worth doing."},
+    {name:"Tactical (OODA)", text:"Use the OODA framework to solve this: Observe the full situation, Orient by analyzing context, Decide between options, and Act with a clear step-by-step plan."},
+    {name:"Blueprint", text:"Don't just give me advice. Give me a step-by-step action plan with deadlines I can start TODAY. Include what to do first, what tools I need, and what to skip."},
+    {name:"Rubber Duck", text:"I'm going to explain my problem to you. Don't solve it, just ask me follow-up questions until I find the answer myself. Be a thinking partner, not an answer machine."},
+    {name:"Expert", text:"Respond as a world-class specialist with 20 years of experience in this field. No beginner-level answers. No generic advice. Give me what a top 1% expert would actually say."}
+  ],
+  commandsShort: [
+    {cmd:"/devil", desc:"steelman the opposing view"},
+    {cmd:"/10x", desc:"rewrite 10x sharper"},
+    {cmd:"/pitch", desc:"30-sec investor or client pitch"},
+    {cmd:"/ghost", desc:"human-like, less robotic response"},
+    {cmd:"/compare", desc:"side-by-side analysis"},
+    {cmd:"/scout", desc:"find risks and blind spots"},
+    {cmd:"/critique", desc:"improve and find faults"},
+    {cmd:"/explainlikeim5", desc:"super clear, plain explanation"},
+    {cmd:"/brief", desc:"shortest, no-fluff answer"},
+    {cmd:"/teacher", desc:"mentor mode, debate me"}
+  ]
+};
+
+DATA.accuracy.full = DATA.accuracy.intro + "\n\n" +
+  DATA.accuracy.rules.map((r,i)=>`${i+1}. ${r[0].toUpperCase()}: ${r[1]}`).join("\n\n");
+
+const copyIcon = '<svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="2"/></svg>';
+
+function highlight(t){
+  let esc = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  esc = esc.replace(/\[Mackenzie: verify\]/g,'<span class="verify">[Mackenzie: verify]</span>');
+  esc = esc.replace(/\[([^\]]+)\]/g, m => m.includes('verify')? m : `<span class="ph">${m}</span>`);
+  return esc;
+}
+
+function promptCard(name, idx, text){
+  const c=document.createElement('div');
+  c.className='card reveal';
+  c.dataset.search=(name+' '+text).toLowerCase();
+  c.innerHTML=`<div class="tab"><span class="name">${name}</span>${idx?`<span class="idx">${idx}</span>`:''}</div>
+    <p class="ptext">${highlight(text)}</p>
+    <button class="copy">${copyIcon}Copy</button>`;
+  c.querySelector('.copy').addEventListener('click',e=>doCopy(e.currentTarget,text));
+  return c;
+}
+function doCopy(btn,text){
+  const done=()=>{btn.classList.add('done');btn.innerHTML='&#10003; Copied';setTimeout(()=>{btn.classList.remove('done');btn.innerHTML=copyIcon+'Copy';},1600);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(()=>fallback(text,done));}
+  else fallback(text,done);
+}
+function fallback(text,done){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
+
+let total=0;
+
+// standard
+document.getElementById('acc-intro').textContent=DATA.accuracy.intro;
+const ar=document.getElementById('acc-rules');
+DATA.accuracy.rules.forEach(r=>{const li=document.createElement('li');li.innerHTML=`<b>${r[0]}.</b> ${r[1].replace(/\[Mackenzie: verify\]/g,'<code>[Mackenzie: verify]</code>')}`;ar.appendChild(li);});
+document.querySelector('[data-copy="accuracy"]').addEventListener('click',e=>doCopy(e.currentTarget,DATA.accuracy.full));
+total++;
+
+// library
+const lg=document.querySelector('[data-group="library"]');
+DATA.library.forEach(group=>{
+  const band=document.createElement('div');band.className='cat-band';
+  band.innerHTML=`<span class="cat-tag">${group.cat}</span><span class="cat-line"></span>`;
+  lg.appendChild(band);
+  const grid=document.createElement('div');grid.className='grid';grid.dataset.libgrid='1';
+  group.prompts.forEach((t,i)=>{grid.appendChild(promptCard(group.cat,String(i+1).padStart(2,'0'),t));total++;});
+  lg.appendChild(grid);
+});
+
+// personas
+const pg=document.querySelector('[data-group="personas"]');
+DATA.personas.forEach(p=>{pg.appendChild(promptCard(p.name,'',p.text));total++;});
+
+// focus
+const fg=document.querySelector('[data-group="focus"]');
+DATA.focus.forEach(p=>{fg.appendChild(promptCard(p.name,'',p.text));total++;});
+
+// commands full
+const cg=document.querySelector('[data-group="commandsFull"]');
+DATA.commandsFull.forEach(p=>{cg.appendChild(promptCard(p.name,'',p.text));total++;});
+
+// commands short
+const sg=document.querySelector('[data-group="commandsShort"]');
+DATA.commandsShort.forEach(c=>{const el=document.createElement('div');el.className='cmd';el.dataset.search=(c.cmd+' '+c.desc).toLowerCase();el.innerHTML=`<code>${c.cmd}</code><span>${c.desc}</span>`;sg.appendChild(el);total++;});
+
+document.getElementById('total').textContent=total;
+
+document.querySelectorAll('section').forEach(sec=>{
+  const c=sec.querySelector('[data-count]');if(!c)return;
+  const n=sec.querySelectorAll('.card,.cmd').length;c.textContent=n+' items';
+});
+
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.animationDelay=Math.min(i*22,500)+'ms';});
+
+const filter=document.getElementById('filter');
+const empty=document.getElementById('empty');
+filter.addEventListener('input',()=>{
+  const q=filter.value.trim().toLowerCase();
+  let anyVisible=false;
+  document.querySelectorAll('[data-search]').forEach(el=>{
+    const hit=!q||el.dataset.search.includes(q);
+    el.style.display=hit?'':'none';
+    if(hit)anyVisible=true;
+  });
+  document.querySelectorAll('[data-libgrid]').forEach(grid=>{
+    const vis=[...grid.children].some(c=>c.style.display!=='none');
+    grid.style.display=vis?'':'none';
+    const band=grid.previousElementSibling;
+    if(band&&band.classList.contains('cat-band'))band.style.display=vis?'':'none';
+  });
+  document.querySelectorAll('section').forEach(sec=>{
+    if(sec.id==='howto'||sec.id==='standard')return;
+    const vis=[...sec.querySelectorAll('[data-search]')].some(el=>el.style.display!=='none');
+    sec.style.display=(q&&!vis)?'none':'';
+  });
+  empty.style.display=anyVisible?'none':'block';
+});
+</script>
+</body>
+</html>
