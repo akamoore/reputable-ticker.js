@@ -1,0 +1,3689 @@
+<!-- homepage-final-body.html: body-only variant for WP templates that supply their own header, footer, and analytics. -->
+<!-- Preserves every content section from homepage-final.html; strips wrapper tags, site chrome, and analytics loaders. -->
+
+<!-- Fonts (Poppins for premium sections, Inter for body, Instrument Serif for accents, JetBrains Mono for eyebrows/labels) -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Design system styles (Tailwind v4.3.3 build plus all custom classes, scoped to #rh) -->
+<style>
+/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+:root, :host {
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --color-black: #000;
+    --spacing: 0.25rem;
+    --container-lg: 32rem;
+    --container-xl: 36rem;
+    --container-3xl: 48rem;
+    --container-5xl: 64rem;
+    --container-6xl: 72rem;
+    --container-7xl: 80rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-6xl: 3.75rem;
+    --text-6xl--line-height: 1;
+    --text-7xl: 4.5rem;
+    --text-7xl--line-height: 1;
+    --text-8xl: 6rem;
+    --text-8xl--line-height: 1;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-relaxed: 1.625;
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --blur-sm: 8px;
+    --blur-3xl: 64px;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --default-mono-font-family: var(--font-mono);
+  }
+#rh *, #rh ::after, #rh ::before, #rh ::backdrop, #rh ::file-selector-button {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 solid;
+  }
+#rh .html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+#rh hr {
+    height: 0 !important;
+    color: inherit;
+    border-top-width: 1px;
+  }
+#rh abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+#rh h1, #rh h2, #rh h3, #rh h4, #rh h5, #rh h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+#rh a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+#rh b, #rh strong {
+    font-weight: bolder;
+  }
+#rh code, #rh kbd, #rh samp, #rh pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+#rh small {
+    font-size: 80%;
+  }
+#rh sub, #rh sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative !important;
+    vertical-align: baseline;
+  }
+#rh sub {
+    bottom: -0.25em !important;
+  }
+#rh sup {
+    top: -0.5em !important;
+  }
+#rh table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+#rh :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+#rh progress {
+    vertical-align: baseline;
+  }
+#rh summary {
+    display: list-item !important;
+  }
+#rh ol, #rh ul, #rh menu {
+    list-style: none;
+  }
+#rh img, #rh svg, #rh video, #rh canvas, #rh audio, #rh iframe, #rh embed, #rh object {
+    display: block !important;
+    vertical-align: middle;
+  }
+#rh img, #rh video {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+#rh button, #rh input, #rh select, #rh optgroup, #rh textarea, #rh ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+#rh :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+#rh :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px !important;
+  }
+#rh ::file-selector-button {
+    margin-inline-end: 4px !important;
+  }
+#rh ::placeholder {
+    opacity: 1;
+  }
+@supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    #rh ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+#rh textarea {
+    resize: vertical;
+  }
+#rh ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+#rh ::-webkit-date-and-time-value {
+    min-height: 1lh !important;
+    text-align: inherit;
+  }
+#rh ::-webkit-datetime-edit {
+    display: inline-flex !important;
+  }
+#rh ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0 !important;
+  }
+#rh ::-webkit-datetime-edit, #rh ::-webkit-datetime-edit-year-field, #rh ::-webkit-datetime-edit-month-field, #rh ::-webkit-datetime-edit-day-field, #rh ::-webkit-datetime-edit-hour-field, #rh ::-webkit-datetime-edit-minute-field, #rh ::-webkit-datetime-edit-second-field, #rh ::-webkit-datetime-edit-millisecond-field, #rh ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0 !important;
+  }
+#rh ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+#rh :-moz-ui-invalid {
+    box-shadow: none;
+  }
+#rh button, #rh input:where([type="button"], [type="reset"], [type="submit"]), #rh ::file-selector-button {
+    appearance: button;
+  }
+#rh ::-webkit-inner-spin-button, #rh ::-webkit-outer-spin-button {
+    height: auto !important;
+  }
+#rh [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+#rh .pointer-events-none {
+    pointer-events: none;
+  }
+#rh .invisible {
+    visibility: hidden !important;
+  }
+#rh .visible {
+    visibility: visible !important;
+  }
+#rh .absolute {
+    position: absolute !important;
+  }
+#rh .relative {
+    position: relative !important;
+  }
+#rh .sticky {
+    position: sticky !important;
+  }
+#rh .inset-0 {
+    inset: 0px;
+  }
+#rh .inset-x-0 {
+    inset-inline: 0px;
+  }
+#rh .inset-y-0 {
+    inset-block: 0px;
+  }
+#rh .top-0 {
+    top: 0px !important;
+  }
+#rh .top-1\/2 {
+    top: calc(1 / 2 * 100%) !important;
+  }
+#rh .top-6 {
+    top: calc(var(--spacing) * 6) !important;
+  }
+#rh .top-\[-20\%\] {
+    top: -20% !important;
+  }
+#rh .top-\[30\%\] {
+    top: 30% !important;
+  }
+#rh .top-\[55\%\] {
+    top: 55% !important;
+  }
+#rh .top-\[62\%\] {
+    top: 62% !important;
+  }
+#rh .right-0 {
+    right: 0px !important;
+  }
+#rh .right-\[-10\%\] {
+    right: -10% !important;
+  }
+#rh .right-\[20\%\] {
+    right: 20% !important;
+  }
+#rh .bottom-0 {
+    bottom: 0px !important;
+  }
+#rh .bottom-6 {
+    bottom: calc(var(--spacing) * 6) !important;
+  }
+#rh .bottom-\[-25\%\] {
+    bottom: -25% !important;
+  }
+#rh .left-0 {
+    left: 0px !important;
+  }
+#rh .left-1\/2 {
+    left: calc(1 / 2 * 100%) !important;
+  }
+#rh .left-2 {
+    left: calc(var(--spacing) * 2) !important;
+  }
+#rh .left-\[-15\%\] {
+    left: -15% !important;
+  }
+#rh .left-\[60\%\] {
+    left: 60% !important;
+  }
+#rh .-z-0 {
+    z-index: calc(0 * -1);
+  }
+#rh .z-0 {
+    z-index: 0;
+  }
+#rh .z-10 {
+    z-index: 10;
+  }
+#rh .-mx-5 {
+    margin-inline: calc(var(--spacing) * -5) !important;
+  }
+#rh .mx-auto {
+    margin-inline: auto !important;
+  }
+#rh .mt-0\.5 {
+    margin-top: calc(var(--spacing) * 0.5) !important;
+  }
+#rh .mt-1 {
+    margin-top: var(--spacing) !important;
+  }
+#rh .mt-1\.5 {
+    margin-top: calc(var(--spacing) * 1.5) !important;
+  }
+#rh .mt-2 {
+    margin-top: calc(var(--spacing) * 2) !important;
+  }
+#rh .mt-3 {
+    margin-top: calc(var(--spacing) * 3) !important;
+  }
+#rh .mt-4 {
+    margin-top: calc(var(--spacing) * 4) !important;
+  }
+#rh .mt-5 {
+    margin-top: calc(var(--spacing) * 5) !important;
+  }
+#rh .mt-6 {
+    margin-top: calc(var(--spacing) * 6) !important;
+  }
+#rh .mt-8 {
+    margin-top: calc(var(--spacing) * 8) !important;
+  }
+#rh .mt-10 {
+    margin-top: calc(var(--spacing) * 10) !important;
+  }
+#rh .mt-12 {
+    margin-top: calc(var(--spacing) * 12) !important;
+  }
+#rh .mt-14 {
+    margin-top: calc(var(--spacing) * 14) !important;
+  }
+#rh .mt-20 {
+    margin-top: calc(var(--spacing) * 20) !important;
+  }
+#rh .mt-auto {
+    margin-top: auto !important;
+  }
+#rh .mr-2 {
+    margin-right: calc(var(--spacing) * 2) !important;
+  }
+#rh .mb-3 {
+    margin-bottom: calc(var(--spacing) * 3) !important;
+  }
+#rh .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6) !important;
+  }
+#rh .mb-8 {
+    margin-bottom: calc(var(--spacing) * 8) !important;
+  }
+#rh .mb-10 {
+    margin-bottom: calc(var(--spacing) * 10) !important;
+  }
+#rh .mb-12 {
+    margin-bottom: calc(var(--spacing) * 12) !important;
+  }
+#rh .mb-16 {
+    margin-bottom: calc(var(--spacing) * 16) !important;
+  }
+#rh .block {
+    display: block !important;
+  }
+#rh .flex {
+    display: flex !important;
+  }
+#rh .grid {
+    display: grid !important;
+  }
+#rh .hidden {
+    display: none !important;
+  }
+#rh .inline-block {
+    display: inline-block !important;
+  }
+#rh .inline-flex {
+    display: inline-flex !important;
+  }
+#rh .inline-grid {
+    display: inline-grid !important;
+  }
+#rh .size-1\.5 {
+    width: calc(var(--spacing) * 1.5) !important;
+    height: calc(var(--spacing) * 1.5) !important;
+  }
+#rh .size-2 {
+    width: calc(var(--spacing) * 2) !important;
+    height: calc(var(--spacing) * 2) !important;
+  }
+#rh .size-6 {
+    width: calc(var(--spacing) * 6) !important;
+    height: calc(var(--spacing) * 6) !important;
+  }
+#rh .size-8 {
+    width: calc(var(--spacing) * 8) !important;
+    height: calc(var(--spacing) * 8) !important;
+  }
+#rh .size-10 {
+    width: calc(var(--spacing) * 10) !important;
+    height: calc(var(--spacing) * 10) !important;
+  }
+#rh .size-12 {
+    width: calc(var(--spacing) * 12) !important;
+    height: calc(var(--spacing) * 12) !important;
+  }
+#rh .size-14 {
+    width: calc(var(--spacing) * 14) !important;
+    height: calc(var(--spacing) * 14) !important;
+  }
+#rh .size-\[280px\] {
+    width: 280px !important;
+    height: 280px !important;
+  }
+#rh .size-\[440px\] {
+    width: 440px !important;
+    height: 440px !important;
+  }
+#rh .size-\[520px\] {
+    width: 520px !important;
+    height: 520px !important;
+  }
+#rh .size-\[700px\] {
+    width: 700px !important;
+    height: 700px !important;
+  }
+#rh .size-full {
+    width: 100% !important;
+    height: 100% !important;
+  }
+#rh .h-0\.5 {
+    height: calc(var(--spacing) * 0.5) !important;
+  }
+#rh .h-1 {
+    height: var(--spacing) !important;
+  }
+#rh .h-1\.5 {
+    height: calc(var(--spacing) * 1.5) !important;
+  }
+#rh .h-2 {
+    height: calc(var(--spacing) * 2) !important;
+  }
+#rh .h-14 {
+    height: calc(var(--spacing) * 14) !important;
+  }
+#rh .h-24 {
+    height: calc(var(--spacing) * 24) !important;
+  }
+#rh .h-\[340px\] {
+    height: 340px !important;
+  }
+#rh .h-\[380px\] {
+    height: 380px !important;
+  }
+#rh .h-\[420px\] {
+    height: 420px !important;
+  }
+#rh .h-\[520px\] {
+    height: 520px !important;
+  }
+#rh .h-full {
+    height: 100% !important;
+  }
+#rh .h-px {
+    height: 1px !important;
+  }
+#rh .min-h-screen {
+    min-height: 100vh !important;
+  }
+#rh .w-12 {
+    width: calc(var(--spacing) * 12) !important;
+  }
+#rh .w-16 {
+    width: calc(var(--spacing) * 16) !important;
+  }
+#rh .w-24 {
+    width: calc(var(--spacing) * 24) !important;
+  }
+#rh .w-\[46\%\] {
+    width: 46% !important;
+  }
+#rh .w-\[82\%\] {
+    width: 82% !important;
+  }
+#rh .w-\[86\%\] {
+    width: 86% !important;
+  }
+#rh .w-\[340px\] {
+    width: 340px !important;
+  }
+#rh .w-\[520px\] {
+    width: 520px !important;
+  }
+#rh .w-full {
+    width: 100% !important;
+  }
+#rh .w-max {
+    width: max-content !important;
+  }
+#rh .max-w-3xl {
+    max-width: var(--container-3xl) !important;
+  }
+#rh .max-w-5xl {
+    max-width: var(--container-5xl) !important;
+  }
+#rh .max-w-6xl {
+    max-width: var(--container-6xl) !important;
+  }
+#rh .max-w-7xl {
+    max-width: var(--container-7xl) !important;
+  }
+#rh .max-w-full {
+    max-width: 100% !important;
+  }
+#rh .max-w-lg {
+    max-width: var(--container-lg) !important;
+  }
+#rh .max-w-xl {
+    max-width: var(--container-xl) !important;
+  }
+#rh .min-w-0 {
+    min-width: 0px !important;
+  }
+#rh .flex-1 {
+    flex: 1 !important;
+  }
+#rh .shrink-0 {
+    flex-shrink: 0 !important;
+  }
+#rh .origin-left {
+    transform-origin: 0;
+  }
+#rh .-translate-x-1\/2 {
+    --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+#rh .-translate-y-0\.5 {
+    --tw-translate-y: calc(var(--spacing) * -0.5);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+#rh .-translate-y-1\/2 {
+    --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+#rh .-translate-y-4 {
+    --tw-translate-y: calc(var(--spacing) * -4);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+#rh .translate-y-0 {
+    --tw-translate-y: 0px;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+#rh .translate-y-6 {
+    --tw-translate-y: calc(var(--spacing) * 6);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+#rh .scale-x-0 {
+    --tw-scale-x: 0%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+#rh .scale-x-100 {
+    --tw-scale-x: 100%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+#rh .-rotate-90 {
+    rotate: calc(90deg * -1);
+  }
+#rh .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+#rh .cursor-default {
+    cursor: default;
+  }
+#rh .touch-pan-y {
+    --tw-pan-y: pan-y;
+    touch-action: var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,);
+  }
+#rh .resize {
+    resize: both;
+  }
+#rh .\[scrollbar-width\:none\] {
+    scrollbar-width: none;
+  }
+#rh .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+#rh .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+#rh .flex-col {
+    flex-direction: column !important;
+  }
+#rh .flex-wrap {
+    flex-wrap: wrap !important;
+  }
+#rh .place-items-center {
+    place-items: center !important;
+  }
+#rh .items-baseline {
+    align-items: baseline !important;
+  }
+#rh .items-center {
+    align-items: center !important;
+  }
+#rh .items-start {
+    align-items: flex-start !important;
+  }
+#rh .justify-between {
+    justify-content: space-between !important;
+  }
+#rh .justify-center {
+    justify-content: center !important;
+  }
+#rh .gap-1\.5 {
+    gap: calc(var(--spacing) * 1.5) !important;
+  }
+#rh .gap-2 {
+    gap: calc(var(--spacing) * 2) !important;
+  }
+#rh .gap-2\.5 {
+    gap: calc(var(--spacing) * 2.5) !important;
+  }
+#rh .gap-3 {
+    gap: calc(var(--spacing) * 3) !important;
+  }
+#rh .gap-4 {
+    gap: calc(var(--spacing) * 4) !important;
+  }
+#rh .gap-6 {
+    gap: calc(var(--spacing) * 6) !important;
+  }
+#rh .gap-8 {
+    gap: calc(var(--spacing) * 8) !important;
+  }
+#rh .gap-12 {
+    gap: calc(var(--spacing) * 12) !important;
+  }
+#rh .gap-16 {
+    gap: calc(var(--spacing) * 16) !important;
+  }
+#rh :where(.space-y-2 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse)) !important;
+    margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse))) !important;
+  }
+#rh :where(.space-y-4 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse)) !important;
+    margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse))) !important;
+  }
+#rh :where(.space-y-16 > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 16) * var(--tw-space-y-reverse)) !important;
+    margin-block-end: calc(calc(var(--spacing) * 16) * calc(1 - var(--tw-space-y-reverse))) !important;
+  }
+#rh .truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+#rh .overflow-hidden {
+    overflow: hidden !important;
+  }
+#rh .overflow-x-auto {
+    overflow-x: auto !important;
+  }
+#rh .overflow-x-hidden {
+    overflow-x: hidden !important;
+  }
+#rh .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+#rh .rounded-lg {
+    border-radius: 16px;
+  }
+#rh .rounded-md {
+    border-radius: 12px;
+  }
+#rh .rounded-xl {
+    border-radius: 24px;
+  }
+#rh .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+#rh .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+#rh .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+#rh .border-l-2 {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 2px;
+  }
+#rh .border-border {
+    border-color: var(--border);
+  }
+#rh .border-cream\/10 {
+    border-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--cream) 10%, transparent);
+    }
+  }
+#rh .border-cream\/15 {
+    border-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--cream) 15%, transparent);
+    }
+  }
+#rh .border-cream\/20 {
+    border-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--cream) 20%, transparent);
+    }
+  }
+#rh .border-lime\/40 {
+    border-color: var(--lime);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--lime) 40%, transparent);
+    }
+  }
+#rh .border-lime\/60 {
+    border-color: var(--lime);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--lime) 60%, transparent);
+    }
+  }
+#rh .border-orange\/40 {
+    border-color: var(--orange);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--orange) 40%, transparent);
+    }
+  }
+#rh .border-sky\/40 {
+    border-color: var(--sky);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--sky) 40%, transparent);
+    }
+  }
+#rh .bg-bg {
+    background-color: var(--bg);
+  }
+#rh .bg-black\/30 {
+    background-color: color-mix(in srgb, #000 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 30%, transparent);
+    }
+  }
+#rh .bg-black\/40 {
+    background-color: color-mix(in srgb, #000 40%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 40%, transparent);
+    }
+  }
+#rh .bg-cream\/5 {
+    background-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--cream) 5%, transparent);
+    }
+  }
+#rh .bg-cream\/10 {
+    background-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--cream) 10%, transparent);
+    }
+  }
+#rh .bg-cream\/15 {
+    background-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--cream) 15%, transparent);
+    }
+  }
+#rh .bg-cream\/40 {
+    background-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--cream) 40%, transparent);
+    }
+  }
+#rh .bg-cream\/\[0\.02\] {
+    background-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--cream) 2%, transparent);
+    }
+  }
+#rh .bg-cream\/\[0\.03\] {
+    background-color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--cream) 3%, transparent);
+    }
+  }
+#rh .bg-lime {
+    background-color: var(--lime);
+  }
+#rh .bg-lime\/8 {
+    background-color: var(--lime);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--lime) 8%, transparent);
+    }
+  }
+#rh .bg-lime\/10 {
+    background-color: var(--lime);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--lime) 10%, transparent);
+    }
+  }
+#rh .bg-lime\/15 {
+    background-color: var(--lime);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--lime) 15%, transparent);
+    }
+  }
+#rh .bg-mint {
+    background-color: var(--mint);
+  }
+#rh .bg-orange {
+    background-color: var(--orange);
+  }
+#rh .bg-orange\/10 {
+    background-color: var(--orange);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--orange) 10%, transparent);
+    }
+  }
+#rh .bg-sky {
+    background-color: var(--sky);
+  }
+#rh .bg-sky\/10 {
+    background-color: var(--sky);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--sky) 10%, transparent);
+    }
+  }
+#rh .bg-sky\/15 {
+    background-color: var(--sky);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--sky) 15%, transparent);
+    }
+  }
+#rh .p-2 {
+    padding: calc(var(--spacing) * 2) !important;
+  }
+#rh .p-2\.5 {
+    padding: calc(var(--spacing) * 2.5) !important;
+  }
+#rh .p-3 {
+    padding: calc(var(--spacing) * 3) !important;
+  }
+#rh .p-4 {
+    padding: calc(var(--spacing) * 4) !important;
+  }
+#rh .p-5 {
+    padding: calc(var(--spacing) * 5) !important;
+  }
+#rh .p-6 {
+    padding: calc(var(--spacing) * 6) !important;
+  }
+#rh .p-8 {
+    padding: calc(var(--spacing) * 8) !important;
+  }
+#rh .px-2 {
+    padding-inline: calc(var(--spacing) * 2) !important;
+  }
+#rh .px-3 {
+    padding-inline: calc(var(--spacing) * 3) !important;
+  }
+#rh .px-3\.5 {
+    padding-inline: calc(var(--spacing) * 3.5) !important;
+  }
+#rh .px-4 {
+    padding-inline: calc(var(--spacing) * 4) !important;
+  }
+#rh .px-5 {
+    padding-inline: calc(var(--spacing) * 5) !important;
+  }
+#rh .px-6 {
+    padding-inline: calc(var(--spacing) * 6) !important;
+  }
+#rh .px-8 {
+    padding-inline: calc(var(--spacing) * 8) !important;
+  }
+#rh .py-0\.5 {
+    padding-block: calc(var(--spacing) * 0.5) !important;
+  }
+#rh .py-1 {
+    padding-block: var(--spacing) !important;
+  }
+#rh .py-2 {
+    padding-block: calc(var(--spacing) * 2) !important;
+  }
+#rh .py-3 {
+    padding-block: calc(var(--spacing) * 3) !important;
+  }
+#rh .py-4 {
+    padding-block: calc(var(--spacing) * 4) !important;
+  }
+#rh .py-16 {
+    padding-block: calc(var(--spacing) * 16) !important;
+  }
+#rh .py-20 {
+    padding-block: calc(var(--spacing) * 20) !important;
+  }
+#rh .pt-3 {
+    padding-top: calc(var(--spacing) * 3) !important;
+  }
+#rh .pt-4 {
+    padding-top: calc(var(--spacing) * 4) !important;
+  }
+#rh .pt-10 {
+    padding-top: calc(var(--spacing) * 10) !important;
+  }
+#rh .pb-6 {
+    padding-bottom: calc(var(--spacing) * 6) !important;
+  }
+#rh .pb-16 {
+    padding-bottom: calc(var(--spacing) * 16) !important;
+  }
+#rh .pl-4 {
+    padding-left: calc(var(--spacing) * 4) !important;
+  }
+#rh .text-center {
+    text-align: center;
+  }
+#rh .text-left {
+    text-align: left;
+  }
+#rh .align-baseline {
+    vertical-align: baseline;
+  }
+#rh .align-middle {
+    vertical-align: middle;
+  }
+#rh .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+#rh .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+#rh .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+#rh .text-5xl {
+    font-size: var(--text-5xl);
+    line-height: var(--tw-leading, var(--text-5xl--line-height));
+  }
+#rh .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
+  }
+#rh .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+#rh .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+#rh .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+#rh .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+#rh .text-\[8px\] {
+    font-size: 8px;
+  }
+#rh .text-\[9px\] {
+    font-size: 9px;
+  }
+#rh .text-\[10px\] {
+    font-size: 10px;
+  }
+#rh .text-\[11px\] {
+    font-size: 11px;
+  }
+#rh .text-\[clamp\(2\.25rem\,11vw\,3\.25rem\)\] {
+    font-size: clamp(2.25rem, 11vw, 3.25rem);
+  }
+#rh .leading-\[0\.95\] {
+    --tw-leading: 0.95;
+    line-height: 0.95;
+  }
+#rh .leading-\[0\.98\] {
+    --tw-leading: 0.98;
+    line-height: 0.98;
+  }
+#rh .leading-\[1\.0\] {
+    --tw-leading: 1.0;
+    line-height: 1.0;
+  }
+#rh .leading-\[1\.1\] {
+    --tw-leading: 1.1;
+    line-height: 1.1;
+  }
+#rh .leading-\[1\.05\] {
+    --tw-leading: 1.05;
+    line-height: 1.05;
+  }
+#rh .leading-\[1\] {
+    --tw-leading: 1;
+    line-height: 1;
+  }
+#rh .leading-none {
+    --tw-leading: 1;
+    line-height: 1;
+  }
+#rh .leading-relaxed {
+    --tw-leading: var(--leading-relaxed);
+    line-height: var(--leading-relaxed);
+  }
+#rh .leading-snug {
+    --tw-leading: var(--leading-snug);
+    line-height: var(--leading-snug);
+  }
+#rh .leading-tight {
+    --tw-leading: var(--leading-tight);
+    line-height: var(--leading-tight);
+  }
+#rh .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+#rh .font-medium {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+  }
+#rh .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
+#rh .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+#rh .tracking-\[-0\.02em\] {
+    --tw-tracking: -0.02em;
+    letter-spacing: -0.02em;
+  }
+#rh .tracking-\[-0\.03em\] {
+    --tw-tracking: -0.03em;
+    letter-spacing: -0.03em;
+  }
+#rh .tracking-\[-0\.04em\] {
+    --tw-tracking: -0.04em;
+    letter-spacing: -0.04em;
+  }
+#rh .tracking-\[-0\.035em\] {
+    --tw-tracking: -0.035em;
+    letter-spacing: -0.035em;
+  }
+#rh .tracking-\[0\.2em\] {
+    --tw-tracking: 0.2em;
+    letter-spacing: 0.2em;
+  }
+#rh .tracking-\[0\.24em\] {
+    --tw-tracking: 0.24em;
+    letter-spacing: 0.24em;
+  }
+#rh .tracking-\[0\.28em\] {
+    --tw-tracking: 0.28em;
+    letter-spacing: 0.28em;
+  }
+#rh .tracking-\[0\.32em\] {
+    --tw-tracking: 0.32em;
+    letter-spacing: 0.32em;
+  }
+#rh .break-words {
+    overflow-wrap: break-word;
+  }
+#rh .hyphens-auto {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+#rh .whitespace-nowrap {
+    white-space: nowrap;
+  }
+#rh .text-charcoal {
+    color: var(--charcoal);
+  }
+#rh .text-cream {
+    color: var(--cream);
+  }
+#rh .text-cream\/40 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 40%, transparent);
+    }
+  }
+#rh .text-cream\/50 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 50%, transparent);
+    }
+  }
+#rh .text-cream\/60 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 60%, transparent);
+    }
+  }
+#rh .text-cream\/70 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 70%, transparent);
+    }
+  }
+#rh .text-cream\/80 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 80%, transparent);
+    }
+  }
+#rh .text-cream\/85 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 85%, transparent);
+    }
+  }
+#rh .text-cream\/90 {
+    color: var(--cream);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--cream) 90%, transparent);
+    }
+  }
+#rh .text-lime {
+    color: var(--lime);
+  }
+#rh .text-mint {
+    color: var(--mint);
+  }
+#rh .text-orange {
+    color: var(--orange);
+  }
+#rh .text-orange\/70 {
+    color: var(--orange);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--orange) 70%, transparent);
+    }
+  }
+#rh .text-sky {
+    color: var(--sky);
+  }
+#rh .uppercase {
+    text-transform: uppercase;
+  }
+#rh .italic {
+    font-style: italic;
+  }
+#rh .opacity-0 {
+    opacity: 0%;
+  }
+#rh .opacity-30 {
+    opacity: 30%;
+  }
+#rh .opacity-40 {
+    opacity: 40%;
+  }
+#rh .opacity-80 {
+    opacity: 80%;
+  }
+#rh .opacity-100 {
+    opacity: 100%;
+  }
+#rh .shadow-2xl {
+    --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+#rh .blur-3xl {
+    --tw-blur: blur(var(--blur-3xl));
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+#rh .backdrop-blur-sm {
+    --tw-backdrop-blur: blur(var(--blur-sm));
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+#rh .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+#rh .transition-all {
+    transition-property: all;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+#rh .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+#rh .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+#rh .transition-transform {
+    transition-property: transform, translate, scale, rotate;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+#rh .duration-500 {
+    --tw-duration: 500ms;
+    transition-duration: 500ms;
+  }
+#rh .duration-700 {
+    --tw-duration: 700ms;
+    transition-duration: 700ms;
+  }
+#rh .ease-out {
+    --tw-ease: var(--ease-out);
+    transition-timing-function: var(--ease-out);
+  }
+#rh .select-none {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+#rh .\[grid-area\:1\/1\] {
+    grid-area: 1/1;
+  }
+@media (hover: hover) {
+    #rh .group-hover\:gap-4:is(:where(.group):hover *) {
+      gap: calc(var(--spacing) * 4) !important;
+    }
+    #rh .group-hover\:opacity-60:is(:where(.group):hover *) {
+      opacity: 60%;
+    }
+    #rh .hover\:border-cream\/25:hover {
+      border-color: var(--cream);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      #rh .hover\:border-cream\/25:hover {
+        border-color: color-mix(in oklab, var(--cream) 25%, transparent);
+      }
+    }
+  }
+@media (width >= 40rem) {
+    #rh .sm\:bottom-10 {
+      bottom: calc(var(--spacing) * 10) !important;
+    }
+    #rh .sm\:left-6 {
+      left: calc(var(--spacing) * 6) !important;
+    }
+    #rh .sm\:mx-0 {
+      margin-inline: 0px !important;
+    }
+    #rh .sm\:mt-4 {
+      margin-top: calc(var(--spacing) * 4) !important;
+    }
+    #rh .sm\:mt-6 {
+      margin-top: calc(var(--spacing) * 6) !important;
+    }
+    #rh .sm\:mt-14 {
+      margin-top: calc(var(--spacing) * 14) !important;
+    }
+    #rh .sm\:mb-14 {
+      margin-bottom: calc(var(--spacing) * 14) !important;
+    }
+    #rh .sm\:mb-16 {
+      margin-bottom: calc(var(--spacing) * 16) !important;
+    }
+    #rh .sm\:block {
+      display: block !important;
+    }
+    #rh .sm\:hidden {
+      display: none !important;
+    }
+    #rh .sm\:size-11 {
+      width: calc(var(--spacing) * 11) !important;
+      height: calc(var(--spacing) * 11) !important;
+    }
+    #rh .sm\:size-16 {
+      width: calc(var(--spacing) * 16) !important;
+      height: calc(var(--spacing) * 16) !important;
+    }
+    #rh .sm\:h-16 {
+      height: calc(var(--spacing) * 16) !important;
+    }
+    #rh .sm\:h-\[460px\] {
+      height: 460px !important;
+    }
+    #rh .sm\:h-\[520px\] {
+      height: 520px !important;
+    }
+    #rh .sm\:w-\[40\%\] {
+      width: 40% !important;
+    }
+    #rh .sm\:w-\[64\%\] {
+      width: 64% !important;
+    }
+    #rh .sm\:w-\[78\%\] {
+      width: 78% !important;
+    }
+    #rh .sm\:w-auto {
+      width: auto !important;
+    }
+    #rh .sm\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    #rh .sm\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+    #rh .sm\:flex-row {
+      flex-direction: row !important;
+    }
+    #rh .sm\:flex-wrap {
+      flex-wrap: wrap !important;
+    }
+    #rh .sm\:items-center {
+      align-items: center !important;
+    }
+    #rh .sm\:items-end {
+      align-items: flex-end !important;
+    }
+    #rh .sm\:justify-between {
+      justify-content: space-between !important;
+    }
+    #rh .sm\:gap-3 {
+      gap: calc(var(--spacing) * 3) !important;
+    }
+    #rh .sm\:gap-6 {
+      gap: calc(var(--spacing) * 6) !important;
+    }
+    #rh :where(.sm\:space-y-20 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 20) * var(--tw-space-y-reverse)) !important;
+      margin-block-end: calc(calc(var(--spacing) * 20) * calc(1 - var(--tw-space-y-reverse))) !important;
+    }
+    #rh .sm\:overflow-visible {
+      overflow: visible !important;
+    }
+    #rh .sm\:p-3 {
+      padding: calc(var(--spacing) * 3) !important;
+    }
+    #rh .sm\:p-5 {
+      padding: calc(var(--spacing) * 5) !important;
+    }
+    #rh .sm\:p-6 {
+      padding: calc(var(--spacing) * 6) !important;
+    }
+    #rh .sm\:p-7 {
+      padding: calc(var(--spacing) * 7) !important;
+    }
+    #rh .sm\:p-8 {
+      padding: calc(var(--spacing) * 8) !important;
+    }
+    #rh .sm\:p-10 {
+      padding: calc(var(--spacing) * 10) !important;
+    }
+    #rh .sm\:px-0 {
+      padding-inline: 0px !important;
+    }
+    #rh .sm\:px-5 {
+      padding-inline: calc(var(--spacing) * 5) !important;
+    }
+    #rh .sm\:px-10 {
+      padding-inline: calc(var(--spacing) * 10) !important;
+    }
+    #rh .sm\:py-3 {
+      padding-block: calc(var(--spacing) * 3) !important;
+    }
+    #rh .sm\:py-24 {
+      padding-block: calc(var(--spacing) * 24) !important;
+    }
+    #rh .sm\:py-28 {
+      padding-block: calc(var(--spacing) * 28) !important;
+    }
+    #rh .sm\:pt-16 {
+      padding-top: calc(var(--spacing) * 16) !important;
+    }
+    #rh .sm\:pb-24 {
+      padding-bottom: calc(var(--spacing) * 24) !important;
+    }
+    #rh .sm\:text-3xl {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
+    }
+    #rh .sm\:text-4xl {
+      font-size: var(--text-4xl);
+      line-height: var(--tw-leading, var(--text-4xl--line-height));
+    }
+    #rh .sm\:text-5xl {
+      font-size: var(--text-5xl);
+      line-height: var(--tw-leading, var(--text-5xl--line-height));
+    }
+    #rh .sm\:text-6xl {
+      font-size: var(--text-6xl);
+      line-height: var(--tw-leading, var(--text-6xl--line-height));
+    }
+    #rh .sm\:text-7xl {
+      font-size: var(--text-7xl);
+      line-height: var(--tw-leading, var(--text-7xl--line-height));
+    }
+    #rh .sm\:text-base {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+    #rh .sm\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+    }
+    #rh .sm\:text-xl {
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
+    }
+    #rh .sm\:text-\[1\.65rem\] {
+      font-size: 1.65rem;
+    }
+    #rh .sm\:text-\[5\.5rem\] {
+      font-size: 5.5rem;
+    }
+    #rh .sm\:text-\[11px\] {
+      font-size: 11px;
+    }
+    #rh .sm\:leading-\[0\.94\] {
+      --tw-leading: 0.94;
+      line-height: 0.94;
+    }
+    #rh .sm\:tracking-\[0\.24em\] {
+      --tw-tracking: 0.24em;
+      letter-spacing: 0.24em;
+    }
+  }
+@media (width >= 48rem) {
+    #rh .md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    #rh .md\:gap-14 {
+      gap: calc(var(--spacing) * 14) !important;
+    }
+  }
+@media (width >= 64rem) {
+    #rh .lg\:sticky {
+      position: sticky !important;
+    }
+    #rh .lg\:top-28 {
+      top: calc(var(--spacing) * 28) !important;
+    }
+    #rh .lg\:col-span-2 {
+      grid-column: span 2 / span 2 !important;
+    }
+    #rh .lg\:col-span-3 {
+      grid-column: span 3 / span 3 !important;
+    }
+    #rh .lg\:col-span-6 {
+      grid-column: span 6 / span 6 !important;
+    }
+    #rh .lg\:mt-14 {
+      margin-top: calc(var(--spacing) * 14) !important;
+    }
+    #rh .lg\:hidden {
+      display: none !important;
+    }
+    #rh .lg\:h-\[580px\] {
+      height: 580px !important;
+    }
+    #rh .lg\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    #rh .lg\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    #rh .lg\:grid-cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    }
+    #rh .lg\:grid-cols-12 {
+      grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    }
+    #rh .lg\:gap-12 {
+      gap: calc(var(--spacing) * 12) !important;
+    }
+    #rh .lg\:gap-16 {
+      gap: calc(var(--spacing) * 16) !important;
+    }
+    #rh :where(.lg\:space-y-24 > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 24) * var(--tw-space-y-reverse)) !important;
+      margin-block-end: calc(calc(var(--spacing) * 24) * calc(1 - var(--tw-space-y-reverse))) !important;
+    }
+    #rh .lg\:py-32 {
+      padding-block: calc(var(--spacing) * 32) !important;
+    }
+    #rh .lg\:py-36 {
+      padding-block: calc(var(--spacing) * 36) !important;
+    }
+    #rh .lg\:pt-24 {
+      padding-top: calc(var(--spacing) * 24) !important;
+    }
+    #rh .lg\:pb-32 {
+      padding-bottom: calc(var(--spacing) * 32) !important;
+    }
+    #rh .lg\:text-8xl {
+      font-size: var(--text-8xl);
+      line-height: var(--tw-leading, var(--text-8xl--line-height));
+    }
+    #rh .lg\:text-\[6rem\] {
+      font-size: 6rem;
+    }
+  }
+:root {
+  --lime: #d2fb69;
+  --mint: #dcf79f;
+  --sky: #81bef9;
+  --orange: #f0af5c;
+  --charcoal: #222220;
+  --bg: #1a1a19;
+  --surface: #222220;
+  --cream: #f2efe9;
+  --ink: #1a1a19;
+  --muted: #b0b0b0;
+  --border: rgba(242, 239, 233, 0.08);
+  --radius: 16px;
+  --shadow-glow: 0 0 60px -20px rgba(210, 251, 105, 0.35);
+}
+#rh .html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+#rh .body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden !important;
+  text-rendering: optimizeLegibility;
+}
+#rh ::selection {
+  background: var(--lime);
+  color: var(--charcoal);
+}
+@keyframes word-rotate {
+  0%, 26% {
+    transform: translateY(0%);
+  }
+  33%, 59% {
+    transform: translateY(-25%);
+  }
+  66%, 92% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(-75%);
+  }
+}
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(210,251,105,0.6);
+  }
+  50% {
+    opacity: .7;
+    transform: scale(1.15);
+    box-shadow: 0 0 0 10px rgba(210,251,105,0);
+  }
+}
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 800;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes ring-fill {
+  from {
+    stroke-dashoffset: 251;
+  }
+  to {
+    stroke-dashoffset: 38;
+  }
+}
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(0.93);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes float-y {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes float-a {
+  0%, 100% {
+    transform: rotate(-4deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotate(-4deg) translate3d(0, -14px, 0);
+  }
+}
+@keyframes float-b {
+  0%, 100% {
+    transform: rotate(3deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotate(3deg) translate3d(0, -18px, 0);
+  }
+}
+@keyframes float-c {
+  0%, 100% {
+    transform: rotate(-1.5deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotate(-1.5deg) translate3d(0, -10px, 0);
+  }
+}
+#rh .float-a {
+  animation: float-a 10s ease-in-out infinite;
+}
+#rh .float-b {
+  animation: float-b 12s ease-in-out infinite -3s;
+}
+#rh .float-c {
+  animation: float-c 9s ease-in-out infinite -6s;
+}
+@media (max-width: 640px) {
+  #rh .float-a, #rh .float-b, #rh .float-c {
+    animation: none;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes count-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes verb-swap {
+  0% {
+    opacity: 0;
+    transform: translateY(60%) skewY(4deg);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) skewY(0);
+    filter: blur(0);
+  }
+}
+@keyframes panel-swap {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--swipe-from, 24px), 0, 0) scale(0.985);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+#rh .panel-swap {
+  animation: panel-swap 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity, filter;
+}
+#rh .panel-swap > * {
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+#rh .panel-swap > *:nth-child(2) {
+  animation-delay: 0.08s;
+}
+#rh .panel-swap > *:nth-child(3) {
+  animation-delay: 0.14s;
+}
+@media (max-width: 640px) {
+  #rh .panel-swap {
+    animation-duration: 0.38s;
+  }
+  #rh .panel-swap > * {
+    animation-duration: 0.38s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #rh .panel-swap, #rh .panel-swap > * {
+    animation: none !important;
+  }
+}
+#rh .animate-word {
+  animation: word-rotate 8s cubic-bezier(0.83, 0, 0.17, 1) infinite;
+}
+#rh .animate-ticker {
+  animation: ticker 90s linear infinite;
+}
+#rh .animate-dot {
+  animation: pulse-dot 2.8s ease-in-out infinite;
+}
+#rh .animate-draw {
+  stroke-dasharray: 800;
+  animation: draw-line 6s ease-in-out infinite alternate;
+}
+#rh .animate-ring {
+  stroke-dasharray: 251;
+  animation: ring-fill 3.2s cubic-bezier(0.19,1,0.22,1) forwards;
+}
+#rh .animate-bar {
+  transform-origin: left;
+  animation: bar-grow 2.4s cubic-bezier(0.19,1,0.22,1) forwards;
+}
+#rh .animate-rise {
+  animation: rise 1.4s cubic-bezier(0.19,1,0.22,1) both;
+}
+#rh .animate-float {
+  animation: float-y 9s ease-in-out infinite;
+}
+#rh .animate-blink {
+  animation: count-blink 3s ease-in-out infinite;
+}
+#rh .reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.6s cubic-bezier(0.19,1,0.22,1), transform 1.6s cubic-bezier(0.19,1,0.22,1);
+}
+#rh .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+#rh .font-editorial {
+  font-family: "Instrument Serif", "Cormorant Garamond", "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+}
+#rh .font-editorial em, #rh .italic-serif {
+  font-style: italic;
+  font-family: "Instrument Serif", serif;
+}
+#rh .hairline {
+  height: 1px !important;
+  background: rgba(242,239,233,0.12);
+}
+#rh .eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(242,239,233,0.5);
+}
+#rh .grid-bg {
+  background-image: linear-gradient(to right, rgba(242,239,233,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(242,239,233,0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+#rh .orb {
+  position: absolute !important;
+  border-radius: 999px;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+#rh .btn-lime {
+  background: var(--lime);
+  color: var(--charcoal);
+  transition: transform .2s ease, box-shadow .3s ease, background .2s ease;
+  box-shadow: 0 10px 30px -12px rgba(210, 251, 105, 0.45);
+}
+#rh .btn-lime:hover {
+  background: var(--mint);
+  box-shadow: 0 14px 40px -10px rgba(210,251,105,0.65);
+}
+#rh .btn-lime:active {
+  transform: scale(0.97);
+}
+#rh .btn-ghost {
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(242,239,233,0.18);
+  transition: background .2s ease, border-color .2s ease;
+}
+#rh .btn-ghost:hover {
+  background: rgba(242,239,233,0.06);
+  border-color: rgba(242,239,233,0.3);
+}
+#rh .marquee-mask {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+#rh .lift {
+  transition: transform .5s cubic-bezier(0.19,1,0.22,1), border-color .3s ease, background .3s ease;
+}
+#rh .lift:hover {
+  transform: translateY(-4px);
+}
+#rh .tnum {
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  #rh .animate-word, #rh .animate-ticker, #rh .animate-dot, #rh .animate-draw, #rh .animate-ring, #rh .animate-bar, #rh .animate-float, #rh .animate-blink {
+    animation: none !important;
+  }
+  #rh .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  #rh .html {
+    scroll-behavior: auto;
+  }
+}
+#rh .rep-select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 fill=%27white%27%3e%3cpath d=%27M7 10l5 5 5-5z%27/%3e%3c/svg%3e');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 20px;
+}
+#rh .rep-select option {
+  background: #1a1a19;
+  color: #f2efe9;
+}
+#rh .font-clinical {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+#rh .mono {
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  font-feature-settings: "tnum" 1;
+}
+#rh .clinical-card {
+  position: relative !important;
+  background: var(--surface);
+  @supports (color: color-mix(in lab, red, red)) {
+    background: color-mix(in oklab, var(--surface) 60%, transparent);
+  }
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: border-color .3s ease, background .3s ease, transform .5s cubic-bezier(0.19,1,0.22,1);
+}
+#rh .clinical-card:hover {
+  border-color: rgba(210, 251, 105, 0.35);
+  background: var(--surface);
+  @supports (color: color-mix(in lab, red, red)) {
+    background: color-mix(in oklab, var(--surface) 85%, transparent);
+  }
+}
+#rh .clinical-card::before, #rh .clinical-card::after {
+  content: "";
+  position: absolute !important;
+  width: 10px !important;
+  height: 10px !important;
+  border: 1px solid rgba(242,239,233,0.35);
+  pointer-events: none;
+  transition: border-color .3s ease;
+}
+#rh .clinical-card::before {
+  top: -1px !important;
+  left: -1px !important;
+  border-right: 0;
+  border-bottom: 0;
+}
+#rh .clinical-card::after {
+  bottom: -1px !important;
+  right: -1px !important;
+  border-left: 0;
+  border-top: 0;
+}
+#rh .clinical-card:hover::before, #rh .clinical-card:hover::after {
+  border-color: var(--lime);
+}
+#rh .scan {
+  position: relative !important;
+  overflow: hidden !important;
+}
+#rh .scan::after {
+  content: "";
+  position: absolute !important;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(210,251,105,0.08) 50%, transparent 100%);
+  transform: translateY(-100%);
+  transition: transform .9s cubic-bezier(0.19,1,0.22,1);
+  pointer-events: none;
+}
+#rh .scan:hover::after {
+  transform: translateY(100%);
+}
+@keyframes heartbeat {
+  0%, 40%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(1.35);
+    opacity: 0.85;
+  }
+  30% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+}
+#rh .heartbeat {
+  animation: heartbeat 1.6s ease-in-out infinite;
+}
+@keyframes rule-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+#rh .rule-in {
+  transform-origin: left;
+  animation: rule-in 1.2s cubic-bezier(0.19,1,0.22,1) both;
+}
+#rh .link-slide {
+  position: relative !important;
+  display: inline-block !important;
+}
+#rh .link-slide::after {
+  content: "";
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -4px !important;
+  height: 1px !important;
+  width: 100% !important;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .45s cubic-bezier(0.19,1,0.22,1);
+}
+#rh .link-slide:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+#rh .status-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 12px !important;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(242,239,233,0.7);
+  background: rgba(242,239,233,0.02);
+}
+#rh .status-chip .dot {
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 999px;
+}
+#rh .ecg-grid {
+  background-image: linear-gradient(to right, rgba(210,251,105,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(210,251,105,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+@media (max-width: 640px) {
+  #rh .ecg-grid {
+    background-size: 16px 16px;
+    opacity: 0.6;
+  }
+  #rh .clinical-card::before, #rh .clinical-card::after {
+    width: 8px !important;
+    height: 8px !important;
+  }
+}
+@keyframes aurora {
+  0%, 100% {
+    transform: translate3d(0,0,0) scale(1);
+  }
+  33% {
+    transform: translate3d(6%, -4%, 0) scale(1.12);
+  }
+  66% {
+    transform: translate3d(-5%, 5%, 0) scale(0.94);
+  }
+}
+#rh .animate-aurora {
+  animation: aurora 22s ease-in-out infinite;
+}
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+#rh .text-gradient-shift {
+  background: linear-gradient(90deg, var(--lime), var(--mint), var(--sky), var(--lime));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(40%) rotate(2deg);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+#rh .word-in {
+  display: inline-block !important;
+  animation: word-in 1.1s cubic-bezier(0.19,1,0.22,1) both;
+}
+@keyframes caret-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+#rh .caret {
+  display: inline-block !important;
+  width: 0.5ch !important;
+  background: var(--lime);
+  animation: caret-blink 1.05s steps(1) infinite;
+  vertical-align: -0.05em;
+  height: 0.85em !important;
+  margin-left: 0.1em !important;
+}
+#rh .scroll-progress {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  z-index: 60;
+  background: linear-gradient(90deg, var(--lime), var(--sky), var(--orange));
+  transform-origin: left;
+  transform: scaleX(var(--sp, 0));
+  transition: transform .12s linear;
+}
+#rh .tilt {
+  transform: perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(0);
+  transition: transform .35s cubic-bezier(0.19,1,0.22,1);
+  will-change: transform;
+}
+#rh .tilt-glow {
+  position: relative !important;
+}
+#rh .tilt-glow::before {
+  content: "";
+  position: absolute !important;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(210,251,105,0.14), transparent 55%);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+#rh .tilt-glow:hover::before {
+  opacity: 1;
+}
+@keyframes ticker-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+#rh .animate-ticker-reverse {
+  animation: ticker-reverse 90s linear infinite;
+}
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: .9;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+#rh .animate-breathe {
+  animation: breathe 6s ease-in-out infinite;
+}
+@keyframes chip-shine {
+  0% {
+    background-position: -150% 0;
+  }
+  60%, 100% {
+    background-position: 250% 0;
+  }
+}
+#rh .chip-shine {
+  background-image: linear-gradient(110deg, transparent 40%, rgba(210,251,105,0.18) 50%, transparent 60%);
+  background-size: 200% 100%;
+  animation: chip-shine 4.5s ease-in-out infinite;
+}
+#rh .hero-card-a, #rh .hero-card-b, #rh .hero-card-c {
+  opacity: 0;
+  transform: translate3d(0, 55px, 0) scale(0.94) rotateX(10deg);
+  transform-origin: center bottom;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1), transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+#rh .reveal.in .hero-card-a {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  transition-delay: 0.12s;
+}
+#rh .reveal.in .hero-card-b {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  transition-delay: 0.38s;
+}
+#rh .reveal.in .hero-card-c {
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  transition-delay: 0.64s;
+}
+@media (max-width: 640px) {
+  #rh .hero-card-a, #rh .hero-card-b, #rh .hero-card-c {
+    transform: translate3d(0, 28px, 0);
+    transition: opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1), transform 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+    contain: layout paint;
+  }
+  #rh .reveal.in .hero-card-a {
+    transition-delay: 0.08s;
+  }
+  #rh .reveal.in .hero-card-b {
+    transition-delay: 0.22s;
+  }
+  #rh .reveal.in .hero-card-c {
+    transition-delay: 0.36s;
+  }
+}
+#rh .reveal.in .hero-card-a, #rh .reveal.in .hero-card-b, #rh .reveal.in .hero-card-c {
+  will-change: auto;
+}
+#rh .float-a, #rh .float-b, #rh .float-c {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  #rh .animate-aurora, #rh .text-gradient-shift, #rh .word-in, #rh .caret, #rh .animate-breathe, #rh .chip-shine, #rh .animate-ticker-reverse {
+    animation: none !important;
+  }
+  #rh .scroll-progress {
+    display: none !important;
+  }
+  #rh .hero-card-a, #rh .hero-card-b, #rh .hero-card-c {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hero-ring-pulse {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+#rh .hero-ring {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 420px !important;
+  height: 420px !important;
+  margin-left: -210px !important;
+  margin-top: -210px !important;
+  border-radius: 999px;
+  border: 1px solid rgba(210, 251, 105, 0.35);
+  transform: scale(0.4);
+  animation: hero-ring-pulse 4.8s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+  will-change: transform, opacity;
+}
+#rh .hero-ring-2 {
+  animation-delay: -1.6s;
+  border-color: rgba(129, 190, 249, 0.3);
+}
+#rh .hero-ring-3 {
+  animation-delay: -3.2s;
+  border-color: rgba(240, 175, 92, 0.28);
+}
+@keyframes hero-ecg-draw {
+  0% {
+    stroke-dashoffset: 900;
+  }
+  55% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -900;
+  }
+}
+#rh .hero-ecg-path {
+  stroke-dasharray: 900;
+  animation: hero-ecg-draw 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  filter: drop-shadow(0 0 6px rgba(210, 251, 105, 0.55));
+}
+@keyframes hero-particle-rise {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-360px) scale(1);
+    opacity: 0;
+  }
+}
+#rh .hero-particle {
+  position: absolute !important;
+  bottom: 0 !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 999px;
+  background: var(--lime);
+  box-shadow: 0 0 10px rgba(210, 251, 105, 0.8);
+  animation: hero-particle-rise 6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes hero-heart-breathe {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0.9;
+  }
+}
+#rh .hero-heart-glow {
+  width: 260px !important;
+  height: 260px !important;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(210,251,105,0.35) 0%, rgba(210,251,105,0.05) 55%, transparent 75%);
+  filter: blur(20px);
+  animation: hero-heart-breathe 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  #rh .hero-ring, #rh .hero-ecg-path, #rh .hero-particle, #rh .hero-heart-glow {
+    animation: none !important;
+  }
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-pan-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-pan-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-pinch-zoom {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    #rh *, #rh ::before, #rh ::after, #rh ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-pan-x: initial;
+      --tw-pan-y: initial;
+      --tw-pinch-zoom: initial;
+      --tw-space-y-reverse: 0;
+      --tw-border-style: solid;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-tracking: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
+      --tw-duration: initial;
+      --tw-ease: initial;
+    }
+  }
+
+/* ---- tone-driven helpers (metrics tabs/dots/panel) ---- */
+#rh [data-tone-text]{ color: var(--tone); }
+#rh [data-tone-bg]{ background: var(--tone); }
+
+#rh .mtab{ color: rgba(242,239,233,.6); border-color: var(--border); background: transparent; }
+#rh .mtab:hover{ color: var(--cream); border-color: rgba(242,239,233,.3); }
+#rh .mtab .mtab-dot{ background: rgba(242,239,233,.3); }
+#rh .mtab[aria-selected="true"]{ color: var(--tone); border-color: color-mix(in oklab, var(--tone) 60%, transparent); background: color-mix(in oklab, var(--tone) 12%, transparent); }
+#rh .mtab[aria-selected="true"] .mtab-dot{ background: var(--tone); }
+
+#rh .mdot{ background: rgba(242,239,233,.25); width:.375rem !important; }
+#rh .mdot[aria-selected="true"]{ background: var(--tone); width:1.5rem !important; }
+
+/* ---- no-JS / failsafe: never leave content permanently hidden ---- */
+#rh .no-js .reveal{ opacity:1; transform:none; }
+
+/* full-bleed + theme-proofing */
+#rh{background:#1a1a19;color:#f2efe9;font-family:"Inter",ui-sans-serif,system-ui,sans-serif;position:relative;width:100vw;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;overflow-x:hidden}
+#rh :is(h1,h2,h3,h4,h5,h6){color:inherit !important}
+
+/* ---- Walkthrough overlap insurance (ID-scoped, beats hostile theme CSS) ----
+   IMPORTANT: target ONLY the main two-column grid (the one with lg:grid-cols-12).
+   Do NOT use a bare `.grid` selector here. The card contains nested stat grids
+   (grid-cols-3 / grid-cols-2) that must stay multi-column on mobile. */
+#rh #walkthrough .lg\:grid-cols-12 > div{min-width:0 !important}
+#rh #walkthrough [data-walk-steps]{position:relative !important;z-index:1}
+@media (max-width:1023.98px){
+  /* single column on mobile/tablet: card sits BELOW the steps, never beside/over them */
+  #rh #walkthrough .lg\:grid-cols-12{display:block !important}
+  #rh #walkthrough .lg\:grid-cols-12 > div{width:100% !important;grid-column:auto !important}
+  #rh #walkthrough .lg\:grid-cols-12 > div:last-child{margin-top:3rem !important}
+  #rh #walkthrough .lg\:sticky{position:static !important}
+}
+@media (min-width:1024px){
+  /* two real columns; card is confined to the right half and cannot cover the text */
+  #rh #walkthrough .lg\:grid-cols-12{display:grid !important;grid-template-columns:repeat(12,minmax(0,1fr)) !important}
+  #rh #walkthrough .lg\:grid-cols-12 > div{grid-column:span 6 / span 6 !important}
+  #rh #walkthrough .lg\:grid-cols-12 > div:first-child{overflow:hidden !important}
+}
+
+/* ==== 2026-07-23d mobile + interaction fixes ==================================== */
+
+/* (1) THE BUG: some themes ship `button{white-space:nowrap}`. The walkthrough step
+   text lives inside <button>, so that reset forces every heading/paragraph onto one
+   line, running off the page on mobile and clipping under the card on desktop.
+   Force normal wrapping for everything inside the step buttons. */
+#rh #walkthrough [data-walk-steps] button,
+#rh #walkthrough [data-walk-steps] button * { white-space: normal !important; }
+#rh #walkthrough h2,
+#rh #walkthrough h3,
+#rh #walkthrough p { overflow-wrap: break-word; word-break: normal; hyphens: none; }
+#rh #walkthrough [data-walk-steps] li { max-width: 100% !important; }
+
+/* (2) Clickable-step affordance: make it obvious the steps can be tapped/clicked. */
+#rh #walkthrough [data-walk-steps] button { cursor: pointer !important; }
+#rh #walkthrough [data-walk-steps] li { transition: opacity .5s ease; }
+@media (hover: hover) {
+  #rh #walkthrough [data-walk-steps] li.opacity-40:hover { opacity: .72 !important; }
+}
+
+/* (3) Hero: more breathing room under the (fixed) theme nav on mobile. */
+@media (max-width: 640px) {
+  #rh #hero { padding-top: 6rem !important; }
+}
+
+/* (4) Walkthrough card on mobile: give the panels enough height so the manuscript /
+   analyze panels don't feel squished or clip their footer. Desktop keeps sm:h-[460px]. */
+@media (max-width: 1023.98px) {
+  #rh #walkthrough [data-walk-panels] { height: 30rem !important; }        /* 480px */
+}
+@media (max-width: 400px) {
+  #rh #walkthrough [data-walk-panels] { height: 31.5rem !important; }      /* narrower phones */
+}
+
+/* (5) Card polish: soft ambient depth so the "live" panel reads as a premium object. */
+#rh #walkthrough .lg\:sticky > .clinical-card,
+#rh #walkthrough .lg\:top-28 > .clinical-card {
+  box-shadow: 0 30px 80px -44px rgba(0,0,0,.85), 0 0 70px -34px rgba(210,251,105,.22);
+}
+
+/* ==== 2026-07-23e: HRV path fix is in markup; below = tight mobile card labels ==== */
+/* On narrow phones the card's uppercase mono micro-labels have too much letter-spacing,
+   so "Deliverable · Manuscript", "PDF · Poster · Dataset" and "Authored · Reviewed ·
+   Reproducible" cram / wrap awkwardly. Ease the tracking (and let the header stat wrap
+   cleanly, right-aligned) so they breathe. */
+@media (max-width: 640px) {
+  #rh #walkthrough [data-walk-chip],
+  #rh #walkthrough [data-walk-stat],
+  #rh #walkthrough [data-walk-panels] .mono { letter-spacing: 0.12em !important; }
+  #rh #walkthrough [data-walk-stat] { text-align: right; line-height: 1.55; }
+  /* panel footers (IRB·Ready / PDF·Poster·Dataset / Pre-registered): a touch more room */
+  #rh #walkthrough [data-walk-panels] [data-panel] .mt-auto { gap: 0.75rem; }
+}
+/* keep the STEP xx · LIVE chip on one line inside its pill on mobile */
+@media (max-width: 640px) {
+  #rh #walkthrough [data-walk-chip] { white-space: nowrap !important; }
+  #rh #walkthrough .status-chip { flex-shrink: 0; }
+  #rh #walkthrough .clinical-card > .items-center.justify-between { align-items: flex-start; }
+}
+
+/* ==== 2026-07-23f ============================================================== */
+
+/* (A) Capabilities cards: numbers + dots removed; color is the differentiator now.
+   Each card gets a short accent rule (lime / sky / orange, cycling by position)
+   that grows on hover, and the border + a soft glow pick up that same color. */
+#rh #capabilities .cap-card { --accent: var(--lime); }
+#rh #capabilities .grid > article:nth-child(3n+2) { --accent: var(--sky); }
+#rh #capabilities .grid > article:nth-child(3n)   { --accent: var(--orange); }
+#rh #capabilities .cap-rule {
+  display: block; width: 2.5rem; height: 3px; border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 16px -1px var(--accent);
+  transition: width .45s cubic-bezier(0.19,1,0.22,1);
+}
+#rh #capabilities .cap-card {
+  transition: border-color .3s ease, box-shadow .45s ease,
+              transform .5s cubic-bezier(0.19,1,0.22,1);
+}
+#rh #capabilities .cap-card:hover {
+  border-color: color-mix(in oklab, var(--accent) 50%, transparent) !important;
+  box-shadow: 0 26px 70px -46px var(--accent);
+}
+#rh #capabilities .cap-card:hover .cap-rule { width: 3.5rem; }
+/* tint the card's corner brackets to its accent color on hover */
+#rh #capabilities .cap-card:hover::before,
+#rh #capabilities .cap-card:hover::after { border-color: var(--accent) !important; }
+
+/* (B) Walkthrough steps: force clear vertical separation. The design's space-y
+   (logical margins) was being collapsed by theme resets, cramming the /01,/02…
+   labels together. Pin explicit spacing that beats the theme. */
+#rh #walkthrough [data-walk-steps] > li + li { margin-top: 4.5rem !important; }
+@media (min-width: 640px)  { #rh #walkthrough [data-walk-steps] > li + li { margin-top: 5.5rem !important; } }
+@media (min-width: 1024px) { #rh #walkthrough [data-walk-steps] > li + li { margin-top: 6rem !important; } }
+
+/* (C) Defensive: keep the page root dark so no light gap can show as a thin
+   "white line" at the very top (e.g. Elementor section padding or an admin-bar
+   seam). Harmless on an all-dark page; only affects the background behind the
+   header area. */
+html, body { background-color: #1a1a19 !important; }
+
+</style>
+
+<!-- Content -->
+<!-- Reputable embed, build rh-2026-07-23k (remove assessment, CTAs->strategy call, add Who-we-work-with) -->
+<div id="rh">
+<main class="min-h-screen overflow-x-hidden bg-bg text-cream">
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="relative overflow-hidden px-5 pb-16 pt-10 sm:px-10 sm:pb-24 sm:pt-16 lg:pb-32 lg:pt-24">
+    <div class="ecg-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+    <div class="orb top-[-20%] left-[-15%] size-[520px] bg-lime/15 animate-aurora" aria-hidden="true"></div>
+    <div class="orb bottom-[-25%] right-[-10%] size-[440px] bg-sky/15 animate-aurora" style="animation-delay:-8s;animation-duration:26s" aria-hidden="true"></div>
+    <div class="orb top-[30%] right-[20%] size-[280px] bg-orange/10 animate-aurora" style="animation-delay:-14s;animation-duration:30s" aria-hidden="true"></div>
+
+    <!-- Mobile-only animated hero visual -->
+    <div class="pointer-events-none absolute inset-x-0 top-0 z-0 h-[380px] overflow-hidden sm:hidden" aria-hidden="true">
+      <div class="absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2">
+        <span class="hero-ring hero-ring-1"></span>
+        <span class="hero-ring hero-ring-2"></span>
+        <span class="hero-ring hero-ring-3"></span>
+      </div>
+      <svg class="absolute inset-x-0 top-6 w-full opacity-80" viewBox="0 0 400 80" preserveAspectRatio="none" height="80">
+        <defs>
+          <linearGradient id="ecgGrad" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stop-color="var(--lime)" stop-opacity="0"></stop>
+            <stop offset="20%" stop-color="var(--lime)" stop-opacity="1"></stop>
+            <stop offset="80%" stop-color="var(--sky)" stop-opacity="1"></stop>
+            <stop offset="100%" stop-color="var(--sky)" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        <path d="M0 40 L60 40 L72 40 L78 20 L86 60 L94 30 L102 50 L112 40 L180 40 L192 40 L200 12 L208 68 L216 34 L226 46 L240 40 L320 40 L332 40 L340 22 L348 58 L356 40 L400 40" fill="none" stroke="url(#ecgGrad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="hero-ecg-path"></path>
+      </svg>
+      <span class="hero-particle" style="left:12%;animation-delay:0s"></span>
+      <span class="hero-particle" style="left:28%;animation-delay:-3s"></span>
+      <span class="hero-particle" style="left:48%;animation-delay:-1.5s"></span>
+      <span class="hero-particle" style="left:68%;animation-delay:-4.2s"></span>
+      <span class="hero-particle" style="left:84%;animation-delay:-2.4s"></span>
+      <div class="hero-heart-glow absolute left-1/2 top-[62%] -translate-x-1/2 -translate-y-1/2"></div>
+    </div>
+
+    <div class="relative z-10 mx-auto max-w-7xl">
+      <div class="grid items-center gap-16 lg:grid-cols-2 lg:gap-12">
+        <div>
+          <div class="reveal mono text-[11px] uppercase tracking-[0.32em] text-cream/40">Built for research-first health companies</div>
+          <h1 class="font-clinical mt-5 sm:mt-6 text-cream tracking-[-0.04em] leading-[0.98] sm:leading-[0.94] text-[clamp(2.25rem,11vw,3.25rem)] sm:text-[5.5rem] lg:text-[6rem] break-words hyphens-auto">
+            <span class="relative inline-grid align-baseline overflow-hidden max-w-full" aria-live="polite" data-verb>
+              <span aria-hidden="true" class="invisible whitespace-nowrap [grid-area:1/1]">Launch</span>
+              <span class="text-gradient-shift whitespace-nowrap [grid-area:1/1]" data-verb-word style="animation:verb-swap 0.6s cubic-bezier(0.22,1,0.36,1) both">Run</span>
+            </span>
+            <span class="word-in text-cream/90" style="animation-delay:0.25s">decentralized</span>
+            <br>
+            <span class="word-in text-cream/90" style="animation-delay:0.4s">health</span>
+            <span class="word-in italic-serif font-normal text-cream/85" style="animation-delay:0.55s">research.</span>
+          </h1>
+          <div class="reveal rule-in mt-10 h-px w-24 bg-lime"></div>
+          <p class="reveal mt-10 max-w-xl text-lg leading-relaxed text-cream/70 sm:text-xl lg:mt-14">Continuous wearable biometrics, at-home lab biomarkers, and validated surveys. Real-world evidence, gathered outside the clinic.</p>
+          <div class="reveal mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <a href="https://calendly.com/reputablehealth/intro" target="_blank" rel="noopener noreferrer" class="btn-lime rounded-full px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.24em]">Schedule a Strategy Call</a>
+          </div>
+        </div>
+
+        <!-- live study cards -->
+        <div class="reveal">
+          <div class="relative mx-auto h-[420px] w-full max-w-xl sm:h-[520px] lg:h-[580px]">
+            <div class="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime/8 blur-3xl" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute left-[60%] top-[55%] -z-0 h-[340px] w-[340px] rounded-full bg-sky/10 blur-3xl" aria-hidden="true"></div>
+
+            <!-- Card A -->
+            <div class="float-a absolute left-0 top-0 w-[86%] sm:w-[78%]" style="transform-origin:center">
+              <div class="clinical-card hero-card-a tilt-glow scan p-5 sm:p-7 backdrop-blur-sm">
+                <div class="flex items-center gap-2">
+                  <span class="inline-block size-2 rounded-full bg-lime animate-dot"></span>
+                  <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/60">Research Dashboard</div>
+                </div>
+                <div class="mt-4 h-px w-full bg-cream/10"></div>
+                <div class="mt-5 rounded-xl bg-black/40 p-4 sm:p-5">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="mono text-[10px] uppercase tracking-[0.28em] text-cream/50">Daily Heart Rate Variability (HRV)</div>
+                    <span class="shrink-0 rounded-md border border-lime/40 bg-lime/10 px-2 py-1 mono text-[10px] font-bold text-lime">+12%</span>
+                  </div>
+                  <div class="mt-3 flex items-baseline gap-2">
+                    <span class="font-clinical text-4xl text-cream tnum sm:text-5xl">48</span>
+                    <span class="mono text-xs text-cream/50">ms</span>
+                  </div>
+                  <svg viewBox="0 0 300 70" class="mt-3 h-14 w-full sm:h-16">
+                    <defs>
+                      <linearGradient id="hrvFill2" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#d2fb69" stop-opacity="0.35"></stop>
+                        <stop offset="100%" stop-color="#d2fb69" stop-opacity="0"></stop>
+                      </linearGradient>
+                    </defs>
+                    <path d="M0,47 Q26,45 46,37 Q68,29 92,33 Q118,39 142,26 Q164,16 188,28 Q212,40 236,23 Q260,13 284,26 Q293,30 300,23 V70 H0 Z" fill="url(#hrvFill2)"></path>
+                    <path d="M0,47 Q26,45 46,37 Q68,29 92,33 Q118,39 142,26 Q164,16 188,28 Q212,40 236,23 Q260,13 284,26 Q293,30 300,23" fill="none" stroke="#d2fb69" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-draw"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card B -->
+            <div class="float-c absolute bottom-6 left-2 w-[46%] sm:bottom-10 sm:left-6 sm:w-[40%]">
+              <div class="clinical-card hero-card-b tilt-glow p-4 sm:p-5 backdrop-blur-sm">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <div class="mono text-[10px] uppercase tracking-[0.28em] text-cream/60">Sleep</div>
+                    <div class="mono text-[10px] uppercase tracking-[0.28em] text-cream/60">Score</div>
+                    <div class="mt-2 font-clinical text-3xl text-cream tnum sm:text-4xl">85</div>
+                    <div class="mono mt-1 text-[10px] uppercase tracking-[0.28em] text-lime">Optimal</div>
+                  </div>
+                  <div class="relative size-14 shrink-0 sm:size-16">
+                    <svg viewBox="0 0 100 100" class="size-full -rotate-90">
+                      <circle cx="50" cy="50" r="42" stroke="rgba(242,239,233,0.08)" stroke-width="6" fill="none"></circle>
+                      <circle cx="50" cy="50" r="42" stroke="#81BEF9" stroke-width="6" fill="none" stroke-linecap="round" class="animate-ring"></circle>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card C -->
+            <div class="float-b absolute bottom-0 right-0 w-[82%] sm:w-[64%]">
+              <figure class="clinical-card hero-card-c p-5 shadow-2xl sm:p-6 backdrop-blur-sm">
+                <div class="flex items-center gap-3">
+                  <div class="grid size-10 shrink-0 place-items-center rounded-full bg-mint font-clinical text-base text-charcoal sm:size-11 sm:text-lg">S</div>
+                  <div class="min-w-0 flex-1">
+                    <div class="truncate text-sm font-semibold text-cream">Sarah L.</div>
+                    <span class="mono mt-1 inline-block rounded-full bg-lime/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em] text-lime">Sleep Study</span>
+                  </div>
+                </div>
+                <blockquote class="mt-4 border-l-2 border-lime/60 pl-4 font-editorial text-base italic leading-snug text-cream/85 sm:text-lg">“Watching my own numbers move made it click. I finally trust that I'm resting.”</blockquote>
+                <div class="mt-4 grid grid-cols-3 gap-2 border-t border-cream/10 pt-3 text-center sm:gap-3">
+                  <div>
+                    <div class="mono text-[9px] uppercase tracking-[0.28em] text-cream/50">Before</div>
+                    <div class="mt-1 mono text-sm font-semibold text-sky tnum">45 min</div>
+                  </div>
+                  <div>
+                    <div class="mono text-[9px] uppercase tracking-[0.28em] text-cream/50">After</div>
+                    <div class="mt-1 mono text-sm font-semibold text-lime tnum">62 min</div>
+                  </div>
+                  <div>
+                    <div class="mono text-[9px] uppercase tracking-[0.28em] text-cream/50">Change</div>
+                    <div class="mt-1 mono text-sm font-semibold text-mint tnum">+37%</div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEASUREMENT TRIAD ============ -->
+  <section id="measurement-triad" class="relative px-6 py-14 sm:px-10 sm:py-20 lg:py-24">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+        <span class="eyebrow text-lime">One platform, three instruments</span>
+        <h2 class="font-clinical mt-6 text-3xl leading-[1.05] tracking-[-0.035em] sm:text-5xl">Wearables, labs, and validated surveys, in one study.</h2>
+        <div class="rule-in mx-auto mt-6 h-px w-16 bg-lime"></div>
+      </div>
+      <div class="grid gap-6 lg:grid-cols-3">
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Continuous wearable biometrics</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Sleep, HRV, activity, and glucose from Oura, Apple Watch, and Whoop. Streaming in nightly.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Full at-home lab biomarker testing</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Blood and saliva collection with automated logistics and tracking. Processed through CLIA labs.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Validated surveys</h3><p class="mt-5 text-base leading-relaxed text-cream/60">PSQI, PSS, PROMIS, and other validated instruments captured alongside every biometric.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHO WE WORK WITH ============ -->
+  <section id="audience" class="px-6 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mx-auto mb-12 max-w-3xl text-center sm:mb-16">
+        <span class="eyebrow text-lime">Who we work with</span>
+        <h2 class="font-clinical mt-6 text-4xl leading-[1.0] tracking-[-0.035em] sm:text-6xl">Research sponsors and <em class="italic-serif font-normal text-lime">ingredient developers.</em></h2>
+        <p class="mt-8 text-lg leading-relaxed text-cream/60 sm:text-xl">If you're building something real in health, we'll help you study it properly.</p>
+      </div>
+      <div class="grid gap-6 lg:grid-cols-3">
+        <article class="reveal clinical-card tilt-glow scan flex flex-col p-8 sm:p-10">
+          <div class="grid size-12 shrink-0 place-items-center rounded-xl bg-lime/15 text-lime">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="size-6" aria-hidden="true"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+          </div>
+          <h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Supplements &amp; Functional Foods</h3>
+          <p class="mt-5 text-base leading-relaxed text-cream/60">Products targeting sleep, stress, cognition, energy, recovery, metabolism, and longevity. Generate the real-world evidence behind your formulations.</p>
+          <ul class="mt-8 text-sm text-cream/70">
+            <li class="border-t border-border py-3">Sleep and stress modulators</li>
+            <li class="border-t border-border py-3">Nootropics and cognitive support</li>
+            <li class="border-t border-border py-3">Energy, recovery, and fitness</li>
+            <li class="border-t border-border py-3">Metabolism and longevity</li>
+          </ul>
+        </article>
+        <article class="reveal clinical-card tilt-glow scan flex flex-col p-8 sm:p-10">
+          <div class="grid size-12 shrink-0 place-items-center rounded-xl bg-lime/15 text-lime">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="size-6" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>
+          </div>
+          <h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Ingredient Developers</h3>
+          <p class="mt-5 text-base leading-relaxed text-cream/60">Raw material suppliers and ingredient innovators building dossiers, mechanism data, and human evidence to support downstream formulators.</p>
+          <ul class="mt-8 text-sm text-cream/70">
+            <li class="border-t border-border py-3">Peptides and bioactives</li>
+            <li class="border-t border-border py-3">Botanical extracts</li>
+            <li class="border-t border-border py-3">Novel actives and synthetics</li>
+            <li class="border-t border-border py-3">Branded ingredient claims</li>
+          </ul>
+        </article>
+        <article class="reveal clinical-card tilt-glow scan flex flex-col p-8 sm:p-10">
+          <div class="grid size-12 shrink-0 place-items-center rounded-xl bg-lime/15 text-lime">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="size-6" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Wellness Hardware &amp; Devices</h3>
+          <p class="mt-5 text-base leading-relaxed text-cream/60">Measure real impact on sleep, stress, recovery, and performance with objective wearable and biometric data. Build the dataset behind your category claims.</p>
+          <ul class="mt-8 text-sm text-cream/70">
+            <li class="border-t border-border py-3">Continuous monitoring devices</li>
+            <li class="border-t border-border py-3">Recovery and performance hardware</li>
+            <li class="border-t border-border py-3">Sleep tracking technology</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PATHWAYS ============ -->
+  <section id="pathways" class="px-6 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mb-12 max-w-3xl sm:mb-16">
+        <span class="eyebrow text-lime">Two ways to start</span>
+        <h2 class="font-clinical mt-6 text-5xl leading-[0.95] tracking-[-0.035em] sm:text-7xl">Two research <em class="italic-serif font-normal text-lime">pathways.</em></h2>
+        <div class="rule-in mt-8 h-px w-16 bg-lime"></div>
+        <p class="mt-8 max-w-xl text-lg leading-relaxed text-cream/60 sm:text-xl">Most teams begin with a 4-week decentralized pilot, then graduate to a clinical study when the signal warrants it.</p>
+      </div>
+      <div class="grid gap-12 md:grid-cols-2 md:gap-14">
+        <article class="reveal clinical-card tilt-glow scan group relative p-8 sm:p-10">
+          <div class="flex items-center justify-between">
+            <span class="mono text-[10px] font-semibold uppercase tracking-[0.28em] text-lime">Decentralized Pilot</span>
+            <span class="size-2 rounded-full bg-lime heartbeat"></span>
+          </div>
+          <h3 class="font-clinical mt-6 text-3xl leading-[1.05] tracking-[-0.03em] text-cream sm:text-4xl">A 4-week real-world study.</h3>
+          <p class="mt-5 text-base leading-relaxed text-cream/60">A fast, wearable-enabled study designed to detect signal in real-world conditions before committing to a full protocol.</p>
+          <div class="mt-8 h-px w-12 bg-lime"></div>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-lime">▸</span><span>4-week IRB-approved remote protocol</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-lime">▸</span><span>Wearable + validated survey data</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-lime">▸</span><span>Real-world adherence tracking</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-lime">▸</span><span>Real-world cohort analysis</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-lime">▸</span><span>Automated participant engagement</span></li>
+          </ul>
+          <a href="https://reputable.health/contact/" class="link-slide mt-10 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.24em] text-lime transition-all group-hover:gap-4">Learn more <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="reveal clinical-card tilt-glow scan group relative p-8 sm:p-10">
+          <div class="flex items-center justify-between">
+            <span class="mono text-[10px] font-semibold uppercase tracking-[0.28em] text-sky">Full Clinical Research</span>
+            <span class="size-2 rounded-full bg-sky heartbeat"></span>
+          </div>
+          <h3 class="font-clinical mt-6 text-3xl leading-[1.05] tracking-[-0.03em] text-cream sm:text-4xl">A 1 to 6 month protocol.</h3>
+          <p class="mt-5 text-base leading-relaxed text-cream/60">IRB-approved, publication-grade research built around your specific hypothesis. Multi-arm and parallel designs supported.</p>
+          <div class="mt-8 h-px w-12 bg-sky"></div>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-sky">▸</span><span>1 to 6 month protocols</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-sky">▸</span><span>IRB-approved methodology</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-sky">▸</span><span>Clinical-grade datasets</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-sky">▸</span><span>Multi-arm and parallel designs</span></li>
+            <li class="flex items-start gap-4 text-sm leading-relaxed text-cream/80"><span class="mono mt-0.5 shrink-0 text-[10px] text-sky">▸</span><span>Build category-defining evidence</span></li>
+          </ul>
+          <a href="https://reputable.health/authority-research/" class="link-slide mt-10 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.24em] text-sky transition-all group-hover:gap-4">Learn more <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+      <div class="reveal mt-20 border-t border-border pt-10 text-lg text-cream/70 sm:text-xl"><span class="italic-serif text-lime">Start with a pilot.</span> A lower-cost way to test for real signal before scaling to a full clinical study.</div>
+    </div>
+  </section>
+
+  <!-- ============ WALKTHROUGH ============ -->
+  <section id="walkthrough" class="relative px-6 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mb-16 max-w-3xl">
+        <span class="eyebrow text-lime">How it works</span>
+        <h2 class="font-clinical mt-6 text-5xl leading-[0.95] tracking-[-0.035em] sm:text-7xl">From cohort to <em class="italic-serif font-normal text-lime">evidence</em>, in five steps.</h2>
+        <div class="rule-in mt-8 h-px w-16 bg-lime"></div>
+      </div>
+
+      <div class="mb-8 flex gap-2 lg:hidden" data-walk-progress>
+        <button class="h-1 flex-1 rounded-full transition-all duration-500 bg-lime" aria-label="Step 1"></button>
+        <button class="h-1 flex-1 rounded-full transition-all duration-500 bg-cream/15" aria-label="Step 2"></button>
+        <button class="h-1 flex-1 rounded-full transition-all duration-500 bg-cream/15" aria-label="Step 3"></button>
+        <button class="h-1 flex-1 rounded-full transition-all duration-500 bg-cream/15" aria-label="Step 4"></button>
+        <button class="h-1 flex-1 rounded-full transition-all duration-500 bg-cream/15" aria-label="Step 5"></button>
+      </div>
+
+      <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-6">
+          <ol class="space-y-16 sm:space-y-20 lg:space-y-24" data-walk-steps>
+            <li data-step="0" class="transition-all duration-700 opacity-100">
+              <button class="group block w-full text-left">
+                <div class="flex items-center gap-4">
+                  <span class="mono text-[10px] uppercase tracking-[0.32em] transition-colors text-lime" data-step-tag>/ 01, Recruit</span>
+                  <span class="h-px flex-1 transition-all duration-700 bg-lime" data-step-rule></span>
+                </div>
+                <h3 class="font-clinical mt-5 text-3xl leading-[1.05] tracking-[-0.02em] text-cream sm:text-4xl">Enroll a targeted cohort in days, not months.</h3>
+                <p class="mt-4 max-w-lg text-base leading-relaxed text-cream/60 sm:text-lg">Screen from 10,000+ health-engaged participants with wearable baselines already on file. Filter by biomarker, device, condition, or behavior.</p>
+              </button>
+            </li>
+            <li data-step="1" class="transition-all duration-700 opacity-40">
+              <button class="group block w-full text-left">
+                <div class="flex items-center gap-4">
+                  <span class="mono text-[10px] uppercase tracking-[0.32em] transition-colors text-cream/40" data-step-tag>/ 02, Protocol</span>
+                  <span class="h-px flex-1 transition-all duration-700 bg-cream/10" data-step-rule></span>
+                </div>
+                <h3 class="font-clinical mt-5 text-3xl leading-[1.05] tracking-[-0.02em] text-cream sm:text-4xl">Compose an IRB-approved protocol visually.</h3>
+                <p class="mt-4 max-w-lg text-base leading-relaxed text-cream/60 sm:text-lg">Drag validated surveys, wearable streams, and check-in cadences into a study timeline. We handle IRB submission and participant onboarding.</p>
+              </button>
+            </li>
+            <li data-step="2" class="transition-all duration-700 opacity-40">
+              <button class="group block w-full text-left">
+                <div class="flex items-center gap-4">
+                  <span class="mono text-[10px] uppercase tracking-[0.32em] transition-colors text-cream/40" data-step-tag>/ 03, Capture</span>
+                  <span class="h-px flex-1 transition-all duration-700 bg-cream/10" data-step-rule></span>
+                </div>
+                <h3 class="font-clinical mt-5 text-3xl leading-[1.05] tracking-[-0.02em] text-cream sm:text-4xl">Stream continuous wearable, lab, and survey data.</h3>
+                <p class="mt-4 max-w-lg text-base leading-relaxed text-cream/60 sm:text-lg">HRV, sleep architecture, activity, and glucose flow in nightly. At-home lab draws (blood and saliva) run on protocol cadence with automated logistics. Validated PROs on schedule.</p>
+              </button>
+            </li>
+            <li data-step="3" class="transition-all duration-700 opacity-40">
+              <button class="group block w-full text-left">
+                <div class="flex items-center gap-4">
+                  <span class="mono text-[10px] uppercase tracking-[0.32em] transition-colors text-cream/40" data-step-tag>/ 04, Analyze</span>
+                  <span class="h-px flex-1 transition-all duration-700 bg-cream/10" data-step-rule></span>
+                </div>
+                <h3 class="font-clinical mt-5 text-3xl leading-[1.05] tracking-[-0.02em] text-cream sm:text-4xl">See effect sizes as data lands.</h3>
+                <p class="mt-4 max-w-lg text-base leading-relaxed text-cream/60 sm:text-lg">Pre-registered endpoints update in real time. Compare arms, subgroups, and dose-response without waiting for close-out.</p>
+              </button>
+            </li>
+            <li data-step="4" class="transition-all duration-700 opacity-40">
+              <button class="group block w-full text-left">
+                <div class="flex items-center gap-4">
+                  <span class="mono text-[10px] uppercase tracking-[0.32em] transition-colors text-cream/40" data-step-tag>/ 05, Publish</span>
+                  <span class="h-px flex-1 transition-all duration-700 bg-cream/10" data-step-rule></span>
+                </div>
+                <h3 class="font-clinical mt-5 text-3xl leading-[1.05] tracking-[-0.02em] text-cream sm:text-4xl">Graduate to publication-grade evidence.</h3>
+                <p class="mt-4 max-w-lg text-base leading-relaxed text-cream/60 sm:text-lg">Export a statistician-reviewed report, poster, or manuscript-ready dataset. Category-defining claims, backed by real-world data.</p>
+              </button>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="lg:sticky lg:top-28">
+            <div class="clinical-card tilt-glow scan relative overflow-hidden p-4 sm:p-8">
+              <div class="flex items-center justify-between">
+                <span class="status-chip"><span class="dot bg-lime heartbeat"></span><span class="mono" data-walk-chip>STEP 01 · LIVE</span></span>
+                <span class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40" data-walk-stat>Screened · <span class="text-cream/80">2,481</span></span>
+              </div>
+
+              <div class="relative mt-6 h-[420px] overflow-hidden rounded-lg border border-border bg-black/30 sm:h-[460px]" data-walk-panels>
+                <!-- Panel 0: Recruit -->
+                <div class="absolute inset-0 p-5 transition-all duration-700 ease-out sm:p-6 translate-y-0 opacity-100" data-panel="0">
+                  <div class="flex h-full flex-col">
+                    <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Cohort screener</div>
+                    <div class="mt-2 font-clinical text-2xl text-cream sm:text-3xl">2,481 <span class="text-cream/40">matched</span></div>
+                    <div class="mt-4 space-y-2">
+                      <div class="clinical-card flex items-center gap-2 p-2.5 sm:gap-3 sm:p-3 walk-row"><div class="grid size-8 shrink-0 place-items-center rounded-full bg-lime/15 mono text-[10px] font-bold text-lime">21</div><div class="min-w-0 flex-1"><div class="mono truncate text-[11px] text-cream">PT-0421</div><div class="mono truncate text-[10px] uppercase tracking-[0.2em] text-cream/50">Sleep · 34F</div></div><div class="mono hidden shrink-0 text-[10px] text-cream/60 sm:block">Oura Gen3</div><div class="shrink-0 rounded-full border border-lime/40 bg-lime/10 px-2 py-0.5 mono text-[10px] font-bold text-lime">98%</div></div>
+                      <div class="clinical-card flex items-center gap-2 p-2.5 sm:gap-3 sm:p-3 walk-row"><div class="grid size-8 shrink-0 place-items-center rounded-full bg-lime/15 mono text-[10px] font-bold text-lime">22</div><div class="min-w-0 flex-1"><div class="mono truncate text-[11px] text-cream">PT-0422</div><div class="mono truncate text-[10px] uppercase tracking-[0.2em] text-cream/50">Metabolic · 41M</div></div><div class="mono hidden shrink-0 text-[10px] text-cream/60 sm:block">Dexcom G7</div><div class="shrink-0 rounded-full border border-lime/40 bg-lime/10 px-2 py-0.5 mono text-[10px] font-bold text-lime">96%</div></div>
+                      <div class="clinical-card flex items-center gap-2 p-2.5 sm:gap-3 sm:p-3 walk-row"><div class="grid size-8 shrink-0 place-items-center rounded-full bg-lime/15 mono text-[10px] font-bold text-lime">23</div><div class="min-w-0 flex-1"><div class="mono truncate text-[11px] text-cream">PT-0423</div><div class="mono truncate text-[10px] uppercase tracking-[0.2em] text-cream/50">Cardio · 29F</div></div><div class="mono hidden shrink-0 text-[10px] text-cream/60 sm:block">Apple Watch</div><div class="shrink-0 rounded-full border border-lime/40 bg-lime/10 px-2 py-0.5 mono text-[10px] font-bold text-lime">94%</div></div>
+                      <div class="clinical-card flex items-center gap-2 p-2.5 sm:gap-3 sm:p-3 walk-row"><div class="grid size-8 shrink-0 place-items-center rounded-full bg-lime/15 mono text-[10px] font-bold text-lime">24</div><div class="min-w-0 flex-1"><div class="mono truncate text-[11px] text-cream">PT-0424</div><div class="mono truncate text-[10px] uppercase tracking-[0.2em] text-cream/50">Recovery · 38M</div></div><div class="mono hidden shrink-0 text-[10px] text-cream/60 sm:block">Whoop 4.0</div><div class="shrink-0 rounded-full border border-lime/40 bg-lime/10 px-2 py-0.5 mono text-[10px] font-bold text-lime">91%</div></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Panel 1: Protocol -->
+                <div class="absolute inset-0 p-5 transition-all duration-700 ease-out sm:p-6 translate-y-6 opacity-0" data-panel="1" aria-hidden="true">
+                  <div class="flex h-full flex-col">
+                    <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Protocol builder</div>
+                    <div class="mt-2 font-clinical text-2xl text-cream sm:text-3xl">6-week crossover</div>
+                    <div class="mt-5 space-y-2">
+                      <div class="rounded-md border px-3 py-3 mono text-[11px] uppercase tracking-[0.2em] border-sky/40 bg-sky/10 text-sky walk-row">Baseline · Week 0</div>
+                      <div class="rounded-md border px-3 py-3 mono text-[11px] uppercase tracking-[0.2em] border-lime/40 bg-lime/10 text-lime walk-row">Intervention A</div>
+                      <div class="rounded-md border px-3 py-3 mono text-[11px] uppercase tracking-[0.2em] border-orange/40 bg-orange/10 text-orange walk-row">Intervention B</div>
+                      <div class="rounded-md border px-3 py-3 mono text-[11px] uppercase tracking-[0.2em] border-cream/20 bg-cream/5 text-cream/70 walk-row">Washout · 7d</div>
+                      <div class="rounded-md border px-3 py-3 mono text-[11px] uppercase tracking-[0.2em] border-lime/40 bg-lime/10 text-lime walk-row">Endpoint · Week 6</div>
+                    </div>
+                    <div class="mt-auto flex items-center justify-between border-t border-border pt-4 mono text-[10px] uppercase tracking-[0.24em] text-cream/50"><span>IRB · Ready</span><span class="text-lime">Deploy →</span></div>
+                  </div>
+                </div>
+                <!-- Panel 2: Capture -->
+                <div class="absolute inset-0 p-5 transition-all duration-700 ease-out sm:p-6 translate-y-6 opacity-0" data-panel="2" aria-hidden="true">
+                  <div class="flex h-full flex-col gap-4">
+                    <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Live streams · Day 21</div>
+                    <div class="clinical-card tilt-glow p-4">
+                      <div class="flex items-baseline justify-between">
+                        <div><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">HRV · MS</div><div class="font-clinical text-4xl text-cream tnum">48</div></div>
+                        <span class="rounded-full border border-lime/40 bg-lime/10 px-2 py-0.5 mono text-[10px] font-bold text-lime">▲ 12%</span>
+                      </div>
+                      <svg viewBox="0 0 300 60" class="mt-3 h-14 w-full"><path d="M0,40 Q30,35 50,25 T100,18 T150,32 T200,10 T250,20 T300,8" fill="none" stroke="#d2fb69" stroke-width="1.5" class="walk-draw"></path></svg>
+                    </div>
+                    <div class="grid flex-1 grid-cols-2 gap-3">
+                      <div class="clinical-card tilt-glow p-3"><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Sleep</div><div class="mt-1 font-clinical text-2xl text-sky tnum">85</div><div class="mono text-[9px] uppercase tracking-[0.24em] text-cream/50">Optimal</div></div>
+                      <div class="clinical-card tilt-glow p-3"><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Adherence</div><div class="mt-1 font-clinical text-2xl text-orange tnum">93<span class="text-sm text-orange/70">%</span></div><div class="mt-2 h-1 overflow-hidden rounded-full bg-cream/10"><div class="h-full origin-left rounded-full bg-orange walk-bar"></div></div></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Panel 3: Analyze -->
+                <div class="absolute inset-0 p-5 transition-all duration-700 ease-out sm:p-6 translate-y-6 opacity-0" data-panel="3" aria-hidden="true">
+                  <div class="flex h-full flex-col">
+                    <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Endpoint · Δ Deep sleep</div>
+                    <div class="mt-2 flex items-baseline gap-3"><span class="font-clinical text-4xl text-lime tnum">+37%</span><span class="mono text-[10px] uppercase tracking-[0.24em] text-cream/50">p &lt; 0.01 · n=142</span></div>
+                    <div class="mt-6 space-y-4">
+                      <div><div class="flex items-center justify-between mono text-[10px] uppercase tracking-[0.24em] text-cream/60"><span>Placebo</span><span class="tnum">22%</span></div><div class="mt-1.5 h-2 overflow-hidden rounded-full bg-cream/10"><div class="h-full bg-cream/40 origin-left rounded-full walk-arm" style="--pct:0.22;transition-delay:200ms"></div></div></div>
+                      <div><div class="flex items-center justify-between mono text-[10px] uppercase tracking-[0.24em] text-cream/60"><span>Arm A</span><span class="tnum">58%</span></div><div class="mt-1.5 h-2 overflow-hidden rounded-full bg-cream/10"><div class="h-full bg-sky origin-left rounded-full walk-arm" style="--pct:0.58;transition-delay:350ms"></div></div></div>
+                      <div><div class="flex items-center justify-between mono text-[10px] uppercase tracking-[0.24em] text-cream/60"><span>Arm B</span><span class="tnum">84%</span></div><div class="mt-1.5 h-2 overflow-hidden rounded-full bg-cream/10"><div class="h-full bg-lime origin-left rounded-full walk-arm" style="--pct:0.84;transition-delay:500ms"></div></div></div>
+                    </div>
+                    <div class="mt-auto flex items-center justify-between border-t border-border pt-4 mono text-[10px] uppercase tracking-[0.24em] text-cream/50"><span>Pre-registered</span><span class="text-lime">Significant ✓</span></div>
+                  </div>
+                </div>
+                <!-- Panel 4: Publish -->
+                <div class="absolute inset-0 p-5 transition-all duration-700 ease-out sm:p-6 translate-y-6 opacity-0" data-panel="4" aria-hidden="true">
+                  <div class="flex h-full flex-col">
+                    <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Manuscript · Draft v3</div>
+                    <div class="mt-4 flex-1 rounded-lg border border-cream/15 bg-cream/[0.03] p-6 walk-pub">
+                      <div class="mono text-[10px] uppercase tracking-[0.32em] text-lime">Reputable · Study 042</div>
+                      <div class="font-editorial mt-3 text-2xl italic leading-tight text-cream sm:text-3xl">"Nightly HRV rises 12% under a 6-week sleep-forward protocol."</div>
+                      <div class="mt-5 grid grid-cols-3 gap-2">
+                        <div class="clinical-card tilt-glow p-2 text-center"><div class="mono text-[9px] uppercase tracking-[0.24em] text-cream/50">n</div><div class="mt-1 mono text-sm font-medium text-lime tnum">142</div></div>
+                        <div class="clinical-card tilt-glow p-2 text-center"><div class="mono text-[9px] uppercase tracking-[0.24em] text-cream/50">Δ HRV</div><div class="mt-1 mono text-sm font-medium text-lime tnum">+12%</div></div>
+                        <div class="clinical-card tilt-glow p-2 text-center"><div class="mono text-[9px] uppercase tracking-[0.24em] text-cream/50">p</div><div class="mt-1 mono text-sm font-medium text-lime tnum">&lt;0.01</div></div>
+                      </div>
+                      <div class="mt-5 mono text-[10px] uppercase tracking-[0.24em] text-cream/50">Authored · Reviewed · Reproducible</div>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between mono text-[10px] uppercase tracking-[0.24em] text-cream/50"><span>PDF · Poster · Dataset</span><span class="text-lime">Export →</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex gap-1.5" data-walk-dots>
+                <div class="h-0.5 flex-1 overflow-hidden rounded-full bg-cream/10"><div class="h-full origin-left rounded-full bg-lime transition-transform duration-700 scale-x-100"></div></div>
+                <div class="h-0.5 flex-1 overflow-hidden rounded-full bg-cream/10"><div class="h-full origin-left rounded-full bg-lime transition-transform duration-700 scale-x-0"></div></div>
+                <div class="h-0.5 flex-1 overflow-hidden rounded-full bg-cream/10"><div class="h-full origin-left rounded-full bg-lime transition-transform duration-700 scale-x-0"></div></div>
+                <div class="h-0.5 flex-1 overflow-hidden rounded-full bg-cream/10"><div class="h-full origin-left rounded-full bg-lime transition-transform duration-700 scale-x-0"></div></div>
+                <div class="h-0.5 flex-1 overflow-hidden rounded-full bg-cream/10"><div class="h-full origin-left rounded-full bg-lime transition-transform duration-700 scale-x-0"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CAPABILITIES ============ -->
+  <section id="capabilities" class="px-6 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mb-12 max-w-3xl sm:mb-16">
+        <span class="eyebrow text-orange">Decentralized research, end to end</span>
+        <h2 class="font-clinical mt-6 text-5xl leading-[0.95] tracking-[-0.035em] sm:text-7xl">Built for <em class="italic-serif font-normal text-orange">real-world</em> studies.</h2>
+        <div class="rule-in mt-8 h-px w-16 bg-orange"></div>
+        <p class="mt-8 max-w-xl text-lg leading-relaxed text-cream/60 sm:text-xl">We run the full research lifecycle. Protocol design, study operations, biometric capture, and analysis.</p>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Pilot to Publication</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Start with a 4-week decentralized pilot. Graduate to a full clinical study when the signal warrants it.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Multi-Instrument Protocols</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Continuous wearable capture (Oura, Apple Watch, Whoop). At-home lab biomarkers (blood and saliva) with automated logistics. Validated PROs (PSQI, PROMIS). One dataset per participant, across instruments.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Built-In Participant Community</h3><p class="mt-5 text-base leading-relaxed text-cream/60">A community of 10,000+ health-engaged participants ready to enroll. Recruitment that took months at a clinic site now takes days.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Defensible Methodology</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Pre-registered protocols, IRB oversight on every study, validated measurement instruments.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Real-World Conditions</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Participants live their normal lives during the study. Adherence, dropout, and outcomes reflect what actually happens when your product reaches users.</p></article>
+        <article class="reveal clinical-card tilt-glow scan cap-card p-8 sm:p-10"><span class="cap-rule"></span><h3 class="font-clinical mt-6 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-[1.65rem]">Full-Service Research Operations</h3><p class="mt-5 text-base leading-relaxed text-cream/60">Protocol design, IRB pathway, recruitment, onboarding, biometric monitoring, statistical analysis, and reporting. One team, one timeline.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METRICS ============ -->
+  <section id="evidence" class="px-6 py-16 sm:px-10 sm:py-24 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="reveal mb-10 max-w-3xl sm:mb-14">
+        <span class="eyebrow text-sky">Measurement</span>
+        <h2 class="font-clinical mt-6 text-5xl leading-[0.95] tracking-[-0.035em] sm:text-7xl">We measure what <em class="italic-serif font-normal text-sky">actually</em> matters.</h2>
+        <div class="rule-in mt-8 h-px w-16 bg-sky"></div>
+        <p class="mt-8 max-w-xl text-lg leading-relaxed text-cream/60 sm:text-xl">Continuous wearable biometrics, at-home lab biomarkers, and validated patient-reported outcomes, across sleep, activity, biology, and wellbeing.</p>
+      </div>
+
+      <div class="reveal mb-6 -mx-5 sm:mx-0 overflow-x-auto sm:overflow-visible [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+        <div class="flex w-max sm:w-auto sm:flex-wrap gap-2 sm:gap-3 px-5 sm:px-0" data-metric-tabs style="--tone:#81bef9">
+          <button data-tab="0" aria-selected="true" class="mtab group relative flex shrink-0 items-center gap-2.5 rounded-full border px-3.5 py-2 mono text-[10px] font-semibold uppercase tracking-[0.2em] transition-all sm:px-5 sm:py-3 sm:text-[11px] sm:tracking-[0.24em] sm:gap-3"><span class="mtab-dot size-1.5 shrink-0 rounded-full heartbeat"></span><span class="whitespace-nowrap">Sleep &amp; Recovery</span><span class="mono text-[9px] text-cream/40">01</span></button>
+          <button data-tab="1" aria-selected="false" class="mtab group relative flex shrink-0 items-center gap-2.5 rounded-full border px-3.5 py-2 mono text-[10px] font-semibold uppercase tracking-[0.2em] transition-all sm:px-5 sm:py-3 sm:text-[11px] sm:tracking-[0.24em] sm:gap-3"><span class="mtab-dot size-1.5 shrink-0 rounded-full"></span><span class="whitespace-nowrap">Activity &amp; Movement</span><span class="mono text-[9px] text-cream/40">02</span></button>
+          <button data-tab="2" aria-selected="false" class="mtab group relative flex shrink-0 items-center gap-2.5 rounded-full border px-3.5 py-2 mono text-[10px] font-semibold uppercase tracking-[0.2em] transition-all sm:px-5 sm:py-3 sm:text-[11px] sm:tracking-[0.24em] sm:gap-3"><span class="mtab-dot size-1.5 shrink-0 rounded-full"></span><span class="whitespace-nowrap">Sentiment &amp; Readiness</span><span class="mono text-[9px] text-cream/40">03</span></button>
+        </div>
+      </div>
+
+      <div class="mb-3 flex items-center justify-between sm:hidden">
+        <span class="mono text-[9px] uppercase tracking-[0.28em] text-cream/40">← swipe →</span>
+        <div class="flex gap-1.5" data-metric-dots style="--tone:#81bef9">
+          <button aria-label="Show Sleep &amp; Recovery" aria-selected="true" class="mdot h-1.5 rounded-full transition-all"></button>
+          <button aria-label="Show Activity &amp; Movement" aria-selected="false" class="mdot h-1.5 rounded-full transition-all"></button>
+          <button aria-label="Show Sentiment &amp; Readiness" aria-selected="false" class="mdot h-1.5 rounded-full transition-all"></button>
+        </div>
+      </div>
+
+      <div class="clinical-card tilt-glow scan overflow-hidden p-6 sm:p-10 touch-pan-y select-none" data-metric-panel style="--tone:#81bef9">
+        <div class="flex flex-col gap-2 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div class="mono text-[10px] uppercase tracking-[0.32em]" data-tone-text>Live · streaming</div>
+            <h3 class="font-clinical mt-3 text-3xl leading-[1] tracking-[-0.03em] text-cream sm:text-5xl" data-panel-title>Sleep &amp; Recovery</h3>
+            <p class="mt-3 max-w-xl text-sm text-cream/60 sm:text-base" data-panel-tagline>Continuous overnight physiology, night after night.</p>
+          </div>
+          <div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40"><span class="mr-2 inline-block size-1.5 -translate-y-0.5 rounded-full align-middle animate-dot" data-tone-bg></span>rec · 256hz</div>
+        </div>
+        <div class="mt-8 grid gap-8 lg:grid-cols-5">
+          <div class="lg:col-span-3">
+            <div class="mono text-[9px] uppercase tracking-[0.32em] text-cream/40">/ signals</div>
+            <ul class="mt-4 flex flex-col gap-3" data-pills>
+              <li class="group relative cursor-default overflow-hidden rounded-lg border border-border bg-cream/[0.02] px-4 py-3 transition-colors hover:border-cream/25"><div class="absolute inset-y-0 left-0 origin-left opacity-30 transition-opacity group-hover:opacity-60"></div><div class="relative flex items-center justify-between gap-4"><span class="text-sm text-cream/80">Sleep duration</span><span class="mono text-xs text-cream tnum">7h 42m</span></div></li>
+            </ul>
+          </div>
+          <div class="lg:col-span-2">
+            <div class="mono text-[9px] uppercase tracking-[0.32em] text-cream/40">/ trend · 30d</div>
+            <div class="mt-4 rounded-lg border border-border bg-cream/[0.02] p-4 sm:p-5">
+              <div class="flex items-baseline justify-between">
+                <span class="font-clinical text-4xl text-cream tnum sm:text-5xl" data-spark-value>7h 42m</span>
+                <span class="mono text-[10px] font-bold uppercase tracking-[0.24em]" data-tone-text data-spark-delta>▲ 21</span>
+              </div>
+              <svg viewBox="0 0 340 90" class="mt-4 h-24 w-full" data-spark-svg></svg>
+              <div class="mt-3 flex justify-between mono text-[9px] uppercase tracking-[0.24em] text-cream/40"><span>d-30</span><span>d-15</span><span>today</span></div>
+            </div>
+            <div class="mt-3 grid grid-cols-3 gap-2" data-minmax>
+              <div class="rounded-md border border-border bg-cream/[0.02] px-3 py-2"><div class="mono text-[8px] uppercase tracking-[0.24em] text-cream/40">min</div><div class="mono text-sm tnum" data-tone-text>42</div></div>
+              <div class="rounded-md border border-border bg-cream/[0.02] px-3 py-2"><div class="mono text-[8px] uppercase tracking-[0.24em] text-cream/40">avg</div><div class="mono text-sm tnum" data-tone-text>54</div></div>
+              <div class="rounded-md border border-border bg-cream/[0.02] px-3 py-2"><div class="mono text-[8px] uppercase tracking-[0.24em] text-cream/40">max</div><div class="mono text-sm tnum" data-tone-text>65</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal mt-10 clinical-card tilt-glow p-6 sm:p-8">
+        <div class="flex flex-col gap-2 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <span class="mono text-[10px] uppercase tracking-[0.32em] text-cream/50">Beyond wearables</span>
+            <h3 class="font-clinical mt-3 text-2xl leading-[1.1] tracking-[-0.03em] text-cream sm:text-3xl">At-home lab biomarkers, by focus area.</h3>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-cream/60 sm:text-base">Blood and saliva draws with automated logistics. Processed through CLIA labs, paired with the wearable and survey streams above.</p>
+          </div>
+          <span class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40"><span class="mr-2 inline-block size-1.5 -translate-y-0.5 rounded-full align-middle bg-lime heartbeat"></span>CLIA · processed</span>
+        </div>
+        <ul class="mt-4 text-sm text-cream/80">
+          <li class="grid gap-1 border-t border-border py-3 sm:grid-cols-3 sm:gap-6"><span class="mono text-[10px] uppercase tracking-[0.28em] text-cream/50">Sleep, Stress</span><span class="sm:col-span-2">Cortisol AM/PM, melatonin, IL-6, CRP</span></li>
+          <li class="grid gap-1 border-t border-border py-3 sm:grid-cols-3 sm:gap-6"><span class="mono text-[10px] uppercase tracking-[0.28em] text-cream/50">Metabolism</span><span class="sm:col-span-2">Insulin, leptin, ghrelin, glucose, cortisol</span></li>
+          <li class="grid gap-1 border-t border-border py-3 sm:grid-cols-3 sm:gap-6"><span class="mono text-[10px] uppercase tracking-[0.28em] text-cream/50">Energy, Fitness</span><span class="sm:col-span-2">VO2max, creatine kinase, DEXA (lean mass, fat)</span></li>
+          <li class="grid gap-1 border-t border-border py-3 sm:grid-cols-3 sm:gap-6"><span class="mono text-[10px] uppercase tracking-[0.28em] text-cream/50">Cognitive</span><span class="sm:col-span-2">CRP, IL-6, amyloid-beta, tau</span></li>
+          <li class="grid gap-1 border-t border-border py-3 sm:grid-cols-3 sm:gap-6"><span class="mono text-[10px] uppercase tracking-[0.28em] text-cream/50">Longevity</span><span class="sm:col-span-2">DNA methylation biological age, NAD, oxidative stress markers</span></li>
+        </ul>
+      </div>
+
+      <div class="reveal mt-12 grid grid-cols-2 gap-4 sm:mt-14 sm:gap-6 sm:grid-cols-4">
+        <div class="clinical-card tilt-glow p-4 sm:p-6"><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40">/ 01</div><div class="font-clinical mt-3 text-3xl leading-none text-cream sm:mt-4 sm:text-5xl"><span class="tnum" data-countup="10000" data-suffix="+">10,000+</span></div><div class="mt-3 mono text-[10px] font-medium uppercase tracking-[0.28em] text-cream/50">Participants</div></div>
+        <div class="clinical-card tilt-glow p-4 sm:p-6"><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40">/ 02</div><div class="font-clinical mt-3 text-3xl leading-none text-cream sm:mt-4 sm:text-5xl"><span class="tnum" data-countup="4" data-suffix=" wk">4 wk</span></div><div class="mt-3 mono text-[10px] font-medium uppercase tracking-[0.28em] text-cream/50">Pilot start</div></div>
+        <div class="clinical-card tilt-glow p-4 sm:p-6"><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40">/ 03</div><div class="font-clinical mt-3 text-3xl leading-none text-cream sm:mt-4 sm:text-5xl"><span class="tnum" data-countup="256" data-suffix=" hz">256 hz</span></div><div class="mt-3 mono text-[10px] font-medium uppercase tracking-[0.28em] text-cream/50">Live capture</div></div>
+        <div class="clinical-card tilt-glow p-4 sm:p-6"><div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40">/ 04</div><div class="font-clinical mt-3 text-3xl leading-none text-cream sm:mt-4 sm:text-5xl"><span class="tnum" data-countup="93" data-suffix="%">93%</span></div><div class="mt-3 mono text-[10px] font-medium uppercase tracking-[0.28em] text-cream/50">Adherence</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section id="contact" class="relative overflow-hidden px-6 py-20 sm:px-10 sm:py-28 lg:py-36">
+    <div class="orb top-1/2 left-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 bg-lime/10" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-5xl text-center">
+      <h2 class="reveal font-clinical text-5xl leading-[0.95] tracking-[-0.04em] sm:text-7xl lg:text-8xl">Run research that <em class="italic-serif font-normal text-lime">actually</em> reaches people.</h2>
+      <div class="reveal mt-10 flex flex-wrap items-center justify-center gap-3">
+        <span class="status-chip"><span class="dot bg-lime heartbeat"></span><span class="mono">HIPAA · SECURE</span></span>
+        <span class="status-chip"><span class="dot bg-sky"></span><span class="mono">IRB · APPROVED</span></span>
+        <span class="status-chip"><span class="dot bg-orange"></span><span class="mono">CLINICAL · GRADE</span></span>
+      </div>
+      <div class="reveal mt-14 grid gap-6 text-left md:grid-cols-2">
+        <div class="clinical-card tilt-glow scan p-8 sm:p-10">
+          <span class="mono text-[10px] font-semibold uppercase tracking-[0.32em] text-lime">/ FOR SPONSORS</span>
+          <h3 class="font-clinical mt-6 text-3xl tracking-[-0.03em] text-cream sm:text-4xl">Ready to design a study?</h3>
+          <p class="mt-6 text-base leading-relaxed text-cream/70">Book a strategy call and we'll map the right study design for your product, timeline, and research goals.</p>
+          <div class="mt-10 flex flex-col gap-4">
+            <a href="https://calendly.com/reputablehealth/intro" target="_blank" rel="noopener noreferrer" class="btn-lime rounded-full px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.24em]">Schedule a Strategy Call</a>
+          </div>
+        </div>
+        <div class="clinical-card tilt-glow scan p-8 sm:p-10">
+          <span class="mono text-[10px] font-semibold uppercase tracking-[0.32em] text-cream/60">/ FOR PARTICIPANTS</span>
+          <div class="mt-6">
+            <div class="font-clinical text-6xl text-lime tnum sm:text-7xl"><span class="tnum" data-countup="10000" data-suffix="+">10,000+</span></div>
+            <div class="mt-3 mono text-[10px] uppercase tracking-[0.28em] text-cream/60">HEALTH ENTHUSIASTS · RESEARCH COMMUNITY</div>
+          </div>
+          <p class="mt-8 text-base leading-relaxed text-cream/70">Want to take part in remote health studies and track your own data along the way?</p>
+          <a href="https://reputable.health/join/" class="btn-ghost mt-10 inline-block rounded-full px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.24em]">Join a study</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</div>
+
+<!-- Behaviors (reveal, tabs, walkthrough scroll interactions, counters, tilt) -->
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- scroll reveal ---------- */
+  function initReveal() {
+    var els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -80px 0px" });
+    els.forEach(function (el) { io.observe(el); });
+    // failsafe: if anything is still hidden after load, reveal it
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        els.forEach(function (el) { if (!el.classList.contains("in")) el.classList.add("in"); });
+      }, 2600);
+    });
+  }
+
+  /* ---------- rotating verb ---------- */
+  function initVerb() {
+    var el = document.querySelector("[data-verb-word]");
+    if (!el || reduce) return;
+    var words = ["Run", "Launch", "Power"];
+    var i = 0;
+    setInterval(function () {
+      i = (i + 1) % words.length;
+      el.textContent = words[i];
+      el.style.animation = "none";
+      void el.offsetWidth; // reflow to restart animation
+      el.style.animation = "verb-swap 0.6s cubic-bezier(0.22,1,0.36,1) both";
+    }, 2200);
+  }
+
+  /* ---------- count up ---------- */
+  function initCountUp() {
+    var els = document.querySelectorAll("[data-countup]");
+    els.forEach(function (el) {
+      var to = parseInt(el.getAttribute("data-countup"), 10) || 0;
+      var suffix = el.getAttribute("data-suffix") || "";
+      var duration = 2400;
+      function run() {
+        if (reduce) { el.textContent = to.toLocaleString() + suffix; return; }
+        var start = 0;
+        function step(t) {
+          if (!start) start = t;
+          var p = Math.min(1, (t - start) / duration);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(to * eased).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      if (!("IntersectionObserver" in window)) { run(); return; }
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { run(); io.disconnect(); }
+      }, { threshold: 0.4 });
+      io.observe(el);
+    });
+  }
+
+  /* ---------- scroll progress bar ---------- */
+  function initScrollProgress() {
+    var bar = document.documentElement;
+    function onScroll() {
+      var max = bar.scrollHeight - bar.clientHeight;
+      var p = max > 0 ? bar.scrollTop / max : 0;
+      bar.style.setProperty("--sp", String(p));
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  }
+
+  /* ---------- magnetic tilt ---------- */
+  function initTilt() {
+    if (window.matchMedia("(hover: none)").matches) return;
+    document.querySelectorAll(".tilt-glow").forEach(function (el) {
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width;
+        var y = (e.clientY - r.top) / r.height;
+        el.style.setProperty("--mx", (x * 100) + "%");
+        el.style.setProperty("--my", (y * 100) + "%");
+        el.style.setProperty("--ry", ((x - 0.5) * 6) + "deg");
+        el.style.setProperty("--rx", ((0.5 - y) * 6) + "deg");
+      });
+      el.addEventListener("pointerleave", function () {
+        el.style.setProperty("--rx", "0deg");
+        el.style.setProperty("--ry", "0deg");
+      });
+    });
+  }
+
+  /* ---------- metrics ---------- */
+  var METRIC_DOMAINS = [
+    { key: "sleep", fill: "#81bef9", title: "Sleep & Recovery", tagline: "Continuous overnight physiology, night after night.",
+      pills: [["Sleep duration","7h 42m",92],["Time in bed","8h 15m",88],["REM","1h 45m",76],["Deep","1h 20m",68],["RHR","52 bpm",74],["HRV","48 ms",82],["Respiration","14.5 br/min",71]],
+      spark: [42,46,44,50,48,52,49,55,53,58,56,60,58,62,60,65,63] },
+    { key: "activity", fill: "#f0af5c", title: "Activity & Movement", tagline: "Real-world exertion, not lab treadmills.",
+      pills: [["Steps","12,450",96],["Distance","8.2 km",84],["Zone 4 intensity","24 min",62],["Active kcal","650",78],["Stress","low",32]],
+      spark: [20,40,32,55,48,70,62,85,74,92,80,96,88,78,90,85,94] },
+    { key: "sentiment", fill: "#d2fb69", title: "Sentiment & Readiness", tagline: "Validated PROs captured in the flow of daily life.",
+      pills: [["Surveys","9 / 10",90],["Mood","elevated",84],["Energy","92%",92],["Symptoms","3 / 10",30],["Readiness","88",88],["Recovery","high",86]],
+      spark: [60,62,58,66,70,68,74,72,78,76,82,80,86,84,88,86,90] }
+  ];
+
+  function sparkSVG(d) {
+    var w = 340, h = 90, pad = 4;
+    var max = Math.max.apply(null, d.spark), min = Math.min.apply(null, d.spark);
+    var pts = d.spark.map(function (v, i) {
+      var x = pad + (i * (w - pad * 2)) / (d.spark.length - 1);
+      var y = h - pad - ((v - min) / (max - min || 1)) * (h - pad * 2);
+      return [x, y];
+    });
+    var line = pts.map(function (p, i) { return (i ? "L" : "M") + p[0] + "," + p[1]; }).join(" ");
+    var area = line + " L" + (w - pad) + "," + h + " L" + pad + "," + h + " Z";
+    var circles = pts.map(function (p, i) {
+      var last = i === pts.length - 1;
+      return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (last ? 3.5 : 1.5) + '" fill="' + d.fill + '">' +
+        (last ? '<animate attributeName="r" values="3.5;5.5;3.5" dur="1.6s" repeatCount="indefinite"/>' : '') + '</circle>';
+    }).join("");
+    return '<defs><linearGradient id="fill-' + d.key + '" x1="0" x2="0" y1="0" y2="1">' +
+      '<stop offset="0%" stop-color="' + d.fill + '" stop-opacity="0.4"/><stop offset="100%" stop-color="' + d.fill + '" stop-opacity="0"/></linearGradient></defs>' +
+      '<path d="' + area + '" fill="url(#fill-' + d.key + ')"/>' +
+      '<path d="' + line + '" fill="none" stroke="' + d.fill + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-draw" style="animation-duration:3.5s"/>' +
+      circles;
+  }
+
+  function renderMetric(active, dir) {
+    var d = METRIC_DOMAINS[active];
+    var panel = document.querySelector("[data-metric-panel]");
+    if (!panel) return;
+    panel.style.setProperty("--tone", d.fill);
+    var tabs = document.querySelector("[data-metric-tabs]");
+    var dots = document.querySelector("[data-metric-dots]");
+    if (tabs) { tabs.style.setProperty("--tone", d.fill);
+      tabs.querySelectorAll("[data-tab]").forEach(function (b) { b.setAttribute("aria-selected", String(+b.getAttribute("data-tab") === active)); }); }
+    if (dots) { dots.style.setProperty("--tone", d.fill);
+      Array.prototype.forEach.call(dots.children, function (b, i) { b.setAttribute("aria-selected", String(i === active)); }); }
+
+    var pills = d.pills.map(function (p, idx) {
+      return '<li class="group relative cursor-default overflow-hidden rounded-lg border border-border bg-cream/[0.02] px-4 py-3 transition-colors hover:border-cream/25">' +
+        '<div class="absolute inset-y-0 left-0 origin-left opacity-30 transition-opacity group-hover:opacity-60" style="width:' + p[2] + '%;background:linear-gradient(90deg, ' + d.fill + '33, ' + d.fill + '08);animation:bar-grow 1.2s cubic-bezier(0.19,1,0.22,1) ' + (idx * 90) + 'ms both"></div>' +
+        '<div class="relative flex items-center justify-between gap-4"><span class="text-sm text-cream/80">' + p[0] + '</span><span class="mono text-xs text-cream tnum">' + p[1] + '</span></div></li>';
+    }).join("");
+
+    var mn = Math.min.apply(null, d.spark), mx = Math.max.apply(null, d.spark);
+    var avg = Math.round(d.spark.reduce(function (a, b) { return a + b; }, 0) / d.spark.length);
+    var delta = Math.round(d.spark[d.spark.length - 1] - d.spark[0]);
+
+    panel.innerHTML =
+      '<div class="flex flex-col gap-2 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">' +
+        '<div><div class="mono text-[10px] uppercase tracking-[0.32em]" data-tone-text>Live · streaming</div>' +
+        '<h3 class="font-clinical mt-3 text-3xl leading-[1] tracking-[-0.03em] text-cream sm:text-5xl">' + d.title + '</h3>' +
+        '<p class="mt-3 max-w-xl text-sm text-cream/60 sm:text-base">' + d.tagline + '</p></div>' +
+        '<div class="mono text-[10px] uppercase tracking-[0.32em] text-cream/40"><span class="mr-2 inline-block size-1.5 -translate-y-0.5 rounded-full align-middle animate-dot" data-tone-bg></span>rec · 256hz</div>' +
+      '</div>' +
+      '<div class="mt-8 grid gap-8 lg:grid-cols-5">' +
+        '<div class="lg:col-span-3"><div class="mono text-[9px] uppercase tracking-[0.32em] text-cream/40">/ signals</div><ul class="mt-4 flex flex-col gap-3">' + pills + '</ul></div>' +
+        '<div class="lg:col-span-2"><div class="mono text-[9px] uppercase tracking-[0.32em] text-cream/40">/ trend · 30d</div>' +
+          '<div class="mt-4 rounded-lg border border-border bg-cream/[0.02] p-4 sm:p-5">' +
+            '<div class="flex items-baseline justify-between"><span class="font-clinical text-4xl text-cream tnum sm:text-5xl">' + d.pills[0][1] + '</span>' +
+            '<span class="mono text-[10px] font-bold uppercase tracking-[0.24em]" data-tone-text>▲ ' + delta + '</span></div>' +
+            '<svg viewBox="0 0 340 90" class="mt-4 h-24 w-full">' + sparkSVG(d) + '</svg>' +
+            '<div class="mt-3 flex justify-between mono text-[9px] uppercase tracking-[0.24em] text-cream/40"><span>d-30</span><span>d-15</span><span>today</span></div>' +
+          '</div>' +
+          '<div class="mt-3 grid grid-cols-3 gap-2">' +
+            '<div class="rounded-md border border-border bg-cream/[0.02] px-3 py-2"><div class="mono text-[8px] uppercase tracking-[0.24em] text-cream/40">min</div><div class="mono text-sm tnum" data-tone-text>' + mn + '</div></div>' +
+            '<div class="rounded-md border border-border bg-cream/[0.02] px-3 py-2"><div class="mono text-[8px] uppercase tracking-[0.24em] text-cream/40">avg</div><div class="mono text-sm tnum" data-tone-text>' + avg + '</div></div>' +
+            '<div class="rounded-md border border-border bg-cream/[0.02] px-3 py-2"><div class="mono text-[8px] uppercase tracking-[0.24em] text-cream/40">max</div><div class="mono text-sm tnum" data-tone-text>' + mx + '</div></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    // panel swap motion
+    if (!reduce) {
+      panel.style.setProperty("--swipe-from", dir > 0 ? "40px" : "-40px");
+      panel.classList.remove("panel-swap"); void panel.offsetWidth; panel.classList.add("panel-swap");
+    }
+  }
+
+  function initMetrics() {
+    var active = 0;
+    function go(i, dir) { active = (i + METRIC_DOMAINS.length) % METRIC_DOMAINS.length; renderMetric(active, dir); }
+    var tabs = document.querySelector("[data-metric-tabs]");
+    if (tabs) tabs.querySelectorAll("[data-tab]").forEach(function (b) {
+      b.addEventListener("click", function () { var i = +b.getAttribute("data-tab"); go(i, i > active ? 1 : -1); });
+    });
+    var dots = document.querySelector("[data-metric-dots]");
+    if (dots) Array.prototype.forEach.call(dots.children, function (b, i) {
+      b.addEventListener("click", function () { go(i, i > active ? 1 : -1); });
+    });
+    var panel = document.querySelector("[data-metric-panel]");
+    if (panel) {
+      var tx = null, ty = null;
+      panel.addEventListener("touchstart", function (e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+      panel.addEventListener("touchend", function (e) {
+        if (tx === null) return;
+        var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) go(active + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+        tx = ty = null;
+      }, { passive: true });
+    }
+    renderMetric(0, 1);
+  }
+
+  /* ---------- walkthrough ---------- */
+  function initWalkthrough() {
+    var steps = document.querySelectorAll("[data-walk-steps] > li");
+    var panels = document.querySelectorAll("[data-walk-panels] [data-panel]");
+    var chip = document.querySelector("[data-walk-chip]");
+    var stat = document.querySelector("[data-walk-stat]");
+    var dotWraps = document.querySelectorAll("[data-walk-dots] > div > div");
+    var mprog = document.querySelectorAll("[data-walk-progress] > button");
+    if (!steps.length) return;
+    var stats = [["Screened","2,481"],["Arms","3 · Parallel"],["Adherence","93%"],["Δ Deep Sleep","+37%"],["Deliverable","Manuscript"]];
+    var tags = ["01","02","03","04","05"];
+    var active = -1;
+    var lockUntil = 0;                       // suppress scroll-spy right after a click
+    function lock() { lockUntil = Date.now() + 1200; }
+
+    function setActive(idx) {
+      if (idx === active) return;
+      active = idx;
+      steps.forEach(function (li, i) {
+        li.classList.toggle("opacity-100", i === idx);
+        li.classList.toggle("opacity-40", i !== idx);
+        var tag = li.querySelector("[data-step-tag]");
+        var rule = li.querySelector("[data-step-rule]");
+        if (tag) { tag.classList.toggle("text-lime", i === idx); tag.classList.toggle("text-cream/40", i !== idx); }
+        if (rule) { rule.classList.toggle("bg-lime", i === idx); rule.classList.toggle("bg-cream/10", i !== idx); }
+      });
+      panels.forEach(function (p, i) {
+        p.classList.remove("translate-y-0", "opacity-100", "translate-y-6", "opacity-0", "-translate-y-4");
+        if (i === idx) { p.classList.add("translate-y-0", "opacity-100"); p.setAttribute("aria-hidden", "false"); runPanel(p); }
+        else { p.classList.add(i < idx ? "-translate-y-4" : "translate-y-6", "opacity-0"); p.setAttribute("aria-hidden", "true"); resetPanel(p); }
+      });
+      if (chip) chip.textContent = "STEP " + tags[idx] + " · LIVE";
+      if (stat) stat.innerHTML = stats[idx][0] + ' · <span class="text-cream/80">' + stats[idx][1] + "</span>";
+      dotWraps.forEach(function (dw, i) { dw.classList.toggle("scale-x-100", i <= idx); dw.classList.toggle("scale-x-0", i > idx); });
+      mprog.forEach(function (b, i) { b.classList.toggle("bg-lime", i === idx); b.classList.toggle("bg-cream/15", i !== idx); });
+    }
+
+    function runPanel(p) {
+      p.querySelectorAll(".walk-row").forEach(function (el, i) { el.style.transition = "all 600ms ease-out"; el.style.transitionDelay = (100 + i * 100) + "ms"; el.style.opacity = "1"; el.style.transform = "none"; });
+      p.querySelectorAll(".walk-arm").forEach(function (el) { el.style.transition = "transform 1000ms ease-out"; el.style.transform = "scaleX(" + (el.style.getPropertyValue("--pct") || 1) + ")"; });
+      p.querySelectorAll(".walk-bar").forEach(function (el) { el.classList.add("animate-bar"); });
+      p.querySelectorAll(".walk-draw").forEach(function (el) { el.classList.add("animate-draw"); });
+      p.querySelectorAll(".walk-pub").forEach(function (el) { el.style.transition = "all 700ms ease-out"; el.style.opacity = "1"; el.style.transform = "none"; });
+    }
+    function resetPanel(p) {
+      p.querySelectorAll(".walk-row").forEach(function (el) { el.style.transition = "none"; el.style.opacity = "0"; el.style.transform = "translateX(12px)"; });
+      p.querySelectorAll(".walk-arm").forEach(function (el) { el.style.transition = "none"; el.style.transform = "scaleX(0)"; });
+      p.querySelectorAll(".walk-bar").forEach(function (el) { el.classList.remove("animate-bar"); });
+      p.querySelectorAll(".walk-draw").forEach(function (el) { el.classList.remove("animate-draw"); });
+      p.querySelectorAll(".walk-pub").forEach(function (el) { el.style.transition = "none"; el.style.opacity = "0"; el.style.transform = "translateY(16px)"; });
+    }
+
+    // init hidden panels reset
+    panels.forEach(function (p, i) { if (i !== 0) resetPanel(p); });
+
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (Date.now() < lockUntil) return;   // a click just set the active step, don't fight it
+        var vis = entries.filter(function (e) { return e.isIntersecting; }).sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; });
+        if (vis[0]) { var idx = +vis[0].target.getAttribute("data-step"); if (!isNaN(idx)) setActive(idx); }
+      }, { threshold: [0.55], rootMargin: "-20% 0px -30% 0px" });
+      steps.forEach(function (li) { io.observe(li); });
+    }
+    steps.forEach(function (li, i) {
+      li.querySelector("button").addEventListener("click", function () {
+        lock(); setActive(i);               // instant panel swap on click; hold it past the scroll
+        li.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+      });
+    });
+    // ---- mobile: auto-circulate the card through the panels while it's on screen ----
+    // (on desktop the sticky card already updates via the scroll-spy above; on mobile
+    // the card sits below all the steps, so without this it freezes on the last step.)
+    var mq = window.matchMedia("(max-width: 1023.98px)");
+    var panelsBox = document.querySelector("[data-walk-panels]");
+    var autoTimer = null, cardInView = false;
+    function stopAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+    function startAuto() {
+      if (autoTimer || reduce || !mq.matches) return;
+      autoTimer = setInterval(function () {
+        if (Date.now() < lockUntil) return;            // don't fight a recent tap
+        setActive((active + 1) % steps.length);
+      }, 3600);
+    }
+    if (panelsBox && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        cardInView = entries[0].isIntersecting;
+        if (cardInView && mq.matches) startAuto(); else stopAuto();
+      }, { threshold: 0.4 }).observe(panelsBox);
+    }
+    if (mq.addEventListener) mq.addEventListener("change", function () { if (!mq.matches) stopAuto(); else if (cardInView) startAuto(); });
+
+    mprog.forEach(function (b, i) {
+      b.addEventListener("click", function () {
+        lock(); setActive(i);
+        // on mobile the card is what's visible, switch the panel in place, don't jump up to the step
+        if (!mq.matches) steps[i].scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+      });
+    });
+    setActive(0);
+  }
+
+  /* ---------- assessment form ---------- */
+  var ASSESSMENT_ENDPOINT = "https://reputablehome.lovable.app/api/public/assessment";
+  function initForm() {
+    var wrap = document.querySelector("[data-assessment]");
+    if (!wrap) return;
+    var form = wrap.querySelector("[data-form]");
+    var formBox = wrap.querySelector("[data-assessment-form]");
+    var success = wrap.querySelector("[data-assessment-success]");
+    var btn = wrap.querySelector("[data-submit]");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var fd = new FormData(form);
+      var payload = {
+        first_name: String(fd.get("first_name") || ""), email: String(fd.get("email") || ""),
+        primary_goal: String(fd.get("primary_goal") || ""), product_stage: String(fd.get("product_stage") || ""),
+        budget_range: String(fd.get("budget_range") || ""), product_category: String(fd.get("product_category") || ""),
+        research_experience: String(fd.get("research_experience") || ""), company: String(fd.get("company") || "")
+      };
+      for (var k in payload) { if (k === "company") continue; if (!payload[k]) { alert("Please complete all fields before submitting."); return; } }
+      btn.disabled = true; btn.textContent = "Submitting...";
+      fetch(ASSESSMENT_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); showSuccess(); })
+        .catch(function (err) { console.error("Submission error:", err); btn.disabled = false; btn.textContent = "Get My Custom Assessment"; alert("There was an error submitting your assessment. Please try again."); });
+    });
+    function showSuccess() {
+      formBox.classList.add("hidden");
+      success.classList.remove("hidden");
+      var h = success.querySelector("h2"); if (h) h.focus();
+    }
+  }
+
+  function init() {
+    document.documentElement.classList.remove("no-js");
+    initReveal(); initVerb(); initCountUp(); initScrollProgress(); initTilt(); initMetrics(); initWalkthrough(); initForm();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+
+</script>
